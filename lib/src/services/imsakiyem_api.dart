@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -54,10 +56,24 @@ class ImsakiyemApi {
 
   Future<Map<String, dynamic>> _get(String path) async {
     final uri = Uri.parse('$_baseUrl$path');
-    final response = await _client.get(
-      uri,
-      headers: {'Accept': 'application/json'},
-    );
+    late final http.Response response;
+    try {
+      response = await _client
+          .get(uri, headers: {'Accept': 'application/json'})
+          .timeout(const Duration(seconds: 15));
+    } on SocketException catch (e) {
+      throw Exception(
+        'Could not reach prayer server. Check internet/DNS and try again. '
+        'Details: ${e.message}',
+      );
+    } on HttpException catch (e) {
+      throw Exception('Network HTTP error: ${e.message}');
+    } on FormatException {
+      throw Exception('Server response format is invalid.');
+    } on TimeoutException {
+      throw Exception('Request timed out. Please try again.');
+    }
+
     if (response.statusCode != 200) {
       throw Exception('Request failed (${response.statusCode}) for $path');
     }

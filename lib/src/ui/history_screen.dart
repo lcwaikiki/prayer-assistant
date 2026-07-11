@@ -5,13 +5,102 @@ import 'package:provider/provider.dart';
 import '../controller/prayer_app_controller.dart';
 import '../models/prayer_models.dart';
 
-class HistoryScreen extends StatelessWidget {
+const double _dateColWidth = 66;
+const double _timeColWidth = 44;
+const double _hijriColWidth = 108;
+const double _tableWidth = _dateColWidth + (_timeColWidth * 6) + _hijriColWidth;
+
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  final ScrollController _verticalController = ScrollController();
+  final ScrollController _headerHorizontalController = ScrollController();
+  final Map<String, ScrollController> _monthHorizontalControllers =
+      <String, ScrollController>{};
+  final Map<String, GlobalKey> _monthKeys = <String, GlobalKey>{};
+  final GlobalKey _todayRowKey = GlobalKey();
+  bool _syncingHorizontal = false;
+  int? _lastTabIndex;
+
+  @override
+  void dispose() {
+    _verticalController.dispose();
+    _headerHorizontalController.dispose();
+    for (final controller in _monthHorizontalControllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _syncHorizontalTo(double offset, {required String source}) {
+    if (_syncingHorizontal) {
+      return;
+    }
+    _syncingHorizontal = true;
+
+    if (source != 'header' && _headerHorizontalController.hasClients) {
+      final max = _headerHorizontalController.position.maxScrollExtent;
+      _headerHorizontalController.jumpTo(offset.clamp(0.0, max));
+    }
+
+    for (final entry in _monthHorizontalControllers.entries) {
+      if (source == entry.key || !entry.value.hasClients) {
+        continue;
+      }
+      final max = entry.value.position.maxScrollExtent;
+      entry.value.jumpTo(offset.clamp(0.0, max));
+    }
+
+    _syncingHorizontal = false;
+  }
+
+  void _scheduleScrollToToday(List<PrayerDay> days) {
+    if (days.isEmpty) {
+      return;
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final targetContext = _todayRowKey.currentContext;
+      if (targetContext != null) {
+        Scrollable.ensureVisible(
+          targetContext,
+          duration: const Duration(milliseconds: 450),
+          curve: Curves.easeOutCubic,
+          alignment: 0.18,
+        );
+        return;
+      }
+      final monthKey = DateFormat('MMMM yyyy').format(DateTime.now());
+      final fallbackContext = _monthKeys[monthKey]?.currentContext;
+      if (fallbackContext != null) {
+        Scrollable.ensureVisible(
+          fallbackContext,
+          duration: const Duration(milliseconds: 450),
+          curve: Curves.easeOutCubic,
+          alignment: 0.08,
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
+        if (_lastTabIndex != controller.tabIndex) {
+          _lastTabIndex = controller.tabIndex;
+          if (controller.tabIndex == 2) {
+            _scheduleScrollToToday(controller.yearRange);
+          }
+        }
+
         final selected = controller.selectedLocation;
         if (selected == null) {
           return const Center(
@@ -24,70 +113,90 @@ class HistoryScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return ListView(
-          padding: const EdgeInsets.all(16),
+        final today = DateTime.now();
+        final groupedByMonth = _groupByMonth(days);
+        for (final month in groupedByMonth.keys) {
+          _monthKeys.putIfAbsent(month, GlobalKey.new);
+          _monthHorizontalControllers.putIfAbsent(month, ScrollController.new);
+        }
+
+        return Stack(
           children: [
-            Text(
-              'Prayer Times Table (1 Year)',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 12),
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: 540,
-                  child: DataTableTheme(
-                    data: DataTableThemeData(
-                      headingTextStyle: Theme.of(context).textTheme.labelLarge,
-                      dataTextStyle: Theme.of(context).textTheme.bodyMedium,
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Prayer Times Table (Full Year)',
+                      style: Theme.of(context).textTheme.headlineSmall,
                     ),
-                    child: PaginatedDataTable(
-                      header: const Text('Dates'),
-                      rowsPerPage: 20,
-                      showFirstLastButtons: true,
-                      horizontalMargin: 0,
-                      columnSpacing: 0,
-                      headingRowHeight: 40,
-                      dataRowMinHeight: 38,
-                      dataRowMaxHeight: 40,
-                      columns: const [
-                        DataColumn(
-                          label: SizedBox(width: 66, child: Text('Date')),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    child: NotificationListener<ScrollUpdateNotification>(
+                      onNotification: (notification) {
+                        _syncHorizontalTo(
+                          notification.metrics.pixels,
+                          source: 'header',
+                        );
+                        return false;
+                      },
+                      child: SingleChildScrollView(
+                        controller: _headerHorizontalController,
+                        scrollDirection: Axis.horizontal,
+                        child: const SizedBox(
+                          width: _tableWidth,
+                          child: _StickyHeaderRow(),
                         ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Imsak')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Gunes')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Ogle')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Ikindi')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Aksam')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 44, child: Text('Yatsi')),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: 108, child: Text('Hijri')),
-                        ),
-                      ],
-                      source: _PrayerTableSource(
-                        days,
-                        oddRowColor: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerLow,
-                        evenRowColor: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: SingleChildScrollView(
+                    controller: _verticalController,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 84),
+                      child: Column(
+                        children: groupedByMonth.entries
+                            .map(
+                              (entry) => Padding(
+                                key: _monthKeys[entry.key],
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: _MonthTable(
+                                  month: entry.key,
+                                  days: entry.value,
+                                  today: today,
+                                  horizontalController:
+                                      _monthHorizontalControllers[entry.key]!,
+                                  onHorizontalScroll: (offset) =>
+                                      _syncHorizontalTo(
+                                        offset,
+                                        source: entry.key,
+                                      ),
+                                  todayRowKey: _todayRowKey,
+                                ),
+                              ),
+                            )
+                            .toList(growable: false),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              right: 16,
+              bottom: 16,
+              child: FloatingActionButton.small(
+                onPressed: () => _scheduleScrollToToday(days),
+                child: const Icon(Icons.today),
               ),
             ),
           ],
@@ -97,55 +206,222 @@ class HistoryScreen extends StatelessWidget {
   }
 }
 
-class _PrayerTableSource extends DataTableSource {
-  _PrayerTableSource(
-    this.days, {
-    required this.oddRowColor,
-    required this.evenRowColor,
+Map<String, List<PrayerDay>> _groupByMonth(List<PrayerDay> days) {
+  final result = <String, List<PrayerDay>>{};
+  for (final day in days) {
+    final key = DateFormat('MMMM yyyy').format(day.date);
+    result.putIfAbsent(key, () => <PrayerDay>[]).add(day);
+  }
+  return result;
+}
+
+class _MonthTable extends StatelessWidget {
+  const _MonthTable({
+    required this.month,
+    required this.days,
+    required this.today,
+    required this.horizontalController,
+    required this.onHorizontalScroll,
+    required this.todayRowKey,
   });
 
+  final String month;
   final List<PrayerDay> days;
-  final Color oddRowColor;
-  final Color evenRowColor;
+  final DateTime today;
+  final ScrollController horizontalController;
+  final ValueChanged<double> onHorizontalScroll;
+  final GlobalKey todayRowKey;
 
   @override
-  DataRow? getRow(int index) {
-    if (index < 0 || index >= days.length) {
-      return null;
-    }
-    final day = days[index];
-    return DataRow.byIndex(
-      index: index,
-      color: WidgetStatePropertyAll(index.isEven ? evenRowColor : oddRowColor),
-      cells: [
-        DataCell(
-          SizedBox(
-            width: 66,
-            child: Text(DateFormat('dd/MM').format(day.date)),
-          ),
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
+              child: Text(
+                month,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            NotificationListener<ScrollUpdateNotification>(
+              onNotification: (notification) {
+                onHorizontalScroll(notification.metrics.pixels);
+                return false;
+              },
+              child: SingleChildScrollView(
+                controller: horizontalController,
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: _tableWidth,
+                  child: DataTableTheme(
+                    data: DataTableThemeData(
+                      headingTextStyle: Theme.of(context).textTheme.labelLarge,
+                      dataTextStyle: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    child: DataTable(
+                      horizontalMargin: 0,
+                      columnSpacing: 0,
+                      headingRowHeight: 0,
+                      dataRowMinHeight: 38,
+                      dataRowMaxHeight: 40,
+                      columns: const [
+                        DataColumn(label: SizedBox(width: _dateColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _timeColWidth)),
+                        DataColumn(label: SizedBox(width: _hijriColWidth)),
+                      ],
+                      rows: List.generate(days.length, (index) {
+                        final day = days[index];
+                        final isToday =
+                            day.date.year == today.year &&
+                            day.date.month == today.month &&
+                            day.date.day == today.day;
+                        final baseColor = index.isEven
+                            ? colors.surface
+                            : colors.surfaceContainerLow;
+                        final rowColor = isToday
+                            ? colors.primaryContainer
+                            : baseColor;
+
+                        Text cellText(String value, {bool isDate = false}) {
+                          return Text(
+                            value,
+                            style: TextStyle(
+                              fontWeight: isToday && isDate
+                                  ? FontWeight.w700
+                                  : FontWeight.w400,
+                            ),
+                          );
+                        }
+
+                        return DataRow(
+                          color: WidgetStatePropertyAll(rowColor),
+                          cells: [
+                            DataCell(
+                              SizedBox(
+                                key: isToday ? todayRowKey : null,
+                                width: _dateColWidth,
+                                child: cellText(
+                                  isToday
+                                      ? 'Today'
+                                      : DateFormat('dd/MM').format(day.date),
+                                  isDate: true,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.imsak),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.gunes),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.ogle),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.ikindi),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.aksam),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _timeColWidth,
+                                child: cellText(day.yatsi),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: _hijriColWidth,
+                                child: cellText(
+                                  day.hijriDate.isEmpty ? '-' : day.hijriDate,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        DataCell(SizedBox(width: 44, child: Text(day.imsak))),
-        DataCell(SizedBox(width: 44, child: Text(day.gunes))),
-        DataCell(SizedBox(width: 44, child: Text(day.ogle))),
-        DataCell(SizedBox(width: 44, child: Text(day.ikindi))),
-        DataCell(SizedBox(width: 44, child: Text(day.aksam))),
-        DataCell(SizedBox(width: 44, child: Text(day.yatsi))),
-        DataCell(
-          SizedBox(
-            width: 108,
-            child: Text(day.hijriDate.isEmpty ? '-' : day.hijriDate),
-          ),
-        ),
-      ],
+      ),
     );
   }
+}
+
+class _StickyHeaderRow extends StatelessWidget {
+  const _StickyHeaderRow();
 
   @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => days.length;
-
-  @override
-  int get selectedRowCount => 0;
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.labelLarge;
+    return SizedBox(
+      height: 40,
+      child: Row(
+        children: [
+          SizedBox(
+            width: _dateColWidth,
+            child: Text('Date', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Imsak', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Gunes', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Ogle', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Ikindi', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Aksam', style: style),
+          ),
+          SizedBox(
+            width: _timeColWidth,
+            child: Text('Yatsi', style: style),
+          ),
+          SizedBox(
+            width: _hijriColWidth,
+            child: Text('Hijri', style: style),
+          ),
+        ],
+      ),
+    );
+  }
 }

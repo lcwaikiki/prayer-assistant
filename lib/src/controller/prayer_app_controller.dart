@@ -176,11 +176,6 @@ class PrayerAppController extends ChangeNotifier {
         currentYear,
         forceSync: forceSync,
       );
-      await _syncYearIfNeeded(
-        selected.districtId,
-        currentYear + 1,
-        forceSync: forceSync,
-      );
       await _loadVisibleData(selected.districtId);
       _error = null;
     } catch (e) {
@@ -260,9 +255,10 @@ class PrayerAppController extends ChangeNotifier {
 
   Future<void> _loadVisibleData(String districtId) async {
     final now = DateTime.now();
-    final start = DateTime(now.year, now.month, now.day);
-    final end = start.add(const Duration(days: 365));
-    _today = await database.getDay(districtId: districtId, date: start);
+    final start = DateTime(now.year, 1, 1);
+    final end = DateTime(now.year, 12, 31);
+    final todayDate = DateTime(now.year, now.month, now.day);
+    _today = await database.getDay(districtId: districtId, date: todayDate);
     _yearRange = await database.getRange(
       districtId: districtId,
       start: start,

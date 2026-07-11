@@ -3,21 +3,51 @@ import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
 
-class ReminderSettingsScreen extends StatelessWidget {
+class ReminderSettingsScreen extends StatefulWidget {
   const ReminderSettingsScreen({required this.prayerName, super.key});
 
   final String prayerName;
 
+  @override
+  State<ReminderSettingsScreen> createState() => _ReminderSettingsScreenState();
+}
+
+class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
   static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
+
+  late final TextEditingController _customMinutesController;
+  final FocusNode _customMinutesFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _customMinutesController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _customMinutesController.dispose();
+    _customMinutesFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
-        final setting = controller.reminderFor(prayerName);
+        final setting = controller.reminderFor(widget.prayerName);
         final canEditBeforeMinutes = setting.notifyBefore;
+
+        if (!_customMinutesFocus.hasFocus) {
+          final currentText = _customMinutesController.text.trim();
+          final expected = setting.minutesBefore.toString();
+          if (currentText != expected) {
+            _customMinutesController.text = expected;
+          }
+        }
+
         return Scaffold(
-          appBar: AppBar(title: Text('$prayerName Reminder')),
+          appBar: AppBar(title: Text('${widget.prayerName} Reminder')),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -41,7 +71,7 @@ class ReminderSettingsScreen extends StatelessWidget {
                             selected: setting.notifyOnTime,
                             onSelected: (value) =>
                                 controller.updateReminderSetting(
-                                  prayer: prayerName,
+                                  prayer: widget.prayerName,
                                   notifyOnTime: value,
                                 ),
                           ),
@@ -50,7 +80,7 @@ class ReminderSettingsScreen extends StatelessWidget {
                             selected: setting.notifyBefore,
                             onSelected: (value) =>
                                 controller.updateReminderSetting(
-                                  prayer: prayerName,
+                                  prayer: widget.prayerName,
                                   notifyBefore: value,
                                 ),
                           ),
@@ -82,7 +112,7 @@ class ReminderSettingsScreen extends StatelessWidget {
                                 selected: setting.minutesBefore == option,
                                 onSelected: canEditBeforeMinutes
                                     ? (_) => controller.updateReminderSetting(
-                                        prayer: prayerName,
+                                        prayer: widget.prayerName,
                                         minutesBefore: option,
                                       )
                                     : null,
@@ -90,26 +120,33 @@ class ReminderSettingsScreen extends StatelessWidget {
                             )
                             .toList(growable: false),
                       ),
-                      const SizedBox(height: 10),
-                      OutlinedButton.icon(
-                        onPressed: canEditBeforeMinutes
-                            ? () async {
-                                final custom = await _pickCustomMinutes(
-                                  context,
-                                  setting.minutesBefore,
-                                );
-                                if (custom != null) {
-                                  await controller.updateReminderSetting(
-                                    prayer: prayerName,
-                                    minutesBefore: custom,
-                                  );
-                                }
-                              }
-                            : null,
-                        icon: const Icon(Icons.edit),
-                        label: Text(
-                          'Custom minutes (${setting.minutesBefore})',
-                        ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _customMinutesController,
+                              focusNode: _customMinutesFocus,
+                              enabled: canEditBeforeMinutes,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Custom minutes',
+                                hintText: 'e.g. 12',
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          FilledButton(
+                            onPressed: canEditBeforeMinutes
+                                ? () => _saveCustomMinutes(
+                                    context: context,
+                                    controller: controller,
+                                  )
+                                : null,
+                            child: const Text('Save'),
+                          ),
+                        ],
                       ),
                       if (!setting.notifyBefore)
                         const Padding(
@@ -127,59 +164,32 @@ class ReminderSettingsScreen extends StatelessWidget {
     );
   }
 
-  Future<int?> _pickCustomMinutes(
-    BuildContext context,
-    int initialValue,
-  ) async {
-    final textController = TextEditingController(text: initialValue.toString());
-
-    final result = await showDialog<int>(
-      context: context,
-      builder: (dialogContext) {
-        String? errorText;
-        return StatefulBuilder(
-          builder: (context, setDialogState) => AlertDialog(
-            title: const Text('Set custom minutes'),
-            content: TextField(
-              controller: textController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Minutes before prayer',
-                hintText: 'e.g. 12',
-                errorText: errorText,
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: const Text('Cancel'),
-              ),
-              FilledButton(
-                onPressed: () {
-                  final parsed = int.tryParse(textController.text.trim());
-                  if (parsed == null || parsed <= 0) {
-                    setDialogState(
-                      () => errorText = 'Enter a valid positive number',
-                    );
-                    return;
-                  }
-                  if (parsed > 240) {
-                    setDialogState(
-                      () => errorText = 'Use a value up to 240 minutes',
-                    );
-                    return;
-                  }
-                  Navigator.of(dialogContext).pop(parsed);
-                },
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        );
-      },
+  Future<void> _saveCustomMinutes({
+    required BuildContext context,
+    required PrayerAppController controller,
+  }) async {
+    final parsed = int.tryParse(_customMinutesController.text.trim());
+    if (parsed == null || parsed <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter a valid positive number.')),
+      );
+      return;
+    }
+    if (parsed > 240) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Use a value up to 240 minutes.')),
+      );
+      return;
+    }
+    await controller.updateReminderSetting(
+      prayer: widget.prayerName,
+      minutesBefore: parsed,
     );
-
-    textController.dispose();
-    return result;
+    if (!context.mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Custom minutes saved.')));
   }
 }

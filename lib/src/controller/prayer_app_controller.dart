@@ -307,4 +307,12 @@ class PrayerAppController extends ChangeNotifier {
       locationName: selected.fullName,
     );
   }
+
+  Future<List<ScheduledReminderEntry>> getScheduledReminders() {
+    return notificationService.getPendingScheduledReminders();
+  }
+
+  Future<void> sendTestNotificationNow() {
+    return notificationService.showTestNotificationNow();
+  }
 }

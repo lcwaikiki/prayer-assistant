@@ -227,3 +227,17 @@ class ReminderSetting {
     );
   }
 }
+
+class ScheduledReminderEntry {
+  ScheduledReminderEntry({
+    required this.id,
+    required this.title,
+    required this.body,
+    this.scheduledAt,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final DateTime? scheduledAt;
+}

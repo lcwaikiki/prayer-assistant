@@ -126,9 +126,99 @@ class _HomeScreenState extends State<HomeScreen> {
                 subtitle: const Text(
                   'Tap any prayer time above to configure reminder hook and minutes-before.',
                 ),
+                trailing: IconButton(
+                  tooltip: 'Scheduled reminders debug',
+                  icon: const Icon(Icons.bug_report_outlined),
+                  onPressed: () =>
+                      _showScheduledRemindersDebug(context, controller),
+                ),
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showScheduledRemindersDebug(
+    BuildContext context,
+    PrayerAppController controller,
+  ) async {
+    final entries = await controller.getScheduledReminders();
+    if (!context.mounted) {
+      return;
+    }
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        final now = DateTime.now();
+        return SafeArea(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Scheduled Reminders (Debug)',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Pending notifications: ${entries.length}',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  const SizedBox(height: 8),
+                  OutlinedButton.icon(
+                    onPressed: () async {
+                      await controller.sendTestNotificationNow();
+                      if (!context.mounted) {
+                        return;
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Test notification sent.'),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.notification_add_outlined),
+                    label: const Text('Send test notification now'),
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: entries.isEmpty
+                        ? const Center(
+                            child: Text('No pending reminder notifications.'),
+                          )
+                        : ListView.separated(
+                            itemCount: entries.length,
+                            separatorBuilder: (_, _) =>
+                                const Divider(height: 1),
+                            itemBuilder: (context, index) {
+                              final entry = entries[index];
+                              final date = entry.scheduledAt;
+                              final dateText = date == null
+                                  ? 'Unknown fire time'
+                                  : DateFormat(
+                                      'EEE, dd MMM HH:mm',
+                                    ).format(date);
+                              final isPast = date != null && date.isBefore(now);
+                              return ListTile(
+                                dense: true,
+                                title: Text(entry.title),
+                                subtitle: Text(
+                                  '${isPast ? '[PAST] ' : ''}$dateText\n${entry.body}',
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );

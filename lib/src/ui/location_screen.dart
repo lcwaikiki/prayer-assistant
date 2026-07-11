@@ -180,8 +180,17 @@ class _LocationDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocationNode? resolvedValue;
+    if (value != null) {
+      final index = items.indexWhere((item) => item.id == value!.id);
+      if (index >= 0) {
+        resolvedValue = items[index];
+      }
+    }
+
     return DropdownButtonFormField<LocationNode>(
-      initialValue: value,
+      key: ValueKey('${title}_${resolvedValue?.id ?? 'none'}_${items.length}'),
+      initialValue: resolvedValue,
       decoration: InputDecoration(
         labelText: title,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

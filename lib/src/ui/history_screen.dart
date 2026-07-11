@@ -24,56 +24,128 @@ class HistoryScreen extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        return ListView.separated(
+        return ListView(
           padding: const EdgeInsets.all(16),
-          itemCount: days.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 10),
-          itemBuilder: (context, index) => _HistoryCard(day: days[index]),
+          children: [
+            Text(
+              'Prayer Times Table (1 Year)',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            const SizedBox(height: 12),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  width: 540,
+                  child: DataTableTheme(
+                    data: DataTableThemeData(
+                      headingTextStyle: Theme.of(context).textTheme.labelLarge,
+                      dataTextStyle: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    child: PaginatedDataTable(
+                      header: const Text('Dates'),
+                      rowsPerPage: 20,
+                      showFirstLastButtons: true,
+                      horizontalMargin: 0,
+                      columnSpacing: 0,
+                      headingRowHeight: 40,
+                      dataRowMinHeight: 38,
+                      dataRowMaxHeight: 40,
+                      columns: const [
+                        DataColumn(
+                          label: SizedBox(width: 66, child: Text('Date')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Imsak')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Gunes')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Ogle')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Ikindi')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Aksam')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 44, child: Text('Yatsi')),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: 108, child: Text('Hijri')),
+                        ),
+                      ],
+                      source: _PrayerTableSource(
+                        days,
+                        oddRowColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerLow,
+                        evenRowColor: Theme.of(context).colorScheme.surface,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
   }
 }
 
-class _HistoryCard extends StatelessWidget {
-  const _HistoryCard({required this.day});
+class _PrayerTableSource extends DataTableSource {
+  _PrayerTableSource(
+    this.days, {
+    required this.oddRowColor,
+    required this.evenRowColor,
+  });
 
-  final PrayerDay day;
+  final List<PrayerDay> days;
+  final Color oddRowColor;
+  final Color evenRowColor;
 
   @override
-  Widget build(BuildContext context) {
-    final values = <String, String>{
-      'Imsak': day.imsak,
-      'Gunes': day.gunes,
-      'Ogle': day.ogle,
-      'Ikindi': day.ikindi,
-      'Aksam': day.aksam,
-      'Yatsi': day.yatsi,
-    };
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              DateFormat('EEE, dd MMM yyyy').format(day.date),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: values.entries
-                  .map(
-                    (entry) =>
-                        Chip(label: Text('${entry.key}: ${entry.value}')),
-                  )
-                  .toList(growable: false),
-            ),
-          ],
+  DataRow? getRow(int index) {
+    if (index < 0 || index >= days.length) {
+      return null;
+    }
+    final day = days[index];
+    return DataRow.byIndex(
+      index: index,
+      color: WidgetStatePropertyAll(index.isEven ? evenRowColor : oddRowColor),
+      cells: [
+        DataCell(
+          SizedBox(
+            width: 66,
+            child: Text(DateFormat('dd/MM').format(day.date)),
+          ),
         ),
-      ),
+        DataCell(SizedBox(width: 44, child: Text(day.imsak))),
+        DataCell(SizedBox(width: 44, child: Text(day.gunes))),
+        DataCell(SizedBox(width: 44, child: Text(day.ogle))),
+        DataCell(SizedBox(width: 44, child: Text(day.ikindi))),
+        DataCell(SizedBox(width: 44, child: Text(day.aksam))),
+        DataCell(SizedBox(width: 44, child: Text(day.yatsi))),
+        DataCell(
+          SizedBox(
+            width: 108,
+            child: Text(day.hijriDate.isEmpty ? '-' : day.hijriDate),
+          ),
+        ),
+      ],
     );
   }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => days.length;
+
+  @override
+  int get selectedRowCount => 0;
 }

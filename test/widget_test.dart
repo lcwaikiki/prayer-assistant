@@ -22,6 +22,7 @@ void main() {
   test('prayerMapForDay creates all prayer labels', () {
     final day = PrayerDay(
       date: DateTime(2026, 1, 1),
+      hijriDate: '12 Rajab 1447',
       imsak: '06:00',
       gunes: '07:30',
       ogle: '12:15',

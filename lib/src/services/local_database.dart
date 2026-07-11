@@ -19,13 +19,14 @@ class LocalDatabase {
     final dbPath = path.join(databasesPath, _dbName);
     _db = await openDatabase(
       dbPath,
-      version: 1,
+      version: 2,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE prayer_times (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             district_id TEXT NOT NULL,
             date TEXT NOT NULL,
+            hijri_date TEXT NOT NULL DEFAULT '',
             imsak TEXT NOT NULL,
             gunes TEXT NOT NULL,
             ogle TEXT NOT NULL,
@@ -42,6 +43,13 @@ class LocalDatabase {
             setting_value TEXT NOT NULL
           )
         ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute(
+            "ALTER TABLE prayer_times ADD COLUMN hijri_date TEXT NOT NULL DEFAULT ''",
+          );
+        }
       },
     );
     return _db!;
@@ -154,7 +162,9 @@ class LocalDatabase {
     final db = await instance;
     final rows = await db.rawQuery(
       '''
-        SELECT COUNT(1) AS count
+        SELECT
+          COUNT(1) AS count,
+          SUM(CASE WHEN hijri_date IS NOT NULL AND hijri_date != '' THEN 1 ELSE 0 END) AS hijri_count
         FROM prayer_times
         WHERE district_id = ?
           AND date >= ?
@@ -163,7 +173,8 @@ class LocalDatabase {
       [districtId, '$year-01-01', '$year-12-31'],
     );
     final count = (rows.first['count'] as int?) ?? 0;
-    return count >= 360;
+    final hijriCount = (rows.first['hijri_count'] as int?) ?? 0;
+    return count >= 360 && hijriCount >= 360;
   }
 
   String _toDateKey(DateTime date) {

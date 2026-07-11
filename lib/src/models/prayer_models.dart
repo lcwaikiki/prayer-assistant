@@ -83,6 +83,7 @@ class SelectedLocation {
 class PrayerDay {
   PrayerDay({
     required this.date,
+    required this.hijriDate,
     required this.imsak,
     required this.gunes,
     required this.ogle,
@@ -92,6 +93,7 @@ class PrayerDay {
   });
 
   final DateTime date;
+  final String hijriDate;
   final String imsak;
   final String gunes;
   final String ogle;
@@ -104,8 +106,11 @@ class PrayerDay {
   factory PrayerDay.fromApi(Map<String, dynamic> json) {
     final times =
         (json['times'] as Map<String, dynamic>? ?? <String, dynamic>{});
+    final hijri =
+        (json['hijri_date'] as Map<String, dynamic>? ?? <String, dynamic>{});
     return PrayerDay(
       date: DateTime.parse((json['date'] ?? '').toString()).toLocal(),
+      hijriDate: (hijri['full_date'] ?? '').toString(),
       imsak: (times['imsak'] ?? '--:--').toString(),
       gunes: (times['gunes'] ?? '--:--').toString(),
       ogle: (times['ogle'] ?? '--:--').toString(),
@@ -119,6 +124,7 @@ class PrayerDay {
     return {
       'district_id': districtId,
       'date': dateKey,
+      'hijri_date': hijriDate,
       'imsak': imsak,
       'gunes': gunes,
       'ogle': ogle,
@@ -132,6 +138,7 @@ class PrayerDay {
   factory PrayerDay.fromMap(Map<String, Object?> map) {
     return PrayerDay(
       date: DateTime.parse((map['date'] ?? '').toString()),
+      hijriDate: (map['hijri_date'] ?? '').toString(),
       imsak: (map['imsak'] ?? '--:--').toString(),
       gunes: (map['gunes'] ?? '--:--').toString(),
       ogle: (map['ogle'] ?? '--:--').toString(),

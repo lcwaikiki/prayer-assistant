@@ -92,6 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
               selected.fullName,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
+            const SizedBox(height: 4),
+            Text(
+              day.hijriDate.isEmpty ? 'Hijri: -' : 'Hijri: ${day.hijriDate}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             const SizedBox(height: 16),
             if (nextPrayer != null) _NextPrayerCard(info: nextPrayer),
             const SizedBox(height: 16),

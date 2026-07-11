@@ -77,15 +77,18 @@ class LocalDatabase {
     return SelectedLocation.tryParse(rows.first['setting_value'] as String?);
   }
 
-  Future<void> saveReminderSettings(Map<String, bool> settings) async {
+  Future<void> saveReminderSettings(
+    Map<String, ReminderSetting> settings,
+  ) async {
     final db = await instance;
+    final encoded = settings.map((key, value) => MapEntry(key, value.toJson()));
     await db.insert('app_settings', {
       'setting_key': _reminderSettingsKey,
-      'setting_value': jsonEncode(settings),
+      'setting_value': jsonEncode(encoded),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<Map<String, bool>> loadReminderSettings() async {
+  Future<Map<String, ReminderSetting>> loadReminderSettings() async {
     final db = await instance;
     final rows = await db.query(
       'app_settings',
@@ -94,15 +97,17 @@ class LocalDatabase {
       limit: 1,
     );
     if (rows.isEmpty) {
-      return <String, bool>{};
+      return <String, ReminderSetting>{};
     }
     try {
       final raw =
           jsonDecode(rows.first['setting_value'] as String)
               as Map<String, dynamic>;
-      return raw.map((key, value) => MapEntry(key, value == true));
+      return raw.map(
+        (key, value) => MapEntry(key, ReminderSetting.fromJson(value)),
+      );
     } catch (_) {
-      return <String, bool>{};
+      return <String, ReminderSetting>{};
     }
   }
 

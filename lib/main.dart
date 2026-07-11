@@ -5,6 +5,7 @@ import 'src/controller/prayer_app_controller.dart';
 import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
+import 'src/services/notification_service.dart';
 import 'src/ui/app_shell.dart';
 
 Future<void> main() async {
@@ -14,6 +15,7 @@ Future<void> main() async {
     api: ImsakiyemApi(),
     database: LocalDatabase(),
     locationResolver: LocationResolver(),
+    notificationService: NotificationService(),
   );
   await controller.initialize();
 

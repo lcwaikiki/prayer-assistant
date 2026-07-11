@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../controller/prayer_app_controller.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import 'reminder_settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -103,37 +104,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ...prayerOrder.map(
               (name) => Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _PrayerTile(name: name, value: prayers[name] ?? '--:--'),
+                child: _PrayerTile(
+                  name: name,
+                  value: prayers[name] ?? '--:--',
+                  reminderSetting: controller.reminderFor(name),
+                  onTap: () async {
+                    await Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) =>
+                            ReminderSettingsScreen(prayerName: name),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-            const SizedBox(height: 8),
             Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Reminder Hooks',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Toggle reminders now. Notification engine can be plugged in later without changing UI.',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 8),
-                    ...prayerOrder.map(
-                      (name) => SwitchListTile(
-                        dense: true,
-                        title: Text(name),
-                        contentPadding: EdgeInsets.zero,
-                        value: controller.reminderSettings[name] ?? false,
-                        onChanged: (value) =>
-                            controller.setReminderEnabled(name, value),
-                      ),
-                    ),
-                  ],
+              child: ListTile(
+                leading: const Icon(Icons.notifications_active_outlined),
+                title: const Text('Reminder settings'),
+                subtitle: const Text(
+                  'Tap any prayer time above to configure reminder hook and minutes-before.',
                 ),
               ),
             ),
@@ -145,18 +136,44 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _PrayerTile extends StatelessWidget {
-  const _PrayerTile({required this.name, required this.value});
+  const _PrayerTile({
+    required this.name,
+    required this.value,
+    required this.reminderSetting,
+    required this.onTap,
+  });
 
   final String name;
   final String value;
+  final ReminderSetting reminderSetting;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    String statusText;
+    if (reminderSetting.notifyOnTime && reminderSetting.notifyBefore) {
+      statusText = 'On • On time + ${reminderSetting.minutesBefore} min before';
+    } else if (reminderSetting.notifyOnTime) {
+      statusText = 'On • On time';
+    } else if (reminderSetting.notifyBefore) {
+      statusText = 'On • ${reminderSetting.minutesBefore} min before';
+    } else {
+      statusText = 'Reminder off';
+    }
     return Card(
       child: ListTile(
+        onTap: onTap,
         leading: const Icon(Icons.access_time),
         title: Text(name),
-        trailing: Text(value, style: Theme.of(context).textTheme.titleLarge),
+        subtitle: Text(statusText),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(value, style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(width: 8),
+            const Icon(Icons.chevron_right),
+          ],
+        ),
       ),
     );
   }

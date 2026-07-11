@@ -4,6 +4,7 @@ import '../models/prayer_models.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
+import '../services/notification_service.dart';
 import '../utils/time_utils.dart';
 
 class PrayerAppController extends ChangeNotifier {
@@ -11,11 +12,13 @@ class PrayerAppController extends ChangeNotifier {
     required this.api,
     required this.database,
     required this.locationResolver,
+    required this.notificationService,
   });
 
   final ImsakiyemApi api;
   final LocalDatabase database;
   final LocationResolver locationResolver;
+  final NotificationService notificationService;
 
   bool _isInitializing = true;
   bool _isBusy = false;
@@ -29,7 +32,7 @@ class PrayerAppController extends ChangeNotifier {
   SelectedLocation? _selectedLocation;
   PrayerDay? _today;
   List<PrayerDay> _yearRange = const <PrayerDay>[];
-  Map<String, bool> _reminderSettings = <String, bool>{};
+  Map<String, ReminderSetting> _reminderSettings = <String, ReminderSetting>{};
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -43,11 +46,12 @@ class PrayerAppController extends ChangeNotifier {
   SelectedLocation? get selectedLocation => _selectedLocation;
   PrayerDay? get today => _today;
   List<PrayerDay> get yearRange => _yearRange;
-  Map<String, bool> get reminderSettings => _reminderSettings;
+  Map<String, ReminderSetting> get reminderSettings => _reminderSettings;
 
   Future<void> initialize() async {
     _setLoading(true);
     try {
+      await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
       _countries = await api.getCountries();
@@ -55,6 +59,8 @@ class PrayerAppController extends ChangeNotifier {
         await _loadStates(_selectedLocation!.countryId);
         await _loadDistricts(_selectedLocation!.stateId);
         await refreshPrayerData(forceSync: false);
+      } else {
+        await notificationService.cancelAllPrayerNotifications();
       }
       _error = null;
     } catch (e) {
@@ -177,6 +183,7 @@ class PrayerAppController extends ChangeNotifier {
         forceSync: forceSync,
       );
       await _loadVisibleData(selected.districtId);
+      await _syncNotifications();
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -218,11 +225,27 @@ class PrayerAppController extends ChangeNotifier {
     return null;
   }
 
-  Future<void> setReminderEnabled(String prayer, bool enabled) async {
-    final updated = Map<String, bool>.from(_reminderSettings);
-    updated[prayer] = enabled;
+  ReminderSetting reminderFor(String prayer) {
+    return _reminderSettings[prayer] ?? ReminderSetting.defaults();
+  }
+
+  Future<void> updateReminderSetting({
+    required String prayer,
+    int? minutesBefore,
+    bool? notifyOnTime,
+    bool? notifyBefore,
+  }) async {
+    final updated = Map<String, ReminderSetting>.from(_reminderSettings);
+    final current = reminderFor(prayer);
+    final next = current.copyWith(
+      minutesBefore: minutesBefore,
+      notifyOnTime: notifyOnTime,
+      notifyBefore: notifyBefore,
+    );
+    updated[prayer] = next;
     _reminderSettings = updated;
     await database.saveReminderSettings(updated);
+    await _syncNotifications();
     notifyListeners();
   }
 
@@ -270,5 +293,18 @@ class PrayerAppController extends ChangeNotifier {
   void _setLoading(bool value) {
     _isBusy = value;
     notifyListeners();
+  }
+
+  Future<void> _syncNotifications() async {
+    final selected = _selectedLocation;
+    if (selected == null) {
+      await notificationService.cancelAllPrayerNotifications();
+      return;
+    }
+    await notificationService.reschedulePrayerNotifications(
+      days: _yearRange,
+      reminderSettings: _reminderSettings,
+      locationName: selected.fullName,
+    );
   }
 }

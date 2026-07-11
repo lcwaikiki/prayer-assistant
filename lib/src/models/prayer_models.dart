@@ -160,3 +160,70 @@ class NextPrayerInfo {
   final DateTime time;
   final Duration remaining;
 }
+
+enum ReminderTiming { onTime, before }
+
+class ReminderSetting {
+  ReminderSetting({
+    required this.minutesBefore,
+    required this.notifyOnTime,
+    required this.notifyBefore,
+  });
+
+  final int minutesBefore;
+  final bool notifyOnTime;
+  final bool notifyBefore;
+
+  factory ReminderSetting.defaults() {
+    return ReminderSetting(
+      minutesBefore: 10,
+      notifyOnTime: false,
+      notifyBefore: false,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'minutesBefore': minutesBefore,
+      'notifyOnTime': notifyOnTime,
+      'notifyBefore': notifyBefore,
+    };
+  }
+
+  factory ReminderSetting.fromJson(dynamic value) {
+    if (value is bool) {
+      return ReminderSetting(
+        minutesBefore: 10,
+        notifyOnTime: false,
+        notifyBefore: value,
+      );
+    }
+    if (value is Map<String, dynamic>) {
+      final legacyEnabled = value['enabled'] == true;
+      final rawTiming = (value['timing'] ?? '').toString();
+      final legacyOnTime = rawTiming == ReminderTiming.onTime.name;
+      final legacyBefore = rawTiming == ReminderTiming.before.name;
+      return ReminderSetting(
+        minutesBefore: ((value['minutesBefore'] as num?) ?? 10).toInt(),
+        notifyOnTime:
+            (value['notifyOnTime'] as bool?) ?? (legacyEnabled && legacyOnTime),
+        notifyBefore:
+            (value['notifyBefore'] as bool?) ??
+            (legacyEnabled && (legacyBefore || !legacyOnTime)),
+      );
+    }
+    return ReminderSetting.defaults();
+  }
+
+  ReminderSetting copyWith({
+    int? minutesBefore,
+    bool? notifyOnTime,
+    bool? notifyBefore,
+  }) {
+    return ReminderSetting(
+      minutesBefore: minutesBefore ?? this.minutesBefore,
+      notifyOnTime: notifyOnTime ?? this.notifyOnTime,
+      notifyBefore: notifyBefore ?? this.notifyBefore,
+    );
+  }
+}

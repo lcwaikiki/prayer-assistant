@@ -282,11 +282,17 @@ class PrayerAppController extends ChangeNotifier {
     final end = DateTime(now.year, 12, 31);
     final todayDate = DateTime(now.year, now.month, now.day);
     _today = await database.getDay(districtId: districtId, date: todayDate);
+
+print('306 today: ${_today?.date}');
+
     _yearRange = await database.getRange(
       districtId: districtId,
       start: start,
       end: end,
     );
+
+    print('310 yearRange: ${_yearRange.length}');
+    
     notifyListeners();
   }
 

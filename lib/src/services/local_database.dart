@@ -9,6 +9,9 @@ class LocalDatabase {
   static const _dbName = 'prayer_assistant.db';
   static const _selectedLocationKey = 'selected_location';
   static const _reminderSettingsKey = 'reminder_settings';
+  static const _appBarRemainingPlacementKey = 'app_bar_remaining_placement';
+  static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
+  static const _statusBarAutoRestoreKey = 'status_bar_auto_restore';
   Database? _db;
 
   Future<Database> get instance async {
@@ -109,6 +112,72 @@ class LocalDatabase {
     } catch (_) {
       return <String, ReminderSetting>{};
     }
+  }
+
+  Future<void> saveAppBarRemainingPlacement(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _appBarRemainingPlacementKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadAppBarRemainingPlacement() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_appBarRemainingPlacementKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveStatusBarRemainingEnabled(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _statusBarRemainingEnabledKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadStatusBarRemainingEnabled() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_statusBarRemainingEnabledKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveStatusBarAutoRestore(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _statusBarAutoRestoreKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadStatusBarAutoRestore() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_statusBarAutoRestoreKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
   }
 
   Future<void> upsertPrayerDays(String districtId, List<PrayerDay> days) async {

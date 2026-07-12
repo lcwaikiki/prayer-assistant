@@ -5,6 +5,7 @@ import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
 import '../services/notification_service.dart';
+import '../services/widget_bridge_service.dart';
 import '../utils/time_utils.dart';
 
 class PrayerAppController extends ChangeNotifier {
@@ -13,12 +14,14 @@ class PrayerAppController extends ChangeNotifier {
     required this.database,
     required this.locationResolver,
     required this.notificationService,
+    required this.widgetBridgeService,
   });
 
   final ImsakiyemApi api;
   final LocalDatabase database;
   final LocationResolver locationResolver;
   final NotificationService notificationService;
+  final WidgetBridgeService widgetBridgeService;
 
   bool _isInitializing = true;
   bool _isBusy = false;
@@ -33,6 +36,10 @@ class PrayerAppController extends ChangeNotifier {
   PrayerDay? _today;
   List<PrayerDay> _yearRange = const <PrayerDay>[];
   Map<String, ReminderSetting> _reminderSettings = <String, ReminderSetting>{};
+  AppBarRemainingPlacement _appBarRemainingPlacement =
+      AppBarRemainingPlacement.title;
+  bool _statusBarRemainingEnabled = true;
+  bool _statusBarAutoRestore = false;
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -47,13 +54,31 @@ class PrayerAppController extends ChangeNotifier {
   PrayerDay? get today => _today;
   List<PrayerDay> get yearRange => _yearRange;
   Map<String, ReminderSetting> get reminderSettings => _reminderSettings;
+  AppBarRemainingPlacement get appBarRemainingPlacement =>
+      _appBarRemainingPlacement;
+  bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
+  bool get statusBarAutoRestore => _statusBarAutoRestore;
 
   Future<void> initialize() async {
     _setLoading(true);
     try {
+      widgetBridgeService.registerOpenHomeHandler(() => setTab(1));
       await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
+      _statusBarRemainingEnabled =
+          await database.loadStatusBarRemainingEnabled() ?? true;
+      _statusBarAutoRestore = await database.loadStatusBarAutoRestore() ?? false;
+      final rawAppBarPlacement = await database.loadAppBarRemainingPlacement();
+      var placement = AppBarRemainingPlacement.title;
+      for (final item in AppBarRemainingPlacement.values) {
+        if (item.name == rawAppBarPlacement) {
+          placement = item;
+          break;
+        }
+      }
+      _appBarRemainingPlacement = placement;
+      await _syncStatusBarConfig();
       _countries = await api.getCountries();
       if (_selectedLocation != null) {
         await _loadStates(_selectedLocation!.countryId);
@@ -61,6 +86,10 @@ class PrayerAppController extends ChangeNotifier {
         await refreshPrayerData(forceSync: false);
       } else {
         await notificationService.cancelAllPrayerNotifications();
+        await widgetBridgeService.updateFromPrayerDays(
+          days: const <PrayerDay>[],
+          now: DateTime.now(),
+        );
       }
       _error = null;
     } catch (e) {
@@ -193,36 +222,7 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   NextPrayerInfo? nextPrayer(DateTime now) {
-    final today = _today;
-    if (today == null) {
-      return null;
-    }
-    final prayers = prayerMapForDay(today);
-    for (final prayerName in prayerOrder) {
-      final time = parsePrayerTime(today.date, prayers[prayerName] ?? '');
-      if (time != null && time.isAfter(now)) {
-        return NextPrayerInfo(
-          name: prayerName,
-          time: time,
-          remaining: time.difference(now),
-        );
-      }
-    }
-    if (_yearRange.length > 1) {
-      final tomorrow = _yearRange.firstWhere(
-        (item) => item.date.isAfter(today.date),
-        orElse: () => today,
-      );
-      final imsak = parsePrayerTime(tomorrow.date, tomorrow.imsak);
-      if (imsak != null) {
-        return NextPrayerInfo(
-          name: 'Imsak',
-          time: imsak,
-          remaining: imsak.difference(now),
-        );
-      }
-    }
-    return null;
+    return _findFirstUpcomingPrayer(now);
   }
 
   ReminderSetting reminderFor(String prayer) {
@@ -246,6 +246,37 @@ class PrayerAppController extends ChangeNotifier {
     _reminderSettings = updated;
     await database.saveReminderSettings(updated);
     await _syncNotifications();
+    notifyListeners();
+  }
+
+  Future<void> updateAppBarRemainingPlacement(
+    AppBarRemainingPlacement placement,
+  ) async {
+    if (_appBarRemainingPlacement == placement) {
+      return;
+    }
+    _appBarRemainingPlacement = placement;
+    await database.saveAppBarRemainingPlacement(placement.name);
+    notifyListeners();
+  }
+
+  Future<void> updateStatusBarRemainingEnabled(bool enabled) async {
+    if (_statusBarRemainingEnabled == enabled) {
+      return;
+    }
+    _statusBarRemainingEnabled = enabled;
+    await database.saveStatusBarRemainingEnabled(enabled);
+    await _syncStatusBarConfig();
+    notifyListeners();
+  }
+
+  Future<void> updateStatusBarAutoRestore(bool enabled) async {
+    if (_statusBarAutoRestore == enabled) {
+      return;
+    }
+    _statusBarAutoRestore = enabled;
+    await database.saveStatusBarAutoRestore(enabled);
+    await _syncStatusBarConfig();
     notifyListeners();
   }
 
@@ -283,16 +314,12 @@ class PrayerAppController extends ChangeNotifier {
     final todayDate = DateTime(now.year, now.month, now.day);
     _today = await database.getDay(districtId: districtId, date: todayDate);
 
-print('306 today: ${_today?.date}');
-
     _yearRange = await database.getRange(
       districtId: districtId,
       start: start,
       end: end,
     );
-
-    print('310 yearRange: ${_yearRange.length}');
-    
+    await widgetBridgeService.updateFromPrayerDays(days: _yearRange, now: now);
     notifyListeners();
   }
 
@@ -320,5 +347,54 @@ print('306 today: ${_today?.date}');
 
   Future<void> sendTestNotificationNow() {
     return notificationService.showTestNotificationNow();
+  }
+
+  Future<void> _syncStatusBarConfig() {
+    return widgetBridgeService.updateStatusBarConfig(
+      enabled: _statusBarRemainingEnabled,
+      autoRestore: _statusBarAutoRestore,
+    );
+  }
+
+  NextPrayerInfo? _findFirstUpcomingPrayer(DateTime now) {
+    if (_yearRange.isEmpty) {
+      return null;
+    }
+    final todayStart = DateTime(now.year, now.month, now.day);
+    final orderedDays = _yearRange.where((item) {
+      final day = DateTime(item.date.year, item.date.month, item.date.day);
+      return !day.isBefore(todayStart);
+    });
+
+    for (final day in orderedDays) {
+      final prayers = prayerMapForDay(day);
+      for (final prayerName in prayerOrder) {
+        final prayerTime = parsePrayerTime(day.date, prayers[prayerName] ?? '');
+        if (prayerTime != null && prayerTime.isAfter(now)) {
+          return NextPrayerInfo(
+            name: prayerName,
+            time: prayerTime,
+            remaining: prayerTime.difference(now),
+          );
+        }
+      }
+    }
+
+    // User requested fallback: if there is no upcoming prayer on this date,
+    // treat the first available prayer as the next one.
+    for (final day in _yearRange) {
+      final prayers = prayerMapForDay(day);
+      for (final prayerName in prayerOrder) {
+        final prayerTime = parsePrayerTime(day.date, prayers[prayerName] ?? '');
+        if (prayerTime != null) {
+          return NextPrayerInfo(
+            name: prayerName,
+            time: prayerTime,
+            remaining: prayerTime.difference(now),
+          );
+        }
+      }
+    }
+    return null;
   }
 }

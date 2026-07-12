@@ -187,6 +187,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: const Text('Send test notification now'),
                   ),
                   const SizedBox(height: 12),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Status bar minutes'),
+                    subtitle: const Text(
+                      'Show ongoing remaining-minutes notification in status bar.',
+                    ),
+                    value: controller.statusBarRemainingEnabled,
+                    onChanged: (value) =>
+                        controller.updateStatusBarRemainingEnabled(value),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Auto-restore if dismissed'),
+                    subtitle: const Text(
+                      'Recreate the status item if user swipes it away.',
+                    ),
+                    value: controller.statusBarAutoRestore,
+                    onChanged: controller.statusBarRemainingEnabled
+                        ? (value) => controller.updateStatusBarAutoRestore(value)
+                        : null,
+                  ),
+                  const SizedBox(height: 12),
                   Expanded(
                     child: entries.isEmpty
                         ? const Center(

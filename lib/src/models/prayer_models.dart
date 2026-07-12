@@ -241,3 +241,10 @@ class ScheduledReminderEntry {
   final String body;
   final DateTime? scheduledAt;
 }
+
+enum AppBarRemainingPlacement {
+  title,
+  trailing,
+  subtitle,
+  hidden,
+}

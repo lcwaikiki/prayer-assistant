@@ -1,0 +1,92 @@
+import 'package:flutter/services.dart';
+
+import '../models/prayer_models.dart';
+import '../utils/time_utils.dart';
+
+class WidgetBridgeService {
+  static const MethodChannel _channel = MethodChannel('prayer_assistant/widget');
+  bool _hasHomeListener = false;
+
+  Future<void> updateFromPrayerDays({
+    required List<PrayerDay> days,
+    required DateTime now,
+  }) async {
+    final timeline = <Map<String, Object>>[];
+    final start = DateTime(now.year, now.month, now.day);
+    final end = start.add(const Duration(days: 3));
+
+    for (final day in days) {
+      final safeDay = DateTime(day.date.year, day.date.month, day.date.day);
+      if (safeDay.isBefore(start) || safeDay.isAfter(end)) {
+        continue;
+      }
+      final prayerTimes = prayerMapForDay(day);
+      for (final prayerName in prayerOrder) {
+        final prayerTime = parsePrayerTime(day.date, prayerTimes[prayerName] ?? '');
+        if (prayerTime == null || !prayerTime.isAfter(now)) {
+          continue;
+        }
+        timeline.add(<String, Object>{
+          'name': prayerName,
+          'epochMs': prayerTime.millisecondsSinceEpoch,
+        });
+      }
+    }
+
+    if (timeline.isEmpty) {
+      for (final day in days) {
+        final prayerTimes = prayerMapForDay(day);
+        for (final prayerName in prayerOrder) {
+          final prayerTime =
+              parsePrayerTime(day.date, prayerTimes[prayerName] ?? '');
+          if (prayerTime == null) {
+            continue;
+          }
+          timeline.add(<String, Object>{
+            'name': prayerName,
+            'epochMs': prayerTime.millisecondsSinceEpoch,
+          });
+          break;
+        }
+        if (timeline.isNotEmpty) {
+          break;
+        }
+      }
+    }
+
+    await _channel.invokeMethod<void>('updateWidgetData', <String, Object>{
+      'timeline': timeline,
+    });
+  }
+
+  Future<void> updateStatusBarConfig({
+    required bool enabled,
+    required bool autoRestore,
+  }) async {
+    await _channel.invokeMethod<void>('updateStatusBarConfig', <String, Object>{
+      'enabled': enabled,
+      'autoRestore': autoRestore,
+    });
+  }
+
+  void registerOpenHomeHandler(VoidCallback onOpenHome) {
+    if (_hasHomeListener) {
+      return;
+    }
+    _hasHomeListener = true;
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == 'openHomeTab') {
+        onOpenHome();
+      }
+    });
+    _consumePendingOpenHome(onOpenHome);
+  }
+
+  Future<void> _consumePendingOpenHome(VoidCallback onOpenHome) async {
+    final shouldOpen =
+        await _channel.invokeMethod<bool>('consumePendingOpenHome') ?? false;
+    if (shouldOpen) {
+      onOpenHome();
+    }
+  }
+}

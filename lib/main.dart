@@ -6,6 +6,7 @@ import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
 import 'src/services/notification_service.dart';
+import 'src/services/widget_bridge_service.dart';
 import 'src/ui/app_shell.dart';
 
 Future<void> main() async {
@@ -16,6 +17,7 @@ Future<void> main() async {
     database: LocalDatabase(),
     locationResolver: LocationResolver(),
     notificationService: NotificationService(),
+    widgetBridgeService: WidgetBridgeService(),
   );
   await controller.initialize();
 

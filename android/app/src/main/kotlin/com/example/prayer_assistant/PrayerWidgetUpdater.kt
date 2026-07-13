@@ -12,6 +12,8 @@ import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 import kotlin.math.max
 
@@ -125,16 +127,19 @@ object PrayerWidgetUpdater {
             dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val remainingMinutes = if (next == null) {
-            "--"
+        val message = if (next == null) {
+            "-- --:-- -> --:--"
         } else {
-            ((max(0L, next.second - now)) / 60000L).toString()
+            val prayerName = toDisplayPrayerName(next.first)
+            val atTime = formatClock(next.second)
+            val remaining = formatStatusRemaining(next.second - now)
+            "$prayerName $atTime -> $remaining"
         }
         val builder = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle("Remaining")
-            .setContentText(remainingMinutes)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(remainingMinutes))
+            .setContentTitle("Prayer Assistant")
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setContentIntent(openPendingIntent)
             .setDeleteIntent(dismissPendingIntent)
             .setOngoing(true)
@@ -159,5 +164,34 @@ object PrayerWidgetUpdater {
         }
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(channel)
+    }
+
+    private fun formatClock(epochMs: Long): String {
+        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+        return formatter.format(Date(epochMs))
+    }
+
+    private fun toDisplayPrayerName(raw: String): String {
+        return when (raw.lowercase(Locale.ROOT)) {
+            "imsak" -> "Imsak"
+            "gunes" -> "Sunrise"
+            "ogle" -> "Dhur"
+            "ikindi" -> "Asr"
+            "aksam" -> "Maghrib"
+            "yatsi" -> "Isha"
+            else -> raw
+        }
+    }
+
+    private fun formatStatusRemaining(diffMillis: Long): String {
+        val safeMillis = max(0L, diffMillis)
+        val totalMinutes = safeMillis / 60000L
+        return if (totalMinutes < 60L) {
+            String.format(Locale.US, "%02d", totalMinutes)
+        } else {
+            val hours = totalMinutes / 60L
+            val minutes = totalMinutes % 60L
+            String.format(Locale.US, "%02d:%02d", hours, minutes)
+        }
     }
 }

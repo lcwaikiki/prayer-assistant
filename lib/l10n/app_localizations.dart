@@ -146,6 +146,18 @@ abstract class AppLocalizations {
   /// **'Toggle light/dark'**
   String get tooltipToggleLightDark;
 
+  /// No description provided for @tooltipRemindersOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn reminders on'**
+  String get tooltipRemindersOn;
+
+  /// No description provided for @tooltipRemindersOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn reminders off'**
+  String get tooltipRemindersOff;
+
   /// No description provided for @tooltipPreferences.
   ///
   /// In en, this message translates to:
@@ -517,6 +529,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hide remaining text'**
   String get hideRemainingText;
+
+  /// No description provided for @notificationMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification message'**
+  String get notificationMessageTitle;
+
+  /// No description provided for @notificationMessageShown.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown'**
+  String get notificationMessageShown;
+
+  /// No description provided for @notificationMessageHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden'**
+  String get notificationMessageHidden;
+
+  /// No description provided for @remindersOnOffTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders on/off'**
+  String get remindersOnOffTitle;
+
+  /// No description provided for @remindersOnOffSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn prayer reminder notifications on or off. Per-prayer settings are kept.'**
+  String get remindersOnOffSubtitle;
+
+  /// No description provided for @remindersOn.
+  ///
+  /// In en, this message translates to:
+  /// **'On'**
+  String get remindersOn;
+
+  /// No description provided for @remindersOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off'**
+  String get remindersOff;
 
   /// No description provided for @reminderScreenTitle.
   ///

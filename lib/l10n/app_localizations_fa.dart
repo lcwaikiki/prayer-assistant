@@ -24,6 +24,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tooltipToggleLightDark => 'تغییر روشن/تیره';
 
   @override
+  String get tooltipRemindersOn => 'یادآورها را روشن کنید';
+
+  @override
+  String get tooltipRemindersOff => 'یادآورها را خاموش کنید';
+
+  @override
   String get tooltipPreferences => 'تنظیمات';
 
   @override
@@ -232,6 +238,28 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'مخفی کردن متن باقی‌مانده';
+
+  @override
+  String get notificationMessageTitle => 'پیام اعلان';
+
+  @override
+  String get notificationMessageShown => 'نمایش داده می‌شود';
+
+  @override
+  String get notificationMessageHidden => 'پنهان';
+
+  @override
+  String get remindersOnOffTitle => 'یادآورها روشن/خاموش';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'اعلان‌های یادآور نماز را روشن یا خاموش کنید. تنظیمات هر نماز حفظ می‌شود.';
+
+  @override
+  String get remindersOn => 'روشن';
+
+  @override
+  String get remindersOff => 'خاموش';
 
   @override
   String reminderScreenTitle(Object prayer) {

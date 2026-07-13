@@ -24,6 +24,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tooltipToggleLightDark => 'ライト/ダーク切替';
 
   @override
+  String get tooltipRemindersOn => 'リマインダーをオン';
+
+  @override
+  String get tooltipRemindersOff => 'リマインダーをオフ';
+
+  @override
   String get tooltipPreferences => '設定';
 
   @override
@@ -224,6 +230,27 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get hideRemainingText => '残りテキストを非表示';
+
+  @override
+  String get notificationMessageTitle => '通知メッセージ';
+
+  @override
+  String get notificationMessageShown => '表示';
+
+  @override
+  String get notificationMessageHidden => '非表示';
+
+  @override
+  String get remindersOnOffTitle => 'リマインダー on/off';
+
+  @override
+  String get remindersOnOffSubtitle => '礼拝リマインダー通知のオン/オフ。礼拝ごとの設定は保持されます。';
+
+  @override
+  String get remindersOn => 'オン';
+
+  @override
+  String get remindersOff => 'オフ';
 
   @override
   String reminderScreenTitle(Object prayer) {

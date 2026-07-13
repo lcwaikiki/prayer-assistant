@@ -24,6 +24,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tooltipToggleLightDark => 'Hell/Dunkel umschalten';
 
   @override
+  String get tooltipRemindersOn => 'Erinnerungen einschalten';
+
+  @override
+  String get tooltipRemindersOff => 'Erinnerungen ausschalten';
+
+  @override
   String get tooltipPreferences => 'Einstellungen';
 
   @override
@@ -231,6 +237,28 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'Resttext ausblenden';
+
+  @override
+  String get notificationMessageTitle => 'Benachrichtigungstext';
+
+  @override
+  String get notificationMessageShown => 'Angezeigt';
+
+  @override
+  String get notificationMessageHidden => 'Ausgeblendet';
+
+  @override
+  String get remindersOnOffTitle => 'Erinnerungen an/aus';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'Gebetserinnerungen ein- oder ausschalten. Einstellungen pro Gebet bleiben erhalten.';
+
+  @override
+  String get remindersOn => 'An';
+
+  @override
+  String get remindersOff => 'Aus';
 
   @override
   String reminderScreenTitle(Object prayer) {

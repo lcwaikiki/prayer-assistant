@@ -135,6 +135,39 @@ class PreferencesScreen extends StatelessWidget {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.remindersOnOffTitle,
+                subtitle: controller.remindersSilenced
+                    ? context.l10n.remindersOff
+                    : context.l10n.remindersOn,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.remindersOnOffTitle),
+                    subtitle: Text(context.l10n.remindersOnOffSubtitle),
+                    value: !controller.remindersSilenced,
+                    onChanged: (enabled) =>
+                        controller.updateRemindersSilenced(!enabled),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.notificationMessageTitle,
+                subtitle: controller.statusBarRemainingEnabled
+                    ? context.l10n.notificationMessageShown
+                    : context.l10n.notificationMessageHidden,
+                children: [
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.statusBarMinutesTitle),
+                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
+                    value: controller.statusBarRemainingEnabled,
+                    onChanged: controller.updateStatusBarRemainingEnabled,
+                  ),
+                ],
+              ),
             ],
           ),
         );

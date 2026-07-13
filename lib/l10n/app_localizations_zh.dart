@@ -24,6 +24,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tooltipToggleLightDark => '切换明暗模式';
 
   @override
+  String get tooltipRemindersOn => '开启提醒';
+
+  @override
+  String get tooltipRemindersOff => '关闭提醒';
+
+  @override
   String get tooltipPreferences => '偏好设置';
 
   @override
@@ -224,6 +230,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get hideRemainingText => '隐藏剩余文字';
+
+  @override
+  String get notificationMessageTitle => '通知消息';
+
+  @override
+  String get notificationMessageShown => '显示';
+
+  @override
+  String get notificationMessageHidden => '隐藏';
+
+  @override
+  String get remindersOnOffTitle => '提醒开/关';
+
+  @override
+  String get remindersOnOffSubtitle => '开启或关闭礼拜提醒通知，各礼拜的设置会保留。';
+
+  @override
+  String get remindersOn => '开';
+
+  @override
+  String get remindersOff => '关';
 
   @override
   String reminderScreenTitle(Object prayer) {

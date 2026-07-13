@@ -62,7 +62,6 @@ object PrayerWidgetStorage {
     }
 
     fun isStatusAutoRestore(context: Context): Boolean {
-        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .getBoolean(STATUS_AUTO_RESTORE_KEY, false)
+        return isStatusEnabled(context)
     }
 }

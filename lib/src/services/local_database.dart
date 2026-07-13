@@ -11,7 +11,7 @@ class LocalDatabase {
   static const _reminderSettingsKey = 'reminder_settings';
   static const _appBarRemainingPlacementKey = 'app_bar_remaining_placement';
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
-  static const _statusBarAutoRestoreKey = 'status_bar_auto_restore';
+  static const _remindersSilencedKey = 'reminders_silenced';
   static const _themePreferenceKey = 'theme_preference';
   static const _localePreferenceKey = 'locale_preference';
   Database? _db;
@@ -160,20 +160,20 @@ class LocalDatabase {
     return (rows.first['setting_value'] as String?) == 'true';
   }
 
-  Future<void> saveStatusBarAutoRestore(bool enabled) async {
+  Future<void> saveRemindersSilenced(bool silenced) async {
     final db = await instance;
     await db.insert('app_settings', {
-      'setting_key': _statusBarAutoRestoreKey,
-      'setting_value': enabled ? 'true' : 'false',
+      'setting_key': _remindersSilencedKey,
+      'setting_value': silenced ? 'true' : 'false',
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<bool?> loadStatusBarAutoRestore() async {
+  Future<bool?> loadRemindersSilenced() async {
     final db = await instance;
     final rows = await db.query(
       'app_settings',
       where: 'setting_key = ?',
-      whereArgs: [_statusBarAutoRestoreKey],
+      whereArgs: [_remindersSilencedKey],
       limit: 1,
     );
     if (rows.isEmpty) {

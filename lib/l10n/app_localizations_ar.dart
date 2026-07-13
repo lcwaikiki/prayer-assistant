@@ -24,6 +24,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tooltipToggleLightDark => 'تبديل فاتح/داكن';
 
   @override
+  String get tooltipRemindersOn => 'تشغيل التذكيرات';
+
+  @override
+  String get tooltipRemindersOff => 'إيقاف التذكيرات';
+
+  @override
   String get tooltipPreferences => 'التفضيلات';
 
   @override
@@ -230,6 +236,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'إخفاء النص المتبقي';
+
+  @override
+  String get notificationMessageTitle => 'رسالة الإشعار';
+
+  @override
+  String get notificationMessageShown => 'ظاهرة';
+
+  @override
+  String get notificationMessageHidden => 'مخفية';
+
+  @override
+  String get remindersOnOffTitle => 'التذكيرات تشغيل/إيقاف';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'تشغيل أو إيقاف إشعارات تذكير الصلاة مع الاحتفاظ بإعدادات كل صلاة.';
+
+  @override
+  String get remindersOn => 'تشغيل';
+
+  @override
+  String get remindersOff => 'إيقاف';
 
   @override
   String reminderScreenTitle(Object prayer) {

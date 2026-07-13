@@ -24,6 +24,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get tooltipToggleLightDark => 'Ganti terang/gelap';
 
   @override
+  String get tooltipRemindersOn => 'Nyalakan pengingat';
+
+  @override
+  String get tooltipRemindersOff => 'Matikan pengingat';
+
+  @override
   String get tooltipPreferences => 'Preferensi';
 
   @override
@@ -231,6 +237,28 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'Sembunyikan teks sisa';
+
+  @override
+  String get notificationMessageTitle => 'Pesan notifikasi';
+
+  @override
+  String get notificationMessageShown => 'Ditampilkan';
+
+  @override
+  String get notificationMessageHidden => 'Disembunyikan';
+
+  @override
+  String get remindersOnOffTitle => 'Pengingat on/off';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'Nyalakan atau matikan notifikasi pengingat salat. Pengaturan per salat tetap tersimpan.';
+
+  @override
+  String get remindersOn => 'On';
+
+  @override
+  String get remindersOff => 'Off';
 
   @override
   String reminderScreenTitle(Object prayer) {

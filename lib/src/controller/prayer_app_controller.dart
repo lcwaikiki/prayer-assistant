@@ -40,7 +40,7 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement _appBarRemainingPlacement =
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
-  bool _statusBarAutoRestore = false;
+  bool _remindersSilenced = false;
   AppThemePreference _themePreference = AppThemePreference.system;
   AppLocalePreference _localePreference = AppLocalePreference.system;
 
@@ -60,7 +60,7 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement get appBarRemainingPlacement =>
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
-  bool get statusBarAutoRestore => _statusBarAutoRestore;
+  bool get remindersSilenced => _remindersSilenced;
   AppThemePreference get themePreference => _themePreference;
   ThemeMode get themeMode => switch (_themePreference) {
     AppThemePreference.system => ThemeMode.system,
@@ -79,7 +79,7 @@ class PrayerAppController extends ChangeNotifier {
       _reminderSettings = await database.loadReminderSettings();
       _statusBarRemainingEnabled =
           await database.loadStatusBarRemainingEnabled() ?? true;
-      _statusBarAutoRestore = await database.loadStatusBarAutoRestore() ?? false;
+      _remindersSilenced = await database.loadRemindersSilenced() ?? false;
       final rawThemePreference = await database.loadThemePreference();
       var themePreference = AppThemePreference.system;
       for (final item in AppThemePreference.values) {
@@ -312,13 +312,17 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateStatusBarAutoRestore(bool enabled) async {
-    if (_statusBarAutoRestore == enabled) {
+  Future<void> updateRemindersSilenced(bool silenced) async {
+    if (_remindersSilenced == silenced) {
       return;
     }
-    _statusBarAutoRestore = enabled;
-    await database.saveStatusBarAutoRestore(enabled);
-    await _syncStatusBarConfig();
+    _remindersSilenced = silenced;
+    await database.saveRemindersSilenced(silenced);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
     notifyListeners();
   }
 
@@ -345,6 +349,10 @@ class PrayerAppController extends ChangeNotifier {
         ? AppThemePreference.light
         : AppThemePreference.dark;
     await updateThemePreference(next);
+  }
+
+  Future<void> toggleReminders() {
+    return updateRemindersSilenced(!_remindersSilenced);
   }
 
   Future<void> _loadStates(String countryId) async {
@@ -397,7 +405,7 @@ class PrayerAppController extends ChangeNotifier {
 
   Future<void> _syncNotifications() async {
     final selected = _selectedLocation;
-    if (selected == null) {
+    if (selected == null || _remindersSilenced) {
       await notificationService.cancelAllPrayerNotifications();
       return;
     }
@@ -419,7 +427,7 @@ class PrayerAppController extends ChangeNotifier {
   Future<void> _syncStatusBarConfig() {
     return widgetBridgeService.updateStatusBarConfig(
       enabled: _statusBarRemainingEnabled,
-      autoRestore: _statusBarAutoRestore,
+      autoRestore: _statusBarRemainingEnabled,
     );
   }
 

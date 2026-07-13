@@ -26,8 +26,7 @@ class MainActivity : FlutterActivity() {
                 }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
-                    val autoRestore = call.argument<Boolean>("autoRestore") ?: false
-                    PrayerWidgetStorage.saveStatusConfig(this, enabled, autoRestore)
+                    PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     result.success(null)

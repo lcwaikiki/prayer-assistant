@@ -24,6 +24,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tooltipToggleLightDark => 'Açık/Koyu değiştir';
 
   @override
+  String get tooltipRemindersOn => 'Hatırlatıcıları aç';
+
+  @override
+  String get tooltipRemindersOff => 'Hatırlatıcıları kapat';
+
+  @override
   String get tooltipPreferences => 'Tercihler';
 
   @override
@@ -232,6 +238,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'Kalan metni gizle';
+
+  @override
+  String get notificationMessageTitle => 'Bildirim mesajı';
+
+  @override
+  String get notificationMessageShown => 'Gösteriliyor';
+
+  @override
+  String get notificationMessageHidden => 'Gizli';
+
+  @override
+  String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'Namaz hatırlatıcı bildirimlerini aç veya kapat. Vakit ayarların korunur.';
+
+  @override
+  String get remindersOn => 'Açık';
+
+  @override
+  String get remindersOff => 'Kapalı';
 
   @override
   String reminderScreenTitle(Object prayer) {

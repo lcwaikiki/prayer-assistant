@@ -188,24 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: Text(context.l10n.sendTestNotificationNow),
                   ),
                   const SizedBox(height: 12),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.statusBarMinutesTitle),
-                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
-                    value: controller.statusBarRemainingEnabled,
-                    onChanged: (value) =>
-                        controller.updateStatusBarRemainingEnabled(value),
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.statusAutoRestoreTitle),
-                    subtitle: Text(context.l10n.statusAutoRestoreSubtitle),
-                    value: controller.statusBarAutoRestore,
-                    onChanged: controller.statusBarRemainingEnabled
-                        ? (value) => controller.updateStatusBarAutoRestore(value)
-                        : null,
-                  ),
-                  const SizedBox(height: 12),
                   Expanded(
                     child: entries.isEmpty
                         ? Center(

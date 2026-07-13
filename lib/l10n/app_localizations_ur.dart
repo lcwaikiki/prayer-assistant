@@ -24,6 +24,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get tooltipToggleLightDark => 'لائٹ/ڈارک تبدیل کریں';
 
   @override
+  String get tooltipRemindersOn => 'یاد دہانیاں آن کریں';
+
+  @override
+  String get tooltipRemindersOff => 'یاد دہانیاں آف کریں';
+
+  @override
   String get tooltipPreferences => 'ترجیحات';
 
   @override
@@ -231,6 +237,28 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'باقی متن چھپائیں';
+
+  @override
+  String get notificationMessageTitle => 'اطلاع کا پیغام';
+
+  @override
+  String get notificationMessageShown => 'دکھایا گیا';
+
+  @override
+  String get notificationMessageHidden => 'چھپا ہوا';
+
+  @override
+  String get remindersOnOffTitle => 'یاد دہانیاں آن/آف';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'نماز کی یاد دہانی آن یا آف کریں۔ ہر نماز کی سیٹنگز محفوظ رہیں گی۔';
+
+  @override
+  String get remindersOn => 'آن';
+
+  @override
+  String get remindersOff => 'آف';
 
   @override
   String reminderScreenTitle(Object prayer) {

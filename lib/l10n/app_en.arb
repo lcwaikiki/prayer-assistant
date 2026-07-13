@@ -5,6 +5,8 @@
   "tabToday": "Today",
   "tabDates": "Dates",
   "tooltipToggleLightDark": "Toggle light/dark",
+  "tooltipRemindersOn": "Turn reminders on",
+  "tooltipRemindersOff": "Turn reminders off",
   "tooltipPreferences": "Preferences",
   "remainingMinutesValue": "{minutes} min",
   "@remainingMinutesValue": {
@@ -107,6 +109,13 @@
   "showAtRight": "Show at right",
   "showAsSubtitle": "Show as subtitle",
   "hideRemainingText": "Hide remaining text",
+  "notificationMessageTitle": "Notification message",
+  "notificationMessageShown": "Shown",
+  "notificationMessageHidden": "Hidden",
+  "remindersOnOffTitle": "Reminders on/off",
+  "remindersOnOffSubtitle": "Turn prayer reminder notifications on or off. Per-prayer settings are kept.",
+  "remindersOn": "On",
+  "remindersOff": "Off",
   "reminderScreenTitle": "{prayer} Reminder",
   "@reminderScreenTitle": {
     "placeholders": {

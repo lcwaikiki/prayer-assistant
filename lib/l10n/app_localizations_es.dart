@@ -24,6 +24,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tooltipToggleLightDark => 'Cambiar claro/oscuro';
 
   @override
+  String get tooltipRemindersOn => 'Activar recordatorios';
+
+  @override
+  String get tooltipRemindersOff => 'Desactivar recordatorios';
+
+  @override
   String get tooltipPreferences => 'Preferencias';
 
   @override
@@ -232,6 +238,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hideRemainingText => 'Ocultar texto restante';
+
+  @override
+  String get notificationMessageTitle => 'Mensaje de notificación';
+
+  @override
+  String get notificationMessageShown => 'Visible';
+
+  @override
+  String get notificationMessageHidden => 'Oculto';
+
+  @override
+  String get remindersOnOffTitle => 'Recordatorios on/off';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'Activa o desactiva las notificaciones de oración. Se conservan los ajustes por oración.';
+
+  @override
+  String get remindersOn => 'On';
+
+  @override
+  String get remindersOff => 'Off';
 
   @override
   String reminderScreenTitle(Object prayer) {

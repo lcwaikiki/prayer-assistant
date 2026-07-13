@@ -81,6 +81,10 @@ class PrayerAppController extends ChangeNotifier {
       await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
+      _reminderSettings = {
+        for (final entry in _reminderSettings.entries)
+          entry.key: ReminderSetting.ensureCurrent(entry.value),
+      };
       _statusBarRemainingEnabled =
           await database.loadStatusBarRemainingEnabled() ?? true;
       _remindersSilenced = await database.loadRemindersSilenced() ?? false;
@@ -260,7 +264,16 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   ReminderSetting reminderFor(String prayer) {
-    return _reminderSettings[prayer] ?? ReminderSetting.defaults();
+    final setting = _reminderSettings[prayer];
+    if (setting == null) {
+      return ReminderSetting.defaults();
+    }
+    final current = ReminderSetting.ensureCurrent(setting);
+    if (!identical(current, setting)) {
+      _reminderSettings = Map<String, ReminderSetting>.from(_reminderSettings)
+        ..[prayer] = current;
+    }
+    return current;
   }
 
   Future<void> updateReminderSetting({

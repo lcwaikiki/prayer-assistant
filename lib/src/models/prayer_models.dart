@@ -236,6 +236,23 @@ class ReminderSetting {
       notifyBefore: notifyBefore ?? this.notifyBefore,
     );
   }
+
+  /// Rebuilds settings loaded before [customMinutesBefore] existed (e.g. after
+  /// hot reload) so new fields can be read safely.
+  static ReminderSetting ensureCurrent(ReminderSetting setting) {
+    var customMinutes = setting.minutesBefore;
+    try {
+      customMinutes = setting.customMinutesBefore;
+    } catch (_) {
+      // Stale instance from hot reload before customMinutesBefore was added.
+    }
+    return ReminderSetting(
+      minutesBefore: setting.minutesBefore,
+      customMinutesBefore: customMinutes,
+      notifyOnTime: setting.notifyOnTime,
+      notifyBefore: setting.notifyBefore,
+    );
+  }
 }
 
 class ScheduledReminderEntry {

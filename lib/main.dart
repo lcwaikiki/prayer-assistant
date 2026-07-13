@@ -33,15 +33,29 @@ class PrayerAssistantApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PrayerAppController>.value(
       value: controller,
-      child: MaterialApp(
-        title: 'Prayer Assistant',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1F8A70)),
-          useMaterial3: true,
-          cardTheme: const CardThemeData(elevation: 0, margin: EdgeInsets.zero),
+      child: Consumer<PrayerAppController>(
+        builder: (context, controller, _) => MaterialApp(
+          title: 'Prayer Assistant',
+          debugShowCheckedModeBanner: false,
+          themeMode: controller.themeMode,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF1F8A70),
+              brightness: Brightness.light,
+            ),
+            useMaterial3: true,
+            cardTheme: const CardThemeData(elevation: 0, margin: EdgeInsets.zero),
+          ),
+          darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color(0xFF1F8A70),
+              brightness: Brightness.dark,
+            ),
+            useMaterial3: true,
+            cardTheme: const CardThemeData(elevation: 0, margin: EdgeInsets.zero),
+          ),
+          home: const AppShell(),
         ),
-        home: const AppShell(),
       ),
     );
   }

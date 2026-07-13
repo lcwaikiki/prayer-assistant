@@ -12,6 +12,7 @@ class LocalDatabase {
   static const _appBarRemainingPlacementKey = 'app_bar_remaining_placement';
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
   static const _statusBarAutoRestoreKey = 'status_bar_auto_restore';
+  static const _themePreferenceKey = 'theme_preference';
   Database? _db;
 
   Future<Database> get instance async {
@@ -178,6 +179,28 @@ class LocalDatabase {
       return null;
     }
     return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveThemePreference(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _themePreferenceKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadThemePreference() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_themePreferenceKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
   }
 
   Future<void> upsertPrayerDays(String districtId, List<PrayerDay> days) async {

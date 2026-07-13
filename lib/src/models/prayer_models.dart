@@ -248,3 +248,9 @@ enum AppBarRemainingPlacement {
   subtitle,
   hidden,
 }
+
+enum AppThemePreference {
+  system,
+  light,
+  dark,
+}

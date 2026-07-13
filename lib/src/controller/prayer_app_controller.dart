@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import '../models/prayer_models.dart';
 import '../services/imsakiyem_api.dart';
@@ -40,6 +41,7 @@ class PrayerAppController extends ChangeNotifier {
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
   bool _statusBarAutoRestore = false;
+  AppThemePreference _themePreference = AppThemePreference.system;
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -58,6 +60,12 @@ class PrayerAppController extends ChangeNotifier {
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
   bool get statusBarAutoRestore => _statusBarAutoRestore;
+  AppThemePreference get themePreference => _themePreference;
+  ThemeMode get themeMode => switch (_themePreference) {
+    AppThemePreference.system => ThemeMode.system,
+    AppThemePreference.light => ThemeMode.light,
+    AppThemePreference.dark => ThemeMode.dark,
+  };
 
   Future<void> initialize() async {
     _setLoading(true);
@@ -69,6 +77,15 @@ class PrayerAppController extends ChangeNotifier {
       _statusBarRemainingEnabled =
           await database.loadStatusBarRemainingEnabled() ?? true;
       _statusBarAutoRestore = await database.loadStatusBarAutoRestore() ?? false;
+      final rawThemePreference = await database.loadThemePreference();
+      var themePreference = AppThemePreference.system;
+      for (final item in AppThemePreference.values) {
+        if (item.name == rawThemePreference) {
+          themePreference = item;
+          break;
+        }
+      }
+      _themePreference = themePreference;
       final rawAppBarPlacement = await database.loadAppBarRemainingPlacement();
       var placement = AppBarRemainingPlacement.title;
       for (final item in AppBarRemainingPlacement.values) {
@@ -278,6 +295,22 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveStatusBarAutoRestore(enabled);
     await _syncStatusBarConfig();
     notifyListeners();
+  }
+
+  Future<void> updateThemePreference(AppThemePreference preference) async {
+    if (_themePreference == preference) {
+      return;
+    }
+    _themePreference = preference;
+    await database.saveThemePreference(preference.name);
+    notifyListeners();
+  }
+
+  Future<void> toggleThemeQuick({required bool isCurrentlyDark}) async {
+    final next = isCurrentlyDark
+        ? AppThemePreference.light
+        : AppThemePreference.dark;
+    await updateThemePreference(next);
   }
 
   Future<void> _loadStates(String countryId) async {

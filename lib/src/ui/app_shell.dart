@@ -8,6 +8,7 @@ import '../models/prayer_models.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'location_screen.dart';
+import 'preferences_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -128,30 +129,28 @@ class _AppShellState extends State<AppShell> {
       actions: [
         if (trailing case final widget?) widget,
         if (isHomeTab)
-          PopupMenuButton<AppBarRemainingPlacement>(
-            tooltip: 'Remaining minutes display',
-            initialValue: controller.appBarRemainingPlacement,
-            onSelected: controller.updateAppBarRemainingPlacement,
-            itemBuilder: (_) => const [
-              PopupMenuItem(
-                value: AppBarRemainingPlacement.title,
-                child: Text('Show in title'),
-              ),
-              PopupMenuItem(
-                value: AppBarRemainingPlacement.trailing,
-                child: Text('Show at right'),
-              ),
-              PopupMenuItem(
-                value: AppBarRemainingPlacement.subtitle,
-                child: Text('Show as subtitle'),
-              ),
-              PopupMenuItem(
-                value: AppBarRemainingPlacement.hidden,
-                child: Text('Hide remaining minutes'),
-              ),
-            ],
-            icon: const Icon(Icons.tune),
+          IconButton(
+            tooltip: 'Toggle light/dark',
+            icon: Icon(
+              Theme.of(context).brightness == Brightness.dark
+                  ? Icons.light_mode_outlined
+                  : Icons.dark_mode_outlined,
+            ),
+            onPressed: () => controller.toggleThemeQuick(
+              isCurrentlyDark: Theme.of(context).brightness == Brightness.dark,
+            ),
           ),
+        IconButton(
+          tooltip: 'Preferences',
+          icon: const Icon(Icons.tune),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const PreferencesScreen(),
+              ),
+            );
+          },
+        ),
       ],
     );
   }

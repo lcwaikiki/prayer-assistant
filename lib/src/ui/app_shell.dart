@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
@@ -60,21 +61,21 @@ class _AppShellState extends State<AppShell> {
           bottomNavigationBar: NavigationBar(
             selectedIndex: controller.tabIndex,
             onDestinationSelected: controller.setTab,
-            destinations: const <NavigationDestination>[
+            destinations: <NavigationDestination>[
               NavigationDestination(
-                icon: Icon(Icons.location_on_outlined),
-                selectedIcon: Icon(Icons.location_on),
-                label: 'Location',
+                icon: const Icon(Icons.location_on_outlined),
+                selectedIcon: const Icon(Icons.location_on),
+                label: context.l10n.tabLocation,
               ),
               NavigationDestination(
-                icon: Icon(Icons.mosque_outlined),
-                selectedIcon: Icon(Icons.mosque),
-                label: 'Today',
+                icon: const Icon(Icons.mosque_outlined),
+                selectedIcon: const Icon(Icons.mosque),
+                label: context.l10n.tabToday,
               ),
               NavigationDestination(
-                icon: Icon(Icons.calendar_month_outlined),
-                selectedIcon: Icon(Icons.calendar_month),
-                label: 'Dates',
+                icon: const Icon(Icons.calendar_month_outlined),
+                selectedIcon: const Icon(Icons.calendar_month),
+                label: context.l10n.tabDates,
               ),
             ],
           ),
@@ -89,15 +90,18 @@ class _AppShellState extends State<AppShell> {
     DateTime now,
   ) {
     final tabTitle = switch (controller.tabIndex) {
-      0 => 'Location',
-      1 => 'Today',
-      2 => 'Dates',
-      _ => 'Prayer Assistant',
+      0 => context.l10n.tabLocation,
+      1 => context.l10n.tabToday,
+      2 => context.l10n.tabDates,
+      _ => context.l10n.appTitle,
     };
 
     final next = controller.nextPrayer(now);
-    final minuteText =
-        next == null ? '-- min' : '${next.remaining.inMinutes.clamp(0, 9999)} min';
+    final minuteText = next == null
+        ? context.l10n.remainingMinutesUnknown
+        : context.l10n.remainingMinutesValue(
+            next.remaining.inMinutes.clamp(0, 9999),
+          );
     final isHomeTab = controller.tabIndex == 1;
     final placement = isHomeTab
         ? controller.appBarRemainingPlacement
@@ -127,10 +131,10 @@ class _AppShellState extends State<AppShell> {
     return AppBar(
       title: titleWidget,
       actions: [
-        if (trailing case final widget?) widget,
+        if (trailing != null) trailing,
         if (isHomeTab)
           IconButton(
-            tooltip: 'Toggle light/dark',
+            tooltip: context.l10n.tooltipToggleLightDark,
             icon: Icon(
               Theme.of(context).brightness == Brightness.dark
                   ? Icons.light_mode_outlined
@@ -141,7 +145,7 @@ class _AppShellState extends State<AppShell> {
             ),
           ),
         IconButton(
-          tooltip: 'Preferences',
+          tooltip: context.l10n.tooltipPreferences,
           icon: const Icon(Icons.tune),
           onPressed: () {
             Navigator.of(context).push(

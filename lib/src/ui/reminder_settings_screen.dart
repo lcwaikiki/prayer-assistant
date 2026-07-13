@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/l10n.dart';
 
 class ReminderSettingsScreen extends StatefulWidget {
   const ReminderSettingsScreen({required this.prayerName, super.key});
@@ -47,7 +48,9 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
         }
 
         return Scaffold(
-          appBar: AppBar(title: Text('${widget.prayerName} Reminder')),
+          appBar: AppBar(
+            title: Text(context.l10n.reminderScreenTitle(widget.prayerName)),
+          ),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -58,7 +61,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Reminder type (can select both)',
+                        context.l10n.reminderTypeTitle,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12),
@@ -67,7 +70,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                         runSpacing: 8,
                         children: [
                           FilterChip(
-                            label: const Text('On time'),
+                            label: Text(context.l10n.onTime),
                             selected: setting.notifyOnTime,
                             onSelected: (value) =>
                                 controller.updateReminderSetting(
@@ -76,7 +79,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                                 ),
                           ),
                           FilterChip(
-                            label: const Text('Before'),
+                            label: Text(context.l10n.before),
                             selected: setting.notifyBefore,
                             onSelected: (value) =>
                                 controller.updateReminderSetting(
@@ -98,7 +101,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Remind me before prayer',
+                        context.l10n.remindBeforePrayerTitle,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 12),
@@ -108,7 +111,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                         children: _minuteOptions
                             .map(
                               (option) => ChoiceChip(
-                                label: Text('$option min'),
+                                label: Text(context.l10n.minutesValue(option)),
                                 selected: setting.minutesBefore == option,
                                 onSelected: canEditBeforeMinutes
                                     ? (_) => controller.updateReminderSetting(
@@ -129,10 +132,10 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                               focusNode: _customMinutesFocus,
                               enabled: canEditBeforeMinutes,
                               keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: 'Custom minutes',
-                                hintText: 'e.g. 12',
-                                border: OutlineInputBorder(),
+                              decoration: InputDecoration(
+                                labelText: context.l10n.customMinutes,
+                                hintText: context.l10n.customMinutesHint,
+                                border: const OutlineInputBorder(),
                               ),
                             ),
                           ),
@@ -144,14 +147,14 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
                                     controller: controller,
                                   )
                                 : null,
-                            child: const Text('Save'),
+                            child: Text(context.l10n.save),
                           ),
                         ],
                       ),
                       if (!setting.notifyBefore)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Text('Enable "Before" to select minutes.'),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(context.l10n.enableBeforeToSelectMinutes),
                         ),
                     ],
                   ),
@@ -171,13 +174,13 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
     final parsed = int.tryParse(_customMinutesController.text.trim());
     if (parsed == null || parsed <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a valid positive number.')),
+        SnackBar(content: Text(context.l10n.enterValidPositiveNumber)),
       );
       return;
     }
     if (parsed > 240) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Use a value up to 240 minutes.')),
+        SnackBar(content: Text(context.l10n.useValueUpTo240)),
       );
       return;
     }
@@ -190,6 +193,6 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen> {
     }
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Custom minutes saved.')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.customMinutesSaved)));
   }
 }

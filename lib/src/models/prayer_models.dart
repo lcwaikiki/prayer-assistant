@@ -254,3 +254,18 @@ enum AppThemePreference {
   light,
   dark,
 }
+
+enum AppLocalePreference {
+  system,
+  en,
+  es,
+  fr,
+  de,
+  tr,
+  ur,
+  fa,
+  ar,
+  zh,
+  ja,
+  id,
+}

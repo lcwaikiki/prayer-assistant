@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../l10n/locale_options.dart';
 import '../models/prayer_models.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
@@ -42,6 +42,7 @@ class PrayerAppController extends ChangeNotifier {
   bool _statusBarRemainingEnabled = true;
   bool _statusBarAutoRestore = false;
   AppThemePreference _themePreference = AppThemePreference.system;
+  AppLocalePreference _localePreference = AppLocalePreference.system;
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -66,6 +67,8 @@ class PrayerAppController extends ChangeNotifier {
     AppThemePreference.light => ThemeMode.light,
     AppThemePreference.dark => ThemeMode.dark,
   };
+  AppLocalePreference get localePreference => _localePreference;
+  Locale? get appLocale => _localePreference.locale;
 
   Future<void> initialize() async {
     _setLoading(true);
@@ -86,6 +89,15 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _themePreference = themePreference;
+      final rawLocalePreference = await database.loadLocalePreference();
+      var localePreference = AppLocalePreference.system;
+      for (final item in AppLocalePreference.values) {
+        if (item.name == rawLocalePreference) {
+          localePreference = item;
+          break;
+        }
+      }
+      _localePreference = localePreference;
       final rawAppBarPlacement = await database.loadAppBarRemainingPlacement();
       var placement = AppBarRemainingPlacement.title;
       for (final item in AppBarRemainingPlacement.values) {
@@ -303,6 +315,15 @@ class PrayerAppController extends ChangeNotifier {
     }
     _themePreference = preference;
     await database.saveThemePreference(preference.name);
+    notifyListeners();
+  }
+
+  Future<void> updateLocalePreference(AppLocalePreference preference) async {
+    if (_localePreference == preference) {
+      return;
+    }
+    _localePreference = preference;
+    await database.saveLocalePreference(preference.name);
     notifyListeners();
   }
 

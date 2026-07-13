@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
 import 'reminder_settings_screen.dart';
@@ -45,8 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
         if (selected == null) {
           return _EmptyState(
             icon: Icons.location_off_outlined,
-            title: 'No location selected',
-            subtitle: 'Go to Location tab and save your district first.',
+            title: context.l10n.homeNoLocationTitle,
+            subtitle: context.l10n.homeNoLocationSubtitle,
           );
         }
 
@@ -54,14 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
         if (day == null) {
           return _EmptyState(
             icon: Icons.schedule_outlined,
-            title: 'No prayer times in cache',
-            subtitle: 'Tap refresh to sync yearly data.',
+            title: context.l10n.homeNoPrayerTimesTitle,
+            subtitle: context.l10n.homeNoPrayerTimesSubtitle,
             action: FilledButton.icon(
               onPressed: controller.isBusy
                   ? null
                   : () => controller.refreshPrayerData(forceSync: true),
               icon: const Icon(Icons.refresh),
-              label: const Text('Refresh'),
+              label: Text(context.l10n.refresh),
             ),
           );
         }
@@ -76,7 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Today • ${DateFormat('EEEE, dd MMM yyyy').format(day.date)}',
+                    context.l10n.todayWithDate(
+                      DateFormat('EEEE, dd MMM yyyy').format(day.date),
+                    ),
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ),
@@ -95,7 +98,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              day.hijriDate.isEmpty ? 'Hijri: -' : 'Hijri: ${day.hijriDate}',
+              day.hijriDate.isEmpty
+                  ? context.l10n.hijriUnknown
+                  : context.l10n.hijriWithDate(day.hijriDate),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
@@ -122,12 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Card(
               child: ListTile(
                 leading: const Icon(Icons.notifications_active_outlined),
-                title: const Text('Reminder settings'),
-                subtitle: const Text(
-                  'Tap any prayer time above to configure reminder hook and minutes-before.',
-                ),
+                title: Text(context.l10n.reminderSettingsTitle),
+                subtitle: Text(context.l10n.reminderSettingsSubtitle),
                 trailing: IconButton(
-                  tooltip: 'Scheduled reminders debug',
+                  tooltip: context.l10n.tooltipScheduledDebug,
                   icon: const Icon(Icons.bug_report_outlined),
                   onPressed: () =>
                       _showScheduledRemindersDebug(context, controller),
@@ -162,12 +165,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Scheduled Reminders (Debug)',
+                    context.l10n.scheduledRemindersDebugTitle,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Pending notifications: ${entries.length}',
+                    context.l10n.pendingNotificationsCount(entries.length),
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 8),
@@ -178,31 +181,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         return;
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Test notification sent.'),
-                        ),
+                        SnackBar(content: Text(context.l10n.testNotificationSent)),
                       );
                     },
                     icon: const Icon(Icons.notification_add_outlined),
-                    label: const Text('Send test notification now'),
+                    label: Text(context.l10n.sendTestNotificationNow),
                   ),
                   const SizedBox(height: 12),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Status bar minutes'),
-                    subtitle: const Text(
-                      'Show ongoing remaining-minutes notification in status bar.',
-                    ),
+                    title: Text(context.l10n.statusBarMinutesTitle),
+                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
                     value: controller.statusBarRemainingEnabled,
                     onChanged: (value) =>
                         controller.updateStatusBarRemainingEnabled(value),
                   ),
                   SwitchListTile(
                     contentPadding: EdgeInsets.zero,
-                    title: const Text('Auto-restore if dismissed'),
-                    subtitle: const Text(
-                      'Recreate the status item if user swipes it away.',
-                    ),
+                    title: Text(context.l10n.statusAutoRestoreTitle),
+                    subtitle: Text(context.l10n.statusAutoRestoreSubtitle),
                     value: controller.statusBarAutoRestore,
                     onChanged: controller.statusBarRemainingEnabled
                         ? (value) => controller.updateStatusBarAutoRestore(value)
@@ -211,8 +208,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 12),
                   Expanded(
                     child: entries.isEmpty
-                        ? const Center(
-                            child: Text('No pending reminder notifications.'),
+                        ? Center(
+                            child: Text(context.l10n.noPendingReminders),
                           )
                         : ListView.separated(
                             itemCount: entries.length,
@@ -222,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               final entry = entries[index];
                               final date = entry.scheduledAt;
                               final dateText = date == null
-                                  ? 'Unknown fire time'
+                                  ? context.l10n.unknownFireTime
                                   : DateFormat(
                                       'EEE, dd MMM HH:mm',
                                     ).format(date);
@@ -231,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 dense: true,
                                 title: Text(entry.title),
                                 subtitle: Text(
-                                  '${isPast ? '[PAST] ' : ''}$dateText\n${entry.body}',
+                                  '${isPast ? context.l10n.pastPrefix : ''}$dateText\n${entry.body}',
                                 ),
                               );
                             },
@@ -264,13 +261,15 @@ class _PrayerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     String statusText;
     if (reminderSetting.notifyOnTime && reminderSetting.notifyBefore) {
-      statusText = 'On • On time + ${reminderSetting.minutesBefore} min before';
+      statusText = context.l10n.reminderOnTimeAndBefore(
+        reminderSetting.minutesBefore,
+      );
     } else if (reminderSetting.notifyOnTime) {
-      statusText = 'On • On time';
+      statusText = context.l10n.reminderOnTimeOnly;
     } else if (reminderSetting.notifyBefore) {
-      statusText = 'On • ${reminderSetting.minutesBefore} min before';
+      statusText = context.l10n.reminderBeforeOnly(reminderSetting.minutesBefore);
     } else {
-      statusText = 'Reminder off';
+      statusText = context.l10n.reminderOff;
     }
     return Card(
       child: ListTile(
@@ -305,14 +304,17 @@ class _NextPrayerCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Next Prayer', style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              context.l10n.nextPrayerTitle,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const SizedBox(height: 4),
             Text(info.name, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 2),
             Text(DateFormat('HH:mm').format(info.time)),
             const SizedBox(height: 12),
             Text(
-              'Starts in ${formatRemaining(info.remaining)}',
+              context.l10n.startsIn(formatRemaining(info.remaining)),
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ],

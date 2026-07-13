@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -63,23 +64,23 @@ class _LocationScreenState extends State<LocationScreen> {
           padding: const EdgeInsets.all(16),
           children: [
             Text(
-              'Select Your Location',
+              context.l10n.selectYourLocation,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             Text(
-              'Use GPS for quick setup or pick country/city manually.',
+              context.l10n.locationHelp,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 20),
             FilledButton.icon(
               onPressed: controller.isBusy ? null : controller.autoPickFromGps,
               icon: const Icon(Icons.my_location),
-              label: const Text('Use Current Location'),
+              label: Text(context.l10n.useCurrentLocation),
             ),
             const SizedBox(height: 24),
             _LocationDropdown(
-              title: 'Country',
+              title: context.l10n.country,
               value: _country,
               items: controller.countries,
               onChanged: controller.isBusy
@@ -98,7 +99,7 @@ class _LocationScreenState extends State<LocationScreen> {
             ),
             const SizedBox(height: 16),
             _LocationDropdown(
-              title: 'State / City',
+              title: context.l10n.stateCity,
               value: _state,
               items: controller.states,
               onChanged: controller.isBusy
@@ -116,7 +117,7 @@ class _LocationScreenState extends State<LocationScreen> {
             ),
             const SizedBox(height: 16),
             _LocationDropdown(
-              title: 'District',
+              title: context.l10n.district,
               value: _district,
               items: controller.districts,
               onChanged: controller.isBusy
@@ -140,7 +141,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         district: _district!,
                       );
                     },
-              child: const Text('Save Location'),
+              child: Text(context.l10n.saveLocation),
             ),
             const SizedBox(height: 16),
             if (controller.selectedLocation != null)
@@ -148,7 +149,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Text(
-                    'Selected: ${controller.selectedLocation!.fullName}',
+                    context.l10n.selectedLocation(
+                      controller.selectedLocation!.fullName,
+                    ),
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 
 const double _dateColWidth = 66;
@@ -103,8 +104,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
         final selected = controller.selectedLocation;
         if (selected == null) {
-          return const Center(
-            child: Text('Select a location first to view 1-year prayer list.'),
+          return Center(
+            child: Text(context.l10n.historySelectLocationFirst),
           );
         }
 
@@ -129,7 +130,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Prayer Times Table (Full Year)',
+                      context.l10n.historyTableTitle,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                   ),
@@ -313,7 +314,7 @@ class _MonthTable extends StatelessWidget {
                                 width: _dateColWidth,
                                 child: cellText(
                                   isToday
-                                      ? 'Today'
+                                      ? context.l10n.todayShort
                                       : DateFormat('dd/MM').format(day.date),
                                   isDate: true,
                                 ),
@@ -384,41 +385,42 @@ class _StickyHeaderRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelLarge;
+    final l10n = context.l10n;
     return SizedBox(
       height: 40,
       child: Row(
         children: [
           SizedBox(
             width: _dateColWidth,
-            child: Text('Date', style: style),
+            child: Text(l10n.dateHeader, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Imsak', style: style),
+            child: Text(l10n.imsak, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Gunes', style: style),
+            child: Text(l10n.gunes, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Ogle', style: style),
+            child: Text(l10n.ogle, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Ikindi', style: style),
+            child: Text(l10n.ikindi, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Aksam', style: style),
+            child: Text(l10n.aksam, style: style),
           ),
           SizedBox(
             width: _timeColWidth,
-            child: Text('Yatsi', style: style),
+            child: Text(l10n.yatsi, style: style),
           ),
           SizedBox(
             width: _hijriColWidth,
-            child: Text('Hijri', style: style),
+            child: Text(l10n.hijriHeader, style: style),
           ),
         ],
       ),

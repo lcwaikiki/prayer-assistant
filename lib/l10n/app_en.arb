@@ -1,0 +1,133 @@
+{
+  "@@locale": "en",
+  "appTitle": "Prayer Assistant",
+  "tabLocation": "Location",
+  "tabToday": "Today",
+  "tabDates": "Dates",
+  "tooltipToggleLightDark": "Toggle light/dark",
+  "tooltipPreferences": "Preferences",
+  "remainingMinutesValue": "{minutes} min",
+  "@remainingMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remainingMinutesUnknown": "-- min",
+  "homeNoLocationTitle": "No location selected",
+  "homeNoLocationSubtitle": "Go to Location tab and save your district first.",
+  "homeNoPrayerTimesTitle": "No prayer times in cache",
+  "homeNoPrayerTimesSubtitle": "Tap refresh to sync yearly data.",
+  "refresh": "Refresh",
+  "todayWithDate": "Today • {date}",
+  "@todayWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "hijriUnknown": "Hijri: -",
+  "hijriWithDate": "Hijri: {date}",
+  "@hijriWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "reminderSettingsTitle": "Reminder settings",
+  "reminderSettingsSubtitle": "Tap any prayer time above to configure reminder hook and minutes-before.",
+  "tooltipScheduledDebug": "Scheduled reminders debug",
+  "scheduledRemindersDebugTitle": "Scheduled Reminders (Debug)",
+  "pendingNotificationsCount": "Pending notifications: {count}",
+  "@pendingNotificationsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendTestNotificationNow": "Send test notification now",
+  "testNotificationSent": "Test notification sent.",
+  "statusBarMinutesTitle": "Status bar minutes",
+  "statusBarMinutesSubtitle": "Show ongoing remaining-minutes notification in status bar.",
+  "statusAutoRestoreTitle": "Auto-restore if dismissed",
+  "statusAutoRestoreSubtitle": "Recreate the status item if user swipes it away.",
+  "noPendingReminders": "No pending reminder notifications.",
+  "unknownFireTime": "Unknown fire time",
+  "pastPrefix": "[PAST] ",
+  "reminderOnTimeAndBefore": "On • On time + {minutes} min before",
+  "@reminderOnTimeAndBefore": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOnTimeOnly": "On • On time",
+  "reminderBeforeOnly": "On • {minutes} min before",
+  "@reminderBeforeOnly": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOff": "Reminder off",
+  "nextPrayerTitle": "Next Prayer",
+  "startsIn": "Starts in {remaining}",
+  "@startsIn": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "selectYourLocation": "Select Your Location",
+  "locationHelp": "Use GPS for quick setup or pick country/city manually.",
+  "useCurrentLocation": "Use Current Location",
+  "country": "Country",
+  "stateCity": "State / City",
+  "district": "District",
+  "saveLocation": "Save Location",
+  "selectedLocation": "Selected: {location}",
+  "@selectedLocation": {
+    "placeholders": {
+      "location": {}
+    }
+  },
+  "historySelectLocationFirst": "Select a location first to view 1-year prayer list.",
+  "historyTableTitle": "Prayer Times Table (Full Year)",
+  "todayShort": "Today",
+  "dateHeader": "Date",
+  "imsak": "Imsak",
+  "gunes": "Gunes",
+  "ogle": "Ogle",
+  "ikindi": "Ikindi",
+  "aksam": "Aksam",
+  "yatsi": "Yatsi",
+  "hijriHeader": "Hijri",
+  "preferencesTitle": "Preferences",
+  "languageTitle": "Language",
+  "languageSystem": "System default",
+  "themeModeTitle": "Theme mode",
+  "themeSystem": "System default",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "appBarRemainingTitle": "Home app bar remaining text",
+  "showInTitle": "Show in title",
+  "showAtRight": "Show at right",
+  "showAsSubtitle": "Show as subtitle",
+  "hideRemainingText": "Hide remaining text",
+  "reminderScreenTitle": "{prayer} Reminder",
+  "@reminderScreenTitle": {
+    "placeholders": {
+      "prayer": {}
+    }
+  },
+  "reminderTypeTitle": "Reminder type (can select both)",
+  "onTime": "On time",
+  "before": "Before",
+  "remindBeforePrayerTitle": "Remind me before prayer",
+  "minutesValue": "{minutes} min",
+  "@minutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "customMinutes": "Custom minutes",
+  "customMinutesHint": "e.g. 12",
+  "save": "Save",
+  "enableBeforeToSelectMinutes": "Enable \"Before\" to select minutes.",
+  "enterValidPositiveNumber": "Enter a valid positive number.",
+  "useValueUpTo240": "Use a value up to 240 minutes.",
+  "customMinutesSaved": "Custom minutes saved."
+}

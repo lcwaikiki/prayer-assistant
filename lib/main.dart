@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'l10n/app_localizations.dart';
 
 import 'src/controller/prayer_app_controller.dart';
+import 'src/l10n/locale_options.dart';
 import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
@@ -35,9 +38,17 @@ class PrayerAssistantApp extends StatelessWidget {
       value: controller,
       child: Consumer<PrayerAppController>(
         builder: (context, controller, _) => MaterialApp(
-          title: 'Prayer Assistant',
+          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
           debugShowCheckedModeBanner: false,
           themeMode: controller.themeMode,
+          locale: controller.appLocale,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: supportedAppLocales,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xFF1F8A70),

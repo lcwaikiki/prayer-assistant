@@ -13,6 +13,7 @@ class LocalDatabase {
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
   static const _statusBarAutoRestoreKey = 'status_bar_auto_restore';
   static const _themePreferenceKey = 'theme_preference';
+  static const _localePreferenceKey = 'locale_preference';
   Database? _db;
 
   Future<Database> get instance async {
@@ -195,6 +196,28 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_themePreferenceKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveLocalePreference(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _localePreferenceKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadLocalePreference() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_localePreferenceKey],
       limit: 1,
     );
     if (rows.isEmpty) {

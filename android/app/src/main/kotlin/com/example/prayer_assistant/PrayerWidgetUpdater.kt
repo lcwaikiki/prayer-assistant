@@ -171,17 +171,7 @@ object PrayerWidgetUpdater {
         return formatter.format(Date(epochMs))
     }
 
-    private fun toDisplayPrayerName(raw: String): String {
-        return when (raw.lowercase(Locale.ROOT)) {
-            "imsak" -> "Imsak"
-            "gunes" -> "Sunrise"
-            "ogle" -> "Dhur"
-            "ikindi" -> "Asr"
-            "aksam" -> "Maghrib"
-            "yatsi" -> "Isha"
-            else -> raw
-        }
-    }
+    private fun toDisplayPrayerName(raw: String): String = raw
 
     private fun formatStatusRemaining(diffMillis: Long): String {
         val safeMillis = max(0L, diffMillis)

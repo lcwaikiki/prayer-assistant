@@ -175,22 +175,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get dateHeader => '日期';
 
   @override
-  String get imsak => 'Imsak';
+  String get imsak => '晨礼';
 
   @override
-  String get gunes => 'Gunes';
+  String get gunes => '日出';
 
   @override
-  String get ogle => 'Dhuhr';
+  String get ogle => '晌礼';
 
   @override
-  String get ikindi => 'Asr';
+  String get ikindi => '晡礼';
 
   @override
-  String get aksam => 'Maghrib';
+  String get aksam => '昏礼';
 
   @override
-  String get yatsi => 'Isha';
+  String get yatsi => '宵礼';
 
   @override
   String get hijriHeader => '回历';

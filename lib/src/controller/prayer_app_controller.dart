@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../l10n/locale_options.dart';
+import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
@@ -69,6 +72,7 @@ class PrayerAppController extends ChangeNotifier {
   };
   AppLocalePreference get localePreference => _localePreference;
   Locale? get appLocale => _localePreference.locale;
+  Locale get resolvedLocale => appLocale ?? PlatformDispatcher.instance.locale;
 
   Future<void> initialize() async {
     _setLoading(true);
@@ -118,6 +122,7 @@ class PrayerAppController extends ChangeNotifier {
         await widgetBridgeService.updateFromPrayerDays(
           days: const <PrayerDay>[],
           now: DateTime.now(),
+          locale: resolvedLocale,
         );
       }
       _error = null;
@@ -342,6 +347,17 @@ class PrayerAppController extends ChangeNotifier {
     _localePreference = preference;
     await database.saveLocalePreference(preference.name);
     notifyListeners();
+    if (_selectedLocation != null && _yearRange.isNotEmpty) {
+      final now = DateTime.now();
+      await widgetBridgeService.updateFromPrayerDays(
+        days: _yearRange,
+        now: now,
+        locale: resolvedLocale,
+      );
+      try {
+        await _syncNotifications();
+      } catch (_) {}
+    }
   }
 
   Future<void> toggleThemeQuick({required bool isCurrentlyDark}) async {
@@ -394,7 +410,11 @@ class PrayerAppController extends ChangeNotifier {
       start: start,
       end: end,
     );
-    await widgetBridgeService.updateFromPrayerDays(days: _yearRange, now: now);
+    await widgetBridgeService.updateFromPrayerDays(
+      days: _yearRange,
+      now: now,
+      locale: resolvedLocale,
+    );
     notifyListeners();
   }
 
@@ -413,6 +433,7 @@ class PrayerAppController extends ChangeNotifier {
       days: _yearRange,
       reminderSettings: _reminderSettings,
       locationName: selected.fullName,
+      prayerNameLabel: (key) => localizedPrayerName(resolvedLocale, key),
     );
   }
 

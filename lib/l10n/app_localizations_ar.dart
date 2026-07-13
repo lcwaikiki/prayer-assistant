@@ -181,7 +181,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get dateHeader => 'التاريخ';
 
   @override
-  String get imsak => 'إمساك';
+  String get imsak => 'فجر';
 
   @override
   String get gunes => 'شروق';

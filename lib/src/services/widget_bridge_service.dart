@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/services.dart';
 
+import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
 
@@ -10,6 +13,7 @@ class WidgetBridgeService {
   Future<void> updateFromPrayerDays({
     required List<PrayerDay> days,
     required DateTime now,
+    Locale? locale,
   }) async {
     final timeline = <Map<String, Object>>[];
     final start = DateTime(now.year, now.month, now.day);
@@ -27,7 +31,7 @@ class WidgetBridgeService {
           continue;
         }
         timeline.add(<String, Object>{
-          'name': prayerName,
+          'name': localizedPrayerName(locale, prayerName),
           'epochMs': prayerTime.millisecondsSinceEpoch,
         });
       }
@@ -43,7 +47,7 @@ class WidgetBridgeService {
             continue;
           }
           timeline.add(<String, Object>{
-            'name': prayerName,
+            'name': localizedPrayerName(locale, prayerName),
             'epochMs': prayerTime.millisecondsSinceEpoch,
           });
           break;

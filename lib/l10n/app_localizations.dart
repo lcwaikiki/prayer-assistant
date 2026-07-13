@@ -419,37 +419,37 @@ abstract class AppLocalizations {
   /// No description provided for @imsak.
   ///
   /// In en, this message translates to:
-  /// **'Imsak'**
+  /// **'Fajr'**
   String get imsak;
 
   /// No description provided for @gunes.
   ///
   /// In en, this message translates to:
-  /// **'Gunes'**
+  /// **'Sunrise'**
   String get gunes;
 
   /// No description provided for @ogle.
   ///
   /// In en, this message translates to:
-  /// **'Ogle'**
+  /// **'Dhuhr'**
   String get ogle;
 
   /// No description provided for @ikindi.
   ///
   /// In en, this message translates to:
-  /// **'Ikindi'**
+  /// **'Asr'**
   String get ikindi;
 
   /// No description provided for @aksam.
   ///
   /// In en, this message translates to:
-  /// **'Aksam'**
+  /// **'Maghrib'**
   String get aksam;
 
   /// No description provided for @yatsi.
   ///
   /// In en, this message translates to:
-  /// **'Yatsi'**
+  /// **'Isha'**
   String get yatsi;
 
   /// No description provided for @hijriHeader.

@@ -183,7 +183,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get dateHeader => 'تاریخ';
 
   @override
-  String get imsak => 'امساک';
+  String get imsak => 'فجر';
 
   @override
   String get gunes => 'طلوع';
@@ -198,7 +198,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get aksam => 'مغرب';
 
   @override
-  String get yatsi => 'عشا';
+  String get yatsi => 'عشاء';
 
   @override
   String get hijriHeader => 'هجری';

@@ -111,7 +111,11 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
           },
           child: Scaffold(
             appBar: AppBar(
-              title: Text(context.l10n.reminderScreenTitle(widget.prayerName)),
+              title: Text(
+              context.l10n.reminderScreenTitle(
+                context.l10n.prayerNameLabel(widget.prayerName),
+              ),
+            ),
             ),
             body: ListView(
               padding: const EdgeInsets.all(16),

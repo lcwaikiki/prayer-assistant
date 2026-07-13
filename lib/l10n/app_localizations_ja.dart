@@ -175,22 +175,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dateHeader => '日付';
 
   @override
-  String get imsak => 'Imsak';
+  String get imsak => 'ファジュル';
 
   @override
-  String get gunes => 'Gunes';
+  String get gunes => '日出';
 
   @override
-  String get ogle => 'Dhuhr';
+  String get ogle => 'ズフル';
 
   @override
-  String get ikindi => 'Asr';
+  String get ikindi => 'アスル';
 
   @override
-  String get aksam => 'Maghrib';
+  String get aksam => 'マグリブ';
 
   @override
-  String get yatsi => 'Isha';
+  String get yatsi => 'イシャ';
 
   @override
   String get hijriHeader => 'ヒジュラ';

@@ -183,10 +183,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dateHeader => 'Fecha';
 
   @override
-  String get imsak => 'Imsak';
+  String get imsak => 'Fajr';
 
   @override
-  String get gunes => 'Gunes';
+  String get gunes => 'Amanecer';
 
   @override
   String get ogle => 'Dhuhr';
@@ -195,7 +195,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ikindi => 'Asr';
 
   @override
-  String get aksam => 'Magrib';
+  String get aksam => 'Magreb';
 
   @override
   String get yatsi => 'Isha';

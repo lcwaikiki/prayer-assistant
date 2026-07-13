@@ -108,6 +108,7 @@ class NotificationService {
     required List<PrayerDay> days,
     required Map<String, ReminderSetting> reminderSettings,
     required String locationName,
+    required String Function(String prayerKey) prayerNameLabel,
   }) async {
     await cancelAllPrayerNotifications();
 
@@ -140,12 +141,14 @@ class NotificationService {
           continue;
         }
 
+        final displayName = prayerNameLabel(prayerName);
+
         if (setting.notifyOnTime && prayerTime.isAfter(now)) {
           notifications.add(
             _ReminderNotification(
               fireAt: prayerTime,
-              title: '$prayerName time',
-              body: '$locationName - It is time for $prayerName prayer.',
+              title: '$displayName time',
+              body: '$locationName - It is time for $displayName prayer.',
             ),
           );
         }
@@ -158,9 +161,9 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: beforeTime,
-                title: '$prayerName in ${setting.minutesBefore} min',
+                title: '$displayName in ${setting.minutesBefore} min',
                 body:
-                    '$locationName - $prayerName is at ${prayerTimes[prayerName]}.',
+                    '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
               ),
             );
           } else if (isTodayDay && prayerTime.isAfter(now)) {
@@ -169,9 +172,9 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: now.add(const Duration(seconds: 5)),
-                title: '$prayerName soon',
+                title: '$displayName soon',
                 body:
-                    '$locationName - $prayerName is at ${prayerTimes[prayerName]}.',
+                    '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
               ),
             );
           }

@@ -182,10 +182,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get dateHeader => 'Tanggal';
 
   @override
-  String get imsak => 'Imsak';
+  String get imsak => 'Subuh';
 
   @override
-  String get gunes => 'Gunes';
+  String get gunes => 'Terbit';
 
   @override
   String get ogle => 'Dzuhur';

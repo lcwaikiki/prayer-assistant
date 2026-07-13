@@ -257,7 +257,7 @@ class _PrayerTile extends StatelessWidget {
       child: ListTile(
         onTap: onTap,
         leading: const Icon(Icons.access_time),
-        title: Text(name),
+        title: Text(context.l10n.prayerNameLabel(name)),
         subtitle: Text(statusText),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -291,7 +291,10 @@ class _NextPrayerCard extends StatelessWidget {
               style: Theme.of(context).textTheme.labelLarge,
             ),
             const SizedBox(height: 4),
-            Text(info.name, style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              context.l10n.prayerNameLabel(info.name),
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 2),
             Text(DateFormat('HH:mm').format(info.time)),
             const SizedBox(height: 12),

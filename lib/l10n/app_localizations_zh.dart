@@ -248,6 +248,9 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get custom => '自定义';
+
+  @override
   String get customMinutes => '自定义分钟';
 
   @override

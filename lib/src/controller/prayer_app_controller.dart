@@ -261,6 +261,7 @@ class PrayerAppController extends ChangeNotifier {
   Future<void> updateReminderSetting({
     required String prayer,
     int? minutesBefore,
+    int? customMinutesBefore,
     bool? notifyOnTime,
     bool? notifyBefore,
   }) async {
@@ -268,14 +269,26 @@ class PrayerAppController extends ChangeNotifier {
     final current = reminderFor(prayer);
     final next = current.copyWith(
       minutesBefore: minutesBefore,
+      customMinutesBefore: customMinutesBefore,
       notifyOnTime: notifyOnTime,
       notifyBefore: notifyBefore,
     );
     updated[prayer] = next;
     _reminderSettings = updated;
     await database.saveReminderSettings(updated);
-    await _syncNotifications();
     notifyListeners();
+    final shouldSyncNotifications =
+        minutesBefore != null ||
+        notifyOnTime != null ||
+        notifyBefore != null;
+    if (!shouldSyncNotifications) {
+      return;
+    }
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Settings are saved; notification sync can fail without blocking UI.
+    }
   }
 
   Future<void> updateAppBarRemainingPlacement(

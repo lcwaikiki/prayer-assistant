@@ -123,6 +123,7 @@
       "minutes": {}
     }
   },
+  "custom": "Custom",
   "customMinutes": "Custom minutes",
   "customMinutesHint": "e.g. 12",
   "save": "Save",

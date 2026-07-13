@@ -254,6 +254,9 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get custom => 'مخصص';
+
+  @override
   String get customMinutes => 'دقائق مخصصة';
 
   @override

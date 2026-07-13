@@ -154,8 +154,6 @@ class NotificationService {
           final beforeTime = prayerTime.subtract(
             Duration(minutes: setting.minutesBefore),
           );
-          print('160 beforeTime: $beforeTime');
-
           if (beforeTime.isAfter(now)) {
             notifications.add(
               _ReminderNotification(
@@ -182,23 +180,11 @@ class NotificationService {
     }
 
     notifications.sort((a, b) => a.fireAt.compareTo(b.fireAt));
-    
-    print('189 notifications: ${jsonEncode(notifications)}');
-    
     final limited = notifications.take(48).toList(growable: false);
-
-print('193 limited: ${limited.length}');
-
-
 
     for (var i = 0; i < limited.length; i++) {
       final item = limited[i];
       final date = tz.TZDateTime.from(item.fireAt, tz.local);
-      print('200 item: ${item.fireAt}');
-
-
-      
-      print('204 date: $date');
 
       try {
         final payload = jsonEncode({
@@ -228,9 +214,6 @@ print('193 limited: ${limited.length}');
           'fireAt': item.fireAt.toIso8601String(),
           'title': item.title,
         });
-
-        print('237 in CATCH block payload: $payload');
-
 
         await _plugin.zonedSchedule(
           id: i + 1,

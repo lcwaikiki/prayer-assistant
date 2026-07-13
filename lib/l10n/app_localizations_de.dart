@@ -255,6 +255,9 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get custom => 'Eigene';
+
+  @override
   String get customMinutes => 'Benutzerdefinierte Minuten';
 
   @override

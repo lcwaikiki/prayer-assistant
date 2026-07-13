@@ -166,17 +166,20 @@ enum ReminderTiming { onTime, before }
 class ReminderSetting {
   ReminderSetting({
     required this.minutesBefore,
+    required this.customMinutesBefore,
     required this.notifyOnTime,
     required this.notifyBefore,
   });
 
   final int minutesBefore;
+  final int customMinutesBefore;
   final bool notifyOnTime;
   final bool notifyBefore;
 
   factory ReminderSetting.defaults() {
     return ReminderSetting(
       minutesBefore: 10,
+      customMinutesBefore: 10,
       notifyOnTime: false,
       notifyBefore: false,
     );
@@ -185,6 +188,7 @@ class ReminderSetting {
   Map<String, dynamic> toJson() {
     return {
       'minutesBefore': minutesBefore,
+      'customMinutesBefore': customMinutesBefore,
       'notifyOnTime': notifyOnTime,
       'notifyBefore': notifyBefore,
     };
@@ -194,6 +198,7 @@ class ReminderSetting {
     if (value is bool) {
       return ReminderSetting(
         minutesBefore: 10,
+        customMinutesBefore: 10,
         notifyOnTime: false,
         notifyBefore: value,
       );
@@ -203,8 +208,11 @@ class ReminderSetting {
       final rawTiming = (value['timing'] ?? '').toString();
       final legacyOnTime = rawTiming == ReminderTiming.onTime.name;
       final legacyBefore = rawTiming == ReminderTiming.before.name;
+      final minutesBefore = ((value['minutesBefore'] as num?) ?? 10).toInt();
       return ReminderSetting(
-        minutesBefore: ((value['minutesBefore'] as num?) ?? 10).toInt(),
+        minutesBefore: minutesBefore,
+        customMinutesBefore:
+            ((value['customMinutesBefore'] as num?) ?? minutesBefore).toInt(),
         notifyOnTime:
             (value['notifyOnTime'] as bool?) ?? (legacyEnabled && legacyOnTime),
         notifyBefore:
@@ -217,11 +225,13 @@ class ReminderSetting {
 
   ReminderSetting copyWith({
     int? minutesBefore,
+    int? customMinutesBefore,
     bool? notifyOnTime,
     bool? notifyBefore,
   }) {
     return ReminderSetting(
       minutesBefore: minutesBefore ?? this.minutesBefore,
+      customMinutesBefore: customMinutesBefore ?? this.customMinutesBefore,
       notifyOnTime: notifyOnTime ?? this.notifyOnTime,
       notifyBefore: notifyBefore ?? this.notifyBefore,
     );

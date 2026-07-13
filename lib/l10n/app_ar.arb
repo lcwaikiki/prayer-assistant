@@ -73,6 +73,7 @@
   "before": "قبل",
   "remindBeforePrayerTitle": "ذكّرني قبل الصلاة",
   "minutesValue": "{minutes} د",
+  "custom": "مخصص",
   "customMinutes": "دقائق مخصصة",
   "customMinutesHint": "مثال: 12",
   "save": "حفظ",

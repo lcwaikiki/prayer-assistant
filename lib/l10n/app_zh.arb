@@ -73,6 +73,7 @@
   "before": "提前",
   "remindBeforePrayerTitle": "在礼拜前提醒我",
   "minutesValue": "{minutes} 分钟",
+  "custom": "自定义",
   "customMinutes": "自定义分钟",
   "customMinutesHint": "例如 12",
   "save": "保存",

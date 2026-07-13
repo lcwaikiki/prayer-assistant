@@ -256,6 +256,9 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get custom => 'سفارشی';
+
+  @override
   String get customMinutes => 'دقیقه سفارشی';
 
   @override

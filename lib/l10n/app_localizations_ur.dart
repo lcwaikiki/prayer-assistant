@@ -255,6 +255,9 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String get custom => 'کسٹم';
+
+  @override
   String get customMinutes => 'کسٹم منٹس';
 
   @override

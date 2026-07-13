@@ -73,6 +73,7 @@
   "before": "Sebelum",
   "remindBeforePrayerTitle": "Ingatkan saya sebelum salat",
   "minutesValue": "{minutes} mnt",
+  "custom": "Kustom",
   "customMinutes": "Menit kustom",
   "customMinutesHint": "mis. 12",
   "save": "Simpan",

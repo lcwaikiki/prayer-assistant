@@ -73,6 +73,7 @@
   "before": "Önce",
   "remindBeforePrayerTitle": "Namazdan önce hatırlat",
   "minutesValue": "{minutes} dk",
+  "custom": "Özel",
   "customMinutes": "Özel dakika",
   "customMinutesHint": "örn. 12",
   "save": "Kaydet",

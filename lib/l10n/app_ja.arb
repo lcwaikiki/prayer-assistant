@@ -73,6 +73,7 @@
   "before": "前",
   "remindBeforePrayerTitle": "礼拝前に通知",
   "minutesValue": "{minutes} 分",
+  "custom": "カスタム",
   "customMinutes": "カスタム分",
   "customMinutesHint": "例: 12",
   "save": "保存",

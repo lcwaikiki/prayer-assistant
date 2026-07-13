@@ -257,6 +257,9 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get custom => 'Perso';
+
+  @override
   String get customMinutes => 'Minutes personnalisées';
 
   @override

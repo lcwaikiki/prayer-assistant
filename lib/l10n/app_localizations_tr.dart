@@ -256,6 +256,9 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get custom => 'Özel';
+
+  @override
   String get customMinutes => 'Özel dakika';
 
   @override

@@ -73,6 +73,7 @@
   "before": "پہلے",
   "remindBeforePrayerTitle": "نماز سے پہلے یاد دلائیں",
   "minutesValue": "{minutes} منٹ",
+  "custom": "کسٹم",
   "customMinutes": "کسٹم منٹس",
   "customMinutesHint": "مثلاً 12",
   "save": "محفوظ کریں",

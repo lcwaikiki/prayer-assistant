@@ -73,6 +73,7 @@
   "before": "Antes",
   "remindBeforePrayerTitle": "Recuérdame antes de la oración",
   "minutesValue": "{minutes} min",
+  "custom": "Personalizado",
   "customMinutes": "Minutos personalizados",
   "customMinutesHint": "p. ej. 12",
   "save": "Guardar",

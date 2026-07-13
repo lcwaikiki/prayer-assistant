@@ -248,6 +248,9 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get custom => 'カスタム';
+
+  @override
   String get customMinutes => 'カスタム分';
 
   @override

@@ -554,6 +554,12 @@ abstract class AppLocalizations {
   /// **'{minutes} min'**
   String minutesValue(Object minutes);
 
+  /// No description provided for @custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
+
   /// No description provided for @customMinutes.
   ///
   /// In en, this message translates to:

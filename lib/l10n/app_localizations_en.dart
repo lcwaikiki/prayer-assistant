@@ -254,6 +254,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get custom => 'Custom';
+
+  @override
   String get customMinutes => 'Custom minutes';
 
   @override

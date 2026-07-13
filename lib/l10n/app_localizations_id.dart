@@ -255,6 +255,9 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get custom => 'Kustom';
+
+  @override
   String get customMinutes => 'Menit kustom';
 
   @override

@@ -60,7 +60,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     _syncingHorizontal = false;
   }
 
-  void _scheduleScrollToToday(List<PrayerDay> days) {
+  void _scheduleScrollToToday(List<PrayerDay> days, {String? locale}) {
     if (days.isEmpty) {
       return;
     }
@@ -78,7 +78,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
         );
         return;
       }
-      final monthKey = DateFormat('MMMM yyyy').format(DateTime.now());
+      final monthKey =
+          DateFormat('MMMM yyyy', locale).format(DateTime.now());
       final fallbackContext = _monthKeys[monthKey]?.currentContext;
       if (fallbackContext != null) {
         Scrollable.ensureVisible(
@@ -98,7 +99,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
         if (_lastTabIndex != controller.tabIndex) {
           _lastTabIndex = controller.tabIndex;
           if (controller.tabIndex == 2) {
-            _scheduleScrollToToday(controller.yearRange);
+            _scheduleScrollToToday(
+              controller.yearRange,
+              locale: Localizations.localeOf(context).toString(),
+            );
           }
         }
 
@@ -115,7 +119,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
         }
 
         final today = DateTime.now();
-        final groupedByMonth = _groupByMonth(days);
+        final locale = Localizations.localeOf(context).toString();
+        final groupedByMonth = _groupByMonth(days, locale);
         for (final month in groupedByMonth.keys) {
           _monthKeys.putIfAbsent(month, GlobalKey.new);
           _monthHorizontalControllers.putIfAbsent(month, ScrollController.new);
@@ -150,9 +155,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       child: SingleChildScrollView(
                         controller: _headerHorizontalController,
                         scrollDirection: Axis.horizontal,
-                        child: const SizedBox(
+                        child: SizedBox(
                           width: _tableWidth,
-                          child: _StickyHeaderRow(),
+                          child: const _StickyHeaderRow(),
                         ),
                       ),
                     ),
@@ -196,7 +201,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
               right: 16,
               bottom: 16,
               child: FloatingActionButton.small(
-                onPressed: () => _scheduleScrollToToday(days),
+                onPressed: () => _scheduleScrollToToday(
+                  days,
+                  locale: Localizations.localeOf(context).toString(),
+                ),
                 child: const Icon(Icons.today),
               ),
             ),
@@ -207,10 +215,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 }
 
-Map<String, List<PrayerDay>> _groupByMonth(List<PrayerDay> days) {
+Map<String, List<PrayerDay>> _groupByMonth(List<PrayerDay> days, String locale) {
   final result = <String, List<PrayerDay>>{};
   for (final day in days) {
-    final key = DateFormat('MMMM yyyy').format(day.date);
+    final key = DateFormat('MMMM yyyy', locale).format(day.date);
     result.putIfAbsent(key, () => <PrayerDay>[]).add(day);
   }
   return result;
@@ -382,6 +390,19 @@ class _MonthTable extends StatelessWidget {
 class _StickyHeaderRow extends StatelessWidget {
   const _StickyHeaderRow();
 
+  Widget _headerCell(String text, double width, TextStyle? style) {
+    return SizedBox(
+      width: width,
+      child: Text(
+        text,
+        style: style,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).textTheme.labelLarge;
@@ -390,38 +411,14 @@ class _StickyHeaderRow extends StatelessWidget {
       height: 40,
       child: Row(
         children: [
-          SizedBox(
-            width: _dateColWidth,
-            child: Text(l10n.dateHeader, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.imsak, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.gunes, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.ogle, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.ikindi, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.aksam, style: style),
-          ),
-          SizedBox(
-            width: _timeColWidth,
-            child: Text(l10n.yatsi, style: style),
-          ),
-          SizedBox(
-            width: _hijriColWidth,
-            child: Text(l10n.hijriHeader, style: style),
-          ),
+          _headerCell(l10n.dateHeader, _dateColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Imsak'), _timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Gunes'), _timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Ogle'), _timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Ikindi'), _timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Aksam'), _timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Yatsi'), _timeColWidth, style),
+          _headerCell(l10n.hijriHeader, _hijriColWidth, style),
         ],
       ),
     );

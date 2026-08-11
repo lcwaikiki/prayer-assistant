@@ -7,12 +7,42 @@ import org.json.JSONObject
 object PrayerWidgetStorage {
     private const val PREFS_NAME = "PrayerWidgetPrefs"
     private const val TIMELINE_KEY = "timeline_json"
+    private const val TODAY_PRAYERS_KEY = "today_prayers_json"
+    private const val LOCATION_LABEL_KEY = "location_label"
     private const val STATUS_ENABLED_KEY = "status_enabled"
     private const val STATUS_AUTO_RESTORE_KEY = "status_auto_restore"
 
     fun saveTimeline(context: Context, timeline: List<Map<String, Any?>>) {
+        saveEntryList(context, TIMELINE_KEY, timeline)
+    }
+
+    fun readTimeline(context: Context): List<Pair<String, Long>> {
+        return readEntryList(context, TIMELINE_KEY).sortedBy { it.second }
+    }
+
+    fun saveTodayPrayers(context: Context, prayers: List<Map<String, Any?>>) {
+        saveEntryList(context, TODAY_PRAYERS_KEY, prayers)
+    }
+
+    fun readTodayPrayers(context: Context): List<Pair<String, Long>> {
+        return readEntryList(context, TODAY_PRAYERS_KEY)
+    }
+
+    fun saveLocationLabel(context: Context, label: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(LOCATION_LABEL_KEY, label)
+            .apply()
+    }
+
+    fun readLocationLabel(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(LOCATION_LABEL_KEY, "") ?: ""
+    }
+
+    private fun saveEntryList(context: Context, key: String, entries: List<Map<String, Any?>>) {
         val json = JSONArray()
-        for (entry in timeline) {
+        for (entry in entries) {
             val epoch = (entry["epochMs"] as? Number)?.toLong() ?: continue
             val name = entry["name"]?.toString() ?: continue
             json.put(
@@ -23,13 +53,13 @@ object PrayerWidgetStorage {
         }
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit()
-            .putString(TIMELINE_KEY, json.toString())
+            .putString(key, json.toString())
             .apply()
     }
 
-    fun readTimeline(context: Context): List<Pair<String, Long>> {
+    private fun readEntryList(context: Context, key: String): List<Pair<String, Long>> {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val raw = prefs.getString(TIMELINE_KEY, "[]") ?: "[]"
+        val raw = prefs.getString(key, "[]") ?: "[]"
         val parsed = mutableListOf<Pair<String, Long>>()
         val json = JSONArray(raw)
         for (i in 0 until json.length()) {
@@ -41,7 +71,7 @@ object PrayerWidgetStorage {
             }
             parsed.add(name to epoch)
         }
-        return parsed.sortedBy { it.second }
+        return parsed
     }
 
     fun saveStatusConfig(

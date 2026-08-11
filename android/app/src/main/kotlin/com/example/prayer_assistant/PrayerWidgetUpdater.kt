@@ -9,13 +9,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.SystemClock
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.max
 
 object PrayerWidgetUpdater {
     const val ACTION_REFRESH_WIDGETS = "com.example.prayer_assistant.ACTION_REFRESH_WIDGETS"
@@ -27,12 +27,8 @@ object PrayerWidgetUpdater {
         val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
-        val remainingText = if (next == null) {
-            "--:--"
-        } else {
-            formatRemaining(next.second - now)
-        }
         val nextPrayerName = next?.first ?: "--"
+        val countdownBase = next?.let { SystemClock.elapsedRealtime() + (it.second - now) }
 
         val widgetManager = AppWidgetManager.getInstance(context)
         val openIntent = Intent(context, MainActivity::class.java).apply {
@@ -51,7 +47,7 @@ object PrayerWidgetUpdater {
         )
         for (widgetId in remainingIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time)
-            views.setTextViewText(R.id.widgetRemainingOnlyValue, remainingText)
+            applyCountdown(views, R.id.widgetRemainingOnlyValue, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -62,17 +58,38 @@ object PrayerWidgetUpdater {
         for (widgetId in nextIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_next_prayer)
             views.setTextViewText(R.id.widgetNextPrayerName, nextPrayerName)
-            views.setTextViewText(R.id.widgetNextPrayerRemaining, remainingText)
+            applyCountdown(views, R.id.widgetNextPrayerRemaining, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
-        updateStatusBar(context, next, now)
+        updateStatusBar(context, next)
     }
 
+    /**
+     * Renders a live, self-ticking countdown via the platform Chronometer view so the
+     * displayed value stays accurate between our (now rare) wakeups, instead of a static
+     * string that only ever reflects the last time we happened to redraw it.
+     */
+    private fun applyCountdown(views: RemoteViews, viewId: Int, base: Long?) {
+        if (base == null) {
+            views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
+            views.setTextViewText(viewId, "--:--")
+            return
+        }
+        views.setChronometer(viewId, base, null, true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            views.setChronometerCountDown(viewId, true)
+        }
+    }
+
+    /**
+     * Wakes the app only when the next prayer time actually passes (a handful of times a
+     * day), instead of on a fixed polling interval forever. Between wakeups the Chronometer
+     * views tick on their own without any alarm at all.
+     */
     fun scheduleNextUpdate(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val nextMinute = ((System.currentTimeMillis() / 60000L) + 1L) * 60000L
         val refreshIntent = Intent(context, PrayerWidgetTickReceiver::class.java).apply {
             action = ACTION_REFRESH_WIDGETS
         }
@@ -82,26 +99,25 @@ object PrayerWidgetUpdater {
             refreshIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
+        val now = System.currentTimeMillis()
+        val nextTransition = PrayerWidgetStorage.readTimeline(context)
+            .firstOrNull { it.second > now }
+            ?.second
+
+        if (nextTransition == null) {
+            alarmManager.cancel(pendingIntent)
+            return
+        }
+
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            nextMinute,
+            nextTransition + 1_000L,
             pendingIntent
         )
     }
 
-    private fun formatRemaining(diffMillis: Long): String {
-        val safeMillis = max(0L, diffMillis)
-        val totalMinutes = safeMillis / 60000L
-        val hours = totalMinutes / 60L
-        val minutes = totalMinutes % 60L
-        return String.format(Locale.US, "%02d:%02d", hours, minutes)
-    }
-
-    private fun updateStatusBar(
-        context: Context,
-        next: Pair<String, Long>?,
-        now: Long
-    ) {
+    private fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
         val manager = NotificationManagerCompat.from(context)
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             manager.cancel(STATUS_NOTIFICATION_ID)
@@ -127,19 +143,14 @@ object PrayerWidgetUpdater {
             dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val message = if (next == null) {
-            "-- --:-- -> --:--"
-        } else {
-            val prayerName = toDisplayPrayerName(next.first)
-            val atTime = formatClock(next.second)
-            val remaining = formatStatusRemaining(next.second - now)
-            "$prayerName $atTime -> $remaining"
-        }
+        val contentView = buildStatusContentView(context, next)
+        val expandedView = buildStatusExpandedView(context, next)
         val builder = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("Prayer Assistant")
-            .setContentText(message)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(contentView)
+            .setCustomBigContentView(expandedView)
             .setContentIntent(openPendingIntent)
             .setDeleteIntent(dismissPendingIntent)
             .setOngoing(true)
@@ -148,6 +159,96 @@ object PrayerWidgetUpdater {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         manager.notify(STATUS_NOTIFICATION_ID, builder.build())
+    }
+
+    /**
+     * Builds "<prayer> at <time> -> <live ticking countdown>" as a single row, with the
+     * countdown rendered by a real Chronometer view so it ticks every second without any
+     * app wakeups. The standard NotificationCompat template has no way to splice a live
+     * value into arbitrary text, so this uses a small custom RemoteViews layout instead.
+     */
+    private fun buildStatusContentView(context: Context, next: Pair<String, Long>?): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.notification_status_bar)
+        if (next == null) {
+            views.setTextViewText(R.id.statusPrayerLabel, "--")
+            views.setChronometer(R.id.statusCountdown, SystemClock.elapsedRealtime(), null, false)
+            views.setTextViewText(R.id.statusCountdown, "--:--")
+            return views
+        }
+        views.setTextViewText(
+            R.id.statusPrayerLabel,
+            "${toDisplayPrayerName(next.first)} at ${formatClock(next.second)} ->"
+        )
+        val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
+        views.setChronometer(R.id.statusCountdown, base, null, true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            views.setChronometerCountDown(R.id.statusCountdown, true)
+        }
+        return views
+    }
+
+    /**
+     * Builds the expanded notification view: all of today's prayers in a row, with the
+     * current/next one highlighted, plus a live countdown and the location label below.
+     * Reuses the same today-prayers snapshot the Dart side already pushes on every refresh,
+     * so this costs nothing extra to keep in sync with the collapsed view.
+     */
+    private fun buildStatusExpandedView(context: Context, next: Pair<String, Long>?): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.notification_status_bar_expanded)
+        val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
+        val columnIds = intArrayOf(
+            R.id.columnImsak,
+            R.id.columnGunes,
+            R.id.columnOgle,
+            R.id.columnIkindi,
+            R.id.columnAksam,
+            R.id.columnYatsi
+        )
+        val nameIds = intArrayOf(
+            R.id.nameImsak,
+            R.id.nameGunes,
+            R.id.nameOgle,
+            R.id.nameIkindi,
+            R.id.nameAksam,
+            R.id.nameYatsi
+        )
+        val timeIds = intArrayOf(
+            R.id.timeImsak,
+            R.id.timeGunes,
+            R.id.timeOgle,
+            R.id.timeIkindi,
+            R.id.timeAksam,
+            R.id.timeYatsi
+        )
+
+        for (i in columnIds.indices) {
+            val prayer = todayPrayers.getOrNull(i)
+            views.setTextViewText(nameIds[i], prayer?.first ?: "--")
+            views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
+            val isNext = prayer != null && next != null && prayer.second == next.second
+            if (isNext) {
+                views.setInt(columnIds[i], "setBackgroundResource", R.drawable.notification_pill_bg)
+            } else {
+                views.setInt(columnIds[i], "setBackgroundColor", 0)
+            }
+        }
+
+        if (next == null) {
+            views.setChronometer(R.id.expandedCountdown, SystemClock.elapsedRealtime(), null, false)
+            views.setTextViewText(R.id.expandedCountdown, "--:--")
+        } else {
+            val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
+            views.setChronometer(R.id.expandedCountdown, base, null, true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                views.setChronometerCountDown(R.id.expandedCountdown, true)
+            }
+        }
+
+        views.setTextViewText(
+            R.id.expandedLocationLabel,
+            PrayerWidgetStorage.readLocationLabel(context)
+        )
+        return views
     }
 
     private fun createStatusChannel(context: Context) {
@@ -172,16 +273,4 @@ object PrayerWidgetUpdater {
     }
 
     private fun toDisplayPrayerName(raw: String): String = raw
-
-    private fun formatStatusRemaining(diffMillis: Long): String {
-        val safeMillis = max(0L, diffMillis)
-        val totalMinutes = safeMillis / 60000L
-        return if (totalMinutes < 60L) {
-            String.format(Locale.US, "%02d", totalMinutes)
-        } else {
-            val hours = totalMinutes / 60L
-            val minutes = totalMinutes % 60L
-            String.format(Locale.US, "%02d:%02d", hours, minutes)
-        }
-    }
 }

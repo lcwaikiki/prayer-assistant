@@ -14,6 +14,7 @@ class WidgetBridgeService {
     required List<PrayerDay> days,
     required DateTime now,
     Locale? locale,
+    String locationLabel = '',
   }) async {
     final timeline = <Map<String, Object>>[];
     final start = DateTime(now.year, now.month, now.day);
@@ -58,8 +59,30 @@ class WidgetBridgeService {
       }
     }
 
+    final todayPrayers = <Map<String, Object>>[];
+    for (final day in days) {
+      final safeDay = DateTime(day.date.year, day.date.month, day.date.day);
+      if (safeDay != start) {
+        continue;
+      }
+      final prayerTimes = prayerMapForDay(day);
+      for (final prayerName in prayerOrder) {
+        final prayerTime = parsePrayerTime(day.date, prayerTimes[prayerName] ?? '');
+        if (prayerTime == null) {
+          continue;
+        }
+        todayPrayers.add(<String, Object>{
+          'name': localizedPrayerName(locale, prayerName),
+          'epochMs': prayerTime.millisecondsSinceEpoch,
+        });
+      }
+      break;
+    }
+
     await _channel.invokeMethod<void>('updateWidgetData', <String, Object>{
       'timeline': timeline,
+      'todayPrayers': todayPrayers,
+      'locationLabel': locationLabel,
     });
   }
 

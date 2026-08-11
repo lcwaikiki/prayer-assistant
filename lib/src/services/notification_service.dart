@@ -38,8 +38,12 @@ class NotificationService {
     _isInitialized = true;
   }
 
+  static const int _maxScheduledReminders = 48;
+
   Future<void> cancelAllPrayerNotifications() async {
-    await _plugin.cancelAll();
+    for (var id = 1; id <= _maxScheduledReminders; id++) {
+      await _plugin.cancel(id: id);
+    }
   }
 
   Future<List<ScheduledReminderEntry>> getPendingScheduledReminders() async {

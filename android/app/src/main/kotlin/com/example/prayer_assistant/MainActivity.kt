@@ -19,7 +19,11 @@ class MainActivity : FlutterActivity() {
             when (call.method) {
                 "updateWidgetData" -> {
                     val timeline = call.argument<List<Map<String, Any?>>>("timeline") ?: emptyList()
+                    val todayPrayers = call.argument<List<Map<String, Any?>>>("todayPrayers") ?: emptyList()
+                    val locationLabel = call.argument<String>("locationLabel") ?: ""
                     PrayerWidgetStorage.saveTimeline(this, timeline)
+                    PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
+                    PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     result.success(null)

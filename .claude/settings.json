@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell dumpsys notification --noredact)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell pm list packages)",
+      "Bash(export MSYS_NO_PATHCONV=1 *)",
+      "Read(//tmp/**)",
+      "Bash(grep -n \"NotificationRecord.*prayer_assistant\" /tmp/notif_phone.txt)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp logcat -d -t 5000)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell dumpsys package com.example.prayer_assistant)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp logcat -c)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell monkey -p com.example.prayer_assistant -c android.intent.category.LAUNCHER 1)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp logcat -d)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell screencap -p /sdcard/phone_screen.png)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp pull /sdcard/phone_screen.png \"C:\\\\Users\\\\opirc\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-opirc-Projects-prayer-assistant\\\\3c7917cb-cd2e-4d81-ba4c-77e31d36c439\\\\scratchpad\\\\phone_screen.png\")",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell run-as com.example.prayer_assistant cat shared_prefs/PrayerWidgetPrefs.xml)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp install -r \"c:\\\\Users\\\\opirc\\\\Projects\\\\prayer_assistant\\\\build\\\\app\\\\outputs\\\\flutter-apk\\\\app-debug.apk\")",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell cmd statusbar expand-notifications)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell screencap -p /sdcard/notif_check.png)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp pull /sdcard/notif_check.png \"C:\\\\Users\\\\opirc\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-opirc-Projects-prayer-assistant\\\\3c7917cb-cd2e-4d81-ba4c-77e31d36c439\\\\scratchpad\\\\notif_check.png\")",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell input tap 965 923)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell screencap -p /sdcard/notif_expanded.png)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp pull /sdcard/notif_expanded.png \"C:\\\\Users\\\\opirc\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-opirc-Projects-prayer-assistant\\\\3c7917cb-cd2e-4d81-ba4c-77e31d36c439\\\\scratchpad\\\\notif_expanded.png\")",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell input keyevent KEYCODE_BACK)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell input keyevent KEYCODE_HOME)"
+    ]
+  }
+}

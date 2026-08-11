@@ -366,6 +366,7 @@ class PrayerAppController extends ChangeNotifier {
         days: _yearRange,
         now: now,
         locale: resolvedLocale,
+        locationLabel: _selectedLocation?.fullName ?? '',
       );
       try {
         await _syncNotifications();
@@ -427,6 +428,7 @@ class PrayerAppController extends ChangeNotifier {
       days: _yearRange,
       now: now,
       locale: resolvedLocale,
+      locationLabel: _selectedLocation?.fullName ?? '',
     );
     notifyListeners();
   }

@@ -10,6 +10,7 @@ class LocalDatabase {
   static const _selectedLocationKey = 'selected_location';
   static const _reminderSettingsKey = 'reminder_settings';
   static const _appBarRemainingPlacementKey = 'app_bar_remaining_placement';
+  static const _widgetTextSizeKey = 'widget_text_size';
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
   static const _remindersSilencedKey = 'reminders_silenced';
   static const _themePreferenceKey = 'theme_preference';
@@ -130,6 +131,28 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_appBarRemainingPlacementKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveWidgetTextSize(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _widgetTextSizeKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadWidgetTextSize() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_widgetTextSizeKey],
       limit: 1,
     );
     if (rows.isEmpty) {

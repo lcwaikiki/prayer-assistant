@@ -249,6 +249,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationMessageHidden => 'Oculto';
 
   @override
+  String get widgetTextSizeTitle => 'Widget text size';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'Text size used in the home screen widgets.';
+
+  @override
+  String get widgetTextSizeSmall => 'Small';
+
+  @override
+  String get widgetTextSizeMedium => 'Medium';
+
+  @override
+  String get widgetTextSizeLarge => 'Large';
+
+  @override
   String get remindersOnOffTitle => 'Recordatorios on/off';
 
   @override

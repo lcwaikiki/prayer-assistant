@@ -248,6 +248,22 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationMessageHidden => 'Ausgeblendet';
 
   @override
+  String get widgetTextSizeTitle => 'Widget text size';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'Text size used in the home screen widgets.';
+
+  @override
+  String get widgetTextSizeSmall => 'Small';
+
+  @override
+  String get widgetTextSizeMedium => 'Medium';
+
+  @override
+  String get widgetTextSizeLarge => 'Large';
+
+  @override
   String get remindersOnOffTitle => 'Erinnerungen an/aus';
 
   @override

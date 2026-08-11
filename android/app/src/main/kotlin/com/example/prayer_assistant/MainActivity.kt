@@ -28,6 +28,12 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     result.success(null)
                 }
+                "updateWidgetTextSize" -> {
+                    val size = call.argument<String>("size") ?: "medium"
+                    PrayerWidgetStorage.saveWidgetTextSize(this, size)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
                     PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)

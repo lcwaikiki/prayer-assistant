@@ -86,6 +86,12 @@ class WidgetBridgeService {
     });
   }
 
+  Future<void> updateWidgetTextSize(String size) async {
+    await _channel.invokeMethod<void>('updateWidgetTextSize', <String, Object>{
+      'size': size,
+    });
+  }
+
   Future<void> updateStatusBarConfig({
     required bool enabled,
     required bool autoRestore,

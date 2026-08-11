@@ -548,6 +548,36 @@ abstract class AppLocalizations {
   /// **'Hidden'**
   String get notificationMessageHidden;
 
+  /// No description provided for @widgetTextSizeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget text size'**
+  String get widgetTextSizeTitle;
+
+  /// No description provided for @widgetTextSizeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Text size used in the home screen widgets.'**
+  String get widgetTextSizeSubtitle;
+
+  /// No description provided for @widgetTextSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get widgetTextSizeSmall;
+
+  /// No description provided for @widgetTextSizeMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get widgetTextSizeMedium;
+
+  /// No description provided for @widgetTextSizeLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get widgetTextSizeLarge;
+
   /// No description provided for @remindersOnOffTitle.
   ///
   /// In en, this message translates to:

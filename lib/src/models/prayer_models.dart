@@ -276,6 +276,12 @@ enum AppBarRemainingPlacement {
   hidden,
 }
 
+enum WidgetTextSize {
+  small,
+  medium,
+  large,
+}
+
 enum AppThemePreference {
   system,
   light,

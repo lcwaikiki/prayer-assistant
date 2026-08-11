@@ -249,6 +249,22 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationMessageHidden => 'Gizli';
 
   @override
+  String get widgetTextSizeTitle => 'Widget yazı boyutu';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'Ana ekran widget\'larında kullanılan yazı boyutu.';
+
+  @override
+  String get widgetTextSizeSmall => 'Küçük';
+
+  @override
+  String get widgetTextSizeMedium => 'Orta';
+
+  @override
+  String get widgetTextSizeLarge => 'Büyük';
+
+  @override
   String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';
 
   @override

@@ -248,6 +248,22 @@ class AppLocalizationsUr extends AppLocalizations {
   String get notificationMessageHidden => 'چھپا ہوا';
 
   @override
+  String get widgetTextSizeTitle => 'Widget text size';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'Text size used in the home screen widgets.';
+
+  @override
+  String get widgetTextSizeSmall => 'Small';
+
+  @override
+  String get widgetTextSizeMedium => 'Medium';
+
+  @override
+  String get widgetTextSizeLarge => 'Large';
+
+  @override
   String get remindersOnOffTitle => 'یاد دہانیاں آن/آف';
 
   @override

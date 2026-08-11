@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
+import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -29,6 +30,7 @@ object PrayerWidgetUpdater {
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
         val nextPrayerName = next?.first ?: "--"
         val countdownBase = next?.let { SystemClock.elapsedRealtime() + (it.second - now) }
+        val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
 
         val widgetManager = AppWidgetManager.getInstance(context)
         val openIntent = Intent(context, MainActivity::class.java).apply {
@@ -47,6 +49,8 @@ object PrayerWidgetUpdater {
         )
         for (widgetId in remainingIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time)
+            setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 11f, 14f, 17f)
+            setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 22f, 30f, 38f)
             applyCountdown(views, R.id.widgetRemainingOnlyValue, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
@@ -57,6 +61,8 @@ object PrayerWidgetUpdater {
         )
         for (widgetId in nextIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_next_prayer)
+            setTextSizeSp(views, R.id.widgetNextPrayerName, textSize, 12f, 16f, 20f)
+            setTextSizeSp(views, R.id.widgetNextPrayerRemaining, textSize, 20f, 28f, 36f)
             views.setTextViewText(R.id.widgetNextPrayerName, nextPrayerName)
             applyCountdown(views, R.id.widgetNextPrayerRemaining, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
@@ -64,6 +70,22 @@ object PrayerWidgetUpdater {
         }
 
         updateStatusBar(context, next)
+    }
+
+    private fun setTextSizeSp(
+        views: RemoteViews,
+        viewId: Int,
+        sizePreference: String,
+        small: Float,
+        medium: Float,
+        large: Float
+    ) {
+        val sp = when (sizePreference) {
+            "small" -> small
+            "large" -> large
+            else -> medium
+        }
+        views.setTextViewTextSize(viewId, TypedValue.COMPLEX_UNIT_SP, sp)
     }
 
     /**

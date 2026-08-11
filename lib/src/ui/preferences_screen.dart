@@ -137,6 +137,49 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
+                title: context.l10n.widgetTextSizeTitle,
+                subtitle: _widgetTextSizeSubtitle(
+                  context,
+                  controller.widgetTextSize,
+                ),
+                children: [
+                  RadioListTile<WidgetTextSize>(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.widgetTextSizeSmall),
+                    value: WidgetTextSize.small,
+                    groupValue: controller.widgetTextSize,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetTextSize(value);
+                      }
+                    },
+                  ),
+                  RadioListTile<WidgetTextSize>(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.widgetTextSizeMedium),
+                    value: WidgetTextSize.medium,
+                    groupValue: controller.widgetTextSize,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetTextSize(value);
+                      }
+                    },
+                  ),
+                  RadioListTile<WidgetTextSize>(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.widgetTextSizeLarge),
+                    value: WidgetTextSize.large,
+                    groupValue: controller.widgetTextSize,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetTextSize(value);
+                      }
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
                 title: context.l10n.remindersOnOffTitle,
                 subtitle: controller.remindersSilenced
                     ? context.l10n.remindersOff
@@ -224,5 +267,14 @@ String _appBarRemainingSubtitle(
     AppBarRemainingPlacement.trailing => l10n.showAtRight,
     AppBarRemainingPlacement.subtitle => l10n.showAsSubtitle,
     AppBarRemainingPlacement.hidden => l10n.hideRemainingText,
+  };
+}
+
+String _widgetTextSizeSubtitle(BuildContext context, WidgetTextSize size) {
+  final l10n = context.l10n;
+  return switch (size) {
+    WidgetTextSize.small => l10n.widgetTextSizeSmall,
+    WidgetTextSize.medium => l10n.widgetTextSizeMedium,
+    WidgetTextSize.large => l10n.widgetTextSizeLarge,
   };
 }

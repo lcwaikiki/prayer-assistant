@@ -43,6 +43,7 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement _appBarRemainingPlacement =
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
+  WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
   bool _remindersSilenced = false;
   AppThemePreference _themePreference = AppThemePreference.system;
   AppLocalePreference _localePreference = AppLocalePreference.system;
@@ -63,6 +64,7 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement get appBarRemainingPlacement =>
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
+  WidgetTextSize get widgetTextSize => _widgetTextSize;
   bool get remindersSilenced => _remindersSilenced;
   AppThemePreference get themePreference => _themePreference;
   ThemeMode get themeMode => switch (_themePreference) {
@@ -115,7 +117,17 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _appBarRemainingPlacement = placement;
+      final rawWidgetTextSize = await database.loadWidgetTextSize();
+      var widgetTextSize = WidgetTextSize.medium;
+      for (final item in WidgetTextSize.values) {
+        if (item.name == rawWidgetTextSize) {
+          widgetTextSize = item;
+          break;
+        }
+      }
+      _widgetTextSize = widgetTextSize;
       await _syncStatusBarConfig();
+      await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
       _countries = await api.getCountries();
       if (_selectedLocation != null) {
         await _loadStates(_selectedLocation!.countryId);
@@ -317,6 +329,16 @@ class PrayerAppController extends ChangeNotifier {
     }
     _appBarRemainingPlacement = placement;
     await database.saveAppBarRemainingPlacement(placement.name);
+    notifyListeners();
+  }
+
+  Future<void> updateWidgetTextSize(WidgetTextSize size) async {
+    if (_widgetTextSize == size) {
+      return;
+    }
+    _widgetTextSize = size;
+    await database.saveWidgetTextSize(size.name);
+    await widgetBridgeService.updateWidgetTextSize(size.name);
     notifyListeners();
   }
 

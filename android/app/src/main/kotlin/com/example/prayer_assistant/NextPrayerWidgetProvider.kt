@@ -12,10 +12,12 @@ class NextPrayerWidgetProvider : AppWidgetProvider() {
     ) {
         PrayerWidgetUpdater.updateAll(context)
         PrayerWidgetUpdater.scheduleNextUpdate(context)
+        PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
     }
 
     override fun onEnabled(context: Context) {
         PrayerWidgetUpdater.updateAll(context)
         PrayerWidgetUpdater.scheduleNextUpdate(context)
+        PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
     }
 }

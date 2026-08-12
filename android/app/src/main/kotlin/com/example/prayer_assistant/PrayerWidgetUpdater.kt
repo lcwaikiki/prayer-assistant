@@ -27,17 +27,18 @@ import java.util.Locale
 object PrayerWidgetUpdater {
     const val ACTION_REFRESH_WIDGETS = "com.example.prayer_assistant.ACTION_REFRESH_WIDGETS"
     const val ACTION_REFRESH_ICON = "com.example.prayer_assistant.ACTION_REFRESH_ICON"
+    const val ACTION_REFRESH_WIDGET_MINUTE = "com.example.prayer_assistant.ACTION_REFRESH_WIDGET_MINUTE"
     const val ACTION_STATUS_DISMISSED = "com.example.prayer_assistant.ACTION_STATUS_DISMISSED"
     private const val STATUS_CHANNEL_ID = "prayer_remaining_status"
     private const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
+    private const val WIDGET_HHMM_THRESHOLD_MINUTES = 60L
 
     fun updateAll(context: Context) {
         val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
         val nextPrayerName = next?.first ?: "--"
-        val countdownBase = next?.let { SystemClock.elapsedRealtime() + (it.second - now) }
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
 
         val widgetManager = AppWidgetManager.getInstance(context)
@@ -60,7 +61,7 @@ object PrayerWidgetUpdater {
             views.setTextViewText(R.id.widgetRemainingOnlyLabel, nextPrayerName)
             setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 9f, 11f, 14f, 17f)
             setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 16f, 22f, 30f, 34f)
-            applyCountdown(views, R.id.widgetRemainingOnlyValue, countdownBase)
+            applyCountdown(views, R.id.widgetRemainingOnlyValue, next, now)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -78,7 +79,7 @@ object PrayerWidgetUpdater {
                 R.id.widgetNextPrayerTime,
                 next?.let { formatClock(it.second) } ?: "--:--"
             )
-            applyCountdown(views, R.id.widgetNextPrayerRemaining, countdownBase)
+            applyCountdown(views, R.id.widgetNextPrayerRemaining, next, now)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -105,20 +106,37 @@ object PrayerWidgetUpdater {
     }
 
     /**
-     * Renders a live, self-ticking countdown via the platform Chronometer view so the
-     * displayed value stays accurate between our (now rare) wakeups, instead of a static
-     * string that only ever reflects the last time we happened to redraw it.
+     * Above [WIDGET_HHMM_THRESHOLD_MINUTES] remaining, shows a static "HH.MM" string that we
+     * refresh once a minute via [scheduleWidgetMinuteRefresh] (minutes-only precision doesn't
+     * need finer-grained updates). Once under that threshold, switches to a live, self-ticking
+     * "MM:SS" countdown via the platform Chronometer view, which ticks every second in the
+     * widget host process with no further wakeups from us at all.
      */
-    private fun applyCountdown(views: RemoteViews, viewId: Int, base: Long?) {
-        if (base == null) {
+    private fun applyCountdown(views: RemoteViews, viewId: Int, next: Pair<String, Long>?, now: Long) {
+        if (next == null) {
             views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(viewId, "--:--")
             return
         }
+        val remainingMs = next.second - now
+        val remainingMinutes = remainingMs / 60_000L
+        if (remainingMinutes >= WIDGET_HHMM_THRESHOLD_MINUTES) {
+            views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
+            views.setTextViewText(viewId, formatHoursMinutes(remainingMs))
+            return
+        }
+        val base = SystemClock.elapsedRealtime() + remainingMs
         views.setChronometer(viewId, base, null, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             views.setChronometerCountDown(viewId, true)
         }
+    }
+
+    private fun formatHoursMinutes(remainingMs: Long): String {
+        val totalMinutes = remainingMs / 60_000L
+        val hours = totalMinutes / 60L
+        val minutes = totalMinutes % 60L
+        return "%02d.%02d".format(hours, minutes)
     }
 
     /**
@@ -193,6 +211,37 @@ object PrayerWidgetUpdater {
             ((now / 60_000L) + 1L) * 60_000L
         }
 
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+    }
+
+    /**
+     * Keeps the widgets' "HH.MM" display (see [applyCountdown]) accurate to the minute while
+     * above [WIDGET_HHMM_THRESHOLD_MINUTES] remain. Once remaining time drops under that
+     * threshold, the Chronometer views take over ticking every second on their own, so this
+     * alarm cancels itself rather than continuing to fire.
+     */
+    fun scheduleWidgetMinuteRefresh(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val minuteIntent = Intent(context, PrayerWidgetTickReceiver::class.java).apply {
+            action = ACTION_REFRESH_WIDGET_MINUTE
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            2004,
+            minuteIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val now = System.currentTimeMillis()
+        val next = PrayerWidgetStorage.readTimeline(context).firstOrNull { it.second > now }
+        val remainingMinutes = next?.let { (it.second - now) / 60_000L }
+
+        if (remainingMinutes == null || remainingMinutes < WIDGET_HHMM_THRESHOLD_MINUTES) {
+            alarmManager.cancel(pendingIntent)
+            return
+        }
+
+        val triggerAt = ((now / 60_000L) + 1L) * 60_000L
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
     }
 

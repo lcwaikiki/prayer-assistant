@@ -11,8 +11,14 @@ class PrayerWidgetTickReceiver : BroadcastReceiver() {
             PrayerWidgetUpdater.scheduleIconRefresh(context)
             return
         }
+        if (intent?.action == PrayerWidgetUpdater.ACTION_REFRESH_WIDGET_MINUTE) {
+            PrayerWidgetUpdater.updateAll(context)
+            PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
+            return
+        }
         PrayerWidgetUpdater.updateAll(context)
         PrayerWidgetUpdater.scheduleNextUpdate(context)
         PrayerWidgetUpdater.scheduleIconRefresh(context)
+        PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
     }
 }

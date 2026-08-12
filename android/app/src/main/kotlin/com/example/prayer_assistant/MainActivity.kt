@@ -27,6 +27,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
+                    PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
                     result.success(null)
                 }
                 "updateWidgetTextSize" -> {
@@ -41,6 +42,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
+                    PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
                     result.success(null)
                 }
                 "consumePendingOpenHome" -> {

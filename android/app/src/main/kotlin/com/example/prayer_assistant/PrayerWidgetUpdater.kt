@@ -50,7 +50,7 @@ object PrayerWidgetUpdater {
         for (widgetId in remainingIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time)
             setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 11f, 14f, 17f)
-            setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 22f, 30f, 38f)
+            setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 22f, 30f, 34f)
             applyCountdown(views, R.id.widgetRemainingOnlyValue, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
@@ -62,7 +62,7 @@ object PrayerWidgetUpdater {
         for (widgetId in nextIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_next_prayer)
             setTextSizeSp(views, R.id.widgetNextPrayerName, textSize, 12f, 16f, 20f)
-            setTextSizeSp(views, R.id.widgetNextPrayerRemaining, textSize, 20f, 28f, 36f)
+            setTextSizeSp(views, R.id.widgetNextPrayerRemaining, textSize, 20f, 28f, 32f)
             views.setTextViewText(R.id.widgetNextPrayerName, nextPrayerName)
             applyCountdown(views, R.id.widgetNextPrayerRemaining, countdownBase)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)

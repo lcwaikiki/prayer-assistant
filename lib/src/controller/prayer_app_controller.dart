@@ -227,6 +227,7 @@ class PrayerAppController extends ChangeNotifier {
       }
       await _loadDistricts(state.id);
       final district = locationResolver.bestMatch(_districts, [
+        guess.district,
         guess.city,
         guess.state,
       ]);

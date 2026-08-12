@@ -8,11 +8,13 @@ class DeviceLocationGuess {
     required this.country,
     required this.state,
     required this.city,
+    required this.district,
   });
 
   final String country;
   final String state;
   final String city;
+  final String district;
 }
 
 class LocationResolver {
@@ -51,6 +53,8 @@ class LocationResolver {
       country: (p.country ?? '').trim(),
       state: (p.administrativeArea ?? p.subAdministrativeArea ?? '').trim(),
       city: (p.locality ?? p.subLocality ?? p.subAdministrativeArea ?? '')
+          .trim(),
+      district: (p.subAdministrativeArea ?? p.locality ?? p.subLocality ?? '')
           .trim(),
     );
   }

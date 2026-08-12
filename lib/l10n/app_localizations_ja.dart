@@ -260,9 +260,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetRemainingLabel => 'Remaining';
-
-  @override
   String get remindersOnOffTitle => 'リマインダー on/off';
 
   @override

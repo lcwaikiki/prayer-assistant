@@ -268,9 +268,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Büyük';
 
   @override
-  String get widgetRemainingLabel => 'Kalan';
-
-  @override
   String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';
 
   @override

@@ -260,9 +260,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetRemainingLabel => 'Remaining';
-
-  @override
   String get remindersOnOffTitle => '提醒开/关';
 
   @override

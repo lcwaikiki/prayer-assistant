@@ -584,12 +584,6 @@ abstract class AppLocalizations {
   /// **'Large'**
   String get widgetTextSizeLarge;
 
-  /// No description provided for @widgetRemainingLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Remaining'**
-  String get widgetRemainingLabel;
-
   /// No description provided for @remindersOnOffTitle.
   ///
   /// In en, this message translates to:

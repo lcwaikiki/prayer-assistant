@@ -266,9 +266,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetRemainingLabel => 'Remaining';
-
-  @override
   String get remindersOnOffTitle => 'التذكيرات تشغيل/إيقاف';
 
   @override

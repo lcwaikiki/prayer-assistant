@@ -267,9 +267,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetRemainingLabel => 'Remaining';
-
-  @override
   String get remindersOnOffTitle => 'Pengingat on/off';
 
   @override

@@ -267,9 +267,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetRemainingLabel => 'Remaining';
-
-  @override
   String get remindersOnOffTitle => 'یاد دہانیاں آن/آف';
 
   @override

@@ -11,5 +11,6 @@ class StatusBarDismissReceiver : BroadcastReceiver() {
         }
         PrayerWidgetUpdater.updateAll(context)
         PrayerWidgetUpdater.scheduleNextUpdate(context)
+        PrayerWidgetUpdater.scheduleIconRefresh(context)
     }
 }

@@ -28,6 +28,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetStorage.saveRemainingLabel(this, remainingLabel)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
+                    PrayerWidgetUpdater.scheduleIconRefresh(this)
                     result.success(null)
                 }
                 "updateWidgetTextSize" -> {
@@ -41,6 +42,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
+                    PrayerWidgetUpdater.scheduleIconRefresh(this)
                     result.success(null)
                 }
                 "consumePendingOpenHome" -> {

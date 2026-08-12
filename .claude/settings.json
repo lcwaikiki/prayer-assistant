@@ -23,7 +23,12 @@
       "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp pull /sdcard/notif_expanded.png \"C:\\\\Users\\\\opirc\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-opirc-Projects-prayer-assistant\\\\3c7917cb-cd2e-4d81-ba4c-77e31d36c439\\\\scratchpad\\\\notif_expanded.png\")",
       "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell input keyevent KEYCODE_BACK)",
       "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell input keyevent KEYCODE_HOME)",
-      "Bash(flutter gen-l10n *)"
+      "Bash(flutter gen-l10n *)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell date +%s)",
+      "Bash(python3 -c ' *)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell dumpsys alarm)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp shell screencap -p /sdcard/status_check.png)",
+      "Bash(adb -s adb-R5CW71GRJTE-TvBzJC._adb-tls-connect._tcp pull /sdcard/status_check.png \"C:\\\\Users\\\\opirc\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-opirc-Projects-prayer-assistant\\\\3c7917cb-cd2e-4d81-ba4c-77e31d36c439\\\\scratchpad\\\\status_check.png\")"
     ]
   }
 }

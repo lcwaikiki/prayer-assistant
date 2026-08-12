@@ -8,21 +8,29 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.os.Build
 import android.os.SystemClock
 import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object PrayerWidgetUpdater {
     const val ACTION_REFRESH_WIDGETS = "com.example.prayer_assistant.ACTION_REFRESH_WIDGETS"
+    const val ACTION_REFRESH_ICON = "com.example.prayer_assistant.ACTION_REFRESH_ICON"
     const val ACTION_STATUS_DISMISSED = "com.example.prayer_assistant.ACTION_STATUS_DISMISSED"
     private const val STATUS_CHANNEL_ID = "prayer_remaining_status"
     private const val STATUS_NOTIFICATION_ID = 710001
+    private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
 
     fun updateAll(context: Context) {
         val timeline = PrayerWidgetStorage.readTimeline(context)
@@ -145,6 +153,47 @@ object PrayerWidgetUpdater {
         )
     }
 
+    /**
+     * Keeps the status-bar minutes-remaining icon (see [buildSmallIcon]) accurate to the
+     * minute. Unlike the Chronometer-based text, a notification's small icon is a static
+     * bitmap with no live-ticking equivalent, so it genuinely needs a wakeup per minute to
+     * stay current. To keep that cheap: the wakeup is inexact (batched by the OS, so it's
+     * near-instant while the screen is on/active and only drifts during deep Doze when
+     * nobody is looking anyway), it's cancelled outright when the status notification is
+     * disabled, and while more than [ICON_DIGIT_THRESHOLD_MINUTES] remain (so the icon is
+     * just the app icon, not a digit) it jumps straight to the moment that threshold is
+     * crossed instead of ticking every minute for hours beforehand.
+     */
+    fun scheduleIconRefresh(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val iconIntent = Intent(context, PrayerWidgetTickReceiver::class.java).apply {
+            action = ACTION_REFRESH_ICON
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            2003,
+            iconIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val now = System.currentTimeMillis()
+        val next = PrayerWidgetStorage.readTimeline(context).firstOrNull { it.second > now }
+
+        if (next == null || !PrayerWidgetStorage.isStatusEnabled(context)) {
+            alarmManager.cancel(pendingIntent)
+            return
+        }
+
+        val remainingMinutes = (next.second - now) / 60_000L
+        val triggerAt = if (remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
+            next.second - (ICON_DIGIT_THRESHOLD_MINUTES - 1L) * 60_000L
+        } else {
+            ((now / 60_000L) + 1L) * 60_000L
+        }
+
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+    }
+
     private fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
         val manager = NotificationManagerCompat.from(context)
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
@@ -174,7 +223,7 @@ object PrayerWidgetUpdater {
         val contentView = buildStatusContentView(context, next)
         val expandedView = buildStatusExpandedView(context, next)
         val builder = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(buildSmallIcon(context, next))
             .setContentTitle("Prayer Assistant")
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(contentView)
@@ -187,6 +236,38 @@ object PrayerWidgetUpdater {
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         manager.notify(STATUS_NOTIFICATION_ID, builder.build())
+    }
+
+    /**
+     * Status bar icon: under [ICON_DIGIT_THRESHOLD_MINUTES] minutes remaining, shows the
+     * minute count itself (drawn as a white silhouette bitmap, the required style for
+     * notification small icons); otherwise falls back to the app icon, since a 3-digit
+     * number doesn't read well at status-bar-icon size.
+     */
+    private fun buildSmallIcon(context: Context, next: Pair<String, Long>?): IconCompat {
+        val remainingMinutes = next?.let { (it.second - System.currentTimeMillis()) / 60_000L }
+        if (remainingMinutes == null || remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
+            return IconCompat.createWithResource(context, R.mipmap.ic_launcher)
+        }
+        val sizePx = (48 * context.resources.displayMetrics.density).toInt().coerceAtLeast(48)
+        val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val text = remainingMinutes.coerceIn(0L, 99L).toString().padStart(2, '0')
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.WHITE
+            textAlign = Paint.Align.CENTER
+            typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+        }
+        // Measure at a reference size, then scale so the text fills the full icon width
+        // (minus a thin margin) instead of guessing a fixed point size up front.
+        val referenceSize = sizePx.toFloat()
+        paint.textSize = referenceSize
+        val measuredWidth = paint.measureText(text)
+        val availableWidth = sizePx * 0.92f
+        paint.textSize = referenceSize * (availableWidth / measuredWidth)
+        val yPos = sizePx / 2f - (paint.descent() + paint.ascent()) / 2f
+        canvas.drawText(text, sizePx / 2f, yPos, paint)
+        return IconCompat.createWithBitmap(bitmap)
     }
 
     /**

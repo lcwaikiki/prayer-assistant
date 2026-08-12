@@ -256,17 +256,24 @@ object PrayerWidgetUpdater {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
-            typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
+            // Condensed face: narrower glyphs mean more of the width budget goes to
+            // point size instead of character width, for a visibly larger digit.
+            typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
         }
-        // Measure at a reference size, then scale so the text fills the full icon width
-        // (minus a thin margin) instead of guessing a fixed point size up front.
+        // Fit to the text's actual ink bounds (not font ascent/descent, which reserve
+        // slack for descenders digits don't have) on whichever axis is tighter, so the
+        // glyphs fill almost the entire square canvas in both directions.
         val referenceSize = sizePx.toFloat()
         paint.textSize = referenceSize
-        val measuredWidth = paint.measureText(text)
-        val availableWidth = sizePx * 0.92f
-        paint.textSize = referenceSize * (availableWidth / measuredWidth)
-        val yPos = sizePx / 2f - (paint.descent() + paint.ascent()) / 2f
-        canvas.drawText(text, sizePx / 2f, yPos, paint)
+        val bounds = android.graphics.Rect()
+        paint.getTextBounds(text, 0, text.length, bounds)
+        val available = sizePx * 0.99f
+        val scale = minOf(available / bounds.width(), available / bounds.height())
+        paint.textSize = referenceSize * scale
+        paint.getTextBounds(text, 0, text.length, bounds)
+        val xPos = sizePx / 2f
+        val yPos = sizePx / 2f - bounds.exactCenterY()
+        canvas.drawText(text, xPos, yPos, paint)
         return IconCompat.createWithBitmap(bitmap)
     }
 

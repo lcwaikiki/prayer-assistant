@@ -157,12 +157,12 @@ object PrayerWidgetUpdater {
      * Keeps the status-bar minutes-remaining icon (see [buildSmallIcon]) accurate to the
      * minute. Unlike the Chronometer-based text, a notification's small icon is a static
      * bitmap with no live-ticking equivalent, so it genuinely needs a wakeup per minute to
-     * stay current. To keep that cheap: the wakeup is inexact (batched by the OS, so it's
-     * near-instant while the screen is on/active and only drifts during deep Doze when
-     * nobody is looking anyway), it's cancelled outright when the status notification is
-     * disabled, and while more than [ICON_DIGIT_THRESHOLD_MINUTES] remain (so the icon is
-     * just the app icon, not a digit) it jumps straight to the moment that threshold is
-     * crossed instead of ticking every minute for hours beforehand.
+     * stay current. An inexact wakeup was tried first, but Doze batching measurably delayed
+     * it by several minutes once the device sat idle, so this uses an exact wakeup instead.
+     * The cost is bounded, not unconditional: it only runs while under
+     * [ICON_DIGIT_THRESHOLD_MINUTES] remain (jumping straight to that threshold instead of
+     * ticking through the hours beforehand), and it's cancelled outright when the status
+     * notification is disabled.
      */
     fun scheduleIconRefresh(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -191,7 +191,7 @@ object PrayerWidgetUpdater {
             ((now / 60_000L) + 1L) * 60_000L
         }
 
-        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
     }
 
     private fun updateStatusBar(context: Context, next: Pair<String, Long>?) {

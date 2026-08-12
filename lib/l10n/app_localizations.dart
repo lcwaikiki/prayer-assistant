@@ -560,6 +560,12 @@ abstract class AppLocalizations {
   /// **'Text size used in the home screen widgets.'**
   String get widgetTextSizeSubtitle;
 
+  /// No description provided for @widgetTextSizeExtraSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra small'**
+  String get widgetTextSizeExtraSmall;
+
   /// No description provided for @widgetTextSizeSmall.
   ///
   /// In en, this message translates to:
@@ -577,6 +583,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Large'**
   String get widgetTextSizeLarge;
+
+  /// No description provided for @widgetRemainingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remaining'**
+  String get widgetRemainingLabel;
 
   /// No description provided for @remindersOnOffTitle.
   ///

@@ -145,6 +145,17 @@ class PreferencesScreen extends StatelessWidget {
                 children: [
                   RadioListTile<WidgetTextSize>(
                     contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.widgetTextSizeExtraSmall),
+                    value: WidgetTextSize.extraSmall,
+                    groupValue: controller.widgetTextSize,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetTextSize(value);
+                      }
+                    },
+                  ),
+                  RadioListTile<WidgetTextSize>(
+                    contentPadding: EdgeInsets.zero,
                     title: Text(context.l10n.widgetTextSizeSmall),
                     value: WidgetTextSize.small,
                     groupValue: controller.widgetTextSize,
@@ -273,6 +284,7 @@ String _appBarRemainingSubtitle(
 String _widgetTextSizeSubtitle(BuildContext context, WidgetTextSize size) {
   final l10n = context.l10n;
   return switch (size) {
+    WidgetTextSize.extraSmall => l10n.widgetTextSizeExtraSmall,
     WidgetTextSize.small => l10n.widgetTextSizeSmall,
     WidgetTextSize.medium => l10n.widgetTextSizeMedium,
     WidgetTextSize.large => l10n.widgetTextSizeLarge,

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
+import '../../l10n/app_localizations.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
@@ -79,10 +80,15 @@ class WidgetBridgeService {
       break;
     }
 
+    final l10n = lookupAppLocalizations(
+      locale ?? PlatformDispatcher.instance.locale,
+    );
+
     await _channel.invokeMethod<void>('updateWidgetData', <String, Object>{
       'timeline': timeline,
       'todayPrayers': todayPrayers,
       'locationLabel': locationLabel,
+      'remainingLabel': l10n.widgetRemainingLabel,
     });
   }
 

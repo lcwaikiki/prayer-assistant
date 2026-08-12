@@ -256,6 +256,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'Text size used in the home screen widgets.';
 
   @override
+  String get widgetTextSizeExtraSmall => 'Extra small';
+
+  @override
   String get widgetTextSizeSmall => 'Small';
 
   @override
@@ -263,6 +266,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get widgetTextSizeLarge => 'Large';
+
+  @override
+  String get widgetRemainingLabel => 'Remaining';
 
   @override
   String get remindersOnOffTitle => 'یادآورها روشن/خاموش';

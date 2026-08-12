@@ -9,6 +9,7 @@ object PrayerWidgetStorage {
     private const val TIMELINE_KEY = "timeline_json"
     private const val TODAY_PRAYERS_KEY = "today_prayers_json"
     private const val LOCATION_LABEL_KEY = "location_label"
+    private const val REMAINING_LABEL_KEY = "remaining_label"
     private const val WIDGET_TEXT_SIZE_KEY = "widget_text_size"
     private const val STATUS_ENABLED_KEY = "status_enabled"
     private const val STATUS_AUTO_RESTORE_KEY = "status_auto_restore"
@@ -39,6 +40,18 @@ object PrayerWidgetStorage {
     fun readLocationLabel(context: Context): String {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getString(LOCATION_LABEL_KEY, "") ?: ""
+    }
+
+    fun saveRemainingLabel(context: Context, label: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(REMAINING_LABEL_KEY, label)
+            .apply()
+    }
+
+    fun readRemainingLabel(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(REMAINING_LABEL_KEY, "Remaining") ?: "Remaining"
     }
 
     fun saveWidgetTextSize(context: Context, size: String) {

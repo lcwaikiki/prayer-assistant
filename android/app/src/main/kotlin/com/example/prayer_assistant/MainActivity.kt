@@ -21,9 +21,11 @@ class MainActivity : FlutterActivity() {
                     val timeline = call.argument<List<Map<String, Any?>>>("timeline") ?: emptyList()
                     val todayPrayers = call.argument<List<Map<String, Any?>>>("todayPrayers") ?: emptyList()
                     val locationLabel = call.argument<String>("locationLabel") ?: ""
+                    val remainingLabel = call.argument<String>("remainingLabel") ?: "Remaining"
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
                     PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
+                    PrayerWidgetStorage.saveRemainingLabel(this, remainingLabel)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     result.success(null)

@@ -256,6 +256,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Ana ekran widget\'larında kullanılan yazı boyutu.';
 
   @override
+  String get widgetTextSizeExtraSmall => 'Çok küçük';
+
+  @override
   String get widgetTextSizeSmall => 'Küçük';
 
   @override
@@ -263,6 +266,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get widgetTextSizeLarge => 'Büyük';
+
+  @override
+  String get widgetRemainingLabel => 'Kalan';
 
   @override
   String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';

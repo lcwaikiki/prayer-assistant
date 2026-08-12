@@ -277,6 +277,7 @@ enum AppBarRemainingPlacement {
 }
 
 enum WidgetTextSize {
+  extraSmall,
   small,
   medium,
   large,

@@ -89,6 +89,12 @@ class TesbihHomeScreen extends ConsumerWidget {
                     vertical: 6,
                   ),
                   child: ListTile(
+                    leading: item.reminderEnabled
+                        ? Icon(
+                            Icons.notifications_active,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        : null,
                     title: Text(item.title),
                     subtitle: Text(
                       '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'

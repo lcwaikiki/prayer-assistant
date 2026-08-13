@@ -2,11 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../data/item_repository.dart';
 import '../models/item.dart';
+import '../services/item_reminder_service.dart';
 
 enum TapFeedback { none, standard, checkpoint }
 
 final itemRepositoryProvider = Provider<ItemRepository>((ref) {
   throw UnimplementedError('itemRepositoryProvider must be overridden');
+});
+
+final itemReminderServiceProvider = Provider<ItemReminderService>((ref) {
+  throw UnimplementedError('itemReminderServiceProvider must be overridden');
 });
 
 final itemsNotifierProvider = NotifierProvider<ItemsNotifier, List<Item>>(
@@ -15,10 +20,12 @@ final itemsNotifierProvider = NotifierProvider<ItemsNotifier, List<Item>>(
 
 class ItemsNotifier extends Notifier<List<Item>> {
   late final ItemRepository _repository;
+  late final ItemReminderService _reminderService;
 
   @override
   List<Item> build() {
     _repository = ref.watch(itemRepositoryProvider);
+    _reminderService = ref.watch(itemReminderServiceProvider);
     return _repository.loadItems();
   }
 
@@ -28,6 +35,12 @@ class ItemsNotifier extends Notifier<List<Item>> {
     required int count,
     required int check,
     required int vibrationIntensity,
+    bool reminderEnabled = false,
+    ItemReminderAnchor reminderAnchor = ItemReminderAnchor.clockTime,
+    ItemReminderRepeat reminderRepeat = ItemReminderRepeat.once,
+    DateTime? reminderAt,
+    String? reminderPrayerName,
+    int reminderOffsetMinutes = 0,
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -38,9 +51,16 @@ class ItemsNotifier extends Notifier<List<Item>> {
       setCount: 0,
       vibrationIntensity: vibrationIntensity,
       currentProgress: 0,
+      reminderEnabled: reminderEnabled,
+      reminderAnchor: reminderAnchor,
+      reminderRepeat: reminderRepeat,
+      reminderAt: reminderAt,
+      reminderPrayerName: reminderPrayerName,
+      reminderOffsetMinutes: reminderOffsetMinutes,
     );
     state = [...state, newItem];
     _repository.saveItems(state);
+    _reminderService.scheduleReminder(newItem);
   }
 
   void updateItem(Item updatedItem) {
@@ -49,11 +69,13 @@ class ItemsNotifier extends Notifier<List<Item>> {
         if (item.id == updatedItem.id) updatedItem else item,
     ];
     _repository.saveItems(state);
+    _reminderService.scheduleReminder(updatedItem);
   }
 
   void deleteItem(String id) {
     state = state.where((item) => item.id != id).toList(growable: false);
     _repository.saveItems(state);
+    _reminderService.cancelReminder(id);
   }
 
   void restoreItem(Item item, {required int index}) {
@@ -66,6 +88,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     nextState.insert(safeIndex, item);
     state = nextState;
     _repository.saveItems(state);
+    _reminderService.scheduleReminder(item);
   }
 
   void reorderItems(int oldIndex, int newIndex) {

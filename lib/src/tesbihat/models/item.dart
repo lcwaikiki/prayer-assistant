@@ -1,3 +1,32 @@
+enum ItemReminderRepeat {
+  once,
+  daily;
+
+  static ItemReminderRepeat fromName(String? name) {
+    return ItemReminderRepeat.values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => ItemReminderRepeat.once,
+    );
+  }
+}
+
+enum ItemReminderAnchor {
+  /// A fixed clock time picked directly (once or daily).
+  clockTime,
+
+  /// Tied to one of the day's prayer times plus an offset. Always behaves
+  /// as a recurring reminder since prayer times repeat daily by nature; the
+  /// concrete fire time is re-resolved each day (see MidnightReminderScheduler).
+  prayerTime;
+
+  static ItemReminderAnchor fromName(String? name) {
+    return ItemReminderAnchor.values.firstWhere(
+      (value) => value.name == name,
+      orElse: () => ItemReminderAnchor.clockTime,
+    );
+  }
+}
+
 class Item {
   const Item({
     required this.id,
@@ -8,6 +37,12 @@ class Item {
     required this.setCount,
     required this.vibrationIntensity,
     this.currentProgress = 0,
+    this.reminderEnabled = false,
+    this.reminderRepeat = ItemReminderRepeat.once,
+    this.reminderAt,
+    this.reminderAnchor = ItemReminderAnchor.clockTime,
+    this.reminderPrayerName,
+    this.reminderOffsetMinutes = 0,
   }) : assert(count > 0, 'count must be positive'),
        assert(check > 0, 'check must be positive'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -29,6 +64,24 @@ class Item {
   final int setCount;
   final int vibrationIntensity;
   final int currentProgress;
+  final bool reminderEnabled;
+  final ItemReminderRepeat reminderRepeat;
+
+  /// For [ItemReminderAnchor.clockTime] + [ItemReminderRepeat.once] this is
+  /// the exact moment the reminder fires. For [ItemReminderRepeat.daily]
+  /// only the hour/minute are used. For [ItemReminderAnchor.prayerTime] this
+  /// holds the most recently resolved concrete fire time (recomputed daily).
+  final DateTime? reminderAt;
+
+  final ItemReminderAnchor reminderAnchor;
+
+  /// One of [prayerOrder]'s keys (Imsak/Gunes/Ogle/Ikindi/Aksam/Yatsi) when
+  /// [reminderAnchor] is [ItemReminderAnchor.prayerTime].
+  final String? reminderPrayerName;
+
+  /// Minutes offset from the anchored prayer time: 0 = on time, negative =
+  /// before, positive = after.
+  final int reminderOffsetMinutes;
 
   Item copyWith({
     String? id,
@@ -39,6 +92,12 @@ class Item {
     int? setCount,
     int? vibrationIntensity,
     int? currentProgress,
+    bool? reminderEnabled,
+    ItemReminderRepeat? reminderRepeat,
+    DateTime? reminderAt,
+    ItemReminderAnchor? reminderAnchor,
+    String? reminderPrayerName,
+    int? reminderOffsetMinutes,
   }) {
     return Item(
       id: id ?? this.id,
@@ -49,6 +108,13 @@ class Item {
       setCount: setCount ?? this.setCount,
       vibrationIntensity: vibrationIntensity ?? this.vibrationIntensity,
       currentProgress: currentProgress ?? this.currentProgress,
+      reminderEnabled: reminderEnabled ?? this.reminderEnabled,
+      reminderRepeat: reminderRepeat ?? this.reminderRepeat,
+      reminderAt: reminderAt ?? this.reminderAt,
+      reminderAnchor: reminderAnchor ?? this.reminderAnchor,
+      reminderPrayerName: reminderPrayerName ?? this.reminderPrayerName,
+      reminderOffsetMinutes:
+          reminderOffsetMinutes ?? this.reminderOffsetMinutes,
     );
   }
 
@@ -62,10 +128,17 @@ class Item {
       'setCount': setCount,
       'vibrationIntensity': vibrationIntensity,
       'currentProgress': currentProgress,
+      'reminderEnabled': reminderEnabled,
+      'reminderRepeat': reminderRepeat.name,
+      'reminderAt': reminderAt?.toIso8601String(),
+      'reminderAnchor': reminderAnchor.name,
+      'reminderPrayerName': reminderPrayerName,
+      'reminderOffsetMinutes': reminderOffsetMinutes,
     };
   }
 
   factory Item.fromMap(Map<dynamic, dynamic> map) {
+    final rawReminderAt = map['reminderAt']?.toString();
     return Item(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
@@ -75,6 +148,18 @@ class Item {
       setCount: (map['setCount'] ?? 0) as int,
       vibrationIntensity: (map['vibrationIntensity'] ?? 1) as int,
       currentProgress: (map['currentProgress'] ?? 0) as int,
+      reminderEnabled: (map['reminderEnabled'] as bool?) ?? false,
+      reminderRepeat: ItemReminderRepeat.fromName(
+        map['reminderRepeat']?.toString(),
+      ),
+      reminderAt: (rawReminderAt == null || rawReminderAt.isEmpty)
+          ? null
+          : DateTime.tryParse(rawReminderAt),
+      reminderAnchor: ItemReminderAnchor.fromName(
+        map['reminderAnchor']?.toString(),
+      ),
+      reminderPrayerName: map['reminderPrayerName']?.toString(),
+      reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
     );
   }
 

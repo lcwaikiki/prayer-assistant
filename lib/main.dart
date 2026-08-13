@@ -8,6 +8,7 @@ import 'l10n/app_localizations.dart';
 
 import 'src/controller/prayer_app_controller.dart';
 import 'src/l10n/locale_options.dart';
+import 'src/navigation.dart';
 import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
@@ -15,6 +16,8 @@ import 'src/services/notification_service.dart';
 import 'src/services/widget_bridge_service.dart';
 import 'src/tesbihat/data/item_repository.dart';
 import 'src/tesbihat/l10n/tesbihat_localizations.dart';
+import 'src/tesbihat/services/item_reminder_service.dart';
+import 'src/tesbihat/services/midnight_reminder_scheduler.dart';
 import 'src/tesbihat/state/items_notifier.dart';
 import 'src/ui/app_shell.dart';
 
@@ -33,14 +36,26 @@ Future<void> main() async {
   );
   await controller.initialize();
 
+  final itemReminderService = ItemReminderService();
+  await itemReminderService.initialize();
+  await MidnightReminderScheduler.initializeAndSchedule();
+
   runApp(
     ProviderScope(
       overrides: [
         itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
+        itemReminderServiceProvider.overrideWithValue(itemReminderService),
       ],
       child: PrayerAssistantApp(controller: controller),
     ),
   );
+
+  // Deferred until after the first frame so rootNavigatorKey's Navigator
+  // actually exists to push onto, in case the app was cold-started by
+  // tapping a beads reminder notification.
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    itemReminderService.handleAppLaunchFromNotification();
+  });
 }
 
 class PrayerAssistantApp extends StatelessWidget {
@@ -54,6 +69,7 @@ class PrayerAssistantApp extends StatelessWidget {
       value: controller,
       child: Consumer<PrayerAppController>(
         builder: (context, controller, _) => MaterialApp(
+          navigatorKey: rootNavigatorKey,
           onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
           debugShowCheckedModeBanner: false,
           themeMode: controller.themeMode,

@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
+import '../../../l10n/app_localizations.dart';
+import '../../l10n/prayer_names.dart';
+import '../../services/local_database.dart';
+import '../../utils/time_utils.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
+import '../services/prayer_anchor_resolver.dart';
 import '../state/items_notifier.dart';
+
+enum _OffsetDirection { onTime, before, after }
 
 class ItemFormScreen extends ConsumerStatefulWidget {
   const ItemFormScreen({super.key, this.itemToEdit});
@@ -16,6 +24,8 @@ class ItemFormScreen extends ConsumerStatefulWidget {
 }
 
 class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
+  static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
+
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
@@ -23,6 +33,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late final TextEditingController _checkController;
   late final TextEditingController _setCountController;
   late int _vibrationIntensity;
+  late bool _reminderEnabled;
+  late ItemReminderAnchor _reminderAnchor;
+  late ItemReminderRepeat _reminderRepeat;
+  DateTime? _reminderAt;
+  late String _reminderPrayerName;
+  late _OffsetDirection _offsetDirection;
+  late final TextEditingController _offsetMinutesController;
+  final FocusNode _offsetMinutesFocus = FocusNode();
+  bool _saving = false;
 
   bool get _isEditing => widget.itemToEdit != null;
 
@@ -42,6 +61,19 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       text: item != null ? item.setCount.toString() : '0',
     );
     _vibrationIntensity = item?.vibrationIntensity ?? 50;
+    _reminderEnabled = item?.reminderEnabled ?? false;
+    _reminderAnchor = item?.reminderAnchor ?? ItemReminderAnchor.clockTime;
+    _reminderRepeat = item?.reminderRepeat ?? ItemReminderRepeat.once;
+    _reminderAt = item?.reminderAt;
+    _reminderPrayerName = item?.reminderPrayerName ?? prayerOrder.first;
+    final initialOffset = item?.reminderOffsetMinutes ?? 0;
+    _offsetDirection = initialOffset == 0
+        ? _OffsetDirection.onTime
+        : (initialOffset < 0 ? _OffsetDirection.before : _OffsetDirection.after);
+    _offsetMinutesController = TextEditingController(
+      text: initialOffset == 0 ? '10' : initialOffset.abs().toString(),
+    );
+    _offsetMinutesFocus.addListener(() => setState(() {}));
   }
 
   @override
@@ -51,6 +83,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _countController.dispose();
     _checkController.dispose();
     _setCountController.dispose();
+    _offsetMinutesController.dispose();
+    _offsetMinutesFocus.dispose();
     super.dispose();
   }
 
@@ -89,8 +123,89 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     return null;
   }
 
-  void _save() {
+  Future<void> _pickReminderTime() async {
+    if (_reminderRepeat == ItemReminderRepeat.once) {
+      final now = DateTime.now();
+      final date = await showDatePicker(
+        context: context,
+        initialDate: _reminderAt ?? now,
+        firstDate: now,
+        lastDate: now.add(const Duration(days: 3650)),
+      );
+      if (date == null || !mounted) {
+        return;
+      }
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(_reminderAt ?? now),
+      );
+      if (time == null) {
+        return;
+      }
+      setState(() {
+        _reminderAt = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          time.hour,
+          time.minute,
+        );
+      });
+    } else {
+      final initial = _reminderAt ?? DateTime.now();
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initial),
+      );
+      if (time == null) {
+        return;
+      }
+      setState(() {
+        _reminderAt = DateTime(
+          initial.year,
+          initial.month,
+          initial.day,
+          time.hour,
+          time.minute,
+        );
+      });
+    }
+  }
+
+  String _reminderLabel(TesbihatLocalizations l10n) {
+    final reminderAt = _reminderAt;
+    if (reminderAt == null) {
+      return l10n.reminderNotSet;
+    }
+    if (_reminderRepeat == ItemReminderRepeat.daily) {
+      return DateFormat('HH:mm').format(reminderAt);
+    }
+    return DateFormat('EEE, dd MMM yyyy HH:mm').format(reminderAt);
+  }
+
+  int _computeOffsetMinutes() {
+    if (_offsetDirection == _OffsetDirection.onTime) {
+      return 0;
+    }
+    final parsed = int.tryParse(_offsetMinutesController.text.trim()) ?? 0;
+    // A blank/invalid custom field would otherwise silently collapse to an
+    // offset of 0 (i.e. behave like "on time" instead of before/after).
+    final magnitude = parsed <= 0 ? 1 : parsed;
+    return _offsetDirection == _OffsetDirection.before
+        ? -magnitude
+        : magnitude;
+  }
+
+  Future<void> _save() async {
     if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    if (_reminderEnabled &&
+        _reminderAnchor == ItemReminderAnchor.clockTime &&
+        _reminderAt == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.tesbihatL10n.reminderPickDateTime)),
+      );
       return;
     }
 
@@ -99,6 +214,22 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final count = int.parse(_countController.text.trim());
     final check = int.parse(_checkController.text.trim());
     final setCount = _isEditing ? widget.itemToEdit!.setCount : 0;
+    final offsetMinutes = _computeOffsetMinutes();
+
+    var reminderAt = _reminderAt;
+    if (_reminderEnabled && _reminderAnchor == ItemReminderAnchor.prayerTime) {
+      setState(() => _saving = true);
+      reminderAt = await resolvePrayerAnchoredTime(
+        LocalDatabase(),
+        prayerName: _reminderPrayerName,
+        offsetMinutes: offsetMinutes,
+      );
+      if (!mounted) {
+        return;
+      }
+      setState(() => _saving = false);
+    }
+
     final notifier = ref.read(itemsNotifierProvider.notifier);
 
     if (_isEditing) {
@@ -110,6 +241,12 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         setCount: setCount,
         vibrationIntensity: _vibrationIntensity,
         currentProgress: widget.itemToEdit!.currentProgress.clamp(0, count),
+        reminderEnabled: _reminderEnabled,
+        reminderAnchor: _reminderAnchor,
+        reminderRepeat: _reminderRepeat,
+        reminderAt: reminderAt,
+        reminderPrayerName: _reminderPrayerName,
+        reminderOffsetMinutes: offsetMinutes,
       );
       notifier.updateItem(edited);
     } else {
@@ -119,15 +256,30 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         count: count,
         check: check,
         vibrationIntensity: _vibrationIntensity,
+        reminderEnabled: _reminderEnabled,
+        reminderAnchor: _reminderAnchor,
+        reminderRepeat: _reminderRepeat,
+        reminderAt: reminderAt,
+        reminderPrayerName: _reminderPrayerName,
+        reminderOffsetMinutes: offsetMinutes,
       );
     }
 
-    Navigator.pop(context);
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
+    final appL10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+    final offsetMagnitude = int.tryParse(_offsetMinutesController.text.trim());
+    final isCustomOffsetMinutes =
+        offsetMagnitude == null ||
+        !_minuteOptions.contains(offsetMagnitude) ||
+        _offsetMinutesFocus.hasFocus;
     return Scaffold(
       appBar: AppBar(
         title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
@@ -216,10 +368,247 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 });
               },
             ),
+            const SizedBox(height: 20),
+            SwitchListTile(
+              key: const Key('reminder_enable_switch'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.reminderTitle),
+              subtitle: Text(l10n.reminderEnable),
+              value: _reminderEnabled,
+              onChanged: (value) => setState(() => _reminderEnabled = value),
+            ),
+            if (_reminderEnabled) ...[
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: Text(l10n.reminderAnchorTime),
+                    selected: _reminderAnchor == ItemReminderAnchor.clockTime,
+                    onSelected: (selected) {
+                      if (!selected) return;
+                      setState(
+                        () => _reminderAnchor = ItemReminderAnchor.clockTime,
+                      );
+                    },
+                  ),
+                  ChoiceChip(
+                    label: Text(l10n.reminderAnchorPrayer),
+                    selected: _reminderAnchor == ItemReminderAnchor.prayerTime,
+                    onSelected: (selected) {
+                      if (!selected) return;
+                      setState(
+                        () => _reminderAnchor = ItemReminderAnchor.prayerTime,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              if (_reminderAnchor == ItemReminderAnchor.clockTime) ...[
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ChoiceChip(
+                      label: Text(l10n.reminderRepeatOnce),
+                      selected: _reminderRepeat == ItemReminderRepeat.once,
+                      onSelected: (selected) {
+                        if (!selected) return;
+                        setState(
+                          () => _reminderRepeat = ItemReminderRepeat.once,
+                        );
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text(l10n.reminderRepeatDaily),
+                      selected: _reminderRepeat == ItemReminderRepeat.daily,
+                      onSelected: (selected) {
+                        if (!selected) return;
+                        setState(
+                          () => _reminderRepeat = ItemReminderRepeat.daily,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton.icon(
+                  key: const Key('reminder_time_button'),
+                  onPressed: _pickReminderTime,
+                  icon: const Icon(Icons.schedule_outlined),
+                  label: Text(_reminderLabel(l10n)),
+                ),
+              ] else ...[
+                DropdownButtonFormField<String>(
+                  key: const Key('reminder_prayer_dropdown'),
+                  initialValue: _reminderPrayerName,
+                  decoration: InputDecoration(
+                    labelText: l10n.reminderSelectPrayer,
+                  ),
+                  items: prayerOrder
+                      .map(
+                        (key) => DropdownMenuItem(
+                          value: key,
+                          child: Text(
+                            AppLocalizations.of(context)!.prayerNameLabel(key),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => _reminderPrayerName = value);
+                    }
+                  },
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ChoiceChip(
+                      label: Text(l10n.reminderOffsetOnTime),
+                      selected: _offsetDirection == _OffsetDirection.onTime,
+                      onSelected: (selected) {
+                        if (!selected) return;
+                        setState(
+                          () => _offsetDirection = _OffsetDirection.onTime,
+                        );
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text(l10n.reminderOffsetBefore),
+                      selected: _offsetDirection == _OffsetDirection.before,
+                      onSelected: (selected) {
+                        if (!selected) return;
+                        setState(
+                          () => _offsetDirection = _OffsetDirection.before,
+                        );
+                      },
+                    ),
+                    ChoiceChip(
+                      label: Text(l10n.reminderOffsetAfter),
+                      selected: _offsetDirection == _OffsetDirection.after,
+                      onSelected: (selected) {
+                        if (!selected) return;
+                        setState(
+                          () => _offsetDirection = _OffsetDirection.after,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                if (_offsetDirection != _OffsetDirection.onTime) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      ..._minuteOptions.map(
+                        (option) => ChoiceChip(
+                          label: Text(appL10n.minutesValue(option)),
+                          selected: !isCustomOffsetMinutes &&
+                              offsetMagnitude == option,
+                          onSelected: (selected) {
+                            if (!selected) return;
+                            setState(() {
+                              _offsetMinutesController.text =
+                                  option.toString();
+                              _offsetMinutesFocus.unfocus();
+                            });
+                          },
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => _offsetMinutesFocus.requestFocus(),
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                          decoration: BoxDecoration(
+                            color: isCustomOffsetMinutes
+                                ? colorScheme.primaryContainer
+                                : colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isCustomOffsetMinutes
+                                  ? colorScheme.primary
+                                  : colorScheme.outlineVariant,
+                              width: isCustomOffsetMinutes ? 2 : 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.edit_outlined,
+                                size: 18,
+                                color: isCustomOffsetMinutes
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                appL10n.custom,
+                                style: Theme.of(context).textTheme.labelLarge
+                                    ?.copyWith(
+                                      fontWeight: isCustomOffsetMinutes
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                      color: isCustomOffsetMinutes
+                                          ? colorScheme.onPrimaryContainer
+                                          : colorScheme.onSurfaceVariant,
+                                    ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                width: 44,
+                                child: TextField(
+                                  key: const Key(
+                                    'reminder_offset_minutes_field',
+                                  ),
+                                  controller: _offsetMinutesController,
+                                  focusNode: _offsetMinutesFocus,
+                                  keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.center,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                  ],
+                                  onChanged: (_) => setState(() {}),
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: isCustomOffsetMinutes
+                                            ? colorScheme.onPrimaryContainer
+                                            : colorScheme.onSurface,
+                                      ),
+                                  decoration: const InputDecoration(
+                                    isDense: true,
+                                    isCollapsed: true,
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ],
+            ],
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: _save,
-              child: Text(_isEditing ? l10n.update : l10n.save),
+              onPressed: _saving ? null : _save,
+              child: _saving
+                  ? const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(_isEditing ? l10n.update : l10n.save),
             ),
           ],
         ),

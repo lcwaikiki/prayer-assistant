@@ -21,6 +21,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get tabDates => 'تاریخیں';
 
   @override
+  String get tabTesbih => 'تسبیح';
+
+  @override
   String get tooltipToggleLightDark => 'لائٹ/ڈارک تبدیل کریں';
 
   @override

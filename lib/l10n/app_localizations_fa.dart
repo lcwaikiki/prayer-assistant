@@ -21,6 +21,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get tabDates => 'تاریخ‌ها';
 
   @override
+  String get tabTesbih => 'تسبیح';
+
+  @override
   String get tooltipToggleLightDark => 'تغییر روشن/تیره';
 
   @override

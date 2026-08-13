@@ -1,0 +1,651 @@
+import 'package:flutter/material.dart';
+
+class TesbihatLocalizations {
+  TesbihatLocalizations(this.locale);
+
+  final Locale locale;
+
+  static const supportedLocales = [
+    Locale('en'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('de'),
+    Locale('fa'),
+    Locale('ar'),
+    Locale('ja'),
+    Locale('zh'),
+    Locale('tr'),
+    Locale('ur'),
+  ];
+
+  static const localizationsDelegates = [_TesbihatLocalizationsDelegate()];
+
+  static TesbihatLocalizations of(BuildContext context) {
+    final localizations = Localizations.of<TesbihatLocalizations>(
+      context,
+      TesbihatLocalizations,
+    );
+    return localizations ?? TesbihatLocalizations(const Locale('en'));
+  }
+
+  static const _strings = <String, Map<String, String>>{
+    'en': {
+      'appTitle': 'Rosary Counter',
+      'milestones': 'Rosary',
+      'switchToLight': 'Switch to light mode',
+      'switchToDark': 'Switch to dark mode',
+      'language': 'Language',
+      'chooseLanguage': 'Choose language',
+      'noMilestones': 'No rosaries yet. Tap + to add one.',
+      'deleted': 'deleted',
+      'undo': 'Undo',
+      'edit': 'Edit',
+      'delete': 'Delete',
+      'count': 'Count',
+      'check': 'Check',
+      'set': 'Set',
+      'progress': 'Progress',
+      'createMilestone': 'Create Rosary',
+      'editMilestone': 'Edit Rosary',
+      'title': 'Title',
+      'notes': 'Notes',
+      'notesHint': 'Add notes for this rosary...',
+      'countField': 'Count',
+      'checkInterval': 'Check Interval',
+      'checkHelper': 'Must be less than or equal to half of count.',
+      'setCount': 'Set Count',
+      'setCountHelper': 'Set count must be less than or equal to count.',
+      'setCountReadonlyHelper':
+          'Set count can only be changed from progress screen.',
+      'vibrationIntensity': 'Vibration Intensity',
+      'save': 'Save',
+      'update': 'Update',
+      'requiredSuffix': 'is required',
+      'mustBeInteger': 'must be an integer',
+      'countPositive': 'Count must be a positive integer',
+      'checkGreaterThanZero': 'Check must be greater than 0',
+      'checkHalfError': 'Check cannot be greater than half of count',
+      'enterValidCountFirst': 'Enter a valid count first',
+      'setCountNegative': 'Set count cannot be negative',
+      'setCountGreaterCount': 'Set count cannot be greater than count',
+      'setCountValueRequired': 'Set count is required',
+      'itemNotFound': 'Item not found',
+      'resetProgressTitle': 'Reset progress?',
+      'resetProgressBody': 'This will set current progress back to 0.',
+      'cancel': 'Cancel',
+      'reset': 'Reset',
+      'editProgressAndSetCount': 'Edit progress and set count',
+      'progressCount': 'Progress Count',
+      'setCountCannotNegative': 'Set count cannot be negative',
+      'validProgressNumber': 'Enter a valid progress number',
+      'progressBetween': 'Progress must be between 0 and {max}',
+      'maxMinusCount': 'Left Count',
+      'tap': 'TAP',
+      'noNotesAdded': 'No notes added.',
+    },
+    'es': {
+      'appTitle': 'Contador de Rosario',
+      'milestones': 'Rosario',
+      'switchToLight': 'Cambiar a modo claro',
+      'switchToDark': 'Cambiar a modo oscuro',
+      'language': 'Idioma',
+      'chooseLanguage': 'Elegir idioma',
+      'noMilestones': 'Aun no hay rosarios. Toca + para agregar uno.',
+      'deleted': 'eliminado',
+      'undo': 'Deshacer',
+      'edit': 'Editar',
+      'delete': 'Eliminar',
+      'count': 'Conteo',
+      'check': 'Chequeo',
+      'set': 'Serie',
+      'progress': 'Progreso',
+      'createMilestone': 'Crear Rosario',
+      'editMilestone': 'Editar Rosario',
+      'title': 'Titulo',
+      'notes': 'Notas',
+      'notesHint': 'Agrega notas para este rosario...',
+      'countField': 'Conteo',
+      'checkInterval': 'Intervalo de chequeo',
+      'checkHelper': 'Debe ser menor o igual a la mitad del conteo.',
+      'setCount': 'Conteo de series',
+      'setCountHelper': 'El conteo de series debe ser menor o igual al conteo.',
+      'setCountReadonlyHelper':
+          'El conteo de series solo se puede cambiar desde la pantalla de progreso.',
+      'vibrationIntensity': 'Intensidad de vibracion',
+      'save': 'Guardar',
+      'update': 'Actualizar',
+      'requiredSuffix': 'es obligatorio',
+      'mustBeInteger': 'debe ser un numero entero',
+      'countPositive': 'El conteo debe ser un entero positivo',
+      'checkGreaterThanZero': 'El chequeo debe ser mayor que 0',
+      'checkHalfError': 'El chequeo no puede ser mayor que la mitad del conteo',
+      'enterValidCountFirst': 'Ingresa primero un conteo valido',
+      'setCountNegative': 'El conteo de series no puede ser negativo',
+      'setCountGreaterCount':
+          'El conteo de series no puede ser mayor que el conteo',
+      'setCountValueRequired': 'El conteo de series es obligatorio',
+      'itemNotFound': 'Elemento no encontrado',
+      'resetProgressTitle': 'Reiniciar progreso?',
+      'resetProgressBody': 'Esto pondra el progreso actual en 0.',
+      'cancel': 'Cancelar',
+      'reset': 'Reiniciar',
+      'editProgressAndSetCount': 'Editar progreso y conteo de series',
+      'progressCount': 'Conteo de progreso',
+      'setCountCannotNegative': 'El conteo de series no puede ser negativo',
+      'validProgressNumber': 'Ingresa un numero de progreso valido',
+      'progressBetween': 'El progreso debe estar entre 0 y {max}',
+      'maxMinusCount': 'Conteo restante',
+      'tap': 'TOCAR',
+      'noNotesAdded': 'No se agregaron notas.',
+    },
+    'fa': {
+      'appTitle': 'شمارنده تسبیح',
+      'milestones': 'تسبیح',
+      'switchToLight': 'تغییر به حالت روشن',
+      'switchToDark': 'تغییر به حالت تیره',
+      'language': 'زبان',
+      'chooseLanguage': 'انتخاب زبان',
+      'noMilestones': 'هنوز تسبیحی وجود ندارد. برای افزودن + را بزنید.',
+      'deleted': 'حذف شد',
+      'undo': 'بازگردانی',
+      'edit': 'ویرایش',
+      'delete': 'حذف',
+      'count': 'شمارش',
+      'check': 'بررسی',
+      'set': 'دور',
+      'progress': 'پیشرفت',
+      'createMilestone': 'ایجاد تسبیح',
+      'editMilestone': 'ویرایش تسبیح',
+      'title': 'عنوان',
+      'notes': 'یادداشت‌ها',
+      'notesHint': 'برای این تسبیح یادداشت بنویسید...',
+      'countField': 'شمارش',
+      'checkInterval': 'فاصله بررسی',
+      'checkHelper': 'باید کمتر یا مساوی نصف شمارش باشد.',
+      'setCount': 'تعداد دور',
+      'setCountHelper': 'تعداد دور باید کمتر یا مساوی شمارش باشد.',
+      'setCountReadonlyHelper': 'تعداد دور فقط از صفحه پیشرفت قابل تغییر است.',
+      'vibrationIntensity': 'شدت ویبره',
+      'save': 'ذخیره',
+      'update': 'به‌روزرسانی',
+      'requiredSuffix': 'الزامی است',
+      'mustBeInteger': 'باید عدد صحیح باشد',
+      'countPositive': 'شمارش باید عدد صحیح مثبت باشد',
+      'checkGreaterThanZero': 'مقدار بررسی باید بیشتر از 0 باشد',
+      'checkHalfError': 'مقدار بررسی نمی‌تواند بیشتر از نصف شمارش باشد',
+      'enterValidCountFirst': 'ابتدا یک شمارش معتبر وارد کنید',
+      'setCountNegative': 'تعداد دور نمی‌تواند منفی باشد',
+      'setCountGreaterCount': 'تعداد دور نمی‌تواند بیشتر از شمارش باشد',
+      'setCountValueRequired': 'تعداد دور الزامی است',
+      'itemNotFound': 'مورد پیدا نشد',
+      'resetProgressTitle': 'پیشرفت بازنشانی شود؟',
+      'resetProgressBody': 'این کار پیشرفت فعلی را به 0 برمی‌گرداند.',
+      'cancel': 'لغو',
+      'reset': 'بازنشانی',
+      'editProgressAndSetCount': 'ویرایش پیشرفت و تعداد دور',
+      'progressCount': 'شمارش پیشرفت',
+      'setCountCannotNegative': 'تعداد دور نمی‌تواند منفی باشد',
+      'validProgressNumber': 'یک عدد پیشرفت معتبر وارد کنید',
+      'progressBetween': 'پیشرفت باید بین 0 و {max} باشد',
+      'maxMinusCount': 'شمارش باقی‌مانده',
+      'tap': 'ضربه',
+      'noNotesAdded': 'یادداشتی اضافه نشده است.',
+    },
+    'fr': {
+      'appTitle': 'Compteur de Chapelet',
+      'milestones': 'Chapelet',
+      'switchToLight': 'Passer en mode clair',
+      'switchToDark': 'Passer en mode sombre',
+      'noMilestones': 'Aucun chapelet. Appuyez sur + pour en ajouter.',
+      'deleted': 'supprimé',
+      'undo': 'Annuler',
+      'edit': 'Modifier',
+      'delete': 'Supprimer',
+      'count': 'Compte',
+      'check': 'Seuil',
+      'set': 'Série',
+      'progress': 'Progression',
+      'createMilestone': 'Créer un chapelet',
+      'editMilestone': 'Modifier le chapelet',
+      'title': 'Titre',
+      'notes': 'Notes',
+      'notesHint': 'Ajoutez des notes pour ce chapelet...',
+      'countField': 'Compte',
+      'checkInterval': 'Intervalle de seuil',
+      'checkHelper': 'Doit être inférieur ou égal à la moitié du compte.',
+      'setCount': 'Compte de série',
+      'setCountHelper':
+          'Le compte de série doit être inférieur ou égal au compte.',
+      'setCountReadonlyHelper':
+          'Le compte de série ne peut être modifié que depuis l’écran de progression.',
+      'vibrationIntensity': 'Intensité de vibration',
+      'save': 'Enregistrer',
+      'update': 'Mettre à jour',
+      'requiredSuffix': 'est requis',
+      'mustBeInteger': 'doit être un entier',
+      'countPositive': 'Le compte doit être un entier positif',
+      'checkGreaterThanZero': 'Le seuil doit être supérieur à 0',
+      'checkHalfError': 'Le seuil ne peut pas dépasser la moitié du compte',
+      'enterValidCountFirst': 'Saisissez d’abord un compte valide',
+      'setCountNegative': 'Le compte de série ne peut pas être négatif',
+      'setCountGreaterCount':
+          'Le compte de série ne peut pas dépasser le compte',
+      'setCountValueRequired': 'Le compte de série est requis',
+      'itemNotFound': 'Élément introuvable',
+      'resetProgressTitle': 'Réinitialiser la progression ?',
+      'resetProgressBody': 'Cela remettra la progression actuelle à 0.',
+      'cancel': 'Annuler',
+      'reset': 'Réinitialiser',
+      'editProgressAndSetCount':
+          'Modifier la progression et le compte de série',
+      'progressCount': 'Compte de progression',
+      'setCountCannotNegative': 'Le compte de série ne peut pas être négatif',
+      'validProgressNumber': 'Saisissez un nombre de progression valide',
+      'progressBetween': 'La progression doit être entre 0 et {max}',
+      'maxMinusCount': 'Compte restant',
+      'tap': 'TAP',
+      'noNotesAdded': 'Aucune note ajoutée.',
+    },
+    'de': {
+      'appTitle': 'Rosenkranz-Zähler',
+      'milestones': 'Rosenkranz',
+      'switchToLight': 'Zu hellem Modus wechseln',
+      'switchToDark': 'Zu dunklem Modus wechseln',
+      'noMilestones': 'Noch keine Rosenkränze. Mit + hinzufügen.',
+      'deleted': 'gelöscht',
+      'undo': 'Rückgängig',
+      'edit': 'Bearbeiten',
+      'delete': 'Löschen',
+      'count': 'Zähler',
+      'check': 'Intervall',
+      'set': 'Satz',
+      'progress': 'Fortschritt',
+      'createMilestone': 'Rosenkranz erstellen',
+      'editMilestone': 'Rosenkranz bearbeiten',
+      'title': 'Titel',
+      'notes': 'Notizen',
+      'notesHint': 'Notizen für diesen Rosenkranz hinzufügen...',
+      'countField': 'Zähler',
+      'checkInterval': 'Intervallprüfung',
+      'checkHelper': 'Muss kleiner oder gleich der Hälfte des Zählers sein.',
+      'setCount': 'Satz-Zähler',
+      'setCountHelper': 'Der Satz-Zähler muss kleiner/gleich dem Zähler sein.',
+      'setCountReadonlyHelper':
+          'Der Satz-Zähler kann nur im Fortschrittsbildschirm geändert werden.',
+      'vibrationIntensity': 'Vibrationsintensität',
+      'save': 'Speichern',
+      'update': 'Aktualisieren',
+      'requiredSuffix': 'ist erforderlich',
+      'mustBeInteger': 'muss eine Ganzzahl sein',
+      'countPositive': 'Der Zähler muss positiv sein',
+      'checkGreaterThanZero': 'Intervall muss größer als 0 sein',
+      'checkHalfError':
+          'Intervall darf nicht größer als die Hälfte des Zählers sein',
+      'enterValidCountFirst': 'Bitte zuerst einen gültigen Zähler eingeben',
+      'setCountNegative': 'Satz-Zähler darf nicht negativ sein',
+      'setCountGreaterCount':
+          'Satz-Zähler darf nicht größer als der Zähler sein',
+      'setCountValueRequired': 'Satz-Zähler ist erforderlich',
+      'itemNotFound': 'Eintrag nicht gefunden',
+      'resetProgressTitle': 'Fortschritt zurücksetzen?',
+      'resetProgressBody': 'Dies setzt den aktuellen Fortschritt auf 0 zurück.',
+      'cancel': 'Abbrechen',
+      'reset': 'Zurücksetzen',
+      'editProgressAndSetCount': 'Fortschritt und Satz-Zähler bearbeiten',
+      'progressCount': 'Fortschrittszähler',
+      'setCountCannotNegative': 'Satz-Zähler darf nicht negativ sein',
+      'validProgressNumber': 'Bitte eine gültige Fortschrittszahl eingeben',
+      'progressBetween': 'Fortschritt muss zwischen 0 und {max} liegen',
+      'maxMinusCount': 'Verbleibende Anzahl',
+      'tap': 'TAP',
+      'noNotesAdded': 'Keine Notizen hinzugefügt.',
+    },
+    'ar': {
+      'appTitle': 'عداد المسبحة',
+      'milestones': 'مِسْبَحَة',
+      'switchToLight': 'التبديل إلى الوضع الفاتح',
+      'switchToDark': 'التبديل إلى الوضع الداكن',
+      'noMilestones': 'لا توجد مسبحة بعد. اضغط + للإضافة.',
+      'deleted': 'تم الحذف',
+      'undo': 'تراجع',
+      'edit': 'تعديل',
+      'delete': 'حذف',
+      'count': 'العدد',
+      'check': 'الفاصل',
+      'set': 'الدفعة',
+      'progress': 'التقدم',
+      'createMilestone': 'إنشاء مسبحة',
+      'editMilestone': 'تعديل المسبحة',
+      'title': 'العنوان',
+      'notes': 'ملاحظات',
+      'notesHint': 'أضف ملاحظات لهذه المسبحة...',
+      'countField': 'العدد',
+      'checkInterval': 'فاصل التحقق',
+      'checkHelper': 'يجب أن يكون أقل من أو يساوي نصف العدد.',
+      'setCount': 'عدد الدفعات',
+      'setCountHelper': 'يجب أن يكون عدد الدفعات أقل من أو يساوي العدد.',
+      'setCountReadonlyHelper': 'يمكن تغيير عدد الدفعات فقط من شاشة التقدم.',
+      'vibrationIntensity': 'شدة الاهتزاز',
+      'save': 'حفظ',
+      'update': 'تحديث',
+      'requiredSuffix': 'مطلوب',
+      'mustBeInteger': 'يجب أن يكون رقمًا صحيحًا',
+      'countPositive': 'يجب أن يكون العدد رقمًا صحيحًا موجبًا',
+      'checkGreaterThanZero': 'يجب أن يكون الفاصل أكبر من 0',
+      'checkHalfError': 'لا يمكن أن يكون الفاصل أكبر من نصف العدد',
+      'enterValidCountFirst': 'أدخل عددًا صالحًا أولاً',
+      'setCountNegative': 'لا يمكن أن يكون عدد الدفعات سالبًا',
+      'setCountGreaterCount': 'لا يمكن أن يتجاوز عدد الدفعات العدد',
+      'setCountValueRequired': 'عدد الدفعات مطلوب',
+      'itemNotFound': 'العنصر غير موجود',
+      'resetProgressTitle': 'إعادة تعيين التقدم؟',
+      'resetProgressBody': 'سيتم إعادة التقدم الحالي إلى 0.',
+      'cancel': 'إلغاء',
+      'reset': 'إعادة تعيين',
+      'editProgressAndSetCount': 'تعديل التقدم وعدد الدفعات',
+      'progressCount': 'عدد التقدم',
+      'setCountCannotNegative': 'لا يمكن أن يكون عدد الدفعات سالبًا',
+      'validProgressNumber': 'أدخل رقم تقدم صالحًا',
+      'progressBetween': 'يجب أن يكون التقدم بين 0 و {max}',
+      'maxMinusCount': 'العدد المتبقي',
+      'tap': 'اضغط',
+      'noNotesAdded': 'لم يتم إضافة ملاحظات.',
+    },
+    'ja': {
+      'appTitle': 'ロザリオカウンター',
+      'milestones': 'ロザリオ',
+      'switchToLight': 'ライトモードに切り替え',
+      'switchToDark': 'ダークモードに切り替え',
+      'language': '言語',
+      'chooseLanguage': '言語を選択',
+      'noMilestones': 'ロザリオがありません。+ をタップして追加してください。',
+      'deleted': 'を削除しました',
+      'undo': '元に戻す',
+      'edit': '編集',
+      'delete': '削除',
+      'count': 'カウント',
+      'check': 'チェック',
+      'set': 'セット',
+      'progress': '進捗',
+      'createMilestone': 'ロザリオを作成',
+      'editMilestone': 'ロザリオを編集',
+      'title': 'タイトル',
+      'notes': 'メモ',
+      'notesHint': 'このロザリオのメモを入力...',
+      'countField': 'カウント',
+      'checkInterval': 'チェック間隔',
+      'checkHelper': 'カウントの半分以下である必要があります。',
+      'setCount': 'セット数',
+      'setCountHelper': 'セット数はカウント以下である必要があります。',
+      'setCountReadonlyHelper': 'セット数は進捗画面でのみ変更できます。',
+      'vibrationIntensity': 'バイブ強度',
+      'save': '保存',
+      'update': '更新',
+      'requiredSuffix': 'は必須です',
+      'mustBeInteger': 'は整数である必要があります',
+      'countPositive': 'カウントは正の整数である必要があります',
+      'checkGreaterThanZero': 'チェックは0より大きい必要があります',
+      'checkHalfError': 'チェックはカウントの半分を超えられません',
+      'enterValidCountFirst': '先に有効なカウントを入力してください',
+      'setCountNegative': 'セット数は負にできません',
+      'setCountGreaterCount': 'セット数はカウントを超えられません',
+      'setCountValueRequired': 'セット数は必須です',
+      'itemNotFound': '項目が見つかりません',
+      'resetProgressTitle': '進捗をリセットしますか？',
+      'resetProgressBody': '現在の進捗を0に戻します。',
+      'cancel': 'キャンセル',
+      'reset': 'リセット',
+      'editProgressAndSetCount': '進捗とセット数を編集',
+      'progressCount': '進捗カウント',
+      'setCountCannotNegative': 'セット数は負にできません',
+      'validProgressNumber': '有効な進捗値を入力してください',
+      'progressBetween': '進捗は0から{max}の間である必要があります',
+      'maxMinusCount': '残りカウント',
+      'tap': 'タップ',
+      'noNotesAdded': 'メモはありません。',
+    },
+    'zh': {
+      'appTitle': '念珠计数器',
+      'milestones': '念珠',
+      'switchToLight': '切换到浅色模式',
+      'switchToDark': '切换到深色模式',
+      'noMilestones': '还没有念珠。点击 + 添加。',
+      'deleted': '已删除',
+      'undo': '撤销',
+      'edit': '编辑',
+      'delete': '删除',
+      'count': '计数',
+      'check': '检查点',
+      'set': '组数',
+      'progress': '进度',
+      'createMilestone': '创建念珠',
+      'editMilestone': '编辑念珠',
+      'title': '标题',
+      'notes': '备注',
+      'notesHint': '为此念珠添加备注...',
+      'countField': '计数',
+      'checkInterval': '检查间隔',
+      'checkHelper': '必须小于或等于计数的一半。',
+      'setCount': '组数计数',
+      'setCountHelper': '组数计数必须小于或等于计数。',
+      'setCountReadonlyHelper': '组数只能在进度页面修改。',
+      'vibrationIntensity': '震动强度',
+      'save': '保存',
+      'update': '更新',
+      'requiredSuffix': '为必填项',
+      'mustBeInteger': '必须是整数',
+      'countPositive': '计数必须是正整数',
+      'checkGreaterThanZero': '检查点必须大于 0',
+      'checkHalfError': '检查点不能大于计数的一半',
+      'enterValidCountFirst': '请先输入有效计数',
+      'setCountNegative': '组数不能为负数',
+      'setCountGreaterCount': '组数不能大于计数',
+      'setCountValueRequired': '组数为必填项',
+      'itemNotFound': '未找到项目',
+      'resetProgressTitle': '重置进度？',
+      'resetProgressBody': '这会将当前进度重置为 0。',
+      'cancel': '取消',
+      'reset': '重置',
+      'editProgressAndSetCount': '编辑进度与组数',
+      'progressCount': '进度计数',
+      'setCountCannotNegative': '组数不能为负数',
+      'validProgressNumber': '请输入有效进度数字',
+      'progressBetween': '进度必须在 0 到 {max} 之间',
+      'maxMinusCount': '剩余计数',
+      'tap': '点按',
+      'noNotesAdded': '暂无备注。',
+    },
+    'tr': {
+      'appTitle': 'Tesbih Sayacı',
+      'milestones': 'Tesbih',
+      'switchToLight': 'Açık moda geç',
+      'switchToDark': 'Koyu moda geç',
+      'noMilestones': 'Henüz tesbih yok. Eklemek için + dokunun.',
+      'deleted': 'silindi',
+      'undo': 'Geri Al',
+      'edit': 'Düzenle',
+      'delete': 'Sil',
+      'count': 'Sayı',
+      'check': 'Kontrol',
+      'set': 'Set',
+      'progress': 'İlerleme',
+      'createMilestone': 'Tesbih Oluştur',
+      'editMilestone': 'Tesbihi Düzenle',
+      'title': 'Başlık',
+      'notes': 'Notlar',
+      'notesHint': 'Bu tesbih için not ekleyin...',
+      'countField': 'Sayı',
+      'checkInterval': 'Kontrol Aralığı',
+      'checkHelper': 'Sayı değerinin yarısından küçük/eşit olmalı.',
+      'setCount': 'Set Sayısı',
+      'setCountHelper': 'Set sayısı sayıdan büyük olamaz.',
+      'setCountReadonlyHelper':
+          'Set sayısı sadece ilerleme ekranından değiştirilebilir.',
+      'vibrationIntensity': 'Titreşim Şiddeti',
+      'save': 'Kaydet',
+      'update': 'Güncelle',
+      'requiredSuffix': 'zorunludur',
+      'mustBeInteger': 'tam sayı olmalıdır',
+      'countPositive': 'Sayı pozitif tam sayı olmalı',
+      'checkGreaterThanZero': 'Kontrol 0’dan büyük olmalı',
+      'checkHalfError': 'Kontrol sayı değerinin yarısından büyük olamaz',
+      'enterValidCountFirst': 'Önce geçerli bir sayı girin',
+      'setCountNegative': 'Set sayısı negatif olamaz',
+      'setCountGreaterCount': 'Set sayısı sayıdan büyük olamaz',
+      'setCountValueRequired': 'Set sayısı zorunludur',
+      'itemNotFound': 'Öğe bulunamadı',
+      'resetProgressTitle': 'İlerleme sıfırlansın mı?',
+      'resetProgressBody': 'Bu işlem mevcut ilerlemeyi 0 yapar.',
+      'cancel': 'İptal',
+      'reset': 'Sıfırla',
+      'editProgressAndSetCount': 'İlerleme ve set sayısını düzenle',
+      'progressCount': 'İlerleme Sayısı',
+      'setCountCannotNegative': 'Set sayısı negatif olamaz',
+      'validProgressNumber': 'Geçerli bir ilerleme sayısı girin',
+      'progressBetween': 'İlerleme 0 ile {max} arasında olmalı',
+      'maxMinusCount': 'Kalan Sayı',
+      'tap': 'DOKUN',
+      'noNotesAdded': 'Not eklenmedi.',
+    },
+    'ur': {
+      'appTitle': 'تسبیح کاؤنٹر',
+      'milestones': 'تسبیح',
+      'switchToLight': 'لائٹ موڈ پر جائیں',
+      'switchToDark': 'ڈارک موڈ پر جائیں',
+      'noMilestones': 'ابھی کوئی تسبیح نہیں۔ شامل کرنے کے لیے + دبائیں۔',
+      'deleted': 'حذف ہوگیا',
+      'undo': 'واپس لائیں',
+      'edit': 'ترمیم',
+      'delete': 'حذف',
+      'count': 'گنتی',
+      'check': 'چیک',
+      'set': 'سیٹ',
+      'progress': 'پیش رفت',
+      'createMilestone': 'نئی تسبیح بنائیں',
+      'editMilestone': 'تسبیح میں ترمیم',
+      'title': 'عنوان',
+      'notes': 'نوٹس',
+      'notesHint': 'اس تسبیح کے لیے نوٹس لکھیں...',
+      'countField': 'گنتی',
+      'checkInterval': 'چیک وقفہ',
+      'checkHelper': 'یہ گنتی کے نصف سے کم یا برابر ہونا چاہیے۔',
+      'setCount': 'سیٹ گنتی',
+      'setCountHelper': 'سیٹ گنتی، گنتی سے زیادہ نہیں ہونی چاہیے۔',
+      'setCountReadonlyHelper':
+          'سیٹ گنتی صرف پیش رفت اسکرین سے تبدیل ہو سکتی ہے۔',
+      'vibrationIntensity': 'وائبریشن شدت',
+      'save': 'محفوظ کریں',
+      'update': 'اپ ڈیٹ',
+      'requiredSuffix': 'لازمی ہے',
+      'mustBeInteger': 'عدد صحیح ہونا چاہیے',
+      'countPositive': 'گنتی مثبت عدد صحیح ہونی چاہیے',
+      'checkGreaterThanZero': 'چیک 0 سے بڑا ہونا چاہیے',
+      'checkHalfError': 'چیک گنتی کے نصف سے زیادہ نہیں ہو سکتا',
+      'enterValidCountFirst': 'پہلے درست گنتی درج کریں',
+      'setCountNegative': 'سیٹ گنتی منفی نہیں ہو سکتی',
+      'setCountGreaterCount': 'سیٹ گنتی، گنتی سے زیادہ نہیں ہو سکتی',
+      'setCountValueRequired': 'سیٹ گنتی لازمی ہے',
+      'itemNotFound': 'آئٹم نہیں ملا',
+      'resetProgressTitle': 'پیش رفت ری سیٹ کریں؟',
+      'resetProgressBody': 'اس سے موجودہ پیش رفت 0 ہو جائے گی۔',
+      'cancel': 'منسوخ',
+      'reset': 'ری سیٹ',
+      'editProgressAndSetCount': 'پیش رفت اور سیٹ گنتی میں ترمیم',
+      'progressCount': 'پیش رفت گنتی',
+      'setCountCannotNegative': 'سیٹ گنتی منفی نہیں ہو سکتی',
+      'validProgressNumber': 'درست پیش رفت نمبر درج کریں',
+      'progressBetween': 'پیش رفت 0 اور {max} کے درمیان ہونی چاہیے',
+      'maxMinusCount': 'باقی گنتی',
+      'tap': 'ٹیپ',
+      'noNotesAdded': 'کوئی نوٹس شامل نہیں کیے گئے۔',
+    },
+  };
+
+  String _t(String key) {
+    final code = locale.languageCode;
+    final langMap = _strings[code] ?? _strings['en']!;
+    return langMap[key] ?? _strings['en']![key] ?? key;
+  }
+
+  String get appTitle => _t('appTitle');
+  String get milestones => _t('milestones');
+  String get switchToLight => _t('switchToLight');
+  String get switchToDark => _t('switchToDark');
+  String get language => _t('language');
+  String get chooseLanguage => _t('chooseLanguage');
+  String get noMilestones => _t('noMilestones');
+  String deletedItem(String title) => '"$title" ${_t('deleted')}';
+  String get undo => _t('undo');
+  String get edit => _t('edit');
+  String get delete => _t('delete');
+  String get count => _t('count');
+  String get check => _t('check');
+  String get set => _t('set');
+  String get progress => _t('progress');
+  String get createMilestone => _t('createMilestone');
+  String get editMilestone => _t('editMilestone');
+  String get title => _t('title');
+  String get notes => _t('notes');
+  String get notesHint => _t('notesHint');
+  String get countField => _t('countField');
+  String get checkInterval => _t('checkInterval');
+  String get checkHelper => _t('checkHelper');
+  String get setCount => _t('setCount');
+  String get setCountHelper => _t('setCountHelper');
+  String get setCountReadonlyHelper => _t('setCountReadonlyHelper');
+  String get vibrationIntensity => _t('vibrationIntensity');
+  String get save => _t('save');
+  String get update => _t('update');
+  String requiredField(String fieldName) =>
+      '$fieldName ${_t('requiredSuffix')}';
+  String fieldMustBeInteger(String fieldName) =>
+      '$fieldName ${_t('mustBeInteger')}';
+  String get countPositive => _t('countPositive');
+  String get checkGreaterThanZero => _t('checkGreaterThanZero');
+  String get checkHalfError => _t('checkHalfError');
+  String get enterValidCountFirst => _t('enterValidCountFirst');
+  String get setCountNegative => _t('setCountNegative');
+  String get setCountGreaterCount => _t('setCountGreaterCount');
+  String get setCountValueRequired => _t('setCountValueRequired');
+  String get itemNotFound => _t('itemNotFound');
+  String get resetProgressTitle => _t('resetProgressTitle');
+  String get resetProgressBody => _t('resetProgressBody');
+  String get cancel => _t('cancel');
+  String get reset => _t('reset');
+  String get editProgressAndSetCount => _t('editProgressAndSetCount');
+  String get progressCount => _t('progressCount');
+  String get setCountCannotNegative => _t('setCountCannotNegative');
+  String get validProgressNumber => _t('validProgressNumber');
+  String progressBetween(int max) =>
+      _t('progressBetween').replaceAll('{max}', '$max');
+  String get maxMinusCount => _t('maxMinusCount');
+  String get tap => _t('tap');
+  String get noNotesAdded => _t('noNotesAdded');
+}
+
+class _TesbihatLocalizationsDelegate
+    extends LocalizationsDelegate<TesbihatLocalizations> {
+  const _TesbihatLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) =>
+      TesbihatLocalizations.supportedLocales.any(
+        (l) => l.languageCode == locale.languageCode,
+      );
+
+  @override
+  Future<TesbihatLocalizations> load(Locale locale) async {
+    return TesbihatLocalizations(locale);
+  }
+
+  @override
+  bool shouldReload(
+    covariant LocalizationsDelegate<TesbihatLocalizations> old,
+  ) {
+    return false;
+  }
+}
+
+extension TesbihatLocalizationsX on BuildContext {
+  TesbihatLocalizations get tesbihatL10n => TesbihatLocalizations.of(this);
+}

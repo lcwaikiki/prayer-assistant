@@ -21,6 +21,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get tabDates => 'التواريخ';
 
   @override
+  String get tabTesbih => 'مِسْبَحَة';
+
+  @override
   String get tooltipToggleLightDark => 'تبديل فاتح/داكن';
 
   @override

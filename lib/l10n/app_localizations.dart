@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Dates'**
   String get tabDates;
 
+  /// No description provided for @tabTesbih.
+  ///
+  /// In en, this message translates to:
+  /// **'Beads'**
+  String get tabTesbih;
+
   /// No description provided for @tooltipToggleLightDark.
   ///
   /// In en, this message translates to:

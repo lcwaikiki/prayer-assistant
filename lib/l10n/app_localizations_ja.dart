@@ -21,6 +21,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tabDates => '日付';
 
   @override
+  String get tabTesbih => 'ロザリオ';
+
+  @override
   String get tooltipToggleLightDark => 'ライト/ダーク切替';
 
   @override

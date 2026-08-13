@@ -21,6 +21,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get tabDates => 'Tanggal';
 
   @override
+  String get tabTesbih => 'Tasbih';
+
+  @override
   String get tooltipToggleLightDark => 'Ganti terang/gelap';
 
   @override

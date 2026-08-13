@@ -1,0 +1,229 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../l10n/tesbihat_localizations.dart';
+import '../models/item.dart';
+import '../state/items_notifier.dart';
+
+class ItemFormScreen extends ConsumerStatefulWidget {
+  const ItemFormScreen({super.key, this.itemToEdit});
+
+  final Item? itemToEdit;
+
+  @override
+  ConsumerState<ItemFormScreen> createState() => _ItemFormScreenState();
+}
+
+class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late final TextEditingController _titleController;
+  late final TextEditingController _notesController;
+  late final TextEditingController _countController;
+  late final TextEditingController _checkController;
+  late final TextEditingController _setCountController;
+  late int _vibrationIntensity;
+
+  bool get _isEditing => widget.itemToEdit != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final item = widget.itemToEdit;
+    _titleController = TextEditingController(text: item?.title ?? '');
+    _notesController = TextEditingController(text: item?.notes ?? '');
+    _countController = TextEditingController(
+      text: item != null ? item.count.toString() : '',
+    );
+    _checkController = TextEditingController(
+      text: item != null ? item.check.toString() : '',
+    );
+    _setCountController = TextEditingController(
+      text: item != null ? item.setCount.toString() : '0',
+    );
+    _vibrationIntensity = item?.vibrationIntensity ?? 50;
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _notesController.dispose();
+    _countController.dispose();
+    _checkController.dispose();
+    _setCountController.dispose();
+    super.dispose();
+  }
+
+  String? _requiredValidator(String? value, String fieldName) {
+    if (value == null || value.trim().isEmpty) {
+      return context.tesbihatL10n.requiredField(fieldName);
+    }
+    return null;
+  }
+
+  String? _countValidator(String? value) {
+    final l10n = context.tesbihatL10n;
+    final emptyError = _requiredValidator(value, l10n.countField);
+    if (emptyError != null) return emptyError;
+
+    final count = int.tryParse(value!.trim());
+    if (count == null || count <= 0) {
+      return l10n.countPositive;
+    }
+    return null;
+  }
+
+  String? _checkValidator(String? value) {
+    final l10n = context.tesbihatL10n;
+    final emptyError = _requiredValidator(value, l10n.check);
+    if (emptyError != null) return emptyError;
+
+    final check = int.tryParse(value!.trim());
+    final count = int.tryParse(_countController.text.trim());
+    if (check == null) {
+      return l10n.fieldMustBeInteger(l10n.check);
+    }
+    if (check <= 0) return l10n.checkGreaterThanZero;
+    if (count == null || count <= 0) return l10n.enterValidCountFirst;
+    if (check * 2 > count) return l10n.checkHalfError;
+    return null;
+  }
+
+  void _save() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final title = _titleController.text.trim();
+    final notes = _notesController.text.trim();
+    final count = int.parse(_countController.text.trim());
+    final check = int.parse(_checkController.text.trim());
+    final setCount = _isEditing ? widget.itemToEdit!.setCount : 0;
+    final notifier = ref.read(itemsNotifierProvider.notifier);
+
+    if (_isEditing) {
+      final edited = widget.itemToEdit!.copyWith(
+        title: title,
+        notes: notes,
+        count: count,
+        check: check,
+        setCount: setCount,
+        vibrationIntensity: _vibrationIntensity,
+        currentProgress: widget.itemToEdit!.currentProgress.clamp(0, count),
+      );
+      notifier.updateItem(edited);
+    } else {
+      notifier.addItem(
+        title: title,
+        notes: notes,
+        count: count,
+        check: check,
+        vibrationIntensity: _vibrationIntensity,
+      );
+    }
+
+    Navigator.pop(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.tesbihatL10n;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
+      ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            TextFormField(
+              key: const Key('title_field'),
+              controller: _titleController,
+              decoration: InputDecoration(labelText: l10n.title),
+              validator: (value) => _requiredValidator(value, l10n.title),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              key: const Key('notes_field'),
+              controller: _notesController,
+              minLines: 3,
+              maxLines: 6,
+              decoration: InputDecoration(
+                labelText: l10n.notes,
+                alignLabelWithHint: true,
+                hintText: l10n.notesHint,
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              key: const Key('count_field'),
+              controller: _countController,
+              decoration: InputDecoration(labelText: l10n.countField),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: _countValidator,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              key: const Key('check_field'),
+              controller: _checkController,
+              decoration: InputDecoration(
+                labelText: l10n.checkInterval,
+                helperText: l10n.checkHelper,
+              ),
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              validator: _checkValidator,
+            ),
+            const SizedBox(height: 12),
+            _isEditing
+                ? InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.setCount,
+                      helperText: l10n.setCountReadonlyHelper,
+                    ),
+                    child: Text(
+                      _setCountController.text,
+                      key: const Key('set_count_readonly_value'),
+                    ),
+                  )
+                : InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: l10n.setCount,
+                      helperText: l10n.setCountReadonlyHelper,
+                    ),
+                    child: Text(
+                      '0',
+                      key: const Key('set_count_readonly_value'),
+                    ),
+                  ),
+            const SizedBox(height: 20),
+            Text(
+              '${l10n.vibrationIntensity}: $_vibrationIntensity',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Slider(
+              key: const Key('intensity_slider'),
+              value: _vibrationIntensity.toDouble(),
+              min: 1,
+              max: 100,
+              divisions: 99,
+              label: _vibrationIntensity.toString(),
+              onChanged: (value) {
+                setState(() {
+                  _vibrationIntensity = value.round();
+                });
+              },
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: _save,
+              child: Text(_isEditing ? l10n.update : l10n.save),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

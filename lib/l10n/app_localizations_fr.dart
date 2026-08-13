@@ -21,6 +21,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get tabDates => 'Dates';
 
   @override
+  String get tabTesbih => 'Chapelet';
+
+  @override
   String get tooltipToggleLightDark => 'Basculer clair/sombre';
 
   @override

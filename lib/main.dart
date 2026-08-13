@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    hide ChangeNotifierProvider, Consumer;
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 
@@ -10,10 +13,16 @@ import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
 import 'src/services/notification_service.dart';
 import 'src/services/widget_bridge_service.dart';
+import 'src/tesbihat/data/item_repository.dart';
+import 'src/tesbihat/l10n/tesbihat_localizations.dart';
+import 'src/tesbihat/state/items_notifier.dart';
 import 'src/ui/app_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Hive.initFlutter();
+  final itemsBox = await Hive.openBox<dynamic>('items_box');
 
   final controller = PrayerAppController(
     api: ImsakiyemApi(),
@@ -24,7 +33,14 @@ Future<void> main() async {
   );
   await controller.initialize();
 
-  runApp(PrayerAssistantApp(controller: controller));
+  runApp(
+    ProviderScope(
+      overrides: [
+        itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
+      ],
+      child: PrayerAssistantApp(controller: controller),
+    ),
+  );
 }
 
 class PrayerAssistantApp extends StatelessWidget {
@@ -44,6 +60,7 @@ class PrayerAssistantApp extends StatelessWidget {
           locale: controller.appLocale,
           localizationsDelegates: const [
             AppLocalizations.delegate,
+            ...TesbihatLocalizations.localizationsDelegates,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

@@ -21,6 +21,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tabDates => '日期';
 
   @override
+  String get tabTesbih => '念珠';
+
+  @override
   String get tooltipToggleLightDark => '切换明暗模式';
 
   @override

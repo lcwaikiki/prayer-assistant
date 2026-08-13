@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
+import '../tesbihat/screens/tesbih_home_screen.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'location_screen.dart';
@@ -53,6 +54,7 @@ class _AppShellState extends State<AppShell> {
           const LocationScreen(),
           const HomeScreen(),
           const HistoryScreen(),
+          const TesbihHomeScreen(),
         ];
 
         return Scaffold(
@@ -77,6 +79,11 @@ class _AppShellState extends State<AppShell> {
                 selectedIcon: const Icon(Icons.calendar_month),
                 label: context.l10n.tabDates,
               ),
+              NavigationDestination(
+                icon: const Icon(Icons.circle_outlined),
+                selectedIcon: const Icon(Icons.circle),
+                label: context.l10n.tabTesbih,
+              ),
             ],
           ),
         );
@@ -93,6 +100,7 @@ class _AppShellState extends State<AppShell> {
       0 => context.l10n.tabLocation,
       1 => context.l10n.tabToday,
       2 => context.l10n.tabDates,
+      3 => context.l10n.tabTesbih,
       _ => context.l10n.appTitle,
     };
 

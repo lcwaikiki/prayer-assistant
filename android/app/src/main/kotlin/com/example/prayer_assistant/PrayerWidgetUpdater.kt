@@ -84,7 +84,66 @@ object PrayerWidgetUpdater {
             widgetManager.updateAppWidget(widgetId, views)
         }
 
+        val upcomingRemindersIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, UpcomingRemindersWidgetProvider::class.java)
+        )
+        for (widgetId in upcomingRemindersIds) {
+            val views = buildUpcomingRemindersView(context, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
         updateStatusBar(context, next)
+    }
+
+    /**
+     * Up to 3 fixed rows (title + pre-formatted, already-localized date/time from the Dart
+     * side) rather than a RemoteViewsService-backed list — the reminder count shown here is
+     * intentionally small, so a real scrolling list would be more machinery than the surface
+     * warrants.
+     */
+    private fun buildUpcomingRemindersView(
+        context: Context,
+        openPendingIntent: PendingIntent
+    ): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.widget_upcoming_reminders)
+        views.setTextViewText(
+            R.id.widgetUpcomingRemindersHeader,
+            PrayerWidgetStorage.readCalendarRemindersHeader(context)
+        )
+        views.setOnClickPendingIntent(R.id.widgetUpcomingRemindersRoot, openPendingIntent)
+
+        val reminders = PrayerWidgetStorage.readCalendarReminders(context)
+        views.setViewVisibility(
+            R.id.widgetUpcomingRemindersEmpty,
+            if (reminders.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+        )
+
+        val rowIds = intArrayOf(
+            R.id.widgetUpcomingReminderRow1,
+            R.id.widgetUpcomingReminderRow2,
+            R.id.widgetUpcomingReminderRow3
+        )
+        val titleIds = intArrayOf(
+            R.id.widgetUpcomingReminderTitle1,
+            R.id.widgetUpcomingReminderTitle2,
+            R.id.widgetUpcomingReminderTitle3
+        )
+        val whenIds = intArrayOf(
+            R.id.widgetUpcomingReminderWhen1,
+            R.id.widgetUpcomingReminderWhen2,
+            R.id.widgetUpcomingReminderWhen3
+        )
+        for (i in rowIds.indices) {
+            val reminder = reminders.getOrNull(i)
+            if (reminder == null) {
+                views.setViewVisibility(rowIds[i], android.view.View.GONE)
+                continue
+            }
+            views.setViewVisibility(rowIds[i], android.view.View.VISIBLE)
+            views.setTextViewText(titleIds[i], reminder.title)
+            views.setTextViewText(whenIds[i], reminder.whenText)
+        }
+        return views
     }
 
     private fun setTextSizeSp(

@@ -30,6 +30,14 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
                     result.success(null)
                 }
+                "updateCalendarReminders" -> {
+                    val headerText = call.argument<String>("headerText") ?: "Upcoming reminders"
+                    val reminders = call.argument<List<Map<String, Any?>>>("reminders") ?: emptyList()
+                    PrayerWidgetStorage.saveCalendarRemindersHeader(this, headerText)
+                    PrayerWidgetStorage.saveCalendarReminders(this, reminders)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
                 "updateWidgetTextSize" -> {
                     val size = call.argument<String>("size") ?: "medium"
                     PrayerWidgetStorage.saveWidgetTextSize(this, size)

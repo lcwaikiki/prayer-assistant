@@ -86,6 +86,16 @@ class WidgetBridgeService {
     });
   }
 
+  Future<void> updateCalendarReminders({
+    required String headerText,
+    required List<Map<String, Object>> reminders,
+  }) async {
+    await _channel.invokeMethod<void>('updateCalendarReminders', <String, Object>{
+      'headerText': headerText,
+      'reminders': reminders,
+    });
+  }
+
   Future<void> updateWidgetTextSize(String size) async {
     await _channel.invokeMethod<void>('updateWidgetTextSize', <String, Object>{
       'size': size,

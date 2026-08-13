@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/services/calendar_reminder_service.dart';
+import '../../l10n/app_localizations.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
@@ -164,6 +166,7 @@ class PrayerAppController extends ChangeNotifier {
           await calendarReminderService.scheduleReminder(reminder);
         }
       }
+      await _syncCalendarRemindersWidget();
       _countries = await api.getCountries();
       if (_selectedLocation != null) {
         await _loadStates(_selectedLocation!.countryId);
@@ -408,6 +411,7 @@ class PrayerAppController extends ChangeNotifier {
   Future<void> addCalendarReminder(CalendarReminder reminder) async {
     _calendarReminders = [..._calendarReminders, reminder];
     notifyListeners();
+    _syncCalendarRemindersWidget();
     await database.saveCalendarReminder(reminder);
     await calendarReminderService.scheduleReminder(reminder);
   }
@@ -418,6 +422,7 @@ class PrayerAppController extends ChangeNotifier {
         if (existing.id == reminder.id) reminder else existing,
     ];
     notifyListeners();
+    _syncCalendarRemindersWidget();
     await database.saveCalendarReminder(reminder);
     await calendarReminderService.scheduleReminder(reminder);
   }
@@ -427,6 +432,7 @@ class PrayerAppController extends ChangeNotifier {
         .where((reminder) => reminder.id != id)
         .toList(growable: false);
     notifyListeners();
+    _syncCalendarRemindersWidget();
     await database.deleteCalendarReminder(id);
     await calendarReminderService.cancelReminder(id);
   }
@@ -443,8 +449,40 @@ class PrayerAppController extends ChangeNotifier {
     nextReminders.insert(safeIndex, reminder);
     _calendarReminders = nextReminders;
     notifyListeners();
+    _syncCalendarRemindersWidget();
     await database.saveCalendarReminder(reminder);
     await calendarReminderService.scheduleReminder(reminder);
+  }
+
+  /// Pushes the next few upcoming enabled calendar reminders to the Android
+  /// home-screen widget. Fire-and-forget: display-only, not the scheduling
+  /// authority (CalendarReminderService/CalendarMidnightScheduler are).
+  Future<void> _syncCalendarRemindersWidget() async {
+    final now = DateTime.now();
+    final upcoming =
+        <({CalendarReminder reminder, DateTime next})>[
+            for (final reminder in _calendarReminders)
+              if (reminder.enabled)
+                if (reminder.nextOccurrenceFrom(now) case final next?)
+                  (reminder: reminder, next: next),
+          ]
+          ..sort((a, b) => a.next.compareTo(b.next));
+    final dateFormat = DateFormat(
+      'EEE, d MMM · HH:mm',
+      resolvedLocale.toString(),
+    );
+    final payload = [
+      for (final entry in upcoming.take(3))
+        {
+          'title': entry.reminder.title,
+          'when': dateFormat.format(entry.next),
+          'epochMs': entry.next.millisecondsSinceEpoch,
+        },
+    ];
+    await widgetBridgeService.updateCalendarReminders(
+      headerText: lookupAppLocalizations(resolvedLocale).homeUpcomingRemindersTitle,
+      reminders: payload,
+    );
   }
 
   Future<void> toggleCalendarReminderEnabled(String id) async {

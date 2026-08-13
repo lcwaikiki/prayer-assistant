@@ -151,7 +151,25 @@ Two sub-tabs:
       calendar on that date's day-detail sheet. Only rendered when
       there's at least one upcoming reminder, so it doesn't disturb the
       edge-to-edge Today tab layout when there's nothing to show.
-- [ ] Android home-screen widget surface for upcoming calendar reminders
-      — separate from the in-app card above; needs native Kotlin/XML
-      changes to the existing prayer-times widget and can't be verified
-      without deploying to a real device. Not started.
+- [x] Android home-screen widget surface for upcoming calendar reminders:
+      a new `UpcomingRemindersWidgetProvider` (3rd widget alongside the
+      existing Next Prayer / Remaining Time ones), following the same
+      SharedPreferences-backed pattern as `PrayerWidgetStorage`/
+      `PrayerWidgetUpdater`. `PrayerAppController` pushes the next 3
+      enabled reminders — pre-formatted with `DateFormat`/`AppLocalizations`
+      on the Dart side, since the native layer has no l10n access — via
+      a new `updateCalendarReminders` method channel call, fired
+      immediately after every add/update/delete/restore and once on
+      `initialize()`. Fixed 3-row `RemoteViews` layout (no
+      `RemoteViewsService`/ListView — deliberately simple for a 3-item
+      display), tapping it opens the app to the Today tab like the other
+      widgets. Verified: clean `flutter build apk --debug` (Kotlin +
+      resources compile) and a clean install/launch on a real device
+      (Galaxy Z Flip) with no crash in logcat. **Not verified by me**:
+      actually adding the widget to a home screen and confirming it
+      renders live data — an attempt at scripted UI automation on the
+      user's physical phone mis-tapped into an unrelated app (a floating
+      overlay intercepted a tap), so at the user's choice this final
+      manual check (add a reminder, long-press home screen → widgets →
+      "Prayer Assistant" → Upcoming reminders) is left for the user to
+      do themselves rather than risk more automated taps on their device.

@@ -33,7 +33,16 @@
       "Read(//c/Users/opirc/Projects/tesbihat/lib/models/**)",
       "Read(//c/Users/opirc/Projects/tesbihat/lib/screens/**)",
       "Bash(unzip -p build/app/outputs/flutter-apk/app-debug.apk AndroidManifest.xml)",
-      "Bash(git status *)"
+      "Bash(git status *)",
+      "Bash(flutter run *)",
+      "mcp__plugin_playwright_playwright__browser_resize",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "mcp__plugin_playwright_playwright__browser_wait_for",
+      "mcp__plugin_playwright_playwright__browser_console_messages",
+      "Bash(adb exec-out *)",
+      "Bash(adb emu *)",
+      "Bash(adb wait-for-device *)"
     ]
   }
 }

@@ -70,82 +70,116 @@ class _HomeScreenState extends State<HomeScreen> {
         final nextPrayer = controller.nextPrayer(_now);
         final prayers = prayerMapForDay(day);
 
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    context.l10n.todayWithDate(
-                      DateFormat('EEEE, dd MMM yyyy').format(day.date),
-                    ),
-                    style: Theme.of(context).textTheme.headlineSmall,
+        const outerPadding = 16.0;
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(outerPadding),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight - outerPadding * 2,
+                ),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              context.l10n.todayWithDate(
+                                DateFormat(
+                                  'EEEE, dd MMM yyyy',
+                                ).format(day.date),
+                              ),
+                              style: Theme.of(context).textTheme.titleMedium,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            onPressed: controller.isBusy
+                                ? null
+                                : () => controller.refreshPrayerData(
+                                    forceSync: false,
+                                  ),
+                            icon: const Icon(Icons.refresh),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${selected.fullName} · ${day.hijriDate.isEmpty ? context.l10n.hijriUnknown : context.l10n.hijriWithDate(day.hijriDate)}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 10),
+                      if (nextPrayer != null)
+                        _NextPrayerBanner(info: nextPrayer),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: Card(
+                          margin: EdgeInsets.zero,
+                          child: Column(
+                            children: [
+                              for (final entry in prayerOrder.indexed) ...[
+                                if (entry.$1 > 0) const Divider(height: 1),
+                                Expanded(
+                                  child: _CompactPrayerRow(
+                                    name: entry.$2,
+                                    value: prayers[entry.$2] ?? '--:--',
+                                    reminderSetting: controller.reminderFor(
+                                      entry.$2,
+                                    ),
+                                    isNext: entry.$2 == nextPrayer?.name,
+                                    onTap: () async {
+                                      await Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) =>
+                                              ReminderSettingsScreen(
+                                                prayerName: entry.$2,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                IconButton(
-                  onPressed: controller.isBusy
-                      ? null
-                      : () => controller.refreshPrayerData(forceSync: false),
-                  icon: const Icon(Icons.refresh),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              selected.fullName,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              day.hijriDate.isEmpty
-                  ? context.l10n.hijriUnknown
-                  : context.l10n.hijriWithDate(day.hijriDate),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            if (nextPrayer != null) _NextPrayerCard(info: nextPrayer),
-            const SizedBox(height: 16),
-            ...prayerOrder.map(
-              (name) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: _PrayerTile(
-                  name: name,
-                  value: prayers[name] ?? '--:--',
-                  reminderSetting: controller.reminderFor(name),
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) =>
-                            ReminderSettingsScreen(prayerName: name),
-                      ),
-                    );
-                  },
-                ),
               ),
-            ),
-          ],
+            );
+          },
         );
       },
     );
   }
 }
 
-class _PrayerTile extends StatelessWidget {
-  const _PrayerTile({
+class _CompactPrayerRow extends StatelessWidget {
+  const _CompactPrayerRow({
     required this.name,
     required this.value,
     required this.reminderSetting,
+    required this.isNext,
     required this.onTap,
   });
 
   final String name;
   final String value;
   final ReminderSetting reminderSetting;
+  final bool isNext;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final hasReminder =
+        reminderSetting.notifyOnTime || reminderSetting.notifyBefore;
     String statusText;
     if (reminderSetting.notifyOnTime && reminderSetting.notifyBefore) {
       statusText = context.l10n.reminderOnTimeAndBefore(
@@ -158,18 +192,51 @@ class _PrayerTile extends StatelessWidget {
     } else {
       statusText = context.l10n.reminderOff;
     }
-    return Card(
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      color: isNext ? colorScheme.primaryContainer : null,
       child: ListTile(
         onTap: onTap,
-        leading: const Icon(Icons.access_time),
-        title: Text(context.l10n.prayerNameLabel(name)),
-        subtitle: Text(statusText),
+        leading: Icon(
+          Icons.access_time,
+          size: 26,
+          color: isNext ? colorScheme.onPrimaryContainer : null,
+        ),
+        title: Text(
+          context.l10n.prayerNameLabel(name),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: isNext ? colorScheme.onPrimaryContainer : null,
+          ),
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(value, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(width: 8),
-            const Icon(Icons.chevron_right),
+            Tooltip(
+              message: statusText,
+              child: Icon(
+                hasReminder
+                    ? Icons.notifications_active
+                    : Icons.notifications_off_outlined,
+                size: 22,
+                color: hasReminder
+                    ? (isNext ? colorScheme.onPrimaryContainer : colorScheme.primary)
+                    : colorScheme.outline,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: isNext ? colorScheme.onPrimaryContainer : null,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              Icons.chevron_right,
+              size: 22,
+              color: isNext ? colorScheme.onPrimaryContainer : null,
+            ),
           ],
         ),
       ),
@@ -177,38 +244,67 @@ class _PrayerTile extends StatelessWidget {
   }
 }
 
-class _NextPrayerCard extends StatelessWidget {
-  const _NextPrayerCard({required this.info});
+class _NextPrayerBanner extends StatelessWidget {
+  const _NextPrayerBanner({required this.info});
 
   final NextPrayerInfo info;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.nextPrayerTitle,
-              style: Theme.of(context).textTheme.labelLarge,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.play_arrow_rounded,
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                style: Theme.of(context).textTheme.bodyMedium,
+                children: [
+                  TextSpan(text: '${context.l10n.nextPrayerTitle}: '),
+                  TextSpan(
+                    text: context.l10n.prayerNameLabel(info.name),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 4),
-            Text(
-              context.l10n.prayerNameLabel(info.name),
-              style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(8),
             ),
-            const SizedBox(height: 2),
-            Text(DateFormat('HH:mm').format(info.time)),
-            const SizedBox(height: 12),
-            Text(
-              context.l10n.startsIn(formatRemaining(info.remaining)),
-              style: Theme.of(context).textTheme.titleMedium,
+            child: Text(
+              DateFormat('HH:mm').format(info.time),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.bold,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            context.l10n.startsIn(formatRemaining(info.remaining)),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontFeatures: const [FontFeature.tabularFigures()],
+            ),
+          ),
+        ],
       ),
     );
   }

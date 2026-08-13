@@ -358,91 +358,115 @@ class AppLocalizationsTr extends AppLocalizations {
   String get customMinutesSaved => 'Özel dakika kaydedildi.';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'İptal';
 
   @override
-  String get calendarTabTooltip => 'Hijri calendar';
+  String get calendarTabTooltip => 'Hicri takvim';
 
   @override
-  String get calendarPreviousMonth => 'Previous month';
+  String get calendarPreviousMonth => 'Önceki ay';
 
   @override
-  String get calendarNextMonth => 'Next month';
+  String get calendarNextMonth => 'Sonraki ay';
 
   @override
-  String get calendarSwapPrimary => 'Switch Hijri/Gregorian';
+  String get calendarSwapPrimary => 'Hicri/Miladi değiştir';
 
   @override
-  String get calendarShowSecondary => 'Show secondary date';
+  String get calendarShowSecondary => 'İkincil tarihi göster';
 
   @override
-  String get calendarHideSecondary => 'Hide secondary date';
+  String get calendarHideSecondary => 'İkincil tarihi gizle';
 
   @override
-  String get calendarNoRemindersOnDay => 'No reminders on this day';
+  String get calendarNoRemindersOnDay => 'Bu günde hatırlatıcı yok';
 
   @override
-  String get calendarAddReminder => 'Add reminder';
+  String get calendarAddReminder => 'Hatırlatıcı ekle';
 
   @override
-  String get calendarEditReminder => 'Edit';
+  String get calendarEditReminder => 'Düzenle';
 
   @override
-  String get calendarDeleteReminder => 'Delete';
+  String get calendarDeleteReminder => 'Sil';
 
   @override
-  String get calendarReminderFormTitleNew => 'New reminder';
+  String get calendarReminderFormTitleNew => 'Yeni hatırlatıcı';
 
   @override
-  String get calendarReminderFormTitleEdit => 'Edit reminder';
+  String get calendarReminderFormTitleEdit => 'Hatırlatıcıyı düzenle';
 
   @override
-  String get calendarReminderTitleLabel => 'Title';
+  String get calendarReminderTitleLabel => 'Başlık';
 
   @override
-  String get calendarReminderTitleHint => 'e.g. Ramadan starts';
+  String get calendarReminderTitleHint => 'örn. Ramazan başlangıcı';
 
   @override
-  String get calendarReminderNotesLabel => 'Notes (optional)';
+  String get calendarReminderNotesLabel => 'Notlar (isteğe bağlı)';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Date & time';
+  String get calendarReminderDateTimeLabel => 'Tarih ve saat';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'Repeat';
+  String get calendarReminderRecurrenceLabel => 'Tekrar';
 
   @override
-  String get calendarRecurrenceOnce => 'Once';
+  String get calendarRecurrenceOnce => 'Bir kez';
 
   @override
-  String get calendarRecurrenceDaily => 'Daily';
+  String get calendarRecurrenceDaily => 'Her gün';
 
   @override
-  String get calendarRecurrenceWeekly => 'Weekly';
+  String get calendarRecurrenceWeekly => 'Her hafta';
 
   @override
-  String get calendarRecurrenceMonthly => 'Monthly';
+  String get calendarRecurrenceMonthly => 'Her ay';
 
   @override
-  String get calendarRecurrenceYearly => 'Yearly';
+  String get calendarRecurrenceYearly => 'Her yıl';
 
   @override
-  String get calendarYearlyBasisLabel => 'Yearly basis';
+  String get calendarYearlyBasisLabel => 'Yıllık esas';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Gregorian';
+  String get calendarYearlyBasisGregorian => 'Miladi';
 
   @override
-  String get calendarYearlyBasisHijri => 'Hijri';
+  String get calendarYearlyBasisHijri => 'Hicri';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
+  String get calendarDeleteReminderConfirmTitle => 'Hatırlatıcı silinsin mi?';
 
   @override
   String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'This stops all future notifications for \"$title\".';
+    return 'Bu, \"$title\" için gelecekteki tüm bildirimleri durdurur.';
   }
 
   @override
-  String get calendarReminderTitleRequired => 'Enter a title';
+  String get calendarReminderTitleRequired => 'Bir başlık girin';
+
+  @override
+  String get calendarAnchorClockTime => 'Takvim tarihi';
+
+  @override
+  String get calendarAnchorPrayerTime => 'Namaz vakti';
+
+  @override
+  String get calendarSelectPrayer => 'Vakit seçin';
+
+  @override
+  String get calendarOffsetOnTime => 'Vaktinde';
+
+  @override
+  String get calendarOffsetBefore => 'Önce';
+
+  @override
+  String get calendarOffsetAfter => 'Sonra';
+
+  @override
+  String get datesPrayerTimesTab => 'Namaz Vakitleri';
+
+  @override
+  String get datesCalendarTab => 'Takvim';
 }

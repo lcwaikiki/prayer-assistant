@@ -919,6 +919,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a title'**
   String get calendarReminderTitleRequired;
+
+  /// No description provided for @calendarAnchorClockTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar date'**
+  String get calendarAnchorClockTime;
+
+  /// No description provided for @calendarAnchorPrayerTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer time'**
+  String get calendarAnchorPrayerTime;
+
+  /// No description provided for @calendarSelectPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select prayer'**
+  String get calendarSelectPrayer;
+
+  /// No description provided for @calendarOffsetOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On time'**
+  String get calendarOffsetOnTime;
+
+  /// No description provided for @calendarOffsetBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get calendarOffsetBefore;
+
+  /// No description provided for @calendarOffsetAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get calendarOffsetAfter;
+
+  /// No description provided for @datesPrayerTimesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Times'**
+  String get datesPrayerTimesTab;
+
+  /// No description provided for @datesCalendarTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get datesCalendarTab;
 }
 
 class _AppLocalizationsDelegate

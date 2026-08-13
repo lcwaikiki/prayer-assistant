@@ -62,6 +62,7 @@ Future<void> main() async {
   // tapping a beads reminder notification.
   WidgetsBinding.instance.addPostFrameCallback((_) {
     itemReminderService.handleAppLaunchFromNotification();
+    calendarReminderService.handleAppLaunchFromNotification();
   });
 }
 

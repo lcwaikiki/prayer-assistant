@@ -78,6 +78,9 @@ class LocalDatabase {
       anchor_at TEXT NOT NULL,
       recurrence TEXT NOT NULL,
       yearly_basis TEXT NOT NULL,
+      anchor TEXT NOT NULL DEFAULT 'clockTime',
+      anchor_prayer_name TEXT,
+      anchor_offset_minutes INTEGER NOT NULL DEFAULT 0,
       enabled INTEGER NOT NULL
     )
   ''';

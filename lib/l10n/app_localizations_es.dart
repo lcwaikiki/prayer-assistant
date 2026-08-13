@@ -252,23 +252,23 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationMessageHidden => 'Oculto';
 
   @override
-  String get widgetTextSizeTitle => 'Widget text size';
+  String get widgetTextSizeTitle => 'Tamaño de texto del widget';
 
   @override
   String get widgetTextSizeSubtitle =>
-      'Text size used in the home screen widgets.';
+      'Tamaño de texto usado en los widgets de la pantalla de inicio.';
 
   @override
-  String get widgetTextSizeExtraSmall => 'Extra small';
+  String get widgetTextSizeExtraSmall => 'Muy pequeño';
 
   @override
-  String get widgetTextSizeSmall => 'Small';
+  String get widgetTextSizeSmall => 'Pequeño';
 
   @override
-  String get widgetTextSizeMedium => 'Medium';
+  String get widgetTextSizeMedium => 'Mediano';
 
   @override
-  String get widgetTextSizeLarge => 'Large';
+  String get widgetTextSizeLarge => 'Grande';
 
   @override
   String get remindersOnOffTitle => 'Recordatorios on/off';
@@ -359,91 +359,115 @@ class AppLocalizationsEs extends AppLocalizations {
   String get customMinutesSaved => 'Minutos personalizados guardados.';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'Cancelar';
 
   @override
-  String get calendarTabTooltip => 'Hijri calendar';
+  String get calendarTabTooltip => 'Calendario Hégira';
 
   @override
-  String get calendarPreviousMonth => 'Previous month';
+  String get calendarPreviousMonth => 'Mes anterior';
 
   @override
-  String get calendarNextMonth => 'Next month';
+  String get calendarNextMonth => 'Mes siguiente';
 
   @override
-  String get calendarSwapPrimary => 'Switch Hijri/Gregorian';
+  String get calendarSwapPrimary => 'Cambiar Hégira/Gregoriano';
 
   @override
-  String get calendarShowSecondary => 'Show secondary date';
+  String get calendarShowSecondary => 'Mostrar fecha secundaria';
 
   @override
-  String get calendarHideSecondary => 'Hide secondary date';
+  String get calendarHideSecondary => 'Ocultar fecha secundaria';
 
   @override
-  String get calendarNoRemindersOnDay => 'No reminders on this day';
+  String get calendarNoRemindersOnDay => 'No hay recordatorios en este día';
 
   @override
-  String get calendarAddReminder => 'Add reminder';
+  String get calendarAddReminder => 'Añadir recordatorio';
 
   @override
-  String get calendarEditReminder => 'Edit';
+  String get calendarEditReminder => 'Editar';
 
   @override
-  String get calendarDeleteReminder => 'Delete';
+  String get calendarDeleteReminder => 'Eliminar';
 
   @override
-  String get calendarReminderFormTitleNew => 'New reminder';
+  String get calendarReminderFormTitleNew => 'Nuevo recordatorio';
 
   @override
-  String get calendarReminderFormTitleEdit => 'Edit reminder';
+  String get calendarReminderFormTitleEdit => 'Editar recordatorio';
 
   @override
-  String get calendarReminderTitleLabel => 'Title';
+  String get calendarReminderTitleLabel => 'Título';
 
   @override
-  String get calendarReminderTitleHint => 'e.g. Ramadan starts';
+  String get calendarReminderTitleHint => 'p. ej. Comienza el Ramadán';
 
   @override
-  String get calendarReminderNotesLabel => 'Notes (optional)';
+  String get calendarReminderNotesLabel => 'Notas (opcional)';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Date & time';
+  String get calendarReminderDateTimeLabel => 'Fecha y hora';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'Repeat';
+  String get calendarReminderRecurrenceLabel => 'Repetir';
 
   @override
-  String get calendarRecurrenceOnce => 'Once';
+  String get calendarRecurrenceOnce => 'Una vez';
 
   @override
-  String get calendarRecurrenceDaily => 'Daily';
+  String get calendarRecurrenceDaily => 'Diario';
 
   @override
-  String get calendarRecurrenceWeekly => 'Weekly';
+  String get calendarRecurrenceWeekly => 'Semanal';
 
   @override
-  String get calendarRecurrenceMonthly => 'Monthly';
+  String get calendarRecurrenceMonthly => 'Mensual';
 
   @override
-  String get calendarRecurrenceYearly => 'Yearly';
+  String get calendarRecurrenceYearly => 'Anual';
 
   @override
-  String get calendarYearlyBasisLabel => 'Yearly basis';
+  String get calendarYearlyBasisLabel => 'Base anual';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Gregorian';
+  String get calendarYearlyBasisGregorian => 'Gregoriano';
 
   @override
-  String get calendarYearlyBasisHijri => 'Hijri';
+  String get calendarYearlyBasisHijri => 'Hégira';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
+  String get calendarDeleteReminderConfirmTitle => '¿Eliminar recordatorio?';
 
   @override
   String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'This stops all future notifications for \"$title\".';
+    return 'Esto detendrá todas las notificaciones futuras de \"$title\".';
   }
 
   @override
-  String get calendarReminderTitleRequired => 'Enter a title';
+  String get calendarReminderTitleRequired => 'Introduce un título';
+
+  @override
+  String get calendarAnchorClockTime => 'Fecha del calendario';
+
+  @override
+  String get calendarAnchorPrayerTime => 'Hora de oración';
+
+  @override
+  String get calendarSelectPrayer => 'Selecciona la oración';
+
+  @override
+  String get calendarOffsetOnTime => 'En hora';
+
+  @override
+  String get calendarOffsetBefore => 'Antes';
+
+  @override
+  String get calendarOffsetAfter => 'Después';
+
+  @override
+  String get datesPrayerTimesTab => 'Horarios de oración';
+
+  @override
+  String get datesCalendarTab => 'Calendario';
 }

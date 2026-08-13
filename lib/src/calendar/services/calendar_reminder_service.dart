@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '../../navigation.dart';
 import '../models/calendar_reminder.dart';
+import '../screens/hijri_calendar_screen.dart';
 
 class CalendarReminderService {
   CalendarReminderService();
@@ -13,12 +16,47 @@ class CalendarReminderService {
   static const _channelId = 'calendar_reminders';
   static const _channelName = 'Calendar Reminders';
 
+  /// How far in the past a resolved prayer-anchored fire time can be and
+  /// still be worth a catch-up notification, rather than silently waiting
+  /// for the next scheduling pass.
+  static const _catchUpWindow = Duration(minutes: 120);
+
   Future<void> initialize() async {
     const initSettings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
     );
-    await _plugin.initialize(settings: initSettings);
+    await _plugin.initialize(
+      settings: initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        _openReminderDate(response.payload);
+      },
+    );
+  }
+
+  /// Call once after the widget tree (and [rootNavigatorKey]'s Navigator)
+  /// exists, to handle the case where tapping the reminder notification is
+  /// what launched the app from fully killed rather than just bringing an
+  /// already-running app to the foreground.
+  Future<void> handleAppLaunchFromNotification() async {
+    final details = await _plugin.getNotificationAppLaunchDetails();
+    if (details?.didNotificationLaunchApp == true) {
+      _openReminderDate(details!.notificationResponse?.payload);
+    }
+  }
+
+  void _openReminderDate(String? reminderId) {
+    if (reminderId == null || reminderId.isEmpty) {
+      return;
+    }
+    rootNavigatorKey.currentState?.push(
+      MaterialPageRoute<void>(
+        builder: (_) => HijriCalendarScreen(
+          initialDate: DateTime.now(),
+          openDetailOnLaunch: true,
+        ),
+      ),
+    );
   }
 
   /// Derives a stable notification id from a reminder's string id, in a
@@ -56,6 +94,32 @@ class CalendarReminderService {
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
 
+    if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
+      // Always a plain one-shot for today's already-resolved time: the
+      // daily repeat is handled by CalendarMidnightScheduler re-resolving
+      // and re-scheduling this every midnight, since the underlying prayer
+      // time itself shifts from day to day.
+      final now = DateTime.now();
+      DateTime fireAt;
+      if (reminder.anchorAt.isAfter(now)) {
+        fireAt = reminder.anchorAt;
+      } else if (now.difference(reminder.anchorAt) <= _catchUpWindow) {
+        fireAt = now.add(const Duration(seconds: 5));
+      } else {
+        return;
+      }
+      await _plugin.zonedSchedule(
+        id: id,
+        title: reminder.title,
+        body: body,
+        scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
+        notificationDetails: details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: reminder.id,
+      );
+      return;
+    }
+
     switch (reminder.recurrence) {
       case ReminderRecurrence.once:
         if (!reminder.anchorAt.isAfter(DateTime.now())) {
@@ -68,6 +132,7 @@ class CalendarReminderService {
           scheduledDate: tz.TZDateTime.from(reminder.anchorAt, tz.local),
           notificationDetails: details,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          payload: reminder.id,
         );
       case ReminderRecurrence.daily:
         await _plugin.zonedSchedule(
@@ -78,6 +143,7 @@ class CalendarReminderService {
           notificationDetails: details,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           matchDateTimeComponents: DateTimeComponents.time,
+          payload: reminder.id,
         );
       case ReminderRecurrence.weekly:
         await _plugin.zonedSchedule(
@@ -88,6 +154,7 @@ class CalendarReminderService {
           notificationDetails: details,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+          payload: reminder.id,
         );
       case ReminderRecurrence.monthly:
         final next = _nextDayOfMonth(reminder.anchorAt);
@@ -102,6 +169,7 @@ class CalendarReminderService {
           notificationDetails: details,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+          payload: reminder.id,
         );
       case ReminderRecurrence.yearly:
         if (reminder.yearlyBasis == YearlyCalendarBasis.gregorian) {
@@ -113,6 +181,7 @@ class CalendarReminderService {
             notificationDetails: details,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
             matchDateTimeComponents: DateTimeComponents.dateAndTime,
+            payload: reminder.id,
           );
         } else {
           final next = _nextHijriAnniversary(reminder.anchorAt);
@@ -123,6 +192,7 @@ class CalendarReminderService {
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
             androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            payload: reminder.id,
           );
         }
     }

@@ -10,17 +10,55 @@ import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_reminder_form_screen.dart';
 
-class HijriCalendarScreen extends StatefulWidget {
-  const HijriCalendarScreen({super.key, this.initialDate});
+/// Full-screen wrapper around [HijriCalendarView], used when the calendar
+/// is pushed on its own (e.g. from a reminder notification tap) rather than
+/// embedded as a tab.
+class HijriCalendarScreen extends StatelessWidget {
+  const HijriCalendarScreen({
+    super.key,
+    this.initialDate,
+    this.openDetailOnLaunch = false,
+  });
+
+  final DateTime? initialDate;
+  final bool openDetailOnLaunch;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.datesCalendarTab)),
+      body: HijriCalendarView(
+        initialDate: initialDate,
+        openDetailOnLaunch: openDetailOnLaunch,
+      ),
+    );
+  }
+}
+
+/// The Hijri/Gregorian monthly calendar body: month navigation, the
+/// primary/secondary calendar controls, and the day grid. Embeddable
+/// directly (e.g. as a tab) or wrapped by [HijriCalendarScreen].
+class HijriCalendarView extends StatefulWidget {
+  const HijriCalendarView({
+    super.key,
+    this.initialDate,
+    this.openDetailOnLaunch = false,
+  });
 
   final DateTime? initialDate;
 
+  /// When true, automatically opens the day-detail sheet for [initialDate]
+  /// once the view is built (used when arriving from a reminder
+  /// notification tap).
+  final bool openDetailOnLaunch;
+
   @override
-  State<HijriCalendarScreen> createState() => _HijriCalendarScreenState();
+  State<HijriCalendarView> createState() => _HijriCalendarViewState();
 }
 
-class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
+class _HijriCalendarViewState extends State<HijriCalendarView> {
   late DateTime _focusedDate;
+  bool _autoOpenTriggered = false;
 
   @override
   void initState() {
@@ -91,98 +129,123 @@ class _HijriCalendarScreenState extends State<HijriCalendarScreen> {
         final today = DateTime.now();
         final locale = Localizations.localeOf(context).toString();
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                IconButton(
-                  tooltip: context.l10n.calendarPreviousMonth,
-                  icon: const Icon(Icons.chevron_left),
-                  onPressed: () => _shiftMonth(primary, -1),
-                ),
-                Expanded(
-                  child: Text(
-                    _monthTitle(context, primary),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
+        if (widget.openDetailOnLaunch && !_autoOpenTriggered) {
+          _autoOpenTriggered = true;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _openDayDetail(controller, _focusedDate);
+            }
+          });
+        }
+
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SegmentedButton<CalendarPrimaryDisplay>(
+                      segments: [
+                        ButtonSegment(
+                          value: CalendarPrimaryDisplay.hijri,
+                          label: Text(context.l10n.calendarYearlyBasisHijri),
+                        ),
+                        ButtonSegment(
+                          value: CalendarPrimaryDisplay.gregorian,
+                          label: Text(
+                            context.l10n.calendarYearlyBasisGregorian,
+                          ),
+                        ),
+                      ],
+                      selected: {primary},
+                      onSelectionChanged: (selection) => controller
+                          .updateCalendarPrimaryDisplay(selection.first),
+                    ),
                   ),
-                ),
-                IconButton(
-                  tooltip: context.l10n.calendarNextMonth,
-                  icon: const Icon(Icons.chevron_right),
-                  onPressed: () => _shiftMonth(primary, 1),
-                ),
-              ],
+                  IconButton(
+                    tooltip: showSecondary
+                        ? context.l10n.calendarHideSecondary
+                        : context.l10n.calendarShowSecondary,
+                    icon: Icon(
+                      showSecondary ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () => controller.updateShowSecondaryCalendarDate(
+                      !showSecondary,
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: context.l10n.todayShort,
+                    icon: const Icon(Icons.today),
+                    onPressed: _jumpToToday,
+                  ),
+                ],
+              ),
             ),
-            actions: [
-              IconButton(
-                tooltip: context.l10n.todayShort,
-                icon: const Icon(Icons.today),
-                onPressed: _jumpToToday,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+              child: Row(
+                children: [
+                  IconButton(
+                    tooltip: context.l10n.calendarPreviousMonth,
+                    icon: const Icon(Icons.chevron_left),
+                    onPressed: () => _shiftMonth(primary, -1),
+                  ),
+                  Expanded(
+                    child: Text(
+                      _monthTitle(context, primary),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      softWrap: true,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: context.l10n.calendarNextMonth,
+                    icon: const Icon(Icons.chevron_right),
+                    onPressed: () => _shiftMonth(primary, 1),
+                  ),
+                ],
               ),
-              IconButton(
-                tooltip: context.l10n.calendarSwapPrimary,
-                icon: const Icon(Icons.swap_horiz),
-                onPressed: () => controller.updateCalendarPrimaryDisplay(
-                  primary == CalendarPrimaryDisplay.hijri
-                      ? CalendarPrimaryDisplay.gregorian
-                      : CalendarPrimaryDisplay.hijri,
+            ),
+            _WeekdayHeaderRow(locale: locale),
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(4),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
+                  childAspectRatio: 0.85,
                 ),
+                itemCount: leadingBlanks + monthDays.length,
+                itemBuilder: (context, index) {
+                  if (index < leadingBlanks) {
+                    return const SizedBox.shrink();
+                  }
+                  final date = monthDays[index - leadingBlanks];
+                  final isToday =
+                      date.year == today.year &&
+                      date.month == today.month &&
+                      date.day == today.day;
+                  final hasReminder = controller.calendarReminders.any(
+                    (reminder) => reminder.enabled && reminder.occursOn(date),
+                  );
+                  return _DayCell(
+                    primaryLabel: primary == CalendarPrimaryDisplay.hijri
+                        ? HijriCalendar.fromDate(date).hDay.toString()
+                        : date.day.toString(),
+                    secondaryLabel: showSecondary
+                        ? (primary == CalendarPrimaryDisplay.hijri
+                              ? date.day.toString()
+                              : HijriCalendar.fromDate(date).hDay.toString())
+                        : null,
+                    isToday: isToday,
+                    hasReminder: hasReminder,
+                    onTap: () => _openDayDetail(controller, date),
+                  );
+                },
               ),
-              IconButton(
-                tooltip: showSecondary
-                    ? context.l10n.calendarHideSecondary
-                    : context.l10n.calendarShowSecondary,
-                icon: Icon(
-                  showSecondary ? Icons.visibility_off : Icons.visibility,
-                ),
-                onPressed: () => controller.updateShowSecondaryCalendarDate(
-                  !showSecondary,
-                ),
-              ),
-            ],
-          ),
-          body: Column(
-            children: [
-              _WeekdayHeaderRow(locale: locale),
-              Expanded(
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8),
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 7,
-                      ),
-                  itemCount: leadingBlanks + monthDays.length,
-                  itemBuilder: (context, index) {
-                    if (index < leadingBlanks) {
-                      return const SizedBox.shrink();
-                    }
-                    final date = monthDays[index - leadingBlanks];
-                    final isToday =
-                        date.year == today.year &&
-                        date.month == today.month &&
-                        date.day == today.day;
-                    final hasReminder = controller.calendarReminders.any(
-                      (reminder) => reminder.enabled && reminder.occursOn(date),
-                    );
-                    return _DayCell(
-                      primaryLabel: primary == CalendarPrimaryDisplay.hijri
-                          ? HijriCalendar.fromDate(date).hDay.toString()
-                          : date.day.toString(),
-                      secondaryLabel: showSecondary
-                          ? (primary == CalendarPrimaryDisplay.hijri
-                                ? date.day.toString()
-                                : HijriCalendar.fromDate(date).hDay.toString())
-                          : null,
-                      isToday: isToday,
-                      hasReminder: hasReminder,
-                      onTap: () => _openDayDetail(controller, date),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -238,20 +301,20 @@ class _DayCell extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(10),
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: isToday ? colors.primaryContainer : null,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               primaryLabel,
-              style: TextStyle(
-                fontWeight: isToday ? FontWeight.w700 : FontWeight.w400,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
                 color: isToday ? colors.onPrimaryContainer : null,
               ),
             ),
@@ -266,9 +329,9 @@ class _DayCell extends StatelessWidget {
               ),
             if (hasReminder)
               Container(
-                margin: const EdgeInsets.only(top: 2),
-                width: 4,
-                height: 4,
+                margin: const EdgeInsets.only(top: 3),
+                width: 5,
+                height: 5,
                 decoration: BoxDecoration(
                   color: isToday ? colors.onPrimaryContainer : colors.primary,
                   shape: BoxShape.circle,
@@ -289,6 +352,9 @@ class _DayDetailSheet extends StatelessWidget {
 
   String _recurrenceLabel(BuildContext context, CalendarReminder reminder) {
     final l10n = context.l10n;
+    if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
+      return '${l10n.calendarAnchorPrayerTime} • ${l10n.prayerNameLabel(reminder.anchorPrayerName ?? '')}';
+    }
     switch (reminder.recurrence) {
       case ReminderRecurrence.once:
         return l10n.calendarRecurrenceOnce;

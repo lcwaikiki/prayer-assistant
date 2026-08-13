@@ -19,7 +19,12 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
+class _HistoryScreenState extends State<HistoryScreen>
+    with SingleTickerProviderStateMixin {
+  late final TabController _tabController = TabController(
+    length: 2,
+    vsync: this,
+  );
   final ScrollController _verticalController = ScrollController();
   final ScrollController _headerHorizontalController = ScrollController();
   final Map<String, ScrollController> _monthHorizontalControllers =
@@ -31,6 +36,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   void dispose() {
+    _tabController.dispose();
     _verticalController.dispose();
     _headerHorizontalController.dispose();
     for (final controller in _monthHorizontalControllers.values) {
@@ -107,124 +113,140 @@ class _HistoryScreenState extends State<HistoryScreen> {
           }
         }
 
-        final selected = controller.selectedLocation;
-        if (selected == null) {
-          return Center(
-            child: Text(context.l10n.historySelectLocationFirst),
-          );
-        }
-
-        final days = controller.yearRange;
-        if (days.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final today = DateTime.now();
-        final locale = Localizations.localeOf(context).toString();
-        final groupedByMonth = _groupByMonth(days, locale);
-        for (final month in groupedByMonth.keys) {
-          _monthKeys.putIfAbsent(month, GlobalKey.new);
-          _monthHorizontalControllers.putIfAbsent(month, ScrollController.new);
-        }
-
-        return Stack(
+        return Column(
           children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          context.l10n.historyTableTitle,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: context.l10n.calendarTabTooltip,
-                        icon: const Icon(Icons.calendar_month),
-                        onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (_) => const HijriCalendarScreen(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+            TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(
+                  text: context.l10n.datesPrayerTimesTab,
+                  icon: const Icon(Icons.schedule),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
-                    child: NotificationListener<ScrollUpdateNotification>(
-                      onNotification: (notification) {
-                        _syncHorizontalTo(
-                          notification.metrics.pixels,
-                          source: 'header',
-                        );
-                        return false;
-                      },
-                      child: SingleChildScrollView(
-                        controller: _headerHorizontalController,
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          width: _tableWidth,
-                          child: const _StickyHeaderRow(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: SingleChildScrollView(
-                    controller: _verticalController,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 84),
-                      child: Column(
-                        children: groupedByMonth.entries
-                            .map(
-                              (entry) => Padding(
-                                key: _monthKeys[entry.key],
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: _MonthTable(
-                                  month: entry.key,
-                                  days: entry.value,
-                                  today: today,
-                                  horizontalController:
-                                      _monthHorizontalControllers[entry.key]!,
-                                  onHorizontalScroll: (offset) =>
-                                      _syncHorizontalTo(
-                                        offset,
-                                        source: entry.key,
-                                      ),
-                                  todayRowKey: _todayRowKey,
-                                ),
-                              ),
-                            )
-                            .toList(growable: false),
-                      ),
-                    ),
-                  ),
+                Tab(
+                  text: context.l10n.datesCalendarTab,
+                  icon: const Icon(Icons.calendar_month),
                 ),
               ],
             ),
-            Positioned(
-              right: 16,
-              bottom: 16,
-              child: FloatingActionButton.small(
-                onPressed: () => _scheduleScrollToToday(
-                  days,
-                  locale: Localizations.localeOf(context).toString(),
-                ),
-                child: const Icon(Icons.today),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildPrayerTimesTab(context, controller),
+                  const HijriCalendarView(),
+                ],
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildPrayerTimesTab(
+    BuildContext context,
+    PrayerAppController controller,
+  ) {
+    final selected = controller.selectedLocation;
+    if (selected == null) {
+      return Center(child: Text(context.l10n.historySelectLocationFirst));
+    }
+
+    final days = controller.yearRange;
+    if (days.isEmpty) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    final today = DateTime.now();
+    final locale = Localizations.localeOf(context).toString();
+    final groupedByMonth = _groupByMonth(days, locale);
+    for (final month in groupedByMonth.keys) {
+      _monthKeys.putIfAbsent(month, GlobalKey.new);
+      _monthHorizontalControllers.putIfAbsent(month, ScrollController.new);
+    }
+
+    return Stack(
+      children: [
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  context.l10n.historyTableTitle,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: NotificationListener<ScrollUpdateNotification>(
+                  onNotification: (notification) {
+                    _syncHorizontalTo(
+                      notification.metrics.pixels,
+                      source: 'header',
+                    );
+                    return false;
+                  },
+                  child: SingleChildScrollView(
+                    controller: _headerHorizontalController,
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: _tableWidth,
+                      child: const _StickyHeaderRow(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: _verticalController,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 84),
+                  child: Column(
+                    children: groupedByMonth.entries
+                        .map(
+                          (entry) => Padding(
+                            key: _monthKeys[entry.key],
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: _MonthTable(
+                              month: entry.key,
+                              days: entry.value,
+                              today: today,
+                              horizontalController:
+                                  _monthHorizontalControllers[entry.key]!,
+                              onHorizontalScroll: (offset) => _syncHorizontalTo(
+                                offset,
+                                source: entry.key,
+                              ),
+                              todayRowKey: _todayRowKey,
+                            ),
+                          ),
+                        )
+                        .toList(growable: false),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        Positioned(
+          right: 16,
+          bottom: 16,
+          child: FloatingActionButton.small(
+            onPressed: () => _scheduleScrollToToday(
+              days,
+              locale: Localizations.localeOf(context).toString(),
+            ),
+            child: const Icon(Icons.today),
+          ),
+        ),
+      ],
     );
   }
 }

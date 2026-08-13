@@ -4,16 +4,19 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../services/local_database.dart';
+import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_reminder_service.dart';
 
 const _calendarMidnightAlarmId = 5002;
 
-/// Re-resolves and re-schedules every yearly-Hijri-basis calendar reminder
-/// once a day, since the plugin has no native way to repeat on a fixed
-/// Hijri month/day (unlike Gregorian-yearly, which uses
-/// [DateTimeComponents.dateAndTime] and never needs this). Android-only:
-/// iOS refreshes these on next app open instead (see
+/// Re-resolves and re-schedules every calendar reminder whose fire time
+/// can't be expressed as a fixed OS-level repeat: yearly-Hijri-basis
+/// reminders (no native way to repeat on a fixed Hijri month/day, unlike
+/// Gregorian-yearly which uses [DateTimeComponents.dateAndTime]) and
+/// prayer-time-anchored reminders (the underlying prayer time shifts by a
+/// few minutes day to day). Runs once daily just after midnight.
+/// Android-only: iOS refreshes these on next app open instead (see
 /// PrayerAppController.initialize).
 @pragma('vm:entry-point')
 Future<void> calendarMidnightRefreshCallback() async {
@@ -23,11 +26,35 @@ Future<void> calendarMidnightRefreshCallback() async {
   await reminderService.initialize();
 
   final reminders = await database.loadCalendarReminders();
+  final updatedReminders = <CalendarReminder>[];
+  var changed = false;
+
   for (final reminder in reminders) {
-    if (reminder.enabled &&
-        reminder.recurrence == ReminderRecurrence.yearly &&
+    if (!reminder.enabled) {
+      continue;
+    }
+    if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
+      final resolved = await resolvePrayerAnchoredTime(
+        database,
+        prayerName: reminder.anchorPrayerName,
+        offsetMinutes: reminder.anchorOffsetMinutes,
+      );
+      if (resolved != null) {
+        final updated = reminder.copyWith(anchorAt: resolved);
+        updatedReminders.add(updated);
+        changed = true;
+        await reminderService.scheduleReminder(updated);
+        continue;
+      }
+    } else if (reminder.recurrence == ReminderRecurrence.yearly &&
         reminder.yearlyBasis == YearlyCalendarBasis.hijri) {
       await reminderService.scheduleReminder(reminder);
+    }
+  }
+
+  if (changed) {
+    for (final reminder in updatedReminders) {
+      await database.saveCalendarReminder(reminder);
     }
   }
 }

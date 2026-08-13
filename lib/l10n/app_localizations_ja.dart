@@ -244,23 +244,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notificationMessageHidden => '非表示';
 
   @override
-  String get widgetTextSizeTitle => 'Widget text size';
+  String get widgetTextSizeTitle => 'ウィジェットの文字サイズ';
 
   @override
-  String get widgetTextSizeSubtitle =>
-      'Text size used in the home screen widgets.';
+  String get widgetTextSizeSubtitle => 'ホーム画面ウィジェットで使用する文字サイズ。';
 
   @override
-  String get widgetTextSizeExtraSmall => 'Extra small';
+  String get widgetTextSizeExtraSmall => '極小';
 
   @override
-  String get widgetTextSizeSmall => 'Small';
+  String get widgetTextSizeSmall => '小';
 
   @override
-  String get widgetTextSizeMedium => 'Medium';
+  String get widgetTextSizeMedium => '中';
 
   @override
-  String get widgetTextSizeLarge => 'Large';
+  String get widgetTextSizeLarge => '大';
 
   @override
   String get remindersOnOffTitle => 'リマインダー on/off';
@@ -345,91 +344,115 @@ class AppLocalizationsJa extends AppLocalizations {
   String get customMinutesSaved => 'カスタム分を保存しました。';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'キャンセル';
 
   @override
-  String get calendarTabTooltip => 'Hijri calendar';
+  String get calendarTabTooltip => 'ヒジュラ暦カレンダー';
 
   @override
-  String get calendarPreviousMonth => 'Previous month';
+  String get calendarPreviousMonth => '前の月';
 
   @override
-  String get calendarNextMonth => 'Next month';
+  String get calendarNextMonth => '次の月';
 
   @override
-  String get calendarSwapPrimary => 'Switch Hijri/Gregorian';
+  String get calendarSwapPrimary => 'ヒジュラ暦/西暦を切替';
 
   @override
-  String get calendarShowSecondary => 'Show secondary date';
+  String get calendarShowSecondary => '副暦日を表示';
 
   @override
-  String get calendarHideSecondary => 'Hide secondary date';
+  String get calendarHideSecondary => '副暦日を非表示';
 
   @override
-  String get calendarNoRemindersOnDay => 'No reminders on this day';
+  String get calendarNoRemindersOnDay => 'この日のリマインダーはありません';
 
   @override
-  String get calendarAddReminder => 'Add reminder';
+  String get calendarAddReminder => 'リマインダーを追加';
 
   @override
-  String get calendarEditReminder => 'Edit';
+  String get calendarEditReminder => '編集';
 
   @override
-  String get calendarDeleteReminder => 'Delete';
+  String get calendarDeleteReminder => '削除';
 
   @override
-  String get calendarReminderFormTitleNew => 'New reminder';
+  String get calendarReminderFormTitleNew => '新しいリマインダー';
 
   @override
-  String get calendarReminderFormTitleEdit => 'Edit reminder';
+  String get calendarReminderFormTitleEdit => 'リマインダーを編集';
 
   @override
-  String get calendarReminderTitleLabel => 'Title';
+  String get calendarReminderTitleLabel => 'タイトル';
 
   @override
-  String get calendarReminderTitleHint => 'e.g. Ramadan starts';
+  String get calendarReminderTitleHint => '例：ラマダン開始';
 
   @override
-  String get calendarReminderNotesLabel => 'Notes (optional)';
+  String get calendarReminderNotesLabel => 'メモ（任意）';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Date & time';
+  String get calendarReminderDateTimeLabel => '日付と時刻';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'Repeat';
+  String get calendarReminderRecurrenceLabel => '繰り返し';
 
   @override
-  String get calendarRecurrenceOnce => 'Once';
+  String get calendarRecurrenceOnce => '1回のみ';
 
   @override
-  String get calendarRecurrenceDaily => 'Daily';
+  String get calendarRecurrenceDaily => '毎日';
 
   @override
-  String get calendarRecurrenceWeekly => 'Weekly';
+  String get calendarRecurrenceWeekly => '毎週';
 
   @override
-  String get calendarRecurrenceMonthly => 'Monthly';
+  String get calendarRecurrenceMonthly => '毎月';
 
   @override
-  String get calendarRecurrenceYearly => 'Yearly';
+  String get calendarRecurrenceYearly => '毎年';
 
   @override
-  String get calendarYearlyBasisLabel => 'Yearly basis';
+  String get calendarYearlyBasisLabel => '年次基準';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Gregorian';
+  String get calendarYearlyBasisGregorian => '西暦';
 
   @override
-  String get calendarYearlyBasisHijri => 'Hijri';
+  String get calendarYearlyBasisHijri => 'ヒジュラ暦';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
+  String get calendarDeleteReminderConfirmTitle => 'リマインダーを削除しますか？';
 
   @override
   String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'This stops all future notifications for \"$title\".';
+    return '「$title」の今後の通知がすべて停止されます。';
   }
 
   @override
-  String get calendarReminderTitleRequired => 'Enter a title';
+  String get calendarReminderTitleRequired => 'タイトルを入力してください';
+
+  @override
+  String get calendarAnchorClockTime => 'カレンダーの日付';
+
+  @override
+  String get calendarAnchorPrayerTime => '礼拝時間';
+
+  @override
+  String get calendarSelectPrayer => '礼拝を選択';
+
+  @override
+  String get calendarOffsetOnTime => '定刻';
+
+  @override
+  String get calendarOffsetBefore => '前';
+
+  @override
+  String get calendarOffsetAfter => '後';
+
+  @override
+  String get datesPrayerTimesTab => '礼拝時間';
+
+  @override
+  String get datesCalendarTab => 'カレンダー';
 }

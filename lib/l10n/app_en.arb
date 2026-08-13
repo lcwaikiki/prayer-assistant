@@ -188,5 +188,13 @@
       "title": {}
     }
   },
-  "calendarReminderTitleRequired": "Enter a title"
+  "calendarReminderTitleRequired": "Enter a title",
+  "calendarAnchorClockTime": "Calendar date",
+  "calendarAnchorPrayerTime": "Prayer time",
+  "calendarSelectPrayer": "Select prayer",
+  "calendarOffsetOnTime": "On time",
+  "calendarOffsetBefore": "Before",
+  "calendarOffsetAfter": "After",
+  "datesPrayerTimesTab": "Prayer Times",
+  "datesCalendarTab": "Calendar"
 }

@@ -244,23 +244,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notificationMessageHidden => '隐藏';
 
   @override
-  String get widgetTextSizeTitle => 'Widget text size';
+  String get widgetTextSizeTitle => '小组件文字大小';
 
   @override
-  String get widgetTextSizeSubtitle =>
-      'Text size used in the home screen widgets.';
+  String get widgetTextSizeSubtitle => '主屏幕小组件使用的文字大小。';
 
   @override
-  String get widgetTextSizeExtraSmall => 'Extra small';
+  String get widgetTextSizeExtraSmall => '极小';
 
   @override
-  String get widgetTextSizeSmall => 'Small';
+  String get widgetTextSizeSmall => '小';
 
   @override
-  String get widgetTextSizeMedium => 'Medium';
+  String get widgetTextSizeMedium => '中';
 
   @override
-  String get widgetTextSizeLarge => 'Large';
+  String get widgetTextSizeLarge => '大';
 
   @override
   String get remindersOnOffTitle => '提醒开/关';
@@ -345,91 +344,115 @@ class AppLocalizationsZh extends AppLocalizations {
   String get customMinutesSaved => '自定义分钟已保存。';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get calendarTabTooltip => 'Hijri calendar';
+  String get calendarTabTooltip => '回历日历';
 
   @override
-  String get calendarPreviousMonth => 'Previous month';
+  String get calendarPreviousMonth => '上个月';
 
   @override
-  String get calendarNextMonth => 'Next month';
+  String get calendarNextMonth => '下个月';
 
   @override
-  String get calendarSwapPrimary => 'Switch Hijri/Gregorian';
+  String get calendarSwapPrimary => '切换回历/公历';
 
   @override
-  String get calendarShowSecondary => 'Show secondary date';
+  String get calendarShowSecondary => '显示副历日期';
 
   @override
-  String get calendarHideSecondary => 'Hide secondary date';
+  String get calendarHideSecondary => '隐藏副历日期';
 
   @override
-  String get calendarNoRemindersOnDay => 'No reminders on this day';
+  String get calendarNoRemindersOnDay => '这一天没有提醒';
 
   @override
-  String get calendarAddReminder => 'Add reminder';
+  String get calendarAddReminder => '添加提醒';
 
   @override
-  String get calendarEditReminder => 'Edit';
+  String get calendarEditReminder => '编辑';
 
   @override
-  String get calendarDeleteReminder => 'Delete';
+  String get calendarDeleteReminder => '删除';
 
   @override
-  String get calendarReminderFormTitleNew => 'New reminder';
+  String get calendarReminderFormTitleNew => '新建提醒';
 
   @override
-  String get calendarReminderFormTitleEdit => 'Edit reminder';
+  String get calendarReminderFormTitleEdit => '编辑提醒';
 
   @override
-  String get calendarReminderTitleLabel => 'Title';
+  String get calendarReminderTitleLabel => '标题';
 
   @override
-  String get calendarReminderTitleHint => 'e.g. Ramadan starts';
+  String get calendarReminderTitleHint => '例如：斋月开始';
 
   @override
-  String get calendarReminderNotesLabel => 'Notes (optional)';
+  String get calendarReminderNotesLabel => '备注（可选）';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Date & time';
+  String get calendarReminderDateTimeLabel => '日期和时间';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'Repeat';
+  String get calendarReminderRecurrenceLabel => '重复';
 
   @override
-  String get calendarRecurrenceOnce => 'Once';
+  String get calendarRecurrenceOnce => '仅一次';
 
   @override
-  String get calendarRecurrenceDaily => 'Daily';
+  String get calendarRecurrenceDaily => '每天';
 
   @override
-  String get calendarRecurrenceWeekly => 'Weekly';
+  String get calendarRecurrenceWeekly => '每周';
 
   @override
-  String get calendarRecurrenceMonthly => 'Monthly';
+  String get calendarRecurrenceMonthly => '每月';
 
   @override
-  String get calendarRecurrenceYearly => 'Yearly';
+  String get calendarRecurrenceYearly => '每年';
 
   @override
-  String get calendarYearlyBasisLabel => 'Yearly basis';
+  String get calendarYearlyBasisLabel => '年度基准';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Gregorian';
+  String get calendarYearlyBasisGregorian => '公历';
 
   @override
-  String get calendarYearlyBasisHijri => 'Hijri';
+  String get calendarYearlyBasisHijri => '回历';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
+  String get calendarDeleteReminderConfirmTitle => '删除此提醒？';
 
   @override
   String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'This stops all future notifications for \"$title\".';
+    return '这将停止“$title”的所有未来通知。';
   }
 
   @override
-  String get calendarReminderTitleRequired => 'Enter a title';
+  String get calendarReminderTitleRequired => '请输入标题';
+
+  @override
+  String get calendarAnchorClockTime => '日历日期';
+
+  @override
+  String get calendarAnchorPrayerTime => '礼拜时间';
+
+  @override
+  String get calendarSelectPrayer => '选择礼拜';
+
+  @override
+  String get calendarOffsetOnTime => '准点';
+
+  @override
+  String get calendarOffsetBefore => '提前';
+
+  @override
+  String get calendarOffsetAfter => '延后';
+
+  @override
+  String get datesPrayerTimesTab => '礼拜时间';
+
+  @override
+  String get datesCalendarTab => '日历';
 }

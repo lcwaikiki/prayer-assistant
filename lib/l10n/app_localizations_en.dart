@@ -443,4 +443,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarReminderTitleRequired => 'Enter a title';
+
+  @override
+  String get calendarAnchorClockTime => 'Calendar date';
+
+  @override
+  String get calendarAnchorPrayerTime => 'Prayer time';
+
+  @override
+  String get calendarSelectPrayer => 'Select prayer';
+
+  @override
+  String get calendarOffsetOnTime => 'On time';
+
+  @override
+  String get calendarOffsetBefore => 'Before';
+
+  @override
+  String get calendarOffsetAfter => 'After';
+
+  @override
+  String get datesPrayerTimesTab => 'Prayer Times';
+
+  @override
+  String get datesCalendarTab => 'Calendar';
 }

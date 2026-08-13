@@ -42,7 +42,8 @@
       "mcp__plugin_playwright_playwright__browser_console_messages",
       "Bash(adb exec-out *)",
       "Bash(adb emu *)",
-      "Bash(adb wait-for-device *)"
+      "Bash(adb wait-for-device *)",
+      "PowerShell(Get-ChildItem -Path \"$env:LOCALAPPDATA\\\\Pub\\\\Cache\\\\hosted\\\\pub.dev\\\\hijri-3.0.1\\\\lib\" -Recurse -File | Select-Object -ExpandProperty FullName)"
     ]
   }
 }

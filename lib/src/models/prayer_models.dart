@@ -316,6 +316,11 @@ enum AppThemePreference {
   dark,
 }
 
+enum CalendarPrimaryDisplay {
+  hijri,
+  gregorian,
+}
+
 enum AppLocalePreference {
   system,
   en,

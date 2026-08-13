@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
@@ -131,13 +132,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.historyTableTitle,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.l10n.historyTableTitle,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: context.l10n.calendarTabTooltip,
+                        icon: const Icon(Icons.calendar_month),
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (_) => const HijriCalendarScreen(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

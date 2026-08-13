@@ -357,4 +357,93 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get customMinutesSaved => 'Minutos personalizados guardados.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get calendarTabTooltip => 'Hijri calendar';
+
+  @override
+  String get calendarPreviousMonth => 'Previous month';
+
+  @override
+  String get calendarNextMonth => 'Next month';
+
+  @override
+  String get calendarSwapPrimary => 'Switch Hijri/Gregorian';
+
+  @override
+  String get calendarShowSecondary => 'Show secondary date';
+
+  @override
+  String get calendarHideSecondary => 'Hide secondary date';
+
+  @override
+  String get calendarNoRemindersOnDay => 'No reminders on this day';
+
+  @override
+  String get calendarAddReminder => 'Add reminder';
+
+  @override
+  String get calendarEditReminder => 'Edit';
+
+  @override
+  String get calendarDeleteReminder => 'Delete';
+
+  @override
+  String get calendarReminderFormTitleNew => 'New reminder';
+
+  @override
+  String get calendarReminderFormTitleEdit => 'Edit reminder';
+
+  @override
+  String get calendarReminderTitleLabel => 'Title';
+
+  @override
+  String get calendarReminderTitleHint => 'e.g. Ramadan starts';
+
+  @override
+  String get calendarReminderNotesLabel => 'Notes (optional)';
+
+  @override
+  String get calendarReminderDateTimeLabel => 'Date & time';
+
+  @override
+  String get calendarReminderRecurrenceLabel => 'Repeat';
+
+  @override
+  String get calendarRecurrenceOnce => 'Once';
+
+  @override
+  String get calendarRecurrenceDaily => 'Daily';
+
+  @override
+  String get calendarRecurrenceWeekly => 'Weekly';
+
+  @override
+  String get calendarRecurrenceMonthly => 'Monthly';
+
+  @override
+  String get calendarRecurrenceYearly => 'Yearly';
+
+  @override
+  String get calendarYearlyBasisLabel => 'Yearly basis';
+
+  @override
+  String get calendarYearlyBasisGregorian => 'Gregorian';
+
+  @override
+  String get calendarYearlyBasisHijri => 'Hijri';
+
+  @override
+  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
+
+  @override
+  String calendarDeleteReminderConfirmMessage(Object title) {
+    return 'This stops all future notifications for \"$title\".';
+  }
+
+  @override
+  String get calendarReminderTitleRequired => 'Enter a title';
 }

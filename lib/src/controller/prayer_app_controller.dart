@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../calendar/models/calendar_reminder.dart';
+import '../calendar/services/calendar_reminder_service.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
@@ -19,6 +21,7 @@ class PrayerAppController extends ChangeNotifier {
     required this.locationResolver,
     required this.notificationService,
     required this.widgetBridgeService,
+    required this.calendarReminderService,
   });
 
   final ImsakiyemApi api;
@@ -26,6 +29,7 @@ class PrayerAppController extends ChangeNotifier {
   final LocationResolver locationResolver;
   final NotificationService notificationService;
   final WidgetBridgeService widgetBridgeService;
+  final CalendarReminderService calendarReminderService;
 
   bool _isInitializing = true;
   bool _isBusy = false;
@@ -49,6 +53,9 @@ class PrayerAppController extends ChangeNotifier {
   bool _reminderSoundEnabled = true;
   AppThemePreference _themePreference = AppThemePreference.system;
   AppLocalePreference _localePreference = AppLocalePreference.system;
+  List<CalendarReminder> _calendarReminders = const <CalendarReminder>[];
+  CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
+  bool _showSecondaryCalendarDate = true;
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -79,6 +86,9 @@ class PrayerAppController extends ChangeNotifier {
   AppLocalePreference get localePreference => _localePreference;
   Locale? get appLocale => _localePreference.locale;
   Locale get resolvedLocale => appLocale ?? PlatformDispatcher.instance.locale;
+  List<CalendarReminder> get calendarReminders => _calendarReminders;
+  CalendarPrimaryDisplay get calendarPrimaryDisplay => _calendarPrimaryDisplay;
+  bool get showSecondaryCalendarDate => _showSecondaryCalendarDate;
 
   Future<void> initialize() async {
     _setLoading(true);
@@ -136,6 +146,24 @@ class PrayerAppController extends ChangeNotifier {
       _widgetTextSize = widgetTextSize;
       await _syncStatusBarConfig();
       await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
+      final rawCalendarPrimaryDisplay =
+          await database.loadCalendarPrimaryDisplay();
+      var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
+      for (final item in CalendarPrimaryDisplay.values) {
+        if (item.name == rawCalendarPrimaryDisplay) {
+          calendarPrimaryDisplay = item;
+          break;
+        }
+      }
+      _calendarPrimaryDisplay = calendarPrimaryDisplay;
+      _showSecondaryCalendarDate =
+          await database.loadShowSecondaryCalendarDate() ?? true;
+      _calendarReminders = await database.loadCalendarReminders();
+      for (final reminder in _calendarReminders) {
+        if (reminder.enabled) {
+          await calendarReminderService.scheduleReminder(reminder);
+        }
+      }
       _countries = await api.getCountries();
       if (_selectedLocation != null) {
         await _loadStates(_selectedLocation!.countryId);
@@ -355,6 +383,65 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveWidgetTextSize(size.name);
     await widgetBridgeService.updateWidgetTextSize(size.name);
     notifyListeners();
+  }
+
+  Future<void> updateCalendarPrimaryDisplay(
+    CalendarPrimaryDisplay display,
+  ) async {
+    if (_calendarPrimaryDisplay == display) {
+      return;
+    }
+    _calendarPrimaryDisplay = display;
+    await database.saveCalendarPrimaryDisplay(display.name);
+    notifyListeners();
+  }
+
+  Future<void> updateShowSecondaryCalendarDate(bool show) async {
+    if (_showSecondaryCalendarDate == show) {
+      return;
+    }
+    _showSecondaryCalendarDate = show;
+    await database.saveShowSecondaryCalendarDate(show);
+    notifyListeners();
+  }
+
+  Future<void> addCalendarReminder(CalendarReminder reminder) async {
+    _calendarReminders = [..._calendarReminders, reminder];
+    await database.saveCalendarReminder(reminder);
+    await calendarReminderService.scheduleReminder(reminder);
+    notifyListeners();
+  }
+
+  Future<void> updateCalendarReminder(CalendarReminder reminder) async {
+    _calendarReminders = [
+      for (final existing in _calendarReminders)
+        if (existing.id == reminder.id) reminder else existing,
+    ];
+    await database.saveCalendarReminder(reminder);
+    await calendarReminderService.scheduleReminder(reminder);
+    notifyListeners();
+  }
+
+  Future<void> deleteCalendarReminder(String id) async {
+    _calendarReminders = _calendarReminders
+        .where((reminder) => reminder.id != id)
+        .toList(growable: false);
+    await database.deleteCalendarReminder(id);
+    await calendarReminderService.cancelReminder(id);
+    notifyListeners();
+  }
+
+  Future<void> toggleCalendarReminderEnabled(String id) async {
+    final index = _calendarReminders.indexWhere(
+      (reminder) => reminder.id == id,
+    );
+    if (index == -1) {
+      return;
+    }
+    final updated = _calendarReminders[index].copyWith(
+      enabled: !_calendarReminders[index].enabled,
+    );
+    await updateCalendarReminder(updated);
   }
 
   Future<void> updateStatusBarRemainingEnabled(bool enabled) async {

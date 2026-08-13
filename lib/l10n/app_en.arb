@@ -154,5 +154,39 @@
   "enableBeforeToSelectMinutes": "Enable \"Before\" to select minutes.",
   "enterValidPositiveNumber": "Enter a valid positive number.",
   "useValueUpTo240": "Use a value up to 240 minutes.",
-  "customMinutesSaved": "Custom minutes saved."
+  "customMinutesSaved": "Custom minutes saved.",
+  "cancel": "Cancel",
+  "calendarTabTooltip": "Hijri calendar",
+  "calendarPreviousMonth": "Previous month",
+  "calendarNextMonth": "Next month",
+  "calendarSwapPrimary": "Switch Hijri/Gregorian",
+  "calendarShowSecondary": "Show secondary date",
+  "calendarHideSecondary": "Hide secondary date",
+  "calendarNoRemindersOnDay": "No reminders on this day",
+  "calendarAddReminder": "Add reminder",
+  "calendarEditReminder": "Edit",
+  "calendarDeleteReminder": "Delete",
+  "calendarReminderFormTitleNew": "New reminder",
+  "calendarReminderFormTitleEdit": "Edit reminder",
+  "calendarReminderTitleLabel": "Title",
+  "calendarReminderTitleHint": "e.g. Ramadan starts",
+  "calendarReminderNotesLabel": "Notes (optional)",
+  "calendarReminderDateTimeLabel": "Date & time",
+  "calendarReminderRecurrenceLabel": "Repeat",
+  "calendarRecurrenceOnce": "Once",
+  "calendarRecurrenceDaily": "Daily",
+  "calendarRecurrenceWeekly": "Weekly",
+  "calendarRecurrenceMonthly": "Monthly",
+  "calendarRecurrenceYearly": "Yearly",
+  "calendarYearlyBasisLabel": "Yearly basis",
+  "calendarYearlyBasisGregorian": "Gregorian",
+  "calendarYearlyBasisHijri": "Hijri",
+  "calendarDeleteReminderConfirmTitle": "Delete reminder?",
+  "calendarDeleteReminderConfirmMessage": "This stops all future notifications for \"{title}\".",
+  "@calendarDeleteReminderConfirmMessage": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "calendarReminderTitleRequired": "Enter a title"
 }

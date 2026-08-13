@@ -6,6 +6,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 
+import 'src/calendar/services/calendar_midnight_scheduler.dart';
+import 'src/calendar/services/calendar_reminder_service.dart';
 import 'src/controller/prayer_app_controller.dart';
 import 'src/l10n/locale_options.dart';
 import 'src/navigation.dart';
@@ -27,18 +29,23 @@ Future<void> main() async {
   await Hive.initFlutter();
   final itemsBox = await Hive.openBox<dynamic>('items_box');
 
+  final calendarReminderService = CalendarReminderService();
+  await calendarReminderService.initialize();
+
   final controller = PrayerAppController(
     api: ImsakiyemApi(),
     database: LocalDatabase(),
     locationResolver: LocationResolver(),
     notificationService: NotificationService(),
     widgetBridgeService: WidgetBridgeService(),
+    calendarReminderService: calendarReminderService,
   );
   await controller.initialize();
 
   final itemReminderService = ItemReminderService();
   await itemReminderService.initialize();
   await MidnightReminderScheduler.initializeAndSchedule();
+  await CalendarMidnightScheduler.initializeAndSchedule();
 
   runApp(
     ProviderScope(

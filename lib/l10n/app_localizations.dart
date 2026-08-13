@@ -745,6 +745,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Custom minutes saved.'**
   String get customMinutesSaved;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @calendarTabTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri calendar'**
+  String get calendarTabTooltip;
+
+  /// No description provided for @calendarPreviousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get calendarPreviousMonth;
+
+  /// No description provided for @calendarNextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get calendarNextMonth;
+
+  /// No description provided for @calendarSwapPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Hijri/Gregorian'**
+  String get calendarSwapPrimary;
+
+  /// No description provided for @calendarShowSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Show secondary date'**
+  String get calendarShowSecondary;
+
+  /// No description provided for @calendarHideSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide secondary date'**
+  String get calendarHideSecondary;
+
+  /// No description provided for @calendarNoRemindersOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders on this day'**
+  String get calendarNoRemindersOnDay;
+
+  /// No description provided for @calendarAddReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get calendarAddReminder;
+
+  /// No description provided for @calendarEditReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get calendarEditReminder;
+
+  /// No description provided for @calendarDeleteReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get calendarDeleteReminder;
+
+  /// No description provided for @calendarReminderFormTitleNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New reminder'**
+  String get calendarReminderFormTitleNew;
+
+  /// No description provided for @calendarReminderFormTitleEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reminder'**
+  String get calendarReminderFormTitleEdit;
+
+  /// No description provided for @calendarReminderTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get calendarReminderTitleLabel;
+
+  /// No description provided for @calendarReminderTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Ramadan starts'**
+  String get calendarReminderTitleHint;
+
+  /// No description provided for @calendarReminderNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get calendarReminderNotesLabel;
+
+  /// No description provided for @calendarReminderDateTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date & time'**
+  String get calendarReminderDateTimeLabel;
+
+  /// No description provided for @calendarReminderRecurrenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get calendarReminderRecurrenceLabel;
+
+  /// No description provided for @calendarRecurrenceOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once'**
+  String get calendarRecurrenceOnce;
+
+  /// No description provided for @calendarRecurrenceDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get calendarRecurrenceDaily;
+
+  /// No description provided for @calendarRecurrenceWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get calendarRecurrenceWeekly;
+
+  /// No description provided for @calendarRecurrenceMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get calendarRecurrenceMonthly;
+
+  /// No description provided for @calendarRecurrenceYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get calendarRecurrenceYearly;
+
+  /// No description provided for @calendarYearlyBasisLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly basis'**
+  String get calendarYearlyBasisLabel;
+
+  /// No description provided for @calendarYearlyBasisGregorian.
+  ///
+  /// In en, this message translates to:
+  /// **'Gregorian'**
+  String get calendarYearlyBasisGregorian;
+
+  /// No description provided for @calendarYearlyBasisHijri.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri'**
+  String get calendarYearlyBasisHijri;
+
+  /// No description provided for @calendarDeleteReminderConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete reminder?'**
+  String get calendarDeleteReminderConfirmTitle;
+
+  /// No description provided for @calendarDeleteReminderConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This stops all future notifications for \"{title}\".'**
+  String calendarDeleteReminderConfirmMessage(Object title);
+
+  /// No description provided for @calendarReminderTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a title'**
+  String get calendarReminderTitleRequired;
 }
 
 class _AppLocalizationsDelegate

@@ -128,8 +128,30 @@ Two sub-tabs:
       reminder at its original position and reschedules its
       notification. The day-detail sheet is now reactive (`context.watch`)
       so it updates live instead of needing to be reopened.
+- [x] Calendar reminder add/update/delete/restore now call
+      `notifyListeners()` immediately after the in-memory list changes
+      (before awaiting the DB save / notification scheduling), matching
+      the Beads pattern — fixes the calendar grid lagging or, in the
+      worst case, silently never refreshing if a scheduling call ever
+      threw.
 
 ### Ideas / not started
-- [ ] Monthly recurrence on a Hijri day-of-month (currently monthly is
-      Gregorian-day-of-month only)
-- [ ] Widget/home-screen surface for upcoming calendar reminders
+- [x] Monthly recurrence on a Hijri day-of-month: `CalendarReminder` now
+      has a `monthlyBasis` (`CalendarBasis.gregorian`/`.hijri`, the same
+      enum yearly already used — renamed from `YearlyCalendarBasis` to
+      `CalendarBasis` since it's shared now). Hijri-basis monthly
+      reminders compute their next Gregorian occurrence the same way
+      yearly-Hijri does and are re-resolved by the daily midnight
+      scheduler (no native OS repeat for a floating Hijri day-of-month).
+      Reminder form shows a Gregorian/Hijri chip picker when recurrence
+      is Monthly, mirroring the Yearly one.
+- [x] In-app "Upcoming reminders" card on the Today tab: shows the next
+      3 enabled calendar reminders (via `CalendarReminder.nextOccurrenceFrom`,
+      which reuses `occursOn` to scan forward), tapping one opens the
+      calendar on that date's day-detail sheet. Only rendered when
+      there's at least one upcoming reminder, so it doesn't disturb the
+      edge-to-edge Today tab layout when there's nothing to show.
+- [ ] Android home-screen widget surface for upcoming calendar reminders
+      — separate from the in-app card above; needs native Kotlin/XML
+      changes to the existing prayer-times widget and can't be verified
+      without deploying to a real device. Not started.

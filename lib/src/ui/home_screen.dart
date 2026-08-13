@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../calendar/models/calendar_reminder.dart';
+import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
 import 'reminder_settings_screen.dart';
+
+typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -69,6 +73,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final nextPrayer = controller.nextPrayer(_now);
         final prayers = prayerMapForDay(day);
+        final upcomingReminders = <_UpcomingReminder>[
+          for (final reminder in controller.calendarReminders)
+            if (reminder.enabled)
+              if (reminder.nextOccurrenceFrom(_now) case final next?)
+                (reminder: reminder, next: next),
+        ]..sort((a, b) => a.next.compareTo(b.next));
+        final upcoming = upcomingReminders.take(3).toList(growable: false);
 
         const outerPadding = 16.0;
         return LayoutBuilder(
@@ -117,6 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (nextPrayer != null)
                         _NextPrayerBanner(info: nextPrayer),
                       const SizedBox(height: 10),
+                      if (upcoming.isNotEmpty) ...[
+                        _UpcomingRemindersCard(entries: upcoming),
+                        const SizedBox(height: 10),
+                      ],
                       Expanded(
                         child: Card(
                           margin: EdgeInsets.zero,
@@ -304,6 +319,58 @@ class _NextPrayerBanner extends StatelessWidget {
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _UpcomingRemindersCard extends StatelessWidget {
+  const _UpcomingRemindersCard({required this.entries});
+
+  final List<_UpcomingReminder> entries;
+
+  @override
+  Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context).toString();
+    final dateFormat = DateFormat('EEE, d MMM · HH:mm', locale);
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+            child: Text(
+              context.l10n.homeUpcomingRemindersTitle,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ),
+          for (final entry in entries)
+            ListTile(
+              dense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+              leading: const Icon(Icons.event_outlined),
+              title: Text(
+                entry.reminder.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: Text(dateFormat.format(entry.next)),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => HijriCalendarScreen(
+                      initialDate: entry.next,
+                      openDetailOnLaunch: true,
+                    ),
+                  ),
+                );
+              },
+            ),
+          const SizedBox(height: 4),
         ],
       ),
     );

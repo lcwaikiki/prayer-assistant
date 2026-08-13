@@ -361,9 +361,12 @@ class _DayDetailSheet extends StatelessWidget {
       case ReminderRecurrence.weekly:
         return l10n.calendarRecurrenceWeekly;
       case ReminderRecurrence.monthly:
-        return l10n.calendarRecurrenceMonthly;
+        final basis = reminder.monthlyBasis == CalendarBasis.hijri
+            ? l10n.calendarYearlyBasisHijri
+            : l10n.calendarYearlyBasisGregorian;
+        return '${l10n.calendarRecurrenceMonthly} • $basis';
       case ReminderRecurrence.yearly:
-        final basis = reminder.yearlyBasis == YearlyCalendarBasis.hijri
+        final basis = reminder.yearlyBasis == CalendarBasis.hijri
             ? l10n.calendarYearlyBasisHijri
             : l10n.calendarYearlyBasisGregorian;
         return '${l10n.calendarRecurrenceYearly} • $basis';

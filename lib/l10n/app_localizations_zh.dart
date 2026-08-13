@@ -135,6 +135,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nextPrayerTitle => '下一次礼拜';
 
   @override
+  String get homeUpcomingRemindersTitle => '即将到来的提醒';
+
+  @override
   String startsIn(Object remaining) {
     return '$remaining 后开始';
   }
@@ -411,6 +414,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => '每年';
+
+  @override
+  String get calendarMonthlyBasisLabel => '月度基准';
 
   @override
   String get calendarYearlyBasisLabel => '年度基准';

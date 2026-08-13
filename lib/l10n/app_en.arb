@@ -68,6 +68,7 @@
   },
   "reminderOff": "Reminder off",
   "nextPrayerTitle": "Next Prayer",
+  "homeUpcomingRemindersTitle": "Upcoming reminders",
   "startsIn": "Starts in {remaining}",
   "@startsIn": {
     "placeholders": {
@@ -178,6 +179,7 @@
   "calendarRecurrenceWeekly": "Weekly",
   "calendarRecurrenceMonthly": "Monthly",
   "calendarRecurrenceYearly": "Yearly",
+  "calendarMonthlyBasisLabel": "Monthly basis",
   "calendarYearlyBasisLabel": "Yearly basis",
   "calendarYearlyBasisGregorian": "Gregorian",
   "calendarYearlyBasisHijri": "Hijri",

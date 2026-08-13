@@ -15,14 +15,14 @@ enum ReminderRecurrence {
   }
 }
 
-enum YearlyCalendarBasis {
+enum CalendarBasis {
   gregorian,
   hijri;
 
-  static YearlyCalendarBasis fromName(String? name) {
-    return YearlyCalendarBasis.values.firstWhere(
+  static CalendarBasis fromName(String? name) {
+    return CalendarBasis.values.firstWhere(
       (value) => value.name == name,
-      orElse: () => YearlyCalendarBasis.gregorian,
+      orElse: () => CalendarBasis.gregorian,
     );
   }
 }
@@ -52,7 +52,8 @@ class CalendarReminder {
     this.notes = '',
     required this.anchorAt,
     this.recurrence = ReminderRecurrence.once,
-    this.yearlyBasis = YearlyCalendarBasis.gregorian,
+    this.monthlyBasis = CalendarBasis.gregorian,
+    this.yearlyBasis = CalendarBasis.gregorian,
     this.anchor = CalendarReminderAnchor.clockTime,
     this.anchorPrayerName,
     this.anchorOffsetMinutes = 0,
@@ -72,8 +73,11 @@ class CalendarReminder {
 
   final ReminderRecurrence recurrence;
 
+  /// Only meaningful when [recurrence] is [ReminderRecurrence.monthly].
+  final CalendarBasis monthlyBasis;
+
   /// Only meaningful when [recurrence] is [ReminderRecurrence.yearly].
-  final YearlyCalendarBasis yearlyBasis;
+  final CalendarBasis yearlyBasis;
 
   final CalendarReminderAnchor anchor;
 
@@ -92,7 +96,8 @@ class CalendarReminder {
     String? notes,
     DateTime? anchorAt,
     ReminderRecurrence? recurrence,
-    YearlyCalendarBasis? yearlyBasis,
+    CalendarBasis? monthlyBasis,
+    CalendarBasis? yearlyBasis,
     CalendarReminderAnchor? anchor,
     String? anchorPrayerName,
     int? anchorOffsetMinutes,
@@ -104,6 +109,7 @@ class CalendarReminder {
       notes: notes ?? this.notes,
       anchorAt: anchorAt ?? this.anchorAt,
       recurrence: recurrence ?? this.recurrence,
+      monthlyBasis: monthlyBasis ?? this.monthlyBasis,
       yearlyBasis: yearlyBasis ?? this.yearlyBasis,
       anchor: anchor ?? this.anchor,
       anchorPrayerName: anchorPrayerName ?? this.anchorPrayerName,
@@ -131,9 +137,14 @@ class CalendarReminder {
       case ReminderRecurrence.weekly:
         return day.weekday == anchorDay.weekday;
       case ReminderRecurrence.monthly:
-        return day.day == anchorDay.day;
+        if (monthlyBasis == CalendarBasis.gregorian) {
+          return day.day == anchorDay.day;
+        }
+        final dayHijri = HijriCalendar.fromDate(day);
+        final anchorHijri = HijriCalendar.fromDate(anchorDay);
+        return dayHijri.hDay == anchorHijri.hDay;
       case ReminderRecurrence.yearly:
-        if (yearlyBasis == YearlyCalendarBasis.gregorian) {
+        if (yearlyBasis == CalendarBasis.gregorian) {
           return day.month == anchorDay.month && day.day == anchorDay.day;
         }
         final dayHijri = HijriCalendar.fromDate(day);
@@ -143,6 +154,35 @@ class CalendarReminder {
     }
   }
 
+  /// The next moment at or after [from] this reminder occurs, combining
+  /// [occursOn] (which day) with [anchorAt]'s time-of-day. Scans up to a
+  /// year ahead; null if disabled or nothing is found in range (shouldn't
+  /// normally happen for a valid recurrence). Used for "upcoming reminders"
+  /// surfaces rather than for actual notification scheduling.
+  DateTime? nextOccurrenceFrom(DateTime from) {
+    if (!enabled) {
+      return null;
+    }
+    final startDay = DateTime(from.year, from.month, from.day);
+    for (var offset = 0; offset <= 370; offset++) {
+      final day = startDay.add(Duration(days: offset));
+      if (!occursOn(day)) {
+        continue;
+      }
+      final candidate = DateTime(
+        day.year,
+        day.month,
+        day.day,
+        anchorAt.hour,
+        anchorAt.minute,
+      );
+      if (!candidate.isBefore(from)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
   Map<String, Object?> toMap() {
     return {
       'id': id,
@@ -150,6 +190,7 @@ class CalendarReminder {
       'notes': notes,
       'anchor_at': anchorAt.toIso8601String(),
       'recurrence': recurrence.name,
+      'monthly_basis': monthlyBasis.name,
       'yearly_basis': yearlyBasis.name,
       'anchor': anchor.name,
       'anchor_prayer_name': anchorPrayerName,
@@ -165,9 +206,8 @@ class CalendarReminder {
       notes: (map['notes'] ?? '').toString(),
       anchorAt: DateTime.parse((map['anchor_at'] ?? '').toString()),
       recurrence: ReminderRecurrence.fromName(map['recurrence']?.toString()),
-      yearlyBasis: YearlyCalendarBasis.fromName(
-        map['yearly_basis']?.toString(),
-      ),
+      monthlyBasis: CalendarBasis.fromName(map['monthly_basis']?.toString()),
+      yearlyBasis: CalendarBasis.fromName(map['yearly_basis']?.toString()),
       anchor: CalendarReminderAnchor.fromName(map['anchor']?.toString()),
       anchorPrayerName: map['anchor_prayer_name']?.toString(),
       anchorOffsetMinutes: (map['anchor_offset_minutes'] as num?)?.toInt() ?? 0,

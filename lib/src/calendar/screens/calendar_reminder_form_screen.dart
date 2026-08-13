@@ -34,7 +34,8 @@ class _CalendarReminderFormScreenState
   late final TextEditingController _notesController;
   late DateTime _anchorAt;
   late ReminderRecurrence _recurrence;
-  late YearlyCalendarBasis _yearlyBasis;
+  late CalendarBasis _monthlyBasis;
+  late CalendarBasis _yearlyBasis;
   late CalendarReminderAnchor _anchor;
   late String _anchorPrayerName;
   late _OffsetDirection _offsetDirection;
@@ -57,7 +58,8 @@ class _CalendarReminderFormScreenState
     _anchorAt = reminder?.anchorAt ??
         DateTime(baseDate.year, baseDate.month, baseDate.day, now.hour, now.minute);
     _recurrence = reminder?.recurrence ?? ReminderRecurrence.once;
-    _yearlyBasis = reminder?.yearlyBasis ?? YearlyCalendarBasis.gregorian;
+    _monthlyBasis = reminder?.monthlyBasis ?? CalendarBasis.gregorian;
+    _yearlyBasis = reminder?.yearlyBasis ?? CalendarBasis.gregorian;
     _anchor = reminder?.anchor ?? CalendarReminderAnchor.clockTime;
     _anchorPrayerName = reminder?.anchorPrayerName ?? prayerOrder.first;
     final initialOffset = reminder?.anchorOffsetMinutes ?? 0;
@@ -163,6 +165,7 @@ class _CalendarReminderFormScreenState
       notes: _notesController.text.trim(),
       anchorAt: anchorAt,
       recurrence: _recurrence,
+      monthlyBasis: _monthlyBasis,
       yearlyBasis: _yearlyBasis,
       anchor: _anchor,
       anchorPrayerName: _anchorPrayerName,
@@ -306,6 +309,34 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ),
+            if (_recurrence == ReminderRecurrence.monthly) ...[
+              const SizedBox(height: 20),
+              Text(
+                l10n.calendarMonthlyBasisLabel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisGregorian,
+                    selected: _monthlyBasis == CalendarBasis.gregorian,
+                    onSelected: () => setState(
+                      () => _monthlyBasis = CalendarBasis.gregorian,
+                    ),
+                  ),
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisHijri,
+                    selected: _monthlyBasis == CalendarBasis.hijri,
+                    onSelected: () => setState(
+                      () => _monthlyBasis = CalendarBasis.hijri,
+                    ),
+                  ),
+                ],
+              ),
+            ],
             if (_recurrence == ReminderRecurrence.yearly) ...[
               const SizedBox(height: 20),
               Text(
@@ -319,16 +350,16 @@ class _CalendarReminderFormScreenState
                 children: [
                   _ChoiceChipOption(
                     label: l10n.calendarYearlyBasisGregorian,
-                    selected: _yearlyBasis == YearlyCalendarBasis.gregorian,
+                    selected: _yearlyBasis == CalendarBasis.gregorian,
                     onSelected: () => setState(
-                      () => _yearlyBasis = YearlyCalendarBasis.gregorian,
+                      () => _yearlyBasis = CalendarBasis.gregorian,
                     ),
                   ),
                   _ChoiceChipOption(
                     label: l10n.calendarYearlyBasisHijri,
-                    selected: _yearlyBasis == YearlyCalendarBasis.hijri,
+                    selected: _yearlyBasis == CalendarBasis.hijri,
                     onSelected: () => setState(
-                      () => _yearlyBasis = YearlyCalendarBasis.hijri,
+                      () => _yearlyBasis = CalendarBasis.hijri,
                     ),
                   ),
                 ],

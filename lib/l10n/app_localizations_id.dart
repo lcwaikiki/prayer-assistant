@@ -140,6 +140,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get nextPrayerTitle => 'Salat Berikutnya';
 
   @override
+  String get homeUpcomingRemindersTitle => 'Pengingat mendatang';
+
+  @override
   String startsIn(Object remaining) {
     return 'Mulai dalam $remaining';
   }
@@ -424,6 +427,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => 'Tahunan';
+
+  @override
+  String get calendarMonthlyBasisLabel => 'Dasar bulanan';
 
   @override
   String get calendarYearlyBasisLabel => 'Dasar tahunan';

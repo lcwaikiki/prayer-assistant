@@ -135,6 +135,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nextPrayerTitle => '次の礼拝';
 
   @override
+  String get homeUpcomingRemindersTitle => '近日のリマインダー';
+
+  @override
   String startsIn(Object remaining) {
     return '$remaining 後に開始';
   }
@@ -411,6 +414,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => '毎年';
+
+  @override
+  String get calendarMonthlyBasisLabel => '月次基準';
 
   @override
   String get calendarYearlyBasisLabel => '年次基準';

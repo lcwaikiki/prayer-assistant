@@ -139,6 +139,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextPrayerTitle => 'Next Prayer';
 
   @override
+  String get homeUpcomingRemindersTitle => 'Upcoming reminders';
+
+  @override
   String startsIn(Object remaining) {
     return 'Starts in $remaining';
   }
@@ -423,6 +426,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => 'Yearly';
+
+  @override
+  String get calendarMonthlyBasisLabel => 'Monthly basis';
 
   @override
   String get calendarYearlyBasisLabel => 'Yearly basis';

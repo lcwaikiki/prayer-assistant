@@ -140,6 +140,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get nextPrayerTitle => 'اگلی نماز';
 
   @override
+  String get homeUpcomingRemindersTitle => 'آنے والی یاد دہانیاں';
+
+  @override
   String startsIn(Object remaining) {
     return '$remaining میں شروع ہوگی';
   }
@@ -423,6 +426,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => 'سالانہ';
+
+  @override
+  String get calendarMonthlyBasisLabel => 'ماہانہ بنیاد';
 
   @override
   String get calendarYearlyBasisLabel => 'سالانہ بنیاد';

@@ -141,6 +141,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nextPrayerTitle => 'Sıradaki Vakit';
 
   @override
+  String get homeUpcomingRemindersTitle => 'Yaklaşan hatırlatıcılar';
+
+  @override
   String startsIn(Object remaining) {
     return '$remaining sonra başlar';
   }
@@ -425,6 +428,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => 'Her yıl';
+
+  @override
+  String get calendarMonthlyBasisLabel => 'Aylık esas';
 
   @override
   String get calendarYearlyBasisLabel => 'Yıllık esas';

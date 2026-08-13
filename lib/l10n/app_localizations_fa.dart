@@ -141,6 +141,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get nextPrayerTitle => 'نماز بعدی';
 
   @override
+  String get homeUpcomingRemindersTitle => 'یادآورهای پیش رو';
+
+  @override
   String startsIn(Object remaining) {
     return 'شروع در $remaining';
   }
@@ -424,6 +427,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get calendarRecurrenceYearly => 'سالانه';
+
+  @override
+  String get calendarMonthlyBasisLabel => 'مبنای ماهانه';
 
   @override
   String get calendarYearlyBasisLabel => 'مبنای سالانه';

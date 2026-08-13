@@ -77,6 +77,7 @@ class LocalDatabase {
       notes TEXT NOT NULL,
       anchor_at TEXT NOT NULL,
       recurrence TEXT NOT NULL,
+      monthly_basis TEXT NOT NULL DEFAULT 'gregorian',
       yearly_basis TEXT NOT NULL,
       anchor TEXT NOT NULL DEFAULT 'clockTime',
       anchor_prayer_name TEXT,

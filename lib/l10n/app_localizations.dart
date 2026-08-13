@@ -344,6 +344,12 @@ abstract class AppLocalizations {
   /// **'Next Prayer'**
   String get nextPrayerTitle;
 
+  /// No description provided for @homeUpcomingRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming reminders'**
+  String get homeUpcomingRemindersTitle;
+
   /// No description provided for @startsIn.
   ///
   /// In en, this message translates to:
@@ -883,6 +889,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yearly'**
   String get calendarRecurrenceYearly;
+
+  /// No description provided for @calendarMonthlyBasisLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly basis'**
+  String get calendarMonthlyBasisLabel;
 
   /// No description provided for @calendarYearlyBasisLabel.
   ///

@@ -157,22 +157,35 @@ class CalendarReminderService {
           payload: reminder.id,
         );
       case ReminderRecurrence.monthly:
-        final next = _nextDayOfMonth(reminder.anchorAt);
-        if (next == null) {
-          return;
+        if (reminder.monthlyBasis == CalendarBasis.gregorian) {
+          final next = _nextDayOfMonth(reminder.anchorAt);
+          if (next == null) {
+            return;
+          }
+          await _plugin.zonedSchedule(
+            id: id,
+            title: reminder.title,
+            body: body,
+            scheduledDate: next,
+            notificationDetails: details,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+            payload: reminder.id,
+          );
+        } else {
+          final next = _nextHijriMonthlyOccurrence(reminder.anchorAt);
+          await _plugin.zonedSchedule(
+            id: id,
+            title: reminder.title,
+            body: body,
+            scheduledDate: tz.TZDateTime.from(next, tz.local),
+            notificationDetails: details,
+            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            payload: reminder.id,
+          );
         }
-        await _plugin.zonedSchedule(
-          id: id,
-          title: reminder.title,
-          body: body,
-          scheduledDate: next,
-          notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
-          payload: reminder.id,
-        );
       case ReminderRecurrence.yearly:
-        if (reminder.yearlyBasis == YearlyCalendarBasis.gregorian) {
+        if (reminder.yearlyBasis == CalendarBasis.gregorian) {
           await _plugin.zonedSchedule(
             id: id,
             title: reminder.title,
@@ -270,6 +283,44 @@ class CalendarReminderService {
       );
     }
     return candidate;
+  }
+
+  /// Next Gregorian occurrence of the anchor's Hijri day-of-month, at or
+  /// after now, trying the current Hijri month and then subsequent ones
+  /// (skipping months shorter than the anchor's day-of-month, e.g. the
+  /// 30th in a 29-day Hijri month).
+  DateTime _nextHijriMonthlyOccurrence(DateTime anchor) {
+    final anchorHijri = HijriCalendar.fromDate(anchor);
+    final now = DateTime.now();
+    final nowHijri = HijriCalendar.fromDate(now);
+    final calendar = HijriCalendar();
+    for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
+      final totalMonths =
+          (nowHijri.hYear * 12 + (nowHijri.hMonth - 1)) + monthOffset;
+      final hYear = totalMonths ~/ 12;
+      final hMonth = (totalMonths % 12) + 1;
+      if (anchorHijri.hDay > calendar.getDaysInMonth(hYear, hMonth)) {
+        continue;
+      }
+      final candidateDate = calendar.hijriToGregorian(
+        hYear,
+        hMonth,
+        anchorHijri.hDay,
+      );
+      final candidate = DateTime(
+        candidateDate.year,
+        candidateDate.month,
+        candidateDate.day,
+        anchor.hour,
+        anchor.minute,
+      );
+      if (candidate.isAfter(now)) {
+        return candidate;
+      }
+    }
+    // Fallback: should be unreachable given the loop above always finds a
+    // future date within a year.
+    return anchor;
   }
 
   /// Next Gregorian occurrence of the anchor's Hijri month/day, at or after

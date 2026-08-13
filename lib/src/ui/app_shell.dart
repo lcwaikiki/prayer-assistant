@@ -140,30 +140,28 @@ class _AppShellState extends State<AppShell> {
       title: titleWidget,
       actions: [
         if (trailing != null) trailing,
-        if (isHomeTab) ...[
-          IconButton(
-            tooltip: controller.remindersSilenced
-                ? context.l10n.tooltipRemindersOn
-                : context.l10n.tooltipRemindersOff,
-            icon: Icon(
-              controller.remindersSilenced
-                  ? Icons.notifications_off_outlined
-                  : Icons.notifications_active_outlined,
-            ),
-            onPressed: controller.toggleReminders,
+        IconButton(
+          tooltip: controller.remindersSilenced
+              ? context.l10n.tooltipRemindersOn
+              : context.l10n.tooltipRemindersOff,
+          icon: Icon(
+            controller.remindersSilenced
+                ? Icons.notifications_off_outlined
+                : Icons.notifications_active_outlined,
           ),
-          IconButton(
-            tooltip: context.l10n.tooltipToggleLightDark,
-            icon: Icon(
-              Theme.of(context).brightness == Brightness.dark
-                  ? Icons.light_mode_outlined
-                  : Icons.dark_mode_outlined,
-            ),
-            onPressed: () => controller.toggleThemeQuick(
-              isCurrentlyDark: Theme.of(context).brightness == Brightness.dark,
-            ),
+          onPressed: controller.toggleReminders,
+        ),
+        IconButton(
+          tooltip: context.l10n.tooltipToggleLightDark,
+          icon: Icon(
+            Theme.of(context).brightness == Brightness.dark
+                ? Icons.light_mode_outlined
+                : Icons.dark_mode_outlined,
           ),
-        ],
+          onPressed: () => controller.toggleThemeQuick(
+            isCurrentlyDark: Theme.of(context).brightness == Brightness.dark,
+          ),
+        ),
         IconButton(
           tooltip: context.l10n.tooltipPreferences,
           icon: const Icon(Icons.tune),

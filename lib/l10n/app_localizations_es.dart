@@ -313,6 +313,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get before => 'Antes';
 
   @override
+  String get reminderAlertTitle => 'Alerta';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'También requiere que el interruptor correspondiente esté activado en Preferencias para alertar realmente.';
+
+  @override
+  String get vibrateChip => 'Vibrar';
+
+  @override
+  String get soundChip => 'Sonido';
+
+  @override
   String get remindBeforePrayerTitle => 'Recuérdame antes de la oración';
 
   @override

@@ -301,6 +301,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get before => '提前';
 
   @override
+  String get reminderAlertTitle => '提醒方式';
+
+  @override
+  String get reminderAlertSubtitle => '还需要在偏好设置中打开对应开关才会真正提醒。';
+
+  @override
+  String get vibrateChip => '振动';
+
+  @override
+  String get soundChip => '声音';
+
+  @override
   String get remindBeforePrayerTitle => '在礼拜前提醒我';
 
   @override

@@ -169,12 +169,16 @@ class ReminderSetting {
     required this.customMinutesBefore,
     required this.notifyOnTime,
     required this.notifyBefore,
+    required this.vibrationEnabled,
+    required this.soundEnabled,
   });
 
   final int minutesBefore;
   final int customMinutesBefore;
   final bool notifyOnTime;
   final bool notifyBefore;
+  final bool vibrationEnabled;
+  final bool soundEnabled;
 
   factory ReminderSetting.defaults() {
     return ReminderSetting(
@@ -182,6 +186,8 @@ class ReminderSetting {
       customMinutesBefore: 10,
       notifyOnTime: false,
       notifyBefore: false,
+      vibrationEnabled: true,
+      soundEnabled: true,
     );
   }
 
@@ -191,6 +197,8 @@ class ReminderSetting {
       'customMinutesBefore': customMinutesBefore,
       'notifyOnTime': notifyOnTime,
       'notifyBefore': notifyBefore,
+      'vibrationEnabled': vibrationEnabled,
+      'soundEnabled': soundEnabled,
     };
   }
 
@@ -201,6 +209,8 @@ class ReminderSetting {
         customMinutesBefore: 10,
         notifyOnTime: false,
         notifyBefore: value,
+        vibrationEnabled: true,
+        soundEnabled: true,
       );
     }
     if (value is Map<String, dynamic>) {
@@ -218,6 +228,8 @@ class ReminderSetting {
         notifyBefore:
             (value['notifyBefore'] as bool?) ??
             (legacyEnabled && (legacyBefore || !legacyOnTime)),
+        vibrationEnabled: (value['vibrationEnabled'] as bool?) ?? true,
+        soundEnabled: (value['soundEnabled'] as bool?) ?? true,
       );
     }
     return ReminderSetting.defaults();
@@ -228,17 +240,22 @@ class ReminderSetting {
     int? customMinutesBefore,
     bool? notifyOnTime,
     bool? notifyBefore,
+    bool? vibrationEnabled,
+    bool? soundEnabled,
   }) {
     return ReminderSetting(
       minutesBefore: minutesBefore ?? this.minutesBefore,
       customMinutesBefore: customMinutesBefore ?? this.customMinutesBefore,
       notifyOnTime: notifyOnTime ?? this.notifyOnTime,
       notifyBefore: notifyBefore ?? this.notifyBefore,
+      vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
+      soundEnabled: soundEnabled ?? this.soundEnabled,
     );
   }
 
-  /// Rebuilds settings loaded before [customMinutesBefore] existed (e.g. after
-  /// hot reload) so new fields can be read safely.
+  /// Rebuilds settings loaded before [customMinutesBefore]/[vibrationEnabled]/
+  /// [soundEnabled] existed (e.g. after hot reload) so new fields can be read
+  /// safely.
   static ReminderSetting ensureCurrent(ReminderSetting setting) {
     var customMinutes = setting.minutesBefore;
     try {
@@ -246,11 +263,21 @@ class ReminderSetting {
     } catch (_) {
       // Stale instance from hot reload before customMinutesBefore was added.
     }
+    var vibrationEnabled = true;
+    var soundEnabled = true;
+    try {
+      vibrationEnabled = setting.vibrationEnabled;
+      soundEnabled = setting.soundEnabled;
+    } catch (_) {
+      // Stale instance from hot reload before these fields were added.
+    }
     return ReminderSetting(
       minutesBefore: setting.minutesBefore,
       customMinutesBefore: customMinutes,
       notifyOnTime: setting.notifyOnTime,
       notifyBefore: setting.notifyBefore,
+      vibrationEnabled: vibrationEnabled,
+      soundEnabled: soundEnabled,
     );
   }
 }

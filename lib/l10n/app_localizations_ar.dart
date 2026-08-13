@@ -309,6 +309,19 @@ class AppLocalizationsAr extends AppLocalizations {
   String get before => 'قبل';
 
   @override
+  String get reminderAlertTitle => 'التنبيه';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'يتطلب أيضًا تفعيل المفتاح المطابق في التفضيلات ليعمل التنبيه فعليًا.';
+
+  @override
+  String get vibrateChip => 'اهتزاز';
+
+  @override
+  String get soundChip => 'صوت';
+
+  @override
   String get remindBeforePrayerTitle => 'ذكّرني قبل الصلاة';
 
   @override

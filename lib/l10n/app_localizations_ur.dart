@@ -310,6 +310,19 @@ class AppLocalizationsUr extends AppLocalizations {
   String get before => 'پہلے';
 
   @override
+  String get reminderAlertTitle => 'الرٹ';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'دراصل الرٹ کرنے کے لیے ترجیحات میں متعلقہ سوئچ کا آن ہونا بھی ضروری ہے۔';
+
+  @override
+  String get vibrateChip => 'وائبریشن';
+
+  @override
+  String get soundChip => 'آواز';
+
+  @override
   String get remindBeforePrayerTitle => 'نماز سے پہلے یاد دلائیں';
 
   @override

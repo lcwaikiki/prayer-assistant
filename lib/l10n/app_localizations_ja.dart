@@ -301,6 +301,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get before => '前';
 
   @override
+  String get reminderAlertTitle => 'アラート';
+
+  @override
+  String get reminderAlertSubtitle => '実際にアラートするには環境設定内の対応するスイッチもオンである必要があります。';
+
+  @override
+  String get vibrateChip => '振動';
+
+  @override
+  String get soundChip => '音';
+
+  @override
   String get remindBeforePrayerTitle => '礼拝前に通知';
 
   @override

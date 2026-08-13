@@ -312,6 +312,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get before => 'Önce';
 
   @override
+  String get reminderAlertTitle => 'Uyarı';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'Gerçekten uyarması için Tercihler\'deki ilgili anahtarın da açık olması gerekir.';
+
+  @override
+  String get vibrateChip => 'Titreşim';
+
+  @override
+  String get soundChip => 'Ses';
+
+  @override
   String get remindBeforePrayerTitle => 'Namazdan önce hatırlat';
 
   @override

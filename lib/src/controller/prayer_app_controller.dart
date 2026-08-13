@@ -303,6 +303,8 @@ class PrayerAppController extends ChangeNotifier {
     int? customMinutesBefore,
     bool? notifyOnTime,
     bool? notifyBefore,
+    bool? vibrationEnabled,
+    bool? soundEnabled,
   }) async {
     final updated = Map<String, ReminderSetting>.from(_reminderSettings);
     final current = reminderFor(prayer);
@@ -311,6 +313,8 @@ class PrayerAppController extends ChangeNotifier {
       customMinutesBefore: customMinutesBefore,
       notifyOnTime: notifyOnTime,
       notifyBefore: notifyBefore,
+      vibrationEnabled: vibrationEnabled,
+      soundEnabled: soundEnabled,
     );
     updated[prayer] = next;
     _reminderSettings = updated;
@@ -319,7 +323,9 @@ class PrayerAppController extends ChangeNotifier {
     final shouldSyncNotifications =
         minutesBefore != null ||
         notifyOnTime != null ||
-        notifyBefore != null;
+        notifyBefore != null ||
+        vibrationEnabled != null ||
+        soundEnabled != null;
     if (!shouldSyncNotifications) {
       return;
     }

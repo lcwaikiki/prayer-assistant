@@ -36,6 +36,11 @@ class NotificationService {
 
     await _plugin.initialize(settings: initSettings);
     _useExactAlarms = await _requestPermissions();
+    await _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
+        ?.deleteNotificationChannel(channelId: 'prayer_reminders');
     _isInitialized = true;
   }
 
@@ -62,14 +67,35 @@ class NotificationService {
     return Int64List.fromList(pattern);
   }
 
+  /// Android locks a notification channel's sound/vibration to whatever it
+  /// was created with the *first* time that channel id is used — later calls
+  /// with a different [AndroidNotificationDetails] on the same id are
+  /// silently ignored by the OS. So each vibrate/sound combination needs its
+  /// own permanent channel id rather than one shared, mutable-looking one.
   static NotificationDetails _reminderNotificationDetails({
     required bool vibrationEnabled,
     required bool soundEnabled,
   }) {
+    final String channelId;
+    final String channelName;
+    if (vibrationEnabled && soundEnabled) {
+      channelId = 'prayer_reminders_vibrate_sound';
+      channelName = 'Prayer Reminders (vibrate + sound)';
+    } else if (vibrationEnabled) {
+      channelId = 'prayer_reminders_vibrate_only';
+      channelName = 'Prayer Reminders (vibrate only)';
+    } else if (soundEnabled) {
+      channelId = 'prayer_reminders_sound_only';
+      channelName = 'Prayer Reminders (sound only)';
+    } else {
+      channelId = 'prayer_reminders_silent';
+      channelName = 'Prayer Reminders (silent)';
+    }
+
     return NotificationDetails(
       android: AndroidNotificationDetails(
-        'prayer_reminders',
-        'Prayer Reminders',
+        channelId,
+        channelName,
         channelDescription: 'Prayer reminder notifications',
         importance: Importance.high,
         priority: Priority.high,
@@ -158,10 +184,6 @@ class NotificationService {
     required bool soundEnabled,
   }) async {
     await cancelAllPrayerNotifications();
-    final notificationDetails = _reminderNotificationDetails(
-      vibrationEnabled: vibrationEnabled,
-      soundEnabled: soundEnabled,
-    );
 
     final now = DateTime.now();
     final startDay = DateTime(now.year, now.month, now.day);
@@ -193,6 +215,10 @@ class NotificationService {
         }
 
         final displayName = prayerNameLabel(prayerName);
+        // The global toggle is a master switch: it must be on, and the
+        // per-prayer toggle then decides that specific prayer's alert.
+        final effectiveVibration = vibrationEnabled && setting.vibrationEnabled;
+        final effectiveSound = soundEnabled && setting.soundEnabled;
 
         if (setting.notifyOnTime && prayerTime.isAfter(now)) {
           notifications.add(
@@ -200,6 +226,8 @@ class NotificationService {
               fireAt: prayerTime,
               title: '$displayName time',
               body: '$locationName - It is time for $displayName prayer.',
+              vibrationEnabled: effectiveVibration,
+              soundEnabled: effectiveSound,
             ),
           );
         }
@@ -215,6 +243,8 @@ class NotificationService {
                 title: '$displayName in ${setting.minutesBefore} min',
                 body:
                     '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
+                vibrationEnabled: effectiveVibration,
+                soundEnabled: effectiveSound,
               ),
             );
           } else if (isTodayDay && prayerTime.isAfter(now)) {
@@ -226,6 +256,8 @@ class NotificationService {
                 title: '$displayName soon',
                 body:
                     '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
+                vibrationEnabled: effectiveVibration,
+                soundEnabled: effectiveSound,
               ),
             );
           }
@@ -239,6 +271,10 @@ class NotificationService {
     for (var i = 0; i < limited.length; i++) {
       final item = limited[i];
       final date = tz.TZDateTime.from(item.fireAt, tz.local);
+      final notificationDetails = _reminderNotificationDetails(
+        vibrationEnabled: item.vibrationEnabled,
+        soundEnabled: item.soundEnabled,
+      );
 
       try {
         final payload = jsonEncode({
@@ -302,9 +338,13 @@ class _ReminderNotification {
     required this.fireAt,
     required this.title,
     required this.body,
+    required this.vibrationEnabled,
+    required this.soundEnabled,
   });
 
   final DateTime fireAt;
   final String title;
   final String body;
+  final bool vibrationEnabled;
+  final bool soundEnabled;
 }

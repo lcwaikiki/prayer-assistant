@@ -662,6 +662,30 @@ abstract class AppLocalizations {
   /// **'Before'**
   String get before;
 
+  /// No description provided for @reminderAlertTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert'**
+  String get reminderAlertTitle;
+
+  /// No description provided for @reminderAlertSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Also needs the matching switch on in Preferences to actually alert.'**
+  String get reminderAlertSubtitle;
+
+  /// No description provided for @vibrateChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate'**
+  String get vibrateChip;
+
+  /// No description provided for @soundChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get soundChip;
+
   /// No description provided for @remindBeforePrayerTitle.
   ///
   /// In en, this message translates to:

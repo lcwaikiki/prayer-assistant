@@ -167,6 +167,51 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
+                          context.l10n.reminderAlertTitle,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          context.l10n.reminderAlertSubtitle,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            FilterChip(
+                              label: Text(context.l10n.vibrateChip),
+                              selected: setting.vibrationEnabled,
+                              onSelected: (value) =>
+                                  controller.updateReminderSetting(
+                                    prayer: widget.prayerName,
+                                    vibrationEnabled: value,
+                                  ),
+                            ),
+                            FilterChip(
+                              label: Text(context.l10n.soundChip),
+                              selected: setting.soundEnabled,
+                              onSelected: (value) =>
+                                  controller.updateReminderSetting(
+                                    prayer: widget.prayerName,
+                                    soundEnabled: value,
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
                           context.l10n.remindBeforePrayerTitle,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),

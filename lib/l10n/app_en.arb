@@ -136,6 +136,10 @@
   "reminderTypeTitle": "Reminder type (can select both)",
   "onTime": "On time",
   "before": "Before",
+  "reminderAlertTitle": "Alert",
+  "reminderAlertSubtitle": "Also needs the matching switch on in Preferences to actually alert.",
+  "vibrateChip": "Vibrate",
+  "soundChip": "Sound",
   "remindBeforePrayerTitle": "Remind me before prayer",
   "minutesValue": "{minutes} min",
   "@minutesValue": {

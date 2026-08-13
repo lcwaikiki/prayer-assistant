@@ -311,6 +311,19 @@ class AppLocalizationsFa extends AppLocalizations {
   String get before => 'قبل';
 
   @override
+  String get reminderAlertTitle => 'هشدار';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'برای هشدار واقعی، کلید مربوطه در تنظیمات هم باید روشن باشد.';
+
+  @override
+  String get vibrateChip => 'لرزش';
+
+  @override
+  String get soundChip => 'صدا';
+
+  @override
   String get remindBeforePrayerTitle => 'قبل از نماز یادآوری کن';
 
   @override

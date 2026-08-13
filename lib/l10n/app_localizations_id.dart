@@ -311,6 +311,19 @@ class AppLocalizationsId extends AppLocalizations {
   String get before => 'Sebelum';
 
   @override
+  String get reminderAlertTitle => 'Peringatan';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'Juga memerlukan sakelar yang sesuai aktif di Preferensi agar benar-benar memberi peringatan.';
+
+  @override
+  String get vibrateChip => 'Getar';
+
+  @override
+  String get soundChip => 'Suara';
+
+  @override
   String get remindBeforePrayerTitle => 'Ingatkan saya sebelum salat';
 
   @override

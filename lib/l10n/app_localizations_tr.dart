@@ -278,6 +278,20 @@ class AppLocalizationsTr extends AppLocalizations {
       'Namaz hatırlatıcı bildirimlerini aç veya kapat. Vakit ayarların korunur.';
 
   @override
+  String get reminderVibrationTitle => 'Hatırlatmada titreşim';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Hatırlatma geldiğinde yaklaşık 10 saniye aralıklı titreşim.';
+
+  @override
+  String get reminderSoundTitle => 'Hatırlatmada ses';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Hatırlatma geldiğinde bildirim sesi çalsın.';
+
+  @override
   String get remindersOn => 'Açık';
 
   @override

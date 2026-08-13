@@ -278,6 +278,19 @@ class AppLocalizationsFa extends AppLocalizations {
       'اعلان‌های یادآور نماز را روشن یا خاموش کنید. تنظیمات هر نماز حفظ می‌شود.';
 
   @override
+  String get reminderVibrationTitle => 'لرزش هنگام یادآوری';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'لرزش ضربانی به مدت حدود ۱۰ ثانیه هنگام فعال شدن یادآور.';
+
+  @override
+  String get reminderSoundTitle => 'پخش صدا هنگام یادآوری';
+
+  @override
+  String get reminderSoundSubtitle => 'پخش صدای اعلان هنگام فعال شدن یادآور.';
+
+  @override
   String get remindersOn => 'روشن';
 
   @override

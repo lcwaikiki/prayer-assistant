@@ -278,6 +278,20 @@ class AppLocalizationsFr extends AppLocalizations {
       'Active ou désactive les notifications de prière. Les réglages par prière sont conservés.';
 
   @override
+  String get reminderVibrationTitle => 'Vibrer au rappel';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Vibration par pulsations pendant environ 10 secondes lors d\'un rappel.';
+
+  @override
+  String get reminderSoundTitle => 'Jouer un son au rappel';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Jouer le son de notification lors d\'un rappel.';
+
+  @override
   String get remindersOn => 'On';
 
   @override

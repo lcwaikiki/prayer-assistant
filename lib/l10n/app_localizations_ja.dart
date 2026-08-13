@@ -269,6 +269,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get remindersOnOffSubtitle => '礼拝リマインダー通知のオン/オフ。礼拝ごとの設定は保持されます。';
 
   @override
+  String get reminderVibrationTitle => 'リマインダーで振動';
+
+  @override
+  String get reminderVibrationSubtitle => 'リマインダー発生時に約10秒間、断続的に振動します。';
+
+  @override
+  String get reminderSoundTitle => 'リマインダーで音を再生';
+
+  @override
+  String get reminderSoundSubtitle => 'リマインダー発生時に通知音を再生します。';
+
+  @override
   String get remindersOn => 'オン';
 
   @override

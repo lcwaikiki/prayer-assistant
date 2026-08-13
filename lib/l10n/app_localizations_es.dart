@@ -278,6 +278,20 @@ class AppLocalizationsEs extends AppLocalizations {
       'Activa o desactiva las notificaciones de oración. Se conservan los ajustes por oración.';
 
   @override
+  String get reminderVibrationTitle => 'Vibrar al recordar';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Vibración por pulsos durante unos 10 segundos cuando se active un recordatorio.';
+
+  @override
+  String get reminderSoundTitle => 'Reproducir sonido al recordar';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Reproduce el sonido de notificación cuando se active un recordatorio.';
+
+  @override
   String get remindersOn => 'On';
 
   @override

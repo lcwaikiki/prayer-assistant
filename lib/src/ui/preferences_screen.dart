@@ -204,6 +204,20 @@ class PreferencesScreen extends StatelessWidget {
                     onChanged: (enabled) =>
                         controller.updateRemindersSilenced(!enabled),
                   ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.reminderVibrationTitle),
+                    subtitle: Text(context.l10n.reminderVibrationSubtitle),
+                    value: controller.reminderVibrationEnabled,
+                    onChanged: controller.updateReminderVibrationEnabled,
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.reminderSoundTitle),
+                    subtitle: Text(context.l10n.reminderSoundSubtitle),
+                    value: controller.reminderSoundEnabled,
+                    onChanged: controller.updateReminderSoundEnabled,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),

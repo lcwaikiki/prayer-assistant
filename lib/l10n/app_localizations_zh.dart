@@ -269,6 +269,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get remindersOnOffSubtitle => '开启或关闭礼拜提醒通知，各礼拜的设置会保留。';
 
   @override
+  String get reminderVibrationTitle => '提醒时振动';
+
+  @override
+  String get reminderVibrationSubtitle => '提醒触发时脉冲式振动约10秒。';
+
+  @override
+  String get reminderSoundTitle => '提醒时播放声音';
+
+  @override
+  String get reminderSoundSubtitle => '提醒触发时播放通知声音。';
+
+  @override
   String get remindersOn => '开';
 
   @override

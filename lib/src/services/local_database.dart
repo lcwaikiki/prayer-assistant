@@ -13,6 +13,8 @@ class LocalDatabase {
   static const _widgetTextSizeKey = 'widget_text_size';
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
   static const _remindersSilencedKey = 'reminders_silenced';
+  static const _reminderVibrationEnabledKey = 'reminder_vibration_enabled';
+  static const _reminderSoundEnabledKey = 'reminder_sound_enabled';
   static const _themePreferenceKey = 'theme_preference';
   static const _localePreferenceKey = 'locale_preference';
   Database? _db;
@@ -197,6 +199,50 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_remindersSilencedKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveReminderVibrationEnabled(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _reminderVibrationEnabledKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadReminderVibrationEnabled() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_reminderVibrationEnabledKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveReminderSoundEnabled(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _reminderSoundEnabledKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadReminderSoundEnabled() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_reminderSoundEnabledKey],
       limit: 1,
     );
     if (rows.isEmpty) {

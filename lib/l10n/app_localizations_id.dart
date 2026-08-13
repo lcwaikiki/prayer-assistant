@@ -277,6 +277,20 @@ class AppLocalizationsId extends AppLocalizations {
       'Nyalakan atau matikan notifikasi pengingat salat. Pengaturan per salat tetap tersimpan.';
 
   @override
+  String get reminderVibrationTitle => 'Getar saat pengingat';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Getar berdenyut selama sekitar 10 detik saat pengingat muncul.';
+
+  @override
+  String get reminderSoundTitle => 'Putar suara saat pengingat';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Putar suara notifikasi saat pengingat muncul.';
+
+  @override
   String get remindersOn => 'On';
 
   @override

@@ -276,6 +276,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Turn prayer reminder notifications on or off. Per-prayer settings are kept.';
 
   @override
+  String get reminderVibrationTitle => 'Vibrate on reminder';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Pulse-vibrate for about 10 seconds when a reminder fires.';
+
+  @override
+  String get reminderSoundTitle => 'Play sound on reminder';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Play the notification sound when a reminder fires.';
+
+  @override
   String get remindersOn => 'On';
 
   @override

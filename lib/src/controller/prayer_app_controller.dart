@@ -45,6 +45,8 @@ class PrayerAppController extends ChangeNotifier {
   bool _statusBarRemainingEnabled = true;
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
   bool _remindersSilenced = false;
+  bool _reminderVibrationEnabled = true;
+  bool _reminderSoundEnabled = true;
   AppThemePreference _themePreference = AppThemePreference.system;
   AppLocalePreference _localePreference = AppLocalePreference.system;
 
@@ -66,6 +68,8 @@ class PrayerAppController extends ChangeNotifier {
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
   WidgetTextSize get widgetTextSize => _widgetTextSize;
   bool get remindersSilenced => _remindersSilenced;
+  bool get reminderVibrationEnabled => _reminderVibrationEnabled;
+  bool get reminderSoundEnabled => _reminderSoundEnabled;
   AppThemePreference get themePreference => _themePreference;
   ThemeMode get themeMode => switch (_themePreference) {
     AppThemePreference.system => ThemeMode.system,
@@ -90,6 +94,10 @@ class PrayerAppController extends ChangeNotifier {
       _statusBarRemainingEnabled =
           await database.loadStatusBarRemainingEnabled() ?? true;
       _remindersSilenced = await database.loadRemindersSilenced() ?? false;
+      _reminderVibrationEnabled =
+          await database.loadReminderVibrationEnabled() ?? true;
+      _reminderSoundEnabled =
+          await database.loadReminderSoundEnabled() ?? true;
       final rawThemePreference = await database.loadThemePreference();
       var themePreference = AppThemePreference.system;
       for (final item in AppThemePreference.values) {
@@ -367,6 +375,34 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateReminderVibrationEnabled(bool enabled) async {
+    if (_reminderVibrationEnabled == enabled) {
+      return;
+    }
+    _reminderVibrationEnabled = enabled;
+    await database.saveReminderVibrationEnabled(enabled);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateReminderSoundEnabled(bool enabled) async {
+    if (_reminderSoundEnabled == enabled) {
+      return;
+    }
+    _reminderSoundEnabled = enabled;
+    await database.saveReminderSoundEnabled(enabled);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    notifyListeners();
+  }
+
   Future<void> updateThemePreference(AppThemePreference preference) async {
     if (_themePreference == preference) {
       return;
@@ -472,6 +508,8 @@ class PrayerAppController extends ChangeNotifier {
       reminderSettings: _reminderSettings,
       locationName: selected.fullName,
       prayerNameLabel: (key) => localizedPrayerName(resolvedLocale, key),
+      vibrationEnabled: _reminderVibrationEnabled,
+      soundEnabled: _reminderSoundEnabled,
     );
   }
 

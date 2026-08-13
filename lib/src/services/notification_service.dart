@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -39,6 +40,46 @@ class NotificationService {
   }
 
   static const int _maxScheduledReminders = 48;
+
+  /// A repeating 0.5s-vibrate / 1s-pause pattern lasting about 10 seconds,
+  /// in the [delay, vibrate, pause, vibrate, pause, ...] format Android
+  /// notification channels expect.
+  static Int64List _reminderVibrationPattern() {
+    const vibrateMs = 500;
+    const pauseMs = 1000;
+    const totalMs = 10000;
+    final pattern = <int>[0];
+    var elapsed = 0;
+    while (elapsed < totalMs) {
+      pattern.add(vibrateMs);
+      elapsed += vibrateMs;
+      if (elapsed >= totalMs) {
+        break;
+      }
+      pattern.add(pauseMs);
+      elapsed += pauseMs;
+    }
+    return Int64List.fromList(pattern);
+  }
+
+  static NotificationDetails _reminderNotificationDetails({
+    required bool vibrationEnabled,
+    required bool soundEnabled,
+  }) {
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        'prayer_reminders',
+        'Prayer Reminders',
+        channelDescription: 'Prayer reminder notifications',
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: soundEnabled,
+        enableVibration: vibrationEnabled,
+        vibrationPattern: vibrationEnabled ? _reminderVibrationPattern() : null,
+      ),
+      iOS: DarwinNotificationDetails(presentSound: soundEnabled),
+    );
+  }
 
   Future<void> cancelAllPrayerNotifications() async {
     for (var id = 1; id <= _maxScheduledReminders; id++) {
@@ -113,8 +154,14 @@ class NotificationService {
     required Map<String, ReminderSetting> reminderSettings,
     required String locationName,
     required String Function(String prayerKey) prayerNameLabel,
+    required bool vibrationEnabled,
+    required bool soundEnabled,
   }) async {
     await cancelAllPrayerNotifications();
+    final notificationDetails = _reminderNotificationDetails(
+      vibrationEnabled: vibrationEnabled,
+      soundEnabled: soundEnabled,
+    );
 
     final now = DateTime.now();
     final startDay = DateTime(now.year, now.month, now.day);
@@ -203,16 +250,7 @@ class NotificationService {
           title: item.title,
           body: item.body,
           scheduledDate: date,
-          notificationDetails: const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'prayer_reminders',
-              'Prayer Reminders',
-              channelDescription: 'Prayer reminder notifications',
-              importance: Importance.high,
-              priority: Priority.high,
-            ),
-            iOS: DarwinNotificationDetails(),
-          ),
+          notificationDetails: notificationDetails,
           androidScheduleMode : AndroidScheduleMode.exactAllowWhileIdle,
           payload: payload,
         );
@@ -227,16 +265,7 @@ class NotificationService {
           title: item.title,
           body: item.body,
           scheduledDate: date,
-          notificationDetails: const NotificationDetails(
-            android: AndroidNotificationDetails(
-              'prayer_reminders',
-              'Prayer Reminders',
-              channelDescription: 'Prayer reminder notifications',
-              importance: Importance.high,
-              priority: Priority.high,
-            ),
-            iOS: DarwinNotificationDetails(),
-          ),
+          notificationDetails: notificationDetails,
           androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           payload: payload,
         );

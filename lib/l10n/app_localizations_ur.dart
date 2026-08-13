@@ -277,6 +277,19 @@ class AppLocalizationsUr extends AppLocalizations {
       'نماز کی یاد دہانی آن یا آف کریں۔ ہر نماز کی سیٹنگز محفوظ رہیں گی۔';
 
   @override
+  String get reminderVibrationTitle => 'یاد دہانی پر وائبریشن';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'یاد دہانی پر تقریباً 10 سیکنڈ تک وقفے وقفے سے وائبریشن ہو۔';
+
+  @override
+  String get reminderSoundTitle => 'یاد دہانی پر آواز چلائیں';
+
+  @override
+  String get reminderSoundSubtitle => 'یاد دہانی پر نوٹیفکیشن کی آواز چلائیں۔';
+
+  @override
   String get remindersOn => 'آن';
 
   @override

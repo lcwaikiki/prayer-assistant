@@ -276,6 +276,19 @@ class AppLocalizationsAr extends AppLocalizations {
       'تشغيل أو إيقاف إشعارات تذكير الصلاة مع الاحتفاظ بإعدادات كل صلاة.';
 
   @override
+  String get reminderVibrationTitle => 'الاهتزاز عند التذكير';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'اهتزاز نابض لمدة 10 ثوانٍ تقريبًا عند تفعيل التذكير.';
+
+  @override
+  String get reminderSoundTitle => 'تشغيل الصوت عند التذكير';
+
+  @override
+  String get reminderSoundSubtitle => 'تشغيل صوت الإشعار عند تفعيل التذكير.';
+
+  @override
   String get remindersOn => 'تشغيل';
 
   @override

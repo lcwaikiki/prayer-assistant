@@ -602,6 +602,30 @@ abstract class AppLocalizations {
   /// **'Turn prayer reminder notifications on or off. Per-prayer settings are kept.'**
   String get remindersOnOffSubtitle;
 
+  /// No description provided for @reminderVibrationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on reminder'**
+  String get reminderVibrationTitle;
+
+  /// No description provided for @reminderVibrationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pulse-vibrate for about 10 seconds when a reminder fires.'**
+  String get reminderVibrationSubtitle;
+
+  /// No description provided for @reminderSoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound on reminder'**
+  String get reminderSoundTitle;
+
+  /// No description provided for @reminderSoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play the notification sound when a reminder fires.'**
+  String get reminderSoundSubtitle;
+
   /// No description provided for @remindersOn.
   ///
   /// In en, this message translates to:

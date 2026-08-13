@@ -277,6 +277,20 @@ class AppLocalizationsDe extends AppLocalizations {
       'Gebetserinnerungen ein- oder ausschalten. Einstellungen pro Gebet bleiben erhalten.';
 
   @override
+  String get reminderVibrationTitle => 'Bei Erinnerung vibrieren';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Etwa 10 Sekunden lang pulsierend vibrieren, wenn eine Erinnerung ausgelöst wird.';
+
+  @override
+  String get reminderSoundTitle => 'Ton bei Erinnerung abspielen';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Benachrichtigungston abspielen, wenn eine Erinnerung ausgelöst wird.';
+
+  @override
   String get remindersOn => 'An';
 
   @override

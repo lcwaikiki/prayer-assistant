@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "年度基准",
   "calendarYearlyBasisGregorian": "公历",
   "calendarYearlyBasisHijri": "回历",
-  "calendarDeleteReminderConfirmTitle": "删除此提醒？",
-  "calendarDeleteReminderConfirmMessage": "这将停止“{title}”的所有未来通知。",
   "calendarReminderTitleRequired": "请输入标题",
   "calendarAnchorClockTime": "日历日期",
   "calendarAnchorPrayerTime": "礼拜时间",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "提前",
   "calendarOffsetAfter": "延后",
   "datesPrayerTimesTab": "礼拜时间",
-  "datesCalendarTab": "日历"
+  "datesCalendarTab": "日历",
+  "undo": "撤销",
+  "calendarReminderDeleted": "已删除“{title}”"
 }

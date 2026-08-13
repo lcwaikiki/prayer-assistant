@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "الأساس السنوي",
   "calendarYearlyBasisGregorian": "ميلادي",
   "calendarYearlyBasisHijri": "هجري",
-  "calendarDeleteReminderConfirmTitle": "حذف التذكير؟",
-  "calendarDeleteReminderConfirmMessage": "سيؤدي هذا إلى إيقاف جميع الإشعارات المستقبلية لـ \"{title}\".",
   "calendarReminderTitleRequired": "أدخل عنوانًا",
   "calendarAnchorClockTime": "تاريخ التقويم",
   "calendarAnchorPrayerTime": "وقت الصلاة",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "قبل",
   "calendarOffsetAfter": "بعد",
   "datesPrayerTimesTab": "أوقات الصلاة",
-  "datesCalendarTab": "التقويم"
+  "datesCalendarTab": "التقويم",
+  "undo": "تراجع",
+  "calendarReminderDeleted": "\"{title}\" تم الحذف"
 }

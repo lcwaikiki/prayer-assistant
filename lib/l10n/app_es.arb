@@ -4,7 +4,7 @@
   "tabLocation": "Ubicación",
   "tabToday": "Hoy",
   "tabDates": "Fechas",
-  "tabTesbih": "Rosario",
+  "tabTesbih": "Cuentas",
   "tooltipToggleLightDark": "Cambiar claro/oscuro",
   "tooltipRemindersOn": "Activar recordatorios",
   "tooltipRemindersOff": "Desactivar recordatorios",
@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "Base anual",
   "calendarYearlyBasisGregorian": "Gregoriano",
   "calendarYearlyBasisHijri": "Hégira",
-  "calendarDeleteReminderConfirmTitle": "¿Eliminar recordatorio?",
-  "calendarDeleteReminderConfirmMessage": "Esto detendrá todas las notificaciones futuras de \"{title}\".",
   "calendarReminderTitleRequired": "Introduce un título",
   "calendarAnchorClockTime": "Fecha del calendario",
   "calendarAnchorPrayerTime": "Hora de oración",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "Antes",
   "calendarOffsetAfter": "Después",
   "datesPrayerTimesTab": "Horarios de oración",
-  "datesCalendarTab": "Calendario"
+  "datesCalendarTab": "Calendario",
+  "undo": "Deshacer",
+  "calendarReminderDeleted": "\"{title}\" eliminado"
 }

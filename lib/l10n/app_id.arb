@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "Dasar tahunan",
   "calendarYearlyBasisGregorian": "Masehi",
   "calendarYearlyBasisHijri": "Hijriah",
-  "calendarDeleteReminderConfirmTitle": "Hapus pengingat?",
-  "calendarDeleteReminderConfirmMessage": "Ini akan menghentikan semua notifikasi mendatang untuk \"{title}\".",
   "calendarReminderTitleRequired": "Masukkan judul",
   "calendarAnchorClockTime": "Tanggal kalender",
   "calendarAnchorPrayerTime": "Waktu salat",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "Sebelum",
   "calendarOffsetAfter": "Setelah",
   "datesPrayerTimesTab": "Waktu Salat",
-  "datesCalendarTab": "Kalender"
+  "datesCalendarTab": "Kalender",
+  "undo": "Batalkan",
+  "calendarReminderDeleted": "\"{title}\" dihapus"
 }

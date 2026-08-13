@@ -4,7 +4,7 @@
   "tabLocation": "Lieu",
   "tabToday": "Aujourd'hui",
   "tabDates": "Dates",
-  "tabTesbih": "Chapelet",
+  "tabTesbih": "Perles",
   "tooltipToggleLightDark": "Basculer clair/sombre",
   "tooltipRemindersOn": "Activer les rappels",
   "tooltipRemindersOff": "Désactiver les rappels",
@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "Base annuelle",
   "calendarYearlyBasisGregorian": "Grégorien",
   "calendarYearlyBasisHijri": "Hijri",
-  "calendarDeleteReminderConfirmTitle": "Supprimer le rappel ?",
-  "calendarDeleteReminderConfirmMessage": "Cela arrêtera toutes les notifications futures pour « {title} ».",
   "calendarReminderTitleRequired": "Entrez un titre",
   "calendarAnchorClockTime": "Date du calendrier",
   "calendarAnchorPrayerTime": "Heure de prière",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "Avant",
   "calendarOffsetAfter": "Après",
   "datesPrayerTimesTab": "Heures de prière",
-  "datesCalendarTab": "Calendrier"
+  "datesCalendarTab": "Calendrier",
+  "undo": "Annuler",
+  "calendarReminderDeleted": "« {title} » supprimé"
 }

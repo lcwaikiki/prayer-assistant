@@ -181,13 +181,6 @@
   "calendarYearlyBasisLabel": "Yearly basis",
   "calendarYearlyBasisGregorian": "Gregorian",
   "calendarYearlyBasisHijri": "Hijri",
-  "calendarDeleteReminderConfirmTitle": "Delete reminder?",
-  "calendarDeleteReminderConfirmMessage": "This stops all future notifications for \"{title}\".",
-  "@calendarDeleteReminderConfirmMessage": {
-    "placeholders": {
-      "title": {}
-    }
-  },
   "calendarReminderTitleRequired": "Enter a title",
   "calendarAnchorClockTime": "Calendar date",
   "calendarAnchorPrayerTime": "Prayer time",
@@ -196,5 +189,12 @@
   "calendarOffsetBefore": "Before",
   "calendarOffsetAfter": "After",
   "datesPrayerTimesTab": "Prayer Times",
-  "datesCalendarTab": "Calendar"
+  "datesCalendarTab": "Calendar",
+  "undo": "Undo",
+  "calendarReminderDeleted": "\"{title}\" deleted",
+  "@calendarReminderDeleted": {
+    "placeholders": {
+      "title": {}
+    }
+  }
 }

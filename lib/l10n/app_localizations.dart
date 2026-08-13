@@ -902,18 +902,6 @@ abstract class AppLocalizations {
   /// **'Hijri'**
   String get calendarYearlyBasisHijri;
 
-  /// No description provided for @calendarDeleteReminderConfirmTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete reminder?'**
-  String get calendarDeleteReminderConfirmTitle;
-
-  /// No description provided for @calendarDeleteReminderConfirmMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This stops all future notifications for \"{title}\".'**
-  String calendarDeleteReminderConfirmMessage(Object title);
-
   /// No description provided for @calendarReminderTitleRequired.
   ///
   /// In en, this message translates to:
@@ -967,6 +955,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Calendar'**
   String get datesCalendarTab;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @calendarReminderDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" deleted'**
+  String calendarReminderDeleted(Object title);
 }
 
 class _AppLocalizationsDelegate

@@ -4,7 +4,7 @@
   "tabLocation": "Ort",
   "tabToday": "Heute",
   "tabDates": "Daten",
-  "tabTesbih": "Rosenkranz",
+  "tabTesbih": "Perlen",
   "tooltipToggleLightDark": "Hell/Dunkel umschalten",
   "tooltipRemindersOn": "Erinnerungen einschalten",
   "tooltipRemindersOff": "Erinnerungen ausschalten",
@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "Jährliche Basis",
   "calendarYearlyBasisGregorian": "Gregorianisch",
   "calendarYearlyBasisHijri": "Hidschri",
-  "calendarDeleteReminderConfirmTitle": "Erinnerung löschen?",
-  "calendarDeleteReminderConfirmMessage": "Dadurch werden alle zukünftigen Benachrichtigungen für \"{title}\" gestoppt.",
   "calendarReminderTitleRequired": "Titel eingeben",
   "calendarAnchorClockTime": "Kalenderdatum",
   "calendarAnchorPrayerTime": "Gebetszeit",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "Vorher",
   "calendarOffsetAfter": "Nachher",
   "datesPrayerTimesTab": "Gebetszeiten",
-  "datesCalendarTab": "Kalender"
+  "datesCalendarTab": "Kalender",
+  "undo": "Rückgängig",
+  "calendarReminderDeleted": "\"{title}\" gelöscht"
 }

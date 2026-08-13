@@ -407,9 +407,9 @@ class PrayerAppController extends ChangeNotifier {
 
   Future<void> addCalendarReminder(CalendarReminder reminder) async {
     _calendarReminders = [..._calendarReminders, reminder];
+    notifyListeners();
     await database.saveCalendarReminder(reminder);
     await calendarReminderService.scheduleReminder(reminder);
-    notifyListeners();
   }
 
   Future<void> updateCalendarReminder(CalendarReminder reminder) async {
@@ -417,18 +417,34 @@ class PrayerAppController extends ChangeNotifier {
       for (final existing in _calendarReminders)
         if (existing.id == reminder.id) reminder else existing,
     ];
+    notifyListeners();
     await database.saveCalendarReminder(reminder);
     await calendarReminderService.scheduleReminder(reminder);
-    notifyListeners();
   }
 
   Future<void> deleteCalendarReminder(String id) async {
     _calendarReminders = _calendarReminders
         .where((reminder) => reminder.id != id)
         .toList(growable: false);
+    notifyListeners();
     await database.deleteCalendarReminder(id);
     await calendarReminderService.cancelReminder(id);
+  }
+
+  Future<void> restoreCalendarReminder(
+    CalendarReminder reminder, {
+    required int index,
+  }) async {
+    if (_calendarReminders.any((existing) => existing.id == reminder.id)) {
+      return;
+    }
+    final safeIndex = index.clamp(0, _calendarReminders.length);
+    final nextReminders = [..._calendarReminders];
+    nextReminders.insert(safeIndex, reminder);
+    _calendarReminders = nextReminders;
     notifyListeners();
+    await database.saveCalendarReminder(reminder);
+    await calendarReminderService.scheduleReminder(reminder);
   }
 
   Future<void> toggleCalendarReminderEnabled(String id) async {

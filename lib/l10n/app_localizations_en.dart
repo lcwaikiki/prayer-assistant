@@ -434,14 +434,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'Hijri';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Delete reminder?';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'This stops all future notifications for \"$title\".';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'Enter a title';
 
   @override
@@ -467,4 +459,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'Calendar';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '\"$title\" deleted';
+  }
 }

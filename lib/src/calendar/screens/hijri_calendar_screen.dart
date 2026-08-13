@@ -109,12 +109,11 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
     return '${hijriMonth.longMonthName} ${hijriMonth.year}';
   }
 
-  void _openDayDetail(PrayerAppController controller, DateTime date) {
+  void _openDayDetail(DateTime date) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (sheetContext) =>
-          _DayDetailSheet(controller: controller, date: date),
+      builder: (sheetContext) => _DayDetailSheet(date: date),
     );
   }
 
@@ -133,7 +132,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
           _autoOpenTriggered = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              _openDayDetail(controller, _focusedDate);
+              _openDayDetail(_focusedDate);
             }
           });
         }
@@ -240,7 +239,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                         : null,
                     isToday: isToday,
                     hasReminder: hasReminder,
-                    onTap: () => _openDayDetail(controller, date),
+                    onTap: () => _openDayDetail(date),
                   );
                 },
               ),
@@ -345,9 +344,8 @@ class _DayCell extends StatelessWidget {
 }
 
 class _DayDetailSheet extends StatelessWidget {
-  const _DayDetailSheet({required this.controller, required this.date});
+  const _DayDetailSheet({required this.date});
 
-  final PrayerAppController controller;
   final DateTime date;
 
   String _recurrenceLabel(BuildContext context, CalendarReminder reminder) {
@@ -372,38 +370,50 @@ class _DayDetailSheet extends StatelessWidget {
     }
   }
 
-  Future<void> _confirmDelete(
+  void _deleteWithUndo(
     BuildContext context,
+    PrayerAppController controller,
     CalendarReminder reminder,
-  ) async {
+  ) {
     final l10n = context.l10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.calendarDeleteReminderConfirmTitle),
-        content: Text(
-          l10n.calendarDeleteReminderConfirmMessage(reminder.title),
+    final messenger = ScaffoldMessenger.of(context);
+    final index = controller.calendarReminders.indexWhere(
+      (existing) => existing.id == reminder.id,
+    );
+    controller.deleteCalendarReminder(reminder.id);
+    // Close the sheet first: a SnackBar attached to the underlying page's
+    // Scaffold renders *behind* an open modal bottom sheet, making Undo
+    // unreachable. Closing also reveals the refreshed calendar grid (the
+    // day's reminder dot) immediately behind the closing sheet.
+    Navigator.pop(context);
+
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(
+              child: Text(l10n.calendarReminderDeleted(reminder.title)),
+            ),
+            TextButton(
+              onPressed: () {
+                controller.restoreCalendarReminder(reminder, index: index);
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, false),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext, true),
-            child: Text(l10n.calendarDeleteReminder),
-          ),
-        ],
       ),
     );
-    if (confirmed == true) {
-      await controller.deleteCalendarReminder(reminder.id);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final controller = context.watch<PrayerAppController>();
     final reminders = controller.calendarReminders
         .where((reminder) => reminder.occursOn(date))
         .toList(growable: false);
@@ -458,7 +468,8 @@ class _DayDetailSheet extends StatelessWidget {
                       IconButton(
                         tooltip: l10n.calendarDeleteReminder,
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _confirmDelete(context, reminder),
+                        onPressed: () =>
+                            _deleteWithUndo(context, controller, reminder),
                       ),
                     ],
                   ),

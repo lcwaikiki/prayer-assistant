@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "مبنای سالانه",
   "calendarYearlyBasisGregorian": "میلادی",
   "calendarYearlyBasisHijri": "هجری",
-  "calendarDeleteReminderConfirmTitle": "یادآور حذف شود؟",
-  "calendarDeleteReminderConfirmMessage": "با این کار همه اعلان‌های آینده برای «{title}» متوقف می‌شود.",
   "calendarReminderTitleRequired": "یک عنوان وارد کنید",
   "calendarAnchorClockTime": "تاریخ تقویم",
   "calendarAnchorPrayerTime": "وقت نماز",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "قبل",
   "calendarOffsetAfter": "بعد",
   "datesPrayerTimesTab": "اوقات نماز",
-  "datesCalendarTab": "تقویم"
+  "datesCalendarTab": "تقویم",
+  "undo": "بازگردانی",
+  "calendarReminderDeleted": "«{title}» حذف شد"
 }

@@ -422,14 +422,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarYearlyBasisHijri => '回历';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => '删除此提醒？';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return '这将停止“$title”的所有未来通知。';
-  }
-
-  @override
   String get calendarReminderTitleRequired => '请输入标题';
 
   @override
@@ -455,4 +447,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get datesCalendarTab => '日历';
+
+  @override
+  String get undo => '撤销';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '已删除“$title”';
+  }
 }

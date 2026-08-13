@@ -435,14 +435,6 @@ class AppLocalizationsFa extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'هجری';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'یادآور حذف شود؟';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'با این کار همه اعلان‌های آینده برای «$title» متوقف می‌شود.';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'یک عنوان وارد کنید';
 
   @override
@@ -468,4 +460,12 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'تقویم';
+
+  @override
+  String get undo => 'بازگردانی';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '«$title» حذف شد';
+  }
 }

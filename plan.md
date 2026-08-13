@@ -122,6 +122,12 @@ Two sub-tabs:
       `MidnightReminderScheduler`, which already work for tesbih
       reminders, but that's inference, not a confirmed live test. Retry
       on a less loaded emulator or a physical device.
+- [x] Calendar reminder deletion now uses the same undo mechanism as
+      Beads item deletion: deletes immediately (no confirm dialog),
+      shows a 6-second Snackbar with an Undo action that re-inserts the
+      reminder at its original position and reschedules its
+      notification. The day-detail sheet is now reactive (`context.watch`)
+      so it updates live instead of needing to be reopened.
 
 ### Ideas / not started
 - [ ] Monthly recurrence on a Hijri day-of-month (currently monthly is

@@ -21,7 +21,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tabDates => '日付';
 
   @override
-  String get tabTesbih => 'ロザリオ';
+  String get tabTesbih => 'ビーズ';
 
   @override
   String get tooltipToggleLightDark => 'ライト/ダーク切替';
@@ -422,14 +422,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'ヒジュラ暦';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'リマインダーを削除しますか？';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return '「$title」の今後の通知がすべて停止されます。';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'タイトルを入力してください';
 
   @override
@@ -455,4 +447,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'カレンダー';
+
+  @override
+  String get undo => '元に戻す';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '「$title」を削除しました';
+  }
 }

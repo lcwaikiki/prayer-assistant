@@ -436,14 +436,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'Hicri';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Hatırlatıcı silinsin mi?';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'Bu, \"$title\" için gelecekteki tüm bildirimleri durdurur.';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'Bir başlık girin';
 
   @override
@@ -469,4 +461,12 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'Takvim';
+
+  @override
+  String get undo => 'Geri Al';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '\"$title\" silindi';
+  }
 }

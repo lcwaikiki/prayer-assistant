@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "سالانہ بنیاد",
   "calendarYearlyBasisGregorian": "عیسوی",
   "calendarYearlyBasisHijri": "ہجری",
-  "calendarDeleteReminderConfirmTitle": "یاد دہانی حذف کریں؟",
-  "calendarDeleteReminderConfirmMessage": "اس سے \"{title}\" کے لیے مستقبل کی تمام اطلاعات رک جائیں گی۔",
   "calendarReminderTitleRequired": "ایک عنوان درج کریں",
   "calendarAnchorClockTime": "کیلنڈر تاریخ",
   "calendarAnchorPrayerTime": "نماز کا وقت",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "پہلے",
   "calendarOffsetAfter": "بعد میں",
   "datesPrayerTimesTab": "نماز کے اوقات",
-  "datesCalendarTab": "کیلنڈر"
+  "datesCalendarTab": "کیلنڈر",
+  "undo": "واپس لائیں",
+  "calendarReminderDeleted": "\"{title}\" حذف ہوگیا"
 }

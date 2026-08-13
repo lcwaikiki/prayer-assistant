@@ -21,7 +21,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tabDates => 'Fechas';
 
   @override
-  String get tabTesbih => 'Rosario';
+  String get tabTesbih => 'Cuentas';
 
   @override
   String get tooltipToggleLightDark => 'Cambiar claro/oscuro';
@@ -437,14 +437,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'Hégira';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => '¿Eliminar recordatorio?';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'Esto detendrá todas las notificaciones futuras de \"$title\".';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'Introduce un título';
 
   @override
@@ -470,4 +462,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'Calendario';
+
+  @override
+  String get undo => 'Deshacer';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '\"$title\" eliminado';
+  }
 }

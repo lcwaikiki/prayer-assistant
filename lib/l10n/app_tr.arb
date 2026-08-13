@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "Yıllık esas",
   "calendarYearlyBasisGregorian": "Miladi",
   "calendarYearlyBasisHijri": "Hicri",
-  "calendarDeleteReminderConfirmTitle": "Hatırlatıcı silinsin mi?",
-  "calendarDeleteReminderConfirmMessage": "Bu, \"{title}\" için gelecekteki tüm bildirimleri durdurur.",
   "calendarReminderTitleRequired": "Bir başlık girin",
   "calendarAnchorClockTime": "Takvim tarihi",
   "calendarAnchorPrayerTime": "Namaz vakti",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "Önce",
   "calendarOffsetAfter": "Sonra",
   "datesPrayerTimesTab": "Namaz Vakitleri",
-  "datesCalendarTab": "Takvim"
+  "datesCalendarTab": "Takvim",
+  "undo": "Geri Al",
+  "calendarReminderDeleted": "\"{title}\" silindi"
 }

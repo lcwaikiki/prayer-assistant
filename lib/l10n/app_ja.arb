@@ -4,7 +4,7 @@
   "tabLocation": "場所",
   "tabToday": "今日",
   "tabDates": "日付",
-  "tabTesbih": "ロザリオ",
+  "tabTesbih": "ビーズ",
   "tooltipToggleLightDark": "ライト/ダーク切替",
   "tooltipRemindersOn": "リマインダーをオン",
   "tooltipRemindersOff": "リマインダーをオフ",
@@ -131,8 +131,6 @@
   "calendarYearlyBasisLabel": "年次基準",
   "calendarYearlyBasisGregorian": "西暦",
   "calendarYearlyBasisHijri": "ヒジュラ暦",
-  "calendarDeleteReminderConfirmTitle": "リマインダーを削除しますか？",
-  "calendarDeleteReminderConfirmMessage": "「{title}」の今後の通知がすべて停止されます。",
   "calendarReminderTitleRequired": "タイトルを入力してください",
   "calendarAnchorClockTime": "カレンダーの日付",
   "calendarAnchorPrayerTime": "礼拝時間",
@@ -141,5 +139,7 @@
   "calendarOffsetBefore": "前",
   "calendarOffsetAfter": "後",
   "datesPrayerTimesTab": "礼拝時間",
-  "datesCalendarTab": "カレンダー"
+  "datesCalendarTab": "カレンダー",
+  "undo": "元に戻す",
+  "calendarReminderDeleted": "「{title}」を削除しました"
 }

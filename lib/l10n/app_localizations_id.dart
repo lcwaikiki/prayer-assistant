@@ -435,14 +435,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'Hijriah';
 
   @override
-  String get calendarDeleteReminderConfirmTitle => 'Hapus pengingat?';
-
-  @override
-  String calendarDeleteReminderConfirmMessage(Object title) {
-    return 'Ini akan menghentikan semua notifikasi mendatang untuk \"$title\".';
-  }
-
-  @override
   String get calendarReminderTitleRequired => 'Masukkan judul';
 
   @override
@@ -468,4 +460,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get datesCalendarTab => 'Kalender';
+
+  @override
+  String get undo => 'Batalkan';
+
+  @override
+  String calendarReminderDeleted(Object title) {
+    return '\"$title\" dihapus';
+  }
 }

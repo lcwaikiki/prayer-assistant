@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../l10n/app_localizations.dart';
 import '../../calendar/models/calendar_reminder.dart';
+import '../../calendar/screens/calendar_anchor_date_picker.dart';
 import '../../l10n/prayer_names.dart';
 import '../../services/local_database.dart';
 import '../../utils/time_utils.dart';
@@ -191,18 +192,21 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   }
 
   Future<void> _pickAnchorDate() async {
-    final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _reminderAnchorDate ?? now,
-      firstDate: DateTime(now.year - 5),
-      lastDate: now.add(const Duration(days: 3650)),
+    final hijriPreferred =
+        (_recurrence == ReminderRecurrence.monthly &&
+            _monthlyBasis == CalendarBasis.hijri) ||
+        (_recurrence == ReminderRecurrence.yearly &&
+            _yearlyBasis == CalendarBasis.hijri);
+    final date = await showAnchorDatePicker(
+      context,
+      initialDate: _reminderAnchorDate ?? DateTime.now(),
+      hijriPreferred: hijriPreferred,
     );
     if (date == null || !mounted) {
       return;
     }
     setState(() {
-      _reminderAnchorDate = DateTime(date.year, date.month, date.day);
+      _reminderAnchorDate = date;
     });
   }
 

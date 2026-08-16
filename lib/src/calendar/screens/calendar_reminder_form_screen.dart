@@ -10,6 +10,7 @@ import '../../services/local_database.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../../utils/time_utils.dart';
 import '../models/calendar_reminder.dart';
+import 'calendar_anchor_date_picker.dart';
 
 enum _OffsetDirection { onTime, before, after }
 
@@ -125,18 +126,21 @@ class _CalendarReminderFormScreenState
   }
 
   Future<void> _pickAnchorDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _anchorDate ?? now,
-      firstDate: DateTime(now.year - 5),
-      lastDate: now.add(const Duration(days: 3650)),
+    final hijriPreferred =
+        (_recurrence == ReminderRecurrence.monthly &&
+            _monthlyBasis == CalendarBasis.hijri) ||
+        (_recurrence == ReminderRecurrence.yearly &&
+            _yearlyBasis == CalendarBasis.hijri);
+    final picked = await showAnchorDatePicker(
+      context,
+      initialDate: _anchorDate ?? DateTime.now(),
+      hijriPreferred: hijriPreferred,
     );
     if (picked == null || !mounted) {
       return;
     }
     setState(() {
-      _anchorDate = DateTime(picked.year, picked.month, picked.day);
+      _anchorDate = picked;
     });
   }
 

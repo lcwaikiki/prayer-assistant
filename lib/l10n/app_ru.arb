@@ -1,0 +1,206 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Молитвенный помощник",
+  "tabLocation": "Местоположение",
+  "tabToday": "Сегодня",
+  "tabDates": "Даты",
+  "tabTesbih": "Тасбих",
+  "tooltipToggleLightDark": "Переключить светлую/тёмную тему",
+  "tooltipRemindersOn": "Включить напоминания",
+  "tooltipRemindersOff": "Выключить напоминания",
+  "tooltipPreferences": "Настройки",
+  "remainingMinutesValue": "{minutes} мин",
+  "@remainingMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remainingMinutesUnknown": "-- мин",
+  "homeNoLocationTitle": "Местоположение не выбрано",
+  "homeNoLocationSubtitle": "Перейдите на вкладку «Местоположение» и сохраните ваш район.",
+  "homeNoPrayerTimesTitle": "Нет времени намаза в кэше",
+  "homeNoPrayerTimesSubtitle": "Нажмите «Обновить», чтобы загрузить данные на год.",
+  "refresh": "Обновить",
+  "todayWithDate": "Сегодня • {date}",
+  "@todayWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "hijriUnknown": "Хиджра: -",
+  "hijriWithDate": "Хиджра: {date}",
+  "@hijriWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "reminderSettingsTitle": "Настройки напоминаний",
+  "reminderSettingsSubtitle": "Нажмите на время намаза выше, чтобы настроить напоминание и минуты до.",
+  "tooltipScheduledDebug": "Отладка запланированных напоминаний",
+  "scheduledRemindersDebugTitle": "Запланированные напоминания (отладка)",
+  "pendingNotificationsCount": "Ожидающие уведомления: {count}",
+  "@pendingNotificationsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendTestNotificationNow": "Отправить тестовое уведомление сейчас",
+  "testNotificationSent": "Тестовое уведомление отправлено.",
+  "statusBarMinutesTitle": "Минуты в строке состояния",
+  "statusBarMinutesSubtitle": "Показывать постоянное уведомление об оставшихся минутах в строке состояния.",
+  "statusAutoRestoreTitle": "Автовосстановление при закрытии",
+  "statusAutoRestoreSubtitle": "Повторно создать элемент статуса, если пользователь его отклонил.",
+  "noPendingReminders": "Нет ожидающих напоминаний.",
+  "unknownFireTime": "Неизвестное время срабатывания",
+  "pastPrefix": "[ПРОШЛОЕ] ",
+  "reminderOnTimeAndBefore": "Вкл • Вовремя + {minutes} мин до",
+  "@reminderOnTimeAndBefore": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOnTimeOnly": "Вкл • Вовремя",
+  "reminderBeforeOnly": "Вкл • {minutes} мин до",
+  "@reminderBeforeOnly": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOff": "Напоминание выключено",
+  "nextPrayerTitle": "Следующий намаз",
+  "homeUpcomingRemindersTitle": "Предстоящие напоминания",
+  "startsIn": "Начнётся через {remaining}",
+  "@startsIn": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "selectYourLocation": "Выберите местоположение",
+  "locationHelp": "Используйте GPS для быстрой настройки или выберите страну/город вручную.",
+  "useCurrentLocation": "Использовать текущее местоположение",
+  "country": "Страна",
+  "stateCity": "Регион / Город",
+  "district": "Район",
+  "saveLocation": "Сохранить местоположение",
+  "selectedLocation": "Выбрано: {location}",
+  "@selectedLocation": {
+    "placeholders": {
+      "location": {}
+    }
+  },
+  "historySelectLocationFirst": "Сначала выберите местоположение, чтобы увидеть список намазов за год.",
+  "historyTableTitle": "Таблица времени намаза (весь год)",
+  "todayShort": "Сегодня",
+  "dateHeader": "Дата",
+  "imsak": "Фаджр",
+  "gunes": "Восход",
+  "ogle": "Зухр",
+  "ikindi": "Аср",
+  "aksam": "Магриб",
+  "yatsi": "Иша",
+  "hijriHeader": "Хиджра",
+  "preferencesTitle": "Настройки",
+  "languageTitle": "Язык",
+  "languageSystem": "Системный по умолчанию",
+  "themeModeTitle": "Тема оформления",
+  "themeSystem": "Системная",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная",
+  "appBarRemainingTitle": "Текст оставшегося времени в заголовке",
+  "showInTitle": "Показывать в заголовке",
+  "showAtRight": "Показывать справа",
+  "showAsSubtitle": "Показывать как подзаголовок",
+  "hideRemainingText": "Скрыть текст оставшегося времени",
+  "notificationMessageTitle": "Сообщение уведомления",
+  "notificationMessageShown": "Показывать",
+  "notificationMessageHidden": "Скрыто",
+  "widgetTextSizeTitle": "Размер текста виджета",
+  "widgetTextSizeSubtitle": "Размер текста, используемый в виджетах главного экрана.",
+  "widgetTextSizeExtraSmall": "Очень маленький",
+  "widgetTextSizeSmall": "Маленький",
+  "widgetTextSizeMedium": "Средний",
+  "widgetTextSizeLarge": "Большой",
+  "remindersOnOffTitle": "Напоминания вкл/выкл",
+  "remindersOnOffSubtitle": "Включите или выключите уведомления о намазе. Настройки для каждого намаза сохраняются.",
+  "reminderVibrationTitle": "Вибрация при напоминании",
+  "reminderVibrationSubtitle": "Пульсирующая вибрация около 10 секунд при срабатывании напоминания.",
+  "reminderSoundTitle": "Звук при напоминании",
+  "reminderSoundSubtitle": "Воспроизводить звук уведомления при срабатывании напоминания.",
+  "remindersOn": "Вкл",
+  "remindersOff": "Выкл",
+  "reminderScreenTitle": "{prayer} — напоминание",
+  "@reminderScreenTitle": {
+    "placeholders": {
+      "prayer": {}
+    }
+  },
+  "reminderTypeTitle": "Тип напоминания (можно выбрать оба)",
+  "onTime": "Вовремя",
+  "before": "До",
+  "after": "После",
+  "reminderAlertTitle": "Сигнал",
+  "reminderAlertSubtitle": "Для фактического сигнала также нужен включённый переключатель в настройках.",
+  "vibrateChip": "Вибрация",
+  "soundChip": "Звук",
+  "remindBeforePrayerTitle": "Напомнить перед намазом",
+  "remindAfterPrayerTitle": "Напомнить после намаза",
+  "minutesValue": "{minutes} мин",
+  "@minutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "custom": "Своё",
+  "customMinutes": "Свои минуты",
+  "customMinutesHint": "например 12",
+  "save": "Сохранить",
+  "enableBeforeToSelectMinutes": "Включите «До», чтобы выбрать минуты.",
+  "enableAfterToSelectMinutes": "Включите «После», чтобы выбрать минуты.",
+  "enterValidPositiveNumber": "Введите корректное положительное число.",
+  "useValueUpTo240": "Используйте значение до 240 минут.",
+  "customMinutesSaved": "Свои минуты сохранены.",
+  "cancel": "Отмена",
+  "calendarTabTooltip": "Хиджра-календарь",
+  "calendarPreviousMonth": "Предыдущий месяц",
+  "calendarNextMonth": "Следующий месяц",
+  "calendarSwapPrimary": "Переключить Хиджра/Григорианский",
+  "calendarShowSecondary": "Показать вторичную дату",
+  "calendarHideSecondary": "Скрыть вторичную дату",
+  "calendarNoRemindersOnDay": "Нет напоминаний на этот день",
+  "calendarAddReminder": "Добавить напоминание",
+  "calendarEditReminder": "Изменить",
+  "calendarDeleteReminder": "Удалить",
+  "calendarReminderFormTitleNew": "Новое напоминание",
+  "calendarReminderFormTitleEdit": "Изменить напоминание",
+  "calendarReminderTitleLabel": "Название",
+  "calendarReminderTitleHint": "например, начало Рамадана",
+  "calendarReminderNotesLabel": "Заметки (необязательно)",
+  "calendarReminderDateTimeLabel": "Дата и время",
+  "calendarReminderRecurrenceLabel": "Повтор",
+  "calendarRecurrenceOnce": "Один раз",
+  "calendarRecurrenceDaily": "Ежедневно",
+  "calendarRecurrenceWeekly": "Еженедельно",
+  "calendarRecurrenceMonthly": "Ежемесячно",
+  "calendarRecurrenceYearly": "Ежегодно",
+  "calendarMonthlyBasisLabel": "Основа месяца",
+  "calendarYearlyBasisLabel": "Основа года",
+  "calendarYearlyBasisGregorian": "Григорианский",
+  "calendarYearlyBasisHijri": "Хиджра",
+  "calendarReminderTitleRequired": "Введите название",
+  "calendarAnchorClockTime": "Календарная дата",
+  "calendarAnchorPrayerTime": "Время намаза",
+  "calendarSelectPrayer": "Выберите намаз",
+  "calendarOffsetOnTime": "Вовремя",
+  "calendarOffsetBefore": "До",
+  "calendarOffsetAfter": "После",
+  "calendarPickAnchorDate": "Выбрать дату",
+  "datesPrayerTimesTab": "Время намаза",
+  "datesCalendarTab": "Календарь",
+  "undo": "Отменить",
+  "calendarReminderDeleted": "«{title}» удалено",
+  "@calendarReminderDeleted": {
+    "placeholders": {
+      "title": {}
+    }
+  }
+}

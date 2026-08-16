@@ -14,6 +14,7 @@ const supportedAppLocales = <Locale>[
   Locale('zh'),
   Locale('ja'),
   Locale('id'),
+  Locale('ru'),
 ];
 
 extension AppLocalePreferenceX on AppLocalePreference {
@@ -40,6 +41,7 @@ extension AppLocalePreferenceX on AppLocalePreference {
       AppLocalePreference.zh => '中文',
       AppLocalePreference.ja => '日本語',
       AppLocalePreference.id => 'Bahasa Indonesia',
+      AppLocalePreference.ru => 'Русский',
       AppLocalePreference.system => systemDefaultLabel,
     };
   }

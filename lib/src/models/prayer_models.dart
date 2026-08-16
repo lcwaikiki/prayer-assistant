@@ -375,4 +375,5 @@ enum AppLocalePreference {
   zh,
   ja,
   id,
+  ru,
 }

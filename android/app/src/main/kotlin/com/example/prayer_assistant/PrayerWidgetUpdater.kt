@@ -72,7 +72,7 @@ object PrayerWidgetUpdater {
         for (widgetId in circleIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time_circle)
             val diameterDp = circleDiameterDp(context, widgetId)
-            setCircleTextSizeSp(views, textSize, diameterDp)
+            setCircleTextSizeSp(views, context, textSize, diameterDp)
             applyCountdown(views, R.id.widgetRemainingCircleValue, next, now)
             views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
             applyCircleBackground(views, context, widgetId)
@@ -233,20 +233,32 @@ object PrayerWidgetUpdater {
     }
 
     /**
-     * The countdown text must sit entirely inside the drawn circle, so its size is derived
-     * from the circle's diameter rather than a fixed preference: roughly a quarter of the
-     * diameter per glyph for a 5-character "HH.MM" string, scaled slightly by the user's
-     * text-size preference.
+     * The single countdown line must sit entirely inside the drawn circle, so its size is
+     * derived from the circle's diameter rather than a fixed preference. The countdown can
+     * render up to 7 glyphs ("H:MM:SS") in live-countdown mode, so it's sized for that
+     * worst case (~diameter/3 per glyph incl. spacing), scaled by the user's text-size
+     * preference, and capped at the circle's pixel width.
      */
-    private fun setCircleTextSizeSp(views: RemoteViews, sizePreference: String, diameterDp: Int) {
+    private fun setCircleTextSizeSp(
+        views: RemoteViews,
+        context: Context,
+        sizePreference: String,
+        diameterDp: Int
+    ) {
         val preferenceScale = when (sizePreference) {
             "extraSmall" -> 0.8f
             "small" -> 0.9f
             "large" -> 1.15f
             else -> 1.0f
         }
-        val sp = (diameterDp / 4.0f * preferenceScale).coerceIn(9f, 20f)
-        views.setTextViewTextSize(R.id.widgetRemainingCircleValue, TypedValue.COMPLEX_UNIT_SP, sp)
+        val countdownSp = (diameterDp / 3.0f * preferenceScale).coerceIn(20f, 36f)
+        views.setTextViewTextSize(
+            R.id.widgetRemainingCircleValue,
+            TypedValue.COMPLEX_UNIT_SP,
+            countdownSp
+        )
+        val maxWidthPx = (diameterDp * context.resources.displayMetrics.density * 0.85f).toInt()
+        views.setInt(R.id.widgetRemainingCircleValue, "setMaxWidth", maxWidthPx)
     }
 
     /**
@@ -297,7 +309,7 @@ object PrayerWidgetUpdater {
     }
 
     /**
-     * Above [WIDGET_HHMM_THRESHOLD_MINUTES] remaining, shows a static "HH.MM" string that we
+     * Above [WIDGET_HHMM_THRESHOLD_MINUTES] remaining, shows a static "HH:MM" string that we
      * refresh once a minute via [scheduleWidgetMinuteRefresh] (minutes-only precision doesn't
      * need finer-grained updates). Once under that threshold, switches to a live, self-ticking
      * "MM:SS" countdown via the platform Chronometer view, which ticks every second in the
@@ -327,7 +339,7 @@ object PrayerWidgetUpdater {
         val totalMinutes = remainingMs / 60_000L
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
-        return "%02d.%02d".format(hours, minutes)
+        return "%02d:%02d".format(hours, minutes)
     }
 
     /**
@@ -406,7 +418,7 @@ object PrayerWidgetUpdater {
     }
 
     /**
-     * Keeps the widgets' "HH.MM" display (see [applyCountdown]) accurate to the minute while
+     * Keeps the widgets' "HH:MM" display (see [applyCountdown]) accurate to the minute while
      * above [WIDGET_HHMM_THRESHOLD_MINUTES] remain. Once remaining time drops under that
      * threshold, the Chronometer views take over ticking every second on their own, so this
      * alarm cancels itself rather than continuing to fire.

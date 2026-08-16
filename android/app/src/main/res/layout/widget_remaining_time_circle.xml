@@ -20,10 +20,9 @@
         android:includeFontPadding="false"
         android:maxLines="1"
         android:ellipsize="end"
-        android:paddingHorizontal="4dp"
         android:text="--:--"
         android:textColor="#FFFFFFFF"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold" />
 
 </FrameLayout>

@@ -303,6 +303,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get before => '提前';
 
   @override
+  String get after => '延后';
+
+  @override
   String get reminderAlertTitle => '提醒方式';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => '在礼拜前提醒我';
+
+  @override
+  String get remindAfterPrayerTitle => '在礼拜后提醒我';
 
   @override
   String minutesValue(Object minutes) {
@@ -336,6 +342,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get enableBeforeToSelectMinutes => '启用“提前”后可选择分钟。';
+
+  @override
+  String get enableAfterToSelectMinutes => '启用“延后”后可选择分钟。';
 
   @override
   String get enterValidPositiveNumber => '请输入有效的正数。';

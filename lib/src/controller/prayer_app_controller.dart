@@ -332,8 +332,11 @@ class PrayerAppController extends ChangeNotifier {
     required String prayer,
     int? minutesBefore,
     int? customMinutesBefore,
+    int? minutesAfter,
+    int? customMinutesAfter,
     bool? notifyOnTime,
     bool? notifyBefore,
+    bool? notifyAfter,
     bool? vibrationEnabled,
     bool? soundEnabled,
   }) async {
@@ -342,8 +345,11 @@ class PrayerAppController extends ChangeNotifier {
     final next = current.copyWith(
       minutesBefore: minutesBefore,
       customMinutesBefore: customMinutesBefore,
+      minutesAfter: minutesAfter,
+      customMinutesAfter: customMinutesAfter,
       notifyOnTime: notifyOnTime,
       notifyBefore: notifyBefore,
+      notifyAfter: notifyAfter,
       vibrationEnabled: vibrationEnabled,
       soundEnabled: soundEnabled,
     );
@@ -353,8 +359,10 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
     final shouldSyncNotifications =
         minutesBefore != null ||
+        minutesAfter != null ||
         notifyOnTime != null ||
         notifyBefore != null ||
+        notifyAfter != null ||
         vibrationEnabled != null ||
         soundEnabled != null;
     if (!shouldSyncNotifications) {

@@ -315,6 +315,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get before => 'Önce';
 
   @override
+  String get after => 'Sonra';
+
+  @override
   String get reminderAlertTitle => 'Uyarı';
 
   @override
@@ -329,6 +332,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => 'Namazdan önce hatırlat';
+
+  @override
+  String get remindAfterPrayerTitle => 'Namazdan sonra hatırlat';
 
   @override
   String minutesValue(Object minutes) {
@@ -350,6 +356,10 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get enableBeforeToSelectMinutes =>
       'Dakika seçmek için \"Önce\"yi açın.';
+
+  @override
+  String get enableAfterToSelectMinutes =>
+      'Dakika seçmek için \"Sonra\"yı açın.';
 
   @override
   String get enterValidPositiveNumber => 'Geçerli pozitif sayı girin.';

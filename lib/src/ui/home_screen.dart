@@ -203,57 +203,59 @@ class _CompactPrayerRow extends StatelessWidget {
     } else if (reminderSetting.notifyOnTime) {
       statusText = context.l10n.reminderOnTimeOnly;
     } else if (reminderSetting.notifyBefore) {
-      statusText = context.l10n.reminderBeforeOnly(reminderSetting.minutesBefore);
+      statusText = context.l10n.reminderBeforeOnly(
+        reminderSetting.minutesBefore,
+      );
     } else {
       statusText = context.l10n.reminderOff;
     }
     final colorScheme = Theme.of(context).colorScheme;
-    return Container(
-      color: isNext ? colorScheme.primaryContainer : null,
-      child: ListTile(
-        onTap: onTap,
-        leading: Icon(
-          Icons.access_time,
-          size: 26,
+    return ListTile(
+      tileColor: isNext ? colorScheme.primaryContainer : null,
+      onTap: onTap,
+      leading: Icon(
+        Icons.access_time,
+        size: 26,
+        color: isNext ? colorScheme.onPrimaryContainer : null,
+      ),
+      title: Text(
+        context.l10n.prayerNameLabel(name),
+        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
           color: isNext ? colorScheme.onPrimaryContainer : null,
         ),
-        title: Text(
-          context.l10n.prayerNameLabel(name),
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: isNext ? colorScheme.onPrimaryContainer : null,
-          ),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Tooltip(
-              message: statusText,
-              child: Icon(
-                hasReminder
-                    ? Icons.notifications_active
-                    : Icons.notifications_off_outlined,
-                size: 22,
-                color: hasReminder
-                    ? (isNext ? colorScheme.onPrimaryContainer : colorScheme.primary)
-                    : colorScheme.outline,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                color: isNext ? colorScheme.onPrimaryContainer : null,
-              ),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              Icons.chevron_right,
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Tooltip(
+            message: statusText,
+            child: Icon(
+              hasReminder
+                  ? Icons.notifications_active
+                  : Icons.notifications_off_outlined,
               size: 22,
+              color: hasReminder
+                  ? (isNext
+                        ? colorScheme.onPrimaryContainer
+                        : colorScheme.primary)
+                  : colorScheme.outline,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               color: isNext ? colorScheme.onPrimaryContainer : null,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 4),
+          Icon(
+            Icons.chevron_right,
+            size: 22,
+            color: isNext ? colorScheme.onPrimaryContainer : null,
+          ),
+        ],
       ),
     );
   }

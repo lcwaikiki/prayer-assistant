@@ -203,7 +203,9 @@ class NotificationService {
       for (final prayerName in prayerOrder) {
         final setting =
             reminderSettings[prayerName] ?? ReminderSetting.defaults();
-        if (!setting.notifyOnTime && !setting.notifyBefore) {
+        if (!setting.notifyOnTime &&
+            !setting.notifyBefore &&
+            !setting.notifyAfter) {
           continue;
         }
         final prayerTime = parsePrayerTime(
@@ -256,6 +258,23 @@ class NotificationService {
                 title: '$displayName soon',
                 body:
                     '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
+                vibrationEnabled: effectiveVibration,
+                soundEnabled: effectiveSound,
+              ),
+            );
+          }
+        }
+
+        if (setting.notifyAfter) {
+          final afterTime = prayerTime.add(
+            Duration(minutes: setting.minutesAfter),
+          );
+          if (afterTime.isAfter(now)) {
+            notifications.add(
+              _ReminderNotification(
+                fireAt: afterTime,
+                title: '$displayName +${setting.minutesAfter} min',
+                body: '$locationName - It has been ${setting.minutesAfter} min since $displayName.',
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
               ),

@@ -314,6 +314,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get before => 'Sebelum';
 
   @override
+  String get after => 'Setelah';
+
+  @override
   String get reminderAlertTitle => 'Peringatan';
 
   @override
@@ -328,6 +331,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => 'Ingatkan saya sebelum salat';
+
+  @override
+  String get remindAfterPrayerTitle => 'Ingatkan saya setelah salat';
 
   @override
   String minutesValue(Object minutes) {
@@ -349,6 +355,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get enableBeforeToSelectMinutes =>
       'Aktifkan \"Sebelum\" untuk memilih menit.';
+
+  @override
+  String get enableAfterToSelectMinutes =>
+      'Aktifkan \"Setelah\" untuk memilih menit.';
 
   @override
   String get enterValidPositiveNumber => 'Masukkan angka positif yang valid.';

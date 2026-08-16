@@ -303,6 +303,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get before => '前';
 
   @override
+  String get after => '後';
+
+  @override
   String get reminderAlertTitle => 'アラート';
 
   @override
@@ -316,6 +319,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => '礼拝前に通知';
+
+  @override
+  String get remindAfterPrayerTitle => '礼拝後に通知';
 
   @override
   String minutesValue(Object minutes) {
@@ -336,6 +342,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get enableBeforeToSelectMinutes => '分を選ぶには「前」を有効にしてください。';
+
+  @override
+  String get enableAfterToSelectMinutes => '分を選ぶには「後」を有効にしてください。';
 
   @override
   String get enterValidPositiveNumber => '有効な正の数を入力してください。';

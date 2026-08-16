@@ -152,11 +152,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       });
     } else {
       final now = DateTime.now();
-      final date = await showDatePicker(
-        context: context,
+      final date = await showAnchorDatePicker(
+        context,
         initialDate: _reminderAt ?? now,
-        firstDate: now,
-        lastDate: now.add(const Duration(days: 3650)),
       );
       if (date == null || !mounted) {
         return;

@@ -167,16 +167,22 @@ class ReminderSetting {
   ReminderSetting({
     required this.minutesBefore,
     required this.customMinutesBefore,
+    required this.minutesAfter,
+    required this.customMinutesAfter,
     required this.notifyOnTime,
     required this.notifyBefore,
+    required this.notifyAfter,
     required this.vibrationEnabled,
     required this.soundEnabled,
   });
 
   final int minutesBefore;
   final int customMinutesBefore;
+  final int minutesAfter;
+  final int customMinutesAfter;
   final bool notifyOnTime;
   final bool notifyBefore;
+  final bool notifyAfter;
   final bool vibrationEnabled;
   final bool soundEnabled;
 
@@ -184,8 +190,11 @@ class ReminderSetting {
     return ReminderSetting(
       minutesBefore: 10,
       customMinutesBefore: 10,
+      minutesAfter: 10,
+      customMinutesAfter: 10,
       notifyOnTime: false,
       notifyBefore: false,
+      notifyAfter: false,
       vibrationEnabled: true,
       soundEnabled: true,
     );
@@ -195,8 +204,11 @@ class ReminderSetting {
     return {
       'minutesBefore': minutesBefore,
       'customMinutesBefore': customMinutesBefore,
+      'minutesAfter': minutesAfter,
+      'customMinutesAfter': customMinutesAfter,
       'notifyOnTime': notifyOnTime,
       'notifyBefore': notifyBefore,
+      'notifyAfter': notifyAfter,
       'vibrationEnabled': vibrationEnabled,
       'soundEnabled': soundEnabled,
     };
@@ -207,8 +219,11 @@ class ReminderSetting {
       return ReminderSetting(
         minutesBefore: 10,
         customMinutesBefore: 10,
+        minutesAfter: 10,
+        customMinutesAfter: 10,
         notifyOnTime: false,
         notifyBefore: value,
+        notifyAfter: false,
         vibrationEnabled: true,
         soundEnabled: true,
       );
@@ -219,15 +234,20 @@ class ReminderSetting {
       final legacyOnTime = rawTiming == ReminderTiming.onTime.name;
       final legacyBefore = rawTiming == ReminderTiming.before.name;
       final minutesBefore = ((value['minutesBefore'] as num?) ?? 10).toInt();
+      final minutesAfter = ((value['minutesAfter'] as num?) ?? 10).toInt();
       return ReminderSetting(
         minutesBefore: minutesBefore,
         customMinutesBefore:
             ((value['customMinutesBefore'] as num?) ?? minutesBefore).toInt(),
+        minutesAfter: minutesAfter,
+        customMinutesAfter:
+            ((value['customMinutesAfter'] as num?) ?? minutesAfter).toInt(),
         notifyOnTime:
             (value['notifyOnTime'] as bool?) ?? (legacyEnabled && legacyOnTime),
         notifyBefore:
             (value['notifyBefore'] as bool?) ??
             (legacyEnabled && (legacyBefore || !legacyOnTime)),
+        notifyAfter: (value['notifyAfter'] as bool?) ?? false,
         vibrationEnabled: (value['vibrationEnabled'] as bool?) ?? true,
         soundEnabled: (value['soundEnabled'] as bool?) ?? true,
       );
@@ -238,16 +258,22 @@ class ReminderSetting {
   ReminderSetting copyWith({
     int? minutesBefore,
     int? customMinutesBefore,
+    int? minutesAfter,
+    int? customMinutesAfter,
     bool? notifyOnTime,
     bool? notifyBefore,
+    bool? notifyAfter,
     bool? vibrationEnabled,
     bool? soundEnabled,
   }) {
     return ReminderSetting(
       minutesBefore: minutesBefore ?? this.minutesBefore,
       customMinutesBefore: customMinutesBefore ?? this.customMinutesBefore,
+      minutesAfter: minutesAfter ?? this.minutesAfter,
+      customMinutesAfter: customMinutesAfter ?? this.customMinutesAfter,
       notifyOnTime: notifyOnTime ?? this.notifyOnTime,
       notifyBefore: notifyBefore ?? this.notifyBefore,
+      notifyAfter: notifyAfter ?? this.notifyAfter,
       vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
     );
@@ -263,6 +289,18 @@ class ReminderSetting {
     } catch (_) {
       // Stale instance from hot reload before customMinutesBefore was added.
     }
+    var customAfterMinutes = setting.minutesAfter;
+    try {
+      customAfterMinutes = setting.customMinutesAfter;
+    } catch (_) {
+      // Stale instance from hot reload before customMinutesAfter was added.
+    }
+    var notifyAfter = false;
+    try {
+      notifyAfter = setting.notifyAfter;
+    } catch (_) {
+      // Stale instance from hot reload before notifyAfter was added.
+    }
     var vibrationEnabled = true;
     var soundEnabled = true;
     try {
@@ -274,8 +312,11 @@ class ReminderSetting {
     return ReminderSetting(
       minutesBefore: setting.minutesBefore,
       customMinutesBefore: customMinutes,
+      minutesAfter: setting.minutesAfter,
+      customMinutesAfter: customAfterMinutes,
       notifyOnTime: setting.notifyOnTime,
       notifyBefore: setting.notifyBefore,
+      notifyAfter: notifyAfter,
       vibrationEnabled: vibrationEnabled,
       soundEnabled: soundEnabled,
     );

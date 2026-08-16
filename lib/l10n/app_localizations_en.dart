@@ -313,6 +313,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get before => 'Before';
 
   @override
+  String get after => 'After';
+
+  @override
   String get reminderAlertTitle => 'Alert';
 
   @override
@@ -327,6 +330,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => 'Remind me before prayer';
+
+  @override
+  String get remindAfterPrayerTitle => 'Remind me after prayer';
 
   @override
   String minutesValue(Object minutes) {
@@ -348,6 +354,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get enableBeforeToSelectMinutes =>
       'Enable \"Before\" to select minutes.';
+
+  @override
+  String get enableAfterToSelectMinutes =>
+      'Enable \"After\" to select minutes.';
 
   @override
   String get enterValidPositiveNumber => 'Enter a valid positive number.';

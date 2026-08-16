@@ -137,11 +137,13 @@
   "reminderTypeTitle": "Reminder type (can select both)",
   "onTime": "On time",
   "before": "Before",
+  "after": "After",
   "reminderAlertTitle": "Alert",
   "reminderAlertSubtitle": "Also needs the matching switch on in Preferences to actually alert.",
   "vibrateChip": "Vibrate",
   "soundChip": "Sound",
   "remindBeforePrayerTitle": "Remind me before prayer",
+  "remindAfterPrayerTitle": "Remind me after prayer",
   "minutesValue": "{minutes} min",
   "@minutesValue": {
     "placeholders": {
@@ -153,6 +155,7 @@
   "customMinutesHint": "e.g. 12",
   "save": "Save",
   "enableBeforeToSelectMinutes": "Enable \"Before\" to select minutes.",
+  "enableAfterToSelectMinutes": "Enable \"After\" to select minutes.",
   "enterValidPositiveNumber": "Enter a valid positive number.",
   "useValueUpTo240": "Use a value up to 240 minutes.",
   "customMinutesSaved": "Custom minutes saved.",

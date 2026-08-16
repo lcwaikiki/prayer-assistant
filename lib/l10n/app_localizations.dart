@@ -668,6 +668,12 @@ abstract class AppLocalizations {
   /// **'Before'**
   String get before;
 
+  /// No description provided for @after.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get after;
+
   /// No description provided for @reminderAlertTitle.
   ///
   /// In en, this message translates to:
@@ -697,6 +703,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remind me before prayer'**
   String get remindBeforePrayerTitle;
+
+  /// No description provided for @remindAfterPrayerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me after prayer'**
+  String get remindAfterPrayerTitle;
 
   /// No description provided for @minutesValue.
   ///
@@ -733,6 +745,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable \"Before\" to select minutes.'**
   String get enableBeforeToSelectMinutes;
+
+  /// No description provided for @enableAfterToSelectMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable \"After\" to select minutes.'**
+  String get enableAfterToSelectMinutes;
 
   /// No description provided for @enterValidPositiveNumber.
   ///

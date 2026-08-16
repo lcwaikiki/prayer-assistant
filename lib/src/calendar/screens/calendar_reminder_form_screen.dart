@@ -86,11 +86,9 @@ class _CalendarReminderFormScreenState
   }
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await showAnchorDatePicker(
+      context,
       initialDate: _anchorAt,
-      firstDate: DateTime(1937),
-      lastDate: DateTime(2077),
     );
     if (picked == null) {
       return;

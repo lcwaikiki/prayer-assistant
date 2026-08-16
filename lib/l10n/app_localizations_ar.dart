@@ -312,6 +312,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get before => 'قبل';
 
   @override
+  String get after => 'بعد';
+
+  @override
   String get reminderAlertTitle => 'التنبيه';
 
   @override
@@ -326,6 +329,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get remindBeforePrayerTitle => 'ذكّرني قبل الصلاة';
+
+  @override
+  String get remindAfterPrayerTitle => 'ذكّرني بعد الصلاة';
 
   @override
   String minutesValue(Object minutes) {
@@ -346,6 +352,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get enableBeforeToSelectMinutes => 'فعّل \"قبل\" لاختيار الدقائق.';
+
+  @override
+  String get enableAfterToSelectMinutes => 'فعّل \"بعد\" لاختيار الدقائق.';
 
   @override
   String get enterValidPositiveNumber => 'أدخل رقمًا موجبًا صحيحًا.';

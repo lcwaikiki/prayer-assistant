@@ -80,6 +80,11 @@ Two sub-tabs:
 
 ### Home screen widgets (Android)
 - Configurable text size, kept in sync with prayer data.
+- Four widgets: Next Prayer (3x2), Remaining Time (2x2), a 1x1 circular
+  Remaining Time (countdown in a circle), and Today's Prayer Times (3x4,
+  all six prayers with the next one highlighted), plus the status-bar
+  countdown notification. All updated on the same prayer-transition alarm
+  and text-size preference.
 
 ## Todo checklist
 
@@ -184,6 +189,17 @@ Two sub-tabs:
       calendar on that date's day-detail sheet. Only rendered when
       there's at least one upcoming reminder, so it doesn't disturb the
       edge-to-edge Today tab layout when there's nothing to show.
+- [x] Beads vibration intensity is now more sensitive: it drives the
+      vibrator's actual amplitude (1-255) on devices that support it
+      (Android 8+) in addition to duration, and the duration/amplitude
+      curve is a square-root mapping so slider moves near the low end are
+      perceptible instead of everything feeling identical until the top.
+- [x] Two new home-screen widgets: a 1x1 circular Remaining Time widget
+      (countdown inside a circle) and a 3x4 Today's Prayer Times widget
+      (all six prayers with the next one highlighted), both fed from the
+      existing `updateWidgetData` timeline/today-prayers push with no new
+      channel calls; registered in the manifest and rendered in
+      `PrayerWidgetUpdater.updateAll`.
 - [x] Android home-screen widget surface for upcoming calendar reminders:
       a new `UpcomingRemindersWidgetProvider` (3rd widget alongside the
       existing Next Prayer / Remaining Time ones), following the same

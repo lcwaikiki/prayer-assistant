@@ -73,6 +73,26 @@
                 android:resource="@xml/next_prayer_widget_info" />
         </receiver>
         <receiver
+            android:name=".RemainingTimeCircleWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/remaining_time_circle_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".DailyPrayerTimesWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/daily_prayer_times_widget_info" />
+        </receiver>
+        <receiver
             android:name=".UpcomingRemindersWidgetProvider"
             android:exported="false">
             <intent-filter>

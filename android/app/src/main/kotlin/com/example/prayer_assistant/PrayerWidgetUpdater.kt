@@ -66,6 +66,27 @@ object PrayerWidgetUpdater {
             widgetManager.updateAppWidget(widgetId, views)
         }
 
+        val circleIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, RemainingTimeCircleWidgetProvider::class.java)
+        )
+        for (widgetId in circleIds) {
+            val views = RemoteViews(context.packageName, R.layout.widget_remaining_time_circle)
+            val diameterDp = circleDiameterDp(context, widgetId)
+            setCircleTextSizeSp(views, textSize, diameterDp)
+            applyCountdown(views, R.id.widgetRemainingCircleValue, next, now)
+            views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
+            applyCircleBackground(views, context, widgetId)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
+        val dailyPrayerIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, DailyPrayerTimesWidgetProvider::class.java)
+        )
+        for (widgetId in dailyPrayerIds) {
+            val views = buildDailyPrayerTimesView(context, next, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
         val nextIds = widgetManager.getAppWidgetIds(
             ComponentName(context, NextPrayerWidgetProvider::class.java)
         )
@@ -144,6 +165,117 @@ object PrayerWidgetUpdater {
             views.setTextViewText(whenIds[i], reminder.whenText)
         }
         return views
+    }
+
+    /**
+     * Today's full prayer list as fixed rows (name + time), with the next
+     * upcoming prayer highlighted. Reads the same already-localized today
+     * snapshot the Dart side pushes for the status notification, so no extra
+     * channel call is needed for this widget.
+     */
+    private fun buildDailyPrayerTimesView(
+        context: Context,
+        next: Pair<String, Long>?,
+        openPendingIntent: PendingIntent
+    ): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.widget_daily_prayer_times)
+        views.setTextViewText(
+            R.id.widgetDailyPrayersLocation,
+            PrayerWidgetStorage.readLocationLabel(context)
+        )
+        views.setOnClickPendingIntent(R.id.widgetDailyPrayersRoot, openPendingIntent)
+
+        val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
+        val rowIds = intArrayOf(
+            R.id.widgetDailyRow1,
+            R.id.widgetDailyRow2,
+            R.id.widgetDailyRow3,
+            R.id.widgetDailyRow4,
+            R.id.widgetDailyRow5,
+            R.id.widgetDailyRow6
+        )
+        val nameIds = intArrayOf(
+            R.id.widgetDailyName1,
+            R.id.widgetDailyName2,
+            R.id.widgetDailyName3,
+            R.id.widgetDailyName4,
+            R.id.widgetDailyName5,
+            R.id.widgetDailyName6
+        )
+        val timeIds = intArrayOf(
+            R.id.widgetDailyTime1,
+            R.id.widgetDailyTime2,
+            R.id.widgetDailyTime3,
+            R.id.widgetDailyTime4,
+            R.id.widgetDailyTime5,
+            R.id.widgetDailyTime6
+        )
+
+        for (i in rowIds.indices) {
+            val prayer = todayPrayers.getOrNull(i)
+            views.setTextViewText(nameIds[i], prayer?.first ?: "--")
+            views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
+            val isNext = prayer != null && next != null && prayer.second == next.second
+            if (isNext) {
+                views.setInt(rowIds[i], "setBackgroundResource", R.drawable.widget_row_highlight)
+            } else {
+                views.setInt(rowIds[i], "setBackgroundColor", 0)
+            }
+        }
+        return views
+    }
+
+    private fun circleDiameterDp(context: Context, widgetId: Int): Int {
+        val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
+        val widthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+        val heightDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
+        return minOf(widthDp, heightDp).coerceAtLeast(40)
+    }
+
+    /**
+     * The countdown text must sit entirely inside the drawn circle, so its size is derived
+     * from the circle's diameter rather than a fixed preference: roughly a quarter of the
+     * diameter per glyph for a 5-character "HH.MM" string, scaled slightly by the user's
+     * text-size preference.
+     */
+    private fun setCircleTextSizeSp(views: RemoteViews, sizePreference: String, diameterDp: Int) {
+        val preferenceScale = when (sizePreference) {
+            "extraSmall" -> 0.8f
+            "small" -> 0.9f
+            "large" -> 1.15f
+            else -> 1.0f
+        }
+        val sp = (diameterDp / 4.0f * preferenceScale).coerceIn(9f, 20f)
+        views.setTextViewTextSize(R.id.widgetRemainingCircleValue, TypedValue.COMPLEX_UNIT_SP, sp)
+    }
+
+    /**
+     * Renders a true square circle (solid teal with a subtle white ring) as the widget's
+     * image, sized to the smaller of the widget's reported cell dimensions so it never
+     * stretches into an ellipse. A plain oval background drawable can't do this — shape
+     * drawables always fill whatever bounds the host gives them.
+     */
+    private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int) {
+        val density = context.resources.displayMetrics.density
+        val diameter = (circleDiameterDp(context, widgetId) * density).toInt()
+
+        val bitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val radius = diameter / 2f
+        canvas.drawCircle(radius, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = Color.parseColor("#FF1F8A70")
+        })
+        canvas.drawCircle(
+            radius,
+            radius,
+            radius - 2f * density,
+            Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = Color.parseColor("#4DFFFFFF")
+                style = Paint.Style.STROKE
+                strokeWidth = 2f * density
+            }
+        )
+        views.setImageViewBitmap(R.id.widgetRemainingCircleBg, bitmap)
     }
 
     private fun setTextSizeSp(

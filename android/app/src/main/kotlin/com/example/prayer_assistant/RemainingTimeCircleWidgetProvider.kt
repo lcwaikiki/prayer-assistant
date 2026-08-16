@@ -1,0 +1,23 @@
+package com.example.prayer_assistant
+
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.Context
+
+class RemainingTimeCircleWidgetProvider : AppWidgetProvider() {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        PrayerWidgetUpdater.updateAll(context)
+        PrayerWidgetUpdater.scheduleNextUpdate(context)
+        PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
+    }
+
+    override fun onEnabled(context: Context) {
+        PrayerWidgetUpdater.updateAll(context)
+        PrayerWidgetUpdater.scheduleNextUpdate(context)
+        PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(context)
+    }
+}

@@ -140,6 +140,7 @@
   "calendarOffsetOnTime": "Vaktinde",
   "calendarOffsetBefore": "Önce",
   "calendarOffsetAfter": "Sonra",
+  "calendarPickAnchorDate": "Tarih seç",
   "datesPrayerTimesTab": "Namaz Vakitleri",
   "datesCalendarTab": "Takvim",
   "undo": "Geri Al",

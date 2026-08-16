@@ -462,6 +462,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarOffsetAfter => 'Setelah';
 
   @override
+  String get calendarPickAnchorDate => 'Pilih tanggal';
+
+  @override
   String get datesPrayerTimesTab => 'Waktu Salat';
 
   @override

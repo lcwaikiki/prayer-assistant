@@ -956,6 +956,12 @@ abstract class AppLocalizations {
   /// **'After'**
   String get calendarOffsetAfter;
 
+  /// No description provided for @calendarPickAnchorDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick date'**
+  String get calendarPickAnchorDate;
+
   /// No description provided for @datesPrayerTimesTab.
   ///
   /// In en, this message translates to:

@@ -190,6 +190,7 @@
   "calendarOffsetOnTime": "On time",
   "calendarOffsetBefore": "Before",
   "calendarOffsetAfter": "After",
+  "calendarPickAnchorDate": "Pick date",
   "datesPrayerTimesTab": "Prayer Times",
   "datesCalendarTab": "Calendar",
   "undo": "Undo",

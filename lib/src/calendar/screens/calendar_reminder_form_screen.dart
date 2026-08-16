@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/prayer_app_controller.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../l10n/l10n.dart';
 import '../../services/local_database.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
@@ -41,6 +42,7 @@ class _CalendarReminderFormScreenState
   late _OffsetDirection _offsetDirection;
   late final TextEditingController _offsetMinutesController;
   final FocusNode _offsetMinutesFocus = FocusNode();
+  DateTime? _anchorDate;
   String? _titleError;
   bool _saving = false;
 
@@ -62,6 +64,7 @@ class _CalendarReminderFormScreenState
     _yearlyBasis = reminder?.yearlyBasis ?? CalendarBasis.gregorian;
     _anchor = reminder?.anchor ?? CalendarReminderAnchor.clockTime;
     _anchorPrayerName = reminder?.anchorPrayerName ?? prayerOrder.first;
+    _anchorDate = reminder?.anchorDate;
     final initialOffset = reminder?.anchorOffsetMinutes ?? 0;
     _offsetDirection = initialOffset == 0
         ? _OffsetDirection.onTime
@@ -121,6 +124,30 @@ class _CalendarReminderFormScreenState
     });
   }
 
+  Future<void> _pickAnchorDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _anchorDate ?? now,
+      firstDate: DateTime(now.year - 5),
+      lastDate: now.add(const Duration(days: 3650)),
+    );
+    if (picked == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _anchorDate = DateTime(picked.year, picked.month, picked.day);
+    });
+  }
+
+  String _anchorDateLabel(AppLocalizations l10n) {
+    final anchorDate = _anchorDate;
+    if (anchorDate == null) {
+      return l10n.calendarPickAnchorDate;
+    }
+    return DateFormat('EEE, dd MMM yyyy').format(anchorDate);
+  }
+
   int _computeOffsetMinutes() {
     if (_offsetDirection == _OffsetDirection.onTime) {
       return 0;
@@ -170,6 +197,7 @@ class _CalendarReminderFormScreenState
       anchor: _anchor,
       anchorPrayerName: _anchorPrayerName,
       anchorOffsetMinutes: offsetMinutes,
+      anchorDate: _anchorDate,
       enabled: widget.reminder?.enabled ?? true,
     );
     if (_isEditing) {
@@ -499,6 +527,112 @@ class _CalendarReminderFormScreenState
                     ),
                   ),
                 ],
+              ),
+            ],
+            const SizedBox(height: 20),
+            Text(
+              l10n.calendarReminderRecurrenceLabel,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _ChoiceChipOption(
+                  label: l10n.calendarRecurrenceOnce,
+                  selected: _recurrence == ReminderRecurrence.once,
+                  onSelected: () =>
+                      setState(() => _recurrence = ReminderRecurrence.once),
+                ),
+                _ChoiceChipOption(
+                  label: l10n.calendarRecurrenceDaily,
+                  selected: _recurrence == ReminderRecurrence.daily,
+                  onSelected: () =>
+                      setState(() => _recurrence = ReminderRecurrence.daily),
+                ),
+                _ChoiceChipOption(
+                  label: l10n.calendarRecurrenceWeekly,
+                  selected: _recurrence == ReminderRecurrence.weekly,
+                  onSelected: () =>
+                      setState(() => _recurrence = ReminderRecurrence.weekly),
+                ),
+                _ChoiceChipOption(
+                  label: l10n.calendarRecurrenceMonthly,
+                  selected: _recurrence == ReminderRecurrence.monthly,
+                  onSelected: () =>
+                      setState(() => _recurrence = ReminderRecurrence.monthly),
+                ),
+                _ChoiceChipOption(
+                  label: l10n.calendarRecurrenceYearly,
+                  selected: _recurrence == ReminderRecurrence.yearly,
+                  onSelected: () =>
+                      setState(() => _recurrence = ReminderRecurrence.yearly),
+                ),
+              ],
+            ),
+            if (_recurrence == ReminderRecurrence.monthly) ...[
+              const SizedBox(height: 20),
+              Text(
+                l10n.calendarMonthlyBasisLabel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisGregorian,
+                    selected: _monthlyBasis == CalendarBasis.gregorian,
+                    onSelected: () => setState(
+                      () => _monthlyBasis = CalendarBasis.gregorian,
+                    ),
+                  ),
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisHijri,
+                    selected: _monthlyBasis == CalendarBasis.hijri,
+                    onSelected: () => setState(
+                      () => _monthlyBasis = CalendarBasis.hijri,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            if (_recurrence == ReminderRecurrence.yearly) ...[
+              const SizedBox(height: 20),
+              Text(
+                l10n.calendarYearlyBasisLabel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisGregorian,
+                    selected: _yearlyBasis == CalendarBasis.gregorian,
+                    onSelected: () => setState(
+                      () => _yearlyBasis = CalendarBasis.gregorian,
+                    ),
+                  ),
+                  _ChoiceChipOption(
+                    label: l10n.calendarYearlyBasisHijri,
+                    selected: _yearlyBasis == CalendarBasis.hijri,
+                    onSelected: () => setState(
+                      () => _yearlyBasis = CalendarBasis.hijri,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            if (_recurrence != ReminderRecurrence.daily) ...[
+              const SizedBox(height: 20),
+              OutlinedButton.icon(
+                onPressed: _pickAnchorDate,
+                icon: const Icon(Icons.calendar_month_outlined),
+                label: Text(_anchorDateLabel(l10n)),
               ),
             ],
           ],

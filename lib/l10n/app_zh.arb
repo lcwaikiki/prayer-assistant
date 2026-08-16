@@ -140,6 +140,7 @@
   "calendarOffsetOnTime": "准点",
   "calendarOffsetBefore": "提前",
   "calendarOffsetAfter": "延后",
+  "calendarPickAnchorDate": "选择日期",
   "datesPrayerTimesTab": "礼拜时间",
   "datesCalendarTab": "日历",
   "undo": "撤销",

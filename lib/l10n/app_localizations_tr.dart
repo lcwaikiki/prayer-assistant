@@ -463,6 +463,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarOffsetAfter => 'Sonra';
 
   @override
+  String get calendarPickAnchorDate => 'Tarih seç';
+
+  @override
   String get datesPrayerTimesTab => 'Namaz Vakitleri';
 
   @override

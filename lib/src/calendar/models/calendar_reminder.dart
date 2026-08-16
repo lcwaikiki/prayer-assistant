@@ -31,10 +31,11 @@ enum CalendarReminderAnchor {
   /// A fixed clock time, following [ReminderRecurrence].
   clockTime,
 
-  /// Tied to one of the day's prayer times plus an offset. Always behaves
-  /// as a recurring-daily reminder since prayer times repeat daily by
-  /// nature; [ReminderRecurrence] is ignored. The concrete fire time is
-  /// re-resolved each day (see CalendarMidnightScheduler).
+  /// Tied to one of the day's prayer times plus an offset. Follows
+  /// [ReminderRecurrence]; the recurrence anchor date is
+  /// [CalendarReminder.anchorDate] (falling back to [CalendarReminder.anchorAt]
+  /// for legacy reminders). The concrete fire time is re-resolved by the
+  /// scheduler (see CalendarMidnightScheduler).
   prayerTime;
 
   static CalendarReminderAnchor fromName(String? name) {
@@ -57,6 +58,7 @@ class CalendarReminder {
     this.anchor = CalendarReminderAnchor.clockTime,
     this.anchorPrayerName,
     this.anchorOffsetMinutes = 0,
+    this.anchorDate,
     this.enabled = true,
   });
 
@@ -89,6 +91,13 @@ class CalendarReminder {
   /// before, positive = after. Only meaningful for [CalendarReminderAnchor.prayerTime].
   final int anchorOffsetMinutes;
 
+  /// Recurrence anchor date for [CalendarReminderAnchor.prayerTime]
+  /// reminders whose [recurrence] isn't [ReminderRecurrence.daily]: which
+  /// day-of-week/day-of-month/day-of-year the reminder repeats on. Null for
+  /// legacy prayer-time reminders (always treated as daily) and for
+  /// clock-time reminders ([anchorAt] anchors those instead).
+  final DateTime? anchorDate;
+
   final bool enabled;
 
   CalendarReminder copyWith({
@@ -101,6 +110,7 @@ class CalendarReminder {
     CalendarReminderAnchor? anchor,
     String? anchorPrayerName,
     int? anchorOffsetMinutes,
+    DateTime? anchorDate,
     bool? enabled,
   }) {
     return CalendarReminder(
@@ -114,12 +124,17 @@ class CalendarReminder {
       anchor: anchor ?? this.anchor,
       anchorPrayerName: anchorPrayerName ?? this.anchorPrayerName,
       anchorOffsetMinutes: anchorOffsetMinutes ?? this.anchorOffsetMinutes,
+      anchorDate: anchorDate ?? this.anchorDate,
       enabled: enabled ?? this.enabled,
     );
   }
 
   /// Whether this reminder falls on [date] (time-of-day ignored). Used both
   /// for the calendar's day markers and the day-detail list.
+  ///
+  /// Legacy prayer-time reminders (no [anchorDate]) always occur, since the
+  /// old form only ever created daily prayer-time reminders; newer ones
+  /// follow [recurrence] anchored on [anchorDate].
   bool occursOn(DateTime date) {
     final day = DateTime(date.year, date.month, date.day);
     final anchorDay = DateTime(anchorAt.year, anchorAt.month, anchorAt.day);
@@ -127,8 +142,15 @@ class CalendarReminder {
       return false;
     }
     if (anchor == CalendarReminderAnchor.prayerTime) {
-      return true;
+      if (anchorDate == null) {
+        return true;
+      }
+      return _recurrenceMatches(day, anchorDay, anchorDate!);
     }
+    return _recurrenceMatches(day, anchorDay, anchorAt);
+  }
+
+  bool _recurrenceMatches(DateTime day, DateTime anchorDay, DateTime anchor) {
     switch (recurrence) {
       case ReminderRecurrence.once:
         return day == anchorDay;
@@ -141,14 +163,14 @@ class CalendarReminder {
           return day.day == anchorDay.day;
         }
         final dayHijri = HijriCalendar.fromDate(day);
-        final anchorHijri = HijriCalendar.fromDate(anchorDay);
+        final anchorHijri = HijriCalendar.fromDate(anchor);
         return dayHijri.hDay == anchorHijri.hDay;
       case ReminderRecurrence.yearly:
         if (yearlyBasis == CalendarBasis.gregorian) {
           return day.month == anchorDay.month && day.day == anchorDay.day;
         }
         final dayHijri = HijriCalendar.fromDate(day);
-        final anchorHijri = HijriCalendar.fromDate(anchorDay);
+        final anchorHijri = HijriCalendar.fromDate(anchor);
         return dayHijri.hMonth == anchorHijri.hMonth &&
             dayHijri.hDay == anchorHijri.hDay;
     }
@@ -195,22 +217,38 @@ class CalendarReminder {
       'anchor': anchor.name,
       'anchor_prayer_name': anchorPrayerName,
       'anchor_offset_minutes': anchorOffsetMinutes,
+      'anchor_date': anchorDate?.toIso8601String(),
       'enabled': enabled ? 1 : 0,
     };
   }
 
   factory CalendarReminder.fromMap(Map<String, Object?> map) {
+    final anchor = CalendarReminderAnchor.fromName(map['anchor']?.toString());
+    final rawAnchorDate = map['anchor_date']?.toString();
+    final anchorDate = (rawAnchorDate == null || rawAnchorDate.isEmpty)
+        ? null
+        : DateTime.tryParse(rawAnchorDate);
+    var recurrence = ReminderRecurrence.fromName(map['recurrence']?.toString());
+    // Legacy prayer-time reminders stored any recurrence but always behaved
+    // as daily (the old form never exposed recurrence for prayer time and
+    // the concrete time was re-resolved daily). Since they lack an
+    // anchorDate, migrate them to daily to avoid a regression where they'd
+    // stop repeating.
+    if (anchor == CalendarReminderAnchor.prayerTime && anchorDate == null) {
+      recurrence = ReminderRecurrence.daily;
+    }
     return CalendarReminder(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
       notes: (map['notes'] ?? '').toString(),
       anchorAt: DateTime.parse((map['anchor_at'] ?? '').toString()),
-      recurrence: ReminderRecurrence.fromName(map['recurrence']?.toString()),
+      recurrence: recurrence,
       monthlyBasis: CalendarBasis.fromName(map['monthly_basis']?.toString()),
       yearlyBasis: CalendarBasis.fromName(map['yearly_basis']?.toString()),
-      anchor: CalendarReminderAnchor.fromName(map['anchor']?.toString()),
+      anchor: anchor,
       anchorPrayerName: map['anchor_prayer_name']?.toString(),
       anchorOffsetMinutes: (map['anchor_offset_minutes'] as num?)?.toInt() ?? 0,
+      anchorDate: anchorDate,
       enabled: (map['enabled'] as int? ?? 1) == 1,
     );
   }

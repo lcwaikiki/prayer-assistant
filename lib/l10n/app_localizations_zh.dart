@@ -449,6 +449,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarOffsetAfter => '延后';
 
   @override
+  String get calendarPickAnchorDate => '选择日期';
+
+  @override
   String get datesPrayerTimesTab => '礼拜时间';
 
   @override

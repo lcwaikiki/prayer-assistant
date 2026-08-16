@@ -461,6 +461,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get calendarOffsetAfter => 'بعد میں';
 
   @override
+  String get calendarPickAnchorDate => 'تاریخ منتخب کریں';
+
+  @override
   String get datesPrayerTimesTab => 'نماز کے اوقات';
 
   @override

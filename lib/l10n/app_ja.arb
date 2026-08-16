@@ -140,6 +140,7 @@
   "calendarOffsetOnTime": "定刻",
   "calendarOffsetBefore": "前",
   "calendarOffsetAfter": "後",
+  "calendarPickAnchorDate": "日付を選択",
   "datesPrayerTimesTab": "礼拝時間",
   "datesCalendarTab": "カレンダー",
   "undo": "元に戻す",

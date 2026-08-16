@@ -464,6 +464,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get calendarOffsetAfter => 'Après';
 
   @override
+  String get calendarPickAnchorDate => 'Choisir la date';
+
+  @override
   String get datesPrayerTimesTab => 'Heures de prière';
 
   @override

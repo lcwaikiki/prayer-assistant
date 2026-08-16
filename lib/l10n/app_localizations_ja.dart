@@ -449,6 +449,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarOffsetAfter => '後';
 
   @override
+  String get calendarPickAnchorDate => '日付を選択';
+
+  @override
   String get datesPrayerTimesTab => '礼拝時間';
 
   @override

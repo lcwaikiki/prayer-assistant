@@ -4,6 +4,8 @@ import 'package:hijri/hijri_calendar.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../../navigation.dart';
+import '../../services/local_database.dart';
+import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../models/calendar_reminder.dart';
 import '../screens/hijri_calendar_screen.dart';
 
@@ -95,17 +97,13 @@ class CalendarReminderService {
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
 
     if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
-      // Always a plain one-shot for today's already-resolved time: the
-      // daily repeat is handled by CalendarMidnightScheduler re-resolving
-      // and re-scheduling this every midnight, since the underlying prayer
-      // time itself shifts from day to day.
-      final now = DateTime.now();
-      DateTime fireAt;
-      if (reminder.anchorAt.isAfter(now)) {
-        fireAt = reminder.anchorAt;
-      } else if (now.difference(reminder.anchorAt) <= _catchUpWindow) {
-        fireAt = now.add(const Duration(seconds: 5));
-      } else {
+      // Resolve the next occurrence's concrete fire time, honoring the
+      // reminder's recurrence (the underlying prayer time shifts day to
+      // day, so a fixed OS-level repeat would drift). Re-resolved nightly
+      // by CalendarMidnightScheduler so the reminder advances to the next
+      // matching day.
+      final fireAt = await _resolveNextPrayerFireTime(reminder);
+      if (fireAt == null) {
         return;
       }
       await _plugin.zonedSchedule(
@@ -350,5 +348,160 @@ class CalendarReminderService {
     // Fallback: should be unreachable given the loop above always finds a
     // future date within one Hijri year.
     return anchor;
+  }
+
+  /// Resolves the next concrete fire time for a prayer-anchored reminder,
+  /// honoring [CalendarReminder.recurrence]. Scans occurrence dates forward
+  /// from today, resolving each candidate date's own prayer time, and picks
+  /// the first one that is still upcoming (or, like the old logic, within
+  /// the catch-up window). Returns null when no upcoming occurrence exists
+  /// or the prayer data for a candidate date isn't cached yet.
+  Future<DateTime?> _resolveNextPrayerFireTime(CalendarReminder reminder) async {
+    final database = LocalDatabase();
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final anchor = reminder.anchorDate ?? reminder.anchorAt;
+    final anchorDate = DateTime(anchor.year, anchor.month, anchor.day);
+
+    var from = today;
+    for (var i = 0; i < 400; i++) {
+      final occurrence = _nextPrayerOccurrenceDate(reminder, anchorDate, from);
+      if (occurrence == null) {
+        return null;
+      }
+      final resolved = await resolvePrayerAnchoredTime(
+        database,
+        prayerName: reminder.anchorPrayerName,
+        offsetMinutes: reminder.anchorOffsetMinutes,
+        date: occurrence,
+      );
+      if (resolved == null) {
+        return null;
+      }
+      if (resolved.isAfter(now)) {
+        return resolved;
+      }
+      if (now.difference(resolved) <= _catchUpWindow) {
+        return now.add(const Duration(seconds: 5));
+      }
+      if (reminder.recurrence == ReminderRecurrence.once) {
+        return null;
+      }
+      from = occurrence.add(const Duration(days: 1));
+    }
+    return null;
+  }
+
+  /// The next occurrence date (>= [from]) matching the reminder's recurrence
+  /// and anchored to [anchor]'s date part, or null when there is none.
+  DateTime? _nextPrayerOccurrenceDate(
+    CalendarReminder reminder,
+    DateTime anchor,
+    DateTime from,
+  ) {
+    switch (reminder.recurrence) {
+      case ReminderRecurrence.once:
+        return anchor.isBefore(from) ? null : anchor;
+      case ReminderRecurrence.daily:
+        return from;
+      case ReminderRecurrence.weekly:
+        var candidate = from;
+        while (candidate.weekday != anchor.weekday) {
+          candidate = candidate.add(const Duration(days: 1));
+        }
+        return candidate;
+      case ReminderRecurrence.monthly:
+        if (reminder.monthlyBasis == CalendarBasis.gregorian) {
+          return _nextGregorianDayOfMonth(anchor, from);
+        }
+        return _nextHijriDayOfMonth(anchor, from);
+      case ReminderRecurrence.yearly:
+        if (reminder.yearlyBasis == CalendarBasis.gregorian) {
+          return _nextGregorianMonthDay(anchor, from);
+        }
+        return _nextHijriMonthDay(anchor, from);
+    }
+  }
+
+  /// Next date (>= [from]) with the anchor's day-of-month, skipping months
+  /// where that day doesn't exist (e.g. the 31st).
+  DateTime? _nextGregorianDayOfMonth(DateTime anchor, DateTime from) {
+    for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
+      final year = from.year + ((from.month - 1 + monthOffset) ~/ 12);
+      final month = ((from.month - 1 + monthOffset) % 12) + 1;
+      final daysInMonth = DateTime(year, month + 1, 0).day;
+      if (anchor.day > daysInMonth) {
+        continue;
+      }
+      final candidate = DateTime(year, month, anchor.day);
+      if (!candidate.isBefore(from)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  /// Next date (>= [from]) with the anchor's Gregorian month/day.
+  DateTime? _nextGregorianMonthDay(DateTime anchor, DateTime from) {
+    final candidate = DateTime(from.year, anchor.month, anchor.day);
+    if (!candidate.isBefore(from)) {
+      return candidate;
+    }
+    return DateTime(from.year + 1, anchor.month, anchor.day);
+  }
+
+  /// Next date (>= [from]) whose Hijri day-of-month equals the anchor's,
+  /// skipping months shorter than that day.
+  DateTime? _nextHijriDayOfMonth(DateTime anchor, DateTime from) {
+    final calendar = HijriCalendar();
+    final anchorHijri = HijriCalendar.fromDate(anchor);
+    final fromHijri = HijriCalendar.fromDate(from);
+    for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
+      final totalMonths =
+          (fromHijri.hYear * 12 + (fromHijri.hMonth - 1)) + monthOffset;
+      final hYear = totalMonths ~/ 12;
+      final hMonth = (totalMonths % 12) + 1;
+      if (anchorHijri.hDay > calendar.getDaysInMonth(hYear, hMonth)) {
+        continue;
+      }
+      final candidateDate = calendar.hijriToGregorian(
+        hYear,
+        hMonth,
+        anchorHijri.hDay,
+      );
+      final candidate = DateTime(
+        candidateDate.year,
+        candidateDate.month,
+        candidateDate.day,
+      );
+      if (!candidate.isBefore(from)) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+
+  /// Next date (>= [from]) whose Hijri month/day equals the anchor's,
+  /// trying the current Hijri year and then the next one.
+  DateTime? _nextHijriMonthDay(DateTime anchor, DateTime from) {
+    final calendar = HijriCalendar();
+    final anchorHijri = HijriCalendar.fromDate(anchor);
+    final fromHijri = HijriCalendar.fromDate(from);
+    for (final hYear in [fromHijri.hYear, fromHijri.hYear + 1]) {
+      final candidateDate = calendar.hijriToGregorian(
+        hYear,
+        anchorHijri.hMonth,
+        anchorHijri.hDay,
+      );
+      final candidate = DateTime(
+        candidateDate.year,
+        candidateDate.month,
+        candidateDate.day,
+      );
+      if (!candidate.isBefore(from)) {
+        return candidate;
+      }
+    }
+    return null;
   }
 }

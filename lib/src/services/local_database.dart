@@ -30,7 +30,7 @@ class LocalDatabase {
     final dbPath = path.join(databasesPath, _dbName);
     _db = await openDatabase(
       dbPath,
-      version: 3,
+      version: 4,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE prayer_times (
@@ -65,6 +65,11 @@ class LocalDatabase {
         if (oldVersion < 3) {
           await db.execute(_createCalendarRemindersTableSql);
         }
+        if (oldVersion < 4) {
+          await db.execute(
+            'ALTER TABLE calendar_reminders ADD COLUMN anchor_date TEXT',
+          );
+        }
       },
     );
     return _db!;
@@ -82,6 +87,7 @@ class LocalDatabase {
       anchor TEXT NOT NULL DEFAULT 'clockTime',
       anchor_prayer_name TEXT,
       anchor_offset_minutes INTEGER NOT NULL DEFAULT 0,
+      anchor_date TEXT,
       enabled INTEGER NOT NULL
     )
   ''';

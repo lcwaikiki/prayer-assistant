@@ -140,6 +140,7 @@
   "calendarOffsetOnTime": "Pünktlich",
   "calendarOffsetBefore": "Vorher",
   "calendarOffsetAfter": "Nachher",
+  "calendarPickAnchorDate": "Datum wählen",
   "datesPrayerTimesTab": "Gebetszeiten",
   "datesCalendarTab": "Kalender",
   "undo": "Rückgängig",

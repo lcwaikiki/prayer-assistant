@@ -140,6 +140,7 @@
   "calendarOffsetOnTime": "À l'heure",
   "calendarOffsetBefore": "Avant",
   "calendarOffsetAfter": "Après",
+  "calendarPickAnchorDate": "Choisir la date",
   "datesPrayerTimesTab": "Heures de prière",
   "datesCalendarTab": "Calendrier",
   "undo": "Annuler",

@@ -68,8 +68,10 @@ Two sub-tabs:
 ### Beads (Tesbihat) tab
 - Dhikr/counter items: count, checkpoint interval, vibration intensity,
   notes, reorder, edit/delete with undo.
-- Per-item reminders: once/daily clock-time, or prayer-time-anchored with
-  offset; tapping a reminder notification opens that item's counter screen.
+- Per-item reminders: once/daily/weekly/monthly/yearly clock-time
+  (Gregorian or Hijri basis), or prayer-time-anchored with offset and the
+  same recurrence options; tapping a reminder notification opens that
+  item's counter screen.
 
 ### Preferences
 - Language (system default + 11 locales), theme mode (system/light/dark),
@@ -80,6 +82,37 @@ Two sub-tabs:
 - Configurable text size, kept in sync with prayer data.
 
 ## Todo checklist
+
+### Beads reminder parity with calendar reminders
+- [x] Beads item reminders now support the full calendar-reminder recurrence
+      set: once / daily / weekly / monthly / yearly, with monthly and yearly
+      able to follow either the Gregorian date or the true Hijri date (shared
+      `ReminderRecurrence`/`CalendarBasis` enums from the calendar module).
+      `Item.reminderRepeat` (once/daily) is replaced by
+      `reminderRecurrence` + `reminderMonthlyBasis`/`reminderYearlyBasis`;
+      legacy Hive entries migrate on load via the old `reminderRepeat` value.
+- [x] `ItemReminderService` now schedules weekly (day-of-week repeat), monthly
+      (day-of-month repeat, or a one-shot on the next Hijri day-of-month) and
+      yearly (date repeat, or a one-shot on the next Hijri anniversary)
+      exactly like `CalendarReminderService`; prayer-anchored items stay
+      implicitly daily-recurring with the same catch-up-window behavior.
+- [x] Recurrence now applies to **prayer-time anchored** beads reminders too
+      (was implicitly daily only). New `Item.reminderAnchorDate` anchors the
+      recurrence (weekday for weekly, day-of-month for monthly, month/day for
+      yearly); the schedule is a one-shot resolved to the next matching
+      occurrence's own prayer time (via `resolvePrayerAnchoredTime` with a
+      `date`), advanced each midnight. Legacy prayer-time items (no anchor
+      date) migrate to daily, preserving their original behavior.
+- [x] `MidnightReminderScheduler` re-schedules prayer-anchored and Hijri-basis
+      monthly/yearly item reminders each midnight (no native OS repeat for a
+      floating prayer time or Hijri day), matching `CalendarMidnightScheduler`.
+- [x] Item form shows the recurrence chips (once/daily/weekly/monthly/yearly)
+      plus Gregorian/Hijri basis pickers for monthly and yearly; the date/time
+      picker and reminder label handle every recurrence the same way the
+      calendar reminder form does. The prayer-time branch now shows the same
+      recurrence chips and basis pickers plus an anchor-date picker
+      (defaults to today; hidden for daily).
+- [x] New recurrence/basis strings translated into all 10 Tesbihat locales.
 
 ### Hijri calendar + reminders — initial build
 - [x] Monthly Hijri/Gregorian calendar screen (switchable primary,

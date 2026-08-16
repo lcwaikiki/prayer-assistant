@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../calendar/models/calendar_reminder.dart';
 import '../../l10n/prayer_names.dart';
 import '../../services/local_database.dart';
 import '../../utils/time_utils.dart';
@@ -35,8 +36,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late int _vibrationIntensity;
   late bool _reminderEnabled;
   late ItemReminderAnchor _reminderAnchor;
-  late ItemReminderRepeat _reminderRepeat;
+  late ReminderRecurrence _recurrence;
+  late CalendarBasis _monthlyBasis;
+  late CalendarBasis _yearlyBasis;
   DateTime? _reminderAt;
+  DateTime? _reminderAnchorDate;
   late String _reminderPrayerName;
   late _OffsetDirection _offsetDirection;
   late final TextEditingController _offsetMinutesController;
@@ -63,8 +67,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _vibrationIntensity = item?.vibrationIntensity ?? 50;
     _reminderEnabled = item?.reminderEnabled ?? false;
     _reminderAnchor = item?.reminderAnchor ?? ItemReminderAnchor.clockTime;
-    _reminderRepeat = item?.reminderRepeat ?? ItemReminderRepeat.once;
+    _recurrence = item?.reminderRecurrence ?? ReminderRecurrence.once;
+    _monthlyBasis = item?.reminderMonthlyBasis ?? CalendarBasis.gregorian;
+    _yearlyBasis = item?.reminderYearlyBasis ?? CalendarBasis.gregorian;
     _reminderAt = item?.reminderAt;
+    _reminderAnchorDate = item?.reminderAnchorDate;
     _reminderPrayerName = item?.reminderPrayerName ?? prayerOrder.first;
     final initialOffset = item?.reminderOffsetMinutes ?? 0;
     _offsetDirection = initialOffset == 0
@@ -124,7 +131,25 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   }
 
   Future<void> _pickReminderTime() async {
-    if (_reminderRepeat == ItemReminderRepeat.once) {
+    if (_recurrence == ReminderRecurrence.daily) {
+      final initial = _reminderAt ?? DateTime.now();
+      final time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initial),
+      );
+      if (time == null) {
+        return;
+      }
+      setState(() {
+        _reminderAt = DateTime(
+          initial.year,
+          initial.month,
+          initial.day,
+          time.hour,
+          time.minute,
+        );
+      });
+    } else {
       final now = DateTime.now();
       final date = await showDatePicker(
         context: context,
@@ -151,24 +176,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           time.minute,
         );
       });
-    } else {
-      final initial = _reminderAt ?? DateTime.now();
-      final time = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(initial),
-      );
-      if (time == null) {
-        return;
-      }
-      setState(() {
-        _reminderAt = DateTime(
-          initial.year,
-          initial.month,
-          initial.day,
-          time.hour,
-          time.minute,
-        );
-      });
     }
   }
 
@@ -177,10 +184,34 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (reminderAt == null) {
       return l10n.reminderNotSet;
     }
-    if (_reminderRepeat == ItemReminderRepeat.daily) {
+    if (_recurrence == ReminderRecurrence.daily) {
       return DateFormat('HH:mm').format(reminderAt);
     }
     return DateFormat('EEE, dd MMM yyyy HH:mm').format(reminderAt);
+  }
+
+  Future<void> _pickAnchorDate() async {
+    final now = DateTime.now();
+    final date = await showDatePicker(
+      context: context,
+      initialDate: _reminderAnchorDate ?? now,
+      firstDate: DateTime(now.year - 5),
+      lastDate: now.add(const Duration(days: 3650)),
+    );
+    if (date == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _reminderAnchorDate = DateTime(date.year, date.month, date.day);
+    });
+  }
+
+  String _anchorDateLabel(TesbihatLocalizations l10n) {
+    final anchorDate = _reminderAnchorDate;
+    if (anchorDate == null) {
+      return l10n.reminderPickDate;
+    }
+    return DateFormat('EEE, dd MMM yyyy').format(anchorDate);
   }
 
   int _computeOffsetMinutes() {
@@ -194,6 +225,58 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     return _offsetDirection == _OffsetDirection.before
         ? -magnitude
         : magnitude;
+  }
+
+  Widget _recurrenceChips(TesbihatLocalizations l10n) {
+    ChoiceChip chip(ReminderRecurrence value, String label) => ChoiceChip(
+          label: Text(label),
+          selected: _recurrence == value,
+          onSelected: (selected) {
+            if (!selected) return;
+            setState(() => _recurrence = value);
+          },
+        );
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        chip(ReminderRecurrence.once, l10n.reminderRepeatOnce),
+        chip(ReminderRecurrence.daily, l10n.reminderRepeatDaily),
+        chip(ReminderRecurrence.weekly, l10n.reminderRepeatWeekly),
+        chip(ReminderRecurrence.monthly, l10n.reminderRepeatMonthly),
+        chip(ReminderRecurrence.yearly, l10n.reminderRepeatYearly),
+      ],
+    );
+  }
+
+  Widget _basisChips(TesbihatLocalizations l10n, bool monthly) {
+    final current = monthly ? _monthlyBasis : _yearlyBasis;
+    ChoiceChip chip(CalendarBasis basis) => ChoiceChip(
+          label: Text(
+            basis == CalendarBasis.gregorian
+                ? l10n.reminderBasisGregorian
+                : l10n.reminderBasisHijri,
+          ),
+          selected: current == basis,
+          onSelected: (selected) {
+            if (!selected) return;
+            setState(() {
+              if (monthly) {
+                _monthlyBasis = basis;
+              } else {
+                _yearlyBasis = basis;
+              }
+            });
+          },
+        );
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        chip(CalendarBasis.gregorian),
+        chip(CalendarBasis.hijri),
+      ],
+    );
   }
 
   Future<void> _save() async {
@@ -243,8 +326,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         currentProgress: widget.itemToEdit!.currentProgress.clamp(0, count),
         reminderEnabled: _reminderEnabled,
         reminderAnchor: _reminderAnchor,
-        reminderRepeat: _reminderRepeat,
+        reminderRecurrence: _recurrence,
+        reminderMonthlyBasis: _monthlyBasis,
+        reminderYearlyBasis: _yearlyBasis,
         reminderAt: reminderAt,
+        reminderAnchorDate: _reminderAnchorDate,
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
       );
@@ -258,8 +344,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         vibrationIntensity: _vibrationIntensity,
         reminderEnabled: _reminderEnabled,
         reminderAnchor: _reminderAnchor,
-        reminderRepeat: _reminderRepeat,
+        reminderRecurrence: _recurrence,
+        reminderMonthlyBasis: _monthlyBasis,
+        reminderYearlyBasis: _yearlyBasis,
         reminderAt: reminderAt,
+        reminderAnchorDate: _reminderAnchorDate,
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
       );
@@ -407,32 +496,30 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
               ),
               const SizedBox(height: 12),
               if (_reminderAnchor == ItemReminderAnchor.clockTime) ...[
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    ChoiceChip(
-                      label: Text(l10n.reminderRepeatOnce),
-                      selected: _reminderRepeat == ItemReminderRepeat.once,
-                      onSelected: (selected) {
-                        if (!selected) return;
-                        setState(
-                          () => _reminderRepeat = ItemReminderRepeat.once,
-                        );
-                      },
-                    ),
-                    ChoiceChip(
-                      label: Text(l10n.reminderRepeatDaily),
-                      selected: _reminderRepeat == ItemReminderRepeat.daily,
-                      onSelected: (selected) {
-                        if (!selected) return;
-                        setState(
-                          () => _reminderRepeat = ItemReminderRepeat.daily,
-                        );
-                      },
-                    ),
-                  ],
+                Text(
+                  l10n.reminderRecurrenceLabel,
+                  style: Theme.of(context).textTheme.labelLarge,
                 ),
+                const SizedBox(height: 8),
+                _recurrenceChips(l10n),
+                if (_recurrence == ReminderRecurrence.monthly) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.reminderMonthlyBasisLabel,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  _basisChips(l10n, true),
+                ],
+                if (_recurrence == ReminderRecurrence.yearly) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.reminderYearlyBasisLabel,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  _basisChips(l10n, false),
+                ],
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
                   key: const Key('reminder_time_button'),
@@ -463,6 +550,40 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                     }
                   },
                 ),
+                const SizedBox(height: 12),
+                Text(
+                  l10n.reminderRecurrenceLabel,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const SizedBox(height: 8),
+                _recurrenceChips(l10n),
+                if (_recurrence == ReminderRecurrence.monthly) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.reminderMonthlyBasisLabel,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  _basisChips(l10n, true),
+                ],
+                if (_recurrence == ReminderRecurrence.yearly) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    l10n.reminderYearlyBasisLabel,
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 8),
+                  _basisChips(l10n, false),
+                ],
+                if (_recurrence != ReminderRecurrence.daily) ...[
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    key: const Key('reminder_anchor_date_button'),
+                    onPressed: _pickAnchorDate,
+                    icon: const Icon(Icons.calendar_month_outlined),
+                    label: Text(_anchorDateLabel(l10n)),
+                  ),
+                ],
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,

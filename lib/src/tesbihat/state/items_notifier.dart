@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../calendar/models/calendar_reminder.dart';
 import '../data/item_repository.dart';
 import '../models/item.dart';
 import '../services/item_reminder_service.dart';
@@ -37,8 +38,11 @@ class ItemsNotifier extends Notifier<List<Item>> {
     required int vibrationIntensity,
     bool reminderEnabled = false,
     ItemReminderAnchor reminderAnchor = ItemReminderAnchor.clockTime,
-    ItemReminderRepeat reminderRepeat = ItemReminderRepeat.once,
+    ReminderRecurrence reminderRecurrence = ReminderRecurrence.once,
+    CalendarBasis reminderMonthlyBasis = CalendarBasis.gregorian,
+    CalendarBasis reminderYearlyBasis = CalendarBasis.gregorian,
     DateTime? reminderAt,
+    DateTime? reminderAnchorDate,
     String? reminderPrayerName,
     int reminderOffsetMinutes = 0,
   }) {
@@ -53,8 +57,11 @@ class ItemsNotifier extends Notifier<List<Item>> {
       currentProgress: 0,
       reminderEnabled: reminderEnabled,
       reminderAnchor: reminderAnchor,
-      reminderRepeat: reminderRepeat,
+      reminderRecurrence: reminderRecurrence,
+      reminderMonthlyBasis: reminderMonthlyBasis,
+      reminderYearlyBasis: reminderYearlyBasis,
       reminderAt: reminderAt,
+      reminderAnchorDate: reminderAnchorDate,
       reminderPrayerName: reminderPrayerName,
       reminderOffsetMinutes: reminderOffsetMinutes,
     );

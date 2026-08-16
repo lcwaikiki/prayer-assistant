@@ -1,14 +1,15 @@
 import '../../services/local_database.dart';
 import '../../utils/time_utils.dart';
 
-/// Resolves a prayer-anchored reminder's concrete fire time for today,
-/// reading from the same cached prayer schedule the main app uses. Returns
-/// null if there's no selected location, no cached data for today yet, or
-/// [prayerName] isn't one of [prayerOrder]'s keys.
+/// Resolves a prayer-anchored reminder's concrete fire time for [date]
+/// (defaults to today), reading from the same cached prayer schedule the main
+/// app uses. Returns null if there's no selected location, no cached data for
+/// [date] yet, or [prayerName] isn't one of [prayerOrder]'s keys.
 Future<DateTime?> resolvePrayerAnchoredTime(
   LocalDatabase database, {
   required String? prayerName,
   required int offsetMinutes,
+  DateTime? date,
 }) async {
   if (prayerName == null) {
     return null;
@@ -19,10 +20,10 @@ Future<DateTime?> resolvePrayerAnchoredTime(
     return null;
   }
 
-  final today = DateTime.now();
+  final target = date ?? DateTime.now();
   final day = await database.getDay(
     districtId: selected.districtId,
-    date: DateTime(today.year, today.month, today.day),
+    date: DateTime(target.year, target.month, target.day),
   );
   if (day == null) {
     return null;

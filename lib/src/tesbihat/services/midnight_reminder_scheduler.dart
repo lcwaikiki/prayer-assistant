@@ -4,11 +4,10 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../services/local_database.dart';
+import '../../calendar/models/calendar_reminder.dart';
 import '../data/item_repository.dart';
 import '../models/item.dart';
 import 'item_reminder_service.dart';
-import 'prayer_anchor_resolver.dart';
 
 const _midnightAlarmId = 5001;
 
@@ -29,33 +28,25 @@ Future<void> midnightReminderRefreshCallback() async {
   final repository = ItemRepository.hive(itemsBox);
   final reminderService = ItemReminderService();
   await reminderService.initialize();
-  final database = LocalDatabase();
 
   final items = repository.loadItems();
-  final updatedItems = <Item>[];
-  var changed = false;
 
   for (final item in items) {
-    if (item.reminderEnabled &&
-        item.reminderAnchor == ItemReminderAnchor.prayerTime) {
-      final resolved = await resolvePrayerAnchoredTime(
-        database,
-        prayerName: item.reminderPrayerName,
-        offsetMinutes: item.reminderOffsetMinutes,
-      );
-      if (resolved != null) {
-        final updated = item.copyWith(reminderAt: resolved);
-        updatedItems.add(updated);
-        changed = true;
-        await reminderService.scheduleReminder(updated);
-        continue;
-      }
+    if (!item.reminderEnabled) {
+      continue;
     }
-    updatedItems.add(item);
-  }
-
-  if (changed) {
-    repository.saveItems(updatedItems);
+    if (item.reminderAnchor == ItemReminderAnchor.prayerTime) {
+      // Re-resolve the next occurrence's prayer time (moves forward each
+      // day or to the next matching weekday/month-day).
+      await reminderService.scheduleReminder(item);
+    } else if ((item.reminderRecurrence == ReminderRecurrence.monthly &&
+            item.reminderMonthlyBasis == CalendarBasis.hijri) ||
+        (item.reminderRecurrence == ReminderRecurrence.yearly &&
+            item.reminderYearlyBasis == CalendarBasis.hijri)) {
+      // No native OS repeat for a floating Hijri day-of-month/month-day:
+      // recompute the next Gregorian occurrence today.
+      await reminderService.scheduleReminder(item);
+    }
   }
 }
 

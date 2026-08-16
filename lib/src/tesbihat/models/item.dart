@@ -1,22 +1,13 @@
-enum ItemReminderRepeat {
-  once,
-  daily;
-
-  static ItemReminderRepeat fromName(String? name) {
-    return ItemReminderRepeat.values.firstWhere(
-      (value) => value.name == name,
-      orElse: () => ItemReminderRepeat.once,
-    );
-  }
-}
+import '../../calendar/models/calendar_reminder.dart';
 
 enum ItemReminderAnchor {
   /// A fixed clock time picked directly (once or daily).
   clockTime,
 
-  /// Tied to one of the day's prayer times plus an offset. Always behaves
-  /// as a recurring reminder since prayer times repeat daily by nature; the
-  /// concrete fire time is re-resolved each day (see MidnightReminderScheduler).
+  /// Tied to one of the day's prayer times plus an offset. Honors
+  /// [ReminderRecurrence] by firing on each matching occurrence's prayer
+  /// time (which shifts day to day); the concrete fire time is re-resolved
+  /// each time the reminder is (re)scheduled.
   prayerTime;
 
   static ItemReminderAnchor fromName(String? name) {
@@ -38,11 +29,14 @@ class Item {
     required this.vibrationIntensity,
     this.currentProgress = 0,
     this.reminderEnabled = false,
-    this.reminderRepeat = ItemReminderRepeat.once,
+    this.reminderRecurrence = ReminderRecurrence.once,
+    this.reminderMonthlyBasis = CalendarBasis.gregorian,
+    this.reminderYearlyBasis = CalendarBasis.gregorian,
     this.reminderAt,
     this.reminderAnchor = ItemReminderAnchor.clockTime,
     this.reminderPrayerName,
     this.reminderOffsetMinutes = 0,
+    this.reminderAnchorDate,
   }) : assert(count > 0, 'count must be positive'),
        assert(check > 0, 'check must be positive'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -65,12 +59,28 @@ class Item {
   final int vibrationIntensity;
   final int currentProgress;
   final bool reminderEnabled;
-  final ItemReminderRepeat reminderRepeat;
 
-  /// For [ItemReminderAnchor.clockTime] + [ItemReminderRepeat.once] this is
-  /// the exact moment the reminder fires. For [ItemReminderRepeat.daily]
-  /// only the hour/minute are used. For [ItemReminderAnchor.prayerTime] this
-  /// holds the most recently resolved concrete fire time (recomputed daily).
+  /// Recurrence for both anchors. Mirrors [ReminderRecurrence]: once,
+  /// daily, weekly, monthly, yearly. For
+  /// [ItemReminderAnchor.clockTime] reminders the fire time is fixed and
+  /// follows the recurrence directly; for
+  /// [ItemReminderAnchor.prayerTime] reminders each matching occurrence's
+  /// own prayer time is used (it shifts day to day).
+  final ReminderRecurrence reminderRecurrence;
+
+  /// Only meaningful when [reminderRecurrence] is [ReminderRecurrence.monthly].
+  final CalendarBasis reminderMonthlyBasis;
+
+  /// Only meaningful when [reminderRecurrence] is [ReminderRecurrence.yearly].
+  final CalendarBasis reminderYearlyBasis;
+
+  /// For [ItemReminderAnchor.clockTime] + [ReminderRecurrence.once] this is
+  /// the exact moment the reminder fires. For every other recurrence the
+  /// date part anchors which day-of-week/day-of-month/month-day it repeats
+  /// on and the time part is the fire time. For
+  /// [ItemReminderAnchor.prayerTime] this holds the most recently resolved
+  /// concrete fire time; it is only used as a fallback recurrence anchor
+  /// when [reminderAnchorDate] is null.
   final DateTime? reminderAt;
 
   final ItemReminderAnchor reminderAnchor;
@@ -83,6 +93,12 @@ class Item {
   /// before, positive = after.
   final int reminderOffsetMinutes;
 
+  /// For [ItemReminderAnchor.prayerTime] reminders the date that anchors
+  /// the recurrence: which weekday (weekly), day-of-month (monthly) or
+  /// month/day (yearly) the reminder repeats on. Only the date part matters.
+  /// Null for legacy prayer-time reminders, which are treated as daily.
+  final DateTime? reminderAnchorDate;
+
   Item copyWith({
     String? id,
     String? title,
@@ -93,11 +109,14 @@ class Item {
     int? vibrationIntensity,
     int? currentProgress,
     bool? reminderEnabled,
-    ItemReminderRepeat? reminderRepeat,
+    ReminderRecurrence? reminderRecurrence,
+    CalendarBasis? reminderMonthlyBasis,
+    CalendarBasis? reminderYearlyBasis,
     DateTime? reminderAt,
     ItemReminderAnchor? reminderAnchor,
     String? reminderPrayerName,
     int? reminderOffsetMinutes,
+    DateTime? reminderAnchorDate,
   }) {
     return Item(
       id: id ?? this.id,
@@ -109,12 +128,16 @@ class Item {
       vibrationIntensity: vibrationIntensity ?? this.vibrationIntensity,
       currentProgress: currentProgress ?? this.currentProgress,
       reminderEnabled: reminderEnabled ?? this.reminderEnabled,
-      reminderRepeat: reminderRepeat ?? this.reminderRepeat,
+      reminderRecurrence: reminderRecurrence ?? this.reminderRecurrence,
+      reminderMonthlyBasis:
+          reminderMonthlyBasis ?? this.reminderMonthlyBasis,
+      reminderYearlyBasis: reminderYearlyBasis ?? this.reminderYearlyBasis,
       reminderAt: reminderAt ?? this.reminderAt,
       reminderAnchor: reminderAnchor ?? this.reminderAnchor,
       reminderPrayerName: reminderPrayerName ?? this.reminderPrayerName,
       reminderOffsetMinutes:
           reminderOffsetMinutes ?? this.reminderOffsetMinutes,
+      reminderAnchorDate: reminderAnchorDate ?? this.reminderAnchorDate,
     );
   }
 
@@ -129,16 +152,38 @@ class Item {
       'vibrationIntensity': vibrationIntensity,
       'currentProgress': currentProgress,
       'reminderEnabled': reminderEnabled,
-      'reminderRepeat': reminderRepeat.name,
+      'reminderRecurrence': reminderRecurrence.name,
+      'reminderMonthlyBasis': reminderMonthlyBasis.name,
+      'reminderYearlyBasis': reminderYearlyBasis.name,
       'reminderAt': reminderAt?.toIso8601String(),
       'reminderAnchor': reminderAnchor.name,
       'reminderPrayerName': reminderPrayerName,
       'reminderOffsetMinutes': reminderOffsetMinutes,
+      'reminderAnchorDate': reminderAnchorDate?.toIso8601String(),
     };
   }
 
   factory Item.fromMap(Map<dynamic, dynamic> map) {
     final rawReminderAt = map['reminderAt']?.toString();
+    final anchor = ItemReminderAnchor.fromName(
+      map['reminderAnchor']?.toString(),
+    );
+    final rawAnchorDate = map['reminderAnchorDate']?.toString();
+    final reminderAnchorDate = (rawAnchorDate == null || rawAnchorDate.isEmpty)
+        ? null
+        : DateTime.tryParse(rawAnchorDate);
+    var recurrence = ReminderRecurrence.fromName(
+      map['reminderRecurrence']?.toString() ??
+          map['reminderRepeat']?.toString(),
+    );
+    // Legacy prayer-time reminders stored 'once'/'daily' but always
+    // behaved as daily (the form never exposed recurrence for prayer-time
+    // and the concrete time was re-resolved daily). Since they lack a
+    // reminderAnchorDate, migrate them to daily to avoid a regression where
+    // they'd stop repeating.
+    if (anchor == ItemReminderAnchor.prayerTime && reminderAnchorDate == null) {
+      recurrence = ReminderRecurrence.daily;
+    }
     return Item(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
@@ -149,17 +194,22 @@ class Item {
       vibrationIntensity: (map['vibrationIntensity'] ?? 1) as int,
       currentProgress: (map['currentProgress'] ?? 0) as int,
       reminderEnabled: (map['reminderEnabled'] as bool?) ?? false,
-      reminderRepeat: ItemReminderRepeat.fromName(
-        map['reminderRepeat']?.toString(),
+      // reminderRecurrence is new; legacy entries stored 'reminderRepeat'
+      // (once/daily) under the same value names, so fall back to it.
+      reminderRecurrence: recurrence,
+      reminderMonthlyBasis: CalendarBasis.fromName(
+        map['reminderMonthlyBasis']?.toString(),
+      ),
+      reminderYearlyBasis: CalendarBasis.fromName(
+        map['reminderYearlyBasis']?.toString(),
       ),
       reminderAt: (rawReminderAt == null || rawReminderAt.isEmpty)
           ? null
           : DateTime.tryParse(rawReminderAt),
-      reminderAnchor: ItemReminderAnchor.fromName(
-        map['reminderAnchor']?.toString(),
-      ),
+      reminderAnchor: anchor,
       reminderPrayerName: map['reminderPrayerName']?.toString(),
       reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
+      reminderAnchorDate: reminderAnchorDate,
     );
   }
 

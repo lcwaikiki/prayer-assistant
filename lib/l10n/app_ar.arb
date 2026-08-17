@@ -30,6 +30,8 @@
   "qiblaPointDevice": "أدر جهازك حتى يشير السهم إلى الأعلى.",
   "qiblaKaabaShort": "القبلة",
   "shareTodayTimes": "مشاركة أوقات اليوم",
+  "calendarPreviousDay": "اليوم السابق",
+  "calendarNextDay": "اليوم التالي",
   "todayWithDate": "اليوم • {date}",
   "hijriUnknown": "هجري: -",
   "hijriWithDate": "هجري: {date}",

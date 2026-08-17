@@ -87,6 +87,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get shareTodayTimes => 'Поделиться временем на сегодня';
 
   @override
+  String get calendarPreviousDay => 'Предыдущий день';
+
+  @override
+  String get calendarNextDay => 'Следующий день';
+
+  @override
   String todayWithDate(Object date) {
     return 'Сегодня • $date';
   }

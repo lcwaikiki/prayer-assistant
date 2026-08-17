@@ -87,6 +87,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get shareTodayTimes => 'اشتراک اوقات امروز';
 
   @override
+  String get calendarPreviousDay => 'روز قبل';
+
+  @override
+  String get calendarNextDay => 'روز بعد';
+
+  @override
   String todayWithDate(Object date) {
     return 'امروز • $date';
   }

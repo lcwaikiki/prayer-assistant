@@ -30,6 +30,8 @@
   "qiblaPointDevice": "Putar perangkat hingga jarum menunjuk ke atas.",
   "qiblaKaabaShort": "Kiblat",
   "shareTodayTimes": "Bagikan waktu hari ini",
+  "calendarPreviousDay": "Hari sebelumnya",
+  "calendarNextDay": "Hari berikutnya",
   "todayWithDate": "Hari ini • {date}",
   "hijriUnknown": "Hijriah: -",
   "hijriWithDate": "Hijriah: {date}",

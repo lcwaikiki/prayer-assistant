@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
@@ -161,6 +162,132 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('previous/next day controls shift the sheet across days',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation()).thenAnswer(
+      (_) async => sampleSelectedLocation(),
+    );
+    when(
+      () => harness.database.getDay(
+        districtId: any(named: 'districtId'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => samplePrayerDay());
+    when(
+      () => harness.database.getRange(
+        districtId: any(named: 'districtId'),
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+      ),
+    ).thenAnswer(
+      (_) async => [
+        samplePrayerDay(),
+        samplePrayerDay(date: DateTime(2026, 8, 18), imsak: '05:11'),
+      ],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+    );
+
+    await switchToGregorian(tester);
+    await hideSecondary(tester);
+    await openDayDetail(tester);
+
+    expect(find.text('August 17, 2026'), findsOneWidget);
+
+    await tester.tap(find.byTooltip('Next day'));
+    await tester.pumpAndSettle();
+    expect(find.text('August 18, 2026'), findsOneWidget);
+    expect(find.text('05:11'), findsOneWidget);
+    expect(find.text('05:10'), findsNothing);
+
+    await tester.tap(find.byTooltip('Previous day'));
+    await tester.pumpAndSettle();
+    expect(find.text('August 17, 2026'), findsOneWidget);
+    expect(find.text('05:10'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
+    'the sheet shows the hijri date with a small gregorian subtitle in '
+    'hijri mode',
+    (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      final day = DateTime(2026, 8, 17);
+      final hijri = HijriCalendar.fromDate(day);
+      final hijriLabel =
+          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName} '
+          '${hijri.hYear}';
+
+      await tester.drag(find.byType(GridView), const Offset(0, -150));
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find
+            .descendant(
+              of: find.byType(GridView),
+              matching: find.text('${hijri.hDay}'),
+            )
+            .first,
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text(hijriLabel), findsOneWidget);
+      expect(find.text('August 17, 2026'), findsOneWidget);
+      final title = tester.widget<Text>(find.text(hijriLabel));
+      final subtitle = tester.widget<Text>(find.text('August 17, 2026'));
+      expect(subtitle.style!.fontSize!, lessThan(title.style!.fontSize!));
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'in gregorian mode the sheet shows the gregorian date with a small '
+    'hijri subtitle',
+    (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      await switchToGregorian(tester);
+      await hideSecondary(tester);
+      await openDayDetail(tester);
+
+      final day = DateTime(2026, 8, 17);
+      final hijri = HijriCalendar.fromDate(day);
+      final hijriLabel =
+          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName} '
+          '${hijri.hYear}';
+
+      expect(find.text('August 17, 2026'), findsOneWidget);
+      expect(find.text(hijriLabel), findsOneWidget);
+      final title = tester.widget<Text>(find.text('August 17, 2026'));
+      final subtitle = tester.widget<Text>(find.text(hijriLabel));
+      expect(subtitle.style!.fontSize!, lessThan(title.style!.fontSize!));
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 
   testWidgets('the sheet lists reminders occurring on the tapped day', (
     tester,

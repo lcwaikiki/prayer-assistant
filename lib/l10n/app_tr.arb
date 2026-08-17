@@ -30,6 +30,8 @@
   "qiblaPointDevice": "İbre yukarıyı gösterene kadar cihazınızı çevirin.",
   "qiblaKaabaShort": "Kıble",
   "shareTodayTimes": "Bugünün vakitlerini paylaş",
+  "calendarPreviousDay": "Önceki gün",
+  "calendarNextDay": "Sonraki gün",
   "todayWithDate": "Bugün • {date}",
   "hijriUnknown": "Hicri: -",
   "hijriWithDate": "Hicri: {date}",

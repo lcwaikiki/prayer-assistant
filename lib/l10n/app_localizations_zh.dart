@@ -82,6 +82,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shareTodayTimes => '分享今日时间';
 
   @override
+  String get calendarPreviousDay => '前一天';
+
+  @override
+  String get calendarNextDay => '第二天';
+
+  @override
   String todayWithDate(Object date) {
     return '今天 • $date';
   }

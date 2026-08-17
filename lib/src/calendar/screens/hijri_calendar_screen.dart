@@ -110,11 +110,12 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
     return '${hijriMonth.longMonthName} ${hijriMonth.year}';
   }
 
-  void _openDayDetail(DateTime date) {
+  void _openDayDetail(DateTime date, CalendarPrimaryDisplay primary) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      builder: (sheetContext) => _DayDetailSheet(date: date),
+      builder: (sheetContext) =>
+          _DayDetailSheet(date: date, primary: primary),
     );
   }
 
@@ -133,7 +134,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
           _autoOpenTriggered = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              _openDayDetail(_focusedDate);
+              _openDayDetail(_focusedDate, primary);
             }
           });
         }
@@ -240,7 +241,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                         : null,
                     isToday: isToday,
                     hasReminder: hasReminder,
-                    onTap: () => _openDayDetail(date),
+                    onTap: () => _openDayDetail(date, primary),
                   );
                 },
               ),
@@ -344,10 +345,42 @@ class _DayCell extends StatelessWidget {
   }
 }
 
-class _DayDetailSheet extends StatelessWidget {
-  const _DayDetailSheet({required this.date});
+class _DayDetailSheet extends StatefulWidget {
+  const _DayDetailSheet({required this.date, required this.primary});
 
   final DateTime date;
+  final CalendarPrimaryDisplay primary;
+
+  @override
+  State<_DayDetailSheet> createState() => _DayDetailSheetState();
+}
+
+class _DayDetailSheetState extends State<_DayDetailSheet> {
+  late DateTime _date = widget.date;
+
+  void _shiftDay(int delta) {
+    setState(() {
+      _date = DateTime(_date.year, _date.month, _date.day + delta);
+    });
+  }
+
+  String _hijriDateLabel(DateTime date) {
+    final hijri = HijriCalendar.fromDate(date);
+    return '${hijri.hDay} ${HijriMonth.fromDate(date).longMonthName} '
+        '${hijri.hYear}';
+  }
+
+  String _primaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
+    return primary == CalendarPrimaryDisplay.gregorian
+        ? DateFormat.yMMMMd(locale).format(_date)
+        : _hijriDateLabel(_date);
+  }
+
+  String _secondaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
+    return primary == CalendarPrimaryDisplay.gregorian
+        ? _hijriDateLabel(_date)
+        : DateFormat.yMMMMd(locale).format(_date);
+  }
 
   String _recurrenceLabel(BuildContext context, CalendarReminder reminder) {
     final l10n = context.l10n;
@@ -417,7 +450,7 @@ class _DayDetailSheet extends StatelessWidget {
     final l10n = context.l10n;
     final controller = context.watch<PrayerAppController>();
     final reminders = controller.calendarReminders
-        .where((reminder) => reminder.occursOn(date))
+        .where((reminder) => reminder.occursOn(_date))
         .toList(growable: false);
     final locale = Localizations.localeOf(context).toString();
 
@@ -428,11 +461,41 @@ class _DayDetailSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              DateFormat.yMMMMd(locale).format(date),
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              children: [
+                IconButton(
+                  tooltip: l10n.calendarPreviousDay,
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => _shiftDay(-1),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _primaryDateLabel(widget.primary, locale),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        _secondaryDateLabel(widget.primary, locale),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  tooltip: l10n.calendarNextDay,
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: () => _shiftDay(1),
+                ),
+              ],
             ),
-            if (controller.prayerDayFor(date) case final day?) ...[
+            if (controller.prayerDayFor(_date) case final day?) ...[
               const SizedBox(height: 8),
               Card(
                 margin: EdgeInsets.zero,
@@ -524,7 +587,7 @@ class _DayDetailSheet extends StatelessWidget {
                   context,
                   MaterialPageRoute<void>(
                     builder: (_) =>
-                        CalendarReminderFormScreen(initialDate: date),
+                        CalendarReminderFormScreen(initialDate: _date),
                   ),
                 );
               },

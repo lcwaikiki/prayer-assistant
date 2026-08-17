@@ -87,6 +87,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get shareTodayTimes => 'Heutige Zeiten teilen';
 
   @override
+  String get calendarPreviousDay => 'Vorheriger Tag';
+
+  @override
+  String get calendarNextDay => 'Nächster Tag';
+
+  @override
   String todayWithDate(Object date) {
     return 'Heute • $date';
   }

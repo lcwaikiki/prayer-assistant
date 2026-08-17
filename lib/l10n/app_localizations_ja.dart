@@ -82,6 +82,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get shareTodayTimes => '今日の時刻を共有';
 
   @override
+  String get calendarPreviousDay => '前の日';
+
+  @override
+  String get calendarNextDay => '次の日';
+
+  @override
   String todayWithDate(Object date) {
     return '今日 • $date';
   }

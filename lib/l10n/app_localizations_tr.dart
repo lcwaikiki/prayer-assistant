@@ -86,6 +86,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shareTodayTimes => 'Bugünün vakitlerini paylaş';
 
   @override
+  String get calendarPreviousDay => 'Önceki gün';
+
+  @override
+  String get calendarNextDay => 'Sonraki gün';
+
+  @override
   String todayWithDate(Object date) {
     return 'Bugün • $date';
   }

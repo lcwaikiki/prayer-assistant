@@ -35,6 +35,8 @@
   "qiblaPointDevice": "Поверните устройство, пока стрелка не укажет вверх.",
   "qiblaKaabaShort": "Кибла",
   "shareTodayTimes": "Поделиться временем на сегодня",
+  "calendarPreviousDay": "Предыдущий день",
+  "calendarNextDay": "Следующий день",
   "todayWithDate": "Сегодня • {date}",
   "@todayWithDate": {
     "placeholders": {

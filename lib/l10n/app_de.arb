@@ -30,6 +30,8 @@
   "qiblaPointDevice": "Drehen Sie das Gerät, bis die Nadel nach oben zeigt.",
   "qiblaKaabaShort": "Qibla",
   "shareTodayTimes": "Heutige Zeiten teilen",
+  "calendarPreviousDay": "Vorheriger Tag",
+  "calendarNextDay": "Nächster Tag",
   "todayWithDate": "Heute • {date}",
   "hijriUnknown": "Hidschri: -",
   "hijriWithDate": "Hidschri: {date}",

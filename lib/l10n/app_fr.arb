@@ -30,6 +30,8 @@
   "qiblaPointDevice": "Tournez l'appareil jusqu'à ce que la flèche pointe vers le haut.",
   "qiblaKaabaShort": "Qibla",
   "shareTodayTimes": "Partager les horaires du jour",
+  "calendarPreviousDay": "Jour précédent",
+  "calendarNextDay": "Jour suivant",
   "todayWithDate": "Aujourd'hui • {date}",
   "hijriUnknown": "Hijri : -",
   "hijriWithDate": "Hijri : {date}",

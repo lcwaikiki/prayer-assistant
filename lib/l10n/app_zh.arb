@@ -30,6 +30,8 @@
   "qiblaPointDevice": "旋转设备直到指针朝上。",
   "qiblaKaabaShort": "朝拜",
   "shareTodayTimes": "分享今日时间",
+  "calendarPreviousDay": "前一天",
+  "calendarNextDay": "第二天",
   "todayWithDate": "今天 • {date}",
   "hijriUnknown": "回历: -",
   "hijriWithDate": "回历: {date}",

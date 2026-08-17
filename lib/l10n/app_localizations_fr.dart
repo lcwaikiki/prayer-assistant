@@ -87,6 +87,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareTodayTimes => 'Partager les horaires du jour';
 
   @override
+  String get calendarPreviousDay => 'Jour précédent';
+
+  @override
+  String get calendarNextDay => 'Jour suivant';
+
+  @override
   String todayWithDate(Object date) {
     return 'Aujourd\'hui • $date';
   }

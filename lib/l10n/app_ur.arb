@@ -30,6 +30,8 @@
   "qiblaPointDevice": "جب تک سوئی اوپر کی طرف نہ اشارہ کرے اپنا آلہ گھمائیں۔",
   "qiblaKaabaShort": "قبلہ",
   "shareTodayTimes": "آج کے اوقات شیئر کریں",
+  "calendarPreviousDay": "پچھلا دن",
+  "calendarNextDay": "اگلا دن",
   "todayWithDate": "آج • {date}",
   "hijriUnknown": "ہجری: -",
   "hijriWithDate": "ہجری: {date}",

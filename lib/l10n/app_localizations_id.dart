@@ -87,6 +87,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get shareTodayTimes => 'Bagikan waktu hari ini';
 
   @override
+  String get calendarPreviousDay => 'Hari sebelumnya';
+
+  @override
+  String get calendarNextDay => 'Hari berikutnya';
+
+  @override
   String todayWithDate(Object date) {
     return 'Hari ini • $date';
   }

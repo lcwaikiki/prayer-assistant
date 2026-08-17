@@ -256,6 +256,18 @@ abstract class AppLocalizations {
   /// **'Share today\'s times'**
   String get shareTodayTimes;
 
+  /// No description provided for @calendarPreviousDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get calendarPreviousDay;
+
+  /// No description provided for @calendarNextDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get calendarNextDay;
+
   /// No description provided for @todayWithDate.
   ///
   /// In en, this message translates to:

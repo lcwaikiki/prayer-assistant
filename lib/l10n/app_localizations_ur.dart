@@ -87,6 +87,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get shareTodayTimes => 'آج کے اوقات شیئر کریں';
 
   @override
+  String get calendarPreviousDay => 'پچھلا دن';
+
+  @override
+  String get calendarNextDay => 'اگلا دن';
+
+  @override
   String todayWithDate(Object date) {
     return 'آج • $date';
   }

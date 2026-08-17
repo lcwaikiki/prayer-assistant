@@ -35,6 +35,8 @@
   "qiblaPointDevice": "Rotate your device until the needle points up.",
   "qiblaKaabaShort": "Qibla",
   "shareTodayTimes": "Share today's times",
+  "calendarPreviousDay": "Previous day",
+  "calendarNextDay": "Next day",
   "todayWithDate": "Today • {date}",
   "@todayWithDate": {
     "placeholders": {

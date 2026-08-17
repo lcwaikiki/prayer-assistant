@@ -30,6 +30,8 @@
   "qiblaPointDevice": "دستگاه را بچرخانید تا عقربه رو به بالا قرار گیرد.",
   "qiblaKaabaShort": "قبله",
   "shareTodayTimes": "اشتراک اوقات امروز",
+  "calendarPreviousDay": "روز قبل",
+  "calendarNextDay": "روز بعد",
   "todayWithDate": "امروز • {date}",
   "hijriUnknown": "هجری: -",
   "hijriWithDate": "هجری: {date}",

@@ -30,6 +30,8 @@
   "qiblaPointDevice": "針が上を向くまでデバイスを回してください。",
   "qiblaKaabaShort": "キブラ",
   "shareTodayTimes": "今日の時刻を共有",
+  "calendarPreviousDay": "前の日",
+  "calendarNextDay": "次の日",
   "todayWithDate": "今日 • {date}",
   "hijriUnknown": "ヒジュラ暦: -",
   "hijriWithDate": "ヒジュラ暦: {date}",

@@ -20,6 +20,7 @@ class QiblaScreen extends StatefulWidget {
     this.headingStream,
     this.loadPosition,
     this.compassStreamProvider,
+    this.embedded = false,
   });
 
   /// Injectable compass heading stream (degrees, 0-360). Defaults to the
@@ -34,6 +35,10 @@ class QiblaScreen extends StatefulWidget {
   /// fallback UI (fixed bearing, no needle rotation). Tests provide a null
   /// return so the magnetometer platform channel is never touched.
   final Stream<double>? Function()? compassStreamProvider;
+
+  /// When true, renders only the body content without a Scaffold/AppBar so
+  /// the screen can sit inside an outer shell (e.g. as a tab).
+  final bool embedded;
 
   @override
   State<QiblaScreen> createState() => _QiblaScreenState();
@@ -62,30 +67,34 @@ class _QiblaScreenState extends State<QiblaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final body = FutureBuilder<({double lat, double lon})>(
+      future: _positionFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final position = snapshot.data;
+        if (position == null) {
+          return _ErrorState(
+            message: context.l10n.qiblaLocationUnavailable,
+            icon: Icons.location_off_outlined,
+          );
+        }
+        final bearing = qiblaBearing(position.lat, position.lon);
+        return _QiblaView(
+          bearing: bearing,
+          headingStream: _effectiveHeadingStream,
+          locationLabel:
+              '${position.lat.toStringAsFixed(2)}, ${position.lon.toStringAsFixed(2)}',
+        );
+      },
+    );
+    if (widget.embedded) {
+      return body;
+    }
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.qiblaTitle)),
-      body: FutureBuilder<({double lat, double lon})>(
-        future: _positionFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final position = snapshot.data;
-          if (position == null) {
-            return _ErrorState(
-              message: context.l10n.qiblaLocationUnavailable,
-              icon: Icons.location_off_outlined,
-            );
-          }
-          final bearing = qiblaBearing(position.lat, position.lon);
-          return _QiblaView(
-            bearing: bearing,
-            headingStream: _effectiveHeadingStream,
-            locationLabel:
-                '${position.lat.toStringAsFixed(2)}, ${position.lon.toStringAsFixed(2)}',
-          );
-        },
-      ),
+      body: body,
     );
   }
 }

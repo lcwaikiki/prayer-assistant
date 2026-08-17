@@ -512,7 +512,7 @@ class _StickyHeaderRow extends StatelessWidget {
       child: Text(
         text,
         style: style,
-        maxLines: 2,
+        maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
       ),

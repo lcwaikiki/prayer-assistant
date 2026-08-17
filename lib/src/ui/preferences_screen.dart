@@ -5,6 +5,7 @@ import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../l10n/locale_options.dart';
 import '../models/prayer_models.dart';
+import 'location_screen.dart';
 
 class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
@@ -18,6 +19,35 @@ class PreferencesScreen extends StatelessWidget {
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              _PreferenceSection(
+                title: context.l10n.tabLocation,
+                subtitle:
+                    controller.selectedLocation?.fullName ??
+                    context.l10n.locationHelp,
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.location_on_outlined),
+                    title: Text(context.l10n.tabLocation),
+                    subtitle: Text(
+                      controller.selectedLocation?.fullName ??
+                          context.l10n.locationHelp,
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => Scaffold(
+                          appBar: AppBar(
+                            title: Text(context.l10n.tabLocation),
+                          ),
+                          body: const LocationScreen(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
               _PreferenceSection(
                 title: context.l10n.languageTitle,
                 subtitle: controller.localePreference.nativeLabel(

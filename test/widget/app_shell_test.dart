@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/ui/app_shell.dart';
+import 'package:prayer_assistant/src/ui/qibla_screen.dart';
 
+import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
+  Widget qiblaTab() => QiblaScreen(
+        compassStreamProvider: () => null,
+        loadPosition: () async => (lat: 41.0082, lon: 28.9784),
+      );
+
   testWidgets('shows a loading spinner while initializing', (tester) async {
     final harness = TestHarness.create();
 
@@ -22,11 +30,12 @@ void main() {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Today'), findsOneWidget);
-    expect(find.text('Location'), findsOneWidget);
+    expect(find.text('Qibla'), findsOneWidget);
+    expect(find.text('Location'), findsNothing);
     expect(find.text('Dates'), findsOneWidget);
     expect(find.text('Beads'), findsOneWidget);
 
@@ -38,7 +47,7 @@ void main() {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     await tester.tap(find.text('Beads'));
     await tester.pump();
@@ -53,7 +62,7 @@ void main() {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     expect(find.byTooltip('Turn reminders off'), findsOneWidget);
 
@@ -70,7 +79,7 @@ void main() {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     await tester.tap(find.byTooltip('Toggle light/dark'));
     await tester.pump();
@@ -85,7 +94,7 @@ void main() {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     await tester.tap(find.byTooltip('Preferences'));
     await tester.pump();
@@ -96,12 +105,45 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('location entry in preferences opens the location screen',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation()).thenAnswer(
+      (_) async => sampleSelectedLocation(),
+    );
+    when(() => harness.api.getCountries()).thenAnswer(
+      (_) async => [sampleLocationNode(id: 'tr', name: 'Türkiye')],
+    );
+    when(() => harness.api.getStates(any())).thenAnswer(
+      (_) async => [sampleLocationNode(id: '34', name: 'Istanbul')],
+    );
+    when(() => harness.api.getDistricts(any())).thenAnswer(
+      (_) async => [sampleLocationNode(id: '541', name: 'Uskudar')],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    await tester.tap(find.byTooltip('Preferences'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    await tester.tap(find.text('Location'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byIcon(Icons.chevron_right));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Save Location'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('dates sub-tab selection survives tab switches',
       (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const AppShell());
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
 
     await tester.tap(find.text('Dates'));
     await tester.pumpAndSettle();

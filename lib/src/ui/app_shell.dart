@@ -9,12 +9,15 @@ import '../models/prayer_models.dart';
 import '../tesbihat/screens/tesbih_home_screen.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
-import 'location_screen.dart';
 import 'preferences_screen.dart';
 import 'qibla_screen.dart';
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  const AppShell({super.key, this.qiblaScreen});
+
+  /// Injectable qibla tab content so tests can avoid the magnetometer and
+  /// geolocator platform channels. Defaults to [QiblaScreen].
+  final Widget? qiblaScreen;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -52,7 +55,7 @@ class _AppShellState extends State<AppShell> {
         }
 
         final pages = <Widget>[
-          const LocationScreen(),
+          widget.qiblaScreen ?? const QiblaScreen(),
           const HomeScreen(),
           const HistoryScreen(),
           const TesbihHomeScreen(),
@@ -71,9 +74,9 @@ class _AppShellState extends State<AppShell> {
             onDestinationSelected: controller.setTab,
             destinations: <NavigationDestination>[
               NavigationDestination(
-                icon: const Icon(Icons.location_on_outlined),
-                selectedIcon: const Icon(Icons.location_on),
-                label: context.l10n.tabLocation,
+                icon: const Icon(Icons.explore_outlined),
+                selectedIcon: const Icon(Icons.explore),
+                label: context.l10n.qiblaTitle,
               ),
               NavigationDestination(
                 icon: const Icon(Icons.mosque_outlined),
@@ -103,7 +106,7 @@ class _AppShellState extends State<AppShell> {
     DateTime now,
   ) {
     final tabTitle = switch (controller.tabIndex) {
-      0 => context.l10n.tabLocation,
+      0 => context.l10n.qiblaTitle,
       1 => context.l10n.tabToday,
       2 => context.l10n.tabDates,
       3 => context.l10n.tabTesbih,
@@ -146,15 +149,6 @@ class _AppShellState extends State<AppShell> {
       title: titleWidget,
       actions: [
         if (trailing != null) trailing,
-        IconButton(
-          tooltip: context.l10n.qiblaTitle,
-          icon: const Icon(Icons.explore_outlined),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const QiblaScreen()),
-            );
-          },
-        ),
         IconButton(
           tooltip: controller.remindersSilenced
               ? context.l10n.tooltipRemindersOn

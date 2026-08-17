@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "暂无缓存礼拜时间",
   "homeNoPrayerTimesSubtitle": "点击刷新以同步全年数据。",
   "refresh": "刷新",
+  "qiblaTitle": "朝拜方向",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "朝拜方向: {degrees}°",
+  "qiblaLocationUnavailable": "无法确定您的位置。请启用GPS后重试。",
+  "qiblaHeadingUnavailable": "指南针不可用 - 显示固定方向。",
+  "qiblaPointDevice": "旋转设备直到指针朝上。",
+  "qiblaKaabaShort": "朝拜",
+  "shareTodayTimes": "分享今日时间",
   "todayWithDate": "今天 • {date}",
   "hijriUnknown": "回历: -",
   "hijriWithDate": "回历: {date}",

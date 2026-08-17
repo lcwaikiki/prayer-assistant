@@ -61,6 +61,32 @@ class AppLocalizationsRu extends AppLocalizations {
   String get refresh => 'Обновить';
 
   @override
+  String get qiblaTitle => 'Кибла';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'Кибла: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'Не удалось определить местоположение. Включите GPS и попробуйте снова.';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'Компас недоступен - показано фиксированное направление.';
+
+  @override
+  String get qiblaPointDevice =>
+      'Поверните устройство, пока стрелка не укажет вверх.';
+
+  @override
+  String get qiblaKaabaShort => 'Кибла';
+
+  @override
+  String get shareTodayTimes => 'Поделиться временем на сегодня';
+
+  @override
   String todayWithDate(Object date) {
     return 'Сегодня • $date';
   }

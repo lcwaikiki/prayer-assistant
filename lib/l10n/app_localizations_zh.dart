@@ -59,6 +59,29 @@ class AppLocalizationsZh extends AppLocalizations {
   String get refresh => '刷新';
 
   @override
+  String get qiblaTitle => '朝拜方向';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return '朝拜方向: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable => '无法确定您的位置。请启用GPS后重试。';
+
+  @override
+  String get qiblaHeadingUnavailable => '指南针不可用 - 显示固定方向。';
+
+  @override
+  String get qiblaPointDevice => '旋转设备直到指针朝上。';
+
+  @override
+  String get qiblaKaabaShort => '朝拜';
+
+  @override
+  String get shareTodayTimes => '分享今日时间';
+
+  @override
   String todayWithDate(Object date) {
     return '今天 • $date';
   }

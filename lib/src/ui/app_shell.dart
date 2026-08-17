@@ -11,6 +11,7 @@ import 'history_screen.dart';
 import 'home_screen.dart';
 import 'location_screen.dart';
 import 'preferences_screen.dart';
+import 'qibla_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -146,6 +147,15 @@ class _AppShellState extends State<AppShell> {
       actions: [
         if (trailing != null) trailing,
         IconButton(
+          tooltip: context.l10n.qiblaTitle,
+          icon: const Icon(Icons.explore_outlined),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const QiblaScreen()),
+            );
+          },
+        ),
+        IconButton(
           tooltip: controller.remindersSilenced
               ? context.l10n.tooltipRemindersOn
               : context.l10n.tooltipRemindersOff,
@@ -197,8 +207,10 @@ class _LazyIndexedStack extends StatefulWidget {
 }
 
 class _LazyIndexedStackState extends State<_LazyIndexedStack> {
-  late final List<bool> _visited =
-      List<bool>.filled(widget.children.length, false);
+  late final List<bool> _visited = List<bool>.filled(
+    widget.children.length,
+    false,
+  );
 
   @override
   Widget build(BuildContext context) {

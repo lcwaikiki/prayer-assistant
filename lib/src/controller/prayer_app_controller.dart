@@ -71,6 +71,19 @@ class PrayerAppController extends ChangeNotifier {
   SelectedLocation? get selectedLocation => _selectedLocation;
   PrayerDay? get today => _today;
   List<PrayerDay> get yearRange => _yearRange;
+
+  PrayerDay? prayerDayFor(DateTime date) {
+    for (final day in _yearRange) {
+      final safeDay = DateTime(day.date.year, day.date.month, day.date.day);
+      if (safeDay.year == date.year &&
+          safeDay.month == date.month &&
+          safeDay.day == date.day) {
+        return day;
+      }
+    }
+    return null;
+  }
+
   Map<String, ReminderSetting> get reminderSettings => _reminderSettings;
   AppBarRemainingPlacement get appBarRemainingPlacement =>
       _appBarRemainingPlacement;
@@ -108,8 +121,7 @@ class PrayerAppController extends ChangeNotifier {
       _remindersSilenced = await database.loadRemindersSilenced() ?? false;
       _reminderVibrationEnabled =
           await database.loadReminderVibrationEnabled() ?? true;
-      _reminderSoundEnabled =
-          await database.loadReminderSoundEnabled() ?? true;
+      _reminderSoundEnabled = await database.loadReminderSoundEnabled() ?? true;
       final rawThemePreference = await database.loadThemePreference();
       var themePreference = AppThemePreference.system;
       for (final item in AppThemePreference.values) {
@@ -148,8 +160,8 @@ class PrayerAppController extends ChangeNotifier {
       _widgetTextSize = widgetTextSize;
       await _syncStatusBarConfig();
       await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
-      final rawCalendarPrimaryDisplay =
-          await database.loadCalendarPrimaryDisplay();
+      final rawCalendarPrimaryDisplay = await database
+          .loadCalendarPrimaryDisplay();
       var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
       for (final item in CalendarPrimaryDisplay.values) {
         if (item.name == rawCalendarPrimaryDisplay) {
@@ -467,14 +479,12 @@ class PrayerAppController extends ChangeNotifier {
   /// authority (CalendarReminderService/CalendarMidnightScheduler are).
   Future<void> _syncCalendarRemindersWidget() async {
     final now = DateTime.now();
-    final upcoming =
-        <({CalendarReminder reminder, DateTime next})>[
-            for (final reminder in _calendarReminders)
-              if (reminder.enabled)
-                if (reminder.nextOccurrenceFrom(now) case final next?)
-                  (reminder: reminder, next: next),
-          ]
-          ..sort((a, b) => a.next.compareTo(b.next));
+    final upcoming = <({CalendarReminder reminder, DateTime next})>[
+      for (final reminder in _calendarReminders)
+        if (reminder.enabled)
+          if (reminder.nextOccurrenceFrom(now) case final next?)
+            (reminder: reminder, next: next),
+    ]..sort((a, b) => a.next.compareTo(b.next));
     final dateFormat = DateFormat(
       'EEE, d MMM · HH:mm',
       resolvedLocale.toString(),
@@ -488,7 +498,9 @@ class PrayerAppController extends ChangeNotifier {
         },
     ];
     await widgetBridgeService.updateCalendarReminders(
-      headerText: lookupAppLocalizations(resolvedLocale).homeUpcomingRemindersTitle,
+      headerText: lookupAppLocalizations(
+        resolvedLocale,
+      ).homeUpcomingRemindersTitle,
       reminders: payload,
     );
   }

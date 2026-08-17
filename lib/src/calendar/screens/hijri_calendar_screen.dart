@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
 import '../../models/prayer_models.dart';
+import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_reminder_form_screen.dart';
@@ -397,9 +398,7 @@ class _DayDetailSheet extends StatelessWidget {
         behavior: SnackBarBehavior.floating,
         content: Row(
           children: [
-            Expanded(
-              child: Text(l10n.calendarReminderDeleted(reminder.title)),
-            ),
+            Expanded(child: Text(l10n.calendarReminderDeleted(reminder.title))),
             TextButton(
               onPressed: () {
                 controller.restoreCalendarReminder(reminder, index: index);
@@ -423,7 +422,7 @@ class _DayDetailSheet extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
 
     return SafeArea(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -433,6 +432,45 @@ class _DayDetailSheet extends StatelessWidget {
               DateFormat.yMMMMd(locale).format(date),
               style: Theme.of(context).textTheme.titleLarge,
             ),
+            if (controller.prayerDayFor(date) case final day?) ...[
+              const SizedBox(height: 8),
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      for (final entry in prayerOrder.indexed) ...[
+                        if (entry.$1 > 0) const Divider(height: 8),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                context.l10n.prayerNameLabel(entry.$2),
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ),
+                            Text(
+                              prayerMapForDay(day)[entry.$2] ?? '--:--',
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 8),
             if (reminders.isEmpty)
               Padding(
@@ -447,9 +485,8 @@ class _DayDetailSheet extends StatelessWidget {
                   subtitle: Text(_recurrenceLabel(context, reminder)),
                   leading: Switch(
                     value: reminder.enabled,
-                    onChanged: (_) => controller.toggleCalendarReminderEnabled(
-                      reminder.id,
-                    ),
+                    onChanged: (_) =>
+                        controller.toggleCalendarReminderEnabled(reminder.id),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -462,8 +499,9 @@ class _DayDetailSheet extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute<void>(
-                              builder: (_) =>
-                                  CalendarReminderFormScreen(reminder: reminder),
+                              builder: (_) => CalendarReminderFormScreen(
+                                reminder: reminder,
+                              ),
                             ),
                           );
                         },

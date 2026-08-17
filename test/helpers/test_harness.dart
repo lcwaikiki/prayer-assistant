@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
@@ -27,6 +28,7 @@ class TestHarness {
     this.calendarReminderService,
     this.itemReminderService,
     this.itemRepository,
+    this.itemHistoryRepository,
   );
 
   factory TestHarness.create() {
@@ -118,21 +120,15 @@ class TestHarness {
     when(
       () => database.loadStatusBarRemainingEnabled(),
     ).thenAnswer((_) async => null);
-    when(
-      () => database.loadRemindersSilenced(),
-    ).thenAnswer((_) async => null);
+    when(() => database.loadRemindersSilenced()).thenAnswer((_) async => null);
     when(
       () => database.loadReminderVibrationEnabled(),
     ).thenAnswer((_) async => null);
     when(
       () => database.loadReminderSoundEnabled(),
     ).thenAnswer((_) async => null);
-    when(
-      () => database.loadThemePreference(),
-    ).thenAnswer((_) async => null);
-    when(
-      () => database.loadLocalePreference(),
-    ).thenAnswer((_) async => null);
+    when(() => database.loadThemePreference()).thenAnswer((_) async => null);
+    when(() => database.loadLocalePreference()).thenAnswer((_) async => null);
     when(
       () => database.loadAppBarRemainingPlacement(),
     ).thenAnswer((_) async => null);
@@ -181,26 +177,29 @@ class TestHarness {
     ).thenAnswer((_) async {});
 
     when(() => database.saveSelectedLocation(any())).thenAnswer((_) async {});
-    when(() => database.saveReminderSettings(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveAppBarRemainingPlacement(any()))
-        .thenAnswer((_) async {});
+    when(() => database.saveReminderSettings(any())).thenAnswer((_) async {});
+    when(
+      () => database.saveAppBarRemainingPlacement(any()),
+    ).thenAnswer((_) async {});
     when(() => database.saveWidgetTextSize(any())).thenAnswer((_) async {});
-    when(() => database.saveCalendarPrimaryDisplay(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveShowSecondaryCalendarDate(any()))
-        .thenAnswer((_) async {});
+    when(
+      () => database.saveCalendarPrimaryDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowSecondaryCalendarDate(any()),
+    ).thenAnswer((_) async {});
     when(() => database.saveCalendarReminder(any())).thenAnswer((_) async {});
-    when(() => database.deleteCalendarReminder(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveStatusBarRemainingEnabled(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveRemindersSilenced(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveReminderVibrationEnabled(any()))
-        .thenAnswer((_) async {});
-    when(() => database.saveReminderSoundEnabled(any()))
-        .thenAnswer((_) async {});
+    when(() => database.deleteCalendarReminder(any())).thenAnswer((_) async {});
+    when(
+      () => database.saveStatusBarRemainingEnabled(any()),
+    ).thenAnswer((_) async {});
+    when(() => database.saveRemindersSilenced(any())).thenAnswer((_) async {});
+    when(
+      () => database.saveReminderVibrationEnabled(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveReminderSoundEnabled(any()),
+    ).thenAnswer((_) async {});
     when(() => database.saveThemePreference(any())).thenAnswer((_) async {});
     when(() => database.saveLocalePreference(any())).thenAnswer((_) async {});
     when(
@@ -216,9 +215,18 @@ class TestHarness {
       calendarReminderService: calendarReminderService,
     );
 
-    return TestHarness._(controller, api, database, locationResolver,
-        notificationService, widgetBridge, calendarReminderService,
-        itemReminderService, ItemRepository.memory());
+    return TestHarness._(
+      controller,
+      api,
+      database,
+      locationResolver,
+      notificationService,
+      widgetBridge,
+      calendarReminderService,
+      itemReminderService,
+      ItemRepository.memory(),
+      ItemHistoryRepository.memory(),
+    );
   }
 
   final PrayerAppController controller;
@@ -230,6 +238,7 @@ class TestHarness {
   final MockCalendarReminderService calendarReminderService;
   final MockItemReminderService itemReminderService;
   ItemRepository itemRepository;
+  ItemHistoryRepository itemHistoryRepository;
 
   /// Runs the controller's full startup sequence against the current stubs.
   Future<void> initialize() => controller.initialize();
@@ -253,6 +262,9 @@ Future<void> pumpWithHarness(
     child: ProviderScope(
       overrides: [
         itemRepositoryProvider.overrideWithValue(harness.itemRepository),
+        itemHistoryRepositoryProvider.overrideWithValue(
+          harness.itemHistoryRepository,
+        ),
         itemReminderServiceProvider.overrideWithValue(
           harness.itemReminderService,
         ),

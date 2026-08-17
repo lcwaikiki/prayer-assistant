@@ -60,6 +60,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get refresh => 'تحديث';
 
   @override
+  String get qiblaTitle => 'القبلة';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'القبلة: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'تعذر تحديد موقعك. فعّل نظام تحديد المواقع وحاول مرة أخرى.';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'البوصلة غير متاحة - يتم عرض الاتجاه الثابت.';
+
+  @override
+  String get qiblaPointDevice => 'أدر جهازك حتى يشير السهم إلى الأعلى.';
+
+  @override
+  String get qiblaKaabaShort => 'القبلة';
+
+  @override
+  String get shareTodayTimes => 'مشاركة أوقات اليوم';
+
+  @override
   String todayWithDate(Object date) {
     return 'اليوم • $date';
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
@@ -15,7 +16,11 @@ import 'reminder_settings_screen.dart';
 typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.onShare});
+
+  /// Injectable share action so tests can capture the shared text without
+  /// touching the platform share sheet. Defaults to [SharePlus.instance].
+  final void Function(String text)? onShare;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -109,10 +114,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
+                            tooltip: context.l10n.shareTodayTimes,
+                            onPressed: () {
+                              final text = buildSharePrayerTimesText(
+                                location: selected,
+                                day: day,
+                                label: context.l10n.prayerNameLabel,
+                              );
+                              final onShare = widget.onShare;
+                              if (onShare != null) {
+                                onShare(text);
+                              } else {
+                                SharePlus.instance.share(
+                                  ShareParams(text: text),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.share_outlined),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
                             onPressed: controller.isBusy
                                 ? null
                                 : () => controller.refreshPrayerData(
-                                    forceSync: false,
+                                    forceSync: true,
                                   ),
                             icon: const Icon(Icons.refresh),
                           ),
@@ -157,6 +182,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       );
                                     },
+                                    onToggleReminder: () =>
+                                        controller.updateReminderSetting(
+                                          prayer: entry.$2,
+                                          notifyOnTime: !controller
+                                              .reminderFor(entry.$2)
+                                              .notifyOnTime,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -183,6 +215,7 @@ class _CompactPrayerRow extends StatelessWidget {
     required this.reminderSetting,
     required this.isNext,
     required this.onTap,
+    required this.onToggleReminder,
   });
 
   final String name;
@@ -190,6 +223,7 @@ class _CompactPrayerRow extends StatelessWidget {
   final ReminderSetting reminderSetting;
   final bool isNext;
   final VoidCallback onTap;
+  final VoidCallback onToggleReminder;
 
   @override
   Widget build(BuildContext context) {
@@ -230,16 +264,20 @@ class _CompactPrayerRow extends StatelessWidget {
         children: [
           Tooltip(
             message: statusText,
-            child: Icon(
-              hasReminder
-                  ? Icons.notifications_active
-                  : Icons.notifications_off_outlined,
-              size: 22,
-              color: hasReminder
-                  ? (isNext
-                        ? colorScheme.onPrimaryContainer
-                        : colorScheme.primary)
-                  : colorScheme.outline,
+            child: IconButton(
+              visualDensity: VisualDensity.compact,
+              onPressed: onToggleReminder,
+              icon: Icon(
+                hasReminder
+                    ? Icons.notifications_active
+                    : Icons.notifications_off_outlined,
+                size: 22,
+                color: hasReminder
+                    ? (isNext
+                          ? colorScheme.onPrimaryContainer
+                          : colorScheme.primary)
+                    : colorScheme.outline,
+              ),
             ),
           ),
           const SizedBox(width: 12),

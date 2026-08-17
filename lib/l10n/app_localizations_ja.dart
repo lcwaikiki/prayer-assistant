@@ -59,6 +59,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String get refresh => '更新';
 
   @override
+  String get qiblaTitle => 'キブラ';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'キブラ: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable => '現在地を特定できませんでした。GPSを有効にして再試行してください。';
+
+  @override
+  String get qiblaHeadingUnavailable => 'コンパスが利用できません - 固定方向を表示中。';
+
+  @override
+  String get qiblaPointDevice => '針が上を向くまでデバイスを回してください。';
+
+  @override
+  String get qiblaKaabaShort => 'キブラ';
+
+  @override
+  String get shareTodayTimes => '今日の時刻を共有';
+
+  @override
   String todayWithDate(Object date) {
     return '今日 • $date';
   }

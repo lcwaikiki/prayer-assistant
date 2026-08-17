@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
+import '../data/item_history_repository.dart';
 import '../data/item_repository.dart';
+import '../models/daily_item_stat.dart';
 import '../models/item.dart';
 import '../services/item_reminder_service.dart';
 
@@ -9,6 +11,10 @@ enum TapFeedback { none, standard, checkpoint }
 
 final itemRepositoryProvider = Provider<ItemRepository>((ref) {
   throw UnimplementedError('itemRepositoryProvider must be overridden');
+});
+
+final itemHistoryRepositoryProvider = Provider<ItemHistoryRepository>((ref) {
+  throw UnimplementedError('itemHistoryRepositoryProvider must be overridden');
 });
 
 final itemReminderServiceProvider = Provider<ItemReminderService>((ref) {
@@ -21,14 +27,18 @@ final itemsNotifierProvider = NotifierProvider<ItemsNotifier, List<Item>>(
 
 class ItemsNotifier extends Notifier<List<Item>> {
   late final ItemRepository _repository;
+  late final ItemHistoryRepository _historyRepository;
   late final ItemReminderService _reminderService;
 
   @override
   List<Item> build() {
     _repository = ref.watch(itemRepositoryProvider);
+    _historyRepository = ref.watch(itemHistoryRepositoryProvider);
     _reminderService = ref.watch(itemReminderServiceProvider);
     return _repository.loadItems();
   }
+
+  List<DailyItemStat> get dailyStats => _historyRepository.loadStats();
 
   void addItem({
     required String title,
@@ -137,6 +147,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     nextState[index] = updated;
     state = nextState;
     _repository.saveItems(state);
+    _historyRepository.addCount(id, _dayKey(DateTime.now()), 1);
 
     if (Item.isCheckpointProgress(
       currentProgress: updated.currentProgress,
@@ -198,5 +209,11 @@ class ItemsNotifier extends Notifier<List<Item>> {
     state = nextState;
     _repository.saveItems(state);
     return null;
+  }
+
+  static String _dayKey(DateTime date) {
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
   }
 }

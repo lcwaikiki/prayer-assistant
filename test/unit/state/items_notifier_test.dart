@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/models/daily_item_stat.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 
@@ -28,11 +30,15 @@ Item item(
 
 ProviderContainer containerWith(
   ItemRepository repository,
-  MockItemReminderService reminderService,
-) {
+  MockItemReminderService reminderService, {
+  ItemHistoryRepository? historyRepository,
+}) {
   final container = ProviderContainer(
     overrides: [
       itemRepositoryProvider.overrideWithValue(repository),
+      itemHistoryRepositoryProvider.overrideWithValue(
+        historyRepository ?? ItemHistoryRepository.memory(),
+      ),
       itemReminderServiceProvider.overrideWithValue(reminderService),
     ],
   );
@@ -52,9 +58,7 @@ void main() {
     when(
       () => reminderService.scheduleReminder(any()),
     ).thenAnswer((_) async {});
-    when(
-      () => reminderService.cancelReminder(any()),
-    ).thenAnswer((_) async {});
+    when(() => reminderService.cancelReminder(any())).thenAnswer((_) async {});
   });
 
   group('ItemsNotifier.build', () {
@@ -70,10 +74,7 @@ void main() {
     });
 
     test('exposes an empty list for an empty repository', () {
-      final container = containerWith(
-        ItemRepository.memory(),
-        reminderService,
-      );
+      final container = containerWith(ItemRepository.memory(), reminderService);
 
       expect(container.read(itemsNotifierProvider), isEmpty);
     });
@@ -84,16 +85,18 @@ void main() {
       final repository = ItemRepository.memory();
       final container = containerWith(repository, reminderService);
 
-      container.read(itemsNotifierProvider.notifier).addItem(
-        title: 'Istigfar',
-        notes: 'Morning',
-        count: 100,
-        check: 25,
-        vibrationIntensity: 80,
-        reminderEnabled: true,
-        reminderAnchor: ItemReminderAnchor.prayerTime,
-        reminderPrayerName: 'Imsak',
-      );
+      container
+          .read(itemsNotifierProvider.notifier)
+          .addItem(
+            title: 'Istigfar',
+            notes: 'Morning',
+            count: 100,
+            check: 25,
+            vibrationIntensity: 80,
+            reminderEnabled: true,
+            reminderAnchor: ItemReminderAnchor.prayerTime,
+            reminderPrayerName: 'Imsak',
+          );
 
       final items = container.read(itemsNotifierProvider);
       expect(items, hasLength(1));
@@ -113,9 +116,7 @@ void main() {
       final container = containerWith(repository, reminderService);
       final updated = item('a', title: 'New', count: 99);
 
-      container
-          .read(itemsNotifierProvider.notifier)
-          .updateItem(updated);
+      container.read(itemsNotifierProvider.notifier).updateItem(updated);
 
       final items = container.read(itemsNotifierProvider);
       expect(items, hasLength(1));
@@ -146,18 +147,12 @@ void main() {
 
   group('ItemsNotifier.deleteItem', () {
     test('removes the item, persists and cancels its reminder', () {
-      final repository = ItemRepository.memory([
-        item('a'),
-        item('b'),
-      ]);
+      final repository = ItemRepository.memory([item('a'), item('b')]);
       final container = containerWith(repository, reminderService);
 
       container.read(itemsNotifierProvider.notifier).deleteItem('a');
 
-      expect(
-        container.read(itemsNotifierProvider).map((i) => i.id),
-        ['b'],
-      );
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), ['b']);
       expect(repository.loadItems().map((i) => i.id), ['b']);
       verify(() => reminderService.cancelReminder('a')).called(1);
     });
@@ -165,21 +160,18 @@ void main() {
 
   group('ItemsNotifier.restoreItem', () {
     test('inserts the item at the requested index and reschedules', () {
-      final repository = ItemRepository.memory([
-        item('a'),
-        item('b'),
-      ]);
+      final repository = ItemRepository.memory([item('a'), item('b')]);
       final container = containerWith(repository, reminderService);
 
-      container.read(itemsNotifierProvider.notifier).restoreItem(
-        item('x', title: 'X'),
-        index: 1,
-      );
+      container
+          .read(itemsNotifierProvider.notifier)
+          .restoreItem(item('x', title: 'X'), index: 1);
 
-      expect(
-        container.read(itemsNotifierProvider).map((i) => i.id),
-        ['a', 'x', 'b'],
-      );
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), [
+        'a',
+        'x',
+        'b',
+      ]);
       verify(() => reminderService.scheduleReminder(any())).called(1);
     });
 
@@ -187,10 +179,9 @@ void main() {
       final repository = ItemRepository.memory([item('a')]);
       final container = containerWith(repository, reminderService);
 
-      container.read(itemsNotifierProvider.notifier).restoreItem(
-        item('a', title: 'Duplicate'),
-        index: 0,
-      );
+      container
+          .read(itemsNotifierProvider.notifier)
+          .restoreItem(item('a', title: 'Duplicate'), index: 0);
 
       expect(container.read(itemsNotifierProvider), hasLength(1));
       verifyNever(() => reminderService.scheduleReminder(any()));
@@ -200,15 +191,14 @@ void main() {
       final repository = ItemRepository.memory([item('a')]);
       final container = containerWith(repository, reminderService);
 
-      container.read(itemsNotifierProvider.notifier).restoreItem(
-        item('x'),
-        index: 99,
-      );
+      container
+          .read(itemsNotifierProvider.notifier)
+          .restoreItem(item('x'), index: 99);
 
-      expect(
-        container.read(itemsNotifierProvider).map((i) => i.id),
-        ['a', 'x'],
-      );
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), [
+        'a',
+        'x',
+      ]);
     });
   });
 
@@ -223,14 +213,13 @@ void main() {
 
       // ReorderableListView semantics: newIndex is the drop position in the
       // list that still includes the dragged item.
-      container
-          .read(itemsNotifierProvider.notifier)
-          .reorderItems(0, 3);
+      container.read(itemsNotifierProvider.notifier).reorderItems(0, 3);
 
-      expect(
-        container.read(itemsNotifierProvider).map((i) => i.id),
-        ['b', 'c', 'a'],
-      );
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), [
+        'b',
+        'c',
+        'a',
+      ]);
       expect(repository.loadItems().map((i) => i.id), ['b', 'c', 'a']);
     });
 
@@ -242,14 +231,13 @@ void main() {
       ]);
       final container = containerWith(repository, reminderService);
 
-      container
-          .read(itemsNotifierProvider.notifier)
-          .reorderItems(2, 0);
+      container.read(itemsNotifierProvider.notifier).reorderItems(2, 0);
 
-      expect(
-        container.read(itemsNotifierProvider).map((i) => i.id),
-        ['c', 'a', 'b'],
-      );
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), [
+        'c',
+        'a',
+        'b',
+      ]);
     });
 
     test('ignores out-of-range indexes', () {
@@ -271,7 +259,9 @@ void main() {
       );
 
       expect(
-        container.read(itemsNotifierProvider.notifier).incrementProgress('nope'),
+        container
+            .read(itemsNotifierProvider.notifier)
+            .incrementProgress('nope'),
         TapFeedback.none,
       );
     });
@@ -298,10 +288,7 @@ void main() {
         container.read(itemsNotifierProvider.notifier).incrementProgress('a'),
         TapFeedback.standard,
       );
-      expect(
-        container.read(itemsNotifierProvider).single.currentProgress,
-        6,
-      );
+      expect(container.read(itemsNotifierProvider).single.currentProgress, 6);
     });
 
     test('returns checkpoint feedback at check boundaries', () {
@@ -330,14 +317,61 @@ void main() {
       expect(current.currentProgress, 33);
       expect(current.setCount, 3);
     });
+
+    test('records the tap in the daily history', () {
+      final history = ItemHistoryRepository.memory();
+      final container = containerWith(
+        ItemRepository.memory([item('a', count: 33)]),
+        reminderService,
+        historyRepository: history,
+      );
+
+      container.read(itemsNotifierProvider.notifier).incrementProgress('a');
+      container.read(itemsNotifierProvider.notifier).incrementProgress('a');
+
+      final stats = history.loadStats();
+      expect(stats, hasLength(1));
+      expect(stats.single.itemId, 'a');
+      expect(stats.single.count, 2);
+      expect(stats.single.dateKey, matches(RegExp(r'^\d{4}-\d{2}-\d{2}$')));
+    });
+
+    test('does not record taps for unknown or full items', () {
+      final history = ItemHistoryRepository.memory();
+      final container = containerWith(
+        ItemRepository.memory([item('a', count: 33, currentProgress: 33)]),
+        reminderService,
+        historyRepository: history,
+      );
+
+      container.read(itemsNotifierProvider.notifier).incrementProgress('nope');
+      container.read(itemsNotifierProvider.notifier).incrementProgress('a');
+
+      expect(history.loadStats(), isEmpty);
+    });
+
+    test('exposes recorded stats through dailyStats', () {
+      final history = ItemHistoryRepository.memory([
+        const DailyItemStat(itemId: 'a', dateKey: '2026-08-17', count: 5),
+        const DailyItemStat(itemId: 'b', dateKey: '2026-08-17', count: 3),
+      ]);
+      final container = containerWith(
+        ItemRepository.memory([item('a'), item('b')]),
+        reminderService,
+        historyRepository: history,
+      );
+
+      final stats = container.read(itemsNotifierProvider.notifier).dailyStats;
+
+      expect(stats, hasLength(2));
+      expect(stats.map((s) => s.count).reduce((a, b) => a + b), 8);
+    });
   });
 
   group('ItemsNotifier.resetProgress', () {
     test('zeroes progress but keeps setCount', () {
       final container = containerWith(
-        ItemRepository.memory([
-          item('a', currentProgress: 20, setCount: 1),
-        ]),
+        ItemRepository.memory([item('a', currentProgress: 20, setCount: 1)]),
         reminderService,
       );
 
@@ -356,10 +390,7 @@ void main() {
 
       container.read(itemsNotifierProvider.notifier).resetProgress('nope');
 
-      expect(
-        container.read(itemsNotifierProvider).single.currentProgress,
-        5,
-      );
+      expect(container.read(itemsNotifierProvider).single.currentProgress, 5);
     });
   });
 

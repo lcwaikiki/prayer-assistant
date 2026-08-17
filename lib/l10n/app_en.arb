@@ -21,6 +21,20 @@
   "homeNoPrayerTimesTitle": "No prayer times in cache",
   "homeNoPrayerTimesSubtitle": "Tap refresh to sync yearly data.",
   "refresh": "Refresh",
+  "qiblaTitle": "Qibla",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Qibla: {degrees}°",
+  "qiblaLocationUnavailable": "Could not determine your location. Enable GPS and try again.",
+  "qiblaHeadingUnavailable": "Compass unavailable - showing fixed bearing.",
+  "qiblaPointDevice": "Rotate your device until the needle points up.",
+  "qiblaKaabaShort": "Qibla",
+  "shareTodayTimes": "Share today's times",
   "todayWithDate": "Today • {date}",
   "@todayWithDate": {
     "placeholders": {

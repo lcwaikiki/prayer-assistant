@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "Önbellekte namaz vakti yok",
   "homeNoPrayerTimesSubtitle": "Yıllık veriyi eşitlemek için yenileyin.",
   "refresh": "Yenile",
+  "qiblaTitle": "Kıble",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Kıble: {degrees}°",
+  "qiblaLocationUnavailable": "Konumunuz belirlenemedi. GPS'i açıp tekrar deneyin.",
+  "qiblaHeadingUnavailable": "Pusula yok - sabit yön gösteriliyor.",
+  "qiblaPointDevice": "İbre yukarıyı gösterene kadar cihazınızı çevirin.",
+  "qiblaKaabaShort": "Kıble",
+  "shareTodayTimes": "Bugünün vakitlerini paylaş",
   "todayWithDate": "Bugün • {date}",
   "hijriUnknown": "Hicri: -",
   "hijriWithDate": "Hicri: {date}",

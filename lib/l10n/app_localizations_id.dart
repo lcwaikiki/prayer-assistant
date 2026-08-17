@@ -61,6 +61,32 @@ class AppLocalizationsId extends AppLocalizations {
   String get refresh => 'Refresh';
 
   @override
+  String get qiblaTitle => 'Kiblat';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'Kiblat: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'Tidak dapat menentukan lokasi Anda. Aktifkan GPS dan coba lagi.';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'Kompas tidak tersedia - menampilkan arah tetap.';
+
+  @override
+  String get qiblaPointDevice =>
+      'Putar perangkat hingga jarum menunjuk ke atas.';
+
+  @override
+  String get qiblaKaabaShort => 'Kiblat';
+
+  @override
+  String get shareTodayTimes => 'Bagikan waktu hari ini';
+
+  @override
   String todayWithDate(Object date) {
     return 'Hari ini • $date';
   }

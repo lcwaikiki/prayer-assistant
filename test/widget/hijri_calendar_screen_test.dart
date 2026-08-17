@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
 
+import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
@@ -24,8 +26,9 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('renders the hijri month title and weekday headers',
-      (tester) async {
+  testWidgets('renders the hijri month title and weekday headers', (
+    tester,
+  ) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -47,8 +50,9 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('switching to the gregorian basis shows the gregorian month',
-      (tester) async {
+  testWidgets('switching to the gregorian basis shows the gregorian month', (
+    tester,
+  ) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -116,8 +120,51 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('the sheet lists reminders occurring on the tapped day',
-      (tester) async {
+  testWidgets('the sheet shows prayer times for the tapped day', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    when(
+      () => harness.database.loadSelectedLocation(),
+    ).thenAnswer((_) async => sampleSelectedLocation());
+    when(
+      () => harness.database.getDay(
+        districtId: any(named: 'districtId'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => samplePrayerDay());
+    when(
+      () => harness.database.getRange(
+        districtId: any(named: 'districtId'),
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+      ),
+    ).thenAnswer((_) async => [samplePrayerDay()]);
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+    );
+
+    await switchToGregorian(tester);
+    await hideSecondary(tester);
+    await openDayDetail(tester);
+
+    expect(find.text('Fajr'), findsOneWidget);
+    expect(find.text('05:10'), findsOneWidget);
+    expect(find.text('Dhuhr'), findsOneWidget);
+    expect(find.text('12:35'), findsOneWidget);
+    expect(find.text('Isha'), findsOneWidget);
+    expect(find.text('19:45'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('the sheet lists reminders occurring on the tapped day', (
+    tester,
+  ) async {
     final harness = TestHarness.create();
     await harness.initialize();
     harness.controller.addCalendarReminder(
@@ -145,8 +192,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('deleting a reminder from the sheet offers undo',
-      (tester) async {
+  testWidgets('deleting a reminder from the sheet offers undo', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
     harness.controller.addCalendarReminder(
@@ -178,16 +224,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(harness.controller.calendarReminders, hasLength(1));
-    expect(
-      harness.controller.calendarReminders.first.title,
-      'Test Reminder',
-    );
+    expect(harness.controller.calendarReminders.first.title, 'Test Reminder');
 
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('adding a reminder from the sheet saves it via the form',
-      (tester) async {
+  testWidgets('adding a reminder from the sheet saves it via the form', (
+    tester,
+  ) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -216,10 +260,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(harness.controller.calendarReminders, hasLength(1));
-    expect(
-      harness.controller.calendarReminders.first.title,
-      'New Reminder',
-    );
+    expect(harness.controller.calendarReminders.first.title, 'New Reminder');
     expect(find.text('August 2026'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());

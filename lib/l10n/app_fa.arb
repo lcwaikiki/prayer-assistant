@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "اوقات نماز در کش موجود نیست",
   "homeNoPrayerTimesSubtitle": "برای همگام‌سازی داده سالانه، نوسازی کنید.",
   "refresh": "نوسازی",
+  "qiblaTitle": "قبله",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "قبله: {degrees}°",
+  "qiblaLocationUnavailable": "مکان شما مشخص نشد. GPS را فعال و دوباره تلاش کنید.",
+  "qiblaHeadingUnavailable": "قطب‌نما در دسترس نیست - جهت ثابت نمایش داده می‌شود.",
+  "qiblaPointDevice": "دستگاه را بچرخانید تا عقربه رو به بالا قرار گیرد.",
+  "qiblaKaabaShort": "قبله",
+  "shareTodayTimes": "اشتراک اوقات امروز",
   "todayWithDate": "امروز • {date}",
   "hijriUnknown": "هجری: -",
   "hijriWithDate": "هجری: {date}",

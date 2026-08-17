@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "礼拝時間のキャッシュがありません",
   "homeNoPrayerTimesSubtitle": "更新して年間データを同期してください。",
   "refresh": "更新",
+  "qiblaTitle": "キブラ",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "キブラ: {degrees}°",
+  "qiblaLocationUnavailable": "現在地を特定できませんでした。GPSを有効にして再試行してください。",
+  "qiblaHeadingUnavailable": "コンパスが利用できません - 固定方向を表示中。",
+  "qiblaPointDevice": "針が上を向くまでデバイスを回してください。",
+  "qiblaKaabaShort": "キブラ",
+  "shareTodayTimes": "今日の時刻を共有",
   "todayWithDate": "今日 • {date}",
   "hijriUnknown": "ヒジュラ暦: -",
   "hijriWithDate": "ヒジュラ暦: {date}",

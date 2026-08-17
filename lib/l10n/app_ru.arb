@@ -21,6 +21,20 @@
   "homeNoPrayerTimesTitle": "Нет времени намаза в кэше",
   "homeNoPrayerTimesSubtitle": "Нажмите «Обновить», чтобы загрузить данные на год.",
   "refresh": "Обновить",
+  "qiblaTitle": "Кибла",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Кибла: {degrees}°",
+  "qiblaLocationUnavailable": "Не удалось определить местоположение. Включите GPS и попробуйте снова.",
+  "qiblaHeadingUnavailable": "Компас недоступен - показано фиксированное направление.",
+  "qiblaPointDevice": "Поверните устройство, пока стрелка не укажет вверх.",
+  "qiblaKaabaShort": "Кибла",
+  "shareTodayTimes": "Поделиться временем на сегодня",
   "todayWithDate": "Сегодня • {date}",
   "@todayWithDate": {
     "placeholders": {

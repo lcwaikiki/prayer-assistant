@@ -38,6 +38,10 @@ class TesbihatLocalizations {
       'language': 'Language',
       'chooseLanguage': 'Choose language',
       'noMilestones': 'No beads yet. Tap + to add one.',
+      'statsTitle': 'History',
+      'statsToday': 'Today',
+      'statsLast7Days': '7 days',
+      'statsTotal': 'Total',
       'deleted': 'deleted',
       'undo': 'Undo',
       'edit': 'Edit',
@@ -115,6 +119,10 @@ class TesbihatLocalizations {
       'language': 'Idioma',
       'chooseLanguage': 'Elegir idioma',
       'noMilestones': 'Aun no hay cuentas. Toca + para agregar una.',
+      'statsTitle': 'Historial',
+      'statsToday': 'Hoy',
+      'statsLast7Days': '7 días',
+      'statsTotal': 'Total',
       'deleted': 'eliminado',
       'undo': 'Deshacer',
       'edit': 'Editar',
@@ -193,6 +201,10 @@ class TesbihatLocalizations {
       'language': 'زبان',
       'chooseLanguage': 'انتخاب زبان',
       'noMilestones': 'هنوز تسبیحی وجود ندارد. برای افزودن + را بزنید.',
+      'statsTitle': 'تاریخچه',
+      'statsToday': 'امروز',
+      'statsLast7Days': '۷ روز',
+      'statsTotal': 'مجموع',
       'deleted': 'حذف شد',
       'undo': 'بازگردانی',
       'edit': 'ویرایش',
@@ -267,6 +279,10 @@ class TesbihatLocalizations {
       'switchToLight': 'Passer en mode clair',
       'switchToDark': 'Passer en mode sombre',
       'noMilestones': 'Aucune perle. Appuyez sur + pour en ajouter.',
+      'statsTitle': 'Historique',
+      'statsToday': 'Aujourd\'hui',
+      'statsLast7Days': '7 jours',
+      'statsTotal': 'Total',
       'deleted': 'supprimé',
       'undo': 'Annuler',
       'edit': 'Modifier',
@@ -345,6 +361,10 @@ class TesbihatLocalizations {
       'switchToLight': 'Zu hellem Modus wechseln',
       'switchToDark': 'Zu dunklem Modus wechseln',
       'noMilestones': 'Noch keine Perlen. Mit + hinzufügen.',
+      'statsTitle': 'Verlauf',
+      'statsToday': 'Heute',
+      'statsLast7Days': '7 Tage',
+      'statsTotal': 'Gesamt',
       'deleted': 'gelöscht',
       'undo': 'Rückgängig',
       'edit': 'Bearbeiten',
@@ -422,6 +442,10 @@ class TesbihatLocalizations {
       'switchToLight': 'التبديل إلى الوضع الفاتح',
       'switchToDark': 'التبديل إلى الوضع الداكن',
       'noMilestones': 'لا توجد مسبحة بعد. اضغط + للإضافة.',
+      'statsTitle': 'السجل',
+      'statsToday': 'اليوم',
+      'statsLast7Days': '٧ أيام',
+      'statsTotal': 'الإجمالي',
       'deleted': 'تم الحذف',
       'undo': 'تراجع',
       'edit': 'تعديل',
@@ -498,6 +522,10 @@ class TesbihatLocalizations {
       'language': '言語',
       'chooseLanguage': '言語を選択',
       'noMilestones': 'ビーズがありません。+ をタップして追加してください。',
+      'statsTitle': '履歴',
+      'statsToday': '今日',
+      'statsLast7Days': '7日間',
+      'statsTotal': '合計',
       'deleted': 'を削除しました',
       'undo': '元に戻す',
       'edit': '編集',
@@ -572,6 +600,10 @@ class TesbihatLocalizations {
       'switchToLight': '切换到浅色模式',
       'switchToDark': '切换到深色模式',
       'noMilestones': '还没有念珠。点击 + 添加。',
+      'statsTitle': '历史',
+      'statsToday': '今天',
+      'statsLast7Days': '7天',
+      'statsTotal': '总计',
       'deleted': '已删除',
       'undo': '撤销',
       'edit': '编辑',
@@ -646,6 +678,10 @@ class TesbihatLocalizations {
       'switchToLight': 'Açık moda geç',
       'switchToDark': 'Koyu moda geç',
       'noMilestones': 'Henüz tesbih yok. Eklemek için + dokunun.',
+      'statsTitle': 'Geçmiş',
+      'statsToday': 'Bugün',
+      'statsLast7Days': '7 gün',
+      'statsTotal': 'Toplam',
       'deleted': 'silindi',
       'undo': 'Geri Al',
       'edit': 'Düzenle',
@@ -721,6 +757,10 @@ class TesbihatLocalizations {
       'switchToLight': 'لائٹ موڈ پر جائیں',
       'switchToDark': 'ڈارک موڈ پر جائیں',
       'noMilestones': 'ابھی کوئی تسبیح نہیں۔ شامل کرنے کے لیے + دبائیں۔',
+      'statsTitle': 'تاریخ',
+      'statsToday': 'آج',
+      'statsLast7Days': '7 دن',
+      'statsTotal': 'کل',
       'deleted': 'حذف ہوگیا',
       'undo': 'واپس لائیں',
       'edit': 'ترمیم',
@@ -798,6 +838,10 @@ class TesbihatLocalizations {
       'language': 'Язык',
       'chooseLanguage': 'Выбрать язык',
       'noMilestones': 'Пока нет тасбиха. Нажмите +, чтобы добавить.',
+      'statsTitle': 'История',
+      'statsToday': 'Сегодня',
+      'statsLast7Days': '7 дней',
+      'statsTotal': 'Итого',
       'deleted': 'удалено',
       'undo': 'Отменить',
       'edit': 'Изменить',
@@ -882,6 +926,10 @@ class TesbihatLocalizations {
   String get language => _t('language');
   String get chooseLanguage => _t('chooseLanguage');
   String get noMilestones => _t('noMilestones');
+  String get statsTitle => _t('statsTitle');
+  String get statsToday => _t('statsToday');
+  String get statsLast7Days => _t('statsLast7Days');
+  String get statsTotal => _t('statsTotal');
   String deletedItem(String title) => '"$title" ${_t('deleted')}';
   String get undo => _t('undo');
   String get edit => _t('edit');
@@ -959,10 +1007,9 @@ class _TesbihatLocalizationsDelegate
   const _TesbihatLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      TesbihatLocalizations.supportedLocales.any(
-        (l) => l.languageCode == locale.languageCode,
-      );
+  bool isSupported(Locale locale) => TesbihatLocalizations.supportedLocales.any(
+    (l) => l.languageCode == locale.languageCode,
+  );
 
   @override
   Future<TesbihatLocalizations> load(Locale locale) async {

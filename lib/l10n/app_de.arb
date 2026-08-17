@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "Keine Gebetszeiten im Cache",
   "homeNoPrayerTimesSubtitle": "Tippe auf Aktualisieren, um Jahresdaten zu synchronisieren.",
   "refresh": "Aktualisieren",
+  "qiblaTitle": "Qibla",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Qibla: {degrees}°",
+  "qiblaLocationUnavailable": "Ihre Position konnte nicht ermittelt werden. GPS aktivieren und erneut versuchen.",
+  "qiblaHeadingUnavailable": "Kompass nicht verfügbar - feste Richtung wird angezeigt.",
+  "qiblaPointDevice": "Drehen Sie das Gerät, bis die Nadel nach oben zeigt.",
+  "qiblaKaabaShort": "Qibla",
+  "shareTodayTimes": "Heutige Zeiten teilen",
   "todayWithDate": "Heute • {date}",
   "hijriUnknown": "Hidschri: -",
   "hijriWithDate": "Hidschri: {date}",

@@ -61,6 +61,32 @@ class AppLocalizationsUr extends AppLocalizations {
   String get refresh => 'ریفریش';
 
   @override
+  String get qiblaTitle => 'قبلہ';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'قبلہ: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'آپ کا مقام معلوم نہیں ہو سکا۔ GPS آن کر کے دوبارہ کوشش کریں۔';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'قطب نما دستیاب نہیں - مقررہ سمت دکھائی جا رہی ہے۔';
+
+  @override
+  String get qiblaPointDevice =>
+      'جب تک سوئی اوپر کی طرف نہ اشارہ کرے اپنا آلہ گھمائیں۔';
+
+  @override
+  String get qiblaKaabaShort => 'قبلہ';
+
+  @override
+  String get shareTodayTimes => 'آج کے اوقات شیئر کریں';
+
+  @override
   String todayWithDate(Object date) {
     return 'آج • $date';
   }

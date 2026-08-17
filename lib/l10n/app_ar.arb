@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "لا توجد أوقات صلاة مخزنة",
   "homeNoPrayerTimesSubtitle": "اضغط تحديث لمزامنة بيانات السنة.",
   "refresh": "تحديث",
+  "qiblaTitle": "القبلة",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "القبلة: {degrees}°",
+  "qiblaLocationUnavailable": "تعذر تحديد موقعك. فعّل نظام تحديد المواقع وحاول مرة أخرى.",
+  "qiblaHeadingUnavailable": "البوصلة غير متاحة - يتم عرض الاتجاه الثابت.",
+  "qiblaPointDevice": "أدر جهازك حتى يشير السهم إلى الأعلى.",
+  "qiblaKaabaShort": "القبلة",
+  "shareTodayTimes": "مشاركة أوقات اليوم",
   "todayWithDate": "اليوم • {date}",
   "hijriUnknown": "هجري: -",
   "hijriWithDate": "هجري: {date}",

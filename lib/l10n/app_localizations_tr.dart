@@ -61,6 +61,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get refresh => 'Yenile';
 
   @override
+  String get qiblaTitle => 'Kıble';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'Kıble: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'Konumunuz belirlenemedi. GPS\'i açıp tekrar deneyin.';
+
+  @override
+  String get qiblaHeadingUnavailable => 'Pusula yok - sabit yön gösteriliyor.';
+
+  @override
+  String get qiblaPointDevice =>
+      'İbre yukarıyı gösterene kadar cihazınızı çevirin.';
+
+  @override
+  String get qiblaKaabaShort => 'Kıble';
+
+  @override
+  String get shareTodayTimes => 'Bugünün vakitlerini paylaş';
+
+  @override
   String todayWithDate(Object date) {
     return 'Bugün • $date';
   }

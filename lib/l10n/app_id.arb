@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "Waktu salat belum ada di cache",
   "homeNoPrayerTimesSubtitle": "Ketuk refresh untuk sinkronisasi data tahunan.",
   "refresh": "Refresh",
+  "qiblaTitle": "Kiblat",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Kiblat: {degrees}°",
+  "qiblaLocationUnavailable": "Tidak dapat menentukan lokasi Anda. Aktifkan GPS dan coba lagi.",
+  "qiblaHeadingUnavailable": "Kompas tidak tersedia - menampilkan arah tetap.",
+  "qiblaPointDevice": "Putar perangkat hingga jarum menunjuk ke atas.",
+  "qiblaKaabaShort": "Kiblat",
+  "shareTodayTimes": "Bagikan waktu hari ini",
   "todayWithDate": "Hari ini • {date}",
   "hijriUnknown": "Hijriah: -",
   "hijriWithDate": "Hijriah: {date}",

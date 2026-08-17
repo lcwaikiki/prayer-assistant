@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "کیش میں نماز اوقات نہیں",
   "homeNoPrayerTimesSubtitle": "سالانہ ڈیٹا ہم آہنگ کرنے کے لیے ریفریش کریں۔",
   "refresh": "ریفریش",
+  "qiblaTitle": "قبلہ",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "قبلہ: {degrees}°",
+  "qiblaLocationUnavailable": "آپ کا مقام معلوم نہیں ہو سکا۔ GPS آن کر کے دوبارہ کوشش کریں۔",
+  "qiblaHeadingUnavailable": "قطب نما دستیاب نہیں - مقررہ سمت دکھائی جا رہی ہے۔",
+  "qiblaPointDevice": "جب تک سوئی اوپر کی طرف نہ اشارہ کرے اپنا آلہ گھمائیں۔",
+  "qiblaKaabaShort": "قبلہ",
+  "shareTodayTimes": "آج کے اوقات شیئر کریں",
   "todayWithDate": "آج • {date}",
   "hijriUnknown": "ہجری: -",
   "hijriWithDate": "ہجری: {date}",

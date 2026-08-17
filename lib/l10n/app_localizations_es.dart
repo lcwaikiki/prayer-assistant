@@ -61,6 +61,32 @@ class AppLocalizationsEs extends AppLocalizations {
   String get refresh => 'Actualizar';
 
   @override
+  String get qiblaTitle => 'Qibla';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'Qibla: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'No se pudo determinar tu ubicación. Activa el GPS e inténtalo de nuevo.';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'Brújula no disponible - mostrando dirección fija.';
+
+  @override
+  String get qiblaPointDevice =>
+      'Gira el dispositivo hasta que la flecha apunte hacia arriba.';
+
+  @override
+  String get qiblaKaabaShort => 'Qibla';
+
+  @override
+  String get shareTodayTimes => 'Compartir horarios de hoy';
+
+  @override
   String todayWithDate(Object date) {
     return 'Hoy • $date';
   }

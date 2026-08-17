@@ -16,6 +16,20 @@
   "homeNoPrayerTimesTitle": "Aucun horaire en cache",
   "homeNoPrayerTimesSubtitle": "Touchez actualiser pour synchroniser les données annuelles.",
   "refresh": "Actualiser",
+  "qiblaTitle": "Qibla",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "Qibla : {degrees}°",
+  "qiblaLocationUnavailable": "Impossible de déterminer votre position. Activez le GPS et réessayez.",
+  "qiblaHeadingUnavailable": "Boussole indisponible - direction fixe affichée.",
+  "qiblaPointDevice": "Tournez l'appareil jusqu'à ce que la flèche pointe vers le haut.",
+  "qiblaKaabaShort": "Qibla",
+  "shareTodayTimes": "Partager les horaires du jour",
   "todayWithDate": "Aujourd'hui • {date}",
   "hijriUnknown": "Hijri : -",
   "hijriWithDate": "Hijri : {date}",

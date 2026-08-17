@@ -61,6 +61,32 @@ class AppLocalizationsFa extends AppLocalizations {
   String get refresh => 'نوسازی';
 
   @override
+  String get qiblaTitle => 'قبله';
+
+  @override
+  String qiblaBearing(int degrees) {
+    return 'قبله: $degrees°';
+  }
+
+  @override
+  String get qiblaLocationUnavailable =>
+      'مکان شما مشخص نشد. GPS را فعال و دوباره تلاش کنید.';
+
+  @override
+  String get qiblaHeadingUnavailable =>
+      'قطب‌نما در دسترس نیست - جهت ثابت نمایش داده می‌شود.';
+
+  @override
+  String get qiblaPointDevice =>
+      'دستگاه را بچرخانید تا عقربه رو به بالا قرار گیرد.';
+
+  @override
+  String get qiblaKaabaShort => 'قبله';
+
+  @override
+  String get shareTodayTimes => 'اشتراک اوقات امروز';
+
+  @override
   String todayWithDate(Object date) {
     return 'امروز • $date';
   }

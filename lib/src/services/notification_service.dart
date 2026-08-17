@@ -274,7 +274,8 @@ class NotificationService {
               _ReminderNotification(
                 fireAt: afterTime,
                 title: '$displayName +${setting.minutesAfter} min',
-                body: '$locationName - It has been ${setting.minutesAfter} min since $displayName.',
+                body:
+                    '$locationName - It has been ${setting.minutesAfter} min since $displayName.',
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
               ),
@@ -295,33 +296,37 @@ class NotificationService {
         soundEnabled: item.soundEnabled,
       );
 
+      final payload = jsonEncode({
+        'fireAt': item.fireAt.toIso8601String(),
+        'title': item.title,
+      });
+
+      // Exact alarms keep prayer times precise, but on Android 12+ they
+      // require the user to grant the exact-alarm permission (or the app to
+      // fall back when the call is rejected). Prefer exact when granted,
+      // otherwise schedule inexactly so reminders still fire at all.
       try {
-        final payload = jsonEncode({
-          'fireAt': item.fireAt.toIso8601String(),
-          'title': item.title,
-        });
         await _plugin.zonedSchedule(
           id: i + 1,
           title: item.title,
           body: item.body,
           scheduledDate: date,
           notificationDetails: notificationDetails,
-          androidScheduleMode : AndroidScheduleMode.exactAllowWhileIdle,
+          androidScheduleMode: _useExactAlarms
+              ? AndroidScheduleMode.exactAllowWhileIdle
+              : AndroidScheduleMode.inexactAllowWhileIdle,
           payload: payload,
         );
       } catch (_) {
-        final payload = jsonEncode({
-          'fireAt': item.fireAt.toIso8601String(),
-          'title': item.title,
-        });
-
+        // Permission state can change after initialization; never let a
+        // rejected exact-alarm request silently drop the reminder.
         await _plugin.zonedSchedule(
           id: i + 1,
           title: item.title,
           body: item.body,
           scheduledDate: date,
           notificationDetails: notificationDetails,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
           payload: payload,
         );
       }

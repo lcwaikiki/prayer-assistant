@@ -214,6 +214,48 @@ abstract class AppLocalizations {
   /// **'Refresh'**
   String get refresh;
 
+  /// No description provided for @qiblaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla'**
+  String get qiblaTitle;
+
+  /// No description provided for @qiblaBearing.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla: {degrees}°'**
+  String qiblaBearing(int degrees);
+
+  /// No description provided for @qiblaLocationUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not determine your location. Enable GPS and try again.'**
+  String get qiblaLocationUnavailable;
+
+  /// No description provided for @qiblaHeadingUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Compass unavailable - showing fixed bearing.'**
+  String get qiblaHeadingUnavailable;
+
+  /// No description provided for @qiblaPointDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Rotate your device until the needle points up.'**
+  String get qiblaPointDevice;
+
+  /// No description provided for @qiblaKaabaShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Qibla'**
+  String get qiblaKaabaShort;
+
+  /// No description provided for @shareTodayTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Share today\'s times'**
+  String get shareTodayTimes;
+
   /// No description provided for @todayWithDate.
   ///
   /// In en, this message translates to:

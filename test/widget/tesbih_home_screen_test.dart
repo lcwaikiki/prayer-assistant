@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/models/daily_item_stat.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/tesbih_home_screen.dart';
 
@@ -55,6 +57,44 @@ void main() {
     expect(find.text('Salavat'), findsOneWidget);
     expect(find.textContaining('Progress: 0 / 33'), findsOneWidget);
     expect(find.textContaining('Count: 100'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('shows aggregated daily history stats', (tester) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([_item(), _item(id: 'b')]);
+    harness.itemHistoryRepository = ItemHistoryRepository.memory([
+      const DailyItemStat(itemId: 'a', dateKey: '2026-08-17', count: 5),
+      const DailyItemStat(itemId: 'b', dateKey: '2026-08-17', count: 3),
+      const DailyItemStat(itemId: 'a', dateKey: '2026-08-12', count: 4),
+      const DailyItemStat(itemId: 'a', dateKey: '2026-08-01', count: 4),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    expect(find.text('History'), findsOneWidget);
+    expect(find.text('Today'), findsOneWidget);
+    expect(find.text('7 days'), findsOneWidget);
+    expect(find.text('Total'), findsOneWidget);
+    expect(find.text('8'), findsOneWidget);
+    expect(find.text('12'), findsOneWidget);
+    expect(find.text('16'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('shows zero stats when no taps have been recorded', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([_item()]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    expect(find.text('0'), findsNWidgets(3));
 
     await tester.pumpWidget(const SizedBox());
   });

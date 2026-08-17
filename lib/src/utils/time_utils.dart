@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../models/prayer_models.dart';
 
 const prayerOrder = <String>[
@@ -41,4 +43,19 @@ String formatRemaining(Duration duration) {
   return '${hours.toString().padLeft(2, '0')}:'
       '${minutes.toString().padLeft(2, '0')}:'
       '${seconds.toString().padLeft(2, '0')}';
+}
+
+String buildSharePrayerTimesText({
+  required SelectedLocation location,
+  required PrayerDay day,
+  required String Function(String prayerName) label,
+}) {
+  final buffer = StringBuffer()
+    ..writeln(location.fullName)
+    ..writeln(DateFormat('EEEE, dd MMM yyyy').format(day.date))
+    ..writeln(day.hijriDate);
+  for (final name in prayerOrder) {
+    buffer.writeln('${label(name)}: ${prayerMapForDay(day)[name] ?? '--:--'}');
+  }
+  return buffer.toString();
 }

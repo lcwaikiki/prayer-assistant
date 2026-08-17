@@ -59,7 +59,12 @@ class _AppShellState extends State<AppShell> {
 
         return Scaffold(
           appBar: _buildAppBar(context, controller, _now),
-          body: SafeArea(child: pages[controller.tabIndex]),
+          body: SafeArea(
+            child: _LazyIndexedStack(
+              index: controller.tabIndex,
+              children: pages,
+            ),
+          ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: controller.tabIndex,
             onDestinationSelected: controller.setTab,
@@ -173,6 +178,37 @@ class _AppShellState extends State<AppShell> {
             );
           },
         ),
+      ],
+    );
+  }
+}
+
+/// Renders one of [children] at [index], building each page lazily on its
+/// first visit and keeping it mounted afterwards so its state (scroll
+/// positions, tab selections, built table rows) survives tab switches.
+class _LazyIndexedStack extends StatefulWidget {
+  const _LazyIndexedStack({required this.index, required this.children});
+
+  final int index;
+  final List<Widget> children;
+
+  @override
+  State<_LazyIndexedStack> createState() => _LazyIndexedStackState();
+}
+
+class _LazyIndexedStackState extends State<_LazyIndexedStack> {
+  late final List<bool> _visited =
+      List<bool>.filled(widget.children.length, false);
+
+  @override
+  Widget build(BuildContext context) {
+    _visited[widget.index] = true;
+    return IndexedStack(
+      index: widget.index,
+      sizing: StackFit.expand,
+      children: [
+        for (var i = 0; i < widget.children.length; i++)
+          if (_visited[i]) widget.children[i] else const SizedBox.shrink(),
       ],
     );
   }

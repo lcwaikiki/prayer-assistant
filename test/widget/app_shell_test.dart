@@ -95,4 +95,29 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('dates sub-tab selection survives tab switches',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const AppShell());
+
+    await tester.tap(find.text('Dates'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Prayer Times'), findsOneWidget);
+    await tester.tap(find.text('Calendar'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Hide secondary date'), findsOneWidget);
+
+    await tester.tap(find.text('Today'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Dates'));
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Hide secondary date'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

@@ -11,6 +11,10 @@ const double _dateColWidth = 66;
 const double _timeColWidth = 44;
 const double _hijriColWidth = 108;
 const double _tableWidth = _dateColWidth + (_timeColWidth * 6) + _hijriColWidth;
+const double _monthHeaderHeight = 40;
+const double _dayRowHeight = 38;
+const double _monthCardBottomPadding = 8;
+const double _monthSpacing = 12;
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
@@ -30,6 +34,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   final Map<String, ScrollController> _monthHorizontalControllers =
       <String, ScrollController>{};
   final Map<String, GlobalKey> _monthKeys = <String, GlobalKey>{};
+  final Map<String, double> _monthTopOffsets = <String, double>{};
   final GlobalKey _todayRowKey = GlobalKey();
   bool _syncingHorizontal = false;
   int? _lastTabIndex;
@@ -71,6 +76,26 @@ class _HistoryScreenState extends State<HistoryScreen>
     if (days.isEmpty) {
       return;
     }
+    final today = DateTime.now();
+    final monthKey = DateFormat('MMMM yyyy', locale).format(today);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final estimatedTop = _monthTopOffsets[monthKey];
+      if (estimatedTop != null && _verticalController.hasClients) {
+        _verticalController.jumpTo(
+          estimatedTop + (today.day - 1) * _dayRowHeight,
+        );
+      }
+      _refineScrollToToday(monthKey, attempts: 12);
+    });
+  }
+
+  void _refineScrollToToday(String monthKey, {required int attempts}) {
+    if (attempts <= 0) {
+      return;
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) {
         return;
@@ -85,8 +110,6 @@ class _HistoryScreenState extends State<HistoryScreen>
         );
         return;
       }
-      final monthKey =
-          DateFormat('MMMM yyyy', locale).format(DateTime.now());
       final fallbackContext = _monthKeys[monthKey]?.currentContext;
       if (fallbackContext != null) {
         Scrollable.ensureVisible(
@@ -95,7 +118,15 @@ class _HistoryScreenState extends State<HistoryScreen>
           curve: Curves.easeOutCubic,
           alignment: 0.08,
         );
+        return;
       }
+      if (_verticalController.hasClients) {
+        final position = _verticalController.position;
+        _verticalController.jumpTo(
+          position.pixels + position.viewportDimension,
+        );
+      }
+      _refineScrollToToday(monthKey, attempts: attempts - 1);
     });
   }
 
@@ -132,8 +163,8 @@ class _HistoryScreenState extends State<HistoryScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildPrayerTimesTab(context, controller),
-                  const HijriCalendarView(),
+                  _KeepAlive(child: _buildPrayerTimesTab(context, controller)),
+                  const _KeepAlive(child: HijriCalendarView()),
                 ],
               ),
             ),
@@ -160,10 +191,18 @@ class _HistoryScreenState extends State<HistoryScreen>
     final today = DateTime.now();
     final locale = Localizations.localeOf(context).toString();
     final groupedByMonth = _groupByMonth(days, locale);
-    for (final month in groupedByMonth.keys) {
-      _monthKeys.putIfAbsent(month, GlobalKey.new);
-      _monthHorizontalControllers.putIfAbsent(month, ScrollController.new);
+    _monthTopOffsets.clear();
+    var cumulativeTop = 0.0;
+    for (final entry in groupedByMonth.entries) {
+      _monthKeys.putIfAbsent(entry.key, GlobalKey.new);
+      _monthHorizontalControllers.putIfAbsent(entry.key, ScrollController.new);
+      _monthTopOffsets[entry.key] = cumulativeTop + _monthHeaderHeight;
+      cumulativeTop += _monthHeaderHeight +
+          entry.value.length * _dayRowHeight +
+          _monthCardBottomPadding +
+          _monthSpacing;
     }
+    final monthEntries = groupedByMonth.entries.toList(growable: false);
 
     return Stack(
       children: [
@@ -204,33 +243,29 @@ class _HistoryScreenState extends State<HistoryScreen>
             ),
             const SizedBox(height: 8),
             Expanded(
-              child: SingleChildScrollView(
+              child: ListView.builder(
                 controller: _verticalController,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 84),
-                  child: Column(
-                    children: groupedByMonth.entries
-                        .map(
-                          (entry) => Padding(
-                            key: _monthKeys[entry.key],
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: _MonthTable(
-                              month: entry.key,
-                              days: entry.value,
-                              today: today,
-                              horizontalController:
-                                  _monthHorizontalControllers[entry.key]!,
-                              onHorizontalScroll: (offset) => _syncHorizontalTo(
-                                offset,
-                                source: entry.key,
-                              ),
-                              todayRowKey: _todayRowKey,
-                            ),
-                          ),
-                        )
-                        .toList(growable: false),
-                  ),
-                ),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 84),
+                itemCount: monthEntries.length,
+                itemBuilder: (context, index) {
+                  final entry = monthEntries[index];
+                  return Padding(
+                    key: _monthKeys[entry.key],
+                    padding: const EdgeInsets.only(bottom: _monthSpacing),
+                    child: _MonthTable(
+                      month: entry.key,
+                      days: entry.value,
+                      today: today,
+                      horizontalController:
+                          _monthHorizontalControllers[entry.key]!,
+                      onHorizontalScroll: (offset) => _syncHorizontalTo(
+                        offset,
+                        source: entry.key,
+                      ),
+                      todayRowKey: _todayRowKey,
+                    ),
+                  );
+                },
               ),
             ),
           ],
@@ -260,6 +295,27 @@ Map<String, List<PrayerDay>> _groupByMonth(List<PrayerDay> days, String locale) 
   return result;
 }
 
+class _KeepAlive extends StatefulWidget {
+  const _KeepAlive({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_KeepAlive> createState() => _KeepAliveState();
+}
+
+class _KeepAliveState extends State<_KeepAlive>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return widget.child;
+  }
+}
+
 class _MonthTable extends StatelessWidget {
   const _MonthTable({
     required this.month,
@@ -283,7 +339,7 @@ class _MonthTable extends StatelessWidget {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.only(bottom: _monthCardBottomPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -316,14 +372,38 @@ class _MonthTable extends StatelessWidget {
                       dataRowMinHeight: 38,
                       dataRowMaxHeight: 40,
                       columns: const [
-                        DataColumn(label: SizedBox(width: _dateColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _timeColWidth)),
-                        DataColumn(label: SizedBox(width: _hijriColWidth)),
+                        DataColumn(
+                          label: SizedBox(width: _dateColWidth),
+                          columnWidth: FixedColumnWidth(_dateColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _timeColWidth),
+                          columnWidth: FixedColumnWidth(_timeColWidth),
+                        ),
+                        DataColumn(
+                          label: SizedBox(width: _hijriColWidth),
+                          columnWidth: FixedColumnWidth(_hijriColWidth),
+                        ),
                       ],
                       rows: List.generate(days.length, (index) {
                         final day = days[index];

@@ -11,6 +11,7 @@ import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
 
 typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
@@ -57,6 +58,20 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icons.location_off_outlined,
             title: context.l10n.homeNoLocationTitle,
             subtitle: context.l10n.homeNoLocationSubtitle,
+            action: IconButton(
+              tooltip: context.l10n.selectYourLocation,
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => Scaffold(
+                    appBar: AppBar(
+                      title: Text(context.l10n.tabLocation),
+                    ),
+                    body: const LocationScreen(),
+                  ),
+                ),
+              ),
+              icon: const Icon(Icons.refresh),
+            ),
           );
         }
 

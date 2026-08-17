@@ -293,6 +293,60 @@ void main() {
 
       expect(controller.districts, hasLength(1));
     });
+
+    test('reloadLocationOptions retries after a failed startup fetch',
+        () async {
+      when(() => api.getCountries()).thenThrow(Exception('network down'));
+      final controller = buildController();
+      await controller.initialize();
+      expect(controller.countries, isEmpty);
+
+      when(() => api.getCountries()).thenAnswer(
+        (_) async => [sampleLocationNode(id: 'tr', name: 'Turkiye')],
+      );
+      await controller.reloadLocationOptions();
+
+      expect(controller.countries, hasLength(1));
+      expect(controller.error, isNull);
+    });
+
+    test('reloadLocationOptions loads the saved location lists', () async {
+      when(() => api.getCountries()).thenThrow(Exception('network down'));
+      when(
+        () => database.loadSelectedLocation(),
+      ).thenAnswer((_) async => sampleSelectedLocation());
+      final controller = buildController();
+      await controller.initialize();
+      expect(controller.countries, isEmpty);
+
+      when(() => api.getCountries()).thenAnswer(
+        (_) async => [sampleLocationNode(id: 'tr', name: 'Turkiye')],
+      );
+      when(() => api.getStates('tr')).thenAnswer(
+        (_) async => [sampleLocationNode(id: '34', name: 'Istanbul')],
+      );
+      when(() => api.getDistricts('34')).thenAnswer(
+        (_) async => [sampleLocationNode(id: '541', name: 'Uskudar')],
+      );
+      await controller.reloadLocationOptions();
+
+      expect(controller.countries, hasLength(1));
+      expect(controller.states, hasLength(1));
+      expect(controller.districts, hasLength(1));
+    });
+
+    test('reloadLocationOptions keeps existing data without refetching',
+        () async {
+      when(() => api.getCountries()).thenAnswer(
+        (_) async => [sampleLocationNode(id: 'tr', name: 'Turkiye')],
+      );
+      final controller = buildController();
+      await controller.initialize();
+
+      await controller.reloadLocationOptions();
+
+      verify(() => api.getCountries()).called(1);
+    });
   });
 
   group('location selection', () {
@@ -343,7 +397,7 @@ void main() {
       )).called(1);
     });
 
-    test('autoPickFromGps resolves and saves the matched location', () async {
+    test('autoPickFromGps resolves and returns the matched location', () async {
       final guess = DeviceLocationGuess(
         country: 'Turkey',
         state: 'Istanbul',
@@ -362,16 +416,17 @@ void main() {
         ];
         return answers[matchCall++];
       });
-      when(
-        () => database.saveSelectedLocation(any()),
-      ).thenAnswer((_) async {});
 
       final controller = buildController();
-      await controller.autoPickFromGps();
+      final picked = await controller.autoPickFromGps();
 
+      expect(picked, isNotNull);
+      expect(picked!.country.id, 'tr');
+      expect(picked.state.id, '34');
+      expect(picked.district.id, '541');
       expect(controller.error, isNull);
-      expect(controller.selectedLocation!.districtId, '541');
-      verify(() => database.saveSelectedLocation(any())).called(1);
+      expect(controller.selectedLocation, isNull);
+      verifyNever(() => database.saveSelectedLocation(any()));
     });
 
     test('autoPickFromGps reports a country match failure', () async {
@@ -386,8 +441,9 @@ void main() {
       when(() => locationResolver.bestMatch(any(), any())).thenReturn(null);
 
       final controller = buildController();
-      await controller.autoPickFromGps();
+      final picked = await controller.autoPickFromGps();
 
+      expect(picked, isNull);
       expect(controller.error, contains('Could not match your country'));
     });
   });

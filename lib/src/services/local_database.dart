@@ -57,22 +57,66 @@ class LocalDatabase {
         await db.execute(_createCalendarRemindersTableSql);
       },
       onUpgrade: (db, oldVersion, newVersion) async {
+        await _renameLegacyMisspelledRemindersTable(db);
         if (oldVersion < 2) {
           await db.execute(
             "ALTER TABLE prayer_times ADD COLUMN hijri_date TEXT NOT NULL DEFAULT ''",
           );
         }
         if (oldVersion < 3) {
-          await db.execute(_createCalendarRemindersTableSql);
+          await _ensureCalendarRemindersTable(db);
         }
         if (oldVersion < 4) {
-          await db.execute(
-            'ALTER TABLE calendar_reminders ADD COLUMN anchor_date TEXT',
-          );
+          await _ensureAnchorDateColumn(db);
         }
+      },
+      onOpen: (db) async {
+        await _renameLegacyMisspelledRemindersTable(db);
       },
     );
     return _db!;
+  }
+
+  /// Older dev builds misspelled the reminders table as 'calender_reminders'
+  /// (and could fail mid-migration). Rename it to the correct name so the
+  /// stored reminders survive; no-op when the correct table already exists.
+  static Future<void> _renameLegacyMisspelledRemindersTable(
+    Database db,
+  ) async {
+    final tables = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type = 'table'",
+    );
+    final names = tables.map((row) => row['name']).toSet();
+    if (names.contains('calender_reminders') &&
+        !names.contains('calendar_reminders')) {
+      await db.execute(
+        'ALTER TABLE calender_reminders RENAME TO calendar_reminders',
+      );
+    }
+  }
+
+  static Future<void> _ensureCalendarRemindersTable(Database db) async {
+    final rows = await db.rawQuery(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'calendar_reminders'",
+    );
+    if (rows.isEmpty) {
+      await db.execute(_createCalendarRemindersTableSql);
+    }
+  }
+
+  /// Adds the v4 column only when missing; the table may already carry it
+  /// (created by v3 SQL that already included the column), which made the
+  /// plain ALTER fail with "duplicate column name".
+  static Future<void> _ensureAnchorDateColumn(Database db) async {
+    final columns = await db.rawQuery(
+      'PRAGMA table_info(calendar_reminders)',
+    );
+    final hasAnchorDate = columns.any((row) => row['name'] == 'anchor_date');
+    if (!hasAnchorDate) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN anchor_date TEXT',
+      );
+    }
   }
 
   static const _createCalendarRemindersTableSql = '''

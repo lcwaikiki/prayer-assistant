@@ -107,7 +107,55 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('use current location triggers autoPickFromGps',
+  testWidgets('retries the option fetch when startup left the list empty',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.api.getCountries()).thenThrow(Exception('network down'));
+    await harness.initialize();
+    expect(harness.controller.countries, isEmpty);
+    expect(harness.controller.error, contains('network down'));
+
+    when(() => harness.api.getCountries()).thenAnswer(
+      (_) async => [sampleLocationNode(id: 'tr', name: 'Türkiye')],
+    );
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: LocationScreen()),
+    );
+
+    expect(harness.controller.countries, hasLength(1));
+    expect(harness.controller.error, isNull);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('shows a stale startup error only once', (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.api.getCountries()).thenThrow(Exception('network down'));
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: LocationScreen()),
+    );
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsNothing);
+
+    harness.controller.notifyListeners();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.byType(SnackBar), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('use current location fills the dropdowns without saving',
       (tester) async {
     final harness = TestHarness.create();
     when(() => harness.locationResolver.resolveFromDevice()).thenAnswer(
@@ -129,17 +177,16 @@ void main() {
     );
     when(
       () => harness.locationResolver.bestMatch(any(), any()),
-    ).thenAnswer((_) {
-      final answers = [
-        sampleLocationNode(id: 'tr', name: 'Türkiye'),
-        sampleLocationNode(id: '34', name: 'Istanbul'),
-        sampleLocationNode(id: '541', name: 'Uskudar'),
-      ];
-      return answers[0];
+    ).thenAnswer((invocation) {
+      final guesses = invocation.positionalArguments[1] as List<String>;
+      if (guesses.first == 'Turkey') {
+        return sampleLocationNode(id: 'tr', name: 'Türkiye');
+      }
+      if (guesses.first == 'Istanbul') {
+        return sampleLocationNode(id: '34', name: 'Istanbul');
+      }
+      return sampleLocationNode(id: '541', name: 'Uskudar');
     });
-    when(
-      () => harness.database.saveSelectedLocation(any()),
-    ).thenAnswer((_) async {});
     await harness.initialize();
 
     await pumpWithHarness(
@@ -152,8 +199,20 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    expect(harness.controller.selectedLocation, isNotNull);
+    expect(harness.controller.selectedLocation, isNull);
     verify(() => harness.locationResolver.resolveFromDevice()).called(1);
+    verifyNever(() => harness.database.saveSelectedLocation(any()));
+    expect(find.text('Türkiye'), findsOneWidget);
+    expect(find.text('Istanbul'), findsOneWidget);
+    expect(find.text('Uskudar'), findsOneWidget);
+
+    final saveButton = tester.widget<FilledButton>(
+      find.ancestor(
+        of: find.text('Save Location'),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    expect(saveButton.onPressed, isNotNull);
 
     await tester.pumpWidget(const SizedBox());
   });

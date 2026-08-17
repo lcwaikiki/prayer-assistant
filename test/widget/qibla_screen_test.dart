@@ -44,6 +44,31 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('centers the dial horizontally on wide (tablet) screens', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1024, 768);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      testLocalizedApp(
+        child: QiblaScreen(
+          loadPosition: () async => (lat: 41.0082, lon: 28.9784),
+          compassStreamProvider: () => null,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    final dial = find.byType(CustomPaint).first;
+    final dialRect = tester.getRect(dial);
+    expect(dialRect.center.dx, closeTo(512, 1));
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('falls back to a fixed bearing when no compass is available', (
     tester,
   ) async {

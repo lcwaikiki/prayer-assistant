@@ -21,6 +21,23 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('refresh icon opens the location screen without a location', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const HomeScreen());
+
+    await tester.tap(find.byIcon(Icons.refresh));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Select Your Location'), findsOneWidget);
+    expect(find.text('Use Current Location'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('offers a refresh action when prayer data is missing', (
     tester,
   ) async {

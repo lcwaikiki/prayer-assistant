@@ -3,6 +3,7 @@ import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/services/local_database.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:path/path.dart' as path;
 
 void main() {
   setUpAll(() {
@@ -309,6 +310,107 @@ void main() {
       final loaded = await database.loadCalendarReminders();
 
       expect(loaded.map((r) => r.id), ['earlier', 'later']);
+    });
+  });
+
+  group('migrations', () {
+    Future<Database> openLegacy(
+      int version, {
+      required void Function(Database db) createSchema,
+      void Function(Database db, int old, int fresh)? upgrade,
+    }) async {
+      final dbPath = path.join(
+        await databaseFactoryFfi.getDatabasesPath(),
+        'prayer_assistant.db',
+      );
+      return databaseFactoryFfi.openDatabase(
+        dbPath,
+        options: OpenDatabaseOptions(
+          version: version,
+          onCreate: (db, _) async => createSchema(db),
+          onUpgrade: upgrade == null
+              ? null
+              : (db, old, fresh) async => upgrade(db, old, fresh),
+        ),
+      );
+    }
+
+    test('upgrade from v3 without anchor_date adds the column', () async {
+      final legacy = await openLegacy(3, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calendar_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            enabled INTEGER NOT NULL
+          )
+        ''');
+      });
+      await legacy.close();
+
+      await database.instance;
+
+      final db = await database.instance;
+      final columns = await db.rawQuery(
+        'PRAGMA table_info(calendar_reminders)',
+      );
+      expect(columns.map((c) => c['name']), contains('anchor_date'));
+    });
+
+    test('upgrade from v3 with anchor_date already present succeeds', () async {
+      final legacy = await openLegacy(3, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calendar_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            enabled INTEGER NOT NULL,
+            anchor_date TEXT
+          )
+        ''');
+      });
+      await legacy.close();
+
+      await database.instance;
+      final loaded = await database.loadCalendarReminders();
+
+      expect(loaded, isEmpty);
+    });
+
+    test('repairs the legacy misspelled table and keeps its data', () async {
+      final legacy = await openLegacy(4, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calender_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            enabled INTEGER NOT NULL,
+            anchor_date TEXT
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO calender_reminders
+            (id, title, notes, anchor_at, recurrence, enabled)
+          VALUES ('r1', 'Eid', '', '2026-08-17T12:00:00.000', 'yearly', 1)
+        ''');
+      });
+      await legacy.close();
+
+      final loaded = await database.loadCalendarReminders();
+
+      expect(loaded, hasLength(1));
+      expect(loaded.single.title, 'Eid');
     });
   });
 }

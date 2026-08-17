@@ -115,45 +115,47 @@ class _QiblaView extends StatelessWidget {
     final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.all(24),
-      child: Column(
-        children: [
-          Text(
-            l10n.qiblaBearing(bearing.round()),
-            style: Theme.of(
-              context,
-            ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 4),
-          Text(locationLabel, style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: 24),
-          if (headingStream == null)
-            Expanded(
-              child: _CompassDial(bearing: bearing, heading: 0, live: false),
-            )
-          else
-            Expanded(
-              child: StreamBuilder<double>(
-                stream: headingStream,
-                initialData: 0,
-                builder: (context, snapshot) {
-                  final heading = snapshot.data ?? 0;
-                  return _CompassDial(
-                    bearing: bearing,
-                    heading: heading,
-                    live: true,
-                  );
-                },
-              ),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              l10n.qiblaBearing(bearing.round()),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-          const SizedBox(height: 16),
-          Text(
-            headingStream == null
-                ? l10n.qiblaHeadingUnavailable
-                : l10n.qiblaPointDevice,
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(locationLabel, style: Theme.of(context).textTheme.bodySmall),
+            const SizedBox(height: 24),
+            if (headingStream == null)
+              Expanded(
+                child: _CompassDial(bearing: bearing, heading: 0, live: false),
+              )
+            else
+              Expanded(
+                child: StreamBuilder<double>(
+                  stream: headingStream,
+                  initialData: 0,
+                  builder: (context, snapshot) {
+                    final heading = snapshot.data ?? 0;
+                    return _CompassDial(
+                      bearing: bearing,
+                      heading: heading,
+                      live: true,
+                    );
+                  },
+                ),
+              ),
+            const SizedBox(height: 16),
+            Text(
+              headingStream == null
+                  ? l10n.qiblaHeadingUnavailable
+                  : l10n.qiblaPointDevice,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ],
+        ),
       ),
     );
   }

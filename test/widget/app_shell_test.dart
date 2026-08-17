@@ -105,12 +105,9 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('location entry in preferences opens the location screen',
+  testWidgets('saving a location from preferences returns to the home tab',
       (tester) async {
     final harness = TestHarness.create();
-    when(() => harness.database.loadSelectedLocation()).thenAnswer(
-      (_) async => sampleSelectedLocation(),
-    );
     when(() => harness.api.getCountries()).thenAnswer(
       (_) async => [sampleLocationNode(id: 'tr', name: 'Türkiye')],
     );
@@ -120,6 +117,21 @@ void main() {
     when(() => harness.api.getDistricts(any())).thenAnswer(
       (_) async => [sampleLocationNode(id: '541', name: 'Uskudar')],
     );
+    when(() => harness.database.saveSelectedLocation(any()))
+        .thenAnswer((_) async {});
+    when(
+      () => harness.database.getDay(
+        districtId: any(named: 'districtId'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => samplePrayerDay());
+    when(
+      () => harness.database.getRange(
+        districtId: any(named: 'districtId'),
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+      ),
+    ).thenAnswer((_) async => [samplePrayerDay()]);
     await harness.initialize();
 
     await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
@@ -133,7 +145,18 @@ void main() {
     await tester.tap(find.byIcon(Icons.chevron_right));
     await tester.pumpAndSettle();
 
-    expect(find.text('Save Location'), findsOneWidget);
+    await _pickDropdown(tester, 'Country', 'Türkiye');
+    await _pickDropdown(tester, 'State / City', 'Istanbul');
+    await _pickDropdown(tester, 'District', 'Uskudar');
+
+    await tester.tap(find.text('Save Location'));
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.tabIndex, 1);
+    expect(harness.controller.selectedLocation!.districtId, '541');
+    expect(find.text('Save Location'), findsNothing);
+    expect(find.text('Today'), findsWidgets);
+    verify(() => harness.database.saveSelectedLocation(any())).called(1);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -160,6 +183,19 @@ void main() {
 
     expect(find.byTooltip('Hide secondary date'), findsOneWidget);
 
-    await tester.pumpWidget(const SizedBox());
+await tester.pumpWidget(const SizedBox());
   });
+}
+
+Future<void> _pickDropdown(
+  WidgetTester tester,
+  String label,
+  String option,
+) async {
+  await tester.tap(find.text(label));
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 300));
+  await tester.tap(find.text(option).last);
+  await tester.pump();
+  await tester.pump(const Duration(milliseconds: 300));
 }

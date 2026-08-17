@@ -216,6 +216,28 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Retries loading the location option lists after a failed startup fetch
+  /// (a network hiccup during [initialize] left the lists empty and no
+  /// subsequent retry existed). Also reloads the saved location's
+  /// states/districts when they are missing, and clears the stale error.
+  Future<void> reloadLocationOptions() async {
+    if (_countries.isNotEmpty) {
+      return;
+    }
+    try {
+      _countries = await api.getCountries();
+      final selected = _selectedLocation;
+      if (selected != null) {
+        await _loadStates(selected.countryId);
+        await _loadDistricts(selected.stateId);
+      }
+      _error = null;
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+    }
+  }
+
   Future<void> chooseState(LocationNode? state) async {
     if (state == null) {
       return;
@@ -240,8 +262,10 @@ class PrayerAppController extends ChangeNotifier {
         districtId: district.id,
         districtName: district.name,
       );
-      _selectedLocation = selected;
+      // Persist first so a failed write never leaves an unsaved location
+      // in memory (which also blocked closing the location screen).
       await database.saveSelectedLocation(selected);
+      _selectedLocation = selected;
       await refreshPrayerData(forceSync: true);
       _tabIndex = 1;
       _error = null;
@@ -252,7 +276,15 @@ class PrayerAppController extends ChangeNotifier {
     }
   }
 
-  Future<void> autoPickFromGps() async {
+  /// Resolves the device location and matches it against the API location
+  /// lists; returns the matched nodes for the screen to fill its dropdowns.
+  /// Does not persist anything and does not leave the current tab — saving
+  /// stays the user's explicit Save action. On failure records the error and
+  /// returns null.
+  Future<
+    ({LocationNode country, LocationNode state, LocationNode district})?
+  >
+  autoPickFromGps() async {
     _setLoading(true);
     try {
       final guess = await locationResolver.resolveFromDevice();
@@ -287,13 +319,10 @@ class PrayerAppController extends ChangeNotifier {
           'Could not match district from GPS. Please choose manually.',
         );
       }
-      await saveSelectedLocation(
-        country: country,
-        state: state,
-        district: district,
-      );
+      return (country: country, state: state, district: district);
     } catch (e) {
       _error = e.toString();
+      return null;
     } finally {
       _setLoading(false);
     }

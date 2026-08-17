@@ -17,6 +17,7 @@ import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
 import 'src/services/notification_service.dart';
 import 'src/services/widget_bridge_service.dart';
+import 'src/tesbihat/data/item_history_repository.dart';
 import 'src/tesbihat/data/item_repository.dart';
 import 'src/tesbihat/l10n/tesbihat_localizations.dart';
 import 'src/tesbihat/services/item_reminder_service.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   final itemsBox = await Hive.openBox<dynamic>('items_box');
+  final itemHistoryBox = await Hive.openBox<dynamic>('item_history_box');
 
   final calendarReminderService = CalendarReminderService();
   await calendarReminderService.initialize();
@@ -53,6 +55,9 @@ Future<void> main() async {
     ProviderScope(
       overrides: [
         itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
+        itemHistoryRepositoryProvider.overrideWithValue(
+          ItemHistoryRepository.hive(itemHistoryBox),
+        ),
         itemReminderServiceProvider.overrideWithValue(itemReminderService),
       ],
       child: PrayerAssistantApp(controller: controller),

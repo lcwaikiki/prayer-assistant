@@ -107,7 +107,8 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
       ).format(_focusedDate);
     }
     final hijriMonth = HijriMonth.fromDate(_focusedDate);
-    return '${hijriMonth.longMonthName} ${hijriMonth.year}';
+    final languageCode = Localizations.localeOf(context).languageCode;
+    return '${hijriMonth.longMonthName(languageCode)} ${hijriMonth.year}';
   }
 
   void _openDayDetail(DateTime date, CalendarPrimaryDisplay primary) {
@@ -364,21 +365,22 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
     });
   }
 
-  String _hijriDateLabel(DateTime date) {
+  String _hijriDateLabel(DateTime date, String languageCode) {
     final hijri = HijriCalendar.fromDate(date);
-    return '${hijri.hDay} ${HijriMonth.fromDate(date).longMonthName} '
+    return '${hijri.hDay} '
+        '${HijriMonth.fromDate(date).longMonthName(languageCode)} '
         '${hijri.hYear}';
   }
 
   String _primaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
     return primary == CalendarPrimaryDisplay.gregorian
         ? DateFormat.yMMMMd(locale).format(_date)
-        : _hijriDateLabel(_date);
+        : _hijriDateLabel(_date, locale.split('-').first);
   }
 
   String _secondaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
     return primary == CalendarPrimaryDisplay.gregorian
-        ? _hijriDateLabel(_date)
+        ? _hijriDateLabel(_date, locale.split('-').first)
         : DateFormat.yMMMMd(locale).format(_date);
   }
 

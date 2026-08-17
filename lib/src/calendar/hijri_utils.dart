@@ -12,7 +12,12 @@ class HijriMonth {
 
   int get daysInMonth => HijriCalendar().getDaysInMonth(year, month);
 
-  String get longMonthName {
+  /// The month's display name for [languageCode]. The hijri package reads
+  /// names from a static locale that defaults to English, so it must be
+  /// switched per app locale: Arabic gets the native names, other locales
+  /// get the standard transliterations.
+  String longMonthName(String languageCode) {
+    HijriCalendar.language = languageCode == 'ar' ? 'ar' : 'en';
     final calendar = HijriCalendar()
       ..hYear = year
       ..hMonth = month;

@@ -100,7 +100,8 @@ class _AnchorDatePickerSheetState extends State<_AnchorDatePickerSheet> {
       ).format(_focusedDate);
     }
     final hijriMonth = HijriMonth.fromDate(_focusedDate);
-    return '${hijriMonth.longMonthName} ${hijriMonth.year}';
+    final languageCode = Localizations.localeOf(context).languageCode;
+    return '${hijriMonth.longMonthName(languageCode)} ${hijriMonth.year}';
   }
 
   void _select(DateTime date) {

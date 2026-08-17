@@ -41,7 +41,7 @@ void main() {
 
     final hijriMonth = HijriMonth.fromDate(DateTime(2026, 8, 17));
     expect(
-      find.text('${hijriMonth.longMonthName} ${hijriMonth.year}'),
+      find.text('${hijriMonth.longMonthName('en')} ${hijriMonth.year}'),
       findsOneWidget,
     );
     expect(find.text('Sun'), findsOneWidget);
@@ -231,7 +231,7 @@ void main() {
       final day = DateTime(2026, 8, 17);
       final hijri = HijriCalendar.fromDate(day);
       final hijriLabel =
-          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName} '
+          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName('en')} '
           '${hijri.hYear}';
 
       await tester.drag(find.byType(GridView), const Offset(0, -150));
@@ -276,7 +276,7 @@ void main() {
       final day = DateTime(2026, 8, 17);
       final hijri = HijriCalendar.fromDate(day);
       final hijriLabel =
-          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName} '
+          '${hijri.hDay} ${HijriMonth.fromDate(day).longMonthName('en')} '
           '${hijri.hYear}';
 
       expect(find.text('August 17, 2026'), findsOneWidget);

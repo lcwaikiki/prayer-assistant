@@ -10,7 +10,9 @@ import '../models/prayer_models.dart';
 class ImsakiyemApi {
   static const _baseUrl = 'https://ezanvakti.imsakiyem.com/api';
 
-  final http.Client _client = http.Client();
+  ImsakiyemApi({http.Client? client}) : _client = client ?? http.Client();
+
+  final http.Client _client;
 
   Future<List<LocationNode>> getCountries() async {
     final response = await _get('/locations/countries');
@@ -78,7 +80,12 @@ class ImsakiyemApi {
       throw Exception('Request failed (${response.statusCode}) for $path');
     }
 
-    final payload = jsonDecode(response.body) as Map<String, dynamic>;
+    final Map<String, dynamic> payload;
+    try {
+      payload = jsonDecode(response.body) as Map<String, dynamic>;
+    } on FormatException {
+      throw Exception('Server response format is invalid.');
+    }
     final success = payload['success'] == true;
     if (!success) {
       throw Exception(

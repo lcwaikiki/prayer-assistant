@@ -652,6 +652,24 @@ abstract class AppLocalizations {
   /// **'Large'**
   String get widgetTextSizeLarge;
 
+  /// No description provided for @widgetMmssThresholdTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget seconds countdown'**
+  String get widgetMmssThresholdTitle;
+
+  /// No description provided for @widgetMmssThresholdNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Always show HH:MM'**
+  String get widgetMmssThresholdNever;
+
+  /// No description provided for @widgetMmssThresholdValue.
+  ///
+  /// In en, this message translates to:
+  /// **'MM:SS below {minutes} min'**
+  String widgetMmssThresholdValue(Object minutes);
+
   /// No description provided for @remindersOnOffTitle.
   ///
   /// In en, this message translates to:

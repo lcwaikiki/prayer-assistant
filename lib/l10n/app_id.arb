@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "Sangat kecil",
   "widgetTextSizeSmall": "Kecil",
   "widgetTextSizeMedium": "Sedang",
-  "widgetTextSizeLarge": "Besar",
+  "widgetTextSizeLarge": "Besar",  "widgetMmssThresholdTitle": "Hitung mundur detik widget",
+  "widgetMmssThresholdNever": "Selalu tampilkan HH:MM",
+  "widgetMmssThresholdValue": "MM:SS di bawah {minutes} mnt",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "Batal",
   "calendarTabTooltip": "Kalender Hijriah",
   "calendarPreviousMonth": "Bulan sebelumnya",

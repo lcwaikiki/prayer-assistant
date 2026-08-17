@@ -305,6 +305,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Büyük';
 
   @override
+  String get widgetMmssThresholdTitle => 'Widget saniye geri sayımı';
+
+  @override
+  String get widgetMmssThresholdNever => 'Her zaman HH:MM göster';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return '$minutes dk altında MM:SS';
+  }
+
+  @override
   String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';
 
   @override

@@ -294,6 +294,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get widgetTextSizeLarge => '大';
 
   @override
+  String get widgetMmssThresholdTitle => '小组件秒倒计时';
+
+  @override
+  String get widgetMmssThresholdNever => '始终显示HH:MM';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return '$minutes 分钟以下显示 MM:SS';
+  }
+
+  @override
   String get remindersOnOffTitle => '提醒开/关';
 
   @override

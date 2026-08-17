@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "極小",
   "widgetTextSizeSmall": "小",
   "widgetTextSizeMedium": "中",
-  "widgetTextSizeLarge": "大",
+  "widgetTextSizeLarge": "大",  "widgetMmssThresholdTitle": "ウィジェットの秒カウントダウン",
+  "widgetMmssThresholdNever": "常にHH:MMを表示",
+  "widgetMmssThresholdValue": "{minutes}分未満はMM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "キャンセル",
   "calendarTabTooltip": "ヒジュラ暦カレンダー",
   "calendarPreviousMonth": "前の月",

@@ -306,6 +306,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Grand';
 
   @override
+  String get widgetMmssThresholdTitle =>
+      'Compte à rebours en secondes du widget';
+
+  @override
+  String get widgetMmssThresholdNever => 'Toujours afficher HH:MM';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'MM:SS sous $minutes min';
+  }
+
+  @override
   String get remindersOnOffTitle => 'Rappels on/off';
 
   @override

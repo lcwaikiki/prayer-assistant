@@ -102,6 +102,15 @@ class WidgetBridgeService {
     });
   }
 
+  /// Pushes the minutes threshold below which widgets count down in MM:SS
+  /// instead of the minute-granularity HH:MM format (0-60).
+  Future<void> updateWidgetMmssThreshold(int minutes) async {
+    await _channel.invokeMethod<void>(
+      'updateWidgetMmssThreshold',
+      <String, Object>{'minutes': minutes},
+    );
+  }
+
   Future<void> updateStatusBarConfig({
     required bool enabled,
     required bool autoRestore,

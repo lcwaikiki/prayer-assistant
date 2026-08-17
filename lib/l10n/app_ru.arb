@@ -136,6 +136,14 @@
   "widgetTextSizeSmall": "Маленький",
   "widgetTextSizeMedium": "Средний",
   "widgetTextSizeLarge": "Большой",
+  "widgetMmssThresholdTitle": "Секундный отсчёт в виджете",
+  "widgetMmssThresholdNever": "Всегда показывать ЧЧ:ММ",
+  "widgetMmssThresholdValue": "ММ:СС менее {minutes} мин",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
   "remindersOnOffTitle": "Напоминания вкл/выкл",
   "remindersOnOffSubtitle": "Включите или выключите уведомления о намазе. Настройки для каждого намаза сохраняются.",
   "reminderVibrationTitle": "Вибрация при напоминании",

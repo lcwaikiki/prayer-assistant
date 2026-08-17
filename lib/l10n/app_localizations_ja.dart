@@ -294,6 +294,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get widgetTextSizeLarge => '大';
 
   @override
+  String get widgetMmssThresholdTitle => 'ウィジェットの秒カウントダウン';
+
+  @override
+  String get widgetMmssThresholdNever => '常にHH:MMを表示';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return '$minutes分未満はMM:SS';
+  }
+
+  @override
   String get remindersOnOffTitle => 'リマインダー on/off';
 
   @override

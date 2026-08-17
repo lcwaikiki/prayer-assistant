@@ -305,6 +305,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get widgetTextSizeLarge => 'بڑا';
 
   @override
+  String get widgetMmssThresholdTitle => 'ویجٹ میں سیکنڈ کاؤنٹ ڈاؤن';
+
+  @override
+  String get widgetMmssThresholdNever => 'ہمیشہ HH:MM دکھائیں';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return '$minutes منٹ سے کم پر MM:SS';
+  }
+
+  @override
   String get remindersOnOffTitle => 'یاد دہانیاں آن/آف';
 
   @override

@@ -221,6 +221,28 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
+                title: context.l10n.widgetMmssThresholdTitle,
+                subtitle: controller.widgetMmssThresholdMinutes == 0
+                    ? context.l10n.widgetMmssThresholdNever
+                    : context.l10n.widgetMmssThresholdValue(
+                        controller.widgetMmssThresholdMinutes,
+                      ),
+                children: [
+                  Slider(
+                    value: controller.widgetMmssThresholdMinutes.toDouble(),
+                    min: 0,
+                    max: 60,
+                    divisions: 60,
+                    label: context.l10n.widgetMmssThresholdValue(
+                      controller.widgetMmssThresholdMinutes,
+                    ),
+                    onChanged: (value) =>
+                        controller.updateWidgetMmssThreshold(value.round()),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
                 title: context.l10n.remindersOnOffTitle,
                 subtitle: controller.remindersSilenced
                     ? context.l10n.remindersOff

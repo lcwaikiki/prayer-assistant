@@ -303,6 +303,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get widgetTextSizeLarge => 'كبير';
 
   @override
+  String get widgetMmssThresholdTitle => 'عد تنازلي بالثواني في الودجت';
+
+  @override
+  String get widgetMmssThresholdNever => 'عرض HH:MM دائمًا';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'MM:SS أقل من $minutes دقيقة';
+  }
+
+  @override
   String get remindersOnOffTitle => 'التذكيرات تشغيل/إيقاف';
 
   @override

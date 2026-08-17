@@ -95,7 +95,15 @@
   "widgetTextSizeExtraSmall": "Çok küçük",
   "widgetTextSizeSmall": "Küçük",
   "widgetTextSizeMedium": "Orta",
-  "widgetTextSizeLarge": "Büyük",
+  "widgetTextSizeLarge": "Büyük",  "widgetMmssThresholdTitle": "Widget saniye geri sayımı",
+  "widgetMmssThresholdNever": "Her zaman HH:MM göster",
+  "widgetMmssThresholdValue": "{minutes} dk altında MM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "remindersOnOffTitle": "Hatırlatıcılar açık/kapalı",
   "remindersOnOffSubtitle": "Namaz hatırlatıcı bildirimlerini aç veya kapat. Vakit ayarların korunur.",
   "reminderVibrationTitle": "Hatırlatmada titreşim",

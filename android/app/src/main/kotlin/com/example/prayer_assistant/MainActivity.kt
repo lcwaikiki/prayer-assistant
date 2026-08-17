@@ -44,6 +44,12 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }
+                "updateWidgetMmssThreshold" -> {
+                    val minutes = call.argument<Int>("minutes") ?: 60
+                    PrayerWidgetStorage.saveWidgetMmssThreshold(this, minutes)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
                     PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)

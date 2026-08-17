@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "Sehr klein",
   "widgetTextSizeSmall": "Klein",
   "widgetTextSizeMedium": "Mittel",
-  "widgetTextSizeLarge": "Groß",
+  "widgetTextSizeLarge": "Groß",  "widgetMmssThresholdTitle": "Widget-Sekunden-Countdown",
+  "widgetMmssThresholdNever": "Immer HH:MM anzeigen",
+  "widgetMmssThresholdValue": "MM:SS unter {minutes} Min",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "Abbrechen",
   "calendarTabTooltip": "Hidschri-Kalender",
   "calendarPreviousMonth": "Vorheriger Monat",

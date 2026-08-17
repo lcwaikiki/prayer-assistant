@@ -89,6 +89,9 @@ class TestHarness {
       () => widgetBridge.updateWidgetTextSize(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateWidgetMmssThreshold(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateFromPrayerDays(
         days: any(named: 'days'),
         now: any(named: 'now'),
@@ -133,6 +136,9 @@ class TestHarness {
       () => database.loadAppBarRemainingPlacement(),
     ).thenAnswer((_) async => null);
     when(() => database.loadWidgetTextSize()).thenAnswer((_) async => null);
+    when(
+      () => database.loadWidgetMmssThreshold(),
+    ).thenAnswer((_) async => 60);
     when(
       () => database.loadCalendarPrimaryDisplay(),
     ).thenAnswer((_) async => null);

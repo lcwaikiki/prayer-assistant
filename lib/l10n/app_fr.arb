@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "Très petit",
   "widgetTextSizeSmall": "Petit",
   "widgetTextSizeMedium": "Moyen",
-  "widgetTextSizeLarge": "Grand",
+  "widgetTextSizeLarge": "Grand",  "widgetMmssThresholdTitle": "Compte à rebours en secondes du widget",
+  "widgetMmssThresholdNever": "Toujours afficher HH:MM",
+  "widgetMmssThresholdValue": "MM:SS sous {minutes} min",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "Annuler",
   "calendarTabTooltip": "Calendrier hégirien",
   "calendarPreviousMonth": "Mois précédent",

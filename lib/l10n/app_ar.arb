@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "صغير جدًا",
   "widgetTextSizeSmall": "صغير",
   "widgetTextSizeMedium": "متوسط",
-  "widgetTextSizeLarge": "كبير",
+  "widgetTextSizeLarge": "كبير",  "widgetMmssThresholdTitle": "عد تنازلي بالثواني في الودجت",
+  "widgetMmssThresholdNever": "عرض HH:MM دائمًا",
+  "widgetMmssThresholdValue": "MM:SS أقل من {minutes} دقيقة",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "إلغاء",
   "calendarTabTooltip": "التقويم الهجري",
   "calendarPreviousMonth": "الشهر السابق",

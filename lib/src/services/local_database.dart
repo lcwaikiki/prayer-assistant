@@ -236,6 +236,32 @@ class LocalDatabase {
     return rows.first['setting_value'] as String?;
   }
 
+  static const _widgetMmssThresholdKey = 'widget_mmss_threshold_minutes';
+
+  Future<void> saveWidgetMmssThreshold(int minutes) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _widgetMmssThresholdKey,
+      'setting_value': minutes.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  /// The minutes below which widgets count down in MM:SS (0-60, default 60).
+  Future<int> loadWidgetMmssThreshold() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_widgetMmssThresholdKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return 60;
+    }
+    final raw = rows.first['setting_value'] as String?;
+    return int.tryParse(raw ?? '')?.clamp(0, 60) ?? 60;
+  }
+
   Future<void> saveStatusBarRemainingEnabled(bool enabled) async {
     final db = await instance;
     await db.insert('app_settings', {

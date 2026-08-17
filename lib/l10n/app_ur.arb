@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "بہت چھوٹا",
   "widgetTextSizeSmall": "چھوٹا",
   "widgetTextSizeMedium": "درمیانہ",
-  "widgetTextSizeLarge": "بڑا",
+  "widgetTextSizeLarge": "بڑا",  "widgetMmssThresholdTitle": "ویجٹ میں سیکنڈ کاؤنٹ ڈاؤن",
+  "widgetMmssThresholdNever": "ہمیشہ HH:MM دکھائیں",
+  "widgetMmssThresholdValue": "{minutes} منٹ سے کم پر MM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "منسوخ کریں",
   "calendarTabTooltip": "ہجری کیلنڈر",
   "calendarPreviousMonth": "پچھلا مہینہ",

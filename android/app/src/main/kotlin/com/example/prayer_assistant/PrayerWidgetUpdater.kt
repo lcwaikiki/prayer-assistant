@@ -32,7 +32,6 @@ object PrayerWidgetUpdater {
     private const val STATUS_CHANNEL_ID = "prayer_remaining_status"
     private const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
-    private const val WIDGET_HHMM_THRESHOLD_MINUTES = 60L
 
     fun updateAll(context: Context) {
         val timeline = PrayerWidgetStorage.readTimeline(context)
@@ -40,6 +39,7 @@ object PrayerWidgetUpdater {
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
         val nextPrayerName = next?.first ?: "--"
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
+        val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
 
         val widgetManager = AppWidgetManager.getInstance(context)
         val openIntent = Intent(context, MainActivity::class.java).apply {
@@ -61,7 +61,7 @@ object PrayerWidgetUpdater {
             views.setTextViewText(R.id.widgetRemainingOnlyLabel, nextPrayerName)
             setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 9f, 11f, 14f, 17f)
             setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 16f, 22f, 30f, 34f)
-            applyCountdown(views, R.id.widgetRemainingOnlyValue, next, now)
+            applyCountdown(views, R.id.widgetRemainingOnlyValue, next, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -73,7 +73,7 @@ object PrayerWidgetUpdater {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time_circle)
             val diameterDp = circleDiameterDp(context, widgetId)
             setCircleTextSizeSp(views, context, textSize, diameterDp)
-            applyCountdown(views, R.id.widgetRemainingCircleValue, next, now)
+            applyCountdown(views, R.id.widgetRemainingCircleValue, next, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
             applyCircleBackground(views, context, widgetId)
             widgetManager.updateAppWidget(widgetId, views)
@@ -100,7 +100,7 @@ object PrayerWidgetUpdater {
                 R.id.widgetNextPrayerTime,
                 next?.let { formatClock(it.second) } ?: "--:--"
             )
-            applyCountdown(views, R.id.widgetNextPrayerRemaining, next, now)
+            applyCountdown(views, R.id.widgetNextPrayerRemaining, next, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -309,13 +309,19 @@ object PrayerWidgetUpdater {
     }
 
     /**
-     * Above [WIDGET_HHMM_THRESHOLD_MINUTES] remaining, shows a static "HH:MM" string that we
+     * Above [mmssThresholdMinutes] remaining, shows a static "HH:MM" string that we
      * refresh once a minute via [scheduleWidgetMinuteRefresh] (minutes-only precision doesn't
      * need finer-grained updates). Once under that threshold, switches to a live, self-ticking
      * "MM:SS" countdown via the platform Chronometer view, which ticks every second in the
      * widget host process with no further wakeups from us at all.
      */
-    private fun applyCountdown(views: RemoteViews, viewId: Int, next: Pair<String, Long>?, now: Long) {
+    private fun applyCountdown(
+        views: RemoteViews,
+        viewId: Int,
+        next: Pair<String, Long>?,
+        now: Long,
+        mmssThresholdMinutes: Int
+    ) {
         if (next == null) {
             views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(viewId, "--:--")
@@ -323,7 +329,7 @@ object PrayerWidgetUpdater {
         }
         val remainingMs = next.second - now
         val remainingMinutes = remainingMs / 60_000L
-        if (remainingMinutes >= WIDGET_HHMM_THRESHOLD_MINUTES) {
+        if (remainingMinutes >= mmssThresholdMinutes) {
             views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(viewId, formatHoursMinutes(remainingMs))
             return
@@ -419,7 +425,7 @@ object PrayerWidgetUpdater {
 
     /**
      * Keeps the widgets' "HH:MM" display (see [applyCountdown]) accurate to the minute while
-     * above [WIDGET_HHMM_THRESHOLD_MINUTES] remain. Once remaining time drops under that
+     * above the configured MM:SS threshold remain. Once remaining time drops under that
      * threshold, the Chronometer views take over ticking every second on their own, so this
      * alarm cancels itself rather than continuing to fire.
      */
@@ -438,8 +444,9 @@ object PrayerWidgetUpdater {
         val now = System.currentTimeMillis()
         val next = PrayerWidgetStorage.readTimeline(context).firstOrNull { it.second > now }
         val remainingMinutes = next?.let { (it.second - now) / 60_000L }
+        val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong()
 
-        if (remainingMinutes == null || remainingMinutes < WIDGET_HHMM_THRESHOLD_MINUTES) {
+        if (remainingMinutes == null || remainingMinutes < mmssThreshold) {
             alarmManager.cancel(pendingIntent)
             return
         }

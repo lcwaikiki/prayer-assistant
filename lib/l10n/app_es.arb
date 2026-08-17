@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "Muy pequeño",
   "widgetTextSizeSmall": "Pequeño",
   "widgetTextSizeMedium": "Mediano",
-  "widgetTextSizeLarge": "Grande",
+  "widgetTextSizeLarge": "Grande",  "widgetMmssThresholdTitle": "Cuenta atrás en segundos del widget",
+  "widgetMmssThresholdNever": "Mostrar siempre HH:MM",
+  "widgetMmssThresholdValue": "MM:SS por debajo de {minutes} min",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "Cancelar",
   "calendarTabTooltip": "Calendario Hégira",
   "calendarPreviousMonth": "Mes anterior",

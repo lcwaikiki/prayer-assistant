@@ -53,6 +53,11 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
+    await tester.scrollUntilVisible(
+      find.text('Reminders on/off'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Reminders on/off'));
     await tester.pumpAndSettle();
     await tester.drag(find.byType(ListView), const Offset(0, -400));
@@ -96,6 +101,11 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
+    await tester.scrollUntilVisible(
+      find.text('Reminders on/off'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
     await tester.tap(find.text('Reminders on/off'));
     await tester.pumpAndSettle();
     await tester.drag(find.byType(ListView), const Offset(0, -400));

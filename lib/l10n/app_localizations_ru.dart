@@ -306,6 +306,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get widgetTextSizeLarge => 'Большой';
 
   @override
+  String get widgetMmssThresholdTitle => 'Секундный отсчёт в виджете';
+
+  @override
+  String get widgetMmssThresholdNever => 'Всегда показывать ЧЧ:ММ';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'ММ:СС менее $minutes мин';
+  }
+
+  @override
   String get remindersOnOffTitle => 'Напоминания вкл/выкл';
 
   @override

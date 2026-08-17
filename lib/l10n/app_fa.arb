@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "خیلی کوچک",
   "widgetTextSizeSmall": "کوچک",
   "widgetTextSizeMedium": "متوسط",
-  "widgetTextSizeLarge": "بزرگ",
+  "widgetTextSizeLarge": "بزرگ",  "widgetMmssThresholdTitle": "شمارش معکوس ثانیهای ویجت",
+  "widgetMmssThresholdNever": "همیشه HH:MM نمایش بده",
+  "widgetMmssThresholdValue": "MM:SS کمتر از {minutes} دقیقه",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "لغو",
   "calendarTabTooltip": "تقویم هجری",
   "calendarPreviousMonth": "ماه قبل",

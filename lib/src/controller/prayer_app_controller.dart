@@ -50,6 +50,7 @@ class PrayerAppController extends ChangeNotifier {
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
+  int _widgetMmssThresholdMinutes = 60;
   bool _remindersSilenced = false;
   bool _reminderVibrationEnabled = true;
   bool _reminderSoundEnabled = true;
@@ -89,6 +90,9 @@ class PrayerAppController extends ChangeNotifier {
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
   WidgetTextSize get widgetTextSize => _widgetTextSize;
+
+  /// Minutes below which widgets count down in MM:SS instead of HH:MM.
+  int get widgetMmssThresholdMinutes => _widgetMmssThresholdMinutes;
   bool get remindersSilenced => _remindersSilenced;
   bool get reminderVibrationEnabled => _reminderVibrationEnabled;
   bool get reminderSoundEnabled => _reminderSoundEnabled;
@@ -158,8 +162,14 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _widgetTextSize = widgetTextSize;
+      _widgetMmssThresholdMinutes = (await database
+              .loadWidgetMmssThreshold())
+          .clamp(0, 60);
       await _syncStatusBarConfig();
       await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
+      await widgetBridgeService.updateWidgetMmssThreshold(
+        _widgetMmssThresholdMinutes,
+      );
       final rawCalendarPrimaryDisplay = await database
           .loadCalendarPrimaryDisplay();
       var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
@@ -434,6 +444,17 @@ class PrayerAppController extends ChangeNotifier {
     _widgetTextSize = size;
     await database.saveWidgetTextSize(size.name);
     await widgetBridgeService.updateWidgetTextSize(size.name);
+    notifyListeners();
+  }
+
+  Future<void> updateWidgetMmssThreshold(int minutes) async {
+    final clamped = minutes.clamp(0, 60);
+    if (_widgetMmssThresholdMinutes == clamped) {
+      return;
+    }
+    _widgetMmssThresholdMinutes = clamped;
+    await database.saveWidgetMmssThreshold(clamped);
+    await widgetBridgeService.updateWidgetMmssThreshold(clamped);
     notifyListeners();
   }
 

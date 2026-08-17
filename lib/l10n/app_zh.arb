@@ -124,7 +124,15 @@
   "widgetTextSizeExtraSmall": "极小",
   "widgetTextSizeSmall": "小",
   "widgetTextSizeMedium": "中",
-  "widgetTextSizeLarge": "大",
+  "widgetTextSizeLarge": "大",  "widgetMmssThresholdTitle": "小组件秒倒计时",
+  "widgetMmssThresholdNever": "始终显示HH:MM",
+  "widgetMmssThresholdValue": "{minutes} 分钟以下显示 MM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "cancel": "取消",
   "calendarTabTooltip": "回历日历",
   "calendarPreviousMonth": "上个月",

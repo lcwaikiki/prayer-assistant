@@ -135,7 +135,15 @@
   "widgetTextSizeExtraSmall": "Extra small",
   "widgetTextSizeSmall": "Small",
   "widgetTextSizeMedium": "Medium",
-  "widgetTextSizeLarge": "Large",
+  "widgetTextSizeLarge": "Large",  "widgetMmssThresholdTitle": "Widget seconds countdown",
+  "widgetMmssThresholdNever": "Always show HH:MM",
+  "widgetMmssThresholdValue": "MM:SS below {minutes} min",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+
   "remindersOnOffTitle": "Reminders on/off",
   "remindersOnOffSubtitle": "Turn prayer reminder notifications on or off. Per-prayer settings are kept.",
   "reminderVibrationTitle": "Vibrate on reminder",

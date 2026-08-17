@@ -13,6 +13,7 @@ object PrayerWidgetStorage {
     private const val TODAY_PRAYERS_KEY = "today_prayers_json"
     private const val LOCATION_LABEL_KEY = "location_label"
     private const val WIDGET_TEXT_SIZE_KEY = "widget_text_size"
+    private const val WIDGET_MMSS_THRESHOLD_KEY = "widget_mmss_threshold_minutes"
     private const val STATUS_ENABLED_KEY = "status_enabled"
     private const val STATUS_AUTO_RESTORE_KEY = "status_auto_restore"
     private const val CALENDAR_REMINDERS_KEY = "calendar_reminders_json"
@@ -105,6 +106,23 @@ object PrayerWidgetStorage {
     fun readWidgetTextSize(context: Context): String {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getString(WIDGET_TEXT_SIZE_KEY, "medium") ?: "medium"
+    }
+
+    /**
+     * Minutes below which widgets switch to a live MM:SS countdown instead of
+     * the minute-granularity HH:MM format (0-60, default 60).
+     */
+    fun saveWidgetMmssThreshold(context: Context, minutes: Int) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(WIDGET_MMSS_THRESHOLD_KEY, minutes.coerceIn(0, 60))
+            .apply()
+    }
+
+    fun readWidgetMmssThreshold(context: Context): Int {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(WIDGET_MMSS_THRESHOLD_KEY, 60)
+            .coerceIn(0, 60)
     }
 
     private fun saveEntryList(context: Context, key: String, entries: List<Map<String, Any?>>) {

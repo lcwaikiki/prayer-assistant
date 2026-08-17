@@ -306,6 +306,17 @@ class AppLocalizationsFa extends AppLocalizations {
   String get widgetTextSizeLarge => 'بزرگ';
 
   @override
+  String get widgetMmssThresholdTitle => 'شمارش معکوس ثانیهای ویجت';
+
+  @override
+  String get widgetMmssThresholdNever => 'همیشه HH:MM نمایش بده';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'MM:SS کمتر از $minutes دقیقه';
+  }
+
+  @override
   String get remindersOnOffTitle => 'یادآورها روشن/خاموش';
 
   @override

@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../../navigation.dart';
-import '../../services/local_database.dart';
-import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../models/calendar_reminder.dart';
-import '../screens/hijri_calendar_screen.dart';
+import '../../services/local_database.dart';
+import '../../services/notification_tap_handler.dart';
+import '../../services/timezone_setup.dart';
+import '../../tesbihat/services/prayer_anchor_resolver.dart';
 
 class CalendarReminderService {
   CalendarReminderService();
@@ -24,6 +23,10 @@ class CalendarReminderService {
   static const _catchUpWindow = Duration(minutes: 120);
 
   Future<void> initialize() async {
+    // The midnight refresh callback runs this in its own background
+    // isolate, where timezone state doesn't exist until initialized.
+    await initializeLocalTimezone();
+
     const initSettings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
@@ -31,33 +34,8 @@ class CalendarReminderService {
     await _plugin.initialize(
       settings: initSettings,
       onDidReceiveNotificationResponse: (response) {
-        _openReminderDate(response.payload);
+        handleNotificationTap(response.payload);
       },
-    );
-  }
-
-  /// Call once after the widget tree (and [rootNavigatorKey]'s Navigator)
-  /// exists, to handle the case where tapping the reminder notification is
-  /// what launched the app from fully killed rather than just bringing an
-  /// already-running app to the foreground.
-  Future<void> handleAppLaunchFromNotification() async {
-    final details = await _plugin.getNotificationAppLaunchDetails();
-    if (details?.didNotificationLaunchApp == true) {
-      _openReminderDate(details!.notificationResponse?.payload);
-    }
-  }
-
-  void _openReminderDate(String? reminderId) {
-    if (reminderId == null || reminderId.isEmpty) {
-      return;
-    }
-    rootNavigatorKey.currentState?.push(
-      MaterialPageRoute<void>(
-        builder: (_) => HijriCalendarScreen(
-          initialDate: DateTime.now(),
-          openDetailOnLaunch: true,
-        ),
-      ),
     );
   }
 
@@ -74,6 +52,44 @@ class CalendarReminderService {
 
   Future<void> cancelReminder(String reminderId) {
     return _plugin.cancel(id: _notificationId(reminderId));
+  }
+
+  /// Schedules with an exact alarm when the OS allows it, falling back to
+  /// an inexact alarm when the exact-alarm permission is denied (Android
+  /// 12+ rejects exact scheduling with a platform exception), so the
+  /// reminder still fires instead of the call throwing.
+  Future<void> _zonedSchedule({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime scheduledDate,
+    required NotificationDetails notificationDetails,
+    required String payload,
+    DateTimeComponents? matchDateTimeComponents,
+  }) async {
+    try {
+      await _plugin.zonedSchedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduledDate: scheduledDate,
+        notificationDetails: notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: payload,
+        matchDateTimeComponents: matchDateTimeComponents,
+      );
+    } catch (_) {
+      await _plugin.zonedSchedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduledDate: scheduledDate,
+        notificationDetails: notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+        payload: payload,
+        matchDateTimeComponents: matchDateTimeComponents,
+      );
+    }
   }
 
   Future<void> scheduleReminder(CalendarReminder reminder) async {
@@ -106,14 +122,13 @@ class CalendarReminderService {
       if (fireAt == null) {
         return;
       }
-      await _plugin.zonedSchedule(
+      await _zonedSchedule(
         id: id,
         title: reminder.title,
         body: body,
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        payload: reminder.id,
+        payload: '$calendarReminderPayloadPrefix${reminder.id}',
       );
       return;
     }
@@ -123,36 +138,33 @@ class CalendarReminderService {
         if (!reminder.anchorAt.isAfter(DateTime.now())) {
           return;
         }
-        await _plugin.zonedSchedule(
+        await _zonedSchedule(
           id: id,
           title: reminder.title,
           body: body,
           scheduledDate: tz.TZDateTime.from(reminder.anchorAt, tz.local),
           notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-          payload: reminder.id,
+          payload: '$calendarReminderPayloadPrefix${reminder.id}',
         );
       case ReminderRecurrence.daily:
-        await _plugin.zonedSchedule(
+        await _zonedSchedule(
           id: id,
           title: reminder.title,
           body: body,
           scheduledDate: _nextTimeOfDay(reminder.anchorAt),
           notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          payload: '$calendarReminderPayloadPrefix${reminder.id}',
           matchDateTimeComponents: DateTimeComponents.time,
-          payload: reminder.id,
         );
       case ReminderRecurrence.weekly:
-        await _plugin.zonedSchedule(
+        await _zonedSchedule(
           id: id,
           title: reminder.title,
           body: body,
           scheduledDate: _nextWeekday(reminder.anchorAt),
           notificationDetails: details,
-          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          payload: '$calendarReminderPayloadPrefix${reminder.id}',
           matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-          payload: reminder.id,
         );
       case ReminderRecurrence.monthly:
         if (reminder.monthlyBasis == CalendarBasis.gregorian) {
@@ -160,50 +172,46 @@ class CalendarReminderService {
           if (next == null) {
             return;
           }
-          await _plugin.zonedSchedule(
+          await _zonedSchedule(
             id: id,
             title: reminder.title,
             body: body,
             scheduledDate: next,
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            payload: '$calendarReminderPayloadPrefix${reminder.id}',
             matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
-            payload: reminder.id,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(reminder.anchorAt);
-          await _plugin.zonedSchedule(
+          await _zonedSchedule(
             id: id,
             title: reminder.title,
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            payload: reminder.id,
+            payload: '$calendarReminderPayloadPrefix${reminder.id}',
           );
         }
       case ReminderRecurrence.yearly:
         if (reminder.yearlyBasis == CalendarBasis.gregorian) {
-          await _plugin.zonedSchedule(
+          await _zonedSchedule(
             id: id,
             title: reminder.title,
             body: body,
             scheduledDate: _nextDayOfYear(reminder.anchorAt),
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+            payload: '$calendarReminderPayloadPrefix${reminder.id}',
             matchDateTimeComponents: DateTimeComponents.dateAndTime,
-            payload: reminder.id,
           );
         } else {
           final next = _nextHijriAnniversary(reminder.anchorAt);
-          await _plugin.zonedSchedule(
+          await _zonedSchedule(
             id: id,
             title: reminder.title,
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-            payload: reminder.id,
+            payload: '$calendarReminderPayloadPrefix${reminder.id}',
           );
         }
     }

@@ -16,6 +16,7 @@ import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
 import 'src/services/notification_service.dart';
+import 'src/services/notification_tap_handler.dart';
 import 'src/services/widget_bridge_service.dart';
 import 'src/tesbihat/data/item_history_repository.dart';
 import 'src/tesbihat/data/item_repository.dart';
@@ -66,10 +67,10 @@ Future<void> main() async {
 
   // Deferred until after the first frame so rootNavigatorKey's Navigator
   // actually exists to push onto, in case the app was cold-started by
-  // tapping a beads reminder notification.
+  // tapping a reminder notification. The payload's feature prefix decides
+  // which screen opens.
   WidgetsBinding.instance.addPostFrameCallback((_) {
-    itemReminderService.handleAppLaunchFromNotification();
-    calendarReminderService.handleAppLaunchFromNotification();
+    handleAppLaunchFromNotification();
   });
 }
 

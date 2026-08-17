@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import 'notification_tap_handler.dart';
+import 'timezone_setup.dart';
 
 class NotificationService {
   NotificationService();
@@ -21,20 +21,23 @@ class NotificationService {
     if (_isInitialized) {
       return;
     }
-    tz.initializeTimeZones();
-    try {
-      final timezoneInfo = await FlutterTimezone.getLocalTimezone();
-      tz.setLocalLocation(tz.getLocation(timezoneInfo.identifier));
-    } catch (_) {
-      tz.setLocalLocation(tz.getLocation('UTC'));
-    }
+    await initializeLocalTimezone();
 
     const initSettings = InitializationSettings(
       android: AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(),
     );
 
-    await _plugin.initialize(settings: initSettings);
+    // All notification producers share one platform channel, so every
+    // initialize() must register the same shared tap router — otherwise
+    // the last one to run would silently win and misroute the others'
+    // taps. Prayer payloads are JSON and don't deep-link.
+    await _plugin.initialize(
+      settings: initSettings,
+      onDidReceiveNotificationResponse: (response) {
+        handleNotificationTap(response.payload);
+      },
+    );
     _useExactAlarms = await _requestPermissions();
     await _plugin
         .resolvePlatformSpecificImplementation<

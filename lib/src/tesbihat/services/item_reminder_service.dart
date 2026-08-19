@@ -17,7 +17,7 @@ class ItemReminderService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
-  static const _channelId = 'tesbih_reminders';
+  static const _channelId = 'tesbih_reminders_chime';
   static const _channelName = 'Tasbih Reminders';
 
   /// How far in the past a resolved prayer-anchored fire time can be and
@@ -140,6 +140,7 @@ class ItemReminderService {
         channelDescription: 'Reminders for tasbih/dhikr items',
         importance: Importance.high,
         priority: Priority.high,
+        sound: const RawResourceAndroidNotificationSound('reminder_chime'),
       ),
       iOS: DarwinNotificationDetails(),
     );

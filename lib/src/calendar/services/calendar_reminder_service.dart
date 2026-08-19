@@ -14,7 +14,7 @@ class CalendarReminderService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
-  static const _channelId = 'calendar_reminders';
+  static const _channelId = 'calendar_reminders_chime';
   static const _channelName = 'Calendar Reminders';
 
   /// How far in the past a resolved prayer-anchored fire time can be and
@@ -129,6 +129,7 @@ class CalendarReminderService {
         channelDescription: 'Reminders scheduled from the calendar',
         importance: Importance.high,
         priority: Priority.high,
+        sound: const RawResourceAndroidNotificationSound('reminder_chime'),
       ),
       iOS: DarwinNotificationDetails(),
     );

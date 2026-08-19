@@ -39,11 +39,26 @@ class NotificationService {
       },
     );
     _useExactAlarms = await _requestPermissions();
-    await _plugin
+    final android = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.deleteNotificationChannel(channelId: 'prayer_reminders');
+        >();
+    // Delete channels that can no longer be changed: Android locks a
+    // channel's sound/vibration at first creation, and the pre-chime
+    // channels (plus the old shared one) are locked to the default
+    // notification sound. Deleting them lets the OS re-create them with
+    // the bundled chime the next time a reminder fires.
+    for (final staleChannel in const [
+      'prayer_reminders',
+      'prayer_reminders_vibrate_sound',
+      'prayer_reminders_vibrate_only',
+      'prayer_reminders_sound_only',
+      'prayer_reminders_silent',
+      'calendar_reminders',
+      'tesbih_reminders',
+    ]) {
+      await android?.deleteNotificationChannel(channelId: staleChannel);
+    }
     _isInitialized = true;
   }
 
@@ -75,6 +90,10 @@ class NotificationService {
   /// with a different [AndroidNotificationDetails] on the same id are
   /// silently ignored by the OS. So each vibrate/sound combination needs its
   /// own permanent channel id rather than one shared, mutable-looking one.
+  /// All channels play the bundled [reminderChimeResourceName] so reminders
+  /// are audible regardless of the device's default notification sound.
+  static const reminderChimeResourceName = 'reminder_chime';
+
   static NotificationDetails _reminderNotificationDetails({
     required bool vibrationEnabled,
     required bool soundEnabled,
@@ -82,16 +101,16 @@ class NotificationService {
     final String channelId;
     final String channelName;
     if (vibrationEnabled && soundEnabled) {
-      channelId = 'prayer_reminders_vibrate_sound';
+      channelId = 'prayer_reminders_chime_vibrate_sound';
       channelName = 'Prayer Reminders (vibrate + sound)';
     } else if (vibrationEnabled) {
-      channelId = 'prayer_reminders_vibrate_only';
+      channelId = 'prayer_reminders_chime_vibrate_only';
       channelName = 'Prayer Reminders (vibrate only)';
     } else if (soundEnabled) {
-      channelId = 'prayer_reminders_sound_only';
+      channelId = 'prayer_reminders_chime_sound_only';
       channelName = 'Prayer Reminders (sound only)';
     } else {
-      channelId = 'prayer_reminders_silent';
+      channelId = 'prayer_reminders_chime_silent';
       channelName = 'Prayer Reminders (silent)';
     }
 
@@ -103,6 +122,11 @@ class NotificationService {
         importance: Importance.high,
         priority: Priority.high,
         playSound: soundEnabled,
+        sound: soundEnabled
+            ? const RawResourceAndroidNotificationSound(
+                reminderChimeResourceName,
+              )
+            : null,
         enableVibration: vibrationEnabled,
         vibrationPattern: vibrationEnabled ? _reminderVibrationPattern() : null,
       ),
@@ -167,11 +191,14 @@ class NotificationService {
       body: 'Notification pipeline is working on this device.',
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
-          'prayer_reminders',
-          'Prayer Reminders',
+          'prayer_reminders_chime_vibrate_sound',
+          'Prayer Reminders (vibrate + sound)',
           channelDescription: 'Prayer reminder notifications',
           importance: Importance.high,
           priority: Priority.high,
+          sound: RawResourceAndroidNotificationSound(
+            reminderChimeResourceName,
+          ),
         ),
         iOS: DarwinNotificationDetails(),
       ),

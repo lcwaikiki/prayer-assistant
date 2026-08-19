@@ -109,7 +109,10 @@ class CalendarReminderService {
     }
   }
 
-  Future<void> scheduleReminder(CalendarReminder reminder) async {
+  Future<void> scheduleReminder(
+    CalendarReminder reminder, {
+    bool catchUp = true,
+  }) async {
     final id = _notificationId(reminder.id);
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
@@ -137,7 +140,14 @@ class CalendarReminderService {
 
     final repeatCount = reminder.repeatCount;
     if (repeatCount != null) {
-      await _scheduleOccurrences(reminder, id, repeatCount, details, body);
+      await _scheduleOccurrences(
+        reminder,
+        id,
+        repeatCount,
+        details,
+        body,
+        catchUp: catchUp,
+      );
       return;
     }
 
@@ -147,7 +157,10 @@ class CalendarReminderService {
       // day, so a fixed OS-level repeat would drift). Re-resolved nightly
       // by CalendarMidnightScheduler so the reminder advances to the next
       // matching day.
-      final fireAt = await _resolveNextPrayerFireTime(reminder);
+      final fireAt = await _resolveNextPrayerFireTime(
+        reminder,
+        catchUp: catchUp,
+      );
       if (fireAt == null) {
         return;
       }
@@ -290,10 +303,15 @@ class CalendarReminderService {
     int baseId,
     int count,
     NotificationDetails details,
-    String body,
-  ) async {
+    String body, {
+    bool catchUp = true,
+  }) async {
     final occurrences = reminder.anchor == CalendarReminderAnchor.prayerTime
-        ? await _resolveNextPrayerFireTimes(reminder, count)
+        ? await _resolveNextPrayerFireTimes(
+            reminder,
+            count,
+            catchUp: catchUp,
+          )
         : _nextClockTimeOccurrences(reminder, count);
     final payload = '$calendarReminderPayloadPrefix${reminder.id}';
     var index = 0;
@@ -460,10 +478,19 @@ class CalendarReminderService {
 
   /// Resolves the next concrete fire time for a prayer-anchored reminder,
   /// honoring [CalendarReminder.recurrence] and [CalendarReminder.repeatCount].
+  /// [catchUp] allows re-firing a just-passed occurrence (e.g. a reminder
+  /// enabled moments after its prayer time) — used only on user save/enable,
+  /// not on background re-arms, which would otherwise re-fire the same
+  /// already-notified occurrence on every app start.
   Future<DateTime?> _resolveNextPrayerFireTime(
-    CalendarReminder reminder,
-  ) async {
-    final times = await _resolveNextPrayerFireTimes(reminder, 1);
+    CalendarReminder reminder, {
+    bool catchUp = true,
+  }) async {
+    final times = await _resolveNextPrayerFireTimes(
+      reminder,
+      1,
+      catchUp: catchUp,
+    );
     return times.isEmpty ? null : times.first;
   }
 
@@ -471,11 +498,13 @@ class CalendarReminderService {
   /// prayer-anchored reminder, honoring its recurrence (and, through it,
   /// the repeat count). Each occurrence date's own prayer time is resolved;
   /// occurrences already past by more than the catch-up window are skipped.
-  /// An empty list means nothing is left to schedule.
+  /// When [catchUp] is false, just-passed occurrences are skipped entirely
+  /// instead of being re-fired. An empty list means nothing is left.
   Future<List<DateTime>> _resolveNextPrayerFireTimes(
     CalendarReminder reminder,
-    int count,
-  ) async {
+    int count, {
+    bool catchUp = true,
+  }) async {
     final database = LocalDatabase();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -500,7 +529,7 @@ class CalendarReminderService {
       }
       if (resolved.isAfter(now)) {
         times.add(resolved);
-      } else if (now.difference(resolved) <= _catchUpWindow) {
+      } else if (catchUp && now.difference(resolved) <= _catchUpWindow) {
         times.add(now.add(const Duration(seconds: 5)));
       } else if (reminder.recurrence == ReminderRecurrence.once) {
         break;

@@ -35,12 +35,13 @@ Future<void> calendarMidnightRefreshCallback() async {
     if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
       // Re-resolve the next occurrence's prayer time (advances each day or
       // to the next matching weekday/month-day), honoring recurrence.
-      await reminderService.scheduleReminder(reminder);
+      // catchUp is false so a just-fired occurrence is not re-notified.
+      await reminderService.scheduleReminder(reminder, catchUp: false);
     } else if ((reminder.recurrence == ReminderRecurrence.monthly &&
             reminder.monthlyBasis == CalendarBasis.hijri) ||
         (reminder.recurrence == ReminderRecurrence.yearly &&
             reminder.yearlyBasis == CalendarBasis.hijri)) {
-      await reminderService.scheduleReminder(reminder);
+      await reminderService.scheduleReminder(reminder, catchUp: false);
     }
   }
 }

@@ -185,7 +185,12 @@ class PrayerAppController extends ChangeNotifier {
       _calendarReminders = await database.loadCalendarReminders();
       for (final reminder in _calendarReminders) {
         if (reminder.enabled) {
-          await calendarReminderService.scheduleReminder(reminder);
+          // Re-arms already-fired occurrences without re-firing them: the
+          // catch-up only applies when the user saves/enables a reminder.
+          await calendarReminderService.scheduleReminder(
+            reminder,
+            catchUp: false,
+          );
         }
       }
       await _syncCalendarRemindersWidget();

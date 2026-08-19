@@ -111,16 +111,17 @@ class ItemReminderService {
     }
   }
 
-  Future<void> scheduleReminder(Item item) =>
-      _schedule(item, tesbihItemPayloadPrefix);
+  Future<void> scheduleReminder(Item item, {bool catchUp = true}) =>
+      _schedule(item, tesbihItemPayloadPrefix, catchUp: catchUp);
 
-  Future<void> scheduleGroupReminder(ItemGroup group) =>
-      _schedule(group, tesbihGroupPayloadPrefix);
+  Future<void> scheduleGroupReminder(ItemGroup group, {bool catchUp = true}) =>
+      _schedule(group, tesbihGroupPayloadPrefix, catchUp: catchUp);
 
   Future<void> _schedule(
     ReminderSchedulable subject,
-    String payloadPrefix,
-  ) async {
+    String payloadPrefix, {
+    bool catchUp = true,
+  }) async {
     final id = _notificationId(subject.id);
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
@@ -149,7 +150,15 @@ class ItemReminderService {
 
     final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {
-      await _scheduleOccurrences(subject, id, repeatCount, details, body, payload);
+      await _scheduleOccurrences(
+        subject,
+        id,
+        repeatCount,
+        details,
+        body,
+        payload,
+        catchUp: catchUp,
+      );
       return;
     }
 
@@ -158,7 +167,10 @@ class ItemReminderService {
       // that occurrence's own prayer time (which shifts day to day). A
       // plain one-shot is scheduled and MidnightReminderScheduler re-runs
       // this daily to advance to the following occurrence.
-      final fireAt = await _resolveNextPrayerFireTime(subject);
+      final fireAt = await _resolveNextPrayerFireTime(
+        subject,
+        catchUp: catchUp,
+      );
       if (fireAt == null) {
         return;
       }
@@ -307,11 +319,16 @@ class ItemReminderService {
     int count,
     NotificationDetails details,
     String body,
-    String payload,
-  ) async {
+    String payload, {
+    bool catchUp = true,
+  }) async {
     final occurrences =
         subject.reminderAnchor == ItemReminderAnchor.prayerTime
-        ? await _resolveNextPrayerFireTimes(subject, count)
+        ? await _resolveNextPrayerFireTimes(
+            subject,
+            count,
+            catchUp: catchUp,
+          )
         : _nextClockTimeOccurrences(subject, count);
     var index = 0;
     for (final fireAt in occurrences) {
@@ -477,8 +494,19 @@ class ItemReminderService {
 
   /// Resolves the next concrete fire time for a prayer-anchored reminder,
   /// honoring [Item.reminderRecurrence] and [Item.reminderRepeatCount].
-  Future<DateTime?> _resolveNextPrayerFireTime(ReminderSchedulable subject) async {
-    final times = await _resolveNextPrayerFireTimes(subject, 1);
+  /// [catchUp] allows re-firing a just-passed occurrence (e.g. a reminder
+  /// enabled moments after its prayer time) — used only on user save/enable,
+  /// not on background re-arms, which would otherwise re-fire the same
+  /// already-notified occurrence on every app start.
+  Future<DateTime?> _resolveNextPrayerFireTime(
+    ReminderSchedulable subject, {
+    bool catchUp = true,
+  }) async {
+    final times = await _resolveNextPrayerFireTimes(
+      subject,
+      1,
+      catchUp: catchUp,
+    );
     return times.isEmpty ? null : times.first;
   }
 
@@ -486,11 +514,13 @@ class ItemReminderService {
   /// prayer-anchored reminder, honoring its recurrence (and, through it,
   /// the repeat count). Each occurrence date's own prayer time is resolved;
   /// occurrences already past by more than the catch-up window are skipped.
-  /// An empty list means nothing is left to schedule.
+  /// When [catchUp] is false, just-passed occurrences are skipped entirely
+  /// instead of being re-fired. An empty list means nothing is left.
   Future<List<DateTime>> _resolveNextPrayerFireTimes(
     ReminderSchedulable subject,
-    int count,
-  ) async {
+    int count, {
+    bool catchUp = true,
+  }) async {
     final database = LocalDatabase();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -515,7 +545,7 @@ class ItemReminderService {
       }
       if (resolved.isAfter(now)) {
         times.add(resolved);
-      } else if (now.difference(resolved) <= _catchUpWindow) {
+      } else if (catchUp && now.difference(resolved) <= _catchUpWindow) {
         times.add(now.add(const Duration(seconds: 5)));
       } else if (subject.reminderRecurrence == ReminderRecurrence.once) {
         break;

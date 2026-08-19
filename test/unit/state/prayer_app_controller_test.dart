@@ -149,7 +149,10 @@ void main() {
     ).thenAnswer((_) async => const []);
 
     when(
-      () => calendarReminderService.scheduleReminder(any()),
+      () => calendarReminderService.scheduleReminder(
+        any(),
+        catchUp: any(named: 'catchUp'),
+      ),
     ).thenAnswer((_) async {});
     when(
       () => calendarReminderService.cancelReminder(any()),
@@ -257,7 +260,12 @@ void main() {
       final controller = buildController();
       await controller.initialize();
 
-      verify(() => calendarReminderService.scheduleReminder(reminder)).called(1);
+      verify(
+        () => calendarReminderService.scheduleReminder(
+          reminder,
+          catchUp: false,
+        ),
+      ).called(1);
       verify(() => widgetBridge.updateCalendarReminders(
         headerText: any(named: 'headerText'),
         reminders: any(named: 'reminders'),
@@ -750,7 +758,12 @@ void main() {
 
       expect(controller.calendarReminders, hasLength(1));
       verify(() => database.saveCalendarReminder(any())).called(1);
-      verify(() => calendarReminderService.scheduleReminder(any())).called(1);
+      verify(
+        () => calendarReminderService.scheduleReminder(
+          any(),
+          catchUp: any(named: 'catchUp'),
+        ),
+      ).called(1);
     });
 
     test('updateCalendarReminder replaces the matching entry', () async {
@@ -828,7 +841,12 @@ void main() {
 
       expect(controller.calendarReminders, hasLength(1));
       // Only the original addCalendarReminder scheduled the reminder.
-      verify(() => calendarReminderService.scheduleReminder(any())).called(1);
+      verify(
+        () => calendarReminderService.scheduleReminder(
+          any(),
+          catchUp: any(named: 'catchUp'),
+        ),
+      ).called(1);
     });
   });
 

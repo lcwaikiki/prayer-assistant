@@ -3,6 +3,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/services/calendar_reminder_service.dart';
+import 'package:prayer_assistant/src/models/prayer_models.dart';
+import 'package:prayer_assistant/src/services/local_database.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -606,6 +609,80 @@ final now = DateTime.now();
         platform.cancelledIds.toSet(),
         {for (var i = 0; i < 100; i++) base + i},
       );
+    });
+  });
+
+  group('prayer-anchored catch-up', () {
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
+
+    test('background re-arm does not re-fire an already-passed occurrence',
+        () async {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      // Keep the seeded prayer time on today: skip the short window right
+      // after midnight where "10 minutes ago" falls on yesterday.
+      if (now.isBefore(today.add(const Duration(minutes: 15)))) {
+        markTestSkipped('too close to midnight for a deterministic past time');
+        return;
+      }
+      final past = now.subtract(const Duration(minutes: 10));
+      final hh = past.hour.toString().padLeft(2, '0');
+      final mm = past.minute.toString().padLeft(2, '0');
+
+      final databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      await databaseFactoryFfi.deleteDatabase(
+        '$databasesPath/prayer_assistant.db',
+      );
+      final database = LocalDatabase();
+      await database.saveSelectedLocation(
+        SelectedLocation(
+          countryId: 'tr',
+          countryName: 'Turkiye',
+          stateId: '34',
+          stateName: 'Istanbul',
+          districtId: '541',
+          districtName: 'Uskudar',
+        ),
+      );
+      await database.upsertPrayerDays('541', [
+        PrayerDay(
+          date: today,
+          hijriDate: '1',
+          imsak: '$hh:$mm',
+          gunes: '06:00',
+          ogle: '13:00',
+          ikindi: '16:00',
+          aksam: '19:00',
+          yatsi: '21:00',
+        ),
+      ]);
+
+      final reminder = CalendarReminder(
+        id: 'prayer-1',
+        title: 'Fajr',
+        notes: '',
+        anchorAt: DateTime(now.year, now.month, now.day, 5, 0),
+        recurrence: ReminderRecurrence.daily,
+        anchor: CalendarReminderAnchor.prayerTime,
+        anchorPrayerName: 'Imsak',
+      );
+      final base = _notificationId('prayer-1');
+
+      // Background re-arm: the just-passed occurrence must not be re-fired.
+      final reArmPlatform = FakeFlutterLocalNotificationsPlatform();
+      FlutterLocalNotificationsPlatform.instance = reArmPlatform;
+      await service.scheduleReminder(reminder, catchUp: false);
+      expect(reArmPlatform.scheduledIds, isEmpty);
+
+      // User save/enable: the catch-up still fires once, shortly.
+      final savePlatform = FakeFlutterLocalNotificationsPlatform();
+      FlutterLocalNotificationsPlatform.instance = savePlatform;
+      await service.scheduleReminder(reminder, catchUp: true);
+      expect(savePlatform.scheduledIds, [base]);
+      expect(savePlatform.scheduledDates.single.isAfter(now), isTrue);
     });
   });
 }

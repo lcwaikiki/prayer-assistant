@@ -49,10 +49,11 @@ Future<void> midnightReminderRefreshCallback() async {
     // Re-resolve the next occurrence's prayer time (moves forward each day
     // or to the next matching weekday/month-day), or recompute the next
     // Gregorian occurrence for a floating Hijri day-of-month/month-day.
+    // catchUp is false so a just-fired occurrence is not re-notified.
     if (subject is Item) {
-      await reminderService.scheduleReminder(subject);
+      await reminderService.scheduleReminder(subject, catchUp: false);
     } else if (subject is ItemGroup) {
-      await reminderService.scheduleGroupReminder(subject);
+      await reminderService.scheduleGroupReminder(subject, catchUp: false);
     }
   }
 }

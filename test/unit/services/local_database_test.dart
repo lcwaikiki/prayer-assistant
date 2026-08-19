@@ -384,6 +384,96 @@ void main() {
       expect(loaded, isEmpty);
     });
 
+    test('repairs tables that predate the anchor and basis columns and '
+        'keeps saving reminders', () async {
+      // Tables created by the very first calendar-reminders build only had
+      // id/title/notes/anchor_at/recurrence/yearly_basis/enabled; later
+      // migrations never ALTERed in monthly_basis, anchor,
+      // anchor_prayer_name and anchor_offset_minutes, so saving reminders on
+      // such a table used to throw "no such column" and reminders never
+      // survived a restart.
+      final legacy = await openLegacy(5, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calendar_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            yearly_basis TEXT NOT NULL,
+            enabled INTEGER NOT NULL
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO calendar_reminders
+            (id, title, notes, anchor_at, recurrence, yearly_basis, enabled)
+          VALUES ('r1', 'Eid', '', '2026-08-17T12:00:00.000', 'weekly',
+                  'gregorian', 1)
+        ''');
+      });
+      await legacy.close();
+
+      final loaded = await database.loadCalendarReminders();
+      expect(loaded, hasLength(1));
+      expect(loaded.single.title, 'Eid');
+
+      final reminder = CalendarReminder(
+        id: 'r2',
+        title: 'Team',
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        recurrence: ReminderRecurrence.weekly,
+        weekdays: [1, 3, 5],
+      );
+      await database.saveCalendarReminder(reminder);
+
+      final reloaded = await database.loadCalendarReminders();
+      expect(reloaded, hasLength(2));
+      expect(
+        reloaded
+            .firstWhere((r) => r.id == 'r2')
+            .weekdays,
+        [1, 3, 5],
+      );
+    });
+
+    test('repairs a broken reminders table even when the version is already '
+        'current', () async {
+      // A device that already ran a current-version build keeps its version
+      // number, so no migration fires; the open-time repair must heal the
+      // table instead.
+      final legacy = await openLegacy(7, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calendar_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            yearly_basis TEXT NOT NULL,
+            enabled INTEGER NOT NULL
+          )
+        ''');
+      });
+      await legacy.close();
+
+      final reminder = CalendarReminder(
+        id: 'r2',
+        title: 'Team',
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        recurrence: ReminderRecurrence.monthly,
+        dayOfMonth: 15,
+      );
+      await database.saveCalendarReminder(reminder);
+
+      final reloaded = await database.loadCalendarReminders();
+      expect(reloaded, hasLength(1));
+      expect(reloaded.single.dayOfMonth, 15);
+    });
+
     test('repairs the legacy misspelled table and keeps its data', () async {
       final legacy = await openLegacy(4, createSchema: (db) async {
         await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
@@ -411,6 +501,67 @@ void main() {
 
       expect(loaded, hasLength(1));
       expect(loaded.single.title, 'Eid');
+    });
+
+    test('upgrade from v5 keeps reminders and adds the recurrence-day '
+        'columns', () async {
+      final legacy = await openLegacy(5, createSchema: (db) async {
+        await db.execute('CREATE TABLE prayer_times (id INTEGER PRIMARY KEY)');
+        await db.execute('CREATE TABLE app_settings (key TEXT PRIMARY KEY)');
+        await db.execute('''
+          CREATE TABLE calendar_reminders (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            anchor_at TEXT NOT NULL,
+            recurrence TEXT NOT NULL,
+            monthly_basis TEXT NOT NULL DEFAULT 'gregorian',
+            yearly_basis TEXT NOT NULL,
+            anchor TEXT NOT NULL DEFAULT 'clockTime',
+            anchor_prayer_name TEXT,
+            anchor_offset_minutes INTEGER NOT NULL DEFAULT 0,
+            anchor_date TEXT,
+            enabled INTEGER NOT NULL,
+            repeat_count INTEGER
+          )
+        ''');
+        await db.execute('''
+          INSERT INTO calendar_reminders
+            (id, title, notes, anchor_at, recurrence, monthly_basis,
+             yearly_basis, anchor, anchor_offset_minutes, enabled, repeat_count)
+          VALUES ('r1', 'Eid', '', '2026-08-17T12:00:00.000', 'weekly',
+                  'gregorian', 'gregorian', 'clockTime', 0, 1, 3)
+        ''');
+      });
+      await legacy.close();
+
+      final loaded = await database.loadCalendarReminders();
+      expect(loaded, hasLength(1));
+      expect(loaded.single.title, 'Eid');
+      expect(loaded.single.repeatCount, 3);
+      expect(loaded.single.weekdays, isEmpty);
+      expect(loaded.single.dayOfMonth, isNull);
+      expect(loaded.single.yearlyDate, isNull);
+
+      // A v6 reminder with recurrence-day fields must round-trip after the
+      // upgrade (would throw "no such column" otherwise).
+      final upgraded = CalendarReminder(
+        id: 'r2',
+        title: 'Team',
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        recurrence: ReminderRecurrence.weekly,
+        weekdays: [1, 3, 5],
+      );
+      await database.saveCalendarReminder(upgraded);
+
+      final reloaded = await database.loadCalendarReminders();
+      expect(reloaded.map((r) => r.id), ['r1', 'r2']);
+      expect(
+        reloaded
+            .firstWhere((r) => r.id == 'r2')
+            .weekdays,
+        [1, 3, 5],
+      );
     });
   });
 }

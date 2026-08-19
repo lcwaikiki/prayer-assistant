@@ -30,7 +30,7 @@ class LocalDatabase {
     final dbPath = path.join(databasesPath, _dbName);
     _db = await openDatabase(
       dbPath,
-      version: 6,
+      version: 7,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE prayer_times (
@@ -66,18 +66,11 @@ class LocalDatabase {
         if (oldVersion < 3) {
           await _ensureCalendarRemindersTable(db);
         }
-        if (oldVersion < 4) {
-          await _ensureAnchorDateColumn(db);
-        }
-        if (oldVersion < 5) {
-          await _ensureRepeatCountColumn(db);
-        }
-        if (oldVersion < 6) {
-          await _ensureRecurrenceDayColumns(db);
-        }
+        await _ensureCalendarReminderColumns(db);
       },
       onOpen: (db) async {
         await _renameLegacyMisspelledRemindersTable(db);
+        await _ensureCalendarReminderColumns(db);
       },
     );
     return _db!;
@@ -110,40 +103,52 @@ class LocalDatabase {
     }
   }
 
-  /// Adds the v4 column only when missing; the table may already carry it
-  /// (created by v3 SQL that already included the column), which made the
-  /// plain ALTER fail with "duplicate column name".
-  static Future<void> _ensureAnchorDateColumn(Database db) async {
-    final columns = await db.rawQuery(
-      'PRAGMA table_info(calendar_reminders)',
-    );
-    final hasAnchorDate = columns.any((row) => row['name'] == 'anchor_date');
-    if (!hasAnchorDate) {
+  /// Ensures every column the app writes exists on the reminders table.
+  /// Tables created by the earliest reminder builds only had
+  /// id/title/notes/anchor_at/recurrence/yearly_basis/enabled; no migration
+  /// ever ALTERed in the anchor/basis columns, so saving used to throw
+  /// "no such column" and reminders silently vanished on restart. All checks
+  /// are PRAGMA-based and no-ops on complete tables; runs on every upgrade
+  /// and on every open so databases already at the current version are
+  /// repaired too.
+  static Future<void> _ensureCalendarReminderColumns(Database db) async {
+    final columns = await db.rawQuery('PRAGMA table_info(calendar_reminders)');
+    final names = columns.map((row) => row['name']).toSet();
+    if (!names.contains('monthly_basis')) {
+      await db.execute(
+        "ALTER TABLE calendar_reminders ADD COLUMN monthly_basis TEXT NOT NULL DEFAULT 'gregorian'",
+      );
+    }
+    if (!names.contains('yearly_basis')) {
+      await db.execute(
+        "ALTER TABLE calendar_reminders ADD COLUMN yearly_basis TEXT NOT NULL DEFAULT 'gregorian'",
+      );
+    }
+    if (!names.contains('anchor')) {
+      await db.execute(
+        "ALTER TABLE calendar_reminders ADD COLUMN anchor TEXT NOT NULL DEFAULT 'clockTime'",
+      );
+    }
+    if (!names.contains('anchor_prayer_name')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN anchor_prayer_name TEXT',
+      );
+    }
+    if (!names.contains('anchor_offset_minutes')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN anchor_offset_minutes INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+    if (!names.contains('anchor_date')) {
       await db.execute(
         'ALTER TABLE calendar_reminders ADD COLUMN anchor_date TEXT',
       );
     }
-  }
-
-  /// Adds the v5 column only when missing (fresh installs already carry it
-  /// via the CREATE TABLE SQL, which would make a plain ALTER fail with
-  /// "duplicate column name").
-  static Future<void> _ensureRepeatCountColumn(Database db) async {
-    final columns = await db.rawQuery('PRAGMA table_info(calendar_reminders)');
-    final hasRepeatCount = columns.any((row) => row['name'] == 'repeat_count');
-    if (!hasRepeatCount) {
+    if (!names.contains('repeat_count')) {
       await db.execute(
         'ALTER TABLE calendar_reminders ADD COLUMN repeat_count INTEGER',
       );
     }
-  }
-
-  /// Adds the v6 columns (weekday selection for weekly reminders, an
-  /// explicit day-of-month, and an explicit yearly month/day) only when
-  /// missing, mirroring [_ensureRepeatCountColumn]'s reasoning.
-  static Future<void> _ensureRecurrenceDayColumns(Database db) async {
-    final columns = await db.rawQuery('PRAGMA table_info(calendar_reminders)');
-    final names = columns.map((row) => row['name']).toSet();
     if (!names.contains('weekdays')) {
       await db.execute(
         "ALTER TABLE calendar_reminders ADD COLUMN weekdays TEXT NOT NULL DEFAULT ''",

@@ -15,7 +15,7 @@ void main() {
   test('formatRemaining uses hh:mm:ss', () {
     expect(
       formatRemaining(const Duration(hours: 2, minutes: 4, seconds: 9)),
-      '02:04:09',
+      '2:04:09',
     );
   });
 

@@ -19,7 +19,9 @@ import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
+import android.app.Notification
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -29,29 +31,71 @@ object PrayerWidgetUpdater {
     const val ACTION_REFRESH_ICON = "com.example.prayer_assistant.ACTION_REFRESH_ICON"
     const val ACTION_REFRESH_WIDGET_MINUTE = "com.example.prayer_assistant.ACTION_REFRESH_WIDGET_MINUTE"
     const val ACTION_STATUS_DISMISSED = "com.example.prayer_assistant.ACTION_STATUS_DISMISSED"
-    private const val STATUS_CHANNEL_ID = "prayer_remaining_status"
-    private const val STATUS_NOTIFICATION_ID = 710001
+    const val STATUS_CHANNEL_ID = "prayer_remaining_status"
+    const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
 
     fun updateAll(context: Context) {
         val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
-        val nextPrayerName = next?.first ?: "--"
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
 
+        val openPendingIntent = buildOpenPendingIntent(context)
+        updateCountdownWidgets(context, next, now, textSize, mmssThreshold, openPendingIntent)
+
         val widgetManager = AppWidgetManager.getInstance(context)
-        val openIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("open_home_tab", true)
-        }
-        val openPendingIntent = PendingIntent.getActivity(
-            context,
-            2001,
-            openIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        val dailyPrayerIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, DailyPrayerTimesWidgetProvider::class.java)
         )
+        for (widgetId in dailyPrayerIds) {
+            val views = buildDailyPrayerTimesView(context, next, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
+        val upcomingRemindersIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, UpcomingRemindersWidgetProvider::class.java)
+        )
+        for (widgetId in upcomingRemindersIds) {
+            val views = buildUpcomingRemindersView(context, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
+        updateStatusBar(context, next)
+    }
+
+    /**
+     * Re-renders only the three countdown widgets (Remaining Time, Circle,
+     * Next Prayer). Called every second while under the MM:SS threshold, so it
+     * must stay cheap: no daily/upcoming/status-bar work here.
+     */
+    fun updateCountdownWidgets(context: Context) {
+        val timeline = PrayerWidgetStorage.readTimeline(context)
+        val now = System.currentTimeMillis()
+        val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
+        val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
+        val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
+        updateCountdownWidgets(
+            context,
+            next,
+            now,
+            textSize,
+            mmssThreshold,
+            buildOpenPendingIntent(context),
+        )
+    }
+
+    private fun updateCountdownWidgets(
+        context: Context,
+        next: Pair<String, Long>?,
+        now: Long,
+        textSize: String,
+        mmssThreshold: Int,
+        openPendingIntent: PendingIntent,
+    ) {
+        val widgetManager = AppWidgetManager.getInstance(context)
+        val nextPrayerName = next?.first ?: "--"
 
         val remainingIds = widgetManager.getAppWidgetIds(
             ComponentName(context, RemainingTimeWidgetProvider::class.java)
@@ -79,14 +123,6 @@ object PrayerWidgetUpdater {
             widgetManager.updateAppWidget(widgetId, views)
         }
 
-        val dailyPrayerIds = widgetManager.getAppWidgetIds(
-            ComponentName(context, DailyPrayerTimesWidgetProvider::class.java)
-        )
-        for (widgetId in dailyPrayerIds) {
-            val views = buildDailyPrayerTimesView(context, next, openPendingIntent)
-            widgetManager.updateAppWidget(widgetId, views)
-        }
-
         val nextIds = widgetManager.getAppWidgetIds(
             ComponentName(context, NextPrayerWidgetProvider::class.java)
         )
@@ -104,16 +140,19 @@ object PrayerWidgetUpdater {
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
+    }
 
-        val upcomingRemindersIds = widgetManager.getAppWidgetIds(
-            ComponentName(context, UpcomingRemindersWidgetProvider::class.java)
-        )
-        for (widgetId in upcomingRemindersIds) {
-            val views = buildUpcomingRemindersView(context, openPendingIntent)
-            widgetManager.updateAppWidget(widgetId, views)
+    private fun buildOpenPendingIntent(context: Context): PendingIntent {
+        val openIntent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("open_home_tab", true)
         }
-
-        updateStatusBar(context, next)
+        return PendingIntent.getActivity(
+            context,
+            2001,
+            openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 
     /**
@@ -235,8 +274,8 @@ object PrayerWidgetUpdater {
     /**
      * The single countdown line must sit entirely inside the drawn circle, so its size is
      * derived from the circle's diameter rather than a fixed preference. The countdown can
-     * render up to 7 glyphs ("H:MM:SS") in live-countdown mode, so it's sized for that
-     * worst case (~diameter/3 per glyph incl. spacing), scaled by the user's text-size
+     * render up to 5 glyphs ("M:SS" like "59:59") in live-countdown mode, so it's sized for
+     * that worst case (~diameter/3 per glyph incl. spacing), scaled by the user's text-size
      * preference, and capped at the circle's pixel width.
      */
     private fun setCircleTextSizeSp(
@@ -310,10 +349,12 @@ object PrayerWidgetUpdater {
 
     /**
      * Above [mmssThresholdMinutes] remaining, shows a static "HH:MM" string that we
-     * refresh once a minute via [scheduleWidgetMinuteRefresh] (minutes-only precision doesn't
-     * need finer-grained updates). Once under that threshold, switches to a live, self-ticking
-     * "MM:SS" countdown via the platform Chronometer view, which ticks every second in the
-     * widget host process with no further wakeups from us at all.
+     * refresh once a minute via [scheduleWidgetMinuteRefresh] (minutes-only precision
+     * doesn't need finer-grained updates). Once under that threshold, switches to a
+     * "M:SS" string with no leading zeros ("4:32", "9") refreshed once a second by
+     * [CountdownTickService] via [updateCountdownWidgets]. A self-ticking platform
+     * Chronometer can't render unpadded minutes (and custom views in widget layouts
+     * break on several launchers), so the app drives these updates itself.
      */
     private fun applyCountdown(
         views: RemoteViews,
@@ -323,35 +364,40 @@ object PrayerWidgetUpdater {
         mmssThresholdMinutes: Int
     ) {
         if (next == null) {
-            views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(viewId, "--:--")
             return
         }
         val remainingMs = next.second - now
         val remainingMinutes = remainingMs / 60_000L
         if (remainingMinutes >= mmssThresholdMinutes) {
-            views.setChronometer(viewId, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(viewId, formatHoursMinutes(remainingMs))
             return
         }
-        val base = SystemClock.elapsedRealtime() + remainingMs
-        views.setChronometer(viewId, base, null, true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            views.setChronometerCountDown(viewId, true)
-        }
+        views.setTextViewText(viewId, formatMinutesSeconds(remainingMs))
     }
 
     private fun formatHoursMinutes(remainingMs: Long): String {
         val totalMinutes = remainingMs / 60_000L
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
-        return "%02d:%02d".format(hours, minutes)
+        return if (hours > 0) "%d:%02d".format(hours, minutes) else "${minutes}"
+    }
+
+    private fun formatMinutesSeconds(remainingMs: Long): String {
+        val totalSeconds = (remainingMs / 1000L).coerceAtLeast(0)
+        val minutes = totalSeconds / 60L
+        val seconds = totalSeconds % 60L
+        return if (minutes > 0) {
+            "$minutes:${seconds.toString().padStart(2, '0')}"
+        } else {
+            "$seconds"
+        }
     }
 
     /**
      * Wakes the app only when the next prayer time actually passes (a handful of times a
-     * day), instead of on a fixed polling interval forever. Between wakeups the Chronometer
-     * views tick on their own without any alarm at all.
+     * day). Between wakeups the countdown text is kept fresh by the per-minute refresh
+     * alarm ([scheduleWidgetMinuteRefresh]) and the per-second [CountdownTickService].
      */
     fun scheduleNextUpdate(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -426,8 +472,8 @@ object PrayerWidgetUpdater {
     /**
      * Keeps the widgets' "HH:MM" display (see [applyCountdown]) accurate to the minute while
      * above the configured MM:SS threshold remain. Once remaining time drops under that
-     * threshold, the Chronometer views take over ticking every second on their own, so this
-     * alarm cancels itself rather than continuing to fire.
+     * threshold, [scheduleWidgetSecondRefresh] takes over and this alarm cancels itself
+     * rather than continuing to fire.
      */
     fun scheduleWidgetMinuteRefresh(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -455,13 +501,85 @@ object PrayerWidgetUpdater {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
     }
 
-    private fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
+    /**
+     * Keeps [CountdownTickService] running while any countdown widget is under the
+     * configured MM:SS threshold, so the widgets' "M:SS" countdown (see [applyCountdown])
+     * ticks once a second without leading zeros ("4:32", "9"). Per-second exact alarms
+     * were tried first, but the system throttles them to roughly 5-second spacing, so an
+     * in-process service is the reliable way to hit one-second updates. Stops the service
+     * once remaining time is back above the threshold or no countdown widget exists.
+     */
+    fun scheduleWidgetSecondRefresh(context: Context) {
+        if (shouldTickPerSecond(context)) {
+            ContextCompat.startForegroundService(
+                context,
+                Intent(context, CountdownTickService::class.java)
+            )
+        } else {
+            context.stopService(Intent(context, CountdownTickService::class.java))
+        }
+    }
+
+    /**
+     * True while a countdown widget is installed, a next prayer exists, and its remaining
+     * time is under the MM:SS threshold — i.e. when the per-second [CountdownTickService]
+     * should be running.
+     */
+    fun shouldTickPerSecond(context: Context): Boolean {
+        val now = System.currentTimeMillis()
+        val next = nextPrayer(context) ?: return false
+        val remainingMinutes = (next.second - now) / 60_000L
+        return remainingMinutes < PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong() &&
+            hasCountdownWidgets(context)
+    }
+
+    fun nextPrayer(context: Context): Pair<String, Long>? =
+        PrayerWidgetStorage.readTimeline(context)
+            .firstOrNull { it.second > System.currentTimeMillis() }
+
+    private fun hasCountdownWidgets(context: Context): Boolean {
+        val manager = AppWidgetManager.getInstance(context)
+        val providers = listOf(
+            RemainingTimeWidgetProvider::class.java,
+            NextPrayerWidgetProvider::class.java,
+            RemainingTimeCircleWidgetProvider::class.java
+        )
+        return providers.any {
+            manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty()
+        }
+    }
+
+    internal fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
         val manager = NotificationManagerCompat.from(context)
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             manager.cancel(STATUS_NOTIFICATION_ID)
             return
         }
         createStatusChannel(context)
+        manager.notify(STATUS_NOTIFICATION_ID, buildStatusNotification(context, next))
+    }
+
+    /**
+     * Builds the status-bar countdown notification (live Chronometer views) when enabled,
+     * or a minimal foreground-service notification otherwise. Used both by
+     * [updateStatusBar] and by [CountdownTickService] as its foreground notification.
+     */
+    internal fun buildStatusNotification(
+        context: Context,
+        next: Pair<String, Long>?
+    ): Notification {
+        if (!PrayerWidgetStorage.isStatusEnabled(context)) {
+            return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("Prayer Assistant")
+                .setContentText("Widget countdown active")
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setSilent(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .build()
+        }
         val openIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("open_home_tab", true)
@@ -483,7 +601,7 @@ object PrayerWidgetUpdater {
         )
         val contentView = buildStatusContentView(context, next)
         val expandedView = buildStatusExpandedView(context, next)
-        val builder = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
+        return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
             .setSmallIcon(buildSmallIcon(context, next))
             .setContentTitle("Prayer Assistant")
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
@@ -496,7 +614,7 @@ object PrayerWidgetUpdater {
             .setSilent(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-        manager.notify(STATUS_NOTIFICATION_ID, builder.build())
+            .build()
     }
 
     /**
@@ -628,7 +746,7 @@ object PrayerWidgetUpdater {
         return views
     }
 
-    private fun createStatusChannel(context: Context) {
+    internal fun createStatusChannel(context: Context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return
         }

@@ -12,7 +12,7 @@
         android:scaleType="fitCenter"
         android:contentDescription="@null" />
 
-    <Chronometer
+    <TextView
         android:id="@+id/widgetRemainingCircleValue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

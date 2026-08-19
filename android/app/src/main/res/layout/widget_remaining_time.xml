@@ -15,7 +15,7 @@
         android:textColor="#FFFFFFFF"
         android:textSize="14sp" />
 
-    <Chronometer
+    <TextView
         android:id="@+id/widgetRemainingOnlyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

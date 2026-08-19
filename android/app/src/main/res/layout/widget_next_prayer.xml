@@ -33,7 +33,7 @@
 
     </LinearLayout>
 
-    <Chronometer
+    <TextView
         android:id="@+id/widgetNextPrayerRemaining"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

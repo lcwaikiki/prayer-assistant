@@ -28,6 +28,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
                     PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
+                    PrayerWidgetUpdater.scheduleWidgetSecondRefresh(this)
                     result.success(null)
                 }
                 "updateCalendarReminders" -> {
@@ -57,6 +58,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
                     PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
+                    PrayerWidgetUpdater.scheduleWidgetSecondRefresh(this)
                     result.success(null)
                 }
                 "consumePendingOpenHome" -> {

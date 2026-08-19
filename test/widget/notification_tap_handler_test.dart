@@ -5,6 +5,7 @@ import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart
 import 'package:prayer_assistant/src/navigation.dart';
 import 'package:prayer_assistant/src/services/notification_tap_handler.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 import 'package:provider/provider.dart' as provider;
 
@@ -40,6 +41,19 @@ void main() {
     expect(find.byType(ExecutionScreen), findsNothing);
   });
 
+  testWidgets('routes a group payload to the group screen', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    await pumpTapHost(tester, harness);
+
+    handleNotificationTap('${tesbihGroupPayloadPrefix}group-1');
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GroupScreen), findsOneWidget);
+    expect(find.byType(ExecutionScreen), findsNothing);
+    expect(find.byType(HijriCalendarScreen), findsNothing);
+  });
+
   testWidgets('ignores payloads without a known feature prefix', (
     tester,
   ) async {
@@ -52,10 +66,12 @@ void main() {
     handleNotificationTap('item-1');
     handleNotificationTap(null);
     handleNotificationTap(tesbihItemPayloadPrefix);
+    handleNotificationTap(tesbihGroupPayloadPrefix);
     await tester.pumpAndSettle();
 
     expect(find.byType(ExecutionScreen), findsNothing);
     expect(find.byType(HijriCalendarScreen), findsNothing);
+    expect(find.byType(GroupScreen), findsNothing);
   });
 }
 

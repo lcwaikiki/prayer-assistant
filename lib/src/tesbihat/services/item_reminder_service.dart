@@ -7,6 +7,8 @@ import '../../services/local_database.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
 import '../models/item.dart';
+import '../models/item_group.dart';
+import '../models/reminder_schedulable.dart';
 import 'prayer_anchor_resolver.dart';
 
 class ItemReminderService {
@@ -109,8 +111,17 @@ class ItemReminderService {
     }
   }
 
-  Future<void> scheduleReminder(Item item) async {
-    final id = _notificationId(item.id);
+  Future<void> scheduleReminder(Item item) =>
+      _schedule(item, tesbihItemPayloadPrefix);
+
+  Future<void> scheduleGroupReminder(ItemGroup group) =>
+      _schedule(group, tesbihGroupPayloadPrefix);
+
+  Future<void> _schedule(
+    ReminderSchedulable subject,
+    String payloadPrefix,
+  ) async {
+    final id = _notificationId(subject.id);
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
     // count would otherwise leave stale notifications behind.
@@ -118,7 +129,7 @@ class ItemReminderService {
       await _plugin.cancel(id: id + i);
     }
 
-    if (!item.reminderEnabled) {
+    if (!subject.reminderEnabled) {
       return;
     }
 
@@ -132,84 +143,85 @@ class ItemReminderService {
       ),
       iOS: DarwinNotificationDetails(),
     );
-    final body = 'Time for your ${item.title} dhikr.';
+    final body = 'Time for your ${subject.title} dhikr.';
+    final payload = '$payloadPrefix${subject.id}';
 
-    final repeatCount = item.reminderRepeatCount;
+    final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {
-      await _scheduleOccurrences(item, id, repeatCount, details, body);
+      await _scheduleOccurrences(subject, id, repeatCount, details, body, payload);
       return;
     }
 
-    if (item.reminderAnchor == ItemReminderAnchor.prayerTime) {
+    if (subject.reminderAnchor == ItemReminderAnchor.prayerTime) {
       // Fire on the next occurrence matching the recurrence, resolved to
       // that occurrence's own prayer time (which shifts day to day). A
       // plain one-shot is scheduled and MidnightReminderScheduler re-runs
       // this daily to advance to the following occurrence.
-      final fireAt = await _resolveNextPrayerFireTime(item);
+      final fireAt = await _resolveNextPrayerFireTime(subject);
       if (fireAt == null) {
         return;
       }
       await _zonedSchedule(
         id: id,
-        title: item.title,
+        title: subject.title,
         body: body,
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
-        payload: '$tesbihItemPayloadPrefix${item.id}',
+        payload: payload,
       );
       return;
     }
 
-    final reminderAt = item.reminderAt;
+    final reminderAt = subject.reminderAt;
     if (reminderAt == null) {
       return;
     }
 
-    switch (item.reminderRecurrence) {
+    switch (subject.reminderRecurrence) {
       case ReminderRecurrence.once:
         if (!reminderAt.isAfter(DateTime.now())) {
           return;
         }
         await _zonedSchedule(
           id: id,
-          title: item.title,
+          title: subject.title,
           body: body,
           scheduledDate: tz.TZDateTime.from(reminderAt, tz.local),
           notificationDetails: details,
-          payload: '$tesbihItemPayloadPrefix${item.id}',
+          payload: payload,
         );
       case ReminderRecurrence.daily:
         await _zonedSchedule(
           id: id,
-          title: item.title,
+          title: subject.title,
           body: body,
           scheduledDate: _nextTimeOfDay(reminderAt),
           notificationDetails: details,
-          payload: '$tesbihItemPayloadPrefix${item.id}',
+          payload: payload,
           matchDateTimeComponents: DateTimeComponents.time,
         );
       case ReminderRecurrence.weekly:
-        if (item.reminderWeekdays.isEmpty) {
+        if (subject.reminderWeekdays.isEmpty) {
           await _zonedSchedule(
             id: id,
-            title: item.title,
+            title: subject.title,
             body: body,
             scheduledDate: _nextWeekday(reminderAt),
             notificationDetails: details,
-            payload: '$tesbihItemPayloadPrefix${item.id}',
+            payload: payload,
             matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
           );
         } else {
           // One OS-level weekly repeat per selected weekday.
           var index = 0;
-          for (final weekday in item.reminderWeekdays) {
+          for (final weekday in subject.reminderWeekdays) {
             final scheduled = await _zonedSchedule(
               id: id + index,
-              title: item.title,
+              title: subject.title,
               body: body,
               scheduledDate: _nextWeekday(reminderAt, weekday),
               notificationDetails: details,
-              payload: '$tesbihItemPayloadPrefix${item.id}',
+              payload: payload,
               matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
             );
             if (!scheduled) {
@@ -219,64 +231,64 @@ class ItemReminderService {
           }
         }
       case ReminderRecurrence.monthly:
-        if (item.reminderMonthlyBasis == CalendarBasis.gregorian) {
+        if (subject.reminderMonthlyBasis == CalendarBasis.gregorian) {
           final next = _nextDayOfMonth(
             reminderAt,
-            day: item.reminderDayOfMonth,
+            day: subject.reminderDayOfMonth,
           );
           if (next == null) {
             return;
           }
           await _zonedSchedule(
             id: id,
-            title: item.title,
+            title: subject.title,
             body: body,
             scheduledDate: next,
             notificationDetails: details,
-            payload: '$tesbihItemPayloadPrefix${item.id}',
+            payload: payload,
             matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
             reminderAt,
-            day: item.reminderDayOfMonth,
+            day: subject.reminderDayOfMonth,
           );
           await _zonedSchedule(
             id: id,
-            title: item.title,
+            title: subject.title,
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            payload: '$tesbihItemPayloadPrefix${item.id}',
+            payload: payload,
           );
         }
       case ReminderRecurrence.yearly:
-        if (item.reminderYearlyBasis == CalendarBasis.gregorian) {
+        if (subject.reminderYearlyBasis == CalendarBasis.gregorian) {
           await _zonedSchedule(
             id: id,
-            title: item.title,
+            title: subject.title,
             body: body,
             scheduledDate: _nextDayOfYear(
               reminderAt,
-              month: item.reminderYearlyDate?.month,
-              day: item.reminderYearlyDate?.day,
+              month: subject.reminderYearlyDate?.month,
+              day: subject.reminderYearlyDate?.day,
             ),
             notificationDetails: details,
-            payload: '$tesbihItemPayloadPrefix${item.id}',
+            payload: payload,
             matchDateTimeComponents: DateTimeComponents.dateAndTime,
           );
         } else {
           final next = _nextHijriAnniversary(
             reminderAt,
-            yearlyDate: item.reminderYearlyDate,
+            yearlyDate: subject.reminderYearlyDate,
           );
           await _zonedSchedule(
             id: id,
-            title: item.title,
+            title: subject.title,
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            payload: '$tesbihItemPayloadPrefix${item.id}',
+            payload: payload,
           );
         }
     }
@@ -289,21 +301,22 @@ class ItemReminderService {
   /// which naturally drops already-fired occurrences and keeps the total
   /// at [count].
   Future<void> _scheduleOccurrences(
-    Item item,
+    ReminderSchedulable subject,
     int baseId,
     int count,
     NotificationDetails details,
     String body,
+    String payload,
   ) async {
-    final occurrences = item.reminderAnchor == ItemReminderAnchor.prayerTime
-        ? await _resolveNextPrayerFireTimes(item, count)
-        : _nextClockTimeOccurrences(item, count);
-    final payload = '$tesbihItemPayloadPrefix${item.id}';
+    final occurrences =
+        subject.reminderAnchor == ItemReminderAnchor.prayerTime
+        ? await _resolveNextPrayerFireTimes(subject, count)
+        : _nextClockTimeOccurrences(subject, count);
     var index = 0;
     for (final fireAt in occurrences) {
       final scheduled = await _zonedSchedule(
         id: baseId + index,
-        title: item.title,
+        title: subject.title,
         body: body,
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
@@ -463,8 +476,8 @@ class ItemReminderService {
 
   /// Resolves the next concrete fire time for a prayer-anchored reminder,
   /// honoring [Item.reminderRecurrence] and [Item.reminderRepeatCount].
-  Future<DateTime?> _resolveNextPrayerFireTime(Item item) async {
-    final times = await _resolveNextPrayerFireTimes(item, 1);
+  Future<DateTime?> _resolveNextPrayerFireTime(ReminderSchedulable subject) async {
+    final times = await _resolveNextPrayerFireTimes(subject, 1);
     return times.isEmpty ? null : times.first;
   }
 
@@ -473,24 +486,27 @@ class ItemReminderService {
   /// the repeat count). Each occurrence date's own prayer time is resolved;
   /// occurrences already past by more than the catch-up window are skipped.
   /// An empty list means nothing is left to schedule.
-  Future<List<DateTime>> _resolveNextPrayerFireTimes(Item item, int count) async {
+  Future<List<DateTime>> _resolveNextPrayerFireTimes(
+    ReminderSchedulable subject,
+    int count,
+  ) async {
     final database = LocalDatabase();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final anchor = item.reminderAnchorDate ?? item.reminderAt ?? now;
+    final anchor = subject.reminderAnchorDate ?? subject.reminderAt ?? now;
     final anchorDate = DateTime(anchor.year, anchor.month, anchor.day);
 
     var from = today;
     final times = <DateTime>[];
     for (var attempts = 0; attempts < 400 && times.length < count; attempts++) {
-      final occurrence = _nextPrayerOccurrenceDate(item, anchorDate, from);
+      final occurrence = _nextPrayerOccurrenceDate(subject, anchorDate, from);
       if (occurrence == null) {
         break;
       }
       final resolved = await resolvePrayerAnchoredTime(
         database,
-        prayerName: item.reminderPrayerName,
-        offsetMinutes: item.reminderOffsetMinutes,
+        prayerName: subject.reminderPrayerName,
+        offsetMinutes: subject.reminderOffsetMinutes,
         date: occurrence,
       );
       if (resolved == null) {
@@ -500,7 +516,7 @@ class ItemReminderService {
         times.add(resolved);
       } else if (now.difference(resolved) <= _catchUpWindow) {
         times.add(now.add(const Duration(seconds: 5)));
-      } else if (item.reminderRecurrence == ReminderRecurrence.once) {
+      } else if (subject.reminderRecurrence == ReminderRecurrence.once) {
         break;
       }
       from = occurrence.add(const Duration(days: 1));
@@ -509,11 +525,11 @@ class ItemReminderService {
   }
 
   /// The first [count] clock-anchored occurrence moments strictly after
-  /// now, at [Item.reminderAt]'s time-of-day. Occurrences already past
+  /// now, at the subject's reminder time-of-day. Occurrences already past
   /// (e.g. today's time already gone) are skipped so only remaining fires
   /// are scheduled.
-  List<DateTime> _nextClockTimeOccurrences(Item item, int count) {
-    final reminderAt = item.reminderAt;
+  List<DateTime> _nextClockTimeOccurrences(ReminderSchedulable subject, int count) {
+    final reminderAt = subject.reminderAt;
     if (reminderAt == null) {
       return const [];
     }
@@ -526,7 +542,7 @@ class ItemReminderService {
     var from = DateTime(now.year, now.month, now.day);
     final occurrences = <DateTime>[];
     for (var i = 0; i < count; i++) {
-      final date = _nextPrayerOccurrenceDate(item, anchor, from);
+      final date = _nextPrayerOccurrenceDate(subject, anchor, from);
       if (date == null) {
         break;
       }
@@ -545,23 +561,23 @@ class ItemReminderService {
     return occurrences;
   }
 
-  /// The next occurrence date (>= [from]) matching the item's recurrence
+  /// The next occurrence date (>= [from]) matching the subject's recurrence
   /// and anchored to [anchor]'s date part, or null when there is none.
   DateTime? _nextPrayerOccurrenceDate(
-    Item item,
+    ReminderSchedulable subject,
     DateTime anchor,
     DateTime from,
   ) {
-    switch (item.reminderRecurrence) {
+    switch (subject.reminderRecurrence) {
       case ReminderRecurrence.once:
         return anchor.isBefore(from) ? null : anchor;
       case ReminderRecurrence.daily:
         return from;
       case ReminderRecurrence.weekly:
-        if (item.reminderWeekdays.isNotEmpty) {
+        if (subject.reminderWeekdays.isNotEmpty) {
           for (var offset = 0; offset < 7; offset++) {
             final candidate = from.add(Duration(days: offset));
-            if (item.reminderWeekdays.contains(candidate.weekday)) {
+            if (subject.reminderWeekdays.contains(candidate.weekday)) {
               return candidate;
             }
           }
@@ -573,27 +589,31 @@ class ItemReminderService {
         }
         return candidate;
       case ReminderRecurrence.monthly:
-        if (item.reminderMonthlyBasis == CalendarBasis.gregorian) {
+        if (subject.reminderMonthlyBasis == CalendarBasis.gregorian) {
           return _nextGregorianDayOfMonth(
             anchor,
             from,
-            day: item.reminderDayOfMonth,
+            day: subject.reminderDayOfMonth,
           );
         }
-        return _nextHijriDayOfMonth(anchor, from, day: item.reminderDayOfMonth);
+        return _nextHijriDayOfMonth(
+          anchor,
+          from,
+          day: subject.reminderDayOfMonth,
+        );
       case ReminderRecurrence.yearly:
-        if (item.reminderYearlyBasis == CalendarBasis.gregorian) {
+        if (subject.reminderYearlyBasis == CalendarBasis.gregorian) {
           return _nextGregorianMonthDay(
             anchor,
             from,
-            month: item.reminderYearlyDate?.month,
-            day: item.reminderYearlyDate?.day,
+            month: subject.reminderYearlyDate?.month,
+            day: subject.reminderYearlyDate?.day,
           );
         }
         return _nextHijriMonthDay(
           anchor,
           from,
-          yearlyDate: item.reminderYearlyDate,
+          yearlyDate: subject.reminderYearlyDate,
         );
     }
   }

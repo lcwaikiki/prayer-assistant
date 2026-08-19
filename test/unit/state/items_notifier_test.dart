@@ -469,4 +469,77 @@ void main() {
       expect(current.setCount, 3);
     });
   });
+
+  group('ItemsNotifier group membership', () {
+    test('addItem stores the given group memberships', () {
+      final repository = ItemRepository.memory();
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .addItem(
+            title: 'Tasbih',
+            notes: '',
+            count: 33,
+            check: 11,
+            vibrationIntensity: 50,
+            groupIds: const ['g1', 'g2'],
+          );
+
+      expect(repository.loadItems().single.groupIds, ['g1', 'g2']);
+    });
+
+    test('addItemsToGroup adds the group to each listed item', () {
+      final repository = ItemRepository.memory([item('a'), item('b')]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .addItemsToGroup(['a', 'b'], 'g1');
+
+      expect(repository.loadItems()[0].groupIds, ['g1']);
+      expect(repository.loadItems()[1].groupIds, ['g1']);
+    });
+
+    test('addItemsToGroup is idempotent for an existing membership', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['g1']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .addItemsToGroup(['a'], 'g1');
+
+      expect(repository.loadItems().single.groupIds, ['g1']);
+    });
+
+    test('removeItemFromGroup drops the membership and persists', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['g1', 'g2']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .removeItemFromGroup('a', 'g1');
+
+      expect(repository.loadItems().single.groupIds, ['g2']);
+    });
+
+    test('removeGroupFromItems strips the group from every item', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['g1', 'g2']),
+        item('b').copyWith(groupIds: const ['g1']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .removeGroupFromItems('g1');
+
+      expect(repository.loadItems()[0].groupIds, ['g2']);
+      expect(repository.loadItems()[1].groupIds, isEmpty);
+    });
+  });
 }

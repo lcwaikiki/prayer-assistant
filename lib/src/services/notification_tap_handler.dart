@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
 import '../navigation.dart';
 import '../tesbihat/screens/execution_screen.dart';
+import '../tesbihat/screens/group_screen.dart';
 
 /// Payload prefixes identifying which feature scheduled a notification.
 /// All three notification producers funnel taps through a single
@@ -11,6 +12,7 @@ import '../tesbihat/screens/execution_screen.dart';
 /// Prayer notifications use JSON payloads and never deep-link.
 const calendarReminderPayloadPrefix = 'calendar_reminder:';
 const tesbihItemPayloadPrefix = 'tesbih_item:';
+const tesbihGroupPayloadPrefix = 'tesbih_group:';
 
 /// Routes a notification tap to the matching screen based on the
 /// payload's feature prefix. Registered by every service that calls
@@ -40,6 +42,14 @@ void handleNotificationTap(String? payload) {
     }
     rootNavigatorKey.currentState?.push(
       MaterialPageRoute<void>(builder: (_) => ExecutionScreen(itemId: itemId)),
+    );
+  } else if (payload.startsWith(tesbihGroupPayloadPrefix)) {
+    final groupId = payload.substring(tesbihGroupPayloadPrefix.length);
+    if (groupId.isEmpty) {
+      return;
+    }
+    rootNavigatorKey.currentState?.push(
+      MaterialPageRoute<void>(builder: (_) => GroupScreen(groupId: groupId)),
     );
   }
 }

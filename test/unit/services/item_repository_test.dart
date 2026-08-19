@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 
 void main() {
   group('ItemRepository.memory', () {
@@ -54,6 +55,7 @@ void main() {
         reminderPrayerName: 'Imsak',
         reminderOffsetMinutes: -5,
         reminderAnchorDate: DateTime(2026, 8, 17),
+        groupIds: const ['g1', 'g2'],
       );
       final repository = ItemRepository.memory();
       repository.saveItems([original]);
@@ -67,6 +69,34 @@ void main() {
       expect(restored.reminderPrayerName, 'Imsak');
       expect(restored.reminderOffsetMinutes, -5);
       expect(restored.reminderAnchorDate, DateTime(2026, 8, 17));
+      expect(restored.groupIds, ['g1', 'g2']);
+    });
+
+    test('groupIds default to an empty list when absent', () {
+      final repository = ItemRepository.memory([_item('a')]);
+
+      expect(repository.loadItems().single.groupIds, isEmpty);
+    });
+
+    test('loadGroups returns the saved groups and saves are readable back', () {
+      final repository = ItemRepository.memory();
+      final group = const ItemGroup(
+        id: 'g1',
+        title: 'Morning Adhkar',
+        reminderEnabled: true,
+      );
+
+      repository.saveGroups([group]);
+
+      expect(repository.loadGroups().single.id, 'g1');
+      expect(repository.loadGroups().single.title, 'Morning Adhkar');
+      expect(repository.loadGroups().single.reminderEnabled, isTrue);
+    });
+
+    test('loadGroups returns an empty list when nothing was saved', () {
+      final repository = ItemRepository.memory();
+
+      expect(repository.loadGroups(), isEmpty);
     });
   });
 }

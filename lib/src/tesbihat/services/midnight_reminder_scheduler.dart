@@ -7,6 +7,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../calendar/models/calendar_reminder.dart';
 import '../data/item_repository.dart';
 import '../models/item.dart';
+import '../models/item_group.dart';
 import 'item_reminder_service.dart';
 
 const _midnightAlarmId = 5001;
@@ -30,22 +31,28 @@ Future<void> midnightReminderRefreshCallback() async {
   await reminderService.initialize();
 
   final items = repository.loadItems();
+  final groups = repository.loadGroups();
 
-  for (final item in items) {
-    if (!item.reminderEnabled) {
+  for (final subject in [...items, ...groups]) {
+    if (!subject.reminderEnabled) {
       continue;
     }
-    if (item.reminderAnchor == ItemReminderAnchor.prayerTime) {
-      // Re-resolve the next occurrence's prayer time (moves forward each
-      // day or to the next matching weekday/month-day).
-      await reminderService.scheduleReminder(item);
-    } else if ((item.reminderRecurrence == ReminderRecurrence.monthly &&
-            item.reminderMonthlyBasis == CalendarBasis.hijri) ||
-        (item.reminderRecurrence == ReminderRecurrence.yearly &&
-            item.reminderYearlyBasis == CalendarBasis.hijri)) {
-      // No native OS repeat for a floating Hijri day-of-month/month-day:
-      // recompute the next Gregorian occurrence today.
-      await reminderService.scheduleReminder(item);
+    final needsRefresh =
+        subject.reminderAnchor == ItemReminderAnchor.prayerTime ||
+        (subject.reminderRecurrence == ReminderRecurrence.monthly &&
+            subject.reminderMonthlyBasis == CalendarBasis.hijri) ||
+        (subject.reminderRecurrence == ReminderRecurrence.yearly &&
+            subject.reminderYearlyBasis == CalendarBasis.hijri);
+    if (!needsRefresh) {
+      continue;
+    }
+    // Re-resolve the next occurrence's prayer time (moves forward each day
+    // or to the next matching weekday/month-day), or recompute the next
+    // Gregorian occurrence for a floating Hijri day-of-month/month-day.
+    if (subject is Item) {
+      await reminderService.scheduleReminder(subject);
+    } else if (subject is ItemGroup) {
+      await reminderService.scheduleGroupReminder(subject);
     }
   }
 }

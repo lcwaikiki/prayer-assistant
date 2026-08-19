@@ -1,4 +1,5 @@
 import '../../calendar/models/calendar_reminder.dart';
+import 'reminder_schedulable.dart';
 
 enum ItemReminderAnchor {
   /// A fixed clock time picked directly (once or daily).
@@ -18,7 +19,7 @@ enum ItemReminderAnchor {
   }
 }
 
-class Item {
+class Item implements ReminderSchedulable {
   const Item({
     required this.id,
     required this.title,
@@ -41,6 +42,7 @@ class Item {
     this.reminderWeekdays = const [],
     this.reminderDayOfMonth,
     this.reminderYearlyDate,
+    this.groupIds = const [],
   }) : assert(count > 0, 'count must be positive'),
        assert(check > 0, 'check must be positive'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -126,6 +128,9 @@ class Item {
   /// anchor date's month/day is used (legacy behavior).
   final DateTime? reminderYearlyDate;
 
+  /// Ids of the groups this bead belongs to (multi-membership is allowed).
+  final List<String> groupIds;
+
   Item copyWith({
     String? id,
     String? title,
@@ -148,6 +153,7 @@ class Item {
     List<int>? reminderWeekdays,
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
+    List<String>? groupIds,
   }) {
     return Item(
       id: id ?? this.id,
@@ -173,6 +179,7 @@ class Item {
       reminderWeekdays: reminderWeekdays ?? this.reminderWeekdays,
       reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
       reminderYearlyDate: reminderYearlyDate ?? this.reminderYearlyDate,
+      groupIds: groupIds ?? this.groupIds,
     );
   }
 
@@ -199,6 +206,7 @@ class Item {
       'reminderWeekdays': reminderWeekdays.join(','),
       'reminderDayOfMonth': reminderDayOfMonth,
       'reminderYearlyDate': reminderYearlyDate?.toIso8601String(),
+      'groupIds': groupIds.join(','),
     };
   }
 
@@ -221,6 +229,11 @@ class Item {
         .map((part) => int.tryParse(part.trim()))
         .whereType<int>()
         .where((day) => day >= 1 && day <= 7)
+        .toList(growable: false);
+    final groupIds = (map['groupIds']?.toString() ?? '')
+        .split(',')
+        .map((part) => part.trim())
+        .where((part) => part.isNotEmpty)
         .toList(growable: false);
     var recurrence = ReminderRecurrence.fromName(
       map['reminderRecurrence']?.toString() ??
@@ -264,6 +277,7 @@ class Item {
       reminderWeekdays: reminderWeekdays,
       reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),
       reminderYearlyDate: reminderYearlyDate,
+      groupIds: groupIds,
     );
   }
 

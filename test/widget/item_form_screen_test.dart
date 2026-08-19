@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/item_form_screen.dart';
 
 import '../helpers/test_harness.dart';
@@ -61,6 +62,13 @@ Future<void> _tapSave(WidgetTester tester) async {
 Future<void> _scrollTo(WidgetTester tester, Finder finder) async {
   for (var i = 0; i < 10 && tester.any(finder) == false; i++) {
     await tester.drag(find.byType(ListView), const Offset(0, -150));
+    await tester.pumpAndSettle();
+  }
+  // With a shared ReminderSection widget the reminder fields are laid out
+  // even when below the fold, so the raw drag loop can stop while the
+  // target is still off-screen; scroll it into view before the caller taps.
+  if (tester.any(finder)) {
+    await tester.ensureVisible(finder);
     await tester.pumpAndSettle();
   }
 }
@@ -361,6 +369,61 @@ void main() {
     final saved = harness.itemRepository.loadItems();
     expect(saved, hasLength(1));
     expect(saved.first.reminderRepeatCount, 7);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('selecting group chips stores the memberships on save', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Morning'),
+      const ItemGroup(id: 'g2', title: 'Night'),
+    ]);
+    await harness.initialize();
+
+    await _pumpForm(tester, harness);
+    await _fillBasicFields(tester);
+
+    await _scrollTo(tester, find.byKey(const Key('group_chip_g1')));
+    await tester.tap(find.byKey(const Key('group_chip_g1')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('group_chip_g2')));
+    await tester.pumpAndSettle();
+    await _tapSave(tester);
+
+    final saved = harness.itemRepository.loadItems();
+    expect(saved, hasLength(1));
+    expect(saved.first.groupIds, ['g1', 'g2']);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('editing an item prefills its group chips', (tester) async {
+    final harness = TestHarness.create();
+    final existing = Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 11,
+      vibrationIntensity: 50,
+      groupIds: const ['g1'],
+    );
+    harness.itemRepository = ItemRepository.memory([existing]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Morning'),
+    ]);
+    await harness.initialize();
+
+    await _pumpForm(tester, harness, itemToEdit: existing);
+
+    await _scrollTo(tester, find.byKey(const Key('group_chip_g1')));
+    final chip = tester.widget<FilterChip>(
+      find.byKey(const Key('group_chip_g1')),
+    );
+    expect(chip.selected, isTrue);
 
     await tester.pumpWidget(const SizedBox());
   });

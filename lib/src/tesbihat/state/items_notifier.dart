@@ -59,6 +59,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     List<int> reminderWeekdays = const [],
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
+    List<String> groupIds = const [],
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -82,6 +83,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
       reminderWeekdays: reminderWeekdays,
       reminderDayOfMonth: reminderDayOfMonth,
       reminderYearlyDate: reminderYearlyDate,
+      groupIds: groupIds,
     );
     state = [...state, newItem];
     _repository.saveItems(state);
@@ -130,6 +132,74 @@ class ItemsNotifier extends Notifier<List<Item>> {
     }
     final movedItem = nextState.removeAt(oldIndex);
     nextState.insert(newIndex, movedItem);
+    state = nextState;
+    _repository.saveItems(state);
+  }
+
+  /// Drops [groupId] from every item's membership after the group itself is
+  /// deleted, so no item keeps pointing at a nonexistent group.
+  void removeGroupFromItems(String groupId) {
+    final nextState = <Item>[];
+    var changed = false;
+    for (final item in state) {
+      if (item.groupIds.contains(groupId)) {
+        changed = true;
+        nextState.add(
+          item.copyWith(
+            groupIds: item.groupIds
+                .where((id) => id != groupId)
+                .toList(growable: false),
+          ),
+        );
+      } else {
+        nextState.add(item);
+      }
+    }
+    if (!changed) {
+      return;
+    }
+    state = nextState;
+    _repository.saveItems(state);
+  }
+
+  /// Adds [groupId] to each of the given items' membership.
+  void addItemsToGroup(List<String> itemIds, String groupId) {
+    final idSet = itemIds.toSet();
+    final nextState = <Item>[];
+    var changed = false;
+    for (final item in state) {
+      if (idSet.contains(item.id) && !item.groupIds.contains(groupId)) {
+        changed = true;
+        nextState.add(
+          item.copyWith(groupIds: [...item.groupIds, groupId]),
+        );
+      } else {
+        nextState.add(item);
+      }
+    }
+    if (!changed) {
+      return;
+    }
+    state = nextState;
+    _repository.saveItems(state);
+  }
+
+  /// Removes [groupId] from a single item's membership.
+  void removeItemFromGroup(String itemId, String groupId) {
+    final index = state.indexWhere((item) => item.id == itemId);
+    if (index == -1) {
+      return;
+    }
+    final item = state[index];
+    if (!item.groupIds.contains(groupId)) {
+      return;
+    }
+    final nextState = [...state];
+    nextState[index] = item.copyWith(
+      groupIds: item.groupIds
+          .where((id) => id != groupId)
+          .toList(growable: false),
+    );
     state = nextState;
     _repository.saveItems(state);
   }

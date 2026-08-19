@@ -108,6 +108,12 @@ void main() {
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
 
+    expect(find.text('New Bead'), findsOneWidget);
+    expect(find.text('New Group'), findsOneWidget);
+
+    await tester.tap(find.text('New Bead'));
+    await tester.pumpAndSettle();
+
     expect(find.text('Create Beads'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());

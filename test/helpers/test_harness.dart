@@ -8,6 +8,7 @@ import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 import 'package:provider/provider.dart' as provider;
 
@@ -57,6 +58,7 @@ class TestHarness {
         vibrationIntensity: 50,
       ),
     );
+    registerFallbackValue(const ItemGroup(id: 'g', title: 'g'));
 
     when(() => notificationService.initialize()).thenAnswer((_) async {});
     when(
@@ -180,6 +182,9 @@ class TestHarness {
     ).thenAnswer((_) async {});
     when(
       () => itemReminderService.cancelReminder(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => itemReminderService.scheduleGroupReminder(any()),
     ).thenAnswer((_) async {});
 
     when(() => database.saveSelectedLocation(any())).thenAnswer((_) async {});

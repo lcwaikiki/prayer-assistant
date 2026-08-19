@@ -345,7 +345,7 @@ object PrayerWidgetUpdater {
         val totalMinutes = remainingMs / 60_000L
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
-        return "%02d:%02d".format(hours, minutes)
+        return if (hours > 0) "%d:%02d".format(hours, minutes) else "${minutes}"
     }
 
     /**

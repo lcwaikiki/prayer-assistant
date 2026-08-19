@@ -47,19 +47,19 @@ void main() {
   group('formatRemaining', () {
     test('formats hours, minutes and seconds with padding', () {
       expect(formatRemaining(const Duration(hours: 2, minutes: 3, seconds: 4)),
-          '02:03:04');
+          '2:03:04');
     });
 
     test('clamps negative durations to zero', () {
-      expect(formatRemaining(const Duration(seconds: -5)), '00:00:00');
+      expect(formatRemaining(const Duration(seconds: -5)), '0:00');
     });
 
     test('formats zero', () {
-      expect(formatRemaining(Duration.zero), '00:00:00');
+      expect(formatRemaining(Duration.zero), '0:00');
     });
 
     test('rolls over seconds into minutes', () {
-      expect(formatRemaining(const Duration(seconds: 61)), '00:01:01');
+      expect(formatRemaining(const Duration(seconds: 61)), '1:01');
     });
   });
 }

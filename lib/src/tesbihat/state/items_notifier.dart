@@ -55,6 +55,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     DateTime? reminderAnchorDate,
     String? reminderPrayerName,
     int reminderOffsetMinutes = 0,
+    int? reminderRepeatCount,
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -74,6 +75,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
       reminderAnchorDate: reminderAnchorDate,
       reminderPrayerName: reminderPrayerName,
       reminderOffsetMinutes: reminderOffsetMinutes,
+      reminderRepeatCount: reminderRepeatCount,
     );
     state = [...state, newItem];
     _repository.saveItems(state);

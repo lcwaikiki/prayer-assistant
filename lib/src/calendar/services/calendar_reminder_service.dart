@@ -22,6 +22,12 @@ class CalendarReminderService {
   /// for the next scheduling pass.
   static const _catchUpWindow = Duration(minutes: 120);
 
+  /// Largest allowed [CalendarReminder.repeatCount]; also the size of the
+  /// notification-id window reserved per reminder (ids base..base+99), so a
+  /// reduced count or a switch back to infinite repetition can cancel the
+  /// leftover per-occurrence notifications.
+  static const _maxOccurrences = 100;
+
   Future<void> initialize() async {
     // The midnight refresh callback runs this in its own background
     // isolate, where timezone state doesn't exist until initialized.
@@ -51,14 +57,19 @@ class CalendarReminderService {
   }
 
   Future<void> cancelReminder(String reminderId) {
-    return _plugin.cancel(id: _notificationId(reminderId));
+    final base = _notificationId(reminderId);
+    return Future.wait([
+      for (var i = 0; i < _maxOccurrences; i++) _plugin.cancel(id: base + i),
+    ]);
   }
 
   /// Schedules with an exact alarm when the OS allows it, falling back to
   /// an inexact alarm when the exact-alarm permission is denied (Android
   /// 12+ rejects exact scheduling with a platform exception), so the
-  /// reminder still fires instead of the call throwing.
-  Future<void> _zonedSchedule({
+  /// reminder still fires instead of the call throwing. Returns false when
+  /// even the inexact attempt failed (e.g. Android's scheduled-notification
+  /// cap reached), so the caller can stop scheduling further occurrences.
+  Future<bool> _zonedSchedule({
     required int id,
     required String title,
     required String body,
@@ -78,23 +89,34 @@ class CalendarReminderService {
         payload: payload,
         matchDateTimeComponents: matchDateTimeComponents,
       );
+      return true;
     } catch (_) {
-      await _plugin.zonedSchedule(
-        id: id,
-        title: title,
-        body: body,
-        scheduledDate: scheduledDate,
-        notificationDetails: notificationDetails,
-        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-        payload: payload,
-        matchDateTimeComponents: matchDateTimeComponents,
-      );
+      try {
+        await _plugin.zonedSchedule(
+          id: id,
+          title: title,
+          body: body,
+          scheduledDate: scheduledDate,
+          notificationDetails: notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          payload: payload,
+          matchDateTimeComponents: matchDateTimeComponents,
+        );
+        return true;
+      } catch (_) {
+        return false;
+      }
     }
   }
 
   Future<void> scheduleReminder(CalendarReminder reminder) async {
     final id = _notificationId(reminder.id);
-    await _plugin.cancel(id: id);
+    // Clear the full per-occurrence id window: a finite count schedules
+    // several one-shots (id..id+count-1), and switching to/from a finite
+    // count would otherwise leave stale notifications behind.
+    for (var i = 0; i < _maxOccurrences; i++) {
+      await _plugin.cancel(id: id + i);
+    }
 
     if (!reminder.enabled) {
       return;
@@ -111,6 +133,12 @@ class CalendarReminderService {
       iOS: DarwinNotificationDetails(),
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
+
+    final repeatCount = reminder.repeatCount;
+    if (repeatCount != null) {
+      await _scheduleOccurrences(reminder, id, repeatCount, details, body);
+      return;
+    }
 
     if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
       // Resolve the next occurrence's concrete fire time, honoring the
@@ -214,6 +242,41 @@ class CalendarReminderService {
             payload: '$calendarReminderPayloadPrefix${reminder.id}',
           );
         }
+    }
+  }
+
+  /// Schedules the reminder's first [count] concrete fire times as separate
+  /// one-shot notifications (ids base..base+count-1). Used instead of an
+  /// OS-level repeat so the reminder stops after [count] occurrences. The
+  /// prayer-anchored path is re-resolved nightly by CalendarMidnightScheduler,
+  /// which naturally drops already-fired occurrences and keeps the total
+  /// at [count].
+  Future<void> _scheduleOccurrences(
+    CalendarReminder reminder,
+    int baseId,
+    int count,
+    NotificationDetails details,
+    String body,
+  ) async {
+    final occurrences = reminder.anchor == CalendarReminderAnchor.prayerTime
+        ? await _resolveNextPrayerFireTimes(reminder, count)
+        : _nextClockTimeOccurrences(reminder, count);
+    final payload = '$calendarReminderPayloadPrefix${reminder.id}';
+    var index = 0;
+    for (final fireAt in occurrences) {
+      final scheduled = await _zonedSchedule(
+        id: baseId + index,
+        title: reminder.title,
+        body: body,
+        scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
+        notificationDetails: details,
+        payload: payload,
+      );
+      if (!scheduled) {
+        // Android caps scheduled notifications; stop instead of throwing.
+        break;
+      }
+      index++;
     }
   }
 
@@ -359,12 +422,23 @@ class CalendarReminderService {
   }
 
   /// Resolves the next concrete fire time for a prayer-anchored reminder,
-  /// honoring [CalendarReminder.recurrence]. Scans occurrence dates forward
-  /// from today, resolving each candidate date's own prayer time, and picks
-  /// the first one that is still upcoming (or, like the old logic, within
-  /// the catch-up window). Returns null when no upcoming occurrence exists
-  /// or the prayer data for a candidate date isn't cached yet.
-  Future<DateTime?> _resolveNextPrayerFireTime(CalendarReminder reminder) async {
+  /// honoring [CalendarReminder.recurrence] and [CalendarReminder.repeatCount].
+  Future<DateTime?> _resolveNextPrayerFireTime(
+    CalendarReminder reminder,
+  ) async {
+    final times = await _resolveNextPrayerFireTimes(reminder, 1);
+    return times.isEmpty ? null : times.first;
+  }
+
+  /// Resolves up to [count] upcoming concrete fire times for a
+  /// prayer-anchored reminder, honoring its recurrence (and, through it,
+  /// the repeat count). Each occurrence date's own prayer time is resolved;
+  /// occurrences already past by more than the catch-up window are skipped.
+  /// An empty list means nothing is left to schedule.
+  Future<List<DateTime>> _resolveNextPrayerFireTimes(
+    CalendarReminder reminder,
+    int count,
+  ) async {
     final database = LocalDatabase();
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -372,10 +446,11 @@ class CalendarReminderService {
     final anchorDate = DateTime(anchor.year, anchor.month, anchor.day);
 
     var from = today;
-    for (var i = 0; i < 400; i++) {
+    final times = <DateTime>[];
+    for (var attempts = 0; attempts < 400 && times.length < count; attempts++) {
       final occurrence = _nextPrayerOccurrenceDate(reminder, anchorDate, from);
       if (occurrence == null) {
-        return null;
+        break;
       }
       final resolved = await resolvePrayerAnchoredTime(
         database,
@@ -384,20 +459,54 @@ class CalendarReminderService {
         date: occurrence,
       );
       if (resolved == null) {
-        return null;
+        break;
       }
       if (resolved.isAfter(now)) {
-        return resolved;
-      }
-      if (now.difference(resolved) <= _catchUpWindow) {
-        return now.add(const Duration(seconds: 5));
-      }
-      if (reminder.recurrence == ReminderRecurrence.once) {
-        return null;
+        times.add(resolved);
+      } else if (now.difference(resolved) <= _catchUpWindow) {
+        times.add(now.add(const Duration(seconds: 5)));
+      } else if (reminder.recurrence == ReminderRecurrence.once) {
+        break;
       }
       from = occurrence.add(const Duration(days: 1));
     }
-    return null;
+    return times;
+  }
+
+  /// The first [count] clock-anchored occurrence moments strictly after
+  /// now, at [CalendarReminder.anchorAt]'s time-of-day. Occurrences already
+  /// past (e.g. today's time already gone) are skipped so only remaining
+  /// fires are scheduled.
+  List<DateTime> _nextClockTimeOccurrences(
+    CalendarReminder reminder,
+    int count,
+  ) {
+    final now = DateTime.now();
+    final anchor = DateTime(
+      reminder.anchorAt.year,
+      reminder.anchorAt.month,
+      reminder.anchorAt.day,
+    );
+    var from = DateTime(now.year, now.month, now.day);
+    final occurrences = <DateTime>[];
+    for (var i = 0; i < count; i++) {
+      final date = _nextPrayerOccurrenceDate(reminder, anchor, from);
+      if (date == null) {
+        break;
+      }
+      final at = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        reminder.anchorAt.hour,
+        reminder.anchorAt.minute,
+      );
+      if (at.isAfter(now)) {
+        occurrences.add(at);
+      }
+      from = date.add(const Duration(days: 1));
+    }
+    return occurrences;
   }
 
   /// The next occurrence date (>= [from]) matching the reminder's recurrence

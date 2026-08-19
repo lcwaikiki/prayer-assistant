@@ -30,7 +30,7 @@ class LocalDatabase {
     final dbPath = path.join(databasesPath, _dbName);
     _db = await openDatabase(
       dbPath,
-      version: 4,
+      version: 5,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE prayer_times (
@@ -68,6 +68,9 @@ class LocalDatabase {
         }
         if (oldVersion < 4) {
           await _ensureAnchorDateColumn(db);
+        }
+        if (oldVersion < 5) {
+          await _ensureRepeatCountColumn(db);
         }
       },
       onOpen: (db) async {
@@ -119,6 +122,19 @@ class LocalDatabase {
     }
   }
 
+  /// Adds the v5 column only when missing (fresh installs already carry it
+  /// via the CREATE TABLE SQL, which would make a plain ALTER fail with
+  /// "duplicate column name").
+  static Future<void> _ensureRepeatCountColumn(Database db) async {
+    final columns = await db.rawQuery('PRAGMA table_info(calendar_reminders)');
+    final hasRepeatCount = columns.any((row) => row['name'] == 'repeat_count');
+    if (!hasRepeatCount) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN repeat_count INTEGER',
+      );
+    }
+  }
+
   static const _createCalendarRemindersTableSql = '''
     CREATE TABLE calendar_reminders (
       id TEXT PRIMARY KEY,
@@ -132,7 +148,8 @@ class LocalDatabase {
       anchor_prayer_name TEXT,
       anchor_offset_minutes INTEGER NOT NULL DEFAULT 0,
       anchor_date TEXT,
-      enabled INTEGER NOT NULL
+      enabled INTEGER NOT NULL,
+      repeat_count INTEGER
     )
   ''';
 

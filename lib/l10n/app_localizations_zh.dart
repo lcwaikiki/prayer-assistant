@@ -465,6 +465,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarRecurrenceYearly => '每年';
 
   @override
+  String get calendarRepeatCountLabel => '重复次数';
+
+  @override
+  String get calendarRepeatCountHelper => '提醒停止前触发的次数（关闭 = 永远重复）';
+
+  @override
+  String get calendarRepeatCountError => '请输入 2 到 100 之间的数字';
+
+  @override
   String get calendarMonthlyBasisLabel => '月度基准';
 
   @override

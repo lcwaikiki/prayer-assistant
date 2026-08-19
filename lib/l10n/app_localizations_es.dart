@@ -484,6 +484,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Anual';
 
   @override
+  String get calendarRepeatCountLabel => 'Número de repeticiones';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'Cuántas veces se activa el recordatorio antes de detenerse (desactivado = se repite siempre)';
+
+  @override
+  String get calendarRepeatCountError => 'Introduce un número del 2 al 100';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Base mensual';
 
   @override

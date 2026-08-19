@@ -482,6 +482,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Tahunan';
 
   @override
+  String get calendarRepeatCountLabel => 'Jumlah pengulangan';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'Berapa kali pengingat berbunyi sebelum berhenti (mati = berulang selamanya)';
+
+  @override
+  String get calendarRepeatCountError => 'Masukkan angka 2 hingga 100';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Dasar bulanan';
 
   @override

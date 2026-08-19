@@ -37,6 +37,7 @@ class Item {
     this.reminderPrayerName,
     this.reminderOffsetMinutes = 0,
     this.reminderAnchorDate,
+    this.reminderRepeatCount,
   }) : assert(count > 0, 'count must be positive'),
        assert(check > 0, 'check must be positive'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -99,6 +100,11 @@ class Item {
   /// Null for legacy prayer-time reminders, which are treated as daily.
   final DateTime? reminderAnchorDate;
 
+  /// Total number of times the reminder fires before stopping. Null means
+  /// it repeats forever. Only meaningful when [reminderRecurrence] isn't
+  /// [ReminderRecurrence.once].
+  final int? reminderRepeatCount;
+
   Item copyWith({
     String? id,
     String? title,
@@ -117,6 +123,7 @@ class Item {
     String? reminderPrayerName,
     int? reminderOffsetMinutes,
     DateTime? reminderAnchorDate,
+    int? reminderRepeatCount,
   }) {
     return Item(
       id: id ?? this.id,
@@ -138,6 +145,7 @@ class Item {
       reminderOffsetMinutes:
           reminderOffsetMinutes ?? this.reminderOffsetMinutes,
       reminderAnchorDate: reminderAnchorDate ?? this.reminderAnchorDate,
+      reminderRepeatCount: reminderRepeatCount ?? this.reminderRepeatCount,
     );
   }
 
@@ -160,6 +168,7 @@ class Item {
       'reminderPrayerName': reminderPrayerName,
       'reminderOffsetMinutes': reminderOffsetMinutes,
       'reminderAnchorDate': reminderAnchorDate?.toIso8601String(),
+      'reminderRepeatCount': reminderRepeatCount,
     };
   }
 
@@ -210,6 +219,7 @@ class Item {
       reminderPrayerName: map['reminderPrayerName']?.toString(),
       reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
       reminderAnchorDate: reminderAnchorDate,
+      reminderRepeatCount: (map['reminderRepeatCount'] as num?)?.toInt(),
     );
   }
 

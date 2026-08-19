@@ -982,6 +982,24 @@ abstract class AppLocalizations {
   /// **'Yearly'**
   String get calendarRecurrenceYearly;
 
+  /// No description provided for @calendarRepeatCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat count'**
+  String get calendarRepeatCountLabel;
+
+  /// No description provided for @calendarRepeatCountHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of times the reminder fires before stopping (off = repeats forever)'**
+  String get calendarRepeatCountHelper;
+
+  /// No description provided for @calendarRepeatCountError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number from 2 to 100'**
+  String get calendarRepeatCountError;
+
   /// No description provided for @calendarMonthlyBasisLabel.
   ///
   /// In en, this message translates to:

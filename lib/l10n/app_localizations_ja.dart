@@ -465,6 +465,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarRecurrenceYearly => '毎年';
 
   @override
+  String get calendarRepeatCountLabel => '繰り返し回数';
+
+  @override
+  String get calendarRepeatCountHelper => 'リマインダーが停止するまでの発火回数（オフ = 永久に繰り返す）';
+
+  @override
+  String get calendarRepeatCountError => '2〜100の数字を入力してください';
+
+  @override
   String get calendarMonthlyBasisLabel => '月次基準';
 
   @override

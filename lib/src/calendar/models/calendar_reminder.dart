@@ -60,6 +60,7 @@ class CalendarReminder {
     this.anchorOffsetMinutes = 0,
     this.anchorDate,
     this.enabled = true,
+    this.repeatCount,
   });
 
   final String id;
@@ -100,6 +101,11 @@ class CalendarReminder {
 
   final bool enabled;
 
+  /// Total number of times the reminder fires before stopping. Null means
+  /// it repeats forever. Only meaningful when [recurrence] isn't
+  /// [ReminderRecurrence.once].
+  final int? repeatCount;
+
   CalendarReminder copyWith({
     String? title,
     String? notes,
@@ -112,6 +118,7 @@ class CalendarReminder {
     int? anchorOffsetMinutes,
     DateTime? anchorDate,
     bool? enabled,
+    int? repeatCount,
   }) {
     return CalendarReminder(
       id: id,
@@ -126,28 +133,158 @@ class CalendarReminder {
       anchorOffsetMinutes: anchorOffsetMinutes ?? this.anchorOffsetMinutes,
       anchorDate: anchorDate ?? this.anchorDate,
       enabled: enabled ?? this.enabled,
+      repeatCount: repeatCount ?? this.repeatCount,
     );
   }
 
   /// Whether this reminder falls on [date] (time-of-day ignored). Used both
-  /// for the calendar's day markers and the day-detail list.
+  /// for the calendar's day markers and the day-detail list. A finite
+  /// [repeatCount] limits the marked days to the first N occurrences.
   ///
   /// Legacy prayer-time reminders (no [anchorDate]) always occur, since the
   /// old form only ever created daily prayer-time reminders; newer ones
   /// follow [recurrence] anchored on [anchorDate].
   bool occursOn(DateTime date) {
     final day = DateTime(date.year, date.month, date.day);
-    final anchorDay = DateTime(anchorAt.year, anchorAt.month, anchorAt.day);
+    final anchorDay = _recurrenceAnchorDay;
     if (day.isBefore(anchorDay)) {
       return false;
     }
     if (anchor == CalendarReminderAnchor.prayerTime) {
       if (anchorDate == null) {
+        return _withinRepeatCount(day);
+      }
+      if (!_recurrenceMatches(day, anchorDay, anchorDate!)) {
+        return false;
+      }
+      return _withinRepeatCount(day);
+    }
+    if (!_recurrenceMatches(day, anchorDay, anchorAt)) {
+      return false;
+    }
+    return _withinRepeatCount(day);
+  }
+
+  /// The date part that anchors the recurrence: [anchorDate] for newer
+  /// prayer-time reminders, [anchorAt] otherwise.
+  DateTime get _recurrenceAnchorDay {
+    final date = anchor == CalendarReminderAnchor.prayerTime
+        ? (anchorDate ?? anchorAt)
+        : anchorAt;
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  /// Whether [day] is among the first [repeatCount] occurrences. Always
+  /// true when [repeatCount] is null.
+  bool _withinRepeatCount(DateTime day) {
+    final count = repeatCount;
+    if (count == null) {
+      return true;
+    }
+    var cursor = _recurrenceAnchorDay;
+    for (var ordinal = 1; ordinal <= count; ordinal++) {
+      if (cursor == day) {
         return true;
       }
-      return _recurrenceMatches(day, anchorDay, anchorDate!);
+      if (cursor.isAfter(day)) {
+        return false;
+      }
+      final next = _nextMatchDate(cursor);
+      if (next == null) {
+        return false;
+      }
+      cursor = next;
     }
-    return _recurrenceMatches(day, anchorDay, anchorAt);
+    return false;
+  }
+
+  /// The next occurrence date strictly after [from], following
+  /// [recurrence] anchored on the recurrence anchor day. Null when there is
+  /// no further occurrence (e.g. [ReminderRecurrence.once]).
+  DateTime? _nextMatchDate(DateTime from) {
+    final anchorDay = _recurrenceAnchorDay;
+    switch (recurrence) {
+      case ReminderRecurrence.once:
+        return null;
+      case ReminderRecurrence.daily:
+        return from.add(const Duration(days: 1));
+      case ReminderRecurrence.weekly:
+        var daysUntil = (anchorDay.weekday - from.weekday) % 7;
+        if (daysUntil <= 0) {
+          daysUntil += 7;
+        }
+        return from.add(Duration(days: daysUntil));
+      case ReminderRecurrence.monthly:
+        if (monthlyBasis == CalendarBasis.gregorian) {
+          for (var offset = 1; offset <= 12; offset++) {
+            final year = from.year + ((from.month - 1 + offset) ~/ 12);
+            final month = ((from.month - 1 + offset) % 12) + 1;
+            final daysInMonth = DateTime(year, month + 1, 0).day;
+            if (anchorDay.day > daysInMonth) {
+              continue;
+            }
+            return DateTime(year, month, anchorDay.day);
+          }
+          return null;
+        }
+        final calendar = HijriCalendar();
+        final anchorHijri = HijriCalendar.fromDate(anchorDay);
+        final fromHijri = HijriCalendar.fromDate(
+          from.add(const Duration(days: 1)),
+        );
+        for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
+          final totalMonths =
+              (fromHijri.hYear * 12 + (fromHijri.hMonth - 1)) + monthOffset;
+          final hYear = totalMonths ~/ 12;
+          final hMonth = (totalMonths % 12) + 1;
+          if (anchorHijri.hDay > calendar.getDaysInMonth(hYear, hMonth)) {
+            continue;
+          }
+          final candidateDate = calendar.hijriToGregorian(
+            hYear,
+            hMonth,
+            anchorHijri.hDay,
+          );
+          final candidate = DateTime(
+            candidateDate.year,
+            candidateDate.month,
+            candidateDate.day,
+          );
+          if (candidate.isAfter(from)) {
+            return candidate;
+          }
+        }
+        return null;
+      case ReminderRecurrence.yearly:
+        if (yearlyBasis == CalendarBasis.gregorian) {
+          for (final year in [from.year, from.year + 1]) {
+            final candidate = DateTime(year, anchorDay.month, anchorDay.day);
+            if (candidate.isAfter(from)) {
+              return candidate;
+            }
+          }
+          return null;
+        }
+        final calendar = HijriCalendar();
+        final anchorHijri = HijriCalendar.fromDate(anchorDay);
+        final fromHijri = HijriCalendar.fromDate(from);
+        for (final hYear in [fromHijri.hYear, fromHijri.hYear + 1]) {
+          final candidateDate = calendar.hijriToGregorian(
+            hYear,
+            anchorHijri.hMonth,
+            anchorHijri.hDay,
+          );
+          final candidate = DateTime(
+            candidateDate.year,
+            candidateDate.month,
+            candidateDate.day,
+          );
+          if (candidate.isAfter(from)) {
+            return candidate;
+          }
+        }
+        return null;
+    }
   }
 
   bool _recurrenceMatches(DateTime day, DateTime anchorDay, DateTime anchor) {
@@ -177,30 +314,33 @@ class CalendarReminder {
   }
 
   /// The next moment at or after [from] this reminder occurs, combining
-  /// [occursOn] (which day) with [anchorAt]'s time-of-day. Scans up to a
-  /// year ahead; null if disabled or nothing is found in range (shouldn't
-  /// normally happen for a valid recurrence). Used for "upcoming reminders"
-  /// surfaces rather than for actual notification scheduling.
+  /// the occurrence pattern (with [repeatCount] limiting the first N
+  /// occurrences) with [anchorAt]'s time-of-day. Null if disabled or
+  /// nothing remains. Used for "upcoming reminders" surfaces rather than
+  /// for actual notification scheduling.
   DateTime? nextOccurrenceFrom(DateTime from) {
     if (!enabled) {
       return null;
     }
-    final startDay = DateTime(from.year, from.month, from.day);
-    for (var offset = 0; offset <= 370; offset++) {
-      final day = startDay.add(Duration(days: offset));
-      if (!occursOn(day)) {
-        continue;
-      }
+    final count = repeatCount;
+    var cursor = _recurrenceAnchorDay;
+    for (var ordinal = 1; count == null || ordinal <= count; ordinal++) {
       final candidate = DateTime(
-        day.year,
-        day.month,
-        day.day,
+        cursor.year,
+        cursor.month,
+        cursor.day,
         anchorAt.hour,
         anchorAt.minute,
       );
-      if (!candidate.isBefore(from)) {
-        return candidate;
+      if (candidate.isBefore(from)) {
+        final next = _nextMatchDate(cursor);
+        if (next == null) {
+          return null;
+        }
+        cursor = next;
+        continue;
       }
+      return candidate;
     }
     return null;
   }
@@ -219,6 +359,7 @@ class CalendarReminder {
       'anchor_offset_minutes': anchorOffsetMinutes,
       'anchor_date': anchorDate?.toIso8601String(),
       'enabled': enabled ? 1 : 0,
+      'repeat_count': repeatCount,
     };
   }
 
@@ -250,6 +391,7 @@ class CalendarReminder {
       anchorOffsetMinutes: (map['anchor_offset_minutes'] as num?)?.toInt() ?? 0,
       anchorDate: anchorDate,
       enabled: (map['enabled'] as int? ?? 1) == 1,
+      repeatCount: (map['repeat_count'] as num?)?.toInt(),
     );
   }
 }

@@ -484,6 +484,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Ежегодно';
 
   @override
+  String get calendarRepeatCountLabel => 'Количество повторений';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'Сколько раз напоминание сработает перед остановкой (выкл = повторять бесконечно)';
+
+  @override
+  String get calendarRepeatCountError => 'Введите число от 2 до 100';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Основа месяца';
 
   @override

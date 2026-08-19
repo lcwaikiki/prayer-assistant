@@ -482,6 +482,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get calendarRecurrenceYearly => 'سالانه';
 
   @override
+  String get calendarRepeatCountLabel => 'تعداد تکرار';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'تعداد دفعاتی که یادآوری قبل از توقف اجرا می‌شود (خاموش = همیشه تکرار می‌شود)';
+
+  @override
+  String get calendarRepeatCountError => 'عددی از ۲ تا ۱۰۰ وارد کنید';
+
+  @override
   String get calendarMonthlyBasisLabel => 'مبنای ماهانه';
 
   @override

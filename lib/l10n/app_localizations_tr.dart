@@ -482,6 +482,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Her yıl';
 
   @override
+  String get calendarRepeatCountLabel => 'Tekrar sayısı';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'Hatırlatmanın durmadan önce kaç kez çalacağı (kapalı = her zaman tekrarlanır)';
+
+  @override
+  String get calendarRepeatCountError => '2 ile 100 arasında bir sayı girin';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Aylık esas';
 
   @override

@@ -477,6 +477,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get calendarRecurrenceYearly => 'سنويًا';
 
   @override
+  String get calendarRepeatCountLabel => 'عدد التكرار';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'عدد مرات تشغيل التذكير قبل التوقف (إيقاف = يتكرر دائمًا)';
+
+  @override
+  String get calendarRepeatCountError => 'أدخل رقمًا من 2 إلى 100';
+
+  @override
   String get calendarMonthlyBasisLabel => 'الأساس الشهري';
 
   @override

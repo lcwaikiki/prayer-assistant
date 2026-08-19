@@ -42,9 +42,12 @@ class _CalendarReminderFormScreenState
   late String _anchorPrayerName;
   late _OffsetDirection _offsetDirection;
   late final TextEditingController _offsetMinutesController;
+  late final TextEditingController _repeatCountController;
   final FocusNode _offsetMinutesFocus = FocusNode();
   DateTime? _anchorDate;
   String? _titleError;
+  int? _repeatCount;
+  String? _repeatCountError;
   bool _saving = false;
 
   bool get _isEditing => widget.reminder != null;
@@ -55,6 +58,10 @@ class _CalendarReminderFormScreenState
     final reminder = widget.reminder;
     _titleController = TextEditingController(text: reminder?.title ?? '');
     _notesController = TextEditingController(text: reminder?.notes ?? '');
+    _repeatCount = reminder?.repeatCount;
+    _repeatCountController = TextEditingController(
+      text: reminder?.repeatCount?.toString() ?? '',
+    );
     final baseDate =
         reminder?.anchorAt ?? widget.initialDate ?? DateTime.now();
     final now = TimeOfDay.now();
@@ -81,6 +88,7 @@ class _CalendarReminderFormScreenState
     _titleController.dispose();
     _notesController.dispose();
     _offsetMinutesController.dispose();
+    _repeatCountController.dispose();
     _offsetMinutesFocus.dispose();
     super.dispose();
   }
@@ -163,10 +171,79 @@ class _CalendarReminderFormScreenState
         : magnitude;
   }
 
+  /// FilterChip toggling a finite repeat count on/off (off = repeat
+  /// forever), with a text field beside it to enter the count (2-100).
+  /// Only shown when the recurrence isn't [ReminderRecurrence.once].
+  Widget _buildRepeatCountControl(AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            FilterChip(
+              key: const Key('repeat_count_chip'),
+              label: Text(l10n.calendarRepeatCountLabel),
+              selected: _repeatCount != null,
+              onSelected: (selected) => setState(() {
+                _repeatCount = selected ? 2 : null;
+                _repeatCountError = null;
+              }),
+            ),
+            if (_repeatCount != null) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  key: const Key('repeat_count_field'),
+                  controller: _repeatCountController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: l10n.calendarRepeatCountLabel,
+                    errorText: _repeatCountError,
+                  ),
+                  onChanged: (_) {
+                    if (_repeatCountError != null) {
+                      setState(() => _repeatCountError = null);
+                    }
+                  },
+                ),
+              ),
+            ],
+          ],
+        ),
+        Text(
+          l10n.calendarRepeatCountHelper,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
+
+  /// Blank means "repeat forever"; otherwise must be 2-100. Sets
+  /// [_repeatCountError] when invalid. Only meaningful when the recurrence
+  /// isn't [ReminderRecurrence.once] (a single occurrence can't repeat).
+  int? _parseRepeatCount(AppLocalizations l10n) {
+    if (_repeatCount == null) {
+      return null;
+    }
+    final raw = _repeatCountController.text.trim();
+    final parsed = int.tryParse(raw);
+    if (parsed == null || parsed < 2 || parsed > 100) {
+      setState(() => _repeatCountError = l10n.calendarRepeatCountError);
+      return null;
+    }
+    return parsed;
+  }
+
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       setState(() => _titleError = context.l10n.calendarReminderTitleRequired);
+      return;
+    }
+
+    final repeatCount = _parseRepeatCount(context.l10n);
+    if (_repeatCountError != null) {
       return;
     }
 
@@ -201,6 +278,9 @@ class _CalendarReminderFormScreenState
       anchorOffsetMinutes: offsetMinutes,
       anchorDate: _anchorDate,
       enabled: widget.reminder?.enabled ?? true,
+      repeatCount: _recurrence == ReminderRecurrence.once
+          ? null
+          : repeatCount,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);
@@ -339,6 +419,10 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ),
+            if (_recurrence != ReminderRecurrence.once) ...[
+              const SizedBox(height: 20),
+              _buildRepeatCountControl(l10n),
+            ],
             if (_recurrence == ReminderRecurrence.monthly) ...[
               const SizedBox(height: 20),
               Text(
@@ -573,6 +657,10 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ),
+            if (_recurrence != ReminderRecurrence.once) ...[
+              const SizedBox(height: 20),
+              _buildRepeatCountControl(l10n),
+            ],
             if (_recurrence == ReminderRecurrence.monthly) ...[
               const SizedBox(height: 20),
               Text(

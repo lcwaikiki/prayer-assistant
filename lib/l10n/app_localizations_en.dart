@@ -481,6 +481,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Yearly';
 
   @override
+  String get calendarRepeatCountLabel => 'Repeat count';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'Number of times the reminder fires before stopping (off = repeats forever)';
+
+  @override
+  String get calendarRepeatCountError => 'Enter a number from 2 to 100';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Monthly basis';
 
   @override

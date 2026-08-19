@@ -45,7 +45,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late String _reminderPrayerName;
   late _OffsetDirection _offsetDirection;
   late final TextEditingController _offsetMinutesController;
+  late final TextEditingController _repeatCountController;
   final FocusNode _offsetMinutesFocus = FocusNode();
+  int? _repeatCount;
   bool _saving = false;
 
   bool get _isEditing => widget.itemToEdit != null;
@@ -81,6 +83,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _offsetMinutesController = TextEditingController(
       text: initialOffset == 0 ? '10' : initialOffset.abs().toString(),
     );
+    _repeatCount = item?.reminderRepeatCount;
+    _repeatCountController = TextEditingController(
+      text: item?.reminderRepeatCount?.toString() ?? '',
+    );
     _offsetMinutesFocus.addListener(() => setState(() {}));
   }
 
@@ -92,6 +98,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _checkController.dispose();
     _setCountController.dispose();
     _offsetMinutesController.dispose();
+    _repeatCountController.dispose();
     _offsetMinutesFocus.dispose();
     super.dispose();
   }
@@ -128,6 +135,58 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (check <= 0) return l10n.checkGreaterThanZero;
     if (count == null || count <= 0) return l10n.enterValidCountFirst;
     if (check * 2 > count) return l10n.checkHalfError;
+    return null;
+  }
+
+  /// FilterChip toggling a finite repeat count on/off (off = repeat
+  /// forever), with a text field beside it to enter the count (2-100).
+  /// Only shown when the recurrence isn't [ReminderRecurrence.once].
+  Widget _buildRepeatCountControl(TesbihatLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            FilterChip(
+              key: const Key('reminder_repeat_count_chip'),
+              label: Text(l10n.reminderRepeatCountLabel),
+              selected: _repeatCount != null,
+              onSelected: (selected) => setState(() {
+                _repeatCount = selected ? 2 : null;
+              }),
+            ),
+            if (_repeatCount != null) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextFormField(
+                  key: const Key('reminder_repeat_count_field'),
+                  controller: _repeatCountController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    labelText: l10n.reminderRepeatCountLabel,
+                  ),
+                  validator: _repeatCountValidator,
+                ),
+              ),
+            ],
+          ],
+        ),
+        Text(
+          l10n.reminderRepeatCountHelper,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ],
+    );
+  }
+
+  /// The count must be 2-100 when the chip is on.
+  String? _repeatCountValidator(String? value) {
+    final raw = value?.trim() ?? '';
+    final count = int.tryParse(raw);
+    if (count == null || count < 2 || count > 100) {
+      return context.tesbihatL10n.reminderRepeatCountRangeError;
+    }
     return null;
   }
 
@@ -300,6 +359,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final check = int.parse(_checkController.text.trim());
     final setCount = _isEditing ? widget.itemToEdit!.setCount : 0;
     final offsetMinutes = _computeOffsetMinutes();
+    final repeatCount = _recurrence == ReminderRecurrence.once
+        ? null
+        : (_repeatCount == null
+            ? null
+            : int.tryParse(_repeatCountController.text.trim()));
 
     var reminderAt = _reminderAt;
     if (_reminderEnabled && _reminderAnchor == ItemReminderAnchor.prayerTime) {
@@ -335,6 +399,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         reminderAnchorDate: _reminderAnchorDate,
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
+        reminderRepeatCount: repeatCount,
       );
       notifier.updateItem(edited);
     } else {
@@ -353,6 +418,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         reminderAnchorDate: _reminderAnchorDate,
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
+        reminderRepeatCount: repeatCount,
       );
     }
 
@@ -504,6 +570,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 8),
                 _recurrenceChips(l10n),
+                if (_recurrence != ReminderRecurrence.once) ...[
+                  const SizedBox(height: 12),
+                  _buildRepeatCountControl(l10n),
+                ],
                 if (_recurrence == ReminderRecurrence.monthly) ...[
                   const SizedBox(height: 12),
                   Text(
@@ -559,6 +629,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 8),
                 _recurrenceChips(l10n),
+                if (_recurrence != ReminderRecurrence.once) ...[
+                  const SizedBox(height: 12),
+                  _buildRepeatCountControl(l10n),
+                ],
                 if (_recurrence == ReminderRecurrence.monthly) ...[
                   const SizedBox(height: 12),
                   Text(

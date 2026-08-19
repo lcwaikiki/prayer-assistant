@@ -20,6 +20,7 @@ Item item({
   String? reminderPrayerName,
   int reminderOffsetMinutes = 0,
   DateTime? reminderAnchorDate,
+  int? reminderRepeatCount,
 }) {
   return Item(
     id: id,
@@ -39,6 +40,7 @@ Item item({
     reminderPrayerName: reminderPrayerName,
     reminderOffsetMinutes: reminderOffsetMinutes,
     reminderAnchorDate: reminderAnchorDate,
+    reminderRepeatCount: reminderRepeatCount,
   );
 }
 
@@ -103,6 +105,7 @@ void main() {
         reminderPrayerName: 'Imsak',
         reminderOffsetMinutes: -10,
         reminderAnchorDate: DateTime(2026, 8, 17),
+        reminderRepeatCount: 7,
       );
 
       final restored = Item.fromMap(source.toMap());
@@ -124,6 +127,25 @@ void main() {
       expect(restored.reminderPrayerName, 'Imsak');
       expect(restored.reminderOffsetMinutes, -10);
       expect(restored.reminderAnchorDate, DateTime(2026, 8, 17));
+      expect(restored.reminderRepeatCount, 7);
+    });
+
+    test('fromMap tolerates a missing reminderRepeatCount', () {
+      final source = item(reminderAt: DateTime(2026, 8, 17, 12, 0));
+      final restored = Item.fromMap(source.toMap()..remove('reminderRepeatCount'));
+      expect(restored.reminderRepeatCount, isNull);
+    });
+
+    test('copyWith preserves the repeat count', () {
+      final base = item(reminderAt: DateTime(2026, 8, 17, 12, 0));
+      expect(base.copyWith(reminderRepeatCount: 9).reminderRepeatCount, 9);
+      expect(
+        base
+            .copyWith(reminderRepeatCount: 9)
+            .copyWith(title: 'X')
+            .reminderRepeatCount,
+        9,
+      );
     });
 
     test('fromMap handles legacy reminderRepeat fallback', () {

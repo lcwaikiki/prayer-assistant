@@ -481,6 +481,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get calendarRecurrenceYearly => 'سالانہ';
 
   @override
+  String get calendarRepeatCountLabel => 'تکرار کی تعداد';
+
+  @override
+  String get calendarRepeatCountHelper =>
+      'یاد دہانی رکنے سے پہلے کتنی بار چلے گی (بند = ہمیشہ دہرائی جائے)';
+
+  @override
+  String get calendarRepeatCountError => '2 سے 100 تک نمبر درج کریں';
+
+  @override
   String get calendarMonthlyBasisLabel => 'ماہانہ بنیاد';
 
   @override

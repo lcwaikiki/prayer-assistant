@@ -8,9 +8,23 @@ import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 
 const double _dateColWidth = 66;
-const double _timeColWidth = 44;
+const double _minTimeColWidth = 44;
 const double _hijriColWidth = 108;
-const double _tableWidth = _dateColWidth + (_timeColWidth * 6) + _hijriColWidth;
+
+/// The time columns expand to fill a wide (tablet/landscape) screen while
+/// staying at [densePhoneTableWidth] on narrow phones, so the table is
+/// dense in portrait and uses the extra width in landscape.
+const double densePhoneTableWidth =
+    _dateColWidth + (_minTimeColWidth * 6) + _hijriColWidth;
+
+double _timeColWidthFor(double available) {
+  final perTime = (available - _dateColWidth - _hijriColWidth) / 6;
+  return perTime < _minTimeColWidth ? _minTimeColWidth : perTime;
+}
+
+double _tableWidthFor(double available) =>
+    _dateColWidth + _timeColWidthFor(available) * 6 + _hijriColWidth;
+
 const double _monthHeaderHeight = 40;
 const double _dayRowHeight = 38;
 const double _monthCardBottomPadding = 8;
@@ -222,23 +236,39 @@ class _HistoryScreenState extends State<HistoryScreen>
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Card(
                 clipBehavior: Clip.antiAlias,
-                child: NotificationListener<ScrollUpdateNotification>(
-                  onNotification: (notification) {
-                    _syncHorizontalTo(
-                      notification.metrics.pixels,
-                      source: 'header',
-                    );
-                    return false;
-                  },
-                  child: SingleChildScrollView(
-                    controller: _headerHorizontalController,
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: _tableWidth,
-                      child: const _StickyHeaderRow(),
+                  child: NotificationListener<ScrollUpdateNotification>(
+                    onNotification: (notification) {
+                      _syncHorizontalTo(
+                        notification.metrics.pixels,
+                        source: 'header',
+                      );
+                      return false;
+                    },
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        // The header and the month tables derive their column
+                        // widths from the same available width, so they stay
+                        // aligned on every screen size: dense on phones,
+                        // filling the width on tablets/landscape.
+                        final timeColWidth =
+                            _timeColWidthFor(constraints.maxWidth);
+                        final tableWidth =
+                            _tableWidthFor(constraints.maxWidth);
+                        return SingleChildScrollView(
+                          controller: _headerHorizontalController,
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: tableWidth,
+                            child: _StickyHeaderRow(
+                              dateColWidth: _dateColWidth,
+                              timeColWidth: timeColWidth,
+                              hijriColWidth: _hijriColWidth,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -355,145 +385,123 @@ class _MonthTable extends StatelessWidget {
                 onHorizontalScroll(notification.metrics.pixels);
                 return false;
               },
-              child: SingleChildScrollView(
-                controller: horizontalController,
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: _tableWidth,
-                  child: DataTableTheme(
-                    data: DataTableThemeData(
-                      headingTextStyle: Theme.of(context).textTheme.labelLarge,
-                      dataTextStyle: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    child: DataTable(
-                      horizontalMargin: 0,
-                      columnSpacing: 0,
-                      headingRowHeight: 0,
-                      dataRowMinHeight: 38,
-                      dataRowMaxHeight: 40,
-                      columns: const [
-                        DataColumn(
-                          label: SizedBox(width: _dateColWidth),
-                          columnWidth: FixedColumnWidth(_dateColWidth),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Mirrors the sticky header's width derivation so the rows
+                  // line up with it on every screen size: dense on phones,
+                  // filling the width on tablets/landscape.
+                  final timeColWidth = _timeColWidthFor(constraints.maxWidth);
+                  final tableWidth = _tableWidthFor(constraints.maxWidth);
+                  final double dateWidth = _dateColWidth;
+                  final double timeWidth = timeColWidth;
+                  final double hijriWidth = _hijriColWidth;
+                  return SingleChildScrollView(
+                    controller: horizontalController,
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: tableWidth,
+                      child: DataTableTheme(
+                        data: DataTableThemeData(
+                          headingTextStyle:
+                              Theme.of(context).textTheme.labelLarge,
+                          dataTextStyle:
+                              Theme.of(context).textTheme.bodyMedium,
                         ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _timeColWidth),
-                          columnWidth: FixedColumnWidth(_timeColWidth),
-                        ),
-                        DataColumn(
-                          label: SizedBox(width: _hijriColWidth),
-                          columnWidth: FixedColumnWidth(_hijriColWidth),
-                        ),
-                      ],
-                      rows: List.generate(days.length, (index) {
-                        final day = days[index];
-                        final isToday =
-                            day.date.year == today.year &&
-                            day.date.month == today.month &&
-                            day.date.day == today.day;
-                        final baseColor = index.isEven
-                            ? colors.surface
-                            : colors.surfaceContainerLow;
-                        final rowColor = isToday
-                            ? colors.primaryContainer
-                            : baseColor;
-
-                        Text cellText(String value, {bool isDate = false}) {
-                          return Text(
-                            value,
-                            style: TextStyle(
-                              fontWeight: isToday && isDate
-                                  ? FontWeight.w700
-                                  : FontWeight.w400,
+                        child: DataTable(
+                          horizontalMargin: 0,
+                          columnSpacing: 0,
+                          headingRowHeight: 0,
+                          dataRowMinHeight: 38,
+                          dataRowMaxHeight: 40,
+                          columns: [
+                            DataColumn(
+                              label: SizedBox(width: dateWidth),
+                              columnWidth: FixedColumnWidth(dateWidth),
                             ),
-                          );
-                        }
-
-                        return DataRow(
-                          color: WidgetStatePropertyAll(rowColor),
-                          cells: [
-                            DataCell(
-                              SizedBox(
-                                key: isToday ? todayRowKey : null,
-                                width: _dateColWidth,
-                                child: cellText(
-                                  isToday
-                                      ? context.l10n.todayShort
-                                      : DateFormat('dd/MM').format(day.date),
-                                  isDate: true,
-                                ),
+                            for (var i = 0; i < 6; i++)
+                              DataColumn(
+                                label: SizedBox(width: timeWidth),
+                                columnWidth: FixedColumnWidth(timeWidth),
                               ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.imsak),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.gunes),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.ogle),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.ikindi),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.aksam),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _timeColWidth,
-                                child: cellText(day.yatsi),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: _hijriColWidth,
-                                child: cellText(
-                                  day.hijriDate.isEmpty ? '-' : day.hijriDate,
-                                ),
-                              ),
+                            DataColumn(
+                              label: SizedBox(width: hijriWidth),
+                              columnWidth: FixedColumnWidth(hijriWidth),
                             ),
                           ],
-                        );
-                      }),
+                          rows: List.generate(days.length, (index) {
+                            final day = days[index];
+                            final isToday =
+                                day.date.year == today.year &&
+                                day.date.month == today.month &&
+                                day.date.day == today.day;
+                            final baseColor = index.isEven
+                                ? colors.surface
+                                : colors.surfaceContainerLow;
+                            final rowColor = isToday
+                                ? colors.primaryContainer
+                                : baseColor;
+
+                            Text cellText(String value, {bool isDate = false}) {
+                              return Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: isToday && isDate
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
+                                ),
+                              );
+                            }
+
+                            return DataRow(
+                              color: WidgetStatePropertyAll(rowColor),
+                              cells: [
+                                DataCell(
+                                  SizedBox(
+                                    key: isToday ? todayRowKey : null,
+                                    width: dateWidth,
+                                    child: cellText(
+                                      isToday
+                                          ? context.l10n.todayShort
+                                          : DateFormat('dd/MM').format(
+                                              day.date,
+                                            ),
+                                      isDate: true,
+                                    ),
+                                  ),
+                                ),
+                                for (final time in [
+                                  day.imsak,
+                                  day.gunes,
+                                  day.ogle,
+                                  day.ikindi,
+                                  day.aksam,
+                                  day.yatsi,
+                                ])
+                                  DataCell(
+                                    SizedBox(
+                                      width: timeWidth,
+                                      child: cellText(time),
+                                    ),
+                                  ),
+                                DataCell(
+                                  SizedBox(
+                                    width: hijriWidth,
+                                    child: cellText(
+                                      day.hijriDate.isEmpty
+                                          ? '-'
+                                          : day.hijriDate,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],
@@ -504,7 +512,15 @@ class _MonthTable extends StatelessWidget {
 }
 
 class _StickyHeaderRow extends StatelessWidget {
-  const _StickyHeaderRow();
+  const _StickyHeaderRow({
+    required this.dateColWidth,
+    required this.timeColWidth,
+    required this.hijriColWidth,
+  });
+
+  final double dateColWidth;
+  final double timeColWidth;
+  final double hijriColWidth;
 
   Widget _headerCell(String text, double width, TextStyle? style) {
     return SizedBox(
@@ -527,14 +543,14 @@ class _StickyHeaderRow extends StatelessWidget {
       height: 40,
       child: Row(
         children: [
-          _headerCell(l10n.dateHeader, _dateColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Imsak'), _timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Gunes'), _timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Ogle'), _timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Ikindi'), _timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Aksam'), _timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Yatsi'), _timeColWidth, style),
-          _headerCell(l10n.hijriHeader, _hijriColWidth, style),
+          _headerCell(l10n.dateHeader, dateColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Imsak'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Gunes'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Ogle'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Ikindi'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Aksam'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Yatsi'), timeColWidth, style),
+          _headerCell(l10n.hijriHeader, hijriColWidth, style),
         ],
       ),
     );

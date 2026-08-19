@@ -210,41 +210,78 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                 ],
               ),
             ),
-            _WeekdayHeaderRow(locale: locale),
+            // On wide screens (tablets) a full-width 7-column grid makes each
+            // day cell enormous and the month require scrolling. Cap the grid
+            // (and its weekday header) at a phone-sized width and center it so
+            // cells stay a comfortable size.
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 560),
+                child: _WeekdayHeaderRow(locale: locale),
+              ),
+            ),
             Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(4),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 7,
-                  childAspectRatio: 0.85,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 560),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Prefer the phone-style cell aspect (0.85), but shrink
+                      // cells vertically just enough that every row fits in the
+                      // available height (tablet landscape) instead of forcing
+                      // the month to scroll.
+                      final rowCount =
+                          ((leadingBlanks + monthDays.length) / 7).ceil();
+                      final cellWidth = (constraints.maxWidth - 8) / 7;
+                      final preferredCellHeight = cellWidth / 0.85;
+                      final fitCellHeight =
+                          (constraints.maxHeight - 8) / rowCount;
+                      final cellHeight = fitCellHeight < preferredCellHeight
+                          ? fitCellHeight
+                          : preferredCellHeight;
+                      final aspectRatio = cellWidth / cellHeight;
+                      return GridView.builder(
+                        padding: const EdgeInsets.all(4),
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 7,
+                              childAspectRatio: aspectRatio,
+                            ),
+                        itemCount: leadingBlanks + monthDays.length,
+                        itemBuilder: (context, index) {
+                          if (index < leadingBlanks) {
+                            return const SizedBox.shrink();
+                          }
+                          final date = monthDays[index - leadingBlanks];
+                          final isToday =
+                              date.year == today.year &&
+                              date.month == today.month &&
+                              date.day == today.day;
+                          final hasReminder = controller.calendarReminders.any(
+                            (reminder) =>
+                                reminder.enabled && reminder.occursOn(date),
+                          );
+                          return _DayCell(
+                            primaryLabel:
+                                primary == CalendarPrimaryDisplay.hijri
+                                ? HijriCalendar.fromDate(date).hDay.toString()
+                                : date.day.toString(),
+                            secondaryLabel: showSecondary
+                                ? (primary == CalendarPrimaryDisplay.hijri
+                                      ? date.day.toString()
+                                      : HijriCalendar.fromDate(date)
+                                            .hDay
+                                            .toString())
+                                : null,
+                            isToday: isToday,
+                            hasReminder: hasReminder,
+                            onTap: () => _openDayDetail(date, primary),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-                itemCount: leadingBlanks + monthDays.length,
-                itemBuilder: (context, index) {
-                  if (index < leadingBlanks) {
-                    return const SizedBox.shrink();
-                  }
-                  final date = monthDays[index - leadingBlanks];
-                  final isToday =
-                      date.year == today.year &&
-                      date.month == today.month &&
-                      date.day == today.day;
-                  final hasReminder = controller.calendarReminders.any(
-                    (reminder) => reminder.enabled && reminder.occursOn(date),
-                  );
-                  return _DayCell(
-                    primaryLabel: primary == CalendarPrimaryDisplay.hijri
-                        ? HijriCalendar.fromDate(date).hDay.toString()
-                        : date.day.toString(),
-                    secondaryLabel: showSecondary
-                        ? (primary == CalendarPrimaryDisplay.hijri
-                              ? date.day.toString()
-                              : HijriCalendar.fromDate(date).hDay.toString())
-                        : null,
-                    isToday: isToday,
-                    hasReminder: hasReminder,
-                    onTap: () => _openDayDetail(date, primary),
-                  );
-                },
               ),
             ),
           ],

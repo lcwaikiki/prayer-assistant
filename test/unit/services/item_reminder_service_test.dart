@@ -91,23 +91,29 @@ void main() {
         _item(reminderAt: anchor, reminderRepeatCount: 3),
       );
 
-      expect(platform.scheduledIds, [base, base + 1, base + 2]);
-      final first = _firstDay(anchor);
-      final expectedDates = [
-        for (var i = 0; i < 3; i++)
-          DateTime(
-            first.add(Duration(days: i)).year,
-            first.add(Duration(days: i)).month,
-            first.add(Duration(days: i)).day,
-            anchor.hour,
-            anchor.minute,
-          ),
-      ];
+      // Mirrors the service: today's 12:00 is dropped when already past, so
+      // fewer than three occurrences may remain.
+      final now = DateTime.now();
+      final expectedDates = <DateTime>[];
+      var from = DateTime(now.year, now.month, now.day);
+      for (var i = 0; i < 3; i++) {
+        final at = DateTime(from.year, from.month, from.day, 12, 0);
+        if (at.isAfter(now)) {
+          expectedDates.add(at);
+        }
+        from = from.add(const Duration(days: 1));
+      }
+      expect(platform.scheduledIds, [
+        for (var i = 0; i < expectedDates.length; i++) base + i,
+      ]);
       expect(
         platform.scheduledDates.map((d) => d.microsecondsSinceEpoch).toList(),
         expectedDates.map((d) => d.microsecondsSinceEpoch).toList(),
       );
-      expect(platform.scheduledMatches, [null, null, null]);
+      expect(
+        platform.scheduledMatches,
+        [for (var i = 0; i < expectedDates.length; i++) null],
+      );
     });
 
     test('daily x3 clears the full id window first', () async {
@@ -235,7 +241,11 @@ void main() {
         _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3),
       );
 
-      expect(platform.scheduledIds.length, 3);
+      // Today's 12:00 is dropped when already past, like the service does.
+      final now = DateTime.now();
+      final todayAt = DateTime(now.year, now.month, now.day, 12, 0);
+      final expected = todayAt.isAfter(now) ? 3 : 2;
+      expect(platform.scheduledIds.length, expected);
     });
 
     test('stops scheduling when even inexact scheduling fails', () async {

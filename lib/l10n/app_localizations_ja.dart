@@ -474,6 +474,18 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarRepeatCountError => '2〜100の数字を入力してください';
 
   @override
+  String get calendarRepeatDaysLabel => '繰り返す曜日';
+
+  @override
+  String get calendarDayOfMonthLabel => '月の日';
+
+  @override
+  String get calendarYearlyMonthLabel => '月';
+
+  @override
+  String get calendarYearlyDayLabel => '日';
+
+  @override
   String get calendarMonthlyBasisLabel => '月次基準';
 
   @override

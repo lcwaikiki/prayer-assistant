@@ -492,6 +492,18 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarRepeatCountError => 'Masukkan angka 2 hingga 100';
 
   @override
+  String get calendarRepeatDaysLabel => 'Ulangi pada';
+
+  @override
+  String get calendarDayOfMonthLabel => 'Hari dalam bulan';
+
+  @override
+  String get calendarYearlyMonthLabel => 'Bulan';
+
+  @override
+  String get calendarYearlyDayLabel => 'Hari';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Dasar bulanan';
 
   @override

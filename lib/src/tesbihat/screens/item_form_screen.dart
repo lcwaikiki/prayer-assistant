@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../calendar/hijri_utils.dart';
 import '../../calendar/models/calendar_reminder.dart';
 import '../../calendar/screens/calendar_anchor_date_picker.dart';
 import '../../l10n/prayer_names.dart';
@@ -48,6 +49,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late final TextEditingController _repeatCountController;
   final FocusNode _offsetMinutesFocus = FocusNode();
   int? _repeatCount;
+  late List<int> _weekdays;
+  late int _dayOfMonth;
+  late DateTime _yearlyDate;
   bool _saving = false;
 
   bool get _isEditing => widget.itemToEdit != null;
@@ -88,6 +92,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       text: item?.reminderRepeatCount?.toString() ?? '',
     );
     _offsetMinutesFocus.addListener(() => setState(() {}));
+    final now = DateTime.now();
+    final anchorDay = _reminderAnchorDate ?? _reminderAt ?? now;
+    final storedWeekdays = item?.reminderWeekdays ?? const <int>[];
+    _weekdays = storedWeekdays.isEmpty
+        ? <int>[anchorDay.weekday]
+        : List<int>.from(storedWeekdays);
+    _dayOfMonth = item?.reminderDayOfMonth ?? anchorDay.day;
+    _yearlyDate = item?.reminderYearlyDate ??
+        DateTime(anchorDay.year, anchorDay.month, anchorDay.day);
   }
 
   @override
@@ -340,6 +353,154 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     );
   }
 
+  /// The shared recurrence extras: repeat count, monthly/yearly basis chips
+  /// and the explicit recurrence-day selectors (weekday multi-select for
+  /// weekly, day-of-month for monthly, month+day for yearly). Rendered in
+  /// both the clock-time and prayer-time sections.
+  Widget _buildRecurrenceOptions(
+    TesbihatLocalizations l10n,
+    AppLocalizations appL10n,
+    String locale,
+  ) {
+    final labelStyle = Theme.of(context).textTheme.labelLarge;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_recurrence != ReminderRecurrence.once) ...[
+          const SizedBox(height: 12),
+          _buildRepeatCountControl(l10n),
+        ],
+        if (_recurrence == ReminderRecurrence.monthly) ...[
+          const SizedBox(height: 12),
+          Text(l10n.reminderMonthlyBasisLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          _basisChips(l10n, true),
+          const SizedBox(height: 12),
+          DropdownButtonFormField<int>(
+            key: const Key('day_of_month_field'),
+            initialValue: _dayOfMonth,
+            decoration: InputDecoration(
+              labelText: l10n.reminderDayOfMonthLabel,
+            ),
+            items: [
+              for (var day = 1; day <= 31; day++)
+                DropdownMenuItem(value: day, child: Text('$day')),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() => _dayOfMonth = value);
+              }
+            },
+          ),
+        ],
+        if (_recurrence == ReminderRecurrence.yearly) ...[
+          const SizedBox(height: 12),
+          Text(l10n.reminderYearlyBasisLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          _basisChips(l10n, false),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  key: const Key('yearly_month_field'),
+                  initialValue: _yearlyDate.month,
+                  decoration: InputDecoration(
+                    labelText: l10n.reminderYearlyMonthLabel,
+                  ),
+                  items: [
+                    for (var month = 1; month <= 12; month++)
+                      DropdownMenuItem(
+                        value: month,
+                        child: Text(_monthLabel(month, locale)),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _yearlyDate = DateTime(
+                        _yearlyDate.year,
+                        value,
+                        _yearlyDate.day,
+                      );
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  key: const Key('yearly_day_field'),
+                  initialValue: _yearlyDate.day,
+                  decoration: InputDecoration(
+                    labelText: l10n.reminderYearlyDayLabel,
+                  ),
+                  items: [
+                    for (var day = 1; day <= 31; day++)
+                      DropdownMenuItem(value: day, child: Text('$day')),
+                  ],
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _yearlyDate = DateTime(
+                        _yearlyDate.year,
+                        _yearlyDate.month,
+                        value,
+                      );
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+        if (_recurrence == ReminderRecurrence.weekly) ...[
+          const SizedBox(height: 12),
+          Text(l10n.reminderRepeatDaysLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (var weekday = 1; weekday <= 7; weekday++)
+                FilterChip(
+                  key: Key('weekday_chip_$weekday'),
+                  label: Text(
+                    DateFormat.E(locale).format(DateTime(2024, 1, weekday)),
+                  ),
+                  selected: _weekdays.contains(weekday),
+                  onSelected: (selected) => setState(() {
+                    if (selected) {
+                      if (!_weekdays.contains(weekday)) {
+                        _weekdays.add(weekday);
+                      }
+                    } else if (_weekdays.length > 1) {
+                      _weekdays.remove(weekday);
+                    }
+                  }),
+                ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// Localized month name for the yearly selector: Gregorian when the basis
+  /// is Gregorian, Hijri otherwise.
+  String _monthLabel(int month, String locale) {
+    if (_yearlyBasis == CalendarBasis.hijri) {
+      return HijriMonth(1446, month)
+          .longMonthName(Localizations.localeOf(context).languageCode);
+    }
+    return DateFormat.MMMM(locale).format(DateTime(2024, month, 1));
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -400,6 +561,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
         reminderRepeatCount: repeatCount,
+        reminderWeekdays: _recurrence == ReminderRecurrence.weekly
+            ? List<int>.from(_weekdays)
+            : const [],
+        reminderDayOfMonth: _recurrence == ReminderRecurrence.monthly
+            ? _dayOfMonth
+            : null,
+        reminderYearlyDate: _recurrence == ReminderRecurrence.yearly
+            ? _yearlyDate
+            : null,
       );
       notifier.updateItem(edited);
     } else {
@@ -419,6 +589,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         reminderPrayerName: _reminderPrayerName,
         reminderOffsetMinutes: offsetMinutes,
         reminderRepeatCount: repeatCount,
+        reminderWeekdays: _recurrence == ReminderRecurrence.weekly
+            ? List<int>.from(_weekdays)
+            : const [],
+        reminderDayOfMonth: _recurrence == ReminderRecurrence.monthly
+            ? _dayOfMonth
+            : null,
+        reminderYearlyDate: _recurrence == ReminderRecurrence.yearly
+            ? _yearlyDate
+            : null,
       );
     }
 
@@ -431,6 +610,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
     final appL10n = AppLocalizations.of(context)!;
+    final locale = Localizations.localeOf(context).toString();
     final colorScheme = Theme.of(context).colorScheme;
     final offsetMagnitude = int.tryParse(_offsetMinutesController.text.trim());
     final isCustomOffsetMinutes =
@@ -570,28 +750,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 8),
                 _recurrenceChips(l10n),
-                if (_recurrence != ReminderRecurrence.once) ...[
-                  const SizedBox(height: 12),
-                  _buildRepeatCountControl(l10n),
-                ],
-                if (_recurrence == ReminderRecurrence.monthly) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.reminderMonthlyBasisLabel,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  _basisChips(l10n, true),
-                ],
-                if (_recurrence == ReminderRecurrence.yearly) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.reminderYearlyBasisLabel,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  _basisChips(l10n, false),
-                ],
+                _buildRecurrenceOptions(l10n, appL10n, locale),
                 const SizedBox(height: 8),
                 OutlinedButton.icon(
                   key: const Key('reminder_time_button'),
@@ -629,28 +788,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
                 const SizedBox(height: 8),
                 _recurrenceChips(l10n),
-                if (_recurrence != ReminderRecurrence.once) ...[
-                  const SizedBox(height: 12),
-                  _buildRepeatCountControl(l10n),
-                ],
-                if (_recurrence == ReminderRecurrence.monthly) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.reminderMonthlyBasisLabel,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  _basisChips(l10n, true),
-                ],
-                if (_recurrence == ReminderRecurrence.yearly) ...[
-                  const SizedBox(height: 12),
-                  Text(
-                    l10n.reminderYearlyBasisLabel,
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 8),
-                  _basisChips(l10n, false),
-                ],
+                _buildRecurrenceOptions(l10n, appL10n, locale),
                 if (_recurrence != ReminderRecurrence.daily) ...[
                   const SizedBox(height: 12),
                   OutlinedButton.icon(

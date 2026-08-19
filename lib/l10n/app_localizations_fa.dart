@@ -492,6 +492,18 @@ class AppLocalizationsFa extends AppLocalizations {
   String get calendarRepeatCountError => 'عددی از ۲ تا ۱۰۰ وارد کنید';
 
   @override
+  String get calendarRepeatDaysLabel => 'تکرار در';
+
+  @override
+  String get calendarDayOfMonthLabel => 'روز ماه';
+
+  @override
+  String get calendarYearlyMonthLabel => 'ماه';
+
+  @override
+  String get calendarYearlyDayLabel => 'روز';
+
+  @override
   String get calendarMonthlyBasisLabel => 'مبنای ماهانه';
 
   @override

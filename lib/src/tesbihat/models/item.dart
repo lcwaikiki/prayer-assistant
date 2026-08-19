@@ -38,6 +38,9 @@ class Item {
     this.reminderOffsetMinutes = 0,
     this.reminderAnchorDate,
     this.reminderRepeatCount,
+    this.reminderWeekdays = const [],
+    this.reminderDayOfMonth,
+    this.reminderYearlyDate,
   }) : assert(count > 0, 'count must be positive'),
        assert(check > 0, 'check must be positive'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -105,6 +108,24 @@ class Item {
   /// [ReminderRecurrence.once].
   final int? reminderRepeatCount;
 
+  /// Weekdays (DateTime.weekday, 1=Mon..7=Sun) the reminder fires on when
+  /// [reminderRecurrence] is [ReminderRecurrence.weekly]. Empty means the
+  /// anchor date's weekday is used (legacy behavior).
+  final List<int> reminderWeekdays;
+
+  /// Day of month (1-31) the reminder fires on when [reminderRecurrence] is
+  /// [ReminderRecurrence.monthly]: the Gregorian day-of-month, or the Hijri
+  /// day when [reminderMonthlyBasis] is [CalendarBasis.hijri]. Null means
+  /// the anchor date's day is used (legacy behavior).
+  final int? reminderDayOfMonth;
+
+  /// Month/day the reminder fires on when [reminderRecurrence] is
+  /// [ReminderRecurrence.yearly]: the Gregorian month/day, or the Hijri
+  /// month/day when [reminderYearlyBasis] is [CalendarBasis.hijri]. Only
+  /// the month and day fields matter; the year is ignored. Null means the
+  /// anchor date's month/day is used (legacy behavior).
+  final DateTime? reminderYearlyDate;
+
   Item copyWith({
     String? id,
     String? title,
@@ -124,6 +145,9 @@ class Item {
     int? reminderOffsetMinutes,
     DateTime? reminderAnchorDate,
     int? reminderRepeatCount,
+    List<int>? reminderWeekdays,
+    int? reminderDayOfMonth,
+    DateTime? reminderYearlyDate,
   }) {
     return Item(
       id: id ?? this.id,
@@ -146,6 +170,9 @@ class Item {
           reminderOffsetMinutes ?? this.reminderOffsetMinutes,
       reminderAnchorDate: reminderAnchorDate ?? this.reminderAnchorDate,
       reminderRepeatCount: reminderRepeatCount ?? this.reminderRepeatCount,
+      reminderWeekdays: reminderWeekdays ?? this.reminderWeekdays,
+      reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
+      reminderYearlyDate: reminderYearlyDate ?? this.reminderYearlyDate,
     );
   }
 
@@ -169,6 +196,9 @@ class Item {
       'reminderOffsetMinutes': reminderOffsetMinutes,
       'reminderAnchorDate': reminderAnchorDate?.toIso8601String(),
       'reminderRepeatCount': reminderRepeatCount,
+      'reminderWeekdays': reminderWeekdays.join(','),
+      'reminderDayOfMonth': reminderDayOfMonth,
+      'reminderYearlyDate': reminderYearlyDate?.toIso8601String(),
     };
   }
 
@@ -181,6 +211,17 @@ class Item {
     final reminderAnchorDate = (rawAnchorDate == null || rawAnchorDate.isEmpty)
         ? null
         : DateTime.tryParse(rawAnchorDate);
+    final rawYearlyDate = map['reminderYearlyDate']?.toString();
+    final reminderYearlyDate =
+        (rawYearlyDate == null || rawYearlyDate.isEmpty)
+        ? null
+        : DateTime.tryParse(rawYearlyDate);
+    final reminderWeekdays = (map['reminderWeekdays']?.toString() ?? '')
+        .split(',')
+        .map((part) => int.tryParse(part.trim()))
+        .whereType<int>()
+        .where((day) => day >= 1 && day <= 7)
+        .toList(growable: false);
     var recurrence = ReminderRecurrence.fromName(
       map['reminderRecurrence']?.toString() ??
           map['reminderRepeat']?.toString(),
@@ -220,6 +261,9 @@ class Item {
       reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
       reminderAnchorDate: reminderAnchorDate,
       reminderRepeatCount: (map['reminderRepeatCount'] as num?)?.toInt(),
+      reminderWeekdays: reminderWeekdays,
+      reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),
+      reminderYearlyDate: reminderYearlyDate,
     );
   }
 

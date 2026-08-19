@@ -30,7 +30,7 @@ class LocalDatabase {
     final dbPath = path.join(databasesPath, _dbName);
     _db = await openDatabase(
       dbPath,
-      version: 5,
+      version: 6,
       onCreate: (db, _) async {
         await db.execute('''
           CREATE TABLE prayer_times (
@@ -71,6 +71,9 @@ class LocalDatabase {
         }
         if (oldVersion < 5) {
           await _ensureRepeatCountColumn(db);
+        }
+        if (oldVersion < 6) {
+          await _ensureRecurrenceDayColumns(db);
         }
       },
       onOpen: (db) async {
@@ -135,6 +138,29 @@ class LocalDatabase {
     }
   }
 
+  /// Adds the v6 columns (weekday selection for weekly reminders, an
+  /// explicit day-of-month, and an explicit yearly month/day) only when
+  /// missing, mirroring [_ensureRepeatCountColumn]'s reasoning.
+  static Future<void> _ensureRecurrenceDayColumns(Database db) async {
+    final columns = await db.rawQuery('PRAGMA table_info(calendar_reminders)');
+    final names = columns.map((row) => row['name']).toSet();
+    if (!names.contains('weekdays')) {
+      await db.execute(
+        "ALTER TABLE calendar_reminders ADD COLUMN weekdays TEXT NOT NULL DEFAULT ''",
+      );
+    }
+    if (!names.contains('day_of_month')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN day_of_month INTEGER',
+      );
+    }
+    if (!names.contains('yearly_date')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN yearly_date TEXT',
+      );
+    }
+  }
+
   static const _createCalendarRemindersTableSql = '''
     CREATE TABLE calendar_reminders (
       id TEXT PRIMARY KEY,
@@ -149,7 +175,10 @@ class LocalDatabase {
       anchor_offset_minutes INTEGER NOT NULL DEFAULT 0,
       anchor_date TEXT,
       enabled INTEGER NOT NULL,
-      repeat_count INTEGER
+      repeat_count INTEGER,
+      weekdays TEXT NOT NULL DEFAULT '',
+      day_of_month INTEGER,
+      yearly_date TEXT
     )
   ''';
 

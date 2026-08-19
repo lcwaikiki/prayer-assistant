@@ -494,6 +494,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get calendarRepeatCountError => 'Введите число от 2 до 100';
 
   @override
+  String get calendarRepeatDaysLabel => 'Повторять в';
+
+  @override
+  String get calendarDayOfMonthLabel => 'День месяца';
+
+  @override
+  String get calendarYearlyMonthLabel => 'Месяц';
+
+  @override
+  String get calendarYearlyDayLabel => 'День';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Основа месяца';
 
   @override

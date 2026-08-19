@@ -74,6 +74,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Number of times the reminder fires before stopping (off = repeats forever)',
       'reminderRepeatCountRangeError': 'Enter a number from 2 to 100',
+      'reminderRepeatDaysLabel': 'Repeat on',
+      'reminderDayOfMonthLabel': 'Day of month',
+      'reminderYearlyMonthLabel': 'Month',
+      'reminderYearlyDayLabel': 'Day',
       'reminderRecurrenceLabel': 'Repeat',
       'reminderMonthlyBasisLabel': 'Monthly basis',
       'reminderYearlyBasisLabel': 'Yearly basis',
@@ -159,6 +163,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Cuántas veces se activa el recordatorio antes de detenerse (desactivado = se repite siempre)',
       'reminderRepeatCountRangeError': 'Introduce un número del 2 al 100',
+      'reminderRepeatDaysLabel': 'Repetir en',
+      'reminderDayOfMonthLabel': 'Día del mes',
+      'reminderYearlyMonthLabel': 'Mes',
+      'reminderYearlyDayLabel': 'Día',
       'reminderRecurrenceLabel': 'Repetición',
       'reminderMonthlyBasisLabel': 'Base mensual',
       'reminderYearlyBasisLabel': 'Base anual',
@@ -244,6 +252,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'تعداد دفعاتی که یادآوری قبل از توقف اجرا می‌شود (خاموش = همیشه تکرار می‌شود)',
       'reminderRepeatCountRangeError': 'عددی از ۲ تا ۱۰۰ وارد کنید',
+      'reminderRepeatDaysLabel': 'تکرار در',
+      'reminderDayOfMonthLabel': 'روز ماه',
+      'reminderYearlyMonthLabel': 'ماه',
+      'reminderYearlyDayLabel': 'روز',
       'reminderRecurrenceLabel': 'تکرار',
       'reminderMonthlyBasisLabel': 'مبنای ماهانه',
       'reminderYearlyBasisLabel': 'مبنای سالانه',
@@ -328,6 +340,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Nombre de fois où le rappel se déclenche avant de s\'arrêter (désactivé = répétition illimitée)',
       'reminderRepeatCountRangeError': 'Entrez un nombre entre 2 et 100',
+      'reminderRepeatDaysLabel': 'Répéter le',
+      'reminderDayOfMonthLabel': 'Jour du mois',
+      'reminderYearlyMonthLabel': 'Mois',
+      'reminderYearlyDayLabel': 'Jour',
       'reminderRecurrenceLabel': 'Répétition',
       'reminderMonthlyBasisLabel': 'Base mensuelle',
       'reminderYearlyBasisLabel': 'Base annuelle',
@@ -413,6 +429,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Wie oft der Reminder ausgelöst wird, bevor er stoppt (aus = unbegrenzt)',
       'reminderRepeatCountRangeError': 'Geben Sie eine Zahl von 2 bis 100 ein',
+      'reminderRepeatDaysLabel': 'Wiederholen am',
+      'reminderDayOfMonthLabel': 'Tag des Monats',
+      'reminderYearlyMonthLabel': 'Monat',
+      'reminderYearlyDayLabel': 'Tag',
       'reminderRecurrenceLabel': 'Wiederholung',
       'reminderMonthlyBasisLabel': 'Monatliche Basis',
       'reminderYearlyBasisLabel': 'Jährliche Basis',
@@ -497,6 +517,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'عدد مرات تشغيل التذكير قبل التوقف (إيقاف = يتكرر دائمًا)',
       'reminderRepeatCountRangeError': 'أدخل رقمًا من 2 إلى 100',
+      'reminderRepeatDaysLabel': 'التكرار في',
+      'reminderDayOfMonthLabel': 'يوم من الشهر',
+      'reminderYearlyMonthLabel': 'الشهر',
+      'reminderYearlyDayLabel': 'اليوم',
       'reminderRecurrenceLabel': 'التكرار',
       'reminderMonthlyBasisLabel': 'الأساس الشهري',
       'reminderYearlyBasisLabel': 'الأساس السنوي',
@@ -581,6 +605,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'リマインダーが停止するまでの発火回数（オフ = 永久に繰り返す）',
       'reminderRepeatCountRangeError': '2〜100の数字を入力してください',
+      'reminderRepeatDaysLabel': '繰り返す曜日',
+      'reminderDayOfMonthLabel': '月の日',
+      'reminderYearlyMonthLabel': '月',
+      'reminderYearlyDayLabel': '日',
       'reminderRecurrenceLabel': '繰り返し',
       'reminderMonthlyBasisLabel': '毎月の基準',
       'reminderYearlyBasisLabel': '毎年の基準',
@@ -663,6 +691,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           '提醒停止前触发的次数（关闭 = 永远重复）',
       'reminderRepeatCountRangeError': '请输入 2 到 100 之间的数字',
+      'reminderRepeatDaysLabel': '重复于',
+      'reminderDayOfMonthLabel': '每月几号',
+      'reminderYearlyMonthLabel': '月份',
+      'reminderYearlyDayLabel': '日',
       'reminderRecurrenceLabel': '重复',
       'reminderMonthlyBasisLabel': '每月基准',
       'reminderYearlyBasisLabel': '每年基准',
@@ -746,6 +778,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Hatırlatmanın durmadan önce kaç kez çalacağı (kapalı = her zaman tekrarlanır)',
       'reminderRepeatCountRangeError': '2 ile 100 arasında bir sayı girin',
+      'reminderRepeatDaysLabel': 'Tekrarla',
+      'reminderDayOfMonthLabel': 'Ayın günü',
+      'reminderYearlyMonthLabel': 'Ay',
+      'reminderYearlyDayLabel': 'Gün',
       'reminderRecurrenceLabel': 'Tekrarlama',
       'reminderMonthlyBasisLabel': 'Aylık esas',
       'reminderYearlyBasisLabel': 'Yıllık esas',
@@ -829,6 +865,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'یاد دہانی رکنے سے پہلے کتنی بار چلے گی (بند = ہمیشہ دہرائی جائے)',
       'reminderRepeatCountRangeError': '2 سے 100 تک نمبر درج کریں',
+      'reminderRepeatDaysLabel': 'دہرائیں',
+      'reminderDayOfMonthLabel': 'مہینے کا دن',
+      'reminderYearlyMonthLabel': 'مہینہ',
+      'reminderYearlyDayLabel': 'دن',
       'reminderRecurrenceLabel': 'تکرار',
       'reminderMonthlyBasisLabel': 'ماہانہ بنیاد',
       'reminderYearlyBasisLabel': 'سالانہ بنیاد',
@@ -914,6 +954,10 @@ class TesbihatLocalizations {
       'reminderRepeatCountHelper':
           'Сколько раз напоминание сработает перед остановкой (выкл = повторять бесконечно)',
       'reminderRepeatCountRangeError': 'Введите число от 2 до 100',
+      'reminderRepeatDaysLabel': 'Повторять в',
+      'reminderDayOfMonthLabel': 'День месяца',
+      'reminderYearlyMonthLabel': 'Месяц',
+      'reminderYearlyDayLabel': 'День',
       'reminderRecurrenceLabel': 'Повтор',
       'reminderMonthlyBasisLabel': 'Основа месяца',
       'reminderYearlyBasisLabel': 'Основа года',
@@ -1004,6 +1048,10 @@ class TesbihatLocalizations {
   String get reminderRepeatCountLabel => _t('reminderRepeatCountLabel');
   String get reminderRepeatCountHelper => _t('reminderRepeatCountHelper');
   String get reminderRepeatCountRangeError => _t('reminderRepeatCountRangeError');
+  String get reminderRepeatDaysLabel => _t('reminderRepeatDaysLabel');
+  String get reminderDayOfMonthLabel => _t('reminderDayOfMonthLabel');
+  String get reminderYearlyMonthLabel => _t('reminderYearlyMonthLabel');
+  String get reminderYearlyDayLabel => _t('reminderYearlyDayLabel');
   String get reminderRecurrenceLabel => _t('reminderRecurrenceLabel');
   String get reminderMonthlyBasisLabel => _t('reminderMonthlyBasisLabel');
   String get reminderYearlyBasisLabel => _t('reminderYearlyBasisLabel');

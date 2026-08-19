@@ -189,18 +189,41 @@ class ItemReminderService {
           matchDateTimeComponents: DateTimeComponents.time,
         );
       case ReminderRecurrence.weekly:
-        await _zonedSchedule(
-          id: id,
-          title: item.title,
-          body: body,
-          scheduledDate: _nextWeekday(reminderAt),
-          notificationDetails: details,
-          payload: '$tesbihItemPayloadPrefix${item.id}',
-          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-        );
+        if (item.reminderWeekdays.isEmpty) {
+          await _zonedSchedule(
+            id: id,
+            title: item.title,
+            body: body,
+            scheduledDate: _nextWeekday(reminderAt),
+            notificationDetails: details,
+            payload: '$tesbihItemPayloadPrefix${item.id}',
+            matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+          );
+        } else {
+          // One OS-level weekly repeat per selected weekday.
+          var index = 0;
+          for (final weekday in item.reminderWeekdays) {
+            final scheduled = await _zonedSchedule(
+              id: id + index,
+              title: item.title,
+              body: body,
+              scheduledDate: _nextWeekday(reminderAt, weekday),
+              notificationDetails: details,
+              payload: '$tesbihItemPayloadPrefix${item.id}',
+              matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+            );
+            if (!scheduled) {
+              break;
+            }
+            index++;
+          }
+        }
       case ReminderRecurrence.monthly:
         if (item.reminderMonthlyBasis == CalendarBasis.gregorian) {
-          final next = _nextDayOfMonth(reminderAt);
+          final next = _nextDayOfMonth(
+            reminderAt,
+            day: item.reminderDayOfMonth,
+          );
           if (next == null) {
             return;
           }
@@ -214,7 +237,10 @@ class ItemReminderService {
             matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
           );
         } else {
-          final next = _nextHijriMonthlyOccurrence(reminderAt);
+          final next = _nextHijriMonthlyOccurrence(
+            reminderAt,
+            day: item.reminderDayOfMonth,
+          );
           await _zonedSchedule(
             id: id,
             title: item.title,
@@ -230,13 +256,20 @@ class ItemReminderService {
             id: id,
             title: item.title,
             body: body,
-            scheduledDate: _nextDayOfYear(reminderAt),
+            scheduledDate: _nextDayOfYear(
+              reminderAt,
+              month: item.reminderYearlyDate?.month,
+              day: item.reminderYearlyDate?.day,
+            ),
             notificationDetails: details,
             payload: '$tesbihItemPayloadPrefix${item.id}',
             matchDateTimeComponents: DateTimeComponents.dateAndTime,
           );
         } else {
-          final next = _nextHijriAnniversary(reminderAt);
+          final next = _nextHijriAnniversary(
+            reminderAt,
+            yearlyDate: item.reminderYearlyDate,
+          );
           await _zonedSchedule(
             id: id,
             title: item.title,
@@ -300,9 +333,9 @@ class ItemReminderService {
     return scheduled;
   }
 
-  tz.TZDateTime _nextWeekday(DateTime anchor) {
+  tz.TZDateTime _nextWeekday(DateTime anchor, [int? weekday]) {
     var scheduled = _nextTimeOfDay(anchor);
-    while (scheduled.weekday != anchor.weekday) {
+    while (scheduled.weekday != (weekday ?? anchor.weekday)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
     return scheduled;
@@ -311,20 +344,21 @@ class ItemReminderService {
   /// Null when the anchor's day-of-month doesn't exist in the coming months
   /// (e.g. 31st) for a very long stretch — practically never happens since
   /// every day-of-month from 1-28 exists every month.
-  tz.TZDateTime? _nextDayOfMonth(DateTime anchor) {
+  tz.TZDateTime? _nextDayOfMonth(DateTime anchor, {int? day}) {
+    final targetDay = day ?? anchor.day;
     final now = tz.TZDateTime.now(tz.local);
     for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
       final year = now.year + ((now.month - 1 + monthOffset) ~/ 12);
       final month = ((now.month - 1 + monthOffset) % 12) + 1;
       final daysInMonth = DateTime(year, month + 1, 0).day;
-      if (anchor.day > daysInMonth) {
+      if (targetDay > daysInMonth) {
         continue;
       }
       final candidate = tz.TZDateTime(
         tz.local,
         year,
         month,
-        anchor.day,
+        targetDay,
         anchor.hour,
         anchor.minute,
       );
@@ -335,13 +369,15 @@ class ItemReminderService {
     return null;
   }
 
-  tz.TZDateTime _nextDayOfYear(DateTime anchor) {
+  tz.TZDateTime _nextDayOfYear(DateTime anchor, {int? month, int? day}) {
+    final targetMonth = month ?? anchor.month;
+    final targetDay = day ?? anchor.day;
     final now = tz.TZDateTime.now(tz.local);
     var candidate = tz.TZDateTime(
       tz.local,
       now.year,
-      anchor.month,
-      anchor.day,
+      targetMonth,
+      targetDay,
       anchor.hour,
       anchor.minute,
     );
@@ -349,8 +385,8 @@ class ItemReminderService {
       candidate = tz.TZDateTime(
         tz.local,
         now.year + 1,
-        anchor.month,
-        anchor.day,
+        targetMonth,
+        targetDay,
         anchor.hour,
         anchor.minute,
       );
@@ -362,8 +398,8 @@ class ItemReminderService {
   /// after now, trying the current Hijri month and then subsequent ones
   /// (skipping months shorter than the anchor's day-of-month, e.g. the
   /// 30th in a 29-day Hijri month).
-  DateTime _nextHijriMonthlyOccurrence(DateTime anchor) {
-    final anchorHijri = HijriCalendar.fromDate(anchor);
+  DateTime _nextHijriMonthlyOccurrence(DateTime anchor, {int? day}) {
+    final targetDay = day ?? HijriCalendar.fromDate(anchor).hDay;
     final now = DateTime.now();
     final nowHijri = HijriCalendar.fromDate(now);
     final calendar = HijriCalendar();
@@ -372,13 +408,13 @@ class ItemReminderService {
           (nowHijri.hYear * 12 + (nowHijri.hMonth - 1)) + monthOffset;
       final hYear = totalMonths ~/ 12;
       final hMonth = (totalMonths % 12) + 1;
-      if (anchorHijri.hDay > calendar.getDaysInMonth(hYear, hMonth)) {
+      if (targetDay > calendar.getDaysInMonth(hYear, hMonth)) {
         continue;
       }
       final candidateDate = calendar.hijriToGregorian(
         hYear,
         hMonth,
-        anchorHijri.hDay,
+        targetDay,
       );
       final candidate = DateTime(
         candidateDate.year,
@@ -398,8 +434,8 @@ class ItemReminderService {
 
   /// Next Gregorian occurrence of the anchor's Hijri month/day, at or after
   /// now, trying the current Hijri year and then the next one.
-  DateTime _nextHijriAnniversary(DateTime anchor) {
-    final anchorHijri = HijriCalendar.fromDate(anchor);
+  DateTime _nextHijriAnniversary(DateTime anchor, {DateTime? yearlyDate}) {
+    final anchorHijri = HijriCalendar.fromDate(yearlyDate ?? anchor);
     final now = DateTime.now();
     final nowHijri = HijriCalendar.fromDate(now);
     final calendar = HijriCalendar();
@@ -522,6 +558,15 @@ class ItemReminderService {
       case ReminderRecurrence.daily:
         return from;
       case ReminderRecurrence.weekly:
+        if (item.reminderWeekdays.isNotEmpty) {
+          for (var offset = 0; offset < 7; offset++) {
+            final candidate = from.add(Duration(days: offset));
+            if (item.reminderWeekdays.contains(candidate.weekday)) {
+              return candidate;
+            }
+          }
+          return null;
+        }
         var candidate = from;
         while (candidate.weekday != anchor.weekday) {
           candidate = candidate.add(const Duration(days: 1));
@@ -529,28 +574,42 @@ class ItemReminderService {
         return candidate;
       case ReminderRecurrence.monthly:
         if (item.reminderMonthlyBasis == CalendarBasis.gregorian) {
-          return _nextGregorianDayOfMonth(anchor, from);
+          return _nextGregorianDayOfMonth(
+            anchor,
+            from,
+            day: item.reminderDayOfMonth,
+          );
         }
-        return _nextHijriDayOfMonth(anchor, from);
+        return _nextHijriDayOfMonth(anchor, from, day: item.reminderDayOfMonth);
       case ReminderRecurrence.yearly:
         if (item.reminderYearlyBasis == CalendarBasis.gregorian) {
-          return _nextGregorianMonthDay(anchor, from);
+          return _nextGregorianMonthDay(
+            anchor,
+            from,
+            month: item.reminderYearlyDate?.month,
+            day: item.reminderYearlyDate?.day,
+          );
         }
-        return _nextHijriMonthDay(anchor, from);
+        return _nextHijriMonthDay(
+          anchor,
+          from,
+          yearlyDate: item.reminderYearlyDate,
+        );
     }
   }
 
   /// Next date (>= [from]) with the anchor's day-of-month, skipping months
   /// where that day doesn't exist (e.g. the 31st).
-  DateTime? _nextGregorianDayOfMonth(DateTime anchor, DateTime from) {
+  DateTime? _nextGregorianDayOfMonth(DateTime anchor, DateTime from, {int? day}) {
+    final targetDay = day ?? anchor.day;
     for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
       final year = from.year + ((from.month - 1 + monthOffset) ~/ 12);
       final month = ((from.month - 1 + monthOffset) % 12) + 1;
       final daysInMonth = DateTime(year, month + 1, 0).day;
-      if (anchor.day > daysInMonth) {
+      if (targetDay > daysInMonth) {
         continue;
       }
-      final candidate = DateTime(year, month, anchor.day);
+      final candidate = DateTime(year, month, targetDay);
       if (!candidate.isBefore(from)) {
         return candidate;
       }
@@ -559,32 +618,39 @@ class ItemReminderService {
   }
 
   /// Next date (>= [from]) with the anchor's Gregorian month/day.
-  DateTime? _nextGregorianMonthDay(DateTime anchor, DateTime from) {
-    final candidate = DateTime(from.year, anchor.month, anchor.day);
+  DateTime? _nextGregorianMonthDay(
+    DateTime anchor,
+    DateTime from, {
+    int? month,
+    int? day,
+  }) {
+    final targetMonth = month ?? anchor.month;
+    final targetDay = day ?? anchor.day;
+    final candidate = DateTime(from.year, targetMonth, targetDay);
     if (!candidate.isBefore(from)) {
       return candidate;
     }
-    return DateTime(from.year + 1, anchor.month, anchor.day);
+    return DateTime(from.year + 1, targetMonth, targetDay);
   }
 
   /// Next date (>= [from]) whose Hijri day-of-month equals the anchor's,
   /// skipping months shorter than that day.
-  DateTime? _nextHijriDayOfMonth(DateTime anchor, DateTime from) {
+  DateTime? _nextHijriDayOfMonth(DateTime anchor, DateTime from, {int? day}) {
     final calendar = HijriCalendar();
-    final anchorHijri = HijriCalendar.fromDate(anchor);
+    final targetDay = day ?? HijriCalendar.fromDate(anchor).hDay;
     final fromHijri = HijriCalendar.fromDate(from);
     for (var monthOffset = 0; monthOffset < 12; monthOffset++) {
       final totalMonths =
           (fromHijri.hYear * 12 + (fromHijri.hMonth - 1)) + monthOffset;
       final hYear = totalMonths ~/ 12;
       final hMonth = (totalMonths % 12) + 1;
-      if (anchorHijri.hDay > calendar.getDaysInMonth(hYear, hMonth)) {
+      if (targetDay > calendar.getDaysInMonth(hYear, hMonth)) {
         continue;
       }
       final candidateDate = calendar.hijriToGregorian(
         hYear,
         hMonth,
-        anchorHijri.hDay,
+        targetDay,
       );
       final candidate = DateTime(
         candidateDate.year,
@@ -600,9 +666,13 @@ class ItemReminderService {
 
   /// Next date (>= [from]) whose Hijri month/day equals the anchor's,
   /// trying the current Hijri year and then the next one.
-  DateTime? _nextHijriMonthDay(DateTime anchor, DateTime from) {
+  DateTime? _nextHijriMonthDay(
+    DateTime anchor,
+    DateTime from, {
+    DateTime? yearlyDate,
+  }) {
     final calendar = HijriCalendar();
-    final anchorHijri = HijriCalendar.fromDate(anchor);
+    final anchorHijri = HijriCalendar.fromDate(yearlyDate ?? anchor);
     final fromHijri = HijriCalendar.fromDate(from);
     for (final hYear in [fromHijri.hYear, fromHijri.hYear + 1]) {
       final candidateDate = calendar.hijriToGregorian(

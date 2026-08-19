@@ -21,6 +21,9 @@ Item item({
   int reminderOffsetMinutes = 0,
   DateTime? reminderAnchorDate,
   int? reminderRepeatCount,
+  List<int> reminderWeekdays = const [],
+  int? reminderDayOfMonth,
+  DateTime? reminderYearlyDate,
 }) {
   return Item(
     id: id,
@@ -41,6 +44,9 @@ Item item({
     reminderOffsetMinutes: reminderOffsetMinutes,
     reminderAnchorDate: reminderAnchorDate,
     reminderRepeatCount: reminderRepeatCount,
+    reminderWeekdays: reminderWeekdays,
+    reminderDayOfMonth: reminderDayOfMonth,
+    reminderYearlyDate: reminderYearlyDate,
   );
 }
 
@@ -168,6 +174,41 @@ void main() {
       });
 
       expect(restored.reminderRecurrence, ReminderRecurrence.daily);
+    });
+
+    test('toMap/fromMap round-trips the recurrence-day fields', () {
+      final source = item(
+        reminderAt: DateTime(2026, 8, 17, 12, 0),
+        reminderWeekdays: [2, 4, 6],
+        reminderDayOfMonth: 15,
+        reminderYearlyDate: DateTime(2026, 5, 6),
+      );
+
+      final restored = Item.fromMap(source.toMap());
+
+      expect(restored.reminderWeekdays, [2, 4, 6]);
+      expect(restored.reminderDayOfMonth, 15);
+      expect(restored.reminderYearlyDate, DateTime(2026, 5, 6));
+    });
+
+    test('fromMap tolerates missing recurrence-day keys', () {
+      final source = item(reminderAt: DateTime(2026, 8, 17, 12, 0));
+      final restored = Item.fromMap(source.toMap()
+        ..remove('reminderWeekdays')
+        ..remove('reminderDayOfMonth')
+        ..remove('reminderYearlyDate'));
+
+      expect(restored.reminderWeekdays, isEmpty);
+      expect(restored.reminderDayOfMonth, isNull);
+      expect(restored.reminderYearlyDate, isNull);
+    });
+
+    test('fromMap filters out-of-range reminder weekdays', () {
+      final source = item(reminderAt: DateTime(2026, 8, 17, 12, 0));
+      final restored = Item.fromMap(source.toMap()
+        ..['reminderWeekdays'] = '1,9,0,7');
+
+      expect(restored.reminderWeekdays, [1, 7]);
     });
 
     test('fromMap migrates legacy prayer-time items to daily', () {

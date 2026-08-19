@@ -474,6 +474,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarRepeatCountError => '请输入 2 到 100 之间的数字';
 
   @override
+  String get calendarRepeatDaysLabel => '重复于';
+
+  @override
+  String get calendarDayOfMonthLabel => '每月几号';
+
+  @override
+  String get calendarYearlyMonthLabel => '月份';
+
+  @override
+  String get calendarYearlyDayLabel => '日';
+
+  @override
   String get calendarMonthlyBasisLabel => '月度基准';
 
   @override

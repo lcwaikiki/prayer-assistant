@@ -495,6 +495,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get calendarRepeatCountError => 'Entrez un nombre entre 2 et 100';
 
   @override
+  String get calendarRepeatDaysLabel => 'Répéter le';
+
+  @override
+  String get calendarDayOfMonthLabel => 'Jour du mois';
+
+  @override
+  String get calendarYearlyMonthLabel => 'Mois';
+
+  @override
+  String get calendarYearlyDayLabel => 'Jour';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Base mensuelle';
 
   @override

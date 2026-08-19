@@ -491,6 +491,18 @@ class AppLocalizationsUr extends AppLocalizations {
   String get calendarRepeatCountError => '2 سے 100 تک نمبر درج کریں';
 
   @override
+  String get calendarRepeatDaysLabel => 'دہرائیں';
+
+  @override
+  String get calendarDayOfMonthLabel => 'مہینے کا دن';
+
+  @override
+  String get calendarYearlyMonthLabel => 'مہینہ';
+
+  @override
+  String get calendarYearlyDayLabel => 'دن';
+
+  @override
   String get calendarMonthlyBasisLabel => 'ماہانہ بنیاد';
 
   @override

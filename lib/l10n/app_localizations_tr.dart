@@ -492,6 +492,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarRepeatCountError => '2 ile 100 arasında bir sayı girin';
 
   @override
+  String get calendarRepeatDaysLabel => 'Tekrarla';
+
+  @override
+  String get calendarDayOfMonthLabel => 'Ayın günü';
+
+  @override
+  String get calendarYearlyMonthLabel => 'Ay';
+
+  @override
+  String get calendarYearlyDayLabel => 'Gün';
+
+  @override
   String get calendarMonthlyBasisLabel => 'Aylık esas';
 
   @override

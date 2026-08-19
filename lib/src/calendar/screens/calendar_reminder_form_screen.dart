@@ -9,6 +9,7 @@ import '../../l10n/l10n.dart';
 import '../../services/local_database.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../../utils/time_utils.dart';
+import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_anchor_date_picker.dart';
 
@@ -48,6 +49,9 @@ class _CalendarReminderFormScreenState
   String? _titleError;
   int? _repeatCount;
   String? _repeatCountError;
+  late List<int> _weekdays;
+  late int _dayOfMonth;
+  late DateTime _yearlyDate;
   bool _saving = false;
 
   bool get _isEditing => widget.reminder != null;
@@ -81,6 +85,14 @@ class _CalendarReminderFormScreenState
       text: initialOffset == 0 ? '10' : initialOffset.abs().toString(),
     );
     _offsetMinutesFocus.addListener(() => setState(() {}));
+    final anchorDay = _anchorDate ?? _anchorAt;
+    final storedWeekdays = reminder?.weekdays ?? const <int>[];
+    _weekdays = storedWeekdays.isEmpty
+        ? <int>[anchorDay.weekday]
+        : List<int>.from(storedWeekdays);
+    _dayOfMonth = reminder?.dayOfMonth ?? anchorDay.day;
+    _yearlyDate =
+        reminder?.yearlyDate ?? DateTime(anchorDay.year, anchorDay.month, anchorDay.day);
   }
 
   @override
@@ -235,6 +247,188 @@ class _CalendarReminderFormScreenState
     return parsed;
   }
 
+  /// The shared recurrence extras: repeat count, monthly/yearly basis chips
+  /// and the explicit recurrence-day selectors (weekday multi-select for
+  /// weekly, day-of-month for monthly, month+day for yearly). Rendered in
+  /// both the clock-time and prayer-time sections.
+  Widget _buildRecurrenceOptions(AppLocalizations l10n, String locale) {
+    final labelStyle = Theme.of(context).textTheme.labelLarge;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (_recurrence != ReminderRecurrence.once) ...[
+          const SizedBox(height: 20),
+          _buildRepeatCountControl(l10n),
+        ],
+        if (_recurrence == ReminderRecurrence.monthly) ...[
+          const SizedBox(height: 20),
+          Text(l10n.calendarMonthlyBasisLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _ChoiceChipOption(
+                label: l10n.calendarYearlyBasisGregorian,
+                selected: _monthlyBasis == CalendarBasis.gregorian,
+                onSelected: () => setState(
+                  () => _monthlyBasis = CalendarBasis.gregorian,
+                ),
+              ),
+              _ChoiceChipOption(
+                label: l10n.calendarYearlyBasisHijri,
+                selected: _monthlyBasis == CalendarBasis.hijri,
+                onSelected: () => setState(
+                  () => _monthlyBasis = CalendarBasis.hijri,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          DropdownButtonFormField<int>(
+            key: const Key('day_of_month_field'),
+            initialValue: _dayOfMonth,
+            decoration: InputDecoration(
+              labelText: l10n.calendarDayOfMonthLabel,
+            ),
+            items: [
+              for (var day = 1; day <= 31; day++)
+                DropdownMenuItem(value: day, child: Text('$day')),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() => _dayOfMonth = value);
+              }
+            },
+          ),
+        ],
+        if (_recurrence == ReminderRecurrence.yearly) ...[
+          const SizedBox(height: 20),
+          Text(l10n.calendarYearlyBasisLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _ChoiceChipOption(
+                label: l10n.calendarYearlyBasisGregorian,
+                selected: _yearlyBasis == CalendarBasis.gregorian,
+                onSelected: () => setState(
+                  () => _yearlyBasis = CalendarBasis.gregorian,
+                ),
+              ),
+              _ChoiceChipOption(
+                label: l10n.calendarYearlyBasisHijri,
+                selected: _yearlyBasis == CalendarBasis.hijri,
+                onSelected: () => setState(
+                  () => _yearlyBasis = CalendarBasis.hijri,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  key: const Key('yearly_month_field'),
+                  initialValue: _yearlyDate.month,
+                  decoration: InputDecoration(
+                    labelText: l10n.calendarYearlyMonthLabel,
+                  ),
+                  items: [
+                    for (var month = 1; month <= 12; month++)
+                      DropdownMenuItem(
+                        value: month,
+                        child: Text(_monthLabel(month, locale)),
+                      ),
+                  ],
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _yearlyDate = DateTime(
+                        _yearlyDate.year,
+                        value,
+                        _yearlyDate.day,
+                      );
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  key: const Key('yearly_day_field'),
+                  initialValue: _yearlyDate.day,
+                  decoration: InputDecoration(
+                    labelText: l10n.calendarYearlyDayLabel,
+                  ),
+                  items: [
+                    for (var day = 1; day <= 31; day++)
+                      DropdownMenuItem(value: day, child: Text('$day')),
+                  ],
+                  onChanged: (value) {
+                    if (value == null) {
+                      return;
+                    }
+                    setState(() {
+                      _yearlyDate = DateTime(
+                        _yearlyDate.year,
+                        _yearlyDate.month,
+                        value,
+                      );
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+        if (_recurrence == ReminderRecurrence.weekly) ...[
+          const SizedBox(height: 20),
+          Text(l10n.calendarRepeatDaysLabel, style: labelStyle),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (var weekday = 1; weekday <= 7; weekday++)
+                FilterChip(
+                  key: Key('weekday_chip_$weekday'),
+                  label: Text(
+                    DateFormat.E(locale).format(DateTime(2024, 1, weekday)),
+                  ),
+                  selected: _weekdays.contains(weekday),
+                  onSelected: (selected) => setState(() {
+                    if (selected) {
+                      if (!_weekdays.contains(weekday)) {
+                        _weekdays.add(weekday);
+                      }
+                    } else if (_weekdays.length > 1) {
+                      _weekdays.remove(weekday);
+                    }
+                  }),
+                ),
+            ],
+          ),
+        ],
+      ],
+    );
+  }
+
+  /// Localized month name for the yearly selector: Gregorian when the basis
+  /// is Gregorian, Hijri otherwise.
+  String _monthLabel(int month, String locale) {
+    if (_yearlyBasis == CalendarBasis.hijri) {
+      return HijriMonth(1446, month)
+          .longMonthName(Localizations.localeOf(context).languageCode);
+    }
+    return DateFormat.MMMM(locale).format(DateTime(2024, month, 1));
+  }
+
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
@@ -281,6 +475,15 @@ class _CalendarReminderFormScreenState
       repeatCount: _recurrence == ReminderRecurrence.once
           ? null
           : repeatCount,
+      weekdays: _recurrence == ReminderRecurrence.weekly
+          ? List<int>.from(_weekdays)
+          : const [],
+      dayOfMonth: _recurrence == ReminderRecurrence.monthly
+          ? _dayOfMonth
+          : null,
+      yearlyDate: _recurrence == ReminderRecurrence.yearly
+          ? _yearlyDate
+          : null,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);
@@ -419,66 +622,7 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ),
-            if (_recurrence != ReminderRecurrence.once) ...[
-              const SizedBox(height: 20),
-              _buildRepeatCountControl(l10n),
-            ],
-            if (_recurrence == ReminderRecurrence.monthly) ...[
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarMonthlyBasisLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisGregorian,
-                    selected: _monthlyBasis == CalendarBasis.gregorian,
-                    onSelected: () => setState(
-                      () => _monthlyBasis = CalendarBasis.gregorian,
-                    ),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisHijri,
-                    selected: _monthlyBasis == CalendarBasis.hijri,
-                    onSelected: () => setState(
-                      () => _monthlyBasis = CalendarBasis.hijri,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            if (_recurrence == ReminderRecurrence.yearly) ...[
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarYearlyBasisLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisGregorian,
-                    selected: _yearlyBasis == CalendarBasis.gregorian,
-                    onSelected: () => setState(
-                      () => _yearlyBasis = CalendarBasis.gregorian,
-                    ),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisHijri,
-                    selected: _yearlyBasis == CalendarBasis.hijri,
-                    onSelected: () => setState(
-                      () => _yearlyBasis = CalendarBasis.hijri,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            _buildRecurrenceOptions(l10n, locale),
           ] else ...[
             DropdownButtonFormField<String>(
               initialValue: _anchorPrayerName,
@@ -657,66 +801,7 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ),
-            if (_recurrence != ReminderRecurrence.once) ...[
-              const SizedBox(height: 20),
-              _buildRepeatCountControl(l10n),
-            ],
-            if (_recurrence == ReminderRecurrence.monthly) ...[
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarMonthlyBasisLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisGregorian,
-                    selected: _monthlyBasis == CalendarBasis.gregorian,
-                    onSelected: () => setState(
-                      () => _monthlyBasis = CalendarBasis.gregorian,
-                    ),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisHijri,
-                    selected: _monthlyBasis == CalendarBasis.hijri,
-                    onSelected: () => setState(
-                      () => _monthlyBasis = CalendarBasis.hijri,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            if (_recurrence == ReminderRecurrence.yearly) ...[
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarYearlyBasisLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisGregorian,
-                    selected: _yearlyBasis == CalendarBasis.gregorian,
-                    onSelected: () => setState(
-                      () => _yearlyBasis = CalendarBasis.gregorian,
-                    ),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarYearlyBasisHijri,
-                    selected: _yearlyBasis == CalendarBasis.hijri,
-                    onSelected: () => setState(
-                      () => _yearlyBasis = CalendarBasis.hijri,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            _buildRecurrenceOptions(l10n, locale),
             if (_recurrence != ReminderRecurrence.daily) ...[
               const SizedBox(height: 20),
               OutlinedButton.icon(

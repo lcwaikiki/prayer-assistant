@@ -1000,6 +1000,30 @@ abstract class AppLocalizations {
   /// **'Enter a number from 2 to 100'**
   String get calendarRepeatCountError;
 
+  /// No description provided for @calendarRepeatDaysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat on'**
+  String get calendarRepeatDaysLabel;
+
+  /// No description provided for @calendarDayOfMonthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of month'**
+  String get calendarDayOfMonthLabel;
+
+  /// No description provided for @calendarYearlyMonthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get calendarYearlyMonthLabel;
+
+  /// No description provided for @calendarYearlyDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get calendarYearlyDayLabel;
+
   /// No description provided for @calendarMonthlyBasisLabel.
   ///
   /// In en, this message translates to:

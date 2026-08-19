@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, visibleForTesting;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -16,6 +18,19 @@ class CalendarReminderService {
 
   static const _channelId = 'calendar_reminders_chime';
   static const _channelName = 'Calendar Reminders';
+
+  /// Whether recurring clock reminders can rely on the OS-level repeat
+  /// (`matchDateTimeComponents`). On iOS this is a reliable
+  /// `UNCalendarNotificationTrigger`; on Android it is an AlarmManager
+  /// one-shot that the plugin's receiver re-arms itself, which has been
+  /// observed to fire the same reminder multiple times on some devices. So
+  /// on Android every reminder is scheduled as a single next-occurrence
+  /// one-shot and advanced nightly by CalendarMidnightScheduler instead.
+  @visibleForTesting
+  static bool? usesOsRepeatsOverride;
+
+  static bool get _usesOsRepeats =>
+      usesOsRepeatsOverride ?? defaultTargetPlatform != TargetPlatform.android;
 
   /// How far in the past a resolved prayer-anchored fire time can be and
   /// still be worth a catch-up notification, rather than silently waiting
@@ -196,7 +211,9 @@ class CalendarReminderService {
           scheduledDate: _nextTimeOfDay(reminder.anchorAt),
           notificationDetails: details,
           payload: '$calendarReminderPayloadPrefix${reminder.id}',
-          matchDateTimeComponents: DateTimeComponents.time,
+          matchDateTimeComponents: _usesOsRepeats
+              ? DateTimeComponents.time
+              : null,
         );
       case ReminderRecurrence.weekly:
         if (reminder.weekdays.isEmpty) {
@@ -207,9 +224,11 @@ class CalendarReminderService {
             scheduledDate: _nextWeekday(reminder.anchorAt),
             notificationDetails: details,
             payload: '$calendarReminderPayloadPrefix${reminder.id}',
-            matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+            matchDateTimeComponents: _usesOsRepeats
+                ? DateTimeComponents.dayOfWeekAndTime
+                : null,
           );
-        } else {
+        } else if (_usesOsRepeats) {
           // One OS-level weekly repeat per selected weekday.
           var index = 0;
           for (final weekday in reminder.weekdays) {
@@ -227,6 +246,20 @@ class CalendarReminderService {
             }
             index++;
           }
+        } else {
+          // Single next selected weekday, advanced nightly by the midnight
+          // scheduler.
+          await _zonedSchedule(
+            id: id,
+            title: reminder.title,
+            body: body,
+            scheduledDate: _nextSelectedWeekday(
+              reminder.anchorAt,
+              reminder.weekdays,
+            ),
+            notificationDetails: details,
+            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+          );
         }
       case ReminderRecurrence.monthly:
         if (reminder.monthlyBasis == CalendarBasis.gregorian) {
@@ -244,7 +277,9 @@ class CalendarReminderService {
             scheduledDate: next,
             notificationDetails: details,
             payload: '$calendarReminderPayloadPrefix${reminder.id}',
-            matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
+            matchDateTimeComponents: _usesOsRepeats
+                ? DateTimeComponents.dayOfMonthAndTime
+                : null,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
@@ -273,7 +308,9 @@ class CalendarReminderService {
             ),
             notificationDetails: details,
             payload: '$calendarReminderPayloadPrefix${reminder.id}',
-            matchDateTimeComponents: DateTimeComponents.dateAndTime,
+            matchDateTimeComponents: _usesOsRepeats
+                ? DateTimeComponents.dateAndTime
+                : null,
           );
         } else {
           final next = _nextHijriAnniversary(
@@ -351,6 +388,16 @@ class CalendarReminderService {
   tz.TZDateTime _nextWeekday(DateTime anchor, [int? weekday]) {
     var scheduled = _nextTimeOfDay(anchor);
     while (scheduled.weekday != (weekday ?? anchor.weekday)) {
+      scheduled = scheduled.add(const Duration(days: 1));
+    }
+    return scheduled;
+  }
+
+  /// The next moment (>= now) at the anchor's time-of-day whose weekday is
+  /// one of [weekdays].
+  tz.TZDateTime _nextSelectedWeekday(DateTime anchor, List<int> weekdays) {
+    var scheduled = _nextTimeOfDay(anchor);
+    while (!weekdays.contains(scheduled.weekday)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
     return scheduled;

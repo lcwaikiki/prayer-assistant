@@ -4,19 +4,18 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../services/local_database.dart';
-import '../models/calendar_reminder.dart';
 import 'calendar_reminder_service.dart';
 
 const _calendarMidnightAlarmId = 5002;
 
-/// Re-resolves and re-schedules every calendar reminder whose fire time
-/// can't be expressed as a fixed OS-level repeat: monthly- and
-/// yearly-Hijri-basis reminders (no native way to repeat on a fixed Hijri
-/// day-of-month/month-day, unlike their Gregorian equivalents which use
-/// [DateTimeComponents.dayOfMonthAndTime]/[DateTimeComponents.dateAndTime])
-/// and prayer-time-anchored reminders (the underlying prayer time shifts by
-/// a few minutes day to day, so the next occurrence is re-resolved and
-/// re-armed nightly). Runs once daily just after midnight.
+/// Re-resolves and re-schedules every enabled calendar reminder nightly.
+/// This advances the app-managed one-shot chains on Android (where the
+/// plugin's OS-level repeats are avoided because they can double-fire) for
+/// all recurrences, and is required for prayer-anchored and Hijri-basis
+/// reminders on both platforms (no native repeat for a floating prayer time
+/// or Hijri day-of-month/month-day; their Gregorian equivalents could use
+/// [DateTimeComponents.dayOfMonthAndTime]/[DateTimeComponents.dateAndTime]
+/// on iOS only). Runs once daily just after midnight.
 /// Android-only: iOS refreshes these on next app open instead (see
 /// PrayerAppController.initialize).
 @pragma('vm:entry-point')
@@ -32,17 +31,10 @@ Future<void> calendarMidnightRefreshCallback() async {
     if (!reminder.enabled) {
       continue;
     }
-    if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
-      // Re-resolve the next occurrence's prayer time (advances each day or
-      // to the next matching weekday/month-day), honoring recurrence.
-      // catchUp is false so a just-fired occurrence is not re-notified.
-      await reminderService.scheduleReminder(reminder, catchUp: false);
-    } else if ((reminder.recurrence == ReminderRecurrence.monthly &&
-            reminder.monthlyBasis == CalendarBasis.hijri) ||
-        (reminder.recurrence == ReminderRecurrence.yearly &&
-            reminder.yearlyBasis == CalendarBasis.hijri)) {
-      await reminderService.scheduleReminder(reminder, catchUp: false);
-    }
+    // Re-resolve the next occurrence (advances each day or to the next
+    // matching weekday/month-day), honoring recurrence. catchUp is false
+    // so a just-fired occurrence is not re-notified.
+    await reminderService.scheduleReminder(reminder, catchUp: false);
   }
 }
 

@@ -4,7 +4,6 @@ import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-import '../../calendar/models/calendar_reminder.dart';
 import '../data/item_repository.dart';
 import '../models/item.dart';
 import '../models/item_group.dart';
@@ -12,11 +11,13 @@ import 'item_reminder_service.dart';
 
 const _midnightAlarmId = 5001;
 
-/// Re-resolves and re-schedules every prayer-anchored beads reminder so it
-/// tracks the current day's actual prayer times. Runs once daily just after
-/// midnight, in its own background isolate — independent of whether the app
-/// is open or even running, which a fixed-time notification repeat alone
-/// can't do since prayer times shift by a few minutes day to day.
+/// Re-resolves and re-schedules every enabled beads reminder/group nightly.
+/// This advances the app-managed one-shot chains on Android (where the
+/// plugin's OS-level repeats are avoided because they can double-fire), and
+/// tracks the current day's actual prayer times for prayer-anchored
+/// reminders (which shift by a few minutes day to day). Runs once daily
+/// just after midnight, in its own background isolate — independent of
+/// whether the app is open or even running.
 ///
 /// Android-only: iOS does not allow apps to run code at an arbitrary exact
 /// background time at all, so on iOS these reminders simply refresh the
@@ -37,19 +38,10 @@ Future<void> midnightReminderRefreshCallback() async {
     if (!subject.reminderEnabled) {
       continue;
     }
-    final needsRefresh =
-        subject.reminderAnchor == ItemReminderAnchor.prayerTime ||
-        (subject.reminderRecurrence == ReminderRecurrence.monthly &&
-            subject.reminderMonthlyBasis == CalendarBasis.hijri) ||
-        (subject.reminderRecurrence == ReminderRecurrence.yearly &&
-            subject.reminderYearlyBasis == CalendarBasis.hijri);
-    if (!needsRefresh) {
-      continue;
-    }
-    // Re-resolve the next occurrence's prayer time (moves forward each day
-    // or to the next matching weekday/month-day), or recompute the next
-    // Gregorian occurrence for a floating Hijri day-of-month/month-day.
-    // catchUp is false so a just-fired occurrence is not re-notified.
+    // Re-resolve the next occurrence (moves forward each day or to the next
+    // matching weekday/month-day), or recompute the next Gregorian
+    // occurrence for a floating Hijri day-of-month/month-day. catchUp is
+    // false so a just-fired occurrence is not re-notified.
     if (subject is Item) {
       await reminderService.scheduleReminder(subject, catchUp: false);
     } else if (subject is ItemGroup) {

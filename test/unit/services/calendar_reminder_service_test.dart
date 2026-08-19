@@ -685,5 +685,75 @@ final now = DateTime.now();
       expect(savePlatform.scheduledDates.single.isAfter(now), isTrue);
     });
   });
+
+  group('Android one-shot scheduling (no OS-level repeats)', () {
+    setUp(() {
+      CalendarReminderService.usesOsRepeatsOverride = false;
+    });
+
+    tearDown(() {
+      CalendarReminderService.usesOsRepeatsOverride = null;
+    });
+
+    test('daily schedules a single next-occurrence one-shot', () async {
+      final base = _notificationId('calendar-1');
+      await service.scheduleReminder(
+        _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0)),
+      );
+
+      expect(platform.scheduledIds, [base]);
+      expect(platform.scheduledMatches.single, isNull);
+      expect(platform.scheduledDates.single.isAfter(DateTime.now()), isTrue);
+    });
+
+    test('weekly on selected weekdays schedules a single next-weekday '
+        'one-shot', () async {
+      final base = _notificationId('calendar-1');
+      await service.scheduleReminder(
+        _reminder(
+          anchorAt: DateTime(2099, 1, 2, 12, 0),
+          recurrence: ReminderRecurrence.weekly,
+          weekdays: [1, 3, 5],
+        ),
+      );
+
+      expect(platform.scheduledIds, [base]);
+      expect(platform.scheduledMatches.single, isNull);
+    });
+
+    test('monthly gregorian schedules a single next-month one-shot', () async {
+      final base = _notificationId('calendar-1');
+      await service.scheduleReminder(
+        _reminder(
+          anchorAt: DateTime(2099, 1, 1, 9, 0),
+          recurrence: ReminderRecurrence.monthly,
+          dayOfMonth: 15,
+        ),
+      );
+
+      expect(platform.scheduledIds, [base]);
+      expect(platform.scheduledMatches.single, isNull);
+    });
+
+    test('re-arming a daily reminder schedules exactly one new one-shot each '
+        'time and never accumulates ids', () async {
+      final base = _notificationId('calendar-1');
+      for (var i = 0; i < 3; i++) {
+        await service.scheduleReminder(
+          _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0)),
+        );
+      }
+
+      // Each re-arm cancels the 100-id window then schedules one one-shot at
+      // the same stable id — a duplicate would show as an extra id here.
+      expect(platform.scheduledIds, [base, base, base]);
+      expect(
+        platform.cancelledIds.where(
+          (id) => id >= base && id < base + 100,
+        ),
+        hasLength(300),
+      );
+    });
+  });
 }
 

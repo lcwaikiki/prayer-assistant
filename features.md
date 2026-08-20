@@ -122,5 +122,5 @@ en, es, fr, de, tr, ur, fa, ar, zh, ja, id, ru (+ system default)
 ## Not ready for the store yet (housekeeping)
 
 - `pubspec.yaml` description is still the Flutter placeholder ("A new Flutter project.")
-- Android package id is `com.example.prayer_assistant` — should be changed to a real reverse-domain id before release
+- Android package id is `com.pirci.prayer_assistant` — should be changed to a real reverse-domain id before release
 - No app-store screenshots or feature graphic exist yet

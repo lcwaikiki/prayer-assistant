@@ -1,4 +1,4 @@
-package com.example.prayer_assistant
+package com.pirci.prayer_assistant
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -27,10 +27,10 @@ import java.util.Date
 import java.util.Locale
 
 object PrayerWidgetUpdater {
-    const val ACTION_REFRESH_WIDGETS = "com.example.prayer_assistant.ACTION_REFRESH_WIDGETS"
-    const val ACTION_REFRESH_ICON = "com.example.prayer_assistant.ACTION_REFRESH_ICON"
-    const val ACTION_REFRESH_WIDGET_MINUTE = "com.example.prayer_assistant.ACTION_REFRESH_WIDGET_MINUTE"
-    const val ACTION_STATUS_DISMISSED = "com.example.prayer_assistant.ACTION_STATUS_DISMISSED"
+    const val ACTION_REFRESH_WIDGETS = "com.pirci.prayer_assistant.ACTION_REFRESH_WIDGETS"
+    const val ACTION_REFRESH_ICON = "com.pirci.prayer_assistant.ACTION_REFRESH_ICON"
+    const val ACTION_REFRESH_WIDGET_MINUTE = "com.pirci.prayer_assistant.ACTION_REFRESH_WIDGET_MINUTE"
+    const val ACTION_STATUS_DISMISSED = "com.pirci.prayer_assistant.ACTION_STATUS_DISMISSED"
     const val STATUS_CHANNEL_ID = "prayer_remaining_status"
     const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L

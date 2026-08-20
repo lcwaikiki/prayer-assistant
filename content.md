@@ -466,7 +466,7 @@ now, mmssThresholdMinutes)`:
 - Midnight reminder refresh is Android-only (iOS refreshes on next app open).
 - Exact alarms require user grant on Android 12+.
 - `pubspec.yaml` description is still the Flutter placeholder; Android
-  package id is still `com.example.prayer_assistant`; no store screenshots.
+  package id is still `com.pirci.prayer_assistant`; no store screenshots.
 - A live on-device test of an actual calendar-reminder notification firing +
   deep link is still outstanding (blocked by emulator performance; logic is a
   close mirror of the tesbih path which works).

@@ -1,4 +1,4 @@
-package com.example.prayer_assistant
+package com.pirci.prayer_assistant
 
 import android.content.Intent
 import io.flutter.embedding.engine.FlutterEngine

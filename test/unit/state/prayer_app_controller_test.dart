@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
@@ -664,6 +665,51 @@ void main() {
 
       expect(controller.themeMode, ThemeMode.dark);
       verify(() => database.saveThemePreference('dark')).called(1);
+    });
+
+    test('updateLocalePreference re-pushes calendar reminders in the new locale',
+        () async {
+      final location = sampleSelectedLocation();
+      when(() => database.loadSelectedLocation()).thenAnswer(
+        (_) async => location,
+      );
+      when(() => api.getStates(location.countryId)).thenAnswer(
+        (_) async => [sampleLocationNode(id: '34', name: 'Istanbul')],
+      );
+      when(() => api.getDistricts(location.stateId)).thenAnswer(
+        (_) async => [sampleLocationNode(id: '541', name: 'Uskudar')],
+      );
+      final day = samplePrayerDay();
+      when(
+        () => database.getDay(
+          districtId: any(named: 'districtId'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => day);
+      when(
+        () => database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        ),
+      ).thenAnswer((_) async => [day]);
+      when(() => database.saveLocalePreference(any())).thenAnswer((_) async {});
+
+      await initializeDateFormatting();
+      final controller = buildController();
+      await controller.initialize();
+      clearInteractions(widgetBridge);
+
+      await controller.updateLocalePreference(AppLocalePreference.tr);
+
+      expect(controller.localePreference, AppLocalePreference.tr);
+      verify(() => database.saveLocalePreference('tr')).called(1);
+      verify(
+        () => widgetBridge.updateCalendarReminders(
+          headerText: any(named: 'headerText'),
+          reminders: any(named: 'reminders'),
+        ),
+      ).called(1);
     });
 
     test('toggleThemeQuick flips between light and dark', () async {

@@ -649,6 +649,7 @@ class PrayerAppController extends ChangeNotifier {
         locale: resolvedLocale,
         locationLabel: _selectedLocation?.fullName ?? '',
       );
+      await _syncCalendarRemindersWidget();
       try {
         await _syncNotifications();
       } catch (_) {}

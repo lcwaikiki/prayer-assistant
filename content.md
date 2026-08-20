@@ -360,7 +360,7 @@ now, mmssThresholdMinutes)`:
   Left:" live `Chronometer`, location label.
 - **Small icon** (`buildSmallIcon`): under 100 minutes remaining
   (`ICON_DIGIT_THRESHOLD_MINUTES = 100`) draws the minute count as a
-  zero-padded 2-digit white bitmap (`05`, `12`...); otherwise the launcher
+  white bitmap (`6`, `59` — no leading zero); otherwise the launcher
   icon. Kept to the minute by exact alarm `ACTION_REFRESH_ICON` (id `2003`),
   which jumps straight to the 100-minute mark rather than ticking through
   hours.

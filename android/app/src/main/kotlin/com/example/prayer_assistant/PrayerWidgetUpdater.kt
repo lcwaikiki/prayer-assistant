@@ -631,7 +631,7 @@ object PrayerWidgetUpdater {
         val sizePx = (48 * context.resources.displayMetrics.density).toInt().coerceAtLeast(48)
         val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        val text = remainingMinutes.coerceIn(0L, 99L).toString().padStart(2, '0')
+        val text = remainingMinutes.coerceIn(0L, 99L).toString()
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
             textAlign = Paint.Align.CENTER

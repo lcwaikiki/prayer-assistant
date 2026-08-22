@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../l10n/l10n.dart';
+import '../../l10n/prayer_names.dart';
 import '../../services/local_database.dart';
+
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
@@ -631,10 +633,22 @@ class _CalendarReminderFormScreenState
                   .map(
                     (key) => DropdownMenuItem(
                       value: key,
-                      child: Text(l10n.prayerNameLabel(key)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            iconForPrayer(key),
+                            size: 18,
+                            color: colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(l10n.prayerNameLabel(key)),
+                        ],
+                      ),
                     ),
                   )
                   .toList(),
+
               onChanged: (value) {
                 if (value != null) {
                   setState(() => _anchorPrayerName = value);

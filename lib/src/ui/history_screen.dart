@@ -6,7 +6,9 @@ import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
+import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
+
 import '../utils/time_utils.dart';
 
 const double _dateColWidth = 66;
@@ -573,15 +575,32 @@ class _StickyHeaderRow extends StatelessWidget {
   final double timeColWidth;
   final double hijriColWidth;
 
-  Widget _headerCell(String text, double width, TextStyle? style) {
+  Widget _headerCell(String text, double width, TextStyle? style, {String? prayerKey}) {
+    final color = style?.color;
     return SizedBox(
       width: width,
-      child: Text(
-        text,
-        style: style,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (prayerKey != null) ...[
+            Icon(
+              iconForPrayer(prayerKey),
+              size: 13,
+              color: color,
+            ),
+            const SizedBox(width: 3),
+          ],
+          Flexible(
+            child: Text(
+              text,
+              style: style,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -595,15 +614,16 @@ class _StickyHeaderRow extends StatelessWidget {
       child: Row(
         children: [
           _headerCell(l10n.dateHeader, dateColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Imsak'), timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Gunes'), timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Ogle'), timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Ikindi'), timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Aksam'), timeColWidth, style),
-          _headerCell(l10n.prayerNameLabel('Yatsi'), timeColWidth, style),
+          _headerCell(l10n.prayerNameLabel('Imsak'), timeColWidth, style, prayerKey: 'Imsak'),
+          _headerCell(l10n.prayerNameLabel('Gunes'), timeColWidth, style, prayerKey: 'Gunes'),
+          _headerCell(l10n.prayerNameLabel('Ogle'), timeColWidth, style, prayerKey: 'Ogle'),
+          _headerCell(l10n.prayerNameLabel('Ikindi'), timeColWidth, style, prayerKey: 'Ikindi'),
+          _headerCell(l10n.prayerNameLabel('Aksam'), timeColWidth, style, prayerKey: 'Aksam'),
+          _headerCell(l10n.prayerNameLabel('Yatsi'), timeColWidth, style, prayerKey: 'Yatsi'),
           _headerCell(l10n.hijriHeader, hijriColWidth, style),
         ],
       ),
     );
   }
+
 }

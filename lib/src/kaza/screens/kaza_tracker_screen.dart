@@ -20,13 +20,15 @@ class KazaTrackerScreen extends StatelessWidget {
     final locale = Localizations.localeOf(context).toString();
 
     final prayers = [
-      (context.l10n.prayerNameLabel('Imsak'), Icons.wb_twilight, 'fajr'),
-      (context.l10n.prayerNameLabel('Ogle'), Icons.wb_sunny_outlined, 'dhuhr'),
-      (context.l10n.prayerNameLabel('Ikindi'), Icons.wb_sunny, 'asr'),
-      (context.l10n.prayerNameLabel('Aksam'), Icons.nights_stay_outlined, 'maghrib'),
-      (context.l10n.prayerNameLabel('Yatsi'), Icons.nights_stay, 'isha'),
-      (context.l10n.kazaWitrLabel, Icons.star_outline, 'witr'),
+      (context.l10n.prayerNameLabel('Imsak'), iconForPrayer('Imsak'), 'fajr'),
+      (context.l10n.prayerNameLabel('Ogle'), iconForPrayer('Ogle'), 'dhuhr'),
+      (context.l10n.prayerNameLabel('Ikindi'), iconForPrayer('Ikindi'), 'asr'),
+      (context.l10n.prayerNameLabel('Aksam'), iconForPrayer('Aksam'), 'maghrib'),
+      (context.l10n.prayerNameLabel('Yatsi'), iconForPrayer('Yatsi'), 'isha'),
+      (context.l10n.kazaWitrLabel, iconForPrayer('Witr'), 'witr'),
+
     ];
+
 
 
     final estDate = tracker.estimatedCompletionDate();

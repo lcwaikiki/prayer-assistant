@@ -10,6 +10,8 @@ import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
+import '../l10n/prayer_names.dart';
+
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
 import '../supplications/screens/supplications_screen.dart';
@@ -382,15 +384,29 @@ class _CompactPrayerRow extends StatelessWidget {
         ),
       ),
 
-      title: Text(
-        context.l10n.prayerNameLabel(name),
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-          color: isCompleted
-              ? Colors.green.shade700
-              : (isNext ? colorScheme.onPrimaryContainer : null),
-        ),
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            iconForPrayer(name),
+            size: 18,
+            color: isCompleted
+                ? Colors.green.shade700
+                : (isNext ? colorScheme.onPrimaryContainer : colorScheme.primary),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            context.l10n.prayerNameLabel(name),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+              color: isCompleted
+                  ? Colors.green.shade700
+                  : (isNext ? colorScheme.onPrimaryContainer : null),
+            ),
+          ),
+        ],
       ),
+
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

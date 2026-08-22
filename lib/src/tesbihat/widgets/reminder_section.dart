@@ -613,12 +613,24 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
                   .map(
                     (key) => DropdownMenuItem(
                       value: key,
-                      child: Text(
-                        AppLocalizations.of(context)!.prayerNameLabel(key),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            iconForPrayer(key),
+                            size: 18,
+                            color: colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            AppLocalizations.of(context)!.prayerNameLabel(key),
+                          ),
+                        ],
                       ),
                     ),
                   )
                   .toList(),
+
               onChanged: (value) {
                 if (value != null) {
                   _mutate(() => _prayerName = value);

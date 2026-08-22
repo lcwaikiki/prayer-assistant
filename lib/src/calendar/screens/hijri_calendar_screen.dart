@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
+import '../../l10n/prayer_names.dart';
 import '../../models/prayer_models.dart';
+
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
@@ -624,12 +626,19 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
                         if (entry.$1 > 0) const Divider(height: 8),
                         Row(
                           children: [
+                            Icon(
+                              iconForPrayer(entry.$2),
+                              size: 16,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Text(
                                 context.l10n.prayerNameLabel(entry.$2),
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ),
+
                             Text(
                               prayerMapForDay(day)[entry.$2] ?? '--:--',
                               style: Theme.of(context).textTheme.titleMedium

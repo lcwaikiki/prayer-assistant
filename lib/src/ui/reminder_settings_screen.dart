@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
+import '../l10n/prayer_names.dart';
+
 
 class ReminderSettingsScreen extends StatefulWidget {
   const ReminderSettingsScreen({required this.prayerName, super.key});
@@ -181,10 +183,21 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          context.l10n.reminderTypeTitle,
-                          style: Theme.of(context).textTheme.titleMedium,
+                        Row(
+                          children: [
+                            Icon(
+                              iconForPrayer(widget.prayerName),
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 22,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              context.l10n.reminderTypeTitle,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ],
                         ),
+
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 8,

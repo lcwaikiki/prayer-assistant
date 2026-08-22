@@ -202,6 +202,7 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.prayerNameLabel('Imsak'),
                                   _fajrController,
+                                  'Imsak',
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -210,6 +211,7 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.prayerNameLabel('Ogle'),
                                   _dhuhrController,
+                                  'Ogle',
                                 ),
                               ),
                             ],
@@ -222,6 +224,7 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.prayerNameLabel('Ikindi'),
                                   _asrController,
+                                  'Ikindi',
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -230,6 +233,7 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.prayerNameLabel('Aksam'),
                                   _maghribController,
+                                  'Aksam',
                                 ),
                               ),
                             ],
@@ -242,6 +246,7 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.prayerNameLabel('Yatsi'),
                                   _ishaController,
+                                  'Yatsi',
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -250,10 +255,12 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
                                   context,
                                   context.l10n.kazaWitrLabel,
                                   _witrController,
+                                  'Witr',
                                 ),
                               ),
                             ],
                           ),
+
 
                         ],
                       ),
@@ -295,16 +302,24 @@ class _KazaCalculatorDialogState extends State<KazaCalculatorDialog>
     BuildContext context,
     String label,
     TextEditingController controller,
+    String prayerKey,
   ) {
+    final colorScheme = Theme.of(context).colorScheme;
     return TextField(
       controller: controller,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: label,
+        prefixIcon: Icon(
+          iconForPrayer(prayerKey),
+          size: 16,
+          color: colorScheme.primary,
+        ),
         isDense: true,
         border: const OutlineInputBorder(),
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       ),
     );
   }
+
 }

@@ -104,7 +104,6 @@
       "minutes": {}
     }
   },
-
   "remindersOnOffTitle": "Hatırlatıcılar açık/kapalı",
   "remindersOnOffSubtitle": "Namaz hatırlatıcı bildirimlerini aç veya kapat. Vakit ayarların korunur.",
   "reminderVibrationTitle": "Hatırlatmada titreşim",
@@ -194,20 +193,73 @@
   "calendarReminderDeleted": "\"{title}\" silindi",
   "verseOfTheDay": "Günün Ayeti",
   "hadithOfTheDay": "Günün Hadisi",
-  "hisnAlMuslimTitle": "Hısnü'l-Müslim (Dualar)",
-  "morningAdhkar": "Sabah Duaları",
-  "eveningAdhkar": "Akşam Duaları",
+  "hisnAlMuslimTitle": "Hısnü'l-Müslim",
+  "morningAdhkar": "Sabah Zikirleri",
+  "eveningAdhkar": "Akşam Zikirleri",
   "afterPrayerAdhkar": "Namaz Sonrası",
-  "sleepingAdhkar": "Uyku Öncesi",
+  "sleepingAdhkar": "Uyku Öncesi Zikirler",
   "dailyLifeDuas": "Günlük Dualar",
   "shareWisdom": "Paylaş",
   "copyText": "Kopyala",
   "copiedToClipboard": "Panoya kopyalandı",
-  "searchSupplicationsHint": "Dua ara...",
+  "searchSupplicationsHint": "Dua ve zikirlerde ara...",
   "noSupplicationsFound": "Dua bulunamadı",
   "completed": "Tamamlandı",
-  "tapToCount": "Sarmak için dokun",
-  "tabAll": "Tümü"
+  "tapToCount": "Saymak için dokunun",
+  "tabAll": "Tümü",
+  "kazaTitle": "Kaza",
+  "kazaSubtitle": "Kaza namazlarınızı hesaplayın ve takip edin",
+  "kazaCalculatorWizard": "Hesaplayıcı",
+  "kazaBatchLogDay": "+1 Gün Tamamla",
+  "kazaBatchLogDayTooltip": "6 namazın tümü için tamamlanan sayısını 1 artırır",
+  "kazaTotalRemaining": "Toplam Kalan",
+  "kazaCompletedProgress": "{completed} / {target} tamamlandı",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Tahmini Bitiş: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "Tüm kaza namazları tamamlandı! 🎉",
+  "kazaDailyPaceLabel": "Günlük Hedef",
+  "kazaDailyPaceValue": "Günde {count} vakit",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Günlük Hedef Belirle",
+  "kazaSetPaceDialogSubtitle": "Günde kaç vakit kaza namazı kılıyorsunuz?",
+  "kazaCalculatorTitle": "Kaza Hesaplama Sihirbazı",
+  "kazaCalculateByYears": "Süreye Göre",
+  "kazaCalculateManual": "Manuel Hedefler",
+  "kazaYearsMissed": "Kılınmayan Yıl Sayısı",
+  "kazaMonthsMissed": "İlave Ay Sayısı",
+  "kazaCalculateButton": "Hedefleri Kaydet",
+  "kazaWitrLabel": "Vitir",
+  "kazaRemainingCount": "{count} kalan",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} Tamamlanan Sayısı",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= Her vakit için {days} gün (Toplam {total} namaz)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

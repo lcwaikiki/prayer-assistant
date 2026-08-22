@@ -83,7 +83,8 @@ void main() {
 
     expect(harness.controller.error, isNull);
     expect(harness.controller.selectedLocation!.districtId, '541');
-    expect(harness.controller.tabIndex, 1);
+    expect(harness.controller.tabIndex, 2);
+
     verify(() => harness.database.saveSelectedLocation(any())).called(1);
 
     await tester.pumpWidget(const SizedBox());

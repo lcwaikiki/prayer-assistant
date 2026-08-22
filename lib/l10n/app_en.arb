@@ -144,7 +144,6 @@
       "minutes": {}
     }
   },
-
   "remindersOnOffTitle": "Reminders on/off",
   "remindersOnOffSubtitle": "Turn prayer reminder notifications on or off. Per-prayer settings are kept.",
   "reminderVibrationTitle": "Vibrate on reminder",
@@ -262,7 +261,60 @@
   "noSupplicationsFound": "No supplications found",
   "completed": "Completed",
   "tapToCount": "Tap to count",
-  "tabAll": "All"
+  "tabAll": "All",
+  "kazaTitle": "Qadaa",
+  "kazaSubtitle": "Track and make up missed past prayers",
+  "kazaCalculatorWizard": "Calculator",
+  "kazaBatchLogDay": "+1 Full Day",
+  "kazaBatchLogDayTooltip": "Increment 1 completed count for all 6 prayers",
+  "kazaTotalRemaining": "Total Remaining",
+  "kazaCompletedProgress": "{completed} / {target} completed",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Est. Completion: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "All missed prayers completed! 🎉",
+  "kazaDailyPaceLabel": "Daily Pace",
+  "kazaDailyPaceValue": "{count} prayers / day",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Set Daily Pace",
+  "kazaSetPaceDialogSubtitle": "How many missed prayers do you make up each day?",
+  "kazaCalculatorTitle": "Missed Prayers Calculator",
+  "kazaCalculateByYears": "Missed Time",
+  "kazaCalculateManual": "Manual Targets",
+  "kazaYearsMissed": "Years Missed",
+  "kazaMonthsMissed": "Additional Months",
+  "kazaCalculateButton": "Set Targets",
+  "kazaWitrLabel": "Witr",
+  "kazaRemainingCount": "{count} remaining",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} Completed Count",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} days per prayer ({total} total prayers)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../kaza/screens/kaza_tracker_screen.dart';
 import '../l10n/l10n.dart';
 import '../l10n/locale_options.dart';
 import '../models/prayer_models.dart';
@@ -47,7 +48,9 @@ class PreferencesScreen extends StatelessWidget {
                   ),
                 ],
               ),
+
               const SizedBox(height: 12),
+
               _PreferenceSection(
                 title: context.l10n.languageTitle,
                 subtitle: controller.localePreference.nativeLabel(

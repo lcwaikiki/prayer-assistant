@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/services/calendar_reminder_service.dart';
+import '../kaza/models/kaza_tracker.dart';
 import '../../l10n/app_localizations.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
@@ -36,7 +37,8 @@ class PrayerAppController extends ChangeNotifier {
   bool _isInitializing = true;
   bool _isBusy = false;
   String? _error;
-  int _tabIndex = 1;
+  int _tabIndex = 2;
+
 
   List<LocationNode> _countries = const <LocationNode>[];
   List<LocationNode> _states = const <LocationNode>[];
@@ -60,6 +62,8 @@ class PrayerAppController extends ChangeNotifier {
   CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
   bool _showSecondaryCalendarDate = true;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
+  KazaTracker _kazaTracker = const KazaTracker();
+
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -111,8 +115,118 @@ class PrayerAppController extends ChangeNotifier {
   bool get showSecondaryCalendarDate => _showSecondaryCalendarDate;
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
+  KazaTracker get kazaTracker => _kazaTracker;
+
+  void updateKazaTracker(KazaTracker tracker) {
+    _kazaTracker = tracker;
+    database.saveKazaTracker(tracker);
+    notifyListeners();
+  }
+
+  void incrementKaza(String prayerKey, [int amount = 1]) {
+    final key = prayerKey.toLowerCase();
+    KazaTracker updated;
+    switch (key) {
+      case 'fajr':
+      case 'imsak':
+        updated = _kazaTracker.copyWith(
+          fajrCompleted: _kazaTracker.fajrCompleted + amount,
+        );
+        break;
+      case 'dhuhr':
+      case 'ogle':
+        updated = _kazaTracker.copyWith(
+          dhuhrCompleted: _kazaTracker.dhuhrCompleted + amount,
+        );
+        break;
+      case 'asr':
+      case 'ikindi':
+        updated = _kazaTracker.copyWith(
+          asrCompleted: _kazaTracker.asrCompleted + amount,
+        );
+        break;
+      case 'maghrib':
+      case 'aksam':
+        updated = _kazaTracker.copyWith(
+          maghribCompleted: _kazaTracker.maghribCompleted + amount,
+        );
+        break;
+      case 'isha':
+      case 'yatsi':
+        updated = _kazaTracker.copyWith(
+          ishaCompleted: _kazaTracker.ishaCompleted + amount,
+        );
+        break;
+      case 'witr':
+        updated = _kazaTracker.copyWith(
+          witrCompleted: _kazaTracker.witrCompleted + amount,
+        );
+        break;
+      default:
+        return;
+    }
+    updateKazaTracker(updated);
+  }
+
+  void decrementKaza(String prayerKey, [int amount = 1]) {
+    final key = prayerKey.toLowerCase();
+    KazaTracker updated;
+    switch (key) {
+      case 'fajr':
+      case 'imsak':
+        updated = _kazaTracker.copyWith(
+          fajrCompleted: (_kazaTracker.fajrCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      case 'dhuhr':
+      case 'ogle':
+        updated = _kazaTracker.copyWith(
+          dhuhrCompleted: (_kazaTracker.dhuhrCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      case 'asr':
+      case 'ikindi':
+        updated = _kazaTracker.copyWith(
+          asrCompleted: (_kazaTracker.asrCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      case 'maghrib':
+      case 'aksam':
+        updated = _kazaTracker.copyWith(
+          maghribCompleted: (_kazaTracker.maghribCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      case 'isha':
+      case 'yatsi':
+        updated = _kazaTracker.copyWith(
+          ishaCompleted: (_kazaTracker.ishaCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      case 'witr':
+        updated = _kazaTracker.copyWith(
+          witrCompleted: (_kazaTracker.witrCompleted - amount).clamp(0, 999999),
+        );
+        break;
+      default:
+        return;
+    }
+    updateKazaTracker(updated);
+  }
+
+  void logFullDayKaza() {
+    final updated = _kazaTracker.copyWith(
+      fajrCompleted: _kazaTracker.fajrCompleted + 1,
+      dhuhrCompleted: _kazaTracker.dhuhrCompleted + 1,
+      asrCompleted: _kazaTracker.asrCompleted + 1,
+      maghribCompleted: _kazaTracker.maghribCompleted + 1,
+      ishaCompleted: _kazaTracker.ishaCompleted + 1,
+      witrCompleted: _kazaTracker.witrCompleted + 1,
+    );
+    updateKazaTracker(updated);
+  }
 
   bool isPrayerCompleted(String prayerName, DateTime date) {
+
     final key = _toDateKey(date);
     return _prayerCompletions[key]?.contains(prayerName) ?? false;
   }
@@ -156,6 +270,8 @@ class PrayerAppController extends ChangeNotifier {
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
       _prayerCompletions = await database.loadPrayerCompletions();
+      _kazaTracker = await database.loadKazaTracker();
+
       _reminderSettings = {
         for (final entry in _reminderSettings.entries)
           entry.key: ReminderSetting.ensureCurrent(entry.value),
@@ -322,8 +438,9 @@ class PrayerAppController extends ChangeNotifier {
       await database.saveSelectedLocation(selected);
       _selectedLocation = selected;
       await refreshPrayerData(forceSync: true);
-      _tabIndex = 1;
+      _tabIndex = 2;
       _error = null;
+
     } catch (e) {
       _error = e.toString();
     } finally {

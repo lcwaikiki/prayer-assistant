@@ -574,28 +574,28 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get verseOfTheDay => '今日のクルアーン節';
+  String get verseOfTheDay => '今日のクルアーン';
 
   @override
-  String get hadithOfTheDay => '今日のハディース';
+  String get hadithOfTheDay => 'ハディースの言葉';
 
   @override
-  String get hisnAlMuslimTitle => 'ムスリムの砦 (祈り・ズィクル)';
+  String get hisnAlMuslimTitle => 'ヒスン・アル・ムスリム';
 
   @override
-  String get morningAdhkar => '朝のズィクル';
+  String get morningAdhkar => '朝のメインの祈り';
 
   @override
-  String get eveningAdhkar => '夕方のズィクル';
+  String get eveningAdhkar => '夕方の祈り';
 
   @override
-  String get afterPrayerAdhkar => '礼拝後のズィクル';
+  String get afterPrayerAdhkar => '礼拝後の祈り';
 
   @override
   String get sleepingAdhkar => '就寝前の祈り';
 
   @override
-  String get dailyLifeDuas => '日常の祈り';
+  String get dailyLifeDuas => '日常のデュアー';
 
   @override
   String get shareWisdom => '共有';
@@ -607,17 +607,98 @@ class AppLocalizationsJa extends AppLocalizations {
   String get copiedToClipboard => 'クリップボードにコピーしました';
 
   @override
-  String get searchSupplicationsHint => '祈りを検索...';
+  String get searchSupplicationsHint => 'デュアーを検索...';
 
   @override
-  String get noSupplicationsFound => '祈りが見つかりません';
+  String get noSupplicationsFound => '該当するデュアーが見つかりません';
 
   @override
   String get completed => '完了';
 
   @override
-  String get tapToCount => 'タップして数える';
+  String get tapToCount => 'タップしてカウント';
 
   @override
   String get tabAll => 'すべて';
+
+  @override
+  String get kazaTitle => 'カザー';
+
+  @override
+  String get kazaSubtitle => '過去の未実施のお祈りを記録・補填';
+
+  @override
+  String get kazaCalculatorWizard => '計算機';
+
+  @override
+  String get kazaBatchLogDay => '+1日分完了';
+
+  @override
+  String get kazaBatchLogDayTooltip => '6つのお祈りすべてを1回分追加';
+
+  @override
+  String get kazaTotalRemaining => '残り合計';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$target回中$completed回完了';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return '完了予定日: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished => 'すべてのカザーが完了しました！🎉';
+
+  @override
+  String get kazaDailyPaceLabel => '1日の目標ペース';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '1日$count回';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => '1日のペースを設定';
+
+  @override
+  String get kazaSetPaceDialogSubtitle => '1日に何回分のカザーを行いますか？';
+
+  @override
+  String get kazaCalculatorTitle => 'カザー計算ウィザード';
+
+  @override
+  String get kazaCalculateByYears => '期間指定';
+
+  @override
+  String get kazaCalculateManual => '手動設定';
+
+  @override
+  String get kazaYearsMissed => '未実施の年数';
+
+  @override
+  String get kazaMonthsMissed => '追加の月数';
+
+  @override
+  String get kazaCalculateButton => '目標を設定';
+
+  @override
+  String get kazaWitrLabel => 'ウィトル';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '残り$count回';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return '$nameの完了回数';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= お祈り1つあたり$days日分（合計$total回）';
+  }
 }

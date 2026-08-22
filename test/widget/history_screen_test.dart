@@ -131,6 +131,8 @@ void main() {
       ),
     );
     await harness.initialize();
+    harness.controller.setTab(3);
+
 
     await pumpWithHarness(
       tester,

@@ -594,28 +594,28 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get verseOfTheDay => 'Versículo del día';
+  String get verseOfTheDay => 'Versículo del Día';
 
   @override
-  String get hadithOfTheDay => 'Hadiz del día';
+  String get hadithOfTheDay => 'Hadiz del Día';
 
   @override
-  String get hisnAlMuslimTitle => 'Hisn al-Muslim (Súplicas)';
+  String get hisnAlMuslimTitle => 'Hisn al-Muslim';
 
   @override
-  String get morningAdhkar => 'Adhkar de la mañana';
+  String get morningAdhkar => 'Adhkar de la Mañana';
 
   @override
-  String get eveningAdhkar => 'Adhkar de la tarde';
+  String get eveningAdhkar => 'Adhkar de la Tarde';
 
   @override
-  String get afterPrayerAdhkar => 'Tras la oración';
+  String get afterPrayerAdhkar => 'Después de la Oración';
 
   @override
-  String get sleepingAdhkar => 'Antes de dormir';
+  String get sleepingAdhkar => 'Antes de Dormir';
 
   @override
-  String get dailyLifeDuas => 'Súplicas cotidianas';
+  String get dailyLifeDuas => 'Súplicas Diarias';
 
   @override
   String get shareWisdom => 'Compartir';
@@ -640,4 +640,87 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tabAll => 'Todos';
+
+  @override
+  String get kazaTitle => 'Qadaa';
+
+  @override
+  String get kazaSubtitle => 'Rastrea y recupera las oraciones pasadas';
+
+  @override
+  String get kazaCalculatorWizard => 'Calculadora';
+
+  @override
+  String get kazaBatchLogDay => '+1 Día Completo';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'Incrementa en 1 todas las 6 oraciones';
+
+  @override
+  String get kazaTotalRemaining => 'Total Restante';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target completadas';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Est. Finalización: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      '¡Todas las oraciones Kaza completadas! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Ritmo Diario';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count oraciones / día';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Establecer Ritmo Diario';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      '¿Cuántas oraciones Kaza realizas al día?';
+
+  @override
+  String get kazaCalculatorTitle => 'Calculadora de Oraciones Kaza';
+
+  @override
+  String get kazaCalculateByYears => 'Por Tiempo';
+
+  @override
+  String get kazaCalculateManual => 'Valores Manuales';
+
+  @override
+  String get kazaYearsMissed => 'Años Perdidos';
+
+  @override
+  String get kazaMonthsMissed => 'Meses Adicionales';
+
+  @override
+  String get kazaCalculateButton => 'Establecer Metas';
+
+  @override
+  String get kazaWitrLabel => 'Witr';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count restantes';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'Cantidad realizada de $name';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days días por oración ($total oraciones en total)';
+  }
 }

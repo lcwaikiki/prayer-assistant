@@ -574,13 +574,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get verseOfTheDay => '每日经文';
+  String get verseOfTheDay => '今日节文';
 
   @override
-  String get hadithOfTheDay => '每日圣训';
+  String get hadithOfTheDay => '今日圣训';
 
   @override
-  String get hisnAlMuslimTitle => '穆斯林的堡垒 (祈祷与赞词)';
+  String get hisnAlMuslimTitle => '穆斯林的堡垒';
 
   @override
   String get morningAdhkar => '晨间赞词';
@@ -592,10 +592,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get afterPrayerAdhkar => '拜后赞词';
 
   @override
-  String get sleepingAdhkar => '睡前祈祷';
+  String get sleepingAdhkar => '睡前赞词';
 
   @override
-  String get dailyLifeDuas => '日常祈祷';
+  String get dailyLifeDuas => '日常祈祷词';
 
   @override
   String get shareWisdom => '分享';
@@ -607,17 +607,98 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copiedToClipboard => '已复制到剪贴板';
 
   @override
-  String get searchSupplicationsHint => '搜索祈祷...';
+  String get searchSupplicationsHint => '搜索祈祷词...';
 
   @override
-  String get noSupplicationsFound => '未找到祈祷';
+  String get noSupplicationsFound => '未找到相关祈祷词';
 
   @override
   String get completed => '已完成';
 
   @override
-  String get tapToCount => '点击计数';
+  String get tapToCount => '轻按以计数';
 
   @override
   String get tabAll => '全部';
+
+  @override
+  String get kazaTitle => '补礼';
+
+  @override
+  String get kazaSubtitle => '计算并追踪主命拜功补礼';
+
+  @override
+  String get kazaCalculatorWizard => '计算器';
+
+  @override
+  String get kazaBatchLogDay => '+1 整天';
+
+  @override
+  String get kazaBatchLogDayTooltip => '为所有 6 次拜功增加 1 次';
+
+  @override
+  String get kazaTotalRemaining => '剩余总计';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '已完成 $completed / $target';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return '预计完成日期：$date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished => '已补完所有卡扎拜功！🎉';
+
+  @override
+  String get kazaDailyPaceLabel => '每日速度';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '每天 $count 次';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => '设置每日速度';
+
+  @override
+  String get kazaSetPaceDialogSubtitle => '您每天补多少次卡扎拜功？';
+
+  @override
+  String get kazaCalculatorTitle => '补礼计算器';
+
+  @override
+  String get kazaCalculateByYears => '按时长';
+
+  @override
+  String get kazaCalculateManual => '手动设置';
+
+  @override
+  String get kazaYearsMissed => '遗漏年数';
+
+  @override
+  String get kazaMonthsMissed => '额外月数';
+
+  @override
+  String get kazaCalculateButton => '设置目标';
+
+  @override
+  String get kazaWitrLabel => '奇数拜';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '还剩 $count 次';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return '$name 完成次数';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= 每次拜功 $days 天（共计 $total 次拜功）';
+  }
 }

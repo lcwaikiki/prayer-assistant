@@ -81,10 +81,11 @@ void main() {
 
     await tester.tap(find.text('Widget text size'));
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(ListView), const Offset(0, -200));
+    await tester.ensureVisible(find.text('Large'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Large'));
     await tester.pumpAndSettle();
+
 
     expect(harness.controller.widgetTextSize, WidgetTextSize.large);
     verify(() => harness.widgetBridge.updateWidgetTextSize('large')).called(1);

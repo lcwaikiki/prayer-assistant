@@ -28,11 +28,14 @@ Visual dashboard and insights into prayer completion habits.
 - [ ] Monthly prayer completion heatmap grid
 - [ ] Completion rate breakdown by prayer (Fajr, Dhuhr, Asr, Maghrib, Isha)
 
-## 5. Kaza (Qadaa) Missed Prayer Calculator & Tracker
+## 5. Kaza (Qadaa) Missed Prayer Calculator & Tracker [DONE]
 Track missed past prayers that need to be made up.
-- [ ] Counter per prayer (Fajr, Dhuhr, Asr, Maghrib, Isha, Witr)
-- [ ] Increment / decrement completion counts
-- [ ] Estimated completion date calculation based on daily pace
+- [x] Counter per prayer (Fajr, Dhuhr, Asr, Maghrib, Isha, Witr)
+- [x] Increment / decrement completion counts
+- [x] Estimated completion date calculation based on daily pace
+- [x] Dedicated bottom navigation tab (placed directly left of Today)
+
+
 
 ## 6. Ramadan & Voluntary Fasting (Sawm) Assistant
 Support for Ramadan and Sunnah fasts throughout the year.

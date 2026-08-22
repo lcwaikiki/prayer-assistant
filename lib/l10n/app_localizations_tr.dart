@@ -598,19 +598,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get hadithOfTheDay => 'Günün Hadisi';
 
   @override
-  String get hisnAlMuslimTitle => 'Hısnü\'l-Müslim (Dualar)';
+  String get hisnAlMuslimTitle => 'Hısnü\'l-Müslim';
 
   @override
-  String get morningAdhkar => 'Sabah Duaları';
+  String get morningAdhkar => 'Sabah Zikirleri';
 
   @override
-  String get eveningAdhkar => 'Akşam Duaları';
+  String get eveningAdhkar => 'Akşam Zikirleri';
 
   @override
   String get afterPrayerAdhkar => 'Namaz Sonrası';
 
   @override
-  String get sleepingAdhkar => 'Uyku Öncesi';
+  String get sleepingAdhkar => 'Uyku Öncesi Zikirler';
 
   @override
   String get dailyLifeDuas => 'Günlük Dualar';
@@ -625,7 +625,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get copiedToClipboard => 'Panoya kopyalandı';
 
   @override
-  String get searchSupplicationsHint => 'Dua ara...';
+  String get searchSupplicationsHint => 'Dua ve zikirlerde ara...';
 
   @override
   String get noSupplicationsFound => 'Dua bulunamadı';
@@ -634,8 +634,92 @@ class AppLocalizationsTr extends AppLocalizations {
   String get completed => 'Tamamlandı';
 
   @override
-  String get tapToCount => 'Sarmak için dokun';
+  String get tapToCount => 'Saymak için dokunun';
 
   @override
   String get tabAll => 'Tümü';
+
+  @override
+  String get kazaTitle => 'Kaza';
+
+  @override
+  String get kazaSubtitle => 'Kaza namazlarınızı hesaplayın ve takip edin';
+
+  @override
+  String get kazaCalculatorWizard => 'Hesaplayıcı';
+
+  @override
+  String get kazaBatchLogDay => '+1 Gün Tamamla';
+
+  @override
+  String get kazaBatchLogDayTooltip =>
+      '6 namazın tümü için tamamlanan sayısını 1 artırır';
+
+  @override
+  String get kazaTotalRemaining => 'Toplam Kalan';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target tamamlandı';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Tahmini Bitiş: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'Tüm kaza namazları tamamlandı! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Günlük Hedef';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return 'Günde $count vakit';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Günlük Hedef Belirle';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'Günde kaç vakit kaza namazı kılıyorsunuz?';
+
+  @override
+  String get kazaCalculatorTitle => 'Kaza Hesaplama Sihirbazı';
+
+  @override
+  String get kazaCalculateByYears => 'Süreye Göre';
+
+  @override
+  String get kazaCalculateManual => 'Manuel Hedefler';
+
+  @override
+  String get kazaYearsMissed => 'Kılınmayan Yıl Sayısı';
+
+  @override
+  String get kazaMonthsMissed => 'İlave Ay Sayısı';
+
+  @override
+  String get kazaCalculateButton => 'Hedefleri Kaydet';
+
+  @override
+  String get kazaWitrLabel => 'Vitir';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count kalan';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return '$name Tamamlanan Sayısı';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= Her vakit için $days gün (Toplam $total namaz)';
+  }
 }

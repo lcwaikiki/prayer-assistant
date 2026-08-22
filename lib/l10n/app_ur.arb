@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "منسوخ کریں",
   "calendarTabTooltip": "ہجری کیلنڈر",
   "calendarPreviousMonth": "پچھلا مہینہ",
@@ -194,7 +193,7 @@
   "calendarReminderDeleted": "\"{title}\" حذف ہوگیا",
   "verseOfTheDay": "آج کی آیت",
   "hadithOfTheDay": "آج کی حدیث",
-  "hisnAlMuslimTitle": "حصن المسلم (اذکار و ادعیہ)",
+  "hisnAlMuslimTitle": "حصن المسلم",
   "morningAdhkar": "صبح کے اذکار",
   "eveningAdhkar": "شام کے اذکار",
   "afterPrayerAdhkar": "نماز کے بعد کے اذکار",
@@ -203,11 +202,64 @@
   "shareWisdom": "شیئر کریں",
   "copyText": "کاپی کریں",
   "copiedToClipboard": "کلپ بورڈ پر کاپی ہو گیا",
-  "searchSupplicationsHint": "دعائیں تلاش کریں...",
+  "searchSupplicationsHint": "دعاؤں میں تلاش کریں...",
   "noSupplicationsFound": "کوئی دعا نہیں ملی",
   "completed": "مکمل",
-  "tapToCount": "شمار کرنے کے لیے ٹیپ کریں",
-  "tabAll": "تمام"
+  "tapToCount": "گننے کے لیے ٹیپ کریں",
+  "tabAll": "تمام",
+  "kazaTitle": "قضاء",
+  "kazaSubtitle": "قضاء نمازوں کا حساب اور اندراج کریں",
+  "kazaCalculatorWizard": "حساب کار",
+  "kazaBatchLogDay": "+1 مکمل دن",
+  "kazaBatchLogDayTooltip": "تمام 6 نمازوں میں 1 کا اضافہ کریں",
+  "kazaTotalRemaining": "کل باقی",
+  "kazaCompletedProgress": "{completed} / {target} مکمل",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "تخمینی تکمیل: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "تمام قضاء نمازیں مکمل ہو گئیں! 🎉",
+  "kazaDailyPaceLabel": "روزانہ کی رفتار",
+  "kazaDailyPaceValue": "روزانہ {count} نمازیں",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "روزانہ کی رفتار مقرر کریں",
+  "kazaSetPaceDialogSubtitle": "آپ روزانہ کتنی قضاء نمازیں پڑھتے ہیں؟",
+  "kazaCalculatorTitle": "قضاء نمازوں کا حساب کار",
+  "kazaCalculateByYears": "وقت کے حساب سے",
+  "kazaCalculateManual": "دستی اندراج",
+  "kazaYearsMissed": "چھوٹے ہوئے سال",
+  "kazaMonthsMissed": "مزید مہینے",
+  "kazaCalculateButton": "محفوظ کریں",
+  "kazaWitrLabel": "وتر",
+  "kazaRemainingCount": "{count} باقی",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} مکمل شدہ تعداد",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= ہر نماز کے {days} دن (کل {total} نمازیں)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

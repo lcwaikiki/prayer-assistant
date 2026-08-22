@@ -637,4 +637,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabAll => 'All';
+
+  @override
+  String get kazaTitle => 'Qadaa';
+
+  @override
+  String get kazaSubtitle => 'Track and make up missed past prayers';
+
+  @override
+  String get kazaCalculatorWizard => 'Calculator';
+
+  @override
+  String get kazaBatchLogDay => '+1 Full Day';
+
+  @override
+  String get kazaBatchLogDayTooltip =>
+      'Increment 1 completed count for all 6 prayers';
+
+  @override
+  String get kazaTotalRemaining => 'Total Remaining';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target completed';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Est. Completion: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'All missed prayers completed! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Daily Pace';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count prayers / day';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Set Daily Pace';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'How many missed prayers do you make up each day?';
+
+  @override
+  String get kazaCalculatorTitle => 'Missed Prayers Calculator';
+
+  @override
+  String get kazaCalculateByYears => 'Missed Time';
+
+  @override
+  String get kazaCalculateManual => 'Manual Targets';
+
+  @override
+  String get kazaYearsMissed => 'Years Missed';
+
+  @override
+  String get kazaMonthsMissed => 'Additional Months';
+
+  @override
+  String get kazaCalculateButton => 'Set Targets';
+
+  @override
+  String get kazaWitrLabel => 'Witr';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count remaining';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return '$name Completed Count';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days days per prayer ($total total prayers)';
+  }
 }

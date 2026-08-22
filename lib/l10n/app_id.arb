@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "Batal",
   "calendarTabTooltip": "Kalender Hijriah",
   "calendarPreviousMonth": "Bulan sebelumnya",
@@ -193,12 +192,12 @@
   "undo": "Batalkan",
   "calendarReminderDeleted": "\"{title}\" dihapus",
   "verseOfTheDay": "Ayat Hari Ini",
-  "hadithOfTheDay": "Hadis Hari Ini",
-  "hisnAlMuslimTitle": "Hisnul Muslim (Doa & Dzikir)",
+  "hadithOfTheDay": "Hadits Hari Ini",
+  "hisnAlMuslimTitle": "Hisnul Muslim",
   "morningAdhkar": "Dzikir Pagi",
   "eveningAdhkar": "Dzikir Petang",
-  "afterPrayerAdhkar": "Dzikir Setelah Salat",
-  "sleepingAdhkar": "Sebelum Tidur",
+  "afterPrayerAdhkar": "Dzikir Setelah Shalat",
+  "sleepingAdhkar": "Dzikir Sebelum Tidur",
   "dailyLifeDuas": "Doa Sehari-hari",
   "shareWisdom": "Bagikan",
   "copyText": "Salin",
@@ -207,7 +206,60 @@
   "noSupplicationsFound": "Doa tidak ditemukan",
   "completed": "Selesai",
   "tapToCount": "Ketuk untuk menghitung",
-  "tabAll": "Semua"
+  "tabAll": "Semua",
+  "kazaTitle": "Qadha",
+  "kazaSubtitle": "Lacak dan qadha shalat yang terlewat",
+  "kazaCalculatorWizard": "Kalkulator",
+  "kazaBatchLogDay": "+1 Hari Penuh",
+  "kazaBatchLogDayTooltip": "Tambah 1 hitungan untuk semua 6 shalat",
+  "kazaTotalRemaining": "Total Tersisa",
+  "kazaCompletedProgress": "{completed} / {target} selesai",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Est. Selesai: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "Semua shalat qadha telah selesai! 🎉",
+  "kazaDailyPaceLabel": "Target Harian",
+  "kazaDailyPaceValue": "{count} shalat / hari",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Atur Target Harian",
+  "kazaSetPaceDialogSubtitle": "Berapa banyak shalat qadha yang Anda kerjakan setiap hari?",
+  "kazaCalculatorTitle": "Kalkulator Shalat Qadha",
+  "kazaCalculateByYears": "Berdasarkan Waktu",
+  "kazaCalculateManual": "Target Manual",
+  "kazaYearsMissed": "Jumlah Tahun",
+  "kazaMonthsMissed": "Tambahan Bulan",
+  "kazaCalculateButton": "Simpan Target",
+  "kazaWitrLabel": "Witir",
+  "kazaRemainingCount": "Sisa {count}",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "Jumlah Selesai {name}",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} hari per shalat (Total {total} shalat)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

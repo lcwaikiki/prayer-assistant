@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "Annuler",
   "calendarTabTooltip": "Calendrier hégirien",
   "calendarPreviousMonth": "Mois précédent",
@@ -192,22 +191,75 @@
   "datesCalendarTab": "Calendrier",
   "undo": "Annuler",
   "calendarReminderDeleted": "« {title} » supprimé",
-  "verseOfTheDay": "Verset du jour",
-  "hadithOfTheDay": "Hadith du jour",
-  "hisnAlMuslimTitle": "Hisn al-Muslim (Invocations)",
-  "morningAdhkar": "Invocations du matin",
-  "eveningAdhkar": "Invocations du soir",
-  "afterPrayerAdhkar": "Après la prière",
-  "sleepingAdhkar": "Avant de dormir",
-  "dailyLifeDuas": "Invocations du quotidien",
+  "verseOfTheDay": "Verset du Jour",
+  "hadithOfTheDay": "Hadith du Jour",
+  "hisnAlMuslimTitle": "Hisn al-Muslim",
+  "morningAdhkar": "Invocations du Matin",
+  "eveningAdhkar": "Invocations du Soir",
+  "afterPrayerAdhkar": "Après la Prière",
+  "sleepingAdhkar": "Avant de Dormir",
+  "dailyLifeDuas": "Invocations du Quotidien",
   "shareWisdom": "Partager",
   "copyText": "Copier",
-  "copiedToClipboard": "Copié dans le presse-papiers",
-  "searchSupplicationsHint": "Rechercher une invocation...",
+  "copiedToClipboard": "Copié dans le presse-papier",
+  "searchSupplicationsHint": "Rechercher des invocations...",
   "noSupplicationsFound": "Aucune invocation trouvée",
   "completed": "Terminé",
-  "tapToCount": "Appuyer pour compter",
-  "tabAll": "Tous"
+  "tapToCount": "Appuyez pour compter",
+  "tabAll": "Tous",
+  "kazaTitle": "Qadaa",
+  "kazaSubtitle": "Suivez et rattrapez vos prières manquées",
+  "kazaCalculatorWizard": "Calculateur",
+  "kazaBatchLogDay": "+1 Journée Complète",
+  "kazaBatchLogDayTooltip": "Ajouter 1 à chacune des 6 prières",
+  "kazaTotalRemaining": "Total Restant",
+  "kazaCompletedProgress": "{completed} / {target} effectuées",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Fin estimée: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "Toutes les prières manquées sont rattrapées! 🎉",
+  "kazaDailyPaceLabel": "Rythme Quotidien",
+  "kazaDailyPaceValue": "{count} prières / jour",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Définir le Rythme Quotidien",
+  "kazaSetPaceDialogSubtitle": "Combien de prières manquées rattrapez-vous par jour?",
+  "kazaCalculatorTitle": "Calculateur de Prières Manquées",
+  "kazaCalculateByYears": "Par Durée",
+  "kazaCalculateManual": "Saisie Manuelle",
+  "kazaYearsMissed": "Années Manquées",
+  "kazaMonthsMissed": "Mois Supplémentaires",
+  "kazaCalculateButton": "Définir les Objectifs",
+  "kazaWitrLabel": "Witr",
+  "kazaRemainingCount": "{count} restantes",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "Nombre effectué pour {name}",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} jours par prière ({total} prières au total)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

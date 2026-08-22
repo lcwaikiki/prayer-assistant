@@ -595,10 +595,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get verseOfTheDay => 'Ayat Hari Ini';
 
   @override
-  String get hadithOfTheDay => 'Hadis Hari Ini';
+  String get hadithOfTheDay => 'Hadits Hari Ini';
 
   @override
-  String get hisnAlMuslimTitle => 'Hisnul Muslim (Doa & Dzikir)';
+  String get hisnAlMuslimTitle => 'Hisnul Muslim';
 
   @override
   String get morningAdhkar => 'Dzikir Pagi';
@@ -607,10 +607,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get eveningAdhkar => 'Dzikir Petang';
 
   @override
-  String get afterPrayerAdhkar => 'Dzikir Setelah Salat';
+  String get afterPrayerAdhkar => 'Dzikir Setelah Shalat';
 
   @override
-  String get sleepingAdhkar => 'Sebelum Tidur';
+  String get sleepingAdhkar => 'Dzikir Sebelum Tidur';
 
   @override
   String get dailyLifeDuas => 'Doa Sehari-hari';
@@ -638,4 +638,87 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tabAll => 'Semua';
+
+  @override
+  String get kazaTitle => 'Qadha';
+
+  @override
+  String get kazaSubtitle => 'Lacak dan qadha shalat yang terlewat';
+
+  @override
+  String get kazaCalculatorWizard => 'Kalkulator';
+
+  @override
+  String get kazaBatchLogDay => '+1 Hari Penuh';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'Tambah 1 hitungan untuk semua 6 shalat';
+
+  @override
+  String get kazaTotalRemaining => 'Total Tersisa';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target selesai';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Est. Selesai: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'Semua shalat qadha telah selesai! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Target Harian';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count shalat / hari';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Atur Target Harian';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'Berapa banyak shalat qadha yang Anda kerjakan setiap hari?';
+
+  @override
+  String get kazaCalculatorTitle => 'Kalkulator Shalat Qadha';
+
+  @override
+  String get kazaCalculateByYears => 'Berdasarkan Waktu';
+
+  @override
+  String get kazaCalculateManual => 'Target Manual';
+
+  @override
+  String get kazaYearsMissed => 'Jumlah Tahun';
+
+  @override
+  String get kazaMonthsMissed => 'Tambahan Bulan';
+
+  @override
+  String get kazaCalculateButton => 'Simpan Target';
+
+  @override
+  String get kazaWitrLabel => 'Witir';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return 'Sisa $count';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'Jumlah Selesai $name';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days hari per shalat (Total $total shalat)';
+  }
 }

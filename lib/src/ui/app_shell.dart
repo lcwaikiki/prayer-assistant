@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../kaza/screens/kaza_tracker_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../tesbihat/screens/tesbih_home_screen.dart';
@@ -56,7 +57,7 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _updateOrientation(int tabIndex) {
-    if (tabIndex == 3) {
+    if (tabIndex == 4) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,
@@ -78,6 +79,7 @@ class _AppShellState extends State<AppShell> {
 
         final pages = <Widget>[
           widget.qiblaScreen ?? const QiblaScreen(),
+          const KazaTrackerScreen(),
           const HomeScreen(),
           const HistoryScreen(),
           const TesbihHomeScreen(),
@@ -99,6 +101,11 @@ class _AppShellState extends State<AppShell> {
                 icon: const Icon(Icons.explore_outlined),
                 selectedIcon: const Icon(Icons.explore),
                 label: context.l10n.qiblaTitle,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.history_toggle_off_outlined),
+                selectedIcon: const Icon(Icons.history_toggle_off),
+                label: context.l10n.kazaTitle,
               ),
               NavigationDestination(
                 icon: const Icon(Icons.mosque_outlined),
@@ -129,9 +136,10 @@ class _AppShellState extends State<AppShell> {
   ) {
     final tabTitle = switch (controller.tabIndex) {
       0 => context.l10n.qiblaTitle,
-      1 => context.l10n.tabToday,
-      2 => context.l10n.tabDates,
-      3 => context.l10n.tabTesbih,
+      1 => context.l10n.kazaTitle,
+      2 => context.l10n.tabToday,
+      3 => context.l10n.tabDates,
+      4 => context.l10n.tabTesbih,
       _ => context.l10n.appTitle,
     };
 
@@ -141,7 +149,8 @@ class _AppShellState extends State<AppShell> {
         : context.l10n.remainingMinutesValue(
             next.remaining.inMinutes.clamp(0, 9999),
           );
-    final isHomeTab = controller.tabIndex == 1;
+    final isHomeTab = controller.tabIndex == 2;
+
     final placement = isHomeTab
         ? controller.appBarRemainingPlacement
         : AppBarRemainingPlacement.hidden;

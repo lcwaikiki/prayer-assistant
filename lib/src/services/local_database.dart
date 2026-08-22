@@ -4,6 +4,7 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 
 import '../calendar/models/calendar_reminder.dart';
+import '../kaza/models/kaza_tracker.dart';
 import '../models/prayer_models.dart';
 
 class LocalDatabase {
@@ -21,7 +22,9 @@ class LocalDatabase {
   static const _calendarPrimaryDisplayKey = 'calendar_primary_display';
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
   static const _prayerCompletionsKey = 'prayer_completions';
+  static const _kazaTrackerKey = 'kaza_tracker_data';
   Database? _db;
+
 
   Future<Database> get instance async {
     if (_db != null) {
@@ -615,7 +618,35 @@ class LocalDatabase {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<KazaTracker> loadKazaTracker() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_kazaTrackerKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return const KazaTracker();
+    }
+    try {
+      final jsonStr = rows.first['setting_value'] as String;
+      return KazaTracker.fromJson(jsonStr);
+    } catch (_) {
+      return const KazaTracker();
+    }
+  }
+
+  Future<void> saveKazaTracker(KazaTracker tracker) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _kazaTrackerKey,
+      'setting_value': tracker.toJson(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
   String _toDateKey(DateTime date) {
+
     final safe = DateTime(date.year, date.month, date.day);
     return '${safe.year.toString().padLeft(4, '0')}-'
         '${safe.month.toString().padLeft(2, '0')}-'

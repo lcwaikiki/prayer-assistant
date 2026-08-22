@@ -451,7 +451,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get customMinutesSaved => 'دقیقه سفارشی ذخیره شد.';
 
   @override
-  String get cancel => 'لغو';
+  String get cancel => 'انصراف';
 
   @override
   String get calendarTabTooltip => 'تقویم هجری';
@@ -598,13 +598,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String get hadithOfTheDay => 'حدیث روز';
 
   @override
-  String get hisnAlMuslimTitle => 'حصن المسلم (ادعیه و اذکار)';
+  String get hisnAlMuslimTitle => 'حصن المسلم';
 
   @override
-  String get morningAdhkar => 'اذکار صبحگاه';
+  String get morningAdhkar => 'اذکار صبح';
 
   @override
-  String get eveningAdhkar => 'اذکار شامگاه';
+  String get eveningAdhkar => 'اذکار شب';
 
   @override
   String get afterPrayerAdhkar => 'اذکار بعد از نماز';
@@ -613,7 +613,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get sleepingAdhkar => 'اذکار قبل از خواب';
 
   @override
-  String get dailyLifeDuas => 'دعاهای روزمره';
+  String get dailyLifeDuas => 'دعاهای زندگی روزمره';
 
   @override
   String get shareWisdom => 'اشتراک‌گذاری';
@@ -625,17 +625,98 @@ class AppLocalizationsFa extends AppLocalizations {
   String get copiedToClipboard => 'در حافظه کپی شد';
 
   @override
-  String get searchSupplicationsHint => 'جستجوی دعا...';
+  String get searchSupplicationsHint => 'جستجوی ادعیه...';
 
   @override
-  String get noSupplicationsFound => 'دعایی یافت نشد';
+  String get noSupplicationsFound => 'دعا یافت نشد';
 
   @override
-  String get completed => 'تکمیل شد';
+  String get completed => 'تکمیل شده';
 
   @override
-  String get tapToCount => 'برای شمارش لمس کنید';
+  String get tapToCount => 'برای شمارش ضربه بزنید';
 
   @override
   String get tabAll => 'همه';
+
+  @override
+  String get kazaTitle => 'قضا';
+
+  @override
+  String get kazaSubtitle => 'محاسبه و پیگیری نمازهای قضای گذشته';
+
+  @override
+  String get kazaCalculatorWizard => 'محاسبه‌گر';
+
+  @override
+  String get kazaBatchLogDay => '+۱ روز کامل';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'افزایش ۱ عدد برای هر ۶ نماز';
+
+  @override
+  String get kazaTotalRemaining => 'مجموع باقیمانده';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed از $target انجام شد';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'تخمین اتمام: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished => 'تمام نمازهای قضا ادا شدند! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'سرعت روزانه';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count نماز / روز';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'تنظیم سرعت روزانه';
+
+  @override
+  String get kazaSetPaceDialogSubtitle => 'روزانه چند نماز قضا می‌خوانید؟';
+
+  @override
+  String get kazaCalculatorTitle => 'محاسبه‌گر نمازهای قضا';
+
+  @override
+  String get kazaCalculateByYears => 'بر اساس زمان';
+
+  @override
+  String get kazaCalculateManual => 'مقادیر دستی';
+
+  @override
+  String get kazaYearsMissed => 'سال‌های قضا شده';
+
+  @override
+  String get kazaMonthsMissed => 'ماه‌های اضافی';
+
+  @override
+  String get kazaCalculateButton => 'ثبت اهداف';
+
+  @override
+  String get kazaWitrLabel => 'واتر';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count باقیمانده';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'تعداد انجام شده $name';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days روز برای هر نماز (مجموعاً $total نماز)';
+  }
 }

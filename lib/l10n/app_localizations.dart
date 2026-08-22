@@ -1287,6 +1287,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get tabAll;
+
+  /// No description provided for @kazaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Qadaa'**
+  String get kazaTitle;
+
+  /// No description provided for @kazaSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track and make up missed past prayers'**
+  String get kazaSubtitle;
+
+  /// No description provided for @kazaCalculatorWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculator'**
+  String get kazaCalculatorWizard;
+
+  /// No description provided for @kazaBatchLogDay.
+  ///
+  /// In en, this message translates to:
+  /// **'+1 Full Day'**
+  String get kazaBatchLogDay;
+
+  /// No description provided for @kazaBatchLogDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Increment 1 completed count for all 6 prayers'**
+  String get kazaBatchLogDayTooltip;
+
+  /// No description provided for @kazaTotalRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Remaining'**
+  String get kazaTotalRemaining;
+
+  /// No description provided for @kazaCompletedProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed} / {target} completed'**
+  String kazaCompletedProgress(Object completed, Object target);
+
+  /// No description provided for @kazaEstimatedCompletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Est. Completion: {date}'**
+  String kazaEstimatedCompletion(Object date);
+
+  /// No description provided for @kazaEstimatedCompletionFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'All missed prayers completed! 🎉'**
+  String get kazaEstimatedCompletionFinished;
+
+  /// No description provided for @kazaDailyPaceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Pace'**
+  String get kazaDailyPaceLabel;
+
+  /// No description provided for @kazaDailyPaceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} prayers / day'**
+  String kazaDailyPaceValue(Object count);
+
+  /// No description provided for @kazaSetPaceDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Daily Pace'**
+  String get kazaSetPaceDialogTitle;
+
+  /// No description provided for @kazaSetPaceDialogSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How many missed prayers do you make up each day?'**
+  String get kazaSetPaceDialogSubtitle;
+
+  /// No description provided for @kazaCalculatorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Prayers Calculator'**
+  String get kazaCalculatorTitle;
+
+  /// No description provided for @kazaCalculateByYears.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed Time'**
+  String get kazaCalculateByYears;
+
+  /// No description provided for @kazaCalculateManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Targets'**
+  String get kazaCalculateManual;
+
+  /// No description provided for @kazaYearsMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Years Missed'**
+  String get kazaYearsMissed;
+
+  /// No description provided for @kazaMonthsMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Months'**
+  String get kazaMonthsMissed;
+
+  /// No description provided for @kazaCalculateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Targets'**
+  String get kazaCalculateButton;
+
+  /// No description provided for @kazaWitrLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Witr'**
+  String get kazaWitrLabel;
+
+  /// No description provided for @kazaRemainingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} remaining'**
+  String kazaRemainingCount(Object count);
+
+  /// No description provided for @kazaEditCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} Completed Count'**
+  String kazaEditCompletedTitle(Object name);
+
+  /// No description provided for @kazaCalculatedDaysPerPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'= {days} days per prayer ({total} total prayers)'**
+  String kazaCalculatedDaysPerPrayer(Object days, Object total);
 }
 
 class _AppLocalizationsDelegate

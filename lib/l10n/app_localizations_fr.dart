@@ -595,28 +595,28 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get verseOfTheDay => 'Verset du jour';
+  String get verseOfTheDay => 'Verset du Jour';
 
   @override
-  String get hadithOfTheDay => 'Hadith du jour';
+  String get hadithOfTheDay => 'Hadith du Jour';
 
   @override
-  String get hisnAlMuslimTitle => 'Hisn al-Muslim (Invocations)';
+  String get hisnAlMuslimTitle => 'Hisn al-Muslim';
 
   @override
-  String get morningAdhkar => 'Invocations du matin';
+  String get morningAdhkar => 'Invocations du Matin';
 
   @override
-  String get eveningAdhkar => 'Invocations du soir';
+  String get eveningAdhkar => 'Invocations du Soir';
 
   @override
-  String get afterPrayerAdhkar => 'Après la prière';
+  String get afterPrayerAdhkar => 'Après la Prière';
 
   @override
-  String get sleepingAdhkar => 'Avant de dormir';
+  String get sleepingAdhkar => 'Avant de Dormir';
 
   @override
-  String get dailyLifeDuas => 'Invocations du quotidien';
+  String get dailyLifeDuas => 'Invocations du Quotidien';
 
   @override
   String get shareWisdom => 'Partager';
@@ -625,10 +625,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get copyText => 'Copier';
 
   @override
-  String get copiedToClipboard => 'Copié dans le presse-papiers';
+  String get copiedToClipboard => 'Copié dans le presse-papier';
 
   @override
-  String get searchSupplicationsHint => 'Rechercher une invocation...';
+  String get searchSupplicationsHint => 'Rechercher des invocations...';
 
   @override
   String get noSupplicationsFound => 'Aucune invocation trouvée';
@@ -637,8 +637,91 @@ class AppLocalizationsFr extends AppLocalizations {
   String get completed => 'Terminé';
 
   @override
-  String get tapToCount => 'Appuyer pour compter';
+  String get tapToCount => 'Appuyez pour compter';
 
   @override
   String get tabAll => 'Tous';
+
+  @override
+  String get kazaTitle => 'Qadaa';
+
+  @override
+  String get kazaSubtitle => 'Suivez et rattrapez vos prières manquées';
+
+  @override
+  String get kazaCalculatorWizard => 'Calculateur';
+
+  @override
+  String get kazaBatchLogDay => '+1 Journée Complète';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'Ajouter 1 à chacune des 6 prières';
+
+  @override
+  String get kazaTotalRemaining => 'Total Restant';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target effectuées';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Fin estimée: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'Toutes les prières manquées sont rattrapées! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Rythme Quotidien';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count prières / jour';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Définir le Rythme Quotidien';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'Combien de prières manquées rattrapez-vous par jour?';
+
+  @override
+  String get kazaCalculatorTitle => 'Calculateur de Prières Manquées';
+
+  @override
+  String get kazaCalculateByYears => 'Par Durée';
+
+  @override
+  String get kazaCalculateManual => 'Saisie Manuelle';
+
+  @override
+  String get kazaYearsMissed => 'Années Manquées';
+
+  @override
+  String get kazaMonthsMissed => 'Mois Supplémentaires';
+
+  @override
+  String get kazaCalculateButton => 'Définir les Objectifs';
+
+  @override
+  String get kazaWitrLabel => 'Witr';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count restantes';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'Nombre effectué pour $name';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days jours par prière ($total prières au total)';
+  }
 }

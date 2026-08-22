@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "إلغاء",
   "calendarTabTooltip": "التقويم الهجري",
   "calendarPreviousMonth": "الشهر السابق",
@@ -194,20 +193,73 @@
   "calendarReminderDeleted": "\"{title}\" تم الحذف",
   "verseOfTheDay": "آية اليوم",
   "hadithOfTheDay": "حديث اليوم",
-  "hisnAlMuslimTitle": "حصن المسلم (الأذكار)",
+  "hisnAlMuslimTitle": "حصن المسلم",
   "morningAdhkar": "أذكار الصباح",
   "eveningAdhkar": "أذكار المساء",
   "afterPrayerAdhkar": "أذكار بعد الصلاة",
   "sleepingAdhkar": "أذكار النوم",
-  "dailyLifeDuas": "أدعية يومية",
+  "dailyLifeDuas": "أدعية الحياة اليومية",
   "shareWisdom": "مشاركة",
   "copyText": "نسخ",
   "copiedToClipboard": "تم النسخ إلى الحافظة",
-  "searchSupplicationsHint": "البحث في الأذكار...",
-  "noSupplicationsFound": "لم يتم العثور على أذكار",
+  "searchSupplicationsHint": "البحث في الأدعية واللوائح...",
+  "noSupplicationsFound": "لم يتم العثور على أدعية",
   "completed": "مكتمل",
-  "tapToCount": "اضغط للتسبيح",
-  "tabAll": "الكل"
+  "tapToCount": "اضغط للعد",
+  "tabAll": "الكل",
+  "kazaTitle": "القضاء",
+  "kazaSubtitle": "حساب ومتابعة قضاء الصلوات الفائتة",
+  "kazaCalculatorWizard": "الحاسبة",
+  "kazaBatchLogDay": "+١ يوم كامل",
+  "kazaBatchLogDayTooltip": "زيادة صلاة واحدة لكل الصلوات الست",
+  "kazaTotalRemaining": "إجمالي المتبقي",
+  "kazaCompletedProgress": "تم قضاء {completed} من {target}",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "تاريخ الإتمام المتوقع: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "تم قضاء جميع الصلوات الفائتة! 🎉",
+  "kazaDailyPaceLabel": "المعدل اليومي",
+  "kazaDailyPaceValue": "{count} صلاة / يوم",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "تحديد المعدل اليومي",
+  "kazaSetPaceDialogSubtitle": "كم صلاة فائتة تقضيها كل يوم؟",
+  "kazaCalculatorTitle": "حاسبة الصلوات الفائتة",
+  "kazaCalculateByYears": "حسب المدة",
+  "kazaCalculateManual": "إدخال يدوي",
+  "kazaYearsMissed": "عدد السنوات الفائتة",
+  "kazaMonthsMissed": "أشهر إضافية",
+  "kazaCalculateButton": "حفظ الأهداف",
+  "kazaWitrLabel": "الوتر",
+  "kazaRemainingCount": "{count} متبقٍ",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "عدد صلاة {name} المقضية",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} يوم لكل صلاة ({total} صلاة إجمالاً)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

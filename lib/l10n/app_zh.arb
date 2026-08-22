@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "取消",
   "calendarTabTooltip": "回历日历",
   "calendarPreviousMonth": "上个月",
@@ -192,22 +191,75 @@
   "datesCalendarTab": "日历",
   "undo": "撤销",
   "calendarReminderDeleted": "已删除“{title}”",
-  "verseOfTheDay": "每日经文",
-  "hadithOfTheDay": "每日圣训",
-  "hisnAlMuslimTitle": "穆斯林的堡垒 (祈祷与赞词)",
+  "verseOfTheDay": "今日节文",
+  "hadithOfTheDay": "今日圣训",
+  "hisnAlMuslimTitle": "穆斯林的堡垒",
   "morningAdhkar": "晨间赞词",
   "eveningAdhkar": "晚间赞词",
   "afterPrayerAdhkar": "拜后赞词",
-  "sleepingAdhkar": "睡前祈祷",
-  "dailyLifeDuas": "日常祈祷",
+  "sleepingAdhkar": "睡前赞词",
+  "dailyLifeDuas": "日常祈祷词",
   "shareWisdom": "分享",
   "copyText": "复制",
   "copiedToClipboard": "已复制到剪贴板",
-  "searchSupplicationsHint": "搜索祈祷...",
-  "noSupplicationsFound": "未找到祈祷",
+  "searchSupplicationsHint": "搜索祈祷词...",
+  "noSupplicationsFound": "未找到相关祈祷词",
   "completed": "已完成",
-  "tapToCount": "点击计数",
-  "tabAll": "全部"
+  "tapToCount": "轻按以计数",
+  "tabAll": "全部",
+  "kazaTitle": "补礼",
+  "kazaSubtitle": "计算并追踪主命拜功补礼",
+  "kazaCalculatorWizard": "计算器",
+  "kazaBatchLogDay": "+1 整天",
+  "kazaBatchLogDayTooltip": "为所有 6 次拜功增加 1 次",
+  "kazaTotalRemaining": "剩余总计",
+  "kazaCompletedProgress": "已完成 {completed} / {target}",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "预计完成日期：{date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "已补完所有卡扎拜功！🎉",
+  "kazaDailyPaceLabel": "每日速度",
+  "kazaDailyPaceValue": "每天 {count} 次",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "设置每日速度",
+  "kazaSetPaceDialogSubtitle": "您每天补多少次卡扎拜功？",
+  "kazaCalculatorTitle": "补礼计算器",
+  "kazaCalculateByYears": "按时长",
+  "kazaCalculateManual": "手动设置",
+  "kazaYearsMissed": "遗漏年数",
+  "kazaMonthsMissed": "额外月数",
+  "kazaCalculateButton": "设置目标",
+  "kazaWitrLabel": "奇数拜",
+  "kazaRemainingCount": "还剩 {count} 次",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} 完成次数",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= 每次拜功 {days} 天（共计 {total} 次拜功）",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

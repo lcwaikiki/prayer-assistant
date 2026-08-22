@@ -145,8 +145,7 @@
       "minutes": {}
     }
   },
-
-  "cancel": "لغو",
+  "cancel": "انصراف",
   "calendarTabTooltip": "تقویم هجری",
   "calendarPreviousMonth": "ماه قبل",
   "calendarNextMonth": "ماه بعد",
@@ -194,20 +193,73 @@
   "calendarReminderDeleted": "«{title}» حذف شد",
   "verseOfTheDay": "آیه روز",
   "hadithOfTheDay": "حدیث روز",
-  "hisnAlMuslimTitle": "حصن المسلم (ادعیه و اذکار)",
-  "morningAdhkar": "اذکار صبحگاه",
-  "eveningAdhkar": "اذکار شامگاه",
+  "hisnAlMuslimTitle": "حصن المسلم",
+  "morningAdhkar": "اذکار صبح",
+  "eveningAdhkar": "اذکار شب",
   "afterPrayerAdhkar": "اذکار بعد از نماز",
   "sleepingAdhkar": "اذکار قبل از خواب",
-  "dailyLifeDuas": "دعاهای روزمره",
+  "dailyLifeDuas": "دعاهای زندگی روزمره",
   "shareWisdom": "اشتراک‌گذاری",
   "copyText": "کپی",
   "copiedToClipboard": "در حافظه کپی شد",
-  "searchSupplicationsHint": "جستجوی دعا...",
-  "noSupplicationsFound": "دعایی یافت نشد",
-  "completed": "تکمیل شد",
-  "tapToCount": "برای شمارش لمس کنید",
-  "tabAll": "همه"
+  "searchSupplicationsHint": "جستجوی ادعیه...",
+  "noSupplicationsFound": "دعا یافت نشد",
+  "completed": "تکمیل شده",
+  "tapToCount": "برای شمارش ضربه بزنید",
+  "tabAll": "همه",
+  "kazaTitle": "قضا",
+  "kazaSubtitle": "محاسبه و پیگیری نمازهای قضای گذشته",
+  "kazaCalculatorWizard": "محاسبه‌گر",
+  "kazaBatchLogDay": "+۱ روز کامل",
+  "kazaBatchLogDayTooltip": "افزایش ۱ عدد برای هر ۶ نماز",
+  "kazaTotalRemaining": "مجموع باقیمانده",
+  "kazaCompletedProgress": "{completed} از {target} انجام شد",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "تخمین اتمام: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "تمام نمازهای قضا ادا شدند! 🎉",
+  "kazaDailyPaceLabel": "سرعت روزانه",
+  "kazaDailyPaceValue": "{count} نماز / روز",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "تنظیم سرعت روزانه",
+  "kazaSetPaceDialogSubtitle": "روزانه چند نماز قضا می‌خوانید؟",
+  "kazaCalculatorTitle": "محاسبه‌گر نمازهای قضا",
+  "kazaCalculateByYears": "بر اساس زمان",
+  "kazaCalculateManual": "مقادیر دستی",
+  "kazaYearsMissed": "سال‌های قضا شده",
+  "kazaMonthsMissed": "ماه‌های اضافی",
+  "kazaCalculateButton": "ثبت اهداف",
+  "kazaWitrLabel": "واتر",
+  "kazaRemainingCount": "{count} باقیمانده",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "تعداد انجام شده {name}",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} روز برای هر نماز (مجموعاً {total} نماز)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

@@ -4,8 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
+import 'package:prayer_assistant/src/kaza/models/kaza_tracker.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
+
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
@@ -59,6 +61,8 @@ class TestHarness {
       ),
     );
     registerFallbackValue(const ItemGroup(id: 'g', title: 'g'));
+    registerFallbackValue(const KazaTracker());
+
 
     when(() => notificationService.initialize()).thenAnswer((_) async {});
     when(
@@ -156,6 +160,13 @@ class TestHarness {
     when(
       () => database.loadCalendarReminders(),
     ).thenAnswer((_) async => const []);
+    when(
+      () => database.loadKazaTracker(),
+    ).thenAnswer((_) async => const KazaTracker());
+    when(
+      () => database.saveKazaTracker(any()),
+    ).thenAnswer((_) async {});
+
 
 
     when(

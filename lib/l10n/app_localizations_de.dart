@@ -598,13 +598,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get hadithOfTheDay => 'Hadith des Tages';
 
   @override
-  String get hisnAlMuslimTitle => 'Hisn al-Muslim (Bittgebete)';
+  String get hisnAlMuslimTitle => 'Hisn al-Muslim';
 
   @override
-  String get morningAdhkar => 'Morgendliche Adhkar';
+  String get morningAdhkar => 'Morgen-Adhkar';
 
   @override
-  String get eveningAdhkar => 'Abendliche Adhkar';
+  String get eveningAdhkar => 'Abend-Adhkar';
 
   @override
   String get afterPrayerAdhkar => 'Nach dem Gebet';
@@ -638,4 +638,88 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tabAll => 'Alle';
+
+  @override
+  String get kazaTitle => 'Qadaa';
+
+  @override
+  String get kazaSubtitle => 'Verfolgen und nachholen versäumter Gebete';
+
+  @override
+  String get kazaCalculatorWizard => 'Rechner';
+
+  @override
+  String get kazaBatchLogDay => '+1 Ganzer Tag';
+
+  @override
+  String get kazaBatchLogDayTooltip =>
+      'Erhöhe die Anzahl für alle 6 Gebete um 1';
+
+  @override
+  String get kazaTotalRemaining => 'Gesamt Verbleibend';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed / $target abgeschlossen';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Vorauss. Ende: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'Alle Kaza-Gebete nachgeholt! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Tägliches Tempo';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count Gebete / Tag';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Tägliches Tempo festlegen';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'Wie viele versäumte Gebete holen Sie täglich nach?';
+
+  @override
+  String get kazaCalculatorTitle => 'Kaza-Gebete Rechner';
+
+  @override
+  String get kazaCalculateByYears => 'Nach Zeit';
+
+  @override
+  String get kazaCalculateManual => 'Manuelle Eingabe';
+
+  @override
+  String get kazaYearsMissed => 'Versäumte Jahre';
+
+  @override
+  String get kazaMonthsMissed => 'Zusätzliche Monate';
+
+  @override
+  String get kazaCalculateButton => 'Ziele Speichern';
+
+  @override
+  String get kazaWitrLabel => 'Witr';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count verbleibend';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'Anzahl $name erledigt';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days Tage pro Gebet (Insgesamt $total Gebete)';
+  }
 }

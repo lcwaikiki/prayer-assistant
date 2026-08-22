@@ -593,7 +593,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hadithOfTheDay => 'حديث اليوم';
 
   @override
-  String get hisnAlMuslimTitle => 'حصن المسلم (الأذكار)';
+  String get hisnAlMuslimTitle => 'حصن المسلم';
 
   @override
   String get morningAdhkar => 'أذكار الصباح';
@@ -608,7 +608,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sleepingAdhkar => 'أذكار النوم';
 
   @override
-  String get dailyLifeDuas => 'أدعية يومية';
+  String get dailyLifeDuas => 'أدعية الحياة اليومية';
 
   @override
   String get shareWisdom => 'مشاركة';
@@ -620,17 +620,99 @@ class AppLocalizationsAr extends AppLocalizations {
   String get copiedToClipboard => 'تم النسخ إلى الحافظة';
 
   @override
-  String get searchSupplicationsHint => 'البحث في الأذكار...';
+  String get searchSupplicationsHint => 'البحث في الأدعية واللوائح...';
 
   @override
-  String get noSupplicationsFound => 'لم يتم العثور على أذكار';
+  String get noSupplicationsFound => 'لم يتم العثور على أدعية';
 
   @override
   String get completed => 'مكتمل';
 
   @override
-  String get tapToCount => 'اضغط للتسبيح';
+  String get tapToCount => 'اضغط للعد';
 
   @override
   String get tabAll => 'الكل';
+
+  @override
+  String get kazaTitle => 'القضاء';
+
+  @override
+  String get kazaSubtitle => 'حساب ومتابعة قضاء الصلوات الفائتة';
+
+  @override
+  String get kazaCalculatorWizard => 'الحاسبة';
+
+  @override
+  String get kazaBatchLogDay => '+١ يوم كامل';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'زيادة صلاة واحدة لكل الصلوات الست';
+
+  @override
+  String get kazaTotalRemaining => 'إجمالي المتبقي';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return 'تم قضاء $completed من $target';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'تاريخ الإتمام المتوقع: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'تم قضاء جميع الصلوات الفائتة! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'المعدل اليومي';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count صلاة / يوم';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'تحديد المعدل اليومي';
+
+  @override
+  String get kazaSetPaceDialogSubtitle => 'كم صلاة فائتة تقضيها كل يوم؟';
+
+  @override
+  String get kazaCalculatorTitle => 'حاسبة الصلوات الفائتة';
+
+  @override
+  String get kazaCalculateByYears => 'حسب المدة';
+
+  @override
+  String get kazaCalculateManual => 'إدخال يدوي';
+
+  @override
+  String get kazaYearsMissed => 'عدد السنوات الفائتة';
+
+  @override
+  String get kazaMonthsMissed => 'أشهر إضافية';
+
+  @override
+  String get kazaCalculateButton => 'حفظ الأهداف';
+
+  @override
+  String get kazaWitrLabel => 'الوتر';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count متبقٍ';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'عدد صلاة $name المقضية';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days يوم لكل صلاة ($total صلاة إجمالاً)';
+  }
 }

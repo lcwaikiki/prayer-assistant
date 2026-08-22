@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "Abbrechen",
   "calendarTabTooltip": "Hidschri-Kalender",
   "calendarPreviousMonth": "Vorheriger Monat",
@@ -194,9 +193,9 @@
   "calendarReminderDeleted": "\"{title}\" gelöscht",
   "verseOfTheDay": "Vers des Tages",
   "hadithOfTheDay": "Hadith des Tages",
-  "hisnAlMuslimTitle": "Hisn al-Muslim (Bittgebete)",
-  "morningAdhkar": "Morgendliche Adhkar",
-  "eveningAdhkar": "Abendliche Adhkar",
+  "hisnAlMuslimTitle": "Hisn al-Muslim",
+  "morningAdhkar": "Morgen-Adhkar",
+  "eveningAdhkar": "Abend-Adhkar",
   "afterPrayerAdhkar": "Nach dem Gebet",
   "sleepingAdhkar": "Vor dem Schlafen",
   "dailyLifeDuas": "Tägliche Bittgebete",
@@ -207,7 +206,60 @@
   "noSupplicationsFound": "Keine Bittgebete gefunden",
   "completed": "Abgeschlossen",
   "tapToCount": "Tippen zum Zählen",
-  "tabAll": "Alle"
+  "tabAll": "Alle",
+  "kazaTitle": "Qadaa",
+  "kazaSubtitle": "Verfolgen und nachholen versäumter Gebete",
+  "kazaCalculatorWizard": "Rechner",
+  "kazaBatchLogDay": "+1 Ganzer Tag",
+  "kazaBatchLogDayTooltip": "Erhöhe die Anzahl für alle 6 Gebete um 1",
+  "kazaTotalRemaining": "Gesamt Verbleibend",
+  "kazaCompletedProgress": "{completed} / {target} abgeschlossen",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Vorauss. Ende: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "Alle Kaza-Gebete nachgeholt! 🎉",
+  "kazaDailyPaceLabel": "Tägliches Tempo",
+  "kazaDailyPaceValue": "{count} Gebete / Tag",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Tägliches Tempo festlegen",
+  "kazaSetPaceDialogSubtitle": "Wie viele versäumte Gebete holen Sie täglich nach?",
+  "kazaCalculatorTitle": "Kaza-Gebete Rechner",
+  "kazaCalculateByYears": "Nach Zeit",
+  "kazaCalculateManual": "Manuelle Eingabe",
+  "kazaYearsMissed": "Versäumte Jahre",
+  "kazaMonthsMissed": "Zusätzliche Monate",
+  "kazaCalculateButton": "Ziele Speichern",
+  "kazaWitrLabel": "Witr",
+  "kazaRemainingCount": "{count} verbleibend",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "Anzahl {name} erledigt",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} Tage pro Gebet (Insgesamt {total} Gebete)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

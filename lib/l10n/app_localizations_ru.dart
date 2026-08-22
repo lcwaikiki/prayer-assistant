@@ -600,7 +600,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get hadithOfTheDay => 'Хадис дня';
 
   @override
-  String get hisnAlMuslimTitle => 'Крепость мусульманина (Мольбы)';
+  String get hisnAlMuslimTitle => 'Крепость мусульманина';
 
   @override
   String get morningAdhkar => 'Утренние азкары';
@@ -609,10 +609,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get eveningAdhkar => 'Вечерние азкары';
 
   @override
-  String get afterPrayerAdhkar => 'После намаза';
+  String get afterPrayerAdhkar => 'Азкары بعد намаза';
 
   @override
-  String get sleepingAdhkar => 'Перед сном';
+  String get sleepingAdhkar => 'Азкары перед сном';
 
   @override
   String get dailyLifeDuas => 'Повседневные дуа';
@@ -624,10 +624,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get copyText => 'Копировать';
 
   @override
-  String get copiedToClipboard => 'Скопировано в буфер обмена';
+  String get copiedToClipboard => 'Скопировано в буфер';
 
   @override
-  String get searchSupplicationsHint => 'Поиск мольбы...';
+  String get searchSupplicationsHint => 'Поиск мольб...';
 
   @override
   String get noSupplicationsFound => 'Мольбы не найдены';
@@ -640,4 +640,87 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tabAll => 'Все';
+
+  @override
+  String get kazaTitle => 'Каза';
+
+  @override
+  String get kazaSubtitle => 'Отслеживайте и совершайте пропущенные намазы';
+
+  @override
+  String get kazaCalculatorWizard => 'Калькулятор';
+
+  @override
+  String get kazaBatchLogDay => '+1 Полный день';
+
+  @override
+  String get kazaBatchLogDayTooltip => 'Прибавить 1 ко всем 6 намазам';
+
+  @override
+  String get kazaTotalRemaining => 'Всего осталось';
+
+  @override
+  String kazaCompletedProgress(Object completed, Object target) {
+    return '$completed из $target выполнено';
+  }
+
+  @override
+  String kazaEstimatedCompletion(Object date) {
+    return 'Примерное окончание: $date';
+  }
+
+  @override
+  String get kazaEstimatedCompletionFinished =>
+      'Все пропущенные намазы выполнены! 🎉';
+
+  @override
+  String get kazaDailyPaceLabel => 'Дневной темп';
+
+  @override
+  String kazaDailyPaceValue(Object count) {
+    return '$count намазов в день';
+  }
+
+  @override
+  String get kazaSetPaceDialogTitle => 'Указать дневной темп';
+
+  @override
+  String get kazaSetPaceDialogSubtitle =>
+      'Сколько пропущенных намазов вы совершаете в день?';
+
+  @override
+  String get kazaCalculatorTitle => 'Калькулятор пропущенных намазов';
+
+  @override
+  String get kazaCalculateByYears => 'По времени';
+
+  @override
+  String get kazaCalculateManual => 'Ручной ввод';
+
+  @override
+  String get kazaYearsMissed => 'Пропущенных лет';
+
+  @override
+  String get kazaMonthsMissed => 'Дополнительные месяцы';
+
+  @override
+  String get kazaCalculateButton => 'Сохранить цели';
+
+  @override
+  String get kazaWitrLabel => 'Витр';
+
+  @override
+  String kazaRemainingCount(Object count) {
+    return '$count осталось';
+  }
+
+  @override
+  String kazaEditCompletedTitle(Object name) {
+    return 'Выполнено намазов $name';
+  }
+
+  @override
+  String kazaCalculatedDaysPerPrayer(Object days, Object total) {
+    return '= $days дней на намаз (Всего $total намазов)';
+  }
 }

@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "Cancelar",
   "calendarTabTooltip": "Calendario Hégira",
   "calendarPreviousMonth": "Mes anterior",
@@ -192,14 +191,14 @@
   "datesCalendarTab": "Calendario",
   "undo": "Deshacer",
   "calendarReminderDeleted": "\"{title}\" eliminado",
-  "verseOfTheDay": "Versículo del día",
-  "hadithOfTheDay": "Hadiz del día",
-  "hisnAlMuslimTitle": "Hisn al-Muslim (Súplicas)",
-  "morningAdhkar": "Adhkar de la mañana",
-  "eveningAdhkar": "Adhkar de la tarde",
-  "afterPrayerAdhkar": "Tras la oración",
-  "sleepingAdhkar": "Antes de dormir",
-  "dailyLifeDuas": "Súplicas cotidianas",
+  "verseOfTheDay": "Versículo del Día",
+  "hadithOfTheDay": "Hadiz del Día",
+  "hisnAlMuslimTitle": "Hisn al-Muslim",
+  "morningAdhkar": "Adhkar de la Mañana",
+  "eveningAdhkar": "Adhkar de la Tarde",
+  "afterPrayerAdhkar": "Después de la Oración",
+  "sleepingAdhkar": "Antes de Dormir",
+  "dailyLifeDuas": "Súplicas Diarias",
   "shareWisdom": "Compartir",
   "copyText": "Copiar",
   "copiedToClipboard": "Copiado al portapapeles",
@@ -207,7 +206,60 @@
   "noSupplicationsFound": "No se encontraron súplicas",
   "completed": "Completado",
   "tapToCount": "Toca para contar",
-  "tabAll": "Todos"
+  "tabAll": "Todos",
+  "kazaTitle": "Qadaa",
+  "kazaSubtitle": "Rastrea y recupera las oraciones pasadas",
+  "kazaCalculatorWizard": "Calculadora",
+  "kazaBatchLogDay": "+1 Día Completo",
+  "kazaBatchLogDayTooltip": "Incrementa en 1 todas las 6 oraciones",
+  "kazaTotalRemaining": "Total Restante",
+  "kazaCompletedProgress": "{completed} / {target} completadas",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Est. Finalización: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "¡Todas las oraciones Kaza completadas! 🎉",
+  "kazaDailyPaceLabel": "Ritmo Diario",
+  "kazaDailyPaceValue": "{count} oraciones / día",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Establecer Ritmo Diario",
+  "kazaSetPaceDialogSubtitle": "¿Cuántas oraciones Kaza realizas al día?",
+  "kazaCalculatorTitle": "Calculadora de Oraciones Kaza",
+  "kazaCalculateByYears": "Por Tiempo",
+  "kazaCalculateManual": "Valores Manuales",
+  "kazaYearsMissed": "Años Perdidos",
+  "kazaMonthsMissed": "Meses Adicionales",
+  "kazaCalculateButton": "Establecer Metas",
+  "kazaWitrLabel": "Witr",
+  "kazaRemainingCount": "{count} restantes",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "Cantidad realizada de {name}",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} días por oración ({total} oraciones en total)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

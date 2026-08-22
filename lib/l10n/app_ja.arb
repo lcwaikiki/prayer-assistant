@@ -145,7 +145,6 @@
       "minutes": {}
     }
   },
-
   "cancel": "キャンセル",
   "calendarTabTooltip": "ヒジュラ暦カレンダー",
   "calendarPreviousMonth": "前の月",
@@ -192,22 +191,75 @@
   "datesCalendarTab": "カレンダー",
   "undo": "元に戻す",
   "calendarReminderDeleted": "「{title}」を削除しました",
-  "verseOfTheDay": "今日のクルアーン節",
-  "hadithOfTheDay": "今日のハディース",
-  "hisnAlMuslimTitle": "ムスリムの砦 (祈り・ズィクル)",
-  "morningAdhkar": "朝のズィクル",
-  "eveningAdhkar": "夕方のズィクル",
-  "afterPrayerAdhkar": "礼拝後のズィクル",
+  "verseOfTheDay": "今日のクルアーン",
+  "hadithOfTheDay": "ハディースの言葉",
+  "hisnAlMuslimTitle": "ヒスン・アル・ムスリム",
+  "morningAdhkar": "朝のメインの祈り",
+  "eveningAdhkar": "夕方の祈り",
+  "afterPrayerAdhkar": "礼拝後の祈り",
   "sleepingAdhkar": "就寝前の祈り",
-  "dailyLifeDuas": "日常の祈り",
+  "dailyLifeDuas": "日常のデュアー",
   "shareWisdom": "共有",
   "copyText": "コピー",
   "copiedToClipboard": "クリップボードにコピーしました",
-  "searchSupplicationsHint": "祈りを検索...",
-  "noSupplicationsFound": "祈りが見つかりません",
+  "searchSupplicationsHint": "デュアーを検索...",
+  "noSupplicationsFound": "該当するデュアーが見つかりません",
   "completed": "完了",
-  "tapToCount": "タップして数える",
-  "tabAll": "すべて"
+  "tapToCount": "タップしてカウント",
+  "tabAll": "すべて",
+  "kazaTitle": "カザー",
+  "kazaSubtitle": "過去の未実施のお祈りを記録・補填",
+  "kazaCalculatorWizard": "計算機",
+  "kazaBatchLogDay": "+1日分完了",
+  "kazaBatchLogDayTooltip": "6つのお祈りすべてを1回分追加",
+  "kazaTotalRemaining": "残り合計",
+  "kazaCompletedProgress": "{target}回中{completed}回完了",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "完了予定日: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "すべてのカザーが完了しました！🎉",
+  "kazaDailyPaceLabel": "1日の目標ペース",
+  "kazaDailyPaceValue": "1日{count}回",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "1日のペースを設定",
+  "kazaSetPaceDialogSubtitle": "1日に何回分のカザーを行いますか？",
+  "kazaCalculatorTitle": "カザー計算ウィザード",
+  "kazaCalculateByYears": "期間指定",
+  "kazaCalculateManual": "手動設定",
+  "kazaYearsMissed": "未実施の年数",
+  "kazaMonthsMissed": "追加の月数",
+  "kazaCalculateButton": "目標を設定",
+  "kazaWitrLabel": "ウィトル",
+  "kazaRemainingCount": "残り{count}回",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name}の完了回数",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= お祈り1つあたり{days}日分（合計{total}回）",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

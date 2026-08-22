@@ -26,7 +26,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('shows all four tabs after initialization', (tester) async {
+  testWidgets('shows all five tabs after initialization', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -35,6 +35,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Today'), findsOneWidget);
     expect(find.text('Qibla'), findsOneWidget);
+    expect(find.text('Qadaa'), findsOneWidget);
+
     expect(find.text('Location'), findsNothing);
     expect(find.text('Dates'), findsOneWidget);
     expect(find.text('Beads'), findsOneWidget);
@@ -52,10 +54,11 @@ void main() {
     await tester.tap(find.text('Beads'));
     await tester.pump();
 
-    expect(harness.controller.tabIndex, 3);
+    expect(harness.controller.tabIndex, 4);
 
     await tester.pumpWidget(const SizedBox());
   });
+
 
   testWidgets('reminders toggle switches its tooltip and silences reminders',
       (tester) async {
@@ -152,7 +155,8 @@ void main() {
     await tester.tap(find.text('Save Location'));
     await tester.pumpAndSettle();
 
-    expect(harness.controller.tabIndex, 1);
+    expect(harness.controller.tabIndex, 2);
+
     expect(harness.controller.selectedLocation!.districtId, '541');
     expect(find.text('Save Location'), findsNothing);
     expect(find.text('Today'), findsWidgets);

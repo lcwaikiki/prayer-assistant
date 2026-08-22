@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
+import 'package:prayer_assistant/src/kaza/models/kaza_tracker.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/services/location_resolver.dart';
 
@@ -29,7 +30,9 @@ void main() {
     registerFallbackValue(
       LocationNode(id: 'f', name: 'f', englishName: 'f'),
     );
+    registerFallbackValue(const KazaTracker());
   });
+
 
   setUp(() {
     api = MockImsakiyemApi();
@@ -135,6 +138,13 @@ void main() {
     when(
       () => database.loadCalendarReminders(),
     ).thenAnswer((_) async => const []);
+    when(
+      () => database.loadKazaTracker(),
+    ).thenAnswer((_) async => const KazaTracker());
+    when(
+      () => database.saveKazaTracker(any()),
+    ).thenAnswer((_) async {});
+
 
     when(
       () => database.hasSufficientYearData(
@@ -191,7 +201,8 @@ void main() {
       expect(controller.today, isNull);
       expect(controller.yearRange, isEmpty);
       expect(controller.countries, isEmpty);
-      expect(controller.tabIndex, 1);
+      expect(controller.tabIndex, 2);
+
       verify(() => widgetBridge.registerOpenHomeHandler(any())).called(1);
       verify(() => notificationService.cancelAllPrayerNotifications()).called(1);
       verify(() => widgetBridge.updateWidgetTextSize('medium')).called(1);
@@ -406,7 +417,8 @@ void main() {
       );
 
       expect(controller.error, isNull);
-      expect(controller.tabIndex, 1);
+      expect(controller.tabIndex, 2);
+
       expect(
         controller.selectedLocation!.fullName,
         'Uskudar, Istanbul, Turkiye',

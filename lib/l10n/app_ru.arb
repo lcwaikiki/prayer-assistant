@@ -248,20 +248,73 @@
   },
   "verseOfTheDay": "Аят дня",
   "hadithOfTheDay": "Хадис дня",
-  "hisnAlMuslimTitle": "Крепость мусульманина (Мольбы)",
+  "hisnAlMuslimTitle": "Крепость мусульманина",
   "morningAdhkar": "Утренние азкары",
   "eveningAdhkar": "Вечерние азкары",
-  "afterPrayerAdhkar": "После намаза",
-  "sleepingAdhkar": "Перед сном",
+  "afterPrayerAdhkar": "Азкары بعد намаза",
+  "sleepingAdhkar": "Азкары перед сном",
   "dailyLifeDuas": "Повседневные дуа",
   "shareWisdom": "Поделиться",
   "copyText": "Копировать",
-  "copiedToClipboard": "Скопировано в буфер обмена",
-  "searchSupplicationsHint": "Поиск мольбы...",
+  "copiedToClipboard": "Скопировано в буфер",
+  "searchSupplicationsHint": "Поиск мольб...",
   "noSupplicationsFound": "Мольбы не найдены",
   "completed": "Завершено",
   "tapToCount": "Нажмите для счета",
-  "tabAll": "Все"
+  "tabAll": "Все",
+  "kazaTitle": "Каза",
+  "kazaSubtitle": "Отслеживайте и совершайте пропущенные намазы",
+  "kazaCalculatorWizard": "Калькулятор",
+  "kazaBatchLogDay": "+1 Полный день",
+  "kazaBatchLogDayTooltip": "Прибавить 1 ко всем 6 намазам",
+  "kazaTotalRemaining": "Всего осталось",
+  "kazaCompletedProgress": "{completed} из {target} выполнено",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "Примерное окончание: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "Все пропущенные намазы выполнены! 🎉",
+  "kazaDailyPaceLabel": "Дневной темп",
+  "kazaDailyPaceValue": "{count} намазов в день",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "Указать дневной темп",
+  "kazaSetPaceDialogSubtitle": "Сколько пропущенных намазов вы совершаете в день?",
+  "kazaCalculatorTitle": "Калькулятор пропущенных намазов",
+  "kazaCalculateByYears": "По времени",
+  "kazaCalculateManual": "Ручной ввод",
+  "kazaYearsMissed": "Пропущенных лет",
+  "kazaMonthsMissed": "Дополнительные месяцы",
+  "kazaCalculateButton": "Сохранить цели",
+  "kazaWitrLabel": "Витр",
+  "kazaRemainingCount": "{count} осталось",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "Выполнено намазов {name}",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= {days} дней на намаз (Всего {total} намазов)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  }
 }
-
-

@@ -126,10 +126,10 @@ class ItemReminderService {
     }
   }
 
-  Future<void> scheduleReminder(Item item, {bool catchUp = true}) =>
+  Future<void> scheduleReminder(Item item, {bool catchUp = false}) =>
       _schedule(item, tesbihItemPayloadPrefix, catchUp: catchUp);
 
-  Future<void> scheduleGroupReminder(ItemGroup group, {bool catchUp = true}) =>
+  Future<void> scheduleGroupReminder(ItemGroup group, {bool catchUp = false}) =>
       _schedule(group, tesbihGroupPayloadPrefix, catchUp: catchUp);
 
   Future<void> _schedule(

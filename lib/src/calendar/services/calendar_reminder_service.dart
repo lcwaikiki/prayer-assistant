@@ -126,7 +126,7 @@ class CalendarReminderService {
 
   Future<void> scheduleReminder(
     CalendarReminder reminder, {
-    bool catchUp = true,
+    bool catchUp = false,
   }) async {
     final id = _notificationId(reminder.id);
     // Clear the full per-occurrence id window: a finite count schedules

@@ -20,6 +20,7 @@ class LocalDatabase {
   static const _localePreferenceKey = 'locale_preference';
   static const _calendarPrimaryDisplayKey = 'calendar_primary_display';
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
+  static const _prayerCompletionsKey = 'prayer_completions';
   Database? _db;
 
   Future<Database> get instance async {
@@ -578,6 +579,40 @@ class LocalDatabase {
     final count = (rows.first['count'] as int?) ?? 0;
     final hijriCount = (rows.first['hijri_count'] as int?) ?? 0;
     return count >= 360 && hijriCount >= 360;
+  }
+
+  Future<Map<String, List<String>>> loadPrayerCompletions() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_prayerCompletionsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return <String, List<String>>{};
+    }
+    try {
+      final raw =
+          jsonDecode(rows.first['setting_value'] as String)
+              as Map<String, dynamic>;
+      return raw.map(
+        (key, value) =>
+            MapEntry(key, List<String>.from(value as List)),
+      );
+    } catch (_) {
+      return <String, List<String>>{};
+    }
+  }
+
+  Future<void> savePrayerCompletions(
+    Map<String, List<String>> completions,
+  ) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _prayerCompletionsKey,
+      'setting_value': jsonEncode(completions),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   String _toDateKey(DateTime date) {

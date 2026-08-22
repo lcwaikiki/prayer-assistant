@@ -9,13 +9,13 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appTitle => 'Namaz Asistanı';
+  String get appTitle => 'Namaz AsistanÄ±';
 
   @override
   String get tabLocation => 'Konum';
 
   @override
-  String get tabToday => 'Bugün';
+  String get tabToday => 'BugÃ¼n';
 
   @override
   String get tabDates => 'Tarih';
@@ -24,13 +24,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get tabTesbih => 'Tesbih';
 
   @override
-  String get tooltipToggleLightDark => 'Açık/Koyu değiştir';
+  String get tooltipToggleLightDark => 'AÃ§Ä±k/Koyu deÄŸiÅŸtir';
 
   @override
-  String get tooltipRemindersOn => 'Hatırlatıcıları aç';
+  String get tooltipRemindersOn => 'HatÄ±rlatÄ±cÄ±larÄ± aÃ§';
 
   @override
-  String get tooltipRemindersOff => 'Hatırlatıcıları kapat';
+  String get tooltipRemindersOff => 'HatÄ±rlatÄ±cÄ±larÄ± kapat';
 
   @override
   String get tooltipPreferences => 'Tercihler';
@@ -44,56 +44,57 @@ class AppLocalizationsTr extends AppLocalizations {
   String get remainingMinutesUnknown => '-- dk';
 
   @override
-  String get homeNoLocationTitle => 'Konum seçilmedi';
+  String get homeNoLocationTitle => 'Konum seÃ§ilmedi';
 
   @override
   String get homeNoLocationSubtitle =>
-      'Konum sekmesine gidip önce ilçenizi kaydedin.';
+      'Konum sekmesine gidip Ã¶nce ilÃ§enizi kaydedin.';
 
   @override
-  String get homeNoPrayerTimesTitle => 'Önbellekte namaz vakti yok';
+  String get homeNoPrayerTimesTitle => 'Ã–nbellekte namaz vakti yok';
 
   @override
   String get homeNoPrayerTimesSubtitle =>
-      'Yıllık veriyi eşitlemek için yenileyin.';
+      'YÄ±llÄ±k veriyi eÅŸitlemek iÃ§in yenileyin.';
 
   @override
   String get refresh => 'Yenile';
 
   @override
-  String get qiblaTitle => 'Kıble';
+  String get qiblaTitle => 'KÄ±ble';
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Kıble: $degrees°';
+    return 'KÄ±ble: $degreesÂ°';
   }
 
   @override
   String get qiblaLocationUnavailable =>
-      'Konumunuz belirlenemedi. GPS\'i açıp tekrar deneyin.';
+      'Konumunuz belirlenemedi. GPS\'i aÃ§Ä±p tekrar deneyin.';
 
   @override
-  String get qiblaHeadingUnavailable => 'Pusula yok - sabit yön gösteriliyor.';
+  String get qiblaHeadingUnavailable =>
+      'Pusula yok - sabit yÃ¶n gÃ¶steriliyor.';
 
   @override
   String get qiblaPointDevice =>
-      'İbre yukarıyı gösterene kadar cihazınızı çevirin.';
+      'Ä°bre yukarÄ±yÄ± gÃ¶sterene kadar cihazÄ±nÄ±zÄ± Ã§evirin.';
 
   @override
-  String get qiblaKaabaShort => 'Kıble';
+  String get qiblaKaabaShort => 'KÄ±ble';
 
   @override
-  String get shareTodayTimes => 'Bugünün vakitlerini paylaş';
+  String get shareTodayTimes => 'BugÃ¼nÃ¼n vakitlerini paylaÅŸ';
 
   @override
-  String get calendarPreviousDay => 'Önceki gün';
+  String get calendarPreviousDay => 'Ã–nceki gÃ¼n';
 
   @override
-  String get calendarNextDay => 'Sonraki gün';
+  String get calendarNextDay => 'Sonraki gÃ¼n';
 
   @override
   String todayWithDate(Object date) {
-    return 'Bugün • $date';
+    return 'BugÃ¼n â€¢ $date';
   }
 
   @override
@@ -105,18 +106,19 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get reminderSettingsTitle => 'Hatırlatıcı ayarları';
+  String get reminderSettingsTitle => 'HatÄ±rlatÄ±cÄ± ayarlarÄ±';
 
   @override
   String get reminderSettingsSubtitle =>
-      'Hatırlatıcı ve dakika ayarları için yukarıdaki vakitlerden birine dokunun.';
+      'HatÄ±rlatÄ±cÄ± ve dakika ayarlarÄ± iÃ§in yukarÄ±daki vakitlerden birine dokunun.';
 
   @override
-  String get tooltipScheduledDebug => 'Zamanlanmış hatırlatıcı hata ayıklama';
+  String get tooltipScheduledDebug =>
+      'ZamanlanmÄ±ÅŸ hatÄ±rlatÄ±cÄ± hata ayÄ±klama';
 
   @override
   String get scheduledRemindersDebugTitle =>
-      'Zamanlanmış Hatırlatıcılar (Debug)';
+      'ZamanlanmÄ±ÅŸ HatÄ±rlatÄ±cÄ±lar (Debug)';
 
   @override
   String pendingNotificationsCount(Object count) {
@@ -124,118 +126,123 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get sendTestNotificationNow => 'Test bildirimi gönder';
+  String get sendTestNotificationNow => 'Test bildirimi gÃ¶nder';
 
   @override
-  String get testNotificationSent => 'Test bildirimi gönderildi.';
+  String get testNotificationSent => 'Test bildirimi gÃ¶nderildi.';
 
   @override
-  String get statusBarMinutesTitle => 'Durum çubuğu dakikaları';
+  String get statusBarMinutesTitle => 'Durum Ã§ubuÄŸu dakikalarÄ±';
 
   @override
   String get statusBarMinutesSubtitle =>
-      'Durum çubuğunda kalan dakika bildirimini göster.';
+      'Durum Ã§ubuÄŸunda kalan dakika bildirimini gÃ¶ster.';
 
   @override
-  String get statusAutoRestoreTitle => 'Silinince geri yükle';
+  String get statusAutoRestoreTitle => 'Silinince geri yÃ¼kle';
 
   @override
   String get statusAutoRestoreSubtitle =>
-      'Kullanıcı kapatırsa durum öğesini yeniden oluştur.';
+      'KullanÄ±cÄ± kapatÄ±rsa durum Ã¶ÄŸesini yeniden oluÅŸtur.';
 
   @override
-  String get noPendingReminders => 'Bekleyen hatırlatıcı yok.';
+  String get noPendingReminders => 'Bekleyen hatÄ±rlatÄ±cÄ± yok.';
 
   @override
   String get unknownFireTime => 'Bilinmeyen zaman';
 
   @override
-  String get pastPrefix => '[GEÇMİŞ] ';
+  String get pastPrefix => '[GEÃ‡MÄ°Åž] ';
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Açık • Vaktinde + $minutes dk önce';
+    return 'AÃ§Ä±k â€¢ Vaktinde + $minutes dk Ã¶nce';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Açık • Vaktinde';
+  String get reminderOnTimeOnly => 'AÃ§Ä±k â€¢ Vaktinde';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Açık • $minutes dk önce';
+    return 'AÃ§Ä±k â€¢ $minutes dk Ã¶nce';
   }
 
   @override
-  String get reminderOff => 'Hatırlatıcı kapalı';
+  String get reminderOff => 'HatÄ±rlatÄ±cÄ± kapalÄ±';
 
   @override
-  String get nextPrayerTitle => 'Sıradaki Vakit';
+  String get nextPrayerTitle => 'SÄ±radaki Vakit';
 
   @override
-  String get homeUpcomingRemindersTitle => 'Yaklaşan hatırlatıcılar';
+  String get homeUpcomingRemindersTitle => 'YaklaÅŸan hatÄ±rlatÄ±cÄ±lar';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total namaz tamamlandı';
+  }
 
   @override
   String startsIn(Object remaining) {
-    return '$remaining sonra başlar';
+    return '$remaining sonra baÅŸlar';
   }
 
   @override
-  String get selectYourLocation => 'Konumunuzu seçin';
+  String get selectYourLocation => 'Konumunuzu seÃ§in';
 
   @override
   String get locationHelp =>
-      'Hızlı kurulum için GPS kullanın veya ülke/şehir seçimini manuel yapın.';
+      'HÄ±zlÄ± kurulum iÃ§in GPS kullanÄ±n veya Ã¼lke/ÅŸehir seÃ§imini manuel yapÄ±n.';
 
   @override
   String get useCurrentLocation => 'Mevcut konumu kullan';
 
   @override
-  String get country => 'Ülke';
+  String get country => 'Ãœlke';
 
   @override
-  String get stateCity => 'İl / Şehir';
+  String get stateCity => 'Ä°l / Åžehir';
 
   @override
-  String get district => 'İlçe';
+  String get district => 'Ä°lÃ§e';
 
   @override
   String get saveLocation => 'Konumu kaydet';
 
   @override
   String selectedLocation(Object location) {
-    return 'Seçilen: $location';
+    return 'SeÃ§ilen: $location';
   }
 
   @override
   String get historySelectLocationFirst =>
-      '1 yıllık namaz listesini görmek için önce konum seçin.';
+      '1 yÄ±llÄ±k namaz listesini gÃ¶rmek iÃ§in Ã¶nce konum seÃ§in.';
 
   @override
-  String get historyTableTitle => 'Namaz Vakitleri Tablosu (Tam Yıl)';
+  String get historyTableTitle => 'Namaz Vakitleri Tablosu (Tam YÄ±l)';
 
   @override
-  String get todayShort => 'Bugün';
+  String get todayShort => 'BugÃ¼n';
 
   @override
   String get dateHeader => 'Tarih';
 
   @override
-  String get imsak => 'İmsak';
+  String get imsak => 'Ä°msak';
 
   @override
-  String get gunes => 'Güneş';
+  String get gunes => 'GÃ¼neÅŸ';
 
   @override
-  String get ogle => 'Öğle';
+  String get ogle => 'Ã–ÄŸle';
 
   @override
-  String get ikindi => 'İkindi';
+  String get ikindi => 'Ä°kindi';
 
   @override
-  String get aksam => 'Akşam';
+  String get aksam => 'AkÅŸam';
 
   @override
-  String get yatsi => 'Yatsı';
+  String get yatsi => 'YatsÄ±';
 
   @override
   String get hijriHeader => 'Hicri';
@@ -247,127 +254,128 @@ class AppLocalizationsTr extends AppLocalizations {
   String get languageTitle => 'Dil';
 
   @override
-  String get languageSystem => 'Sistem varsayılanı';
+  String get languageSystem => 'Sistem varsayÄ±lanÄ±';
 
   @override
   String get themeModeTitle => 'Tema modu';
 
   @override
-  String get themeSystem => 'Sistem varsayılanı';
+  String get themeSystem => 'Sistem varsayÄ±lanÄ±';
 
   @override
-  String get themeLight => 'Açık';
+  String get themeLight => 'AÃ§Ä±k';
 
   @override
   String get themeDark => 'Koyu';
 
   @override
-  String get appBarRemainingTitle => 'Ana sayfa üst çubuk kalan süre';
+  String get appBarRemainingTitle => 'Ana sayfa Ã¼st Ã§ubuk kalan sÃ¼re';
 
   @override
-  String get showInTitle => 'Başlıkta göster';
+  String get showInTitle => 'BaÅŸlÄ±kta gÃ¶ster';
 
   @override
-  String get showAtRight => 'Sağda göster';
+  String get showAtRight => 'SaÄŸda gÃ¶ster';
 
   @override
-  String get showAsSubtitle => 'Alt başlıkta göster';
+  String get showAsSubtitle => 'Alt baÅŸlÄ±kta gÃ¶ster';
 
   @override
   String get hideRemainingText => 'Kalan metni gizle';
 
   @override
-  String get notificationMessageTitle => 'Bildirim mesajı';
+  String get notificationMessageTitle => 'Bildirim mesajÄ±';
 
   @override
-  String get notificationMessageShown => 'Gösteriliyor';
+  String get notificationMessageShown => 'GÃ¶steriliyor';
 
   @override
   String get notificationMessageHidden => 'Gizli';
 
   @override
-  String get widgetTextSizeTitle => 'Widget yazı boyutu';
+  String get widgetTextSizeTitle => 'Widget yazÄ± boyutu';
 
   @override
   String get widgetTextSizeSubtitle =>
-      'Ana ekran widget\'larında kullanılan yazı boyutu.';
+      'Ana ekran widget\'larÄ±nda kullanÄ±lan yazÄ± boyutu.';
 
   @override
-  String get widgetTextSizeExtraSmall => 'Çok küçük';
+  String get widgetTextSizeExtraSmall => 'Ã‡ok kÃ¼Ã§Ã¼k';
 
   @override
-  String get widgetTextSizeSmall => 'Küçük';
+  String get widgetTextSizeSmall => 'KÃ¼Ã§Ã¼k';
 
   @override
   String get widgetTextSizeMedium => 'Orta';
 
   @override
-  String get widgetTextSizeLarge => 'Büyük';
+  String get widgetTextSizeLarge => 'BÃ¼yÃ¼k';
 
   @override
-  String get widgetMmssThresholdTitle => 'Widget saniye geri sayımı';
+  String get widgetMmssThresholdTitle => 'Widget saniye geri sayÄ±mÄ±';
 
   @override
-  String get widgetMmssThresholdNever => 'Her zaman HH:MM göster';
+  String get widgetMmssThresholdNever => 'Her zaman HH:MM gÃ¶ster';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return '$minutes dk altında MM:SS';
+    return '$minutes dk altÄ±nda MM:SS';
   }
 
   @override
-  String get remindersOnOffTitle => 'Hatırlatıcılar açık/kapalı';
+  String get remindersOnOffTitle => 'HatÄ±rlatÄ±cÄ±lar aÃ§Ä±k/kapalÄ±';
 
   @override
   String get remindersOnOffSubtitle =>
-      'Namaz hatırlatıcı bildirimlerini aç veya kapat. Vakit ayarların korunur.';
+      'Namaz hatÄ±rlatÄ±cÄ± bildirimlerini aÃ§ veya kapat. Vakit ayarlarÄ±n korunur.';
 
   @override
-  String get reminderVibrationTitle => 'Hatırlatmada titreşim';
+  String get reminderVibrationTitle => 'HatÄ±rlatmada titreÅŸim';
 
   @override
   String get reminderVibrationSubtitle =>
-      'Hatırlatma geldiğinde yaklaşık 10 saniye aralıklı titreşim.';
+      'HatÄ±rlatma geldiÄŸinde yaklaÅŸÄ±k 10 saniye aralÄ±klÄ± titreÅŸim.';
 
   @override
-  String get reminderSoundTitle => 'Hatırlatmada ses';
+  String get reminderSoundTitle => 'HatÄ±rlatmada ses';
 
   @override
   String get reminderSoundSubtitle =>
-      'Hatırlatma geldiğinde bildirim sesi çalsın.';
+      'HatÄ±rlatma geldiÄŸinde bildirim sesi Ã§alsÄ±n.';
 
   @override
-  String get remindersOn => 'Açık';
+  String get remindersOn => 'AÃ§Ä±k';
 
   @override
-  String get remindersOff => 'Kapalı';
+  String get remindersOff => 'KapalÄ±';
 
   @override
   String reminderScreenTitle(Object prayer) {
-    return '$prayer Hatırlatıcısı';
+    return '$prayer HatÄ±rlatÄ±cÄ±sÄ±';
   }
 
   @override
-  String get reminderTypeTitle => 'Hatırlatıcı türü (ikisi de seçilebilir)';
+  String get reminderTypeTitle =>
+      'HatÄ±rlatÄ±cÄ± tÃ¼rÃ¼ (ikisi de seÃ§ilebilir)';
 
   @override
   String get onTime => 'Vaktinde';
 
   @override
-  String get before => 'Önce';
+  String get before => 'Ã–nce';
 
   @override
   String get after => 'Sonra';
 
   @override
-  String get reminderAlertTitle => 'Uyarı';
+  String get reminderAlertTitle => 'UyarÄ±';
 
   @override
   String get reminderAlertSubtitle =>
-      'Gerçekten uyarması için Tercihler\'deki ilgili anahtarın da açık olması gerekir.';
+      'GerÃ§ekten uyarmasÄ± iÃ§in Tercihler\'deki ilgili anahtarÄ±n da aÃ§Ä±k olmasÄ± gerekir.';
 
   @override
-  String get vibrateChip => 'Titreşim';
+  String get vibrateChip => 'TitreÅŸim';
 
   @override
   String get soundChip => 'Ses';
@@ -376,10 +384,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get adhanChip => 'Ezan';
 
   @override
-  String get remindBeforePrayerTitle => 'Namazdan önce hatırlat';
+  String get remindBeforePrayerTitle => 'Namazdan Ã¶nce hatÄ±rlat';
 
   @override
-  String get remindAfterPrayerTitle => 'Namazdan sonra hatırlat';
+  String get remindAfterPrayerTitle => 'Namazdan sonra hatÄ±rlat';
 
   @override
   String minutesValue(Object minutes) {
@@ -387,81 +395,81 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get custom => 'Özel';
+  String get custom => 'Ã–zel';
 
   @override
-  String get customMinutes => 'Özel dakika';
+  String get customMinutes => 'Ã–zel dakika';
 
   @override
-  String get customMinutesHint => 'örn. 12';
+  String get customMinutesHint => 'Ã¶rn. 12';
 
   @override
   String get save => 'Kaydet';
 
   @override
   String get enableBeforeToSelectMinutes =>
-      'Dakika seçmek için \"Önce\"yi açın.';
+      'Dakika seÃ§mek iÃ§in \"Ã–nce\"yi aÃ§Ä±n.';
 
   @override
   String get enableAfterToSelectMinutes =>
-      'Dakika seçmek için \"Sonra\"yı açın.';
+      'Dakika seÃ§mek iÃ§in \"Sonra\"yÄ± aÃ§Ä±n.';
 
   @override
-  String get enterValidPositiveNumber => 'Geçerli pozitif sayı girin.';
+  String get enterValidPositiveNumber => 'GeÃ§erli pozitif sayÄ± girin.';
 
   @override
   String get useValueUpTo240 => 'En fazla 240 dakika girin.';
 
   @override
-  String get customMinutesSaved => 'Özel dakika kaydedildi.';
+  String get customMinutesSaved => 'Ã–zel dakika kaydedildi.';
 
   @override
-  String get cancel => 'İptal';
+  String get cancel => 'Ä°ptal';
 
   @override
   String get calendarTabTooltip => 'Hicri takvim';
 
   @override
-  String get calendarPreviousMonth => 'Önceki ay';
+  String get calendarPreviousMonth => 'Ã–nceki ay';
 
   @override
   String get calendarNextMonth => 'Sonraki ay';
 
   @override
-  String get calendarSwapPrimary => 'Hicri/Miladi değiştir';
+  String get calendarSwapPrimary => 'Hicri/Miladi deÄŸiÅŸtir';
 
   @override
-  String get calendarShowSecondary => 'İkincil tarihi göster';
+  String get calendarShowSecondary => 'Ä°kincil tarihi gÃ¶ster';
 
   @override
-  String get calendarHideSecondary => 'İkincil tarihi gizle';
+  String get calendarHideSecondary => 'Ä°kincil tarihi gizle';
 
   @override
-  String get calendarNoRemindersOnDay => 'Bu günde hatırlatıcı yok';
+  String get calendarNoRemindersOnDay => 'Bu gÃ¼nde hatÄ±rlatÄ±cÄ± yok';
 
   @override
-  String get calendarAddReminder => 'Hatırlatıcı ekle';
+  String get calendarAddReminder => 'HatÄ±rlatÄ±cÄ± ekle';
 
   @override
-  String get calendarEditReminder => 'Düzenle';
+  String get calendarEditReminder => 'DÃ¼zenle';
 
   @override
   String get calendarDeleteReminder => 'Sil';
 
   @override
-  String get calendarReminderFormTitleNew => 'Yeni hatırlatıcı';
+  String get calendarReminderFormTitleNew => 'Yeni hatÄ±rlatÄ±cÄ±';
 
   @override
-  String get calendarReminderFormTitleEdit => 'Hatırlatıcıyı düzenle';
+  String get calendarReminderFormTitleEdit => 'HatÄ±rlatÄ±cÄ±yÄ± dÃ¼zenle';
 
   @override
-  String get calendarReminderTitleLabel => 'Başlık';
+  String get calendarReminderTitleLabel => 'BaÅŸlÄ±k';
 
   @override
-  String get calendarReminderTitleHint => 'örn. Ramazan başlangıcı';
+  String get calendarReminderTitleHint => 'Ã¶rn. Ramazan baÅŸlangÄ±cÄ±';
 
   @override
-  String get calendarReminderNotesLabel => 'Notlar (isteğe bağlı)';
+  String get calendarReminderNotesLabel => 'Notlar (isteÄŸe baÄŸlÄ±)';
 
   @override
   String get calendarReminderDateTimeLabel => 'Tarih ve saat';
@@ -473,7 +481,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarRecurrenceOnce => 'Bir kez';
 
   @override
-  String get calendarRecurrenceDaily => 'Her gün';
+  String get calendarRecurrenceDaily => 'Her gÃ¼n';
 
   @override
   String get calendarRecurrenceWeekly => 'Her hafta';
@@ -482,35 +490,35 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarRecurrenceMonthly => 'Her ay';
 
   @override
-  String get calendarRecurrenceYearly => 'Her yıl';
+  String get calendarRecurrenceYearly => 'Her yÄ±l';
 
   @override
-  String get calendarRepeatCountLabel => 'Tekrar sayısı';
+  String get calendarRepeatCountLabel => 'Tekrar sayÄ±sÄ±';
 
   @override
   String get calendarRepeatCountHelper =>
-      'Hatırlatmanın durmadan önce kaç kez çalacağı (kapalı = her zaman tekrarlanır)';
+      'HatÄ±rlatmanÄ±n durmadan Ã¶nce kaÃ§ kez Ã§alacaÄŸÄ± (kapalÄ± = her zaman tekrarlanÄ±r)';
 
   @override
-  String get calendarRepeatCountError => '2 ile 100 arasında bir sayı girin';
+  String get calendarRepeatCountError => '2 ile 100 arasÄ±nda bir sayÄ± girin';
 
   @override
   String get calendarRepeatDaysLabel => 'Tekrarla';
 
   @override
-  String get calendarDayOfMonthLabel => 'Ayın günü';
+  String get calendarDayOfMonthLabel => 'AyÄ±n gÃ¼nÃ¼';
 
   @override
   String get calendarYearlyMonthLabel => 'Ay';
 
   @override
-  String get calendarYearlyDayLabel => 'Gün';
+  String get calendarYearlyDayLabel => 'GÃ¼n';
 
   @override
-  String get calendarMonthlyBasisLabel => 'Aylık esas';
+  String get calendarMonthlyBasisLabel => 'AylÄ±k esas';
 
   @override
-  String get calendarYearlyBasisLabel => 'Yıllık esas';
+  String get calendarYearlyBasisLabel => 'YÄ±llÄ±k esas';
 
   @override
   String get calendarYearlyBasisGregorian => 'Miladi';
@@ -519,7 +527,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarYearlyBasisHijri => 'Hicri';
 
   @override
-  String get calendarReminderTitleRequired => 'Bir başlık girin';
+  String get calendarReminderTitleRequired => 'Bir baÅŸlÄ±k girin';
 
   @override
   String get calendarAnchorClockTime => 'Takvim tarihi';
@@ -528,19 +536,19 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarAnchorPrayerTime => 'Namaz vakti';
 
   @override
-  String get calendarSelectPrayer => 'Vakit seçin';
+  String get calendarSelectPrayer => 'Vakit seÃ§in';
 
   @override
   String get calendarOffsetOnTime => 'Vaktinde';
 
   @override
-  String get calendarOffsetBefore => 'Önce';
+  String get calendarOffsetBefore => 'Ã–nce';
 
   @override
   String get calendarOffsetAfter => 'Sonra';
 
   @override
-  String get calendarPickAnchorDate => 'Tarih seç';
+  String get calendarPickAnchorDate => 'Tarih seÃ§';
 
   @override
   String get datesPrayerTimesTab => 'Namaz Vakitleri';

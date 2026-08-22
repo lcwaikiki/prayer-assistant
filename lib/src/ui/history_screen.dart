@@ -7,6 +7,7 @@ import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
+import '../utils/time_utils.dart';
 
 const double _dateColWidth = 66;
 const double _minTimeColWidth = 44;
@@ -294,6 +295,12 @@ class _HistoryScreenState extends State<HistoryScreen>
                         source: entry.key,
                       ),
                       todayRowKey: _todayRowKey,
+                      isCompleted: controller.isPrayerCompleted,
+                      onToggleCompleted: (prayer, date) =>
+                          controller.togglePrayerCompletionForDate(
+                            prayer,
+                            date,
+                          ),
                     ),
                   );
                 },
@@ -355,6 +362,8 @@ class _MonthTable extends StatelessWidget {
     required this.horizontalController,
     required this.onHorizontalScroll,
     required this.todayRowKey,
+    required this.isCompleted,
+    required this.onToggleCompleted,
   });
 
   final String month;
@@ -363,6 +372,8 @@ class _MonthTable extends StatelessWidget {
   final ScrollController horizontalController;
   final ValueChanged<double> onHorizontalScroll;
   final GlobalKey todayRowKey;
+  final bool Function(String prayerName, DateTime date) isCompleted;
+  final void Function(String prayerName, DateTime date) onToggleCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -471,18 +482,57 @@ class _MonthTable extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                for (final time in [
-                                  day.imsak,
-                                  day.gunes,
-                                  day.ogle,
-                                  day.ikindi,
-                                  day.aksam,
-                                  day.yatsi,
-                                ])
+                                for (final prayerName in prayerOrder)
                                   DataCell(
-                                    SizedBox(
-                                      width: timeWidth,
-                                      child: cellText(time),
+                                    GestureDetector(
+                                      onTap: () => onToggleCompleted(
+                                        prayerName,
+                                        day.date,
+                                      ),
+                                      child: SizedBox(
+                                        width: timeWidth,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              (() => switch (prayerName) {
+                                                'Imsak' => day.imsak,
+                                                'Gunes' => day.gunes,
+                                                'Ogle' => day.ogle,
+                                                'Ikindi' => day.ikindi,
+                                                'Aksam' => day.aksam,
+                                                'Yatsi' => day.yatsi,
+                                                _ => '--:--',
+                                              })(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: isCompleted(
+                                                  prayerName,
+                                                  day.date,
+                                                )
+                                                    ? FontWeight.w700
+                                                    : FontWeight.w400,
+                                                color: isCompleted(
+                                                  prayerName,
+                                                  day.date,
+                                                )
+                                                    ? Colors.green.shade700
+                                                    : null,
+                                              ),
+                                            ),
+                                            if (isCompleted(
+                                              prayerName,
+                                              day.date,
+                                            ))
+                                              Icon(
+                                                Icons.check,
+                                                size: 12,
+                                                color: Colors.green.shade700,
+                                              ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 DataCell(

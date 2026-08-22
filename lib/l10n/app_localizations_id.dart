@@ -65,7 +65,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Kiblat: $degrees°';
+    return 'Kiblat: $degreesÂ°';
   }
 
   @override
@@ -94,7 +94,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String todayWithDate(Object date) {
-    return 'Hari ini • $date';
+    return 'Hari ini â€¢ $date';
   }
 
   @override
@@ -154,15 +154,15 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Aktif • Tepat waktu + $minutes mnt sebelum';
+    return 'Aktif â€¢ Tepat waktu + $minutes mnt sebelum';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Aktif • Tepat waktu';
+  String get reminderOnTimeOnly => 'Aktif â€¢ Tepat waktu';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Aktif • $minutes mnt sebelum';
+    return 'Aktif â€¢ $minutes mnt sebelum';
   }
 
   @override
@@ -173,6 +173,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeUpcomingRemindersTitle => 'Pengingat mendatang';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total shalat selesai';
+  }
 
   @override
   String startsIn(Object remaining) {

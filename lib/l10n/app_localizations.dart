@@ -406,6 +406,12 @@ abstract class AppLocalizations {
   /// **'Upcoming reminders'**
   String get homeUpcomingRemindersTitle;
 
+  /// No description provided for @prayersCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed}/{total} prayers completed'**
+  String prayersCompleted(Object completed, Object total);
+
   /// No description provided for @startsIn.
   ///
   /// In en, this message translates to:

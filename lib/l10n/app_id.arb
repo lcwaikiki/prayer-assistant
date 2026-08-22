@@ -1,4 +1,4 @@
-{
+﻿{
   "@@locale": "id",
   "appTitle": "Asisten Salat",
   "tabLocation": "Lokasi",
@@ -24,7 +24,7 @@
       }
     }
   },
-  "qiblaBearing": "Kiblat: {degrees}°",
+  "qiblaBearing": "Kiblat: {degrees}Â°",
   "qiblaLocationUnavailable": "Tidak dapat menentukan lokasi Anda. Aktifkan GPS dan coba lagi.",
   "qiblaHeadingUnavailable": "Kompas tidak tersedia - menampilkan arah tetap.",
   "qiblaPointDevice": "Putar perangkat hingga jarum menunjuk ke atas.",
@@ -32,7 +32,7 @@
   "shareTodayTimes": "Bagikan waktu hari ini",
   "calendarPreviousDay": "Hari sebelumnya",
   "calendarNextDay": "Hari berikutnya",
-  "todayWithDate": "Hari ini • {date}",
+  "todayWithDate": "Hari ini â€¢ {date}",
   "hijriUnknown": "Hijriah: -",
   "hijriWithDate": "Hijriah: {date}",
   "reminderSettingsTitle": "Pengaturan pengingat",
@@ -49,12 +49,13 @@
   "noPendingReminders": "Tidak ada pengingat tertunda.",
   "unknownFireTime": "Waktu tidak diketahui",
   "pastPrefix": "[LEWAT] ",
-  "reminderOnTimeAndBefore": "Aktif • Tepat waktu + {minutes} mnt sebelum",
-  "reminderOnTimeOnly": "Aktif • Tepat waktu",
-  "reminderBeforeOnly": "Aktif • {minutes} mnt sebelum",
+  "reminderOnTimeAndBefore": "Aktif â€¢ Tepat waktu + {minutes} mnt sebelum",
+  "reminderOnTimeOnly": "Aktif â€¢ Tepat waktu",
+  "reminderBeforeOnly": "Aktif â€¢ {minutes} mnt sebelum",
   "reminderOff": "Pengingat nonaktif",
   "nextPrayerTitle": "Salat Berikutnya",
   "homeUpcomingRemindersTitle": "Pengingat mendatang",
+  "prayersCompleted": "{completed}/{total} shalat selesai",
   "startsIn": "Mulai dalam {remaining}",
   "selectYourLocation": "Pilih lokasi Anda",
   "locationHelp": "Gunakan GPS untuk setup cepat atau pilih negara/kota secara manual.",
@@ -125,7 +126,8 @@
   "widgetTextSizeExtraSmall": "Sangat kecil",
   "widgetTextSizeSmall": "Kecil",
   "widgetTextSizeMedium": "Sedang",
-  "widgetTextSizeLarge": "Besar",  "widgetMmssThresholdTitle": "Hitung mundur detik widget",
+  "widgetTextSizeLarge": "Besar",
+  "widgetMmssThresholdTitle": "Hitung mundur detik widget",
   "widgetMmssThresholdNever": "Selalu tampilkan HH:MM",
   "widgetMmssThresholdValue": "MM:SS di bawah {minutes} mnt",
   "@widgetMmssThresholdValue": {

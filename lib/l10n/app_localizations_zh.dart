@@ -9,532 +9,553 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => '礼拜助手';
+  String get appTitle => 'ç¤¼æ‹œåŠ©æ‰‹';
 
   @override
-  String get tabLocation => '位置';
+  String get tabLocation => 'ä½ç½®';
 
   @override
-  String get tabToday => '今天';
+  String get tabToday => 'ä»Šå¤©';
 
   @override
-  String get tabDates => '日期';
+  String get tabDates => 'æ—¥æœŸ';
 
   @override
-  String get tabTesbih => '念珠';
+  String get tabTesbih => 'å¿µç ';
 
   @override
-  String get tooltipToggleLightDark => '切换明暗模式';
+  String get tooltipToggleLightDark => 'åˆ‡æ¢æ˜Žæš—æ¨¡å¼';
 
   @override
-  String get tooltipRemindersOn => '开启提醒';
+  String get tooltipRemindersOn => 'å¼€å¯æé†’';
 
   @override
-  String get tooltipRemindersOff => '关闭提醒';
+  String get tooltipRemindersOff => 'å…³é—­æé†’';
 
   @override
-  String get tooltipPreferences => '偏好设置';
+  String get tooltipPreferences => 'åå¥½è®¾ç½®';
 
   @override
   String remainingMinutesValue(Object minutes) {
-    return '$minutes 分钟';
+    return '$minutes åˆ†é’Ÿ';
   }
 
   @override
-  String get remainingMinutesUnknown => '-- 分钟';
+  String get remainingMinutesUnknown => '-- åˆ†é’Ÿ';
 
   @override
-  String get homeNoLocationTitle => '未选择位置';
+  String get homeNoLocationTitle => 'æœªé€‰æ‹©ä½ç½®';
 
   @override
-  String get homeNoLocationSubtitle => '请先到“位置”页保存你的地区。';
+  String get homeNoLocationSubtitle =>
+      'è¯·å…ˆåˆ°â€œä½ç½®â€é¡µä¿å­˜ä½ çš„åœ°åŒºã€‚';
 
   @override
-  String get homeNoPrayerTimesTitle => '暂无缓存礼拜时间';
+  String get homeNoPrayerTimesTitle => 'æš‚æ— ç¼“å­˜ç¤¼æ‹œæ—¶é—´';
 
   @override
-  String get homeNoPrayerTimesSubtitle => '点击刷新以同步全年数据。';
+  String get homeNoPrayerTimesSubtitle =>
+      'ç‚¹å‡»åˆ·æ–°ä»¥åŒæ­¥å…¨å¹´æ•°æ®ã€‚';
 
   @override
-  String get refresh => '刷新';
+  String get refresh => 'åˆ·æ–°';
 
   @override
-  String get qiblaTitle => '朝拜方向';
+  String get qiblaTitle => 'æœæ‹œæ–¹å‘';
 
   @override
   String qiblaBearing(int degrees) {
-    return '朝拜方向: $degrees°';
+    return 'æœæ‹œæ–¹å‘: $degreesÂ°';
   }
 
   @override
-  String get qiblaLocationUnavailable => '无法确定您的位置。请启用GPS后重试。';
+  String get qiblaLocationUnavailable =>
+      'æ— æ³•ç¡®å®šæ‚¨çš„ä½ç½®ã€‚è¯·å¯ç”¨GPSåŽé‡è¯•ã€‚';
 
   @override
-  String get qiblaHeadingUnavailable => '指南针不可用 - 显示固定方向。';
+  String get qiblaHeadingUnavailable =>
+      'æŒ‡å—é’ˆä¸å¯ç”¨ - æ˜¾ç¤ºå›ºå®šæ–¹å‘ã€‚';
 
   @override
-  String get qiblaPointDevice => '旋转设备直到指针朝上。';
+  String get qiblaPointDevice => 'æ—‹è½¬è®¾å¤‡ç›´åˆ°æŒ‡é’ˆæœä¸Šã€‚';
 
   @override
-  String get qiblaKaabaShort => '朝拜';
+  String get qiblaKaabaShort => 'æœæ‹œ';
 
   @override
-  String get shareTodayTimes => '分享今日时间';
+  String get shareTodayTimes => 'åˆ†äº«ä»Šæ—¥æ—¶é—´';
 
   @override
-  String get calendarPreviousDay => '前一天';
+  String get calendarPreviousDay => 'å‰ä¸€å¤©';
 
   @override
-  String get calendarNextDay => '第二天';
+  String get calendarNextDay => 'ç¬¬äºŒå¤©';
 
   @override
   String todayWithDate(Object date) {
-    return '今天 • $date';
+    return 'ä»Šå¤© â€¢ $date';
   }
 
   @override
-  String get hijriUnknown => '回历: -';
+  String get hijriUnknown => 'å›žåŽ†: -';
 
   @override
   String hijriWithDate(Object date) {
-    return '回历: $date';
+    return 'å›žåŽ†: $date';
   }
 
   @override
-  String get reminderSettingsTitle => '提醒设置';
+  String get reminderSettingsTitle => 'æé†’è®¾ç½®';
 
   @override
-  String get reminderSettingsSubtitle => '点击上方任一礼拜时间以设置提醒及提前分钟数。';
+  String get reminderSettingsSubtitle =>
+      'ç‚¹å‡»ä¸Šæ–¹ä»»ä¸€ç¤¼æ‹œæ—¶é—´ä»¥è®¾ç½®æé†’åŠæå‰åˆ†é’Ÿæ•°ã€‚';
 
   @override
-  String get tooltipScheduledDebug => '计划提醒调试';
+  String get tooltipScheduledDebug => 'è®¡åˆ’æé†’è°ƒè¯•';
 
   @override
-  String get scheduledRemindersDebugTitle => '计划提醒（调试）';
+  String get scheduledRemindersDebugTitle => 'è®¡åˆ’æé†’ï¼ˆè°ƒè¯•ï¼‰';
 
   @override
   String pendingNotificationsCount(Object count) {
-    return '待处理通知：$count';
+    return 'å¾…å¤„ç†é€šçŸ¥ï¼š$count';
   }
 
   @override
-  String get sendTestNotificationNow => '立即发送测试通知';
+  String get sendTestNotificationNow => 'ç«‹å³å‘é€æµ‹è¯•é€šçŸ¥';
 
   @override
-  String get testNotificationSent => '测试通知已发送。';
+  String get testNotificationSent => 'æµ‹è¯•é€šçŸ¥å·²å‘é€ã€‚';
 
   @override
-  String get statusBarMinutesTitle => '状态栏分钟数';
+  String get statusBarMinutesTitle => 'çŠ¶æ€æ åˆ†é’Ÿæ•°';
 
   @override
-  String get statusBarMinutesSubtitle => '在状态栏显示持续的剩余分钟通知。';
+  String get statusBarMinutesSubtitle =>
+      'åœ¨çŠ¶æ€æ æ˜¾ç¤ºæŒç»­çš„å‰©ä½™åˆ†é’Ÿé€šçŸ¥ã€‚';
 
   @override
-  String get statusAutoRestoreTitle => '被划掉后自动恢复';
+  String get statusAutoRestoreTitle => 'è¢«åˆ’æŽ‰åŽè‡ªåŠ¨æ¢å¤';
 
   @override
-  String get statusAutoRestoreSubtitle => '用户划掉后自动重新创建状态项。';
+  String get statusAutoRestoreSubtitle =>
+      'ç”¨æˆ·åˆ’æŽ‰åŽè‡ªåŠ¨é‡æ–°åˆ›å»ºçŠ¶æ€é¡¹ã€‚';
 
   @override
-  String get noPendingReminders => '没有待处理提醒通知。';
+  String get noPendingReminders => 'æ²¡æœ‰å¾…å¤„ç†æé†’é€šçŸ¥ã€‚';
 
   @override
-  String get unknownFireTime => '未知触发时间';
+  String get unknownFireTime => 'æœªçŸ¥è§¦å‘æ—¶é—´';
 
   @override
-  String get pastPrefix => '[已过] ';
+  String get pastPrefix => '[å·²è¿‡] ';
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return '开启 • 准点 + 提前 $minutes 分钟';
+    return 'å¼€å¯ â€¢ å‡†ç‚¹ + æå‰ $minutes åˆ†é’Ÿ';
   }
 
   @override
-  String get reminderOnTimeOnly => '开启 • 准点';
+  String get reminderOnTimeOnly => 'å¼€å¯ â€¢ å‡†ç‚¹';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return '开启 • 提前 $minutes 分钟';
+    return 'å¼€å¯ â€¢ æå‰ $minutes åˆ†é’Ÿ';
   }
 
   @override
-  String get reminderOff => '提醒已关闭';
+  String get reminderOff => 'æé†’å·²å…³é—­';
 
   @override
-  String get nextPrayerTitle => '下一次礼拜';
+  String get nextPrayerTitle => 'ä¸‹ä¸€æ¬¡ç¤¼æ‹œ';
 
   @override
-  String get homeUpcomingRemindersTitle => '即将到来的提醒';
+  String get homeUpcomingRemindersTitle => 'å³å°†åˆ°æ¥çš„æé†’';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total 礼拜已完成';
+  }
 
   @override
   String startsIn(Object remaining) {
-    return '$remaining 后开始';
+    return '$remaining åŽå¼€å§‹';
   }
 
   @override
-  String get selectYourLocation => '选择你的位置';
+  String get selectYourLocation => 'é€‰æ‹©ä½ çš„ä½ç½®';
 
   @override
-  String get locationHelp => '可使用 GPS 快速设置，或手动选择国家/城市。';
+  String get locationHelp =>
+      'å¯ä½¿ç”¨ GPS å¿«é€Ÿè®¾ç½®ï¼Œæˆ–æ‰‹åŠ¨é€‰æ‹©å›½å®¶/åŸŽå¸‚ã€‚';
 
   @override
-  String get useCurrentLocation => '使用当前位置';
+  String get useCurrentLocation => 'ä½¿ç”¨å½“å‰ä½ç½®';
 
   @override
-  String get country => '国家';
+  String get country => 'å›½å®¶';
 
   @override
-  String get stateCity => '省/州 / 城市';
+  String get stateCity => 'çœ/å·ž / åŸŽå¸‚';
 
   @override
-  String get district => '地区';
+  String get district => 'åœ°åŒº';
 
   @override
-  String get saveLocation => '保存位置';
+  String get saveLocation => 'ä¿å­˜ä½ç½®';
 
   @override
   String selectedLocation(Object location) {
-    return '已选择：$location';
+    return 'å·²é€‰æ‹©ï¼š$location';
   }
 
   @override
-  String get historySelectLocationFirst => '请先选择位置以查看 1 年礼拜时间列表。';
+  String get historySelectLocationFirst =>
+      'è¯·å…ˆé€‰æ‹©ä½ç½®ä»¥æŸ¥çœ‹ 1 å¹´ç¤¼æ‹œæ—¶é—´åˆ—è¡¨ã€‚';
 
   @override
-  String get historyTableTitle => '礼拜时间表（全年）';
+  String get historyTableTitle => 'ç¤¼æ‹œæ—¶é—´è¡¨ï¼ˆå…¨å¹´ï¼‰';
 
   @override
-  String get todayShort => '今天';
+  String get todayShort => 'ä»Šå¤©';
 
   @override
-  String get dateHeader => '日期';
+  String get dateHeader => 'æ—¥æœŸ';
 
   @override
-  String get imsak => '晨礼';
+  String get imsak => 'æ™¨ç¤¼';
 
   @override
-  String get gunes => '日出';
+  String get gunes => 'æ—¥å‡º';
 
   @override
-  String get ogle => '晌礼';
+  String get ogle => 'æ™Œç¤¼';
 
   @override
-  String get ikindi => '晡礼';
+  String get ikindi => 'æ™¡ç¤¼';
 
   @override
-  String get aksam => '昏礼';
+  String get aksam => 'æ˜ç¤¼';
 
   @override
-  String get yatsi => '宵礼';
+  String get yatsi => 'å®µç¤¼';
 
   @override
-  String get hijriHeader => '回历';
+  String get hijriHeader => 'å›žåŽ†';
 
   @override
-  String get preferencesTitle => '偏好设置';
+  String get preferencesTitle => 'åå¥½è®¾ç½®';
 
   @override
-  String get languageTitle => '语言';
+  String get languageTitle => 'è¯­è¨€';
 
   @override
-  String get languageSystem => '跟随系统';
+  String get languageSystem => 'è·Ÿéšç³»ç»Ÿ';
 
   @override
-  String get themeModeTitle => '主题模式';
+  String get themeModeTitle => 'ä¸»é¢˜æ¨¡å¼';
 
   @override
-  String get themeSystem => '跟随系统';
+  String get themeSystem => 'è·Ÿéšç³»ç»Ÿ';
 
   @override
-  String get themeLight => '浅色';
+  String get themeLight => 'æµ…è‰²';
 
   @override
-  String get themeDark => '深色';
+  String get themeDark => 'æ·±è‰²';
 
   @override
-  String get appBarRemainingTitle => '首页顶栏剩余时间显示';
+  String get appBarRemainingTitle => 'é¦–é¡µé¡¶æ å‰©ä½™æ—¶é—´æ˜¾ç¤º';
 
   @override
-  String get showInTitle => '显示在标题';
+  String get showInTitle => 'æ˜¾ç¤ºåœ¨æ ‡é¢˜';
 
   @override
-  String get showAtRight => '显示在右侧';
+  String get showAtRight => 'æ˜¾ç¤ºåœ¨å³ä¾§';
 
   @override
-  String get showAsSubtitle => '显示为副标题';
+  String get showAsSubtitle => 'æ˜¾ç¤ºä¸ºå‰¯æ ‡é¢˜';
 
   @override
-  String get hideRemainingText => '隐藏剩余文字';
+  String get hideRemainingText => 'éšè—å‰©ä½™æ–‡å­—';
 
   @override
-  String get notificationMessageTitle => '通知消息';
+  String get notificationMessageTitle => 'é€šçŸ¥æ¶ˆæ¯';
 
   @override
-  String get notificationMessageShown => '显示';
+  String get notificationMessageShown => 'æ˜¾ç¤º';
 
   @override
-  String get notificationMessageHidden => '隐藏';
+  String get notificationMessageHidden => 'éšè—';
 
   @override
-  String get widgetTextSizeTitle => '小组件文字大小';
+  String get widgetTextSizeTitle => 'å°ç»„ä»¶æ–‡å­—å¤§å°';
 
   @override
-  String get widgetTextSizeSubtitle => '主屏幕小组件使用的文字大小。';
+  String get widgetTextSizeSubtitle =>
+      'ä¸»å±å¹•å°ç»„ä»¶ä½¿ç”¨çš„æ–‡å­—å¤§å°ã€‚';
 
   @override
-  String get widgetTextSizeExtraSmall => '极小';
+  String get widgetTextSizeExtraSmall => 'æžå°';
 
   @override
-  String get widgetTextSizeSmall => '小';
+  String get widgetTextSizeSmall => 'å°';
 
   @override
-  String get widgetTextSizeMedium => '中';
+  String get widgetTextSizeMedium => 'ä¸­';
 
   @override
-  String get widgetTextSizeLarge => '大';
+  String get widgetTextSizeLarge => 'å¤§';
 
   @override
-  String get widgetMmssThresholdTitle => '小组件秒倒计时';
+  String get widgetMmssThresholdTitle => 'å°ç»„ä»¶ç§’å€’è®¡æ—¶';
 
   @override
-  String get widgetMmssThresholdNever => '始终显示HH:MM';
+  String get widgetMmssThresholdNever => 'å§‹ç»ˆæ˜¾ç¤ºHH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return '$minutes 分钟以下显示 MM:SS';
+    return '$minutes åˆ†é’Ÿä»¥ä¸‹æ˜¾ç¤º MM:SS';
   }
 
   @override
-  String get remindersOnOffTitle => '提醒开/关';
+  String get remindersOnOffTitle => 'æé†’å¼€/å…³';
 
   @override
-  String get remindersOnOffSubtitle => '开启或关闭礼拜提醒通知，各礼拜的设置会保留。';
+  String get remindersOnOffSubtitle =>
+      'å¼€å¯æˆ–å…³é—­ç¤¼æ‹œæé†’é€šçŸ¥ï¼Œå„ç¤¼æ‹œçš„è®¾ç½®ä¼šä¿ç•™ã€‚';
 
   @override
-  String get reminderVibrationTitle => '提醒时振动';
+  String get reminderVibrationTitle => 'æé†’æ—¶æŒ¯åŠ¨';
 
   @override
-  String get reminderVibrationSubtitle => '提醒触发时脉冲式振动约10秒。';
+  String get reminderVibrationSubtitle =>
+      'æé†’è§¦å‘æ—¶è„‰å†²å¼æŒ¯åŠ¨çº¦10ç§’ã€‚';
 
   @override
-  String get reminderSoundTitle => '提醒时播放声音';
+  String get reminderSoundTitle => 'æé†’æ—¶æ’­æ”¾å£°éŸ³';
 
   @override
-  String get reminderSoundSubtitle => '提醒触发时播放通知声音。';
+  String get reminderSoundSubtitle => 'æé†’è§¦å‘æ—¶æ’­æ”¾é€šçŸ¥å£°éŸ³ã€‚';
 
   @override
-  String get remindersOn => '开';
+  String get remindersOn => 'å¼€';
 
   @override
-  String get remindersOff => '关';
+  String get remindersOff => 'å…³';
 
   @override
   String reminderScreenTitle(Object prayer) {
-    return '$prayer 提醒';
+    return '$prayer æé†’';
   }
 
   @override
-  String get reminderTypeTitle => '提醒类型（可同时选择）';
+  String get reminderTypeTitle => 'æé†’ç±»åž‹ï¼ˆå¯åŒæ—¶é€‰æ‹©ï¼‰';
 
   @override
-  String get onTime => '准点';
+  String get onTime => 'å‡†ç‚¹';
 
   @override
-  String get before => '提前';
+  String get before => 'æå‰';
 
   @override
-  String get after => '延后';
+  String get after => 'å»¶åŽ';
 
   @override
-  String get reminderAlertTitle => '提醒方式';
+  String get reminderAlertTitle => 'æé†’æ–¹å¼';
 
   @override
-  String get reminderAlertSubtitle => '还需要在偏好设置中打开对应开关才会真正提醒。';
+  String get reminderAlertSubtitle =>
+      'è¿˜éœ€è¦åœ¨åå¥½è®¾ç½®ä¸­æ‰“å¼€å¯¹åº”å¼€å…³æ‰ä¼šçœŸæ­£æé†’ã€‚';
 
   @override
-  String get vibrateChip => '振动';
+  String get vibrateChip => 'æŒ¯åŠ¨';
 
   @override
-  String get soundChip => '声音';
+  String get soundChip => 'å£°éŸ³';
 
   @override
-  String get adhanChip => '宣礼';
+  String get adhanChip => 'å®£ç¤¼';
 
   @override
-  String get remindBeforePrayerTitle => '在礼拜前提醒我';
+  String get remindBeforePrayerTitle => 'åœ¨ç¤¼æ‹œå‰æé†’æˆ‘';
 
   @override
-  String get remindAfterPrayerTitle => '在礼拜后提醒我';
+  String get remindAfterPrayerTitle => 'åœ¨ç¤¼æ‹œåŽæé†’æˆ‘';
 
   @override
   String minutesValue(Object minutes) {
-    return '$minutes 分钟';
+    return '$minutes åˆ†é’Ÿ';
   }
 
   @override
-  String get custom => '自定义';
+  String get custom => 'è‡ªå®šä¹‰';
 
   @override
-  String get customMinutes => '自定义分钟';
+  String get customMinutes => 'è‡ªå®šä¹‰åˆ†é’Ÿ';
 
   @override
-  String get customMinutesHint => '例如 12';
+  String get customMinutesHint => 'ä¾‹å¦‚ 12';
 
   @override
-  String get save => '保存';
+  String get save => 'ä¿å­˜';
 
   @override
-  String get enableBeforeToSelectMinutes => '启用“提前”后可选择分钟。';
+  String get enableBeforeToSelectMinutes =>
+      'å¯ç”¨â€œæå‰â€åŽå¯é€‰æ‹©åˆ†é’Ÿã€‚';
 
   @override
-  String get enableAfterToSelectMinutes => '启用“延后”后可选择分钟。';
+  String get enableAfterToSelectMinutes =>
+      'å¯ç”¨â€œå»¶åŽâ€åŽå¯é€‰æ‹©åˆ†é’Ÿã€‚';
 
   @override
-  String get enterValidPositiveNumber => '请输入有效的正数。';
+  String get enterValidPositiveNumber => 'è¯·è¾“å…¥æœ‰æ•ˆçš„æ­£æ•°ã€‚';
 
   @override
-  String get useValueUpTo240 => '请输入不超过 240 的分钟值。';
+  String get useValueUpTo240 => 'è¯·è¾“å…¥ä¸è¶…è¿‡ 240 çš„åˆ†é’Ÿå€¼ã€‚';
 
   @override
-  String get customMinutesSaved => '自定义分钟已保存。';
+  String get customMinutesSaved => 'è‡ªå®šä¹‰åˆ†é’Ÿå·²ä¿å­˜ã€‚';
 
   @override
-  String get cancel => '取消';
+  String get cancel => 'å–æ¶ˆ';
 
   @override
-  String get calendarTabTooltip => '回历日历';
+  String get calendarTabTooltip => 'å›žåŽ†æ—¥åŽ†';
 
   @override
-  String get calendarPreviousMonth => '上个月';
+  String get calendarPreviousMonth => 'ä¸Šä¸ªæœˆ';
 
   @override
-  String get calendarNextMonth => '下个月';
+  String get calendarNextMonth => 'ä¸‹ä¸ªæœˆ';
 
   @override
-  String get calendarSwapPrimary => '切换回历/公历';
+  String get calendarSwapPrimary => 'åˆ‡æ¢å›žåŽ†/å…¬åŽ†';
 
   @override
-  String get calendarShowSecondary => '显示副历日期';
+  String get calendarShowSecondary => 'æ˜¾ç¤ºå‰¯åŽ†æ—¥æœŸ';
 
   @override
-  String get calendarHideSecondary => '隐藏副历日期';
+  String get calendarHideSecondary => 'éšè—å‰¯åŽ†æ—¥æœŸ';
 
   @override
-  String get calendarNoRemindersOnDay => '这一天没有提醒';
+  String get calendarNoRemindersOnDay => 'è¿™ä¸€å¤©æ²¡æœ‰æé†’';
 
   @override
-  String get calendarAddReminder => '添加提醒';
+  String get calendarAddReminder => 'æ·»åŠ æé†’';
 
   @override
-  String get calendarEditReminder => '编辑';
+  String get calendarEditReminder => 'ç¼–è¾‘';
 
   @override
-  String get calendarDeleteReminder => '删除';
+  String get calendarDeleteReminder => 'åˆ é™¤';
 
   @override
-  String get calendarReminderFormTitleNew => '新建提醒';
+  String get calendarReminderFormTitleNew => 'æ–°å»ºæé†’';
 
   @override
-  String get calendarReminderFormTitleEdit => '编辑提醒';
+  String get calendarReminderFormTitleEdit => 'ç¼–è¾‘æé†’';
 
   @override
-  String get calendarReminderTitleLabel => '标题';
+  String get calendarReminderTitleLabel => 'æ ‡é¢˜';
 
   @override
-  String get calendarReminderTitleHint => '例如：斋月开始';
+  String get calendarReminderTitleHint => 'ä¾‹å¦‚ï¼šæ–‹æœˆå¼€å§‹';
 
   @override
-  String get calendarReminderNotesLabel => '备注（可选）';
+  String get calendarReminderNotesLabel => 'å¤‡æ³¨ï¼ˆå¯é€‰ï¼‰';
 
   @override
-  String get calendarReminderDateTimeLabel => '日期和时间';
+  String get calendarReminderDateTimeLabel => 'æ—¥æœŸå’Œæ—¶é—´';
 
   @override
-  String get calendarReminderRecurrenceLabel => '重复';
+  String get calendarReminderRecurrenceLabel => 'é‡å¤';
 
   @override
-  String get calendarRecurrenceOnce => '仅一次';
+  String get calendarRecurrenceOnce => 'ä»…ä¸€æ¬¡';
 
   @override
-  String get calendarRecurrenceDaily => '每天';
+  String get calendarRecurrenceDaily => 'æ¯å¤©';
 
   @override
-  String get calendarRecurrenceWeekly => '每周';
+  String get calendarRecurrenceWeekly => 'æ¯å‘¨';
 
   @override
-  String get calendarRecurrenceMonthly => '每月';
+  String get calendarRecurrenceMonthly => 'æ¯æœˆ';
 
   @override
-  String get calendarRecurrenceYearly => '每年';
+  String get calendarRecurrenceYearly => 'æ¯å¹´';
 
   @override
-  String get calendarRepeatCountLabel => '重复次数';
+  String get calendarRepeatCountLabel => 'é‡å¤æ¬¡æ•°';
 
   @override
-  String get calendarRepeatCountHelper => '提醒停止前触发的次数（关闭 = 永远重复）';
+  String get calendarRepeatCountHelper =>
+      'æé†’åœæ­¢å‰è§¦å‘çš„æ¬¡æ•°ï¼ˆå…³é—­ = æ°¸è¿œé‡å¤ï¼‰';
 
   @override
-  String get calendarRepeatCountError => '请输入 2 到 100 之间的数字';
+  String get calendarRepeatCountError => 'è¯·è¾“å…¥ 2 åˆ° 100 ä¹‹é—´çš„æ•°å­—';
 
   @override
-  String get calendarRepeatDaysLabel => '重复于';
+  String get calendarRepeatDaysLabel => 'é‡å¤äºŽ';
 
   @override
-  String get calendarDayOfMonthLabel => '每月几号';
+  String get calendarDayOfMonthLabel => 'æ¯æœˆå‡ å·';
 
   @override
-  String get calendarYearlyMonthLabel => '月份';
+  String get calendarYearlyMonthLabel => 'æœˆä»½';
 
   @override
-  String get calendarYearlyDayLabel => '日';
+  String get calendarYearlyDayLabel => 'æ—¥';
 
   @override
-  String get calendarMonthlyBasisLabel => '月度基准';
+  String get calendarMonthlyBasisLabel => 'æœˆåº¦åŸºå‡†';
 
   @override
-  String get calendarYearlyBasisLabel => '年度基准';
+  String get calendarYearlyBasisLabel => 'å¹´åº¦åŸºå‡†';
 
   @override
-  String get calendarYearlyBasisGregorian => '公历';
+  String get calendarYearlyBasisGregorian => 'å…¬åŽ†';
 
   @override
-  String get calendarYearlyBasisHijri => '回历';
+  String get calendarYearlyBasisHijri => 'å›žåŽ†';
 
   @override
-  String get calendarReminderTitleRequired => '请输入标题';
+  String get calendarReminderTitleRequired => 'è¯·è¾“å…¥æ ‡é¢˜';
 
   @override
-  String get calendarAnchorClockTime => '日历日期';
+  String get calendarAnchorClockTime => 'æ—¥åŽ†æ—¥æœŸ';
 
   @override
-  String get calendarAnchorPrayerTime => '礼拜时间';
+  String get calendarAnchorPrayerTime => 'ç¤¼æ‹œæ—¶é—´';
 
   @override
-  String get calendarSelectPrayer => '选择礼拜';
+  String get calendarSelectPrayer => 'é€‰æ‹©ç¤¼æ‹œ';
 
   @override
-  String get calendarOffsetOnTime => '准点';
+  String get calendarOffsetOnTime => 'å‡†ç‚¹';
 
   @override
-  String get calendarOffsetBefore => '提前';
+  String get calendarOffsetBefore => 'æå‰';
 
   @override
-  String get calendarOffsetAfter => '延后';
+  String get calendarOffsetAfter => 'å»¶åŽ';
 
   @override
-  String get calendarPickAnchorDate => '选择日期';
+  String get calendarPickAnchorDate => 'é€‰æ‹©æ—¥æœŸ';
 
   @override
-  String get datesPrayerTimesTab => '礼拜时间';
+  String get datesPrayerTimesTab => 'ç¤¼æ‹œæ—¶é—´';
 
   @override
-  String get datesCalendarTab => '日历';
+  String get datesCalendarTab => 'æ—¥åŽ†';
 
   @override
-  String get undo => '撤销';
+  String get undo => 'æ’¤é”€';
 
   @override
   String calendarReminderDeleted(Object title) {
-    return '已删除“$title”';
+    return 'å·²åˆ é™¤â€œ$titleâ€';
   }
 }

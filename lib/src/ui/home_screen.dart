@@ -167,6 +167,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
+                      Text(
+                        context.l10n.prayersCompleted(
+                          controller.completedCountForDate(day.date),
+                          6,
+                        ),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       if (nextPrayer != null)
                         _NextPrayerBanner(info: nextPrayer),
@@ -190,6 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       entry.$2,
                                     ),
                                     isNext: entry.$2 == nextPrayer?.name,
+                                    isCompleted: controller.isPrayerCompleted(
+                                      entry.$2,
+                                      day.date,
+                                    ),
                                     onTap: () async {
                                       await Navigator.of(context).push(
                                         MaterialPageRoute<void>(
@@ -206,6 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           notifyOnTime: !controller
                                               .reminderFor(entry.$2)
                                               .notifyOnTime,
+                                        ),
+                                    onToggleCompleted: () =>
+                                        controller.togglePrayerCompletion(
+                                          entry.$2,
                                         ),
                                   ),
                                 ),
@@ -232,16 +250,20 @@ class _CompactPrayerRow extends StatelessWidget {
     required this.value,
     required this.reminderSetting,
     required this.isNext,
+    required this.isCompleted,
     required this.onTap,
     required this.onToggleReminder,
+    required this.onToggleCompleted,
   });
 
   final String name;
   final String value;
   final ReminderSetting reminderSetting;
   final bool isNext;
+  final bool isCompleted;
   final VoidCallback onTap;
   final VoidCallback onToggleReminder;
+  final VoidCallback onToggleCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -263,18 +285,28 @@ class _CompactPrayerRow extends StatelessWidget {
     }
     final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
-      tileColor: isNext ? colorScheme.primaryContainer : null,
+      tileColor: isCompleted
+          ? Colors.green.withAlpha(30)
+          : (isNext ? colorScheme.primaryContainer : null),
       onTap: onTap,
-      leading: Icon(
-        Icons.access_time,
-        size: 26,
-        color: isNext ? colorScheme.onPrimaryContainer : null,
+      leading: IconButton(
+        visualDensity: VisualDensity.compact,
+        onPressed: onToggleCompleted,
+        icon: Icon(
+          isCompleted ? Icons.check_circle : Icons.circle_outlined,
+          size: 26,
+          color: isCompleted
+              ? Colors.green
+              : (isNext ? colorScheme.onPrimaryContainer : null),
+        ),
       ),
       title: Text(
         context.l10n.prayerNameLabel(name),
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w600,
-          color: isNext ? colorScheme.onPrimaryContainer : null,
+          color: isCompleted
+              ? Colors.green.shade700
+              : (isNext ? colorScheme.onPrimaryContainer : null),
         ),
       ),
       trailing: Row(
@@ -291,10 +323,12 @@ class _CompactPrayerRow extends StatelessWidget {
                     : Icons.notifications_off_outlined,
                 size: 22,
                 color: hasReminder
-                    ? (isNext
-                          ? colorScheme.onPrimaryContainer
-                          : colorScheme.primary)
-                    : colorScheme.outline,
+                    ? (isCompleted
+                          ? Colors.green.shade700
+                          : (isNext
+                              ? colorScheme.onPrimaryContainer
+                              : colorScheme.primary))
+                    : (isCompleted ? Colors.green.shade300 : colorScheme.outline),
               ),
             ),
           ),
@@ -302,14 +336,18 @@ class _CompactPrayerRow extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: isNext ? colorScheme.onPrimaryContainer : null,
+              color: isCompleted
+                  ? Colors.green.shade700
+                  : (isNext ? colorScheme.onPrimaryContainer : null),
             ),
           ),
           const SizedBox(width: 4),
           Icon(
             Icons.chevron_right,
             size: 22,
-            color: isNext ? colorScheme.onPrimaryContainer : null,
+            color: isCompleted
+                ? Colors.green.shade300
+                : (isNext ? colorScheme.onPrimaryContainer : null),
           ),
         ],
       ),

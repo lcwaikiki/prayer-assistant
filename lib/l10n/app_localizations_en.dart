@@ -174,6 +174,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeUpcomingRemindersTitle => 'Upcoming reminders';
 
   @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total prayers completed';
+  }
+
+  @override
   String startsIn(Object remaining) {
     return 'Starts in $remaining';
   }

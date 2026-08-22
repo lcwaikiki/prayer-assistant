@@ -9,10 +9,10 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
-  String get appTitle => 'Asistente de Oración';
+  String get appTitle => 'Asistente de OraciÃ³n';
 
   @override
-  String get tabLocation => 'Ubicación';
+  String get tabLocation => 'UbicaciÃ³n';
 
   @override
   String get tabToday => 'Hoy';
@@ -44,14 +44,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get remainingMinutesUnknown => '-- min';
 
   @override
-  String get homeNoLocationTitle => 'No hay ubicación seleccionada';
+  String get homeNoLocationTitle => 'No hay ubicaciÃ³n seleccionada';
 
   @override
   String get homeNoLocationSubtitle =>
-      'Ve a la pestaña Ubicación y guarda primero tu distrito.';
+      'Ve a la pestaÃ±a UbicaciÃ³n y guarda primero tu distrito.';
 
   @override
-  String get homeNoPrayerTimesTitle => 'No hay horarios en caché';
+  String get homeNoPrayerTimesTitle => 'No hay horarios en cachÃ©';
 
   @override
   String get homeNoPrayerTimesSubtitle =>
@@ -65,16 +65,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Qibla: $degrees°';
+    return 'Qibla: $degreesÂ°';
   }
 
   @override
   String get qiblaLocationUnavailable =>
-      'No se pudo determinar tu ubicación. Activa el GPS e inténtalo de nuevo.';
+      'No se pudo determinar tu ubicaciÃ³n. Activa el GPS e intÃ©ntalo de nuevo.';
 
   @override
   String get qiblaHeadingUnavailable =>
-      'Brújula no disponible - mostrando dirección fija.';
+      'BrÃºjula no disponible - mostrando direcciÃ³n fija.';
 
   @override
   String get qiblaPointDevice =>
@@ -87,22 +87,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareTodayTimes => 'Compartir horarios de hoy';
 
   @override
-  String get calendarPreviousDay => 'Día anterior';
+  String get calendarPreviousDay => 'DÃ­a anterior';
 
   @override
-  String get calendarNextDay => 'Día siguiente';
+  String get calendarNextDay => 'DÃ­a siguiente';
 
   @override
   String todayWithDate(Object date) {
-    return 'Hoy • $date';
+    return 'Hoy â€¢ $date';
   }
 
   @override
-  String get hijriUnknown => 'Hégira: -';
+  String get hijriUnknown => 'HÃ©gira: -';
 
   @override
   String hijriWithDate(Object date) {
-    return 'Hégira: $date';
+    return 'HÃ©gira: $date';
   }
 
   @override
@@ -110,14 +110,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get reminderSettingsSubtitle =>
-      'Toca cualquier hora de oración para configurar recordatorios y minutos antes.';
+      'Toca cualquier hora de oraciÃ³n para configurar recordatorios y minutos antes.';
 
   @override
-  String get tooltipScheduledDebug => 'Depuración de recordatorios';
+  String get tooltipScheduledDebug => 'DepuraciÃ³n de recordatorios';
 
   @override
   String get scheduledRemindersDebugTitle =>
-      'Recordatorios programados (Depuración)';
+      'Recordatorios programados (DepuraciÃ³n)';
 
   @override
   String pendingNotificationsCount(Object count) {
@@ -125,17 +125,17 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get sendTestNotificationNow => 'Enviar notificación de prueba';
+  String get sendTestNotificationNow => 'Enviar notificaciÃ³n de prueba';
 
   @override
-  String get testNotificationSent => 'Notificación de prueba enviada.';
+  String get testNotificationSent => 'NotificaciÃ³n de prueba enviada.';
 
   @override
   String get statusBarMinutesTitle => 'Minutos en barra de estado';
 
   @override
   String get statusBarMinutesSubtitle =>
-      'Mostrar notificación persistente de minutos restantes en la barra de estado.';
+      'Mostrar notificaciÃ³n persistente de minutos restantes en la barra de estado.';
 
   @override
   String get statusAutoRestoreTitle => 'Restaurar al descartarse';
@@ -155,25 +155,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Activado • En hora + $minutes min antes';
+    return 'Activado â€¢ En hora + $minutes min antes';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Activado • En hora';
+  String get reminderOnTimeOnly => 'Activado â€¢ En hora';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Activado • $minutes min antes';
+    return 'Activado â€¢ $minutes min antes';
   }
 
   @override
   String get reminderOff => 'Recordatorio desactivado';
 
   @override
-  String get nextPrayerTitle => 'Próxima oración';
+  String get nextPrayerTitle => 'PrÃ³xima oraciÃ³n';
 
   @override
-  String get homeUpcomingRemindersTitle => 'Próximos recordatorios';
+  String get homeUpcomingRemindersTitle => 'PrÃ³ximos recordatorios';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total oraciones completadas';
+  }
 
   @override
   String startsIn(Object remaining) {
@@ -181,17 +186,17 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get selectYourLocation => 'Selecciona tu ubicación';
+  String get selectYourLocation => 'Selecciona tu ubicaciÃ³n';
 
   @override
   String get locationHelp =>
-      'Usa GPS para una configuración rápida o elige país/ciudad manualmente.';
+      'Usa GPS para una configuraciÃ³n rÃ¡pida o elige paÃ­s/ciudad manualmente.';
 
   @override
-  String get useCurrentLocation => 'Usar ubicación actual';
+  String get useCurrentLocation => 'Usar ubicaciÃ³n actual';
 
   @override
-  String get country => 'País';
+  String get country => 'PaÃ­s';
 
   @override
   String get stateCity => 'Estado / Ciudad';
@@ -200,7 +205,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get district => 'Distrito';
 
   @override
-  String get saveLocation => 'Guardar ubicación';
+  String get saveLocation => 'Guardar ubicaciÃ³n';
 
   @override
   String selectedLocation(Object location) {
@@ -209,10 +214,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get historySelectLocationFirst =>
-      'Selecciona primero una ubicación para ver la lista anual de oraciones.';
+      'Selecciona primero una ubicaciÃ³n para ver la lista anual de oraciones.';
 
   @override
-  String get historyTableTitle => 'Tabla de Horarios de Oración (Año completo)';
+  String get historyTableTitle =>
+      'Tabla de Horarios de OraciÃ³n (AÃ±o completo)';
 
   @override
   String get todayShort => 'Hoy';
@@ -239,7 +245,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get yatsi => 'Isha';
 
   @override
-  String get hijriHeader => 'Hégira';
+  String get hijriHeader => 'HÃ©gira';
 
   @override
   String get preferencesTitle => 'Preferencias';
@@ -266,19 +272,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get appBarRemainingTitle => 'Texto restante en barra superior';
 
   @override
-  String get showInTitle => 'Mostrar en título';
+  String get showInTitle => 'Mostrar en tÃ­tulo';
 
   @override
   String get showAtRight => 'Mostrar a la derecha';
 
   @override
-  String get showAsSubtitle => 'Mostrar como subtítulo';
+  String get showAsSubtitle => 'Mostrar como subtÃ­tulo';
 
   @override
   String get hideRemainingText => 'Ocultar texto restante';
 
   @override
-  String get notificationMessageTitle => 'Mensaje de notificación';
+  String get notificationMessageTitle => 'Mensaje de notificaciÃ³n';
 
   @override
   String get notificationMessageShown => 'Visible';
@@ -287,17 +293,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get notificationMessageHidden => 'Oculto';
 
   @override
-  String get widgetTextSizeTitle => 'Tamaño de texto del widget';
+  String get widgetTextSizeTitle => 'TamaÃ±o de texto del widget';
 
   @override
   String get widgetTextSizeSubtitle =>
-      'Tamaño de texto usado en los widgets de la pantalla de inicio.';
+      'TamaÃ±o de texto usado en los widgets de la pantalla de inicio.';
 
   @override
-  String get widgetTextSizeExtraSmall => 'Muy pequeño';
+  String get widgetTextSizeExtraSmall => 'Muy pequeÃ±o';
 
   @override
-  String get widgetTextSizeSmall => 'Pequeño';
+  String get widgetTextSizeSmall => 'PequeÃ±o';
 
   @override
   String get widgetTextSizeMedium => 'Mediano';
@@ -306,7 +312,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get widgetTextSizeLarge => 'Grande';
 
   @override
-  String get widgetMmssThresholdTitle => 'Cuenta atrás en segundos del widget';
+  String get widgetMmssThresholdTitle => 'Cuenta atrÃ¡s en segundos del widget';
 
   @override
   String get widgetMmssThresholdNever => 'Mostrar siempre HH:MM';
@@ -321,21 +327,21 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get remindersOnOffSubtitle =>
-      'Activa o desactiva las notificaciones de oración. Se conservan los ajustes por oración.';
+      'Activa o desactiva las notificaciones de oraciÃ³n. Se conservan los ajustes por oraciÃ³n.';
 
   @override
   String get reminderVibrationTitle => 'Vibrar al recordar';
 
   @override
   String get reminderVibrationSubtitle =>
-      'Vibración por pulsos durante unos 10 segundos cuando se active un recordatorio.';
+      'VibraciÃ³n por pulsos durante unos 10 segundos cuando se active un recordatorio.';
 
   @override
   String get reminderSoundTitle => 'Reproducir sonido al recordar';
 
   @override
   String get reminderSoundSubtitle =>
-      'Reproduce el sonido de notificación cuando se active un recordatorio.';
+      'Reproduce el sonido de notificaciÃ³n cuando se active un recordatorio.';
 
   @override
   String get remindersOn => 'On';
@@ -359,14 +365,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get before => 'Antes';
 
   @override
-  String get after => 'Después';
+  String get after => 'DespuÃ©s';
 
   @override
   String get reminderAlertTitle => 'Alerta';
 
   @override
   String get reminderAlertSubtitle =>
-      'También requiere que el interruptor correspondiente esté activado en Preferencias para alertar realmente.';
+      'TambiÃ©n requiere que el interruptor correspondiente estÃ© activado en Preferencias para alertar realmente.';
 
   @override
   String get vibrateChip => 'Vibrar';
@@ -378,10 +384,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get adhanChip => 'Adhan';
 
   @override
-  String get remindBeforePrayerTitle => 'Recuérdame antes de la oración';
+  String get remindBeforePrayerTitle => 'RecuÃ©rdame antes de la oraciÃ³n';
 
   @override
-  String get remindAfterPrayerTitle => 'Recuérdame después de la oración';
+  String get remindAfterPrayerTitle => 'RecuÃ©rdame despuÃ©s de la oraciÃ³n';
 
   @override
   String minutesValue(Object minutes) {
@@ -406,10 +412,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get enableAfterToSelectMinutes =>
-      'Activa \"Después\" para elegir minutos.';
+      'Activa \"DespuÃ©s\" para elegir minutos.';
 
   @override
-  String get enterValidPositiveNumber => 'Introduce un número positivo válido.';
+  String get enterValidPositiveNumber =>
+      'Introduce un nÃºmero positivo vÃ¡lido.';
 
   @override
   String get useValueUpTo240 => 'Usa un valor de hasta 240 minutos.';
@@ -421,7 +428,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cancel => 'Cancelar';
 
   @override
-  String get calendarTabTooltip => 'Calendario Hégira';
+  String get calendarTabTooltip => 'Calendario HÃ©gira';
 
   @override
   String get calendarPreviousMonth => 'Mes anterior';
@@ -430,7 +437,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarNextMonth => 'Mes siguiente';
 
   @override
-  String get calendarSwapPrimary => 'Cambiar Hégira/Gregoriano';
+  String get calendarSwapPrimary => 'Cambiar HÃ©gira/Gregoriano';
 
   @override
   String get calendarShowSecondary => 'Mostrar fecha secundaria';
@@ -439,10 +446,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarHideSecondary => 'Ocultar fecha secundaria';
 
   @override
-  String get calendarNoRemindersOnDay => 'No hay recordatorios en este día';
+  String get calendarNoRemindersOnDay => 'No hay recordatorios en este dÃ­a';
 
   @override
-  String get calendarAddReminder => 'Añadir recordatorio';
+  String get calendarAddReminder => 'AÃ±adir recordatorio';
 
   @override
   String get calendarEditReminder => 'Editar';
@@ -457,10 +464,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarReminderFormTitleEdit => 'Editar recordatorio';
 
   @override
-  String get calendarReminderTitleLabel => 'Título';
+  String get calendarReminderTitleLabel => 'TÃ­tulo';
 
   @override
-  String get calendarReminderTitleHint => 'p. ej. Comienza el Ramadán';
+  String get calendarReminderTitleHint => 'p. ej. Comienza el RamadÃ¡n';
 
   @override
   String get calendarReminderNotesLabel => 'Notas (opcional)';
@@ -487,26 +494,26 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarRecurrenceYearly => 'Anual';
 
   @override
-  String get calendarRepeatCountLabel => 'Número de repeticiones';
+  String get calendarRepeatCountLabel => 'NÃºmero de repeticiones';
 
   @override
   String get calendarRepeatCountHelper =>
-      'Cuántas veces se activa el recordatorio antes de detenerse (desactivado = se repite siempre)';
+      'CuÃ¡ntas veces se activa el recordatorio antes de detenerse (desactivado = se repite siempre)';
 
   @override
-  String get calendarRepeatCountError => 'Introduce un número del 2 al 100';
+  String get calendarRepeatCountError => 'Introduce un nÃºmero del 2 al 100';
 
   @override
   String get calendarRepeatDaysLabel => 'Repetir en';
 
   @override
-  String get calendarDayOfMonthLabel => 'Día del mes';
+  String get calendarDayOfMonthLabel => 'DÃ­a del mes';
 
   @override
   String get calendarYearlyMonthLabel => 'Mes';
 
   @override
-  String get calendarYearlyDayLabel => 'Día';
+  String get calendarYearlyDayLabel => 'DÃ­a';
 
   @override
   String get calendarMonthlyBasisLabel => 'Base mensual';
@@ -518,19 +525,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarYearlyBasisGregorian => 'Gregoriano';
 
   @override
-  String get calendarYearlyBasisHijri => 'Hégira';
+  String get calendarYearlyBasisHijri => 'HÃ©gira';
 
   @override
-  String get calendarReminderTitleRequired => 'Introduce un título';
+  String get calendarReminderTitleRequired => 'Introduce un tÃ­tulo';
 
   @override
   String get calendarAnchorClockTime => 'Fecha del calendario';
 
   @override
-  String get calendarAnchorPrayerTime => 'Hora de oración';
+  String get calendarAnchorPrayerTime => 'Hora de oraciÃ³n';
 
   @override
-  String get calendarSelectPrayer => 'Selecciona la oración';
+  String get calendarSelectPrayer => 'Selecciona la oraciÃ³n';
 
   @override
   String get calendarOffsetOnTime => 'En hora';
@@ -539,13 +546,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarOffsetBefore => 'Antes';
 
   @override
-  String get calendarOffsetAfter => 'Después';
+  String get calendarOffsetAfter => 'DespuÃ©s';
 
   @override
   String get calendarPickAnchorDate => 'Elegir fecha';
 
   @override
-  String get datesPrayerTimesTab => 'Horarios de oración';
+  String get datesPrayerTimesTab => 'Horarios de oraciÃ³n';
 
   @override
   String get datesCalendarTab => 'Calendario';

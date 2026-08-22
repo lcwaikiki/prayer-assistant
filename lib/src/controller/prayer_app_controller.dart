@@ -59,6 +59,7 @@ class PrayerAppController extends ChangeNotifier {
   List<CalendarReminder> _calendarReminders = const <CalendarReminder>[];
   CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
   bool _showSecondaryCalendarDate = true;
+  Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
 
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
@@ -109,6 +110,44 @@ class PrayerAppController extends ChangeNotifier {
   CalendarPrimaryDisplay get calendarPrimaryDisplay => _calendarPrimaryDisplay;
   bool get showSecondaryCalendarDate => _showSecondaryCalendarDate;
 
+  Map<String, List<String>> get prayerCompletions => _prayerCompletions;
+
+  bool isPrayerCompleted(String prayerName, DateTime date) {
+    final key = _toDateKey(date);
+    return _prayerCompletions[key]?.contains(prayerName) ?? false;
+  }
+
+  int completedCountForDate(DateTime date) {
+    final key = _toDateKey(date);
+    return _prayerCompletions[key]?.length ?? 0;
+  }
+
+  void togglePrayerCompletion(String prayerName) {
+    togglePrayerCompletionForDate(prayerName, DateTime.now());
+  }
+
+  void togglePrayerCompletionForDate(String prayerName, DateTime date) {
+    final key = _toDateKey(date);
+    final next = Map<String, List<String>>.from(_prayerCompletions);
+    final current = List<String>.from(next[key] ?? []);
+    if (current.contains(prayerName)) {
+      current.remove(prayerName);
+    } else {
+      current.add(prayerName);
+    }
+    next[key] = current;
+    _prayerCompletions = next;
+    database.savePrayerCompletions(next);
+    notifyListeners();
+  }
+
+  String _toDateKey(DateTime date) {
+    final safe = DateTime(date.year, date.month, date.day);
+    return '${safe.year.toString().padLeft(4, '0')}-'
+        '${safe.month.toString().padLeft(2, '0')}-'
+        '${safe.day.toString().padLeft(2, '0')}';
+  }
+
   Future<void> initialize() async {
     _setLoading(true);
     try {
@@ -116,6 +155,7 @@ class PrayerAppController extends ChangeNotifier {
       await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
+      _prayerCompletions = await database.loadPrayerCompletions();
       _reminderSettings = {
         for (final entry in _reminderSettings.entries)
           entry.key: ReminderSetting.ensureCurrent(entry.value),

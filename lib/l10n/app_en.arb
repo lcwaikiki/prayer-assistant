@@ -85,6 +85,13 @@
   "reminderOff": "Reminder off",
   "nextPrayerTitle": "Next Prayer",
   "homeUpcomingRemindersTitle": "Upcoming reminders",
+  "prayersCompleted": "{completed}/{total} prayers completed",
+  "@prayersCompleted": {
+    "placeholders": {
+      "completed": {},
+      "total": {}
+    }
+  },
   "startsIn": "Starts in {remaining}",
   "@startsIn": {
     "placeholders": {

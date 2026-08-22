@@ -1,4 +1,4 @@
-# Prayer Assistant — Full Project Analysis
+# Prayer Assist — Full Project Analysis
 
 A Flutter mobile app (Android + iOS) for Islamic daily practice: prayer times,
 Hijri/Gregorian calendar with reminders, Qibla direction, and a digital dhikr
@@ -480,7 +480,7 @@ countdown already kicks in whenever the next prayer is under an hour away. To
 observe it without waiting:
 
 1. **Install and add widgets**: run the app (or `flutter build apk --debug`),
-   long-press the home screen → Widgets → Prayer Assistant → add any of
+   long-press the home screen → Widgets → Prayer Assist → add any of
    *Next Prayer*, *Remaining Time*, or *Remaining Time Circle* (these three
    use the countdown; Daily Prayer Times and Upcoming Reminders do not).
 2. **Pick a location and sync** the current year's prayer times.

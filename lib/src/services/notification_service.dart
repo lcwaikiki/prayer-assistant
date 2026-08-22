@@ -204,7 +204,7 @@ class NotificationService {
   Future<void> showTestNotificationNow() async {
     await _plugin.show(
       id: 900001,
-      title: 'Prayer Assistant test',
+      title: 'Prayer Assist test',
       body: 'Notification pipeline is working on this device.',
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(

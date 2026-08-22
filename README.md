@@ -1,4 +1,4 @@
-# Prayer Assistant
+# Prayer Assist
 
 A Flutter mobile app for Islamic daily practice: prayer times, Hijri/Gregorian
 calendar with reminders, and a digital dhikr (tesbih) counter with reminder

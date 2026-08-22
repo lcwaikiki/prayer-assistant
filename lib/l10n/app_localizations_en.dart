@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Prayer Assistant';
+  String get appTitle => 'Prayer Assist';
 
   @override
   String get tabLocation => 'Location';

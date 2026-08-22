@@ -1,4 +1,4 @@
-﻿# Prayer Assistant — Detailed Feature Inventory
+﻿# Prayer Assist — Detailed Feature Inventory
 
 Technical feature inventory derived from codebase analysis. All items are factual and current.
 

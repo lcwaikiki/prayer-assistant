@@ -1,4 +1,4 @@
-# Prayer Assistant — Plan
+# Prayer Assist — Plan
 
 Living document: feature inventory of the app as it stands, plus a running
 todo checklist. Check items off as they're completed; add new ones as work
@@ -220,5 +220,5 @@ Two sub-tabs:
       user's physical phone mis-tapped into an unrelated app (a floating
       overlay intercepted a tap), so at the user's choice this final
       manual check (add a reminder, long-press home screen → widgets →
-      "Prayer Assistant" → Upcoming reminders) is left for the user to
+      "Prayer Assist" → Upcoming reminders) is left for the user to
       do themselves rather than risk more automated taps on their device.

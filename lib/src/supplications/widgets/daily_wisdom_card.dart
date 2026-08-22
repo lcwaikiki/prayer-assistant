@@ -132,7 +132,7 @@ class DailyWisdomCard extends StatelessWidget {
                   icon: const Icon(Icons.share_rounded, size: 18),
                   onPressed: () {
                     final shareString =
-                        '${wisdom.textAr}\n\n$localizedText\n— ${wisdom.reference}\n\nVia Prayer Assistant';
+                        '${wisdom.textAr}\n\n$localizedText\n— ${wisdom.reference}\n\nVia Prayer Assist';
                     SharePlus.instance.share(ShareParams(text: shareString));
                   },
                 ),

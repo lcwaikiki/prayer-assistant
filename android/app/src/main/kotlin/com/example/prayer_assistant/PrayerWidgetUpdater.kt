@@ -571,7 +571,7 @@ object PrayerWidgetUpdater {
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Prayer Assistant")
+                .setContentTitle("Prayer Assist")
                 .setContentText("Widget countdown active")
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
@@ -603,7 +603,7 @@ object PrayerWidgetUpdater {
         val expandedView = buildStatusExpandedView(context, next)
         return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
             .setSmallIcon(buildSmallIcon(context, next))
-            .setContentTitle("Prayer Assistant")
+            .setContentTitle("Prayer Assist")
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(contentView)
             .setCustomBigContentView(expandedView)

@@ -1,11 +1,11 @@
-# Prayer Assistant — App Store Feature Document
+# Prayer Assist — App Store Feature Document
 
 Feature inventory of the app, suitable for preparing app-store listings
 (Google Play, App Store). All items are factual, derived from the codebase.
 
 ## App identity
 
-- **Name**: Prayer Assistant (localized per device language, e.g. "Namaz Asistanı" in Turkish, "Asistente de Oración" in Spanish, "مساعد الصلاة" in Arabic)
+- **Name**: Prayer Assist (localized per device language, e.g. "Namaz Asistanı" in Turkish, "Asistente de Oración" in Spanish, "مساعد الصلاة" in Arabic)
 - **Suggested tagline**: Islamic daily practice, all in one app — prayer times, Hijri calendar, Qibla, and digital dhikr
 - **Category**: Lifestyle / Education / Productivity
 - **Version**: 1.0.0
@@ -13,7 +13,7 @@ Feature inventory of the app, suitable for preparing app-store listings
 
 ## Suggested store description
 
-Prayer Assistant brings together everything you need for daily Islamic
+Prayer Assist brings together everything you need for daily Islamic
 practice: accurate prayer times with reminders, an offline Hijri
 calendar, Qibla direction, and a digital dhikr (tesbih) counter with
 full reminder support — all localized for 12 languages and designed to

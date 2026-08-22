@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Cadangkan & Ekspor",
+  "backupExportSubtitle": "Cadangkan data aplikasi atau ekspor jadwal",
+  "exportBackupJson": "Ekspor Data Cadangan (JSON)",
+  "restoreBackupJson": "Pulihkan Data dari Cadangan",
+  "exportPrayerScheduleIcs": "Ekspor Jadwal Shalat (.ics)",
+  "exportHolidaysIcs": "Ekspor Hari Besar Islam (.ics)",
+  "restoreConfirmTitle": "Pulihkan Data Aplikasi?",
+  "restoreConfirmBody": "Ini akan memulihkan target Qadha, riwayat shalat, pengingat, dan data Tasbih Anda. Lanjutkan?",
+  "restoreSuccess": "Data berhasil dipulihkan!",
+  "restoreError": "Format berkas cadangan tidak valid"
 }

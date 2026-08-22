@@ -118,4 +118,27 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('shows Backup & Export section and lists export options',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const PreferencesScreen());
+
+    await tester.scrollUntilVisible(
+      find.text('Backup & Export'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Backup & Export'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Export Backup Data (JSON)'), findsOneWidget);
+    expect(find.text('Restore Data from Backup'), findsOneWidget);
+    expect(find.text('Export Islamic Holidays (.ics)'), findsOneWidget);
+
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

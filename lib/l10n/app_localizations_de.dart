@@ -722,4 +722,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days Tage pro Gebet (Insgesamt $total Gebete)';
   }
+
+  @override
+  String get backupExportTitle => 'Sicherung & Export';
+
+  @override
+  String get backupExportSubtitle =>
+      'App-Daten sichern oder Kalender exportieren';
+
+  @override
+  String get exportBackupJson => 'Sicherungsdaten exportieren (JSON)';
+
+  @override
+  String get restoreBackupJson => 'Daten aus Sicherung wiederherstellen';
+
+  @override
+  String get exportPrayerScheduleIcs => 'Gebetszeiten exportieren (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'Islamische Feiertage exportieren (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'Daten wiederherstellen?';
+
+  @override
+  String get restoreConfirmBody =>
+      'Dies stellt Ihre Qadaa-Ziele, Gebetsverlauf, Erinnerungen und Tesbih-Daten wieder her. Fortfahren?';
+
+  @override
+  String get restoreSuccess => 'Daten erfolgreich wiederhergestellt!';
+
+  @override
+  String get restoreError => 'Ungültiges Sicherungsdateiformat';
 }

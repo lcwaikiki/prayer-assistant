@@ -316,5 +316,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Backup & Export",
+  "backupExportSubtitle": "Backup app data or export calendar schedules",
+  "exportBackupJson": "Export Backup Data (JSON)",
+  "restoreBackupJson": "Restore Data from Backup",
+  "exportPrayerScheduleIcs": "Export Prayer Schedule (.ics)",
+  "exportHolidaysIcs": "Export Islamic Holidays (.ics)",
+  "restoreConfirmTitle": "Restore App Data?",
+  "restoreConfirmBody": "This will restore your Qadaa targets, prayer history, reminders, and Tesbihat data. Continue?",
+  "restoreSuccess": "Data restored successfully!",
+  "restoreError": "Invalid backup file format"
 }

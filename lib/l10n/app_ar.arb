@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "النسخ الاحتياطي والتصدير",
+  "backupExportSubtitle": "نسخ بيانات التطبيق احتياطياً أو تصدير التقويم",
+  "exportBackupJson": "تصدير النسخة الاحتياطية (JSON)",
+  "restoreBackupJson": "استعادة البيانات من النسخة الاحتياطية",
+  "exportPrayerScheduleIcs": "تصدير مواقيت الصلاة (.ics)",
+  "exportHolidaysIcs": "تصدير المناسبات الإسلامية (.ics)",
+  "restoreConfirmTitle": "استعادة بيانات التطبيق؟",
+  "restoreConfirmBody": "سيتم استعادة أهداف القضاء وسجل الصلاة والتذكيرات والتسبيحات. هل تريد الاستمرار؟",
+  "restoreSuccess": "تمت استعادة البيانات بنجاح!",
+  "restoreError": "تنسيق ملف النسخة الاحتياطية غير صالح"
 }

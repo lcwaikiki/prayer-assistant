@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+
 
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/services/calendar_reminder_service.dart';
@@ -10,12 +12,19 @@ import '../../l10n/app_localizations.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
+import '../services/backup_export_service.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
 import '../services/notification_service.dart';
 import '../services/widget_bridge_service.dart';
+import '../tesbihat/data/item_history_repository.dart';
+import '../tesbihat/data/item_repository.dart';
+import '../tesbihat/models/daily_item_stat.dart';
+import '../tesbihat/models/item.dart';
+import '../tesbihat/models/item_group.dart';
 import '../utils/time_utils.dart';
+
 
 class PrayerAppController extends ChangeNotifier {
   PrayerAppController({
@@ -952,4 +961,114 @@ class PrayerAppController extends ChangeNotifier {
     }
     return null;
   }
+
+  ItemRepository get _defaultItemRepo {
+    if (Hive.isBoxOpen('items_box')) {
+      return ItemRepository.hive(Hive.box<dynamic>('items_box'));
+    }
+    return ItemRepository.memory();
+  }
+
+  ItemHistoryRepository get _defaultHistoryRepo {
+    if (Hive.isBoxOpen('item_history_box')) {
+      return ItemHistoryRepository.hive(Hive.box<dynamic>('item_history_box'));
+    }
+    return ItemHistoryRepository.memory();
+  }
+
+  /// Exports a comprehensive JSON backup string of all app data.
+  Future<String> exportBackupJson({
+    ItemRepository? itemRepo,
+    ItemHistoryRepository? historyRepo,
+  }) async {
+    const service = BackupExportService();
+    final repo = itemRepo ?? _defaultItemRepo;
+    final hRepo = historyRepo ?? _defaultHistoryRepo;
+    final items = repo.loadItems();
+    final groups = repo.loadGroups();
+    final stats = hRepo.loadStats();
+
+    final prefs = <String, dynamic>{
+      'remindersSilenced': _remindersSilenced,
+      'themePreference': _themePreference.name,
+      'localePreference': _localePreference.name,
+      'appBarRemainingPlacement': _appBarRemainingPlacement.name,
+      'widgetTextSize': _widgetTextSize.name,
+      'statusBarRemainingEnabled': _statusBarRemainingEnabled,
+
+      'reminderVibrationEnabled': _reminderVibrationEnabled,
+      'reminderSoundEnabled': _reminderSoundEnabled,
+      'calendarPrimaryDisplay': _calendarPrimaryDisplay.name,
+      'showSecondaryCalendarDate': _showSecondaryCalendarDate,
+    };
+
+    return service.generateJsonBackup(
+      kazaTracker: _kazaTracker,
+      prayerCompletions: _prayerCompletions,
+      calendarReminders: _calendarReminders,
+      tesbihItems: items,
+      tesbihGroups: groups,
+      tesbihStats: stats,
+      preferences: prefs,
+    );
+  }
+
+  /// Restores all app data from a valid JSON backup string.
+  Future<void> restoreBackupJson(
+    String jsonString, {
+    ItemRepository? itemRepo,
+    ItemHistoryRepository? historyRepo,
+  }) async {
+    const service = BackupExportService();
+    final repo = itemRepo ?? _defaultItemRepo;
+    final hRepo = historyRepo ?? _defaultHistoryRepo;
+    final parsed = service.parseAndValidateBackup(jsonString);
+
+    final restoredKaza = parsed['kazaTracker'] as KazaTracker;
+    final restoredCompletions =
+        parsed['prayerCompletions'] as Map<String, List<String>>;
+    final restoredReminders =
+        parsed['calendarReminders'] as List<CalendarReminder>;
+    final restoredItems = parsed['tesbihItems'] as List<Item>;
+    final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
+    final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
+
+    await database.saveKazaTracker(restoredKaza);
+    _kazaTracker = restoredKaza;
+
+    await database.savePrayerCompletions(restoredCompletions);
+    _prayerCompletions = restoredCompletions;
+
+    for (final r in restoredReminders) {
+      await database.saveCalendarReminder(r);
+    }
+    _calendarReminders = await database.loadCalendarReminders();
+
+    if (restoredItems.isNotEmpty) {
+      repo.saveItems(restoredItems);
+    }
+    if (restoredGroups.isNotEmpty) {
+      repo.saveGroups(restoredGroups);
+    }
+    if (restoredStats.isNotEmpty) {
+      hRepo.saveStats(restoredStats);
+    }
+
+    notifyListeners();
+  }
+
+
+
+
+  /// Exports the 10 Islamic holidays for the current year to iCalendar (.ics) format.
+  String exportIslamicHolidaysIcs({
+    required String Function(String key) holidayLabel,
+  }) {
+    const service = BackupExportService();
+    return service.generateIslamicHolidaysIcs(
+      days: _yearRange,
+      holidayLabel: holidayLabel,
+    );
+  }
 }
+

@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Sicherung & Export",
+  "backupExportSubtitle": "App-Daten sichern oder Kalender exportieren",
+  "exportBackupJson": "Sicherungsdaten exportieren (JSON)",
+  "restoreBackupJson": "Daten aus Sicherung wiederherstellen",
+  "exportPrayerScheduleIcs": "Gebetszeiten exportieren (.ics)",
+  "exportHolidaysIcs": "Islamische Feiertage exportieren (.ics)",
+  "restoreConfirmTitle": "Daten wiederherstellen?",
+  "restoreConfirmBody": "Dies stellt Ihre Qadaa-Ziele, Gebetsverlauf, Erinnerungen und Tesbih-Daten wieder her. Fortfahren?",
+  "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
+  "restoreError": "Ungültiges Sicherungsdateiformat"
 }

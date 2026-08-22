@@ -723,4 +723,36 @@ class AppLocalizationsRu extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days дней на намаз (Всего $total намазов)';
   }
+
+  @override
+  String get backupExportTitle => 'Резервное копирование и экспорт';
+
+  @override
+  String get backupExportSubtitle =>
+      'Резервное копирование данных или экспорт расписания';
+
+  @override
+  String get exportBackupJson => 'Экспорт резервной копии (JSON)';
+
+  @override
+  String get restoreBackupJson => 'Восстановить данные из копии';
+
+  @override
+  String get exportPrayerScheduleIcs => 'Экспорт расписания намазов (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'Экспорт мусульманских праздников (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'Восстановить данные приложения?';
+
+  @override
+  String get restoreConfirmBody =>
+      'Будут восстановлены цели Каза, история намазов, напоминания и данные Тасбих. Продолжить?';
+
+  @override
+  String get restoreSuccess => 'Данные успешно восстановлены!';
+
+  @override
+  String get restoreError => 'Неверный формат файла резервной копии';
 }

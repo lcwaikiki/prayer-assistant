@@ -48,7 +48,17 @@ Support for Ramadan and Sunnah fasts throughout the year.
 - [x] Essential supplications library with integrated counter and 5 category collections (Hisn al-Muslim)
 
 
-## 8. Backup & Export
-- [ ] Export/import app settings, prayer history & tesbihat counters to JSON
-- [ ] Export yearly prayer schedule & holidays to .ics calendar format
+## 8. Backup & Export [DONE]
+Data portability options in Preferences screen.
+- [x] Comprehensive JSON Backup & Restore:
+  - [x] Export/import Qadaa (Kaza) targets, completion counts & daily pace settings
+  - [x] Export/import daily prayer completion history
+  - [x] Export/import Tesbihat counters, custom beads & group memberships
+  - [x] Export/import custom calendar reminders & notes
+  - [x] Export/import app preferences & saved location data
+- [x] iCalendar Export (.ics):
+  - [x] Export 10 Islamic holidays & important dates to `.ics` format
+
+
+
 

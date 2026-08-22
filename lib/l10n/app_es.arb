@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Copia de seguridad y exportación",
+  "backupExportSubtitle": "Respaldar datos o exportar horarios",
+  "exportBackupJson": "Exportar copia de seguridad (JSON)",
+  "restoreBackupJson": "Restaurar datos desde copia",
+  "exportPrayerScheduleIcs": "Exportar horarios de oración (.ics)",
+  "exportHolidaysIcs": "Exportar festividades islámicas (.ics)",
+  "restoreConfirmTitle": "¿Restaurar datos de la aplicación?",
+  "restoreConfirmBody": "Se restaurarán sus objetivos de Qadaa, historial de oración, recordatorios y Tesbihat. ¿Continuar?",
+  "restoreSuccess": "¡Datos restaurados con éxito!",
+  "restoreError": "Formato de archivo de respaldo no válido"
 }

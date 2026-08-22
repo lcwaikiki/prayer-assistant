@@ -721,4 +721,36 @@ class AppLocalizationsId extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days hari per shalat (Total $total shalat)';
   }
+
+  @override
+  String get backupExportTitle => 'Cadangkan & Ekspor';
+
+  @override
+  String get backupExportSubtitle =>
+      'Cadangkan data aplikasi atau ekspor jadwal';
+
+  @override
+  String get exportBackupJson => 'Ekspor Data Cadangan (JSON)';
+
+  @override
+  String get restoreBackupJson => 'Pulihkan Data dari Cadangan';
+
+  @override
+  String get exportPrayerScheduleIcs => 'Ekspor Jadwal Shalat (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'Ekspor Hari Besar Islam (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'Pulihkan Data Aplikasi?';
+
+  @override
+  String get restoreConfirmBody =>
+      'Ini akan memulihkan target Qadha, riwayat shalat, pengingat, dan data Tasbih Anda. Lanjutkan?';
+
+  @override
+  String get restoreSuccess => 'Data berhasil dipulihkan!';
+
+  @override
+  String get restoreError => 'Format berkas cadangan tidak valid';
 }

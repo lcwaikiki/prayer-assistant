@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "پشتیبان‌گیری و خروجی",
+  "backupExportSubtitle": "پشتیبان‌گیری از داده‌ها یا خروجی تقویم",
+  "exportBackupJson": "خروجی پشتیبان (JSON)",
+  "restoreBackupJson": "بازیابی داده‌ها از پشتیبان",
+  "exportPrayerScheduleIcs": "خروجی اوقات نماز (.ics)",
+  "exportHolidaysIcs": "خروجی مناسبت‌های اسلامی (.ics)",
+  "restoreConfirmTitle": "بازیابی داده‌های برنامه؟",
+  "restoreConfirmBody": "اهداف قضا، تاریخچه نماز، یادآورها و تسبیحات بازیابی خواهند شد. ادامه می‌دهید؟",
+  "restoreSuccess": "داده‌ها با موفقیت بازیابی شدند!",
+  "restoreError": "فرمت فایل پشتیبان نامعتبر است"
 }

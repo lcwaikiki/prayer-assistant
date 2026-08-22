@@ -719,4 +719,35 @@ class AppLocalizationsFa extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days روز برای هر نماز (مجموعاً $total نماز)';
   }
+
+  @override
+  String get backupExportTitle => 'پشتیبان‌گیری و خروجی';
+
+  @override
+  String get backupExportSubtitle => 'پشتیبان‌گیری از داده‌ها یا خروجی تقویم';
+
+  @override
+  String get exportBackupJson => 'خروجی پشتیبان (JSON)';
+
+  @override
+  String get restoreBackupJson => 'بازیابی داده‌ها از پشتیبان';
+
+  @override
+  String get exportPrayerScheduleIcs => 'خروجی اوقات نماز (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'خروجی مناسبت‌های اسلامی (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'بازیابی داده‌های برنامه؟';
+
+  @override
+  String get restoreConfirmBody =>
+      'اهداف قضا، تاریخچه نماز، یادآورها و تسبیحات بازیابی خواهند شد. ادامه می‌دهید؟';
+
+  @override
+  String get restoreSuccess => 'داده‌ها با موفقیت بازیابی شدند!';
+
+  @override
+  String get restoreError => 'فرمت فایل پشتیبان نامعتبر است';
 }

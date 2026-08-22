@@ -722,4 +722,36 @@ class AppLocalizationsTr extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= Her vakit için $days gün (Toplam $total namaz)';
   }
+
+  @override
+  String get backupExportTitle => 'Yedekle ve Dışa Aktar';
+
+  @override
+  String get backupExportSubtitle =>
+      'Uygulama verilerini yedekleyin veya takvimi dışa aktarın';
+
+  @override
+  String get exportBackupJson => 'Yedek Verisini Dışa Aktar (JSON)';
+
+  @override
+  String get restoreBackupJson => 'Yedekten Veri Geri Yükle';
+
+  @override
+  String get exportPrayerScheduleIcs => 'Namaz Vakitlerini Dışa Aktar (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'Dini Günleri Dışa Aktar (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'Veriler Geri Yüklensin mi?';
+
+  @override
+  String get restoreConfirmBody =>
+      'Kaza hedefleri, namaz geçmişi, hatırlatıcılar ve Tesbihat verileriniz geri yüklenecektir. Devam edilsin mi?';
+
+  @override
+  String get restoreSuccess => 'Veriler başarıyla geri yüklendi!';
+
+  @override
+  String get restoreError => 'Geçersiz yedek dosyası biçimi';
 }

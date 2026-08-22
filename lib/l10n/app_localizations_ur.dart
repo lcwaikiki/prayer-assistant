@@ -720,4 +720,36 @@ class AppLocalizationsUr extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= ہر نماز کے $days دن (کل $total نمازیں)';
   }
+
+  @override
+  String get backupExportTitle => 'بیک اپ اور ایکسپورٹ';
+
+  @override
+  String get backupExportSubtitle =>
+      'ایپ کا ڈیٹا بیک اپ کریں یا کیلنڈر ایکسپورٹ کریں';
+
+  @override
+  String get exportBackupJson => 'بیک اپ ڈیٹا ایکسپورٹ کریں (JSON)';
+
+  @override
+  String get restoreBackupJson => 'بیک اپ سے ڈیٹا ری اسٹور کریں';
+
+  @override
+  String get exportPrayerScheduleIcs => 'اوقاتِ نماز ایکسپورٹ کریں (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'اسلامی ایام ایکسپورٹ کریں (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'ڈیٹا ری اسٹور کریں؟';
+
+  @override
+  String get restoreConfirmBody =>
+      'آپ کے قضا کے اہداف، نماز کی ہسٹری، ریمائنڈرز اور تسبیحات کا ڈیٹا ری اسٹور ہو جائے گا۔ جاری رکھیں؟';
+
+  @override
+  String get restoreSuccess => 'ڈیٹا کامیابی کے ساتھ ری اسٹور ہو گیا!';
+
+  @override
+  String get restoreError => 'بیک اپ فائل کا فارمیٹ غلط ہے';
 }

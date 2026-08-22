@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "バックアップとエクスポート",
+  "backupExportSubtitle": "アプリデータをバックアップまたはカレンダーをエクスポート",
+  "exportBackupJson": "バックアップデータをエクスポート (JSON)",
+  "restoreBackupJson": "バックアップから復元",
+  "exportPrayerScheduleIcs": "礼拝時間をエクスポート (.ics)",
+  "exportHolidaysIcs": "イスラムの祝日をエクスポート (.ics)",
+  "restoreConfirmTitle": "データを復元しますか？",
+  "restoreConfirmBody": "カザー目標、礼拝履歴、リマインダー、テスビーハットデータが復元されます。続行しますか？",
+  "restoreSuccess": "データが正常に復元されました！",
+  "restoreError": "無効なバックアップファイル形式です"
 }

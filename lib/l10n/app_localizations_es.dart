@@ -723,4 +723,35 @@ class AppLocalizationsEs extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days días por oración ($total oraciones en total)';
   }
+
+  @override
+  String get backupExportTitle => 'Copia de seguridad y exportación';
+
+  @override
+  String get backupExportSubtitle => 'Respaldar datos o exportar horarios';
+
+  @override
+  String get exportBackupJson => 'Exportar copia de seguridad (JSON)';
+
+  @override
+  String get restoreBackupJson => 'Restaurar datos desde copia';
+
+  @override
+  String get exportPrayerScheduleIcs => 'Exportar horarios de oración (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'Exportar festividades islámicas (.ics)';
+
+  @override
+  String get restoreConfirmTitle => '¿Restaurar datos de la aplicación?';
+
+  @override
+  String get restoreConfirmBody =>
+      'Se restaurarán sus objetivos de Qadaa, historial de oración, recordatorios y Tesbihat. ¿Continuar?';
+
+  @override
+  String get restoreSuccess => '¡Datos restaurados con éxito!';
+
+  @override
+  String get restoreError => 'Formato de archivo de respaldo no válido';
 }

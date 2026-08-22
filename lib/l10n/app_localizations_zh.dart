@@ -701,4 +701,34 @@ class AppLocalizationsZh extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= 每次拜功 $days 天（共计 $total 次拜功）';
   }
+
+  @override
+  String get backupExportTitle => '备份与导出';
+
+  @override
+  String get backupExportSubtitle => '备份应用数据或导出礼拜时间表';
+
+  @override
+  String get exportBackupJson => '导出备份数据 (JSON)';
+
+  @override
+  String get restoreBackupJson => '从备份恢复数据';
+
+  @override
+  String get exportPrayerScheduleIcs => '导出礼拜时间表 (.ics)';
+
+  @override
+  String get exportHolidaysIcs => '导出伊斯兰节日 (.ics)';
+
+  @override
+  String get restoreConfirmTitle => '恢复应用数据？';
+
+  @override
+  String get restoreConfirmBody => '这将恢复您的补礼目标、礼拜记录、提醒和赞词数据。是否继续？';
+
+  @override
+  String get restoreSuccess => '数据已成功恢复！';
+
+  @override
+  String get restoreError => '无效的备份文件格式';
 }

@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "بیک اپ اور ایکسپورٹ",
+  "backupExportSubtitle": "ایپ کا ڈیٹا بیک اپ کریں یا کیلنڈر ایکسپورٹ کریں",
+  "exportBackupJson": "بیک اپ ڈیٹا ایکسپورٹ کریں (JSON)",
+  "restoreBackupJson": "بیک اپ سے ڈیٹا ری اسٹور کریں",
+  "exportPrayerScheduleIcs": "اوقاتِ نماز ایکسپورٹ کریں (.ics)",
+  "exportHolidaysIcs": "اسلامی ایام ایکسپورٹ کریں (.ics)",
+  "restoreConfirmTitle": "ڈیٹا ری اسٹور کریں؟",
+  "restoreConfirmBody": "آپ کے قضا کے اہداف، نماز کی ہسٹری، ریمائنڈرز اور تسبیحات کا ڈیٹا ری اسٹور ہو جائے گا۔ جاری رکھیں؟",
+  "restoreSuccess": "ڈیٹا کامیابی کے ساتھ ری اسٹور ہو گیا!",
+  "restoreError": "بیک اپ فائل کا فارمیٹ غلط ہے"
 }

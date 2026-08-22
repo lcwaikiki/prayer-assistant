@@ -701,4 +701,35 @@ class AppLocalizationsJa extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= お祈り1つあたり$days日分（合計$total回）';
   }
+
+  @override
+  String get backupExportTitle => 'バックアップとエクスポート';
+
+  @override
+  String get backupExportSubtitle => 'アプリデータをバックアップまたはカレンダーをエクスポート';
+
+  @override
+  String get exportBackupJson => 'バックアップデータをエクスポート (JSON)';
+
+  @override
+  String get restoreBackupJson => 'バックアップから復元';
+
+  @override
+  String get exportPrayerScheduleIcs => '礼拝時間をエクスポート (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'イスラムの祝日をエクスポート (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'データを復元しますか？';
+
+  @override
+  String get restoreConfirmBody =>
+      'カザー目標、礼拝履歴、リマインダー、テスビーハットデータが復元されます。続行しますか？';
+
+  @override
+  String get restoreSuccess => 'データが正常に復元されました！';
+
+  @override
+  String get restoreError => '無効なバックアップファイル形式です';
 }

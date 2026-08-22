@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "备份与导出",
+  "backupExportSubtitle": "备份应用数据或导出礼拜时间表",
+  "exportBackupJson": "导出备份数据 (JSON)",
+  "restoreBackupJson": "从备份恢复数据",
+  "exportPrayerScheduleIcs": "导出礼拜时间表 (.ics)",
+  "exportHolidaysIcs": "导出伊斯兰节日 (.ics)",
+  "restoreConfirmTitle": "恢复应用数据？",
+  "restoreConfirmBody": "这将恢复您的补礼目标、礼拜记录、提醒和赞词数据。是否继续？",
+  "restoreSuccess": "数据已成功恢复！",
+  "restoreError": "无效的备份文件格式"
 }

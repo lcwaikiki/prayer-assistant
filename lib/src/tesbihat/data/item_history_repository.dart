@@ -39,6 +39,12 @@ class ItemHistoryRepository {
 
   List<DailyItemStat> loadStats() => List<DailyItemStat>.from(_cache);
 
+  void saveStats(List<DailyItemStat> stats) {
+    _cache = List<DailyItemStat>.from(stats);
+    _persist();
+  }
+
+
   void addCount(String itemId, String dateKey, int increment) {
     final index = _cache.indexWhere(
       (stat) => stat.itemId == itemId && stat.dateKey == dateKey,

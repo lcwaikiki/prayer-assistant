@@ -715,4 +715,36 @@ class AppLocalizationsAr extends AppLocalizations {
   String kazaCalculatedDaysPerPrayer(Object days, Object total) {
     return '= $days يوم لكل صلاة ($total صلاة إجمالاً)';
   }
+
+  @override
+  String get backupExportTitle => 'النسخ الاحتياطي والتصدير';
+
+  @override
+  String get backupExportSubtitle =>
+      'نسخ بيانات التطبيق احتياطياً أو تصدير التقويم';
+
+  @override
+  String get exportBackupJson => 'تصدير النسخة الاحتياطية (JSON)';
+
+  @override
+  String get restoreBackupJson => 'استعادة البيانات من النسخة الاحتياطية';
+
+  @override
+  String get exportPrayerScheduleIcs => 'تصدير مواقيت الصلاة (.ics)';
+
+  @override
+  String get exportHolidaysIcs => 'تصدير المناسبات الإسلامية (.ics)';
+
+  @override
+  String get restoreConfirmTitle => 'استعادة بيانات التطبيق؟';
+
+  @override
+  String get restoreConfirmBody =>
+      'سيتم استعادة أهداف القضاء وسجل الصلاة والتذكيرات والتسبيحات. هل تريد الاستمرار؟';
+
+  @override
+  String get restoreSuccess => 'تمت استعادة البيانات بنجاح!';
+
+  @override
+  String get restoreError => 'تنسيق ملف النسخة الاحتياطية غير صالح';
 }

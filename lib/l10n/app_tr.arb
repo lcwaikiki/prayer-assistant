@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Yedekle ve Dışa Aktar",
+  "backupExportSubtitle": "Uygulama verilerini yedekleyin veya takvimi dışa aktarın",
+  "exportBackupJson": "Yedek Verisini Dışa Aktar (JSON)",
+  "restoreBackupJson": "Yedekten Veri Geri Yükle",
+  "exportPrayerScheduleIcs": "Namaz Vakitlerini Dışa Aktar (.ics)",
+  "exportHolidaysIcs": "Dini Günleri Dışa Aktar (.ics)",
+  "restoreConfirmTitle": "Veriler Geri Yüklensin mi?",
+  "restoreConfirmBody": "Kaza hedefleri, namaz geçmişi, hatırlatıcılar ve Tesbihat verileriniz geri yüklenecektir. Devam edilsin mi?",
+  "restoreSuccess": "Veriler başarıyla geri yüklendi!",
+  "restoreError": "Geçersiz yedek dosyası biçimi"
 }

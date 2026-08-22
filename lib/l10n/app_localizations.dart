@@ -1425,6 +1425,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'= {days} days per prayer ({total} total prayers)'**
   String kazaCalculatedDaysPerPrayer(Object days, Object total);
+
+  /// No description provided for @backupExportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup & Export'**
+  String get backupExportTitle;
+
+  /// No description provided for @backupExportSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup app data or export calendar schedules'**
+  String get backupExportSubtitle;
+
+  /// No description provided for @exportBackupJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Backup Data (JSON)'**
+  String get exportBackupJson;
+
+  /// No description provided for @restoreBackupJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Data from Backup'**
+  String get restoreBackupJson;
+
+  /// No description provided for @exportPrayerScheduleIcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Prayer Schedule (.ics)'**
+  String get exportPrayerScheduleIcs;
+
+  /// No description provided for @exportHolidaysIcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Islamic Holidays (.ics)'**
+  String get exportHolidaysIcs;
+
+  /// No description provided for @restoreConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore App Data?'**
+  String get restoreConfirmTitle;
+
+  /// No description provided for @restoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will restore your Qadaa targets, prayer history, reminders, and Tesbihat data. Continue?'**
+  String get restoreConfirmBody;
+
+  /// No description provided for @restoreSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Data restored successfully!'**
+  String get restoreSuccess;
+
+  /// No description provided for @restoreError.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid backup file format'**
+  String get restoreError;
 }
 
 class _AppLocalizationsDelegate

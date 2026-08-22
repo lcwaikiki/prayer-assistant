@@ -261,5 +261,15 @@
       "days": {},
       "total": {}
     }
-  }
+  },
+  "backupExportTitle": "Sauvegarde et Exportation",
+  "backupExportSubtitle": "Sauvegarder les données ou exporter le calendrier",
+  "exportBackupJson": "Exporter la sauvegarde (JSON)",
+  "restoreBackupJson": "Restaurer les données de la sauvegarde",
+  "exportPrayerScheduleIcs": "Exporter les horaires de prière (.ics)",
+  "exportHolidaysIcs": "Exporter les fêtes islamiques (.ics)",
+  "restoreConfirmTitle": "Restaurer les données?",
+  "restoreConfirmBody": "Vos objectifs Qadaa, l'historique des prières, les rappels et les données Tesbihat seront restaurés. Continuer?",
+  "restoreSuccess": "Données restaurées avec succès!",
+  "restoreError": "Format de fichier de sauvegarde non valide"
 }

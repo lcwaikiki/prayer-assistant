@@ -85,13 +85,6 @@
   "reminderOff": "Reminder off",
   "nextPrayerTitle": "Next Prayer",
   "homeUpcomingRemindersTitle": "Upcoming reminders",
-  "prayersCompleted": "{completed}/{total} prayers completed",
-  "@prayersCompleted": {
-    "placeholders": {
-      "completed": {},
-      "total": {}
-    }
-  },
   "startsIn": "Starts in {remaining}",
   "@startsIn": {
     "placeholders": {
@@ -142,7 +135,8 @@
   "widgetTextSizeExtraSmall": "Extra small",
   "widgetTextSizeSmall": "Small",
   "widgetTextSizeMedium": "Medium",
-  "widgetTextSizeLarge": "Large",  "widgetMmssThresholdTitle": "Widget seconds countdown",
+  "widgetTextSizeLarge": "Large",
+  "widgetMmssThresholdTitle": "Widget seconds countdown",
   "widgetMmssThresholdNever": "Always show HH:MM",
   "widgetMmssThresholdValue": "MM:SS below {minutes} min",
   "@widgetMmssThresholdValue": {
@@ -174,6 +168,17 @@
   "vibrateChip": "Vibrate",
   "soundChip": "Sound",
   "adhanChip": "Adhan",
+  "prayersCompleted": "{completed}/{total} prayers completed",
+  "holiday_islamic_new_year": "Islamic New Year",
+  "holiday_ashura": "Ashura",
+  "holiday_mawlid": "Mawlid al-Nabi",
+  "holiday_isra_miraj": "Isra and Miraj",
+  "holiday_laylat_barat": "Laylat al-Baraat",
+  "holiday_ramadan_first": "First of Ramadan",
+  "holiday_laylat_qadr": "Laylat al-Qadr",
+  "holiday_eid_fitr": "Eid al-Fitr",
+  "holiday_arafah": "Day of Arafah",
+  "holiday_eid_adha": "Eid al-Adha",
   "remindBeforePrayerTitle": "Remind me before prayer",
   "remindAfterPrayerTitle": "Remind me after prayer",
   "minutesValue": "{minutes} min",

@@ -16,8 +16,8 @@ Track which prayers the user has completed each day.
 - Daily completion summary and streak counter
 - Persist to local database
 
-## 3. Islamic Holidays on Calendar
-Show Islamic holidays on the Hijri calendar grid.
-- Mark Eid al-Fitr, Eid al-Adha, Laylat al-Qadr, Ashura, Mawlid, etc.
-- Highlight special days on calendar cells
-- Use Hijri date calculations from the `hijri` package
+## 3. Islamic Holidays on Calendar [DONE]
+- [x] Define 10 Islamic holidays with Hijri month/day in hijri_utils.dart
+- [x] Add `islamicHolidayForDate()` lookup function
+- [x] Highlight holiday cells on calendar grid (amber border and tint)
+- [x] Show holiday name in day detail sheet with star icon

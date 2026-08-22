@@ -239,6 +239,51 @@ String _toArabicNumerals(int n) {
   }).join();
 }
 
+class _IslamicHoliday {
+  const _IslamicHoliday(this.hijriMonth, this.hijriDay, this.labelKey);
+
+  final int hijriMonth;
+  final int hijriDay;
+  final String labelKey;
+}
+
+const _holidays = <_IslamicHoliday>[
+  _IslamicHoliday(1, 1, 'holiday_islamic_new_year'),
+  _IslamicHoliday(1, 10, 'holiday_ashura'),
+  _IslamicHoliday(3, 12, 'holiday_mawlid'),
+  _IslamicHoliday(7, 27, 'holiday_isra_miraj'),
+  _IslamicHoliday(8, 15, 'holiday_laylat_barat'),
+  _IslamicHoliday(9, 1, 'holiday_ramadan_first'),
+  _IslamicHoliday(9, 27, 'holiday_laylat_qadr'),
+  _IslamicHoliday(10, 1, 'holiday_eid_fitr'),
+  _IslamicHoliday(12, 9, 'holiday_arafah'),
+  _IslamicHoliday(12, 10, 'holiday_eid_adha'),
+];
+
+/// Returns the key for the Islamic holiday label on [date] based on its
+/// Hijri month and day, or null if the date is not a holiday.
+String? islamicHolidayKey(DateTime date) {
+  final hijri = HijriCalendar.fromDate(date);
+  for (final holiday in _holidays) {
+    if (hijri.hMonth == holiday.hijriMonth &&
+        hijri.hDay == holiday.hijriDay) {
+      return holiday.labelKey;
+    }
+  }
+  return null;
+}
+
+/// Returns the name of the Islamic holiday on [date] based on its Hijri
+/// month and day, or null if the date is not a holiday.
+/// [labelResolver] translates the holiday key to a localized string.
+String? islamicHolidayForDate(
+  DateTime date,
+  String Function(String key) labelResolver,
+) {
+  final key = islamicHolidayKey(date);
+  return key != null ? labelResolver(key) : null;
+}
+
 /// A Hijri year/month pair, independent of any specific day.
 class HijriMonth {
   const HijriMonth(this.year, this.month);

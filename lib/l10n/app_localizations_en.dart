@@ -174,11 +174,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeUpcomingRemindersTitle => 'Upcoming reminders';
 
   @override
-  String prayersCompleted(Object completed, Object total) {
-    return '$completed/$total prayers completed';
-  }
-
-  @override
   String startsIn(Object remaining) {
     return 'Starts in $remaining';
   }
@@ -378,6 +373,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adhanChip => 'Adhan';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total prayers completed';
+  }
+
+  @override
+  String get holiday_islamic_new_year => 'Islamic New Year';
+
+  @override
+  String get holiday_ashura => 'Ashura';
+
+  @override
+  String get holiday_mawlid => 'Mawlid al-Nabi';
+
+  @override
+  String get holiday_isra_miraj => 'Isra and Miraj';
+
+  @override
+  String get holiday_laylat_barat => 'Laylat al-Baraat';
+
+  @override
+  String get holiday_ramadan_first => 'First of Ramadan';
+
+  @override
+  String get holiday_laylat_qadr => 'Laylat al-Qadr';
+
+  @override
+  String get holiday_eid_fitr => 'Eid al-Fitr';
+
+  @override
+  String get holiday_arafah => 'Day of Arafah';
+
+  @override
+  String get holiday_eid_adha => 'Eid al-Adha';
 
   @override
   String get remindBeforePrayerTitle => 'Remind me before prayer';

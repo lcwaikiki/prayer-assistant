@@ -261,6 +261,8 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                             (reminder) =>
                                 reminder.enabled && reminder.occursOn(date),
                           );
+                          final isHoliday =
+                              islamicHolidayKey(date) != null;
                           return _DayCell(
                             primaryLabel:
                                 primary == CalendarPrimaryDisplay.hijri
@@ -275,6 +277,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                                 : null,
                             isToday: isToday,
                             hasReminder: hasReminder,
+                            isHoliday: isHoliday,
                             onTap: () => _openDayDetail(date, primary),
                           );
                         },
@@ -326,6 +329,7 @@ class _DayCell extends StatelessWidget {
     required this.secondaryLabel,
     required this.isToday,
     required this.hasReminder,
+    required this.isHoliday,
     required this.onTap,
   });
 
@@ -333,6 +337,7 @@ class _DayCell extends StatelessWidget {
   final String? secondaryLabel;
   final bool isToday;
   final bool hasReminder;
+  final bool isHoliday;
   final VoidCallback onTap;
 
   @override
@@ -344,8 +349,13 @@ class _DayCell extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.all(2),
         decoration: BoxDecoration(
-          color: isToday ? colors.primaryContainer : null,
+          color: isToday
+              ? colors.primaryContainer
+              : (isHoliday ? Colors.amber.withAlpha(40) : null),
           borderRadius: BorderRadius.circular(10),
+          border: isHoliday && !isToday
+              ? Border.all(color: Colors.amber.shade700, width: 1.5)
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -353,8 +363,12 @@ class _DayCell extends StatelessWidget {
             Text(
               primaryLabel,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: isToday ? FontWeight.w700 : FontWeight.w500,
-                color: isToday ? colors.onPrimaryContainer : null,
+                fontWeight: isToday || isHoliday
+                    ? FontWeight.w700
+                    : FontWeight.w500,
+                color: isToday
+                    ? colors.onPrimaryContainer
+                    : (isHoliday ? Colors.amber.shade800 : null),
               ),
             ),
             if (secondaryLabel != null)
@@ -363,7 +377,9 @@ class _DayCell extends StatelessWidget {
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: isToday
                       ? colors.onPrimaryContainer
-                      : colors.onSurfaceVariant,
+                      : (isHoliday
+                          ? Colors.amber.shade700
+                          : colors.onSurfaceVariant),
                 ),
               ),
             if (hasReminder)
@@ -534,6 +550,56 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
                 ),
               ],
             ),
+            if (islamicHolidayForDate(_date, (key) {
+                  return switch (key) {
+                    'holiday_islamic_new_year' =>
+                      l10n.holiday_islamic_new_year,
+                    'holiday_ashura' => l10n.holiday_ashura,
+                    'holiday_mawlid' => l10n.holiday_mawlid,
+                    'holiday_isra_miraj' => l10n.holiday_isra_miraj,
+                    'holiday_laylat_barat' =>
+                      l10n.holiday_laylat_barat,
+                    'holiday_ramadan_first' =>
+                      l10n.holiday_ramadan_first,
+                    'holiday_laylat_qadr' => l10n.holiday_laylat_qadr,
+                    'holiday_eid_fitr' => l10n.holiday_eid_fitr,
+                    'holiday_arafah' => l10n.holiday_arafah,
+                    'holiday_eid_adha' => l10n.holiday_eid_adha,
+                    _ => key,
+                  };
+                }) case final holiday?) ...[
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withAlpha(30),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.amber.shade700, width: 1),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.amber.shade700, size: 20),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        holiday,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.amber.shade900,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             if (controller.prayerDayFor(_date) case final day?) ...[
               const SizedBox(height: 8),
               Card(

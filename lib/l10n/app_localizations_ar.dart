@@ -9,175 +9,368 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'Ù…Ø³Ø§Ø¹Ø¯ Ø§Ù„ØµÙ„Ø§Ø©';
+  String get appTitle => 'مساعد الصلاة';
 
   @override
-  String get tabLocation => 'Ø§Ù„Ù…ÙˆÙ‚Ø¹';
+  String get tabLocation => 'الموقع';
 
   @override
-  String get tabToday => 'Ø§Ù„ÙŠÙˆÙ…';
+  String get tabToday => 'اليوم';
 
   @override
-  String get tabDates => 'Ø§Ù„ØªÙˆØ§Ø±ÙŠØ®';
+  String get tabDates => 'التواريخ';
 
   @override
-  String get tabTesbih => 'Ù…ÙØ³Ù’Ø¨ÙŽØ­ÙŽØ©';
+  String get tabTesbih => 'مِسْبَحَة';
 
   @override
-  String get tooltipToggleLightDark => 'ØªØ¨Ø¯ÙŠÙ„ ÙØ§ØªØ­/Ø¯Ø§ÙƒÙ†';
+  String get tooltipToggleLightDark => 'تبديل فاتح/داكن';
 
   @override
-  String get tooltipRemindersOn => 'ØªØ´ØºÙŠÙ„ Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª';
+  String get tooltipRemindersOn => 'تشغيل التذكيرات';
 
   @override
-  String get tooltipRemindersOff => 'Ø¥ÙŠÙ‚Ø§Ù Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª';
+  String get tooltipRemindersOff => 'إيقاف التذكيرات';
 
   @override
-  String get tooltipPreferences => 'Ø§Ù„ØªÙØ¶ÙŠÙ„Ø§Øª';
+  String get tooltipPreferences => 'التفضيلات';
 
   @override
   String remainingMinutesValue(Object minutes) {
-    return '$minutes Ø¯';
+    return '$minutes د';
   }
 
   @override
-  String get remainingMinutesUnknown => '-- Ø¯';
+  String get remainingMinutesUnknown => '-- د';
 
   @override
-  String get homeNoLocationTitle => 'Ù„Ù… ÙŠØªÙ… Ø§Ø®ØªÙŠØ§Ø± Ù…ÙˆÙ‚Ø¹';
+  String get homeNoLocationTitle => 'لم يتم اختيار موقع';
 
   @override
   String get homeNoLocationSubtitle =>
-      'Ø§Ø°Ù‡Ø¨ Ø¥Ù„Ù‰ ØªØ¨ÙˆÙŠØ¨ Ø§Ù„Ù…ÙˆÙ‚Ø¹ ÙˆØ§Ø­ÙØ¸ Ù…Ù†Ø·Ù‚ØªÙƒ Ø£ÙˆÙ„Ø§Ù‹.';
+      'اذهب إلى تبويب الموقع واحفظ منطقتك أولاً.';
 
   @override
-  String get homeNoPrayerTimesTitle =>
-      'Ù„Ø§ ØªÙˆØ¬Ø¯ Ø£ÙˆÙ‚Ø§Øª ØµÙ„Ø§Ø© Ù…Ø®Ø²Ù†Ø©';
+  String get homeNoPrayerTimesTitle => 'لا توجد أوقات صلاة مخزنة';
 
   @override
-  String get homeNoPrayerTimesSubtitle =>
-      'Ø§Ø¶ØºØ· ØªØ­Ø¯ÙŠØ« Ù„Ù…Ø²Ø§Ù…Ù†Ø© Ø¨ÙŠØ§Ù†Ø§Øª Ø§Ù„Ø³Ù†Ø©.';
+  String get homeNoPrayerTimesSubtitle => 'اضغط تحديث لمزامنة بيانات السنة.';
 
   @override
-  String get refresh => 'ØªØ­Ø¯ÙŠØ«';
+  String get refresh => 'تحديث';
 
   @override
-  String get qiblaTitle => 'Ø§Ù„Ù‚Ø¨Ù„Ø©';
+  String get qiblaTitle => 'القبلة';
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Ø§Ù„Ù‚Ø¨Ù„Ø©: $degreesÂ°';
+    return 'القبلة: $degrees°';
   }
 
   @override
   String get qiblaLocationUnavailable =>
-      'ØªØ¹Ø°Ø± ØªØ­Ø¯ÙŠØ¯ Ù…ÙˆÙ‚Ø¹Ùƒ. ÙØ¹Ù‘Ù„ Ù†Ø¸Ø§Ù… ØªØ­Ø¯ÙŠØ¯ Ø§Ù„Ù…ÙˆØ§Ù‚Ø¹ ÙˆØ­Ø§ÙˆÙ„ Ù…Ø±Ø© Ø£Ø®Ø±Ù‰.';
+      'تعذر تحديد موقعك. فعّل نظام تحديد المواقع وحاول مرة أخرى.';
 
   @override
   String get qiblaHeadingUnavailable =>
-      'Ø§Ù„Ø¨ÙˆØµÙ„Ø© ØºÙŠØ± Ù…ØªØ§Ø­Ø© - ÙŠØªÙ… Ø¹Ø±Ø¶ Ø§Ù„Ø§ØªØ¬Ø§Ù‡ Ø§Ù„Ø«Ø§Ø¨Øª.';
+      'البوصلة غير متاحة - يتم عرض الاتجاه الثابت.';
 
   @override
-  String get qiblaPointDevice =>
-      'Ø£Ø¯Ø± Ø¬Ù‡Ø§Ø²Ùƒ Ø­ØªÙ‰ ÙŠØ´ÙŠØ± Ø§Ù„Ø³Ù‡Ù… Ø¥Ù„Ù‰ Ø§Ù„Ø£Ø¹Ù„Ù‰.';
+  String get qiblaPointDevice => 'أدر جهازك حتى يشير السهم إلى الأعلى.';
 
   @override
-  String get qiblaKaabaShort => 'Ø§Ù„Ù‚Ø¨Ù„Ø©';
+  String get qiblaKaabaShort => 'القبلة';
 
   @override
-  String get shareTodayTimes => 'Ù…Ø´Ø§Ø±ÙƒØ© Ø£ÙˆÙ‚Ø§Øª Ø§Ù„ÙŠÙˆÙ…';
+  String get shareTodayTimes => 'مشاركة أوقات اليوم';
 
   @override
-  String get calendarPreviousDay => 'Ø§Ù„ÙŠÙˆÙ… Ø§Ù„Ø³Ø§Ø¨Ù‚';
+  String get calendarPreviousDay => 'اليوم السابق';
 
   @override
-  String get calendarNextDay => 'Ø§Ù„ÙŠÙˆÙ… Ø§Ù„ØªØ§Ù„ÙŠ';
+  String get calendarNextDay => 'اليوم التالي';
 
   @override
   String todayWithDate(Object date) {
-    return 'Ø§Ù„ÙŠÙˆÙ… â€¢ $date';
+    return 'اليوم • $date';
   }
 
   @override
-  String get hijriUnknown => 'Ù‡Ø¬Ø±ÙŠ: -';
+  String get hijriUnknown => 'هجري: -';
 
   @override
   String hijriWithDate(Object date) {
-    return 'Ù‡Ø¬Ø±ÙŠ: $date';
+    return 'هجري: $date';
   }
 
   @override
-  String get reminderSettingsTitle => 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„ØªØ°ÙƒÙŠØ±';
+  String get reminderSettingsTitle => 'إعدادات التذكير';
 
   @override
   String get reminderSettingsSubtitle =>
-      'Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø£ÙŠ ÙˆÙ‚Øª ØµÙ„Ø§Ø© Ø¨Ø§Ù„Ø£Ø¹Ù„Ù‰ Ù„Ø¶Ø¨Ø· Ø§Ù„ØªØ°ÙƒÙŠØ± ÙˆØ¹Ø¯Ø¯ Ø§Ù„Ø¯Ù‚Ø§Ø¦Ù‚ Ù‚Ø¨Ù„Ù‡Ø§.';
+      'اضغط على أي وقت صلاة بالأعلى لضبط التذكير وعدد الدقائق قبلها.';
 
   @override
-  String get tooltipScheduledDebug =>
-      'ØªØµØ­ÙŠØ­ Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª Ø§Ù„Ù…Ø¬Ø¯ÙˆÙ„Ø©';
+  String get tooltipScheduledDebug => 'تصحيح التذكيرات المجدولة';
 
   @override
-  String get scheduledRemindersDebugTitle =>
-      'Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª Ø§Ù„Ù…Ø¬Ø¯ÙˆÙ„Ø© (ØªØµØ­ÙŠØ­)';
+  String get scheduledRemindersDebugTitle => 'التذكيرات المجدولة (تصحيح)';
 
   @override
   String pendingNotificationsCount(Object count) {
-    return 'Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±Ø§Øª Ø§Ù„Ù…Ø¹Ù„Ù‚Ø©: $count';
+    return 'الإشعارات المعلقة: $count';
   }
 
   @override
-  String get sendTestNotificationNow => 'Ø¥Ø±Ø³Ø§Ù„ Ø¥Ø´Ø¹Ø§Ø± ØªØ¬Ø±ÙŠØ¨ÙŠ';
+  String get sendTestNotificationNow => 'إرسال إشعار تجريبي';
 
   @override
-  String get testNotificationSent =>
-      'ØªÙ… Ø¥Ø±Ø³Ø§Ù„ Ø§Ù„Ø¥Ø´Ø¹Ø§Ø± Ø§Ù„ØªØ¬Ø±ÙŠØ¨ÙŠ.';
+  String get testNotificationSent => 'تم إرسال الإشعار التجريبي.';
 
   @override
-  String get statusBarMinutesTitle => 'Ø¯Ù‚Ø§Ø¦Ù‚ Ø´Ø±ÙŠØ· Ø§Ù„Ø­Ø§Ù„Ø©';
+  String get statusBarMinutesTitle => 'دقائق شريط الحالة';
 
   @override
   String get statusBarMinutesSubtitle =>
-      'Ø¥Ø¸Ù‡Ø§Ø± Ø¥Ø´Ø¹Ø§Ø± Ù…Ø³ØªÙ…Ø± Ù„Ù„Ø¯Ù‚Ø§Ø¦Ù‚ Ø§Ù„Ù…ØªØ¨Ù‚ÙŠØ© ÙÙŠ Ø´Ø±ÙŠØ· Ø§Ù„Ø­Ø§Ù„Ø©.';
+      'إظهار إشعار مستمر للدقائق المتبقية في شريط الحالة.';
 
   @override
-  String get statusAutoRestoreTitle =>
-      'Ø¥Ø¹Ø§Ø¯Ø© ØªÙ„Ù‚Ø§Ø¦ÙŠØ© Ø¹Ù†Ø¯ Ø§Ù„Ø¥Ø²Ø§Ù„Ø©';
+  String get statusAutoRestoreTitle => 'إعادة تلقائية عند الإزالة';
 
   @override
   String get statusAutoRestoreSubtitle =>
-      'Ø¥Ø¹Ø§Ø¯Ø© Ø¥Ù†Ø´Ø§Ø¡ Ø¹Ù†ØµØ± Ø§Ù„Ø­Ø§Ù„Ø© Ø¥Ø°Ø§ Ù‚Ø§Ù… Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ø¨Ø¥Ø²Ø§Ù„ØªÙ‡.';
+      'إعادة إنشاء عنصر الحالة إذا قام المستخدم بإزالته.';
 
   @override
-  String get noPendingReminders => 'Ù„Ø§ ØªÙˆØ¬Ø¯ ØªØ°ÙƒÙŠØ±Ø§Øª Ù…Ø¹Ù„Ù‚Ø©.';
+  String get noPendingReminders => 'لا توجد تذكيرات معلقة.';
 
   @override
-  String get unknownFireTime => 'ÙˆÙ‚Øª ØºÙŠØ± Ù…Ø¹Ø±ÙˆÙ';
+  String get unknownFireTime => 'وقت غير معروف';
 
   @override
-  String get pastPrefix => '[Ù…Ø¶Ù‰] ';
+  String get pastPrefix => '[مضى] ';
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Ù…ÙØ¹Ù„ â€¢ ÙÙŠ Ø§Ù„ÙˆÙ‚Øª + Ù‚Ø¨Ù„ $minutes Ø¯';
+    return 'مفعل • في الوقت + قبل $minutes د';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Ù…ÙØ¹Ù„ â€¢ ÙÙŠ Ø§Ù„ÙˆÙ‚Øª';
+  String get reminderOnTimeOnly => 'مفعل • في الوقت';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Ù…ÙØ¹Ù„ â€¢ Ù‚Ø¨Ù„ $minutes Ø¯';
+    return 'مفعل • قبل $minutes د';
   }
 
   @override
-  String get reminderOff => 'Ø§Ù„ØªØ°ÙƒÙŠØ± Ù…ØªÙˆÙ‚Ù';
+  String get reminderOff => 'التذكير متوقف';
 
   @override
-  String get nextPrayerTitle => 'Ø§Ù„ØµÙ„Ø§Ø© Ø§Ù„ØªØ§Ù„ÙŠØ©';
+  String get nextPrayerTitle => 'الصلاة التالية';
 
   @override
-  String get homeUpcomingRemindersTitle => 'Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª Ø§Ù„Ù‚Ø§Ø¯Ù…Ø©';
+  String get homeUpcomingRemindersTitle => 'التذكيرات القادمة';
+
+  @override
+  String startsIn(Object remaining) {
+    return 'تبدأ بعد $remaining';
+  }
+
+  @override
+  String get selectYourLocation => 'اختر موقعك';
+
+  @override
+  String get locationHelp =>
+      'استخدم GPS للإعداد السريع أو اختر الدولة/المدينة يدويًا.';
+
+  @override
+  String get useCurrentLocation => 'استخدم الموقع الحالي';
+
+  @override
+  String get country => 'الدولة';
+
+  @override
+  String get stateCity => 'الولاية / المدينة';
+
+  @override
+  String get district => 'المنطقة';
+
+  @override
+  String get saveLocation => 'حفظ الموقع';
+
+  @override
+  String selectedLocation(Object location) {
+    return 'المحدد: $location';
+  }
+
+  @override
+  String get historySelectLocationFirst =>
+      'اختر موقعًا أولًا لعرض قائمة الصلاة لسنة كاملة.';
+
+  @override
+  String get historyTableTitle => 'جدول أوقات الصلاة (سنة كاملة)';
+
+  @override
+  String get todayShort => 'اليوم';
+
+  @override
+  String get dateHeader => 'التاريخ';
+
+  @override
+  String get imsak => 'فجر';
+
+  @override
+  String get gunes => 'شروق';
+
+  @override
+  String get ogle => 'ظهر';
+
+  @override
+  String get ikindi => 'عصر';
+
+  @override
+  String get aksam => 'مغرب';
+
+  @override
+  String get yatsi => 'عشاء';
+
+  @override
+  String get hijriHeader => 'هجري';
+
+  @override
+  String get preferencesTitle => 'التفضيلات';
+
+  @override
+  String get languageTitle => 'اللغة';
+
+  @override
+  String get languageSystem => 'افتراضي النظام';
+
+  @override
+  String get themeModeTitle => 'وضع المظهر';
+
+  @override
+  String get themeSystem => 'افتراضي النظام';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get appBarRemainingTitle => 'نص الوقت المتبقي في شريط التطبيق';
+
+  @override
+  String get showInTitle => 'إظهار في العنوان';
+
+  @override
+  String get showAtRight => 'إظهار في اليمين';
+
+  @override
+  String get showAsSubtitle => 'إظهار كعنوان فرعي';
+
+  @override
+  String get hideRemainingText => 'إخفاء النص المتبقي';
+
+  @override
+  String get notificationMessageTitle => 'رسالة الإشعار';
+
+  @override
+  String get notificationMessageShown => 'ظاهرة';
+
+  @override
+  String get notificationMessageHidden => 'مخفية';
+
+  @override
+  String get widgetTextSizeTitle => 'حجم خط الودجت';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'حجم الخط المستخدم في ودجتات الشاشة الرئيسية.';
+
+  @override
+  String get widgetTextSizeExtraSmall => 'صغير جدًا';
+
+  @override
+  String get widgetTextSizeSmall => 'صغير';
+
+  @override
+  String get widgetTextSizeMedium => 'متوسط';
+
+  @override
+  String get widgetTextSizeLarge => 'كبير';
+
+  @override
+  String get widgetMmssThresholdTitle => 'عد تنازلي بالثواني في الودجت';
+
+  @override
+  String get widgetMmssThresholdNever => 'عرض HH:MM دائمًا';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'MM:SS أقل من $minutes دقيقة';
+  }
+
+  @override
+  String get remindersOnOffTitle => 'التذكيرات تشغيل/إيقاف';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'تشغيل أو إيقاف إشعارات تذكير الصلاة مع الاحتفاظ بإعدادات كل صلاة.';
+
+  @override
+  String get reminderVibrationTitle => 'الاهتزاز عند التذكير';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'اهتزاز نابض لمدة 10 ثوانٍ تقريبًا عند تفعيل التذكير.';
+
+  @override
+  String get reminderSoundTitle => 'تشغيل الصوت عند التذكير';
+
+  @override
+  String get reminderSoundSubtitle => 'تشغيل صوت الإشعار عند تفعيل التذكير.';
+
+  @override
+  String get remindersOn => 'تشغيل';
+
+  @override
+  String get remindersOff => 'إيقاف';
+
+  @override
+  String reminderScreenTitle(Object prayer) {
+    return 'تذكير $prayer';
+  }
+
+  @override
+  String get reminderTypeTitle => 'نوع التذكير (يمكن اختيار الاثنين)';
+
+  @override
+  String get onTime => 'في الوقت';
+
+  @override
+  String get before => 'قبل';
+
+  @override
+  String get after => 'بعد';
+
+  @override
+  String get reminderAlertTitle => 'التنبيه';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'يتطلب أيضًا تفعيل المفتاح المطابق في التفضيلات ليعمل التنبيه فعليًا.';
+
+  @override
+  String get vibrateChip => 'اهتزاز';
+
+  @override
+  String get soundChip => 'صوت';
+
+  @override
+  String get adhanChip => 'أذان';
 
   @override
   String prayersCompleted(Object completed, Object total) {
@@ -185,394 +378,211 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String startsIn(Object remaining) {
-    return 'ØªØ¨Ø¯Ø£ Ø¨Ø¹Ø¯ $remaining';
-  }
+  String get holiday_islamic_new_year => 'رأس السنة الهجرية';
 
   @override
-  String get selectYourLocation => 'Ø§Ø®ØªØ± Ù…ÙˆÙ‚Ø¹Ùƒ';
+  String get holiday_ashura => 'عاشوراء';
 
   @override
-  String get locationHelp =>
-      'Ø§Ø³ØªØ®Ø¯Ù… GPS Ù„Ù„Ø¥Ø¹Ø¯Ø§Ø¯ Ø§Ù„Ø³Ø±ÙŠØ¹ Ø£Ùˆ Ø§Ø®ØªØ± Ø§Ù„Ø¯ÙˆÙ„Ø©/Ø§Ù„Ù…Ø¯ÙŠÙ†Ø© ÙŠØ¯ÙˆÙŠÙ‹Ø§.';
+  String get holiday_mawlid => 'المولد النبوي';
 
   @override
-  String get useCurrentLocation => 'Ø§Ø³ØªØ®Ø¯Ù… Ø§Ù„Ù…ÙˆÙ‚Ø¹ Ø§Ù„Ø­Ø§Ù„ÙŠ';
+  String get holiday_isra_miraj => 'الإسراء والمعراج';
 
   @override
-  String get country => 'Ø§Ù„Ø¯ÙˆÙ„Ø©';
+  String get holiday_laylat_barat => 'ليلة البراءة';
 
   @override
-  String get stateCity => 'Ø§Ù„ÙˆÙ„Ø§ÙŠØ© / Ø§Ù„Ù…Ø¯ÙŠÙ†Ø©';
+  String get holiday_ramadan_first => 'أول يوم رمضان';
 
   @override
-  String get district => 'Ø§Ù„Ù…Ù†Ø·Ù‚Ø©';
+  String get holiday_laylat_qadr => 'ليلة القدر';
 
   @override
-  String get saveLocation => 'Ø­ÙØ¸ Ø§Ù„Ù…ÙˆÙ‚Ø¹';
+  String get holiday_eid_fitr => 'عيد الفطر';
 
   @override
-  String selectedLocation(Object location) {
-    return 'Ø§Ù„Ù…Ø­Ø¯Ø¯: $location';
-  }
+  String get holiday_arafah => 'يوم عرفة';
 
   @override
-  String get historySelectLocationFirst =>
-      'Ø§Ø®ØªØ± Ù…ÙˆÙ‚Ø¹Ù‹Ø§ Ø£ÙˆÙ„Ù‹Ø§ Ù„Ø¹Ø±Ø¶ Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„ØµÙ„Ø§Ø© Ù„Ø³Ù†Ø© ÙƒØ§Ù…Ù„Ø©.';
+  String get holiday_eid_adha => 'عيد الأضحى';
 
   @override
-  String get historyTableTitle =>
-      'Ø¬Ø¯ÙˆÙ„ Ø£ÙˆÙ‚Ø§Øª Ø§Ù„ØµÙ„Ø§Ø© (Ø³Ù†Ø© ÙƒØ§Ù…Ù„Ø©)';
+  String get remindBeforePrayerTitle => 'ذكّرني قبل الصلاة';
 
   @override
-  String get todayShort => 'Ø§Ù„ÙŠÙˆÙ…';
-
-  @override
-  String get dateHeader => 'Ø§Ù„ØªØ§Ø±ÙŠØ®';
-
-  @override
-  String get imsak => 'ÙØ¬Ø±';
-
-  @override
-  String get gunes => 'Ø´Ø±ÙˆÙ‚';
-
-  @override
-  String get ogle => 'Ø¸Ù‡Ø±';
-
-  @override
-  String get ikindi => 'Ø¹ØµØ±';
-
-  @override
-  String get aksam => 'Ù…ØºØ±Ø¨';
-
-  @override
-  String get yatsi => 'Ø¹Ø´Ø§Ø¡';
-
-  @override
-  String get hijriHeader => 'Ù‡Ø¬Ø±ÙŠ';
-
-  @override
-  String get preferencesTitle => 'Ø§Ù„ØªÙØ¶ÙŠÙ„Ø§Øª';
-
-  @override
-  String get languageTitle => 'Ø§Ù„Ù„ØºØ©';
-
-  @override
-  String get languageSystem => 'Ø§ÙØªØ±Ø§Ø¶ÙŠ Ø§Ù„Ù†Ø¸Ø§Ù…';
-
-  @override
-  String get themeModeTitle => 'ÙˆØ¶Ø¹ Ø§Ù„Ù…Ø¸Ù‡Ø±';
-
-  @override
-  String get themeSystem => 'Ø§ÙØªØ±Ø§Ø¶ÙŠ Ø§Ù„Ù†Ø¸Ø§Ù…';
-
-  @override
-  String get themeLight => 'ÙØ§ØªØ­';
-
-  @override
-  String get themeDark => 'Ø¯Ø§ÙƒÙ†';
-
-  @override
-  String get appBarRemainingTitle =>
-      'Ù†Øµ Ø§Ù„ÙˆÙ‚Øª Ø§Ù„Ù…ØªØ¨Ù‚ÙŠ ÙÙŠ Ø´Ø±ÙŠØ· Ø§Ù„ØªØ·Ø¨ÙŠÙ‚';
-
-  @override
-  String get showInTitle => 'Ø¥Ø¸Ù‡Ø§Ø± ÙÙŠ Ø§Ù„Ø¹Ù†ÙˆØ§Ù†';
-
-  @override
-  String get showAtRight => 'Ø¥Ø¸Ù‡Ø§Ø± ÙÙŠ Ø§Ù„ÙŠÙ…ÙŠÙ†';
-
-  @override
-  String get showAsSubtitle => 'Ø¥Ø¸Ù‡Ø§Ø± ÙƒØ¹Ù†ÙˆØ§Ù† ÙØ±Ø¹ÙŠ';
-
-  @override
-  String get hideRemainingText => 'Ø¥Ø®ÙØ§Ø¡ Ø§Ù„Ù†Øµ Ø§Ù„Ù…ØªØ¨Ù‚ÙŠ';
-
-  @override
-  String get notificationMessageTitle => 'Ø±Ø³Ø§Ù„Ø© Ø§Ù„Ø¥Ø´Ø¹Ø§Ø±';
-
-  @override
-  String get notificationMessageShown => 'Ø¸Ø§Ù‡Ø±Ø©';
-
-  @override
-  String get notificationMessageHidden => 'Ù…Ø®ÙÙŠØ©';
-
-  @override
-  String get widgetTextSizeTitle => 'Ø­Ø¬Ù… Ø®Ø· Ø§Ù„ÙˆØ¯Ø¬Øª';
-
-  @override
-  String get widgetTextSizeSubtitle =>
-      'Ø­Ø¬Ù… Ø§Ù„Ø®Ø· Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… ÙÙŠ ÙˆØ¯Ø¬ØªØ§Øª Ø§Ù„Ø´Ø§Ø´Ø© Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©.';
-
-  @override
-  String get widgetTextSizeExtraSmall => 'ØµØºÙŠØ± Ø¬Ø¯Ù‹Ø§';
-
-  @override
-  String get widgetTextSizeSmall => 'ØµØºÙŠØ±';
-
-  @override
-  String get widgetTextSizeMedium => 'Ù…ØªÙˆØ³Ø·';
-
-  @override
-  String get widgetTextSizeLarge => 'ÙƒØ¨ÙŠØ±';
-
-  @override
-  String get widgetMmssThresholdTitle =>
-      'Ø¹Ø¯ ØªÙ†Ø§Ø²Ù„ÙŠ Ø¨Ø§Ù„Ø«ÙˆØ§Ù†ÙŠ ÙÙŠ Ø§Ù„ÙˆØ¯Ø¬Øª';
-
-  @override
-  String get widgetMmssThresholdNever => 'Ø¹Ø±Ø¶ HH:MM Ø¯Ø§Ø¦Ù…Ù‹Ø§';
-
-  @override
-  String widgetMmssThresholdValue(Object minutes) {
-    return 'MM:SS Ø£Ù‚Ù„ Ù…Ù† $minutes Ø¯Ù‚ÙŠÙ‚Ø©';
-  }
-
-  @override
-  String get remindersOnOffTitle => 'Ø§Ù„ØªØ°ÙƒÙŠØ±Ø§Øª ØªØ´ØºÙŠÙ„/Ø¥ÙŠÙ‚Ø§Ù';
-
-  @override
-  String get remindersOnOffSubtitle =>
-      'ØªØ´ØºÙŠÙ„ Ø£Ùˆ Ø¥ÙŠÙ‚Ø§Ù Ø¥Ø´Ø¹Ø§Ø±Ø§Øª ØªØ°ÙƒÙŠØ± Ø§Ù„ØµÙ„Ø§Ø© Ù…Ø¹ Ø§Ù„Ø§Ø­ØªÙØ§Ø¸ Ø¨Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª ÙƒÙ„ ØµÙ„Ø§Ø©.';
-
-  @override
-  String get reminderVibrationTitle => 'Ø§Ù„Ø§Ù‡ØªØ²Ø§Ø² Ø¹Ù†Ø¯ Ø§Ù„ØªØ°ÙƒÙŠØ±';
-
-  @override
-  String get reminderVibrationSubtitle =>
-      'Ø§Ù‡ØªØ²Ø§Ø² Ù†Ø§Ø¨Ø¶ Ù„Ù…Ø¯Ø© 10 Ø«ÙˆØ§Ù†Ù ØªÙ‚Ø±ÙŠØ¨Ù‹Ø§ Ø¹Ù†Ø¯ ØªÙØ¹ÙŠÙ„ Ø§Ù„ØªØ°ÙƒÙŠØ±.';
-
-  @override
-  String get reminderSoundTitle =>
-      'ØªØ´ØºÙŠÙ„ Ø§Ù„ØµÙˆØª Ø¹Ù†Ø¯ Ø§Ù„ØªØ°ÙƒÙŠØ±';
-
-  @override
-  String get reminderSoundSubtitle =>
-      'ØªØ´ØºÙŠÙ„ ØµÙˆØª Ø§Ù„Ø¥Ø´Ø¹Ø§Ø± Ø¹Ù†Ø¯ ØªÙØ¹ÙŠÙ„ Ø§Ù„ØªØ°ÙƒÙŠØ±.';
-
-  @override
-  String get remindersOn => 'ØªØ´ØºÙŠÙ„';
-
-  @override
-  String get remindersOff => 'Ø¥ÙŠÙ‚Ø§Ù';
-
-  @override
-  String reminderScreenTitle(Object prayer) {
-    return 'ØªØ°ÙƒÙŠØ± $prayer';
-  }
-
-  @override
-  String get reminderTypeTitle =>
-      'Ù†ÙˆØ¹ Ø§Ù„ØªØ°ÙƒÙŠØ± (ÙŠÙ…ÙƒÙ† Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø§Ø«Ù†ÙŠÙ†)';
-
-  @override
-  String get onTime => 'ÙÙŠ Ø§Ù„ÙˆÙ‚Øª';
-
-  @override
-  String get before => 'Ù‚Ø¨Ù„';
-
-  @override
-  String get after => 'Ø¨Ø¹Ø¯';
-
-  @override
-  String get reminderAlertTitle => 'Ø§Ù„ØªÙ†Ø¨ÙŠÙ‡';
-
-  @override
-  String get reminderAlertSubtitle =>
-      'ÙŠØªØ·Ù„Ø¨ Ø£ÙŠØ¶Ù‹Ø§ ØªÙØ¹ÙŠÙ„ Ø§Ù„Ù…ÙØªØ§Ø­ Ø§Ù„Ù…Ø·Ø§Ø¨Ù‚ ÙÙŠ Ø§Ù„ØªÙØ¶ÙŠÙ„Ø§Øª Ù„ÙŠØ¹Ù…Ù„ Ø§Ù„ØªÙ†Ø¨ÙŠÙ‡ ÙØ¹Ù„ÙŠÙ‹Ø§.';
-
-  @override
-  String get vibrateChip => 'Ø§Ù‡ØªØ²Ø§Ø²';
-
-  @override
-  String get soundChip => 'ØµÙˆØª';
-
-  @override
-  String get adhanChip => 'Ø£Ø°Ø§Ù†';
-
-  @override
-  String get remindBeforePrayerTitle => 'Ø°ÙƒÙ‘Ø±Ù†ÙŠ Ù‚Ø¨Ù„ Ø§Ù„ØµÙ„Ø§Ø©';
-
-  @override
-  String get remindAfterPrayerTitle => 'Ø°ÙƒÙ‘Ø±Ù†ÙŠ Ø¨Ø¹Ø¯ Ø§Ù„ØµÙ„Ø§Ø©';
+  String get remindAfterPrayerTitle => 'ذكّرني بعد الصلاة';
 
   @override
   String minutesValue(Object minutes) {
-    return '$minutes Ø¯';
+    return '$minutes د';
   }
 
   @override
-  String get custom => 'Ù…Ø®ØµØµ';
+  String get custom => 'مخصص';
 
   @override
-  String get customMinutes => 'Ø¯Ù‚Ø§Ø¦Ù‚ Ù…Ø®ØµØµØ©';
+  String get customMinutes => 'دقائق مخصصة';
 
   @override
-  String get customMinutesHint => 'Ù…Ø«Ø§Ù„: 12';
+  String get customMinutesHint => 'مثال: 12';
 
   @override
-  String get save => 'Ø­ÙØ¸';
+  String get save => 'حفظ';
 
   @override
-  String get enableBeforeToSelectMinutes =>
-      'ÙØ¹Ù‘Ù„ \"Ù‚Ø¨Ù„\" Ù„Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¯Ù‚Ø§Ø¦Ù‚.';
+  String get enableBeforeToSelectMinutes => 'فعّل \"قبل\" لاختيار الدقائق.';
 
   @override
-  String get enableAfterToSelectMinutes =>
-      'ÙØ¹Ù‘Ù„ \"Ø¨Ø¹Ø¯\" Ù„Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ø¯Ù‚Ø§Ø¦Ù‚.';
+  String get enableAfterToSelectMinutes => 'فعّل \"بعد\" لاختيار الدقائق.';
 
   @override
-  String get enterValidPositiveNumber =>
-      'Ø£Ø¯Ø®Ù„ Ø±Ù‚Ù…Ù‹Ø§ Ù…ÙˆØ¬Ø¨Ù‹Ø§ ØµØ­ÙŠØ­Ù‹Ø§.';
+  String get enterValidPositiveNumber => 'أدخل رقمًا موجبًا صحيحًا.';
 
   @override
-  String get useValueUpTo240 => 'Ø§Ø³ØªØ®Ø¯Ù… Ù‚ÙŠÙ…Ø© Ø­ØªÙ‰ 240 Ø¯Ù‚ÙŠÙ‚Ø©.';
+  String get useValueUpTo240 => 'استخدم قيمة حتى 240 دقيقة.';
 
   @override
-  String get customMinutesSaved => 'ØªÙ… Ø­ÙØ¸ Ø§Ù„Ø¯Ù‚Ø§Ø¦Ù‚ Ø§Ù„Ù…Ø®ØµØµØ©.';
+  String get customMinutesSaved => 'تم حفظ الدقائق المخصصة.';
 
   @override
-  String get cancel => 'Ø¥Ù„ØºØ§Ø¡';
+  String get cancel => 'إلغاء';
 
   @override
-  String get calendarTabTooltip => 'Ø§Ù„ØªÙ‚ÙˆÙŠÙ… Ø§Ù„Ù‡Ø¬Ø±ÙŠ';
+  String get calendarTabTooltip => 'التقويم الهجري';
 
   @override
-  String get calendarPreviousMonth => 'Ø§Ù„Ø´Ù‡Ø± Ø§Ù„Ø³Ø§Ø¨Ù‚';
+  String get calendarPreviousMonth => 'الشهر السابق';
 
   @override
-  String get calendarNextMonth => 'Ø§Ù„Ø´Ù‡Ø± Ø§Ù„ØªØ§Ù„ÙŠ';
+  String get calendarNextMonth => 'الشهر التالي';
 
   @override
-  String get calendarSwapPrimary => 'ØªØ¨Ø¯ÙŠÙ„ Ø§Ù„Ù‡Ø¬Ø±ÙŠ/Ø§Ù„Ù…ÙŠÙ„Ø§Ø¯ÙŠ';
+  String get calendarSwapPrimary => 'تبديل الهجري/الميلادي';
 
   @override
-  String get calendarShowSecondary =>
-      'Ø¥Ø¸Ù‡Ø§Ø± Ø§Ù„ØªØ§Ø±ÙŠØ® Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ';
+  String get calendarShowSecondary => 'إظهار التاريخ الثانوي';
 
   @override
-  String get calendarHideSecondary =>
-      'Ø¥Ø®ÙØ§Ø¡ Ø§Ù„ØªØ§Ø±ÙŠØ® Ø§Ù„Ø«Ø§Ù†ÙˆÙŠ';
+  String get calendarHideSecondary => 'إخفاء التاريخ الثانوي';
 
   @override
-  String get calendarNoRemindersOnDay =>
-      'Ù„Ø§ ØªÙˆØ¬Ø¯ ØªØ°ÙƒÙŠØ±Ø§Øª ÙÙŠ Ù‡Ø°Ø§ Ø§Ù„ÙŠÙˆÙ…';
+  String get calendarNoRemindersOnDay => 'لا توجد تذكيرات في هذا اليوم';
 
   @override
-  String get calendarAddReminder => 'Ø¥Ø¶Ø§ÙØ© ØªØ°ÙƒÙŠØ±';
+  String get calendarAddReminder => 'إضافة تذكير';
 
   @override
-  String get calendarEditReminder => 'ØªØ¹Ø¯ÙŠÙ„';
+  String get calendarEditReminder => 'تعديل';
 
   @override
-  String get calendarDeleteReminder => 'Ø­Ø°Ù';
+  String get calendarDeleteReminder => 'حذف';
 
   @override
-  String get calendarReminderFormTitleNew => 'ØªØ°ÙƒÙŠØ± Ø¬Ø¯ÙŠØ¯';
+  String get calendarReminderFormTitleNew => 'تذكير جديد';
 
   @override
-  String get calendarReminderFormTitleEdit => 'ØªØ¹Ø¯ÙŠÙ„ Ø§Ù„ØªØ°ÙƒÙŠØ±';
+  String get calendarReminderFormTitleEdit => 'تعديل التذكير';
 
   @override
-  String get calendarReminderTitleLabel => 'Ø§Ù„Ø¹Ù†ÙˆØ§Ù†';
+  String get calendarReminderTitleLabel => 'العنوان';
 
   @override
-  String get calendarReminderTitleHint => 'Ù…Ø«Ø§Ù„: Ø¨Ø¯Ø§ÙŠØ© Ø±Ù…Ø¶Ø§Ù†';
+  String get calendarReminderTitleHint => 'مثال: بداية رمضان';
 
   @override
-  String get calendarReminderNotesLabel => 'Ù…Ù„Ø§Ø­Ø¸Ø§Øª (Ø§Ø®ØªÙŠØ§Ø±ÙŠ)';
+  String get calendarReminderNotesLabel => 'ملاحظات (اختياري)';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Ø§Ù„ØªØ§Ø±ÙŠØ® ÙˆØ§Ù„ÙˆÙ‚Øª';
+  String get calendarReminderDateTimeLabel => 'التاريخ والوقت';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'Ø§Ù„ØªÙƒØ±Ø§Ø±';
+  String get calendarReminderRecurrenceLabel => 'التكرار';
 
   @override
-  String get calendarRecurrenceOnce => 'Ù…Ø±Ø© ÙˆØ§Ø­Ø¯Ø©';
+  String get calendarRecurrenceOnce => 'مرة واحدة';
 
   @override
-  String get calendarRecurrenceDaily => 'ÙŠÙˆÙ…ÙŠÙ‹Ø§';
+  String get calendarRecurrenceDaily => 'يوميًا';
 
   @override
-  String get calendarRecurrenceWeekly => 'Ø£Ø³Ø¨ÙˆØ¹ÙŠÙ‹Ø§';
+  String get calendarRecurrenceWeekly => 'أسبوعيًا';
 
   @override
-  String get calendarRecurrenceMonthly => 'Ø´Ù‡Ø±ÙŠÙ‹Ø§';
+  String get calendarRecurrenceMonthly => 'شهريًا';
 
   @override
-  String get calendarRecurrenceYearly => 'Ø³Ù†ÙˆÙŠÙ‹Ø§';
+  String get calendarRecurrenceYearly => 'سنويًا';
 
   @override
-  String get calendarRepeatCountLabel => 'Ø¹Ø¯Ø¯ Ø§Ù„ØªÙƒØ±Ø§Ø±';
+  String get calendarRepeatCountLabel => 'عدد التكرار';
 
   @override
   String get calendarRepeatCountHelper =>
-      'Ø¹Ø¯Ø¯ Ù…Ø±Ø§Øª ØªØ´ØºÙŠÙ„ Ø§Ù„ØªØ°ÙƒÙŠØ± Ù‚Ø¨Ù„ Ø§Ù„ØªÙˆÙ‚Ù (Ø¥ÙŠÙ‚Ø§Ù = ÙŠØªÙƒØ±Ø± Ø¯Ø§Ø¦Ù…Ù‹Ø§)';
+      'عدد مرات تشغيل التذكير قبل التوقف (إيقاف = يتكرر دائمًا)';
 
   @override
-  String get calendarRepeatCountError =>
-      'Ø£Ø¯Ø®Ù„ Ø±Ù‚Ù…Ù‹Ø§ Ù…Ù† 2 Ø¥Ù„Ù‰ 100';
+  String get calendarRepeatCountError => 'أدخل رقمًا من 2 إلى 100';
 
   @override
-  String get calendarRepeatDaysLabel => 'Ø§Ù„ØªÙƒØ±Ø§Ø± ÙÙŠ';
+  String get calendarRepeatDaysLabel => 'التكرار في';
 
   @override
-  String get calendarDayOfMonthLabel => 'ÙŠÙˆÙ… Ù…Ù† Ø§Ù„Ø´Ù‡Ø±';
+  String get calendarDayOfMonthLabel => 'يوم من الشهر';
 
   @override
-  String get calendarYearlyMonthLabel => 'Ø§Ù„Ø´Ù‡Ø±';
+  String get calendarYearlyMonthLabel => 'الشهر';
 
   @override
-  String get calendarYearlyDayLabel => 'Ø§Ù„ÙŠÙˆÙ…';
+  String get calendarYearlyDayLabel => 'اليوم';
 
   @override
-  String get calendarMonthlyBasisLabel => 'Ø§Ù„Ø£Ø³Ø§Ø³ Ø§Ù„Ø´Ù‡Ø±ÙŠ';
+  String get calendarMonthlyBasisLabel => 'الأساس الشهري';
 
   @override
-  String get calendarYearlyBasisLabel => 'Ø§Ù„Ø£Ø³Ø§Ø³ Ø§Ù„Ø³Ù†ÙˆÙŠ';
+  String get calendarYearlyBasisLabel => 'الأساس السنوي';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Ù…ÙŠÙ„Ø§Ø¯ÙŠ';
+  String get calendarYearlyBasisGregorian => 'ميلادي';
 
   @override
-  String get calendarYearlyBasisHijri => 'Ù‡Ø¬Ø±ÙŠ';
+  String get calendarYearlyBasisHijri => 'هجري';
 
   @override
-  String get calendarReminderTitleRequired => 'Ø£Ø¯Ø®Ù„ Ø¹Ù†ÙˆØ§Ù†Ù‹Ø§';
+  String get calendarReminderTitleRequired => 'أدخل عنوانًا';
 
   @override
-  String get calendarAnchorClockTime => 'ØªØ§Ø±ÙŠØ® Ø§Ù„ØªÙ‚ÙˆÙŠÙ…';
+  String get calendarAnchorClockTime => 'تاريخ التقويم';
 
   @override
-  String get calendarAnchorPrayerTime => 'ÙˆÙ‚Øª Ø§Ù„ØµÙ„Ø§Ø©';
+  String get calendarAnchorPrayerTime => 'وقت الصلاة';
 
   @override
-  String get calendarSelectPrayer => 'Ø§Ø®ØªØ± Ø§Ù„ØµÙ„Ø§Ø©';
+  String get calendarSelectPrayer => 'اختر الصلاة';
 
   @override
-  String get calendarOffsetOnTime => 'ÙÙŠ Ø§Ù„ÙˆÙ‚Øª';
+  String get calendarOffsetOnTime => 'في الوقت';
 
   @override
-  String get calendarOffsetBefore => 'Ù‚Ø¨Ù„';
+  String get calendarOffsetBefore => 'قبل';
 
   @override
-  String get calendarOffsetAfter => 'Ø¨Ø¹Ø¯';
+  String get calendarOffsetAfter => 'بعد';
 
   @override
-  String get calendarPickAnchorDate => 'Ø§Ø®ØªØ± Ø§Ù„ØªØ§Ø±ÙŠØ®';
+  String get calendarPickAnchorDate => 'اختر التاريخ';
 
   @override
-  String get datesPrayerTimesTab => 'Ø£ÙˆÙ‚Ø§Øª Ø§Ù„ØµÙ„Ø§Ø©';
+  String get datesPrayerTimesTab => 'أوقات الصلاة';
 
   @override
-  String get datesCalendarTab => 'Ø§Ù„ØªÙ‚ÙˆÙŠÙ…';
+  String get datesCalendarTab => 'التقويم';
 
   @override
-  String get undo => 'ØªØ±Ø§Ø¬Ø¹';
+  String get undo => 'تراجع';
 
   @override
   String calendarReminderDeleted(Object title) {
-    return '\"$title\" ØªÙ… Ø§Ù„Ø­Ø°Ù';
+    return '\"$title\" تم الحذف';
   }
 }

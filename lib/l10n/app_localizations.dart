@@ -406,12 +406,6 @@ abstract class AppLocalizations {
   /// **'Upcoming reminders'**
   String get homeUpcomingRemindersTitle;
 
-  /// No description provided for @prayersCompleted.
-  ///
-  /// In en, this message translates to:
-  /// **'{completed}/{total} prayers completed'**
-  String prayersCompleted(Object completed, Object total);
-
   /// No description provided for @startsIn.
   ///
   /// In en, this message translates to:
@@ -783,6 +777,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adhan'**
   String get adhanChip;
+
+  /// No description provided for @prayersCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed}/{total} prayers completed'**
+  String prayersCompleted(Object completed, Object total);
+
+  /// No description provided for @holiday_islamic_new_year.
+  ///
+  /// In en, this message translates to:
+  /// **'Islamic New Year'**
+  String get holiday_islamic_new_year;
+
+  /// No description provided for @holiday_ashura.
+  ///
+  /// In en, this message translates to:
+  /// **'Ashura'**
+  String get holiday_ashura;
+
+  /// No description provided for @holiday_mawlid.
+  ///
+  /// In en, this message translates to:
+  /// **'Mawlid al-Nabi'**
+  String get holiday_mawlid;
+
+  /// No description provided for @holiday_isra_miraj.
+  ///
+  /// In en, this message translates to:
+  /// **'Isra and Miraj'**
+  String get holiday_isra_miraj;
+
+  /// No description provided for @holiday_laylat_barat.
+  ///
+  /// In en, this message translates to:
+  /// **'Laylat al-Baraat'**
+  String get holiday_laylat_barat;
+
+  /// No description provided for @holiday_ramadan_first.
+  ///
+  /// In en, this message translates to:
+  /// **'First of Ramadan'**
+  String get holiday_ramadan_first;
+
+  /// No description provided for @holiday_laylat_qadr.
+  ///
+  /// In en, this message translates to:
+  /// **'Laylat al-Qadr'**
+  String get holiday_laylat_qadr;
+
+  /// No description provided for @holiday_eid_fitr.
+  ///
+  /// In en, this message translates to:
+  /// **'Eid al-Fitr'**
+  String get holiday_eid_fitr;
+
+  /// No description provided for @holiday_arafah.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of Arafah'**
+  String get holiday_arafah;
+
+  /// No description provided for @holiday_eid_adha.
+  ///
+  /// In en, this message translates to:
+  /// **'Eid al-Adha'**
+  String get holiday_eid_adha;
 
   /// No description provided for @remindBeforePrayerTitle.
   ///

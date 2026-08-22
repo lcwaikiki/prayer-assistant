@@ -65,7 +65,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Kiblat: $degreesÂ°';
+    return 'Kiblat: $degrees°';
   }
 
   @override
@@ -94,7 +94,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String todayWithDate(Object date) {
-    return 'Hari ini â€¢ $date';
+    return 'Hari ini • $date';
   }
 
   @override
@@ -154,15 +154,15 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Aktif â€¢ Tepat waktu + $minutes mnt sebelum';
+    return 'Aktif • Tepat waktu + $minutes mnt sebelum';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Aktif â€¢ Tepat waktu';
+  String get reminderOnTimeOnly => 'Aktif • Tepat waktu';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Aktif â€¢ $minutes mnt sebelum';
+    return 'Aktif • $minutes mnt sebelum';
   }
 
   @override
@@ -173,11 +173,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get homeUpcomingRemindersTitle => 'Pengingat mendatang';
-
-  @override
-  String prayersCompleted(Object completed, Object total) {
-    return '$completed/$total shalat selesai';
-  }
 
   @override
   String startsIn(Object remaining) {
@@ -379,6 +374,41 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get adhanChip => 'Azan';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total shalat selesai';
+  }
+
+  @override
+  String get holiday_islamic_new_year => 'Tahun Baru Islam';
+
+  @override
+  String get holiday_ashura => 'Asyura';
+
+  @override
+  String get holiday_mawlid => 'Maulid Nabi';
+
+  @override
+  String get holiday_isra_miraj => 'Isra Miraj';
+
+  @override
+  String get holiday_laylat_barat => 'Nisfu Syaban';
+
+  @override
+  String get holiday_ramadan_first => 'Awal Ramadan';
+
+  @override
+  String get holiday_laylat_qadr => 'Lailatul Qadar';
+
+  @override
+  String get holiday_eid_fitr => 'Idul Fitri';
+
+  @override
+  String get holiday_arafah => 'Hari Arafah';
+
+  @override
+  String get holiday_eid_adha => 'Idul Adha';
 
   @override
   String get remindBeforePrayerTitle => 'Ingatkan saya sebelum salat';

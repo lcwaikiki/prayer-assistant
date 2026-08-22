@@ -44,7 +44,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get remainingMinutesUnknown => '-- Min';
 
   @override
-  String get homeNoLocationTitle => 'Kein Ort ausgewÃ¤hlt';
+  String get homeNoLocationTitle => 'Kein Ort ausgewählt';
 
   @override
   String get homeNoLocationSubtitle =>
@@ -65,7 +65,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String qiblaBearing(int degrees) {
-    return 'Qibla: $degreesÂ°';
+    return 'Qibla: $degrees°';
   }
 
   @override
@@ -74,11 +74,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get qiblaHeadingUnavailable =>
-      'Kompass nicht verfÃ¼gbar - feste Richtung wird angezeigt.';
+      'Kompass nicht verfügbar - feste Richtung wird angezeigt.';
 
   @override
   String get qiblaPointDevice =>
-      'Drehen Sie das GerÃ¤t, bis die Nadel nach oben zeigt.';
+      'Drehen Sie das Gerät, bis die Nadel nach oben zeigt.';
 
   @override
   String get qiblaKaabaShort => 'Qibla';
@@ -90,11 +90,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarPreviousDay => 'Vorheriger Tag';
 
   @override
-  String get calendarNextDay => 'NÃ¤chster Tag';
+  String get calendarNextDay => 'Nächster Tag';
 
   @override
   String todayWithDate(Object date) {
-    return 'Heute â€¢ $date';
+    return 'Heute • $date';
   }
 
   @override
@@ -154,30 +154,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'An â€¢ PÃ¼nktlich + $minutes Min vorher';
+    return 'An • Pünktlich + $minutes Min vorher';
   }
 
   @override
-  String get reminderOnTimeOnly => 'An â€¢ PÃ¼nktlich';
+  String get reminderOnTimeOnly => 'An • Pünktlich';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'An â€¢ $minutes Min vorher';
+    return 'An • $minutes Min vorher';
   }
 
   @override
   String get reminderOff => 'Erinnerung aus';
 
   @override
-  String get nextPrayerTitle => 'NÃ¤chstes Gebet';
+  String get nextPrayerTitle => 'Nächstes Gebet';
 
   @override
   String get homeUpcomingRemindersTitle => 'Bevorstehende Erinnerungen';
-
-  @override
-  String prayersCompleted(Object completed, Object total) {
-    return '$completed/$total Gebete abgeschlossen';
-  }
 
   @override
   String startsIn(Object remaining) {
@@ -185,11 +180,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get selectYourLocation => 'WÃ¤hle deinen Ort';
+  String get selectYourLocation => 'Wähle deinen Ort';
 
   @override
   String get locationHelp =>
-      'Nutze GPS fÃ¼r schnelle Einrichtung oder wÃ¤hle Land/Stadt manuell.';
+      'Nutze GPS für schnelle Einrichtung oder wähle Land/Stadt manuell.';
 
   @override
   String get useCurrentLocation => 'Aktuellen Standort verwenden';
@@ -208,12 +203,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String selectedLocation(Object location) {
-    return 'AusgewÃ¤hlt: $location';
+    return 'Ausgewählt: $location';
   }
 
   @override
   String get historySelectLocationFirst =>
-      'WÃ¤hle zuerst einen Ort, um die Gebetsliste fÃ¼r 1 Jahr zu sehen.';
+      'Wähle zuerst einen Ort, um die Gebetsliste für 1 Jahr zu sehen.';
 
   @override
   String get historyTableTitle => 'Gebetszeitentabelle (Ganzes Jahr)';
@@ -291,11 +286,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationMessageHidden => 'Ausgeblendet';
 
   @override
-  String get widgetTextSizeTitle => 'Widget-TextgrÃ¶ÃŸe';
+  String get widgetTextSizeTitle => 'Widget-Textgröße';
 
   @override
-  String get widgetTextSizeSubtitle =>
-      'TextgrÃ¶ÃŸe fÃ¼r die Homescreen-Widgets.';
+  String get widgetTextSizeSubtitle => 'Textgröße für die Homescreen-Widgets.';
 
   @override
   String get widgetTextSizeExtraSmall => 'Sehr klein';
@@ -307,7 +301,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get widgetTextSizeMedium => 'Mittel';
 
   @override
-  String get widgetTextSizeLarge => 'GroÃŸ';
+  String get widgetTextSizeLarge => 'Groß';
 
   @override
   String get widgetMmssThresholdTitle => 'Widget-Sekunden-Countdown';
@@ -332,14 +326,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reminderVibrationSubtitle =>
-      'Etwa 10 Sekunden lang pulsierend vibrieren, wenn eine Erinnerung ausgelÃ¶st wird.';
+      'Etwa 10 Sekunden lang pulsierend vibrieren, wenn eine Erinnerung ausgelöst wird.';
 
   @override
   String get reminderSoundTitle => 'Ton bei Erinnerung abspielen';
 
   @override
   String get reminderSoundSubtitle =>
-      'Benachrichtigungston abspielen, wenn eine Erinnerung ausgelÃ¶st wird.';
+      'Benachrichtigungston abspielen, wenn eine Erinnerung ausgelöst wird.';
 
   @override
   String get remindersOn => 'An';
@@ -353,10 +347,10 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get reminderTypeTitle => 'Erinnerungstyp (beides mÃ¶glich)';
+  String get reminderTypeTitle => 'Erinnerungstyp (beides möglich)';
 
   @override
-  String get onTime => 'PÃ¼nktlich';
+  String get onTime => 'Pünktlich';
 
   @override
   String get before => 'Vorher';
@@ -369,7 +363,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get reminderAlertSubtitle =>
-      'Erfordert zusÃ¤tzlich den passenden Schalter in den Einstellungen, damit tatsÃ¤chlich alarmiert wird.';
+      'Erfordert zusätzlich den passenden Schalter in den Einstellungen, damit tatsächlich alarmiert wird.';
 
   @override
   String get vibrateChip => 'Vibration';
@@ -378,7 +372,42 @@ class AppLocalizationsDe extends AppLocalizations {
   String get soundChip => 'Ton';
 
   @override
-  String get adhanChip => 'AdhÄn';
+  String get adhanChip => 'Adhān';
+
+  @override
+  String prayersCompleted(Object completed, Object total) {
+    return '$completed/$total Gebete abgeschlossen';
+  }
+
+  @override
+  String get holiday_islamic_new_year => 'Islamisches Neujahr';
+
+  @override
+  String get holiday_ashura => 'Aschura';
+
+  @override
+  String get holiday_mawlid => 'Mawlid an-Nabi';
+
+  @override
+  String get holiday_isra_miraj => 'Isra und Miraj';
+
+  @override
+  String get holiday_laylat_barat => 'Lailat al-Baraa';
+
+  @override
+  String get holiday_ramadan_first => 'Erster Ramadan';
+
+  @override
+  String get holiday_laylat_qadr => 'Lailat al-Qadr';
+
+  @override
+  String get holiday_eid_fitr => 'Eid al-Fitr';
+
+  @override
+  String get holiday_arafah => 'Tag von Arafah';
+
+  @override
+  String get holiday_eid_adha => 'Eid al-Adha';
 
   @override
   String get remindBeforePrayerTitle => 'Erinnere mich vor dem Gebet';
@@ -405,14 +434,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get enableBeforeToSelectMinutes =>
-      '\"Vorher\" aktivieren, um Minuten zu wÃ¤hlen.';
+      '\"Vorher\" aktivieren, um Minuten zu wählen.';
 
   @override
   String get enableAfterToSelectMinutes =>
-      '\"Nachher\" aktivieren, um Minuten zu wÃ¤hlen.';
+      '\"Nachher\" aktivieren, um Minuten zu wählen.';
 
   @override
-  String get enterValidPositiveNumber => 'Gib eine gÃ¼ltige positive Zahl ein.';
+  String get enterValidPositiveNumber => 'Gib eine gültige positive Zahl ein.';
 
   @override
   String get useValueUpTo240 => 'Verwende einen Wert bis 240 Minuten.';
@@ -430,7 +459,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarPreviousMonth => 'Vorheriger Monat';
 
   @override
-  String get calendarNextMonth => 'NÃ¤chster Monat';
+  String get calendarNextMonth => 'Nächster Monat';
 
   @override
   String get calendarSwapPrimary => 'Hidschri/Gregorianisch wechseln';
@@ -445,13 +474,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarNoRemindersOnDay => 'Keine Erinnerungen an diesem Tag';
 
   @override
-  String get calendarAddReminder => 'Erinnerung hinzufÃ¼gen';
+  String get calendarAddReminder => 'Erinnerung hinzufügen';
 
   @override
   String get calendarEditReminder => 'Bearbeiten';
 
   @override
-  String get calendarDeleteReminder => 'LÃ¶schen';
+  String get calendarDeleteReminder => 'Löschen';
 
   @override
   String get calendarReminderFormTitleNew => 'Neue Erinnerung';
@@ -478,23 +507,23 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarRecurrenceOnce => 'Einmalig';
 
   @override
-  String get calendarRecurrenceDaily => 'TÃ¤glich';
+  String get calendarRecurrenceDaily => 'Täglich';
 
   @override
-  String get calendarRecurrenceWeekly => 'WÃ¶chentlich';
+  String get calendarRecurrenceWeekly => 'Wöchentlich';
 
   @override
   String get calendarRecurrenceMonthly => 'Monatlich';
 
   @override
-  String get calendarRecurrenceYearly => 'JÃ¤hrlich';
+  String get calendarRecurrenceYearly => 'Jährlich';
 
   @override
   String get calendarRepeatCountLabel => 'Wiederholungsanzahl';
 
   @override
   String get calendarRepeatCountHelper =>
-      'Wie oft der Reminder ausgelÃ¶st wird, bevor er stoppt (aus = unbegrenzt)';
+      'Wie oft der Reminder ausgelöst wird, bevor er stoppt (aus = unbegrenzt)';
 
   @override
   String get calendarRepeatCountError =>
@@ -516,7 +545,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarMonthlyBasisLabel => 'Monatliche Basis';
 
   @override
-  String get calendarYearlyBasisLabel => 'JÃ¤hrliche Basis';
+  String get calendarYearlyBasisLabel => 'Jährliche Basis';
 
   @override
   String get calendarYearlyBasisGregorian => 'Gregorianisch';
@@ -534,10 +563,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarAnchorPrayerTime => 'Gebetszeit';
 
   @override
-  String get calendarSelectPrayer => 'Gebet auswÃ¤hlen';
+  String get calendarSelectPrayer => 'Gebet auswählen';
 
   @override
-  String get calendarOffsetOnTime => 'PÃ¼nktlich';
+  String get calendarOffsetOnTime => 'Pünktlich';
 
   @override
   String get calendarOffsetBefore => 'Vorher';
@@ -546,7 +575,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarOffsetAfter => 'Nachher';
 
   @override
-  String get calendarPickAnchorDate => 'Datum wÃ¤hlen';
+  String get calendarPickAnchorDate => 'Datum wählen';
 
   @override
   String get datesPrayerTimesTab => 'Gebetszeiten';
@@ -555,10 +584,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get datesCalendarTab => 'Kalender';
 
   @override
-  String get undo => 'RÃ¼ckgÃ¤ngig';
+  String get undo => 'Rückgängig';
 
   @override
   String calendarReminderDeleted(Object title) {
-    return '\"$title\" gelÃ¶scht';
+    return '\"$title\" gelöscht';
   }
 }

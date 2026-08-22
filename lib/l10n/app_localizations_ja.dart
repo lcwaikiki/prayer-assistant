@@ -9,171 +9,356 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'ç¤¼æ‹ã‚¢ã‚·ã‚¹ã‚¿ãƒ³ãƒˆ';
+  String get appTitle => '礼拝アシスタント';
 
   @override
-  String get tabLocation => 'å ´æ‰€';
+  String get tabLocation => '場所';
 
   @override
-  String get tabToday => 'ä»Šæ—¥';
+  String get tabToday => '今日';
 
   @override
-  String get tabDates => 'æ—¥ä»˜';
+  String get tabDates => '日付';
 
   @override
-  String get tabTesbih => 'ãƒ“ãƒ¼ã‚º';
+  String get tabTesbih => 'ビーズ';
 
   @override
-  String get tooltipToggleLightDark => 'ãƒ©ã‚¤ãƒˆ/ãƒ€ãƒ¼ã‚¯åˆ‡æ›¿';
+  String get tooltipToggleLightDark => 'ライト/ダーク切替';
 
   @override
-  String get tooltipRemindersOn => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã‚’ã‚ªãƒ³';
+  String get tooltipRemindersOn => 'リマインダーをオン';
 
   @override
-  String get tooltipRemindersOff => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã‚’ã‚ªãƒ•';
+  String get tooltipRemindersOff => 'リマインダーをオフ';
 
   @override
-  String get tooltipPreferences => 'è¨­å®š';
+  String get tooltipPreferences => '設定';
 
   @override
   String remainingMinutesValue(Object minutes) {
-    return '$minutes åˆ†';
+    return '$minutes 分';
   }
 
   @override
-  String get remainingMinutesUnknown => '-- åˆ†';
+  String get remainingMinutesUnknown => '-- 分';
 
   @override
-  String get homeNoLocationTitle => 'å ´æ‰€ãŒæœªé¸æŠžã§ã™';
+  String get homeNoLocationTitle => '場所が未選択です';
 
   @override
-  String get homeNoLocationSubtitle =>
-      'ã¾ãšã€Œå ´æ‰€ã€ã‚¿ãƒ–ã§åœ°åŒºã‚’ä¿å­˜ã—ã¦ãã ã•ã„ã€‚';
+  String get homeNoLocationSubtitle => 'まず「場所」タブで地区を保存してください。';
 
   @override
-  String get homeNoPrayerTimesTitle =>
-      'ç¤¼æ‹æ™‚é–“ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãŒã‚ã‚Šã¾ã›ã‚“';
+  String get homeNoPrayerTimesTitle => '礼拝時間のキャッシュがありません';
 
   @override
-  String get homeNoPrayerTimesSubtitle =>
-      'æ›´æ–°ã—ã¦å¹´é–“ãƒ‡ãƒ¼ã‚¿ã‚’åŒæœŸã—ã¦ãã ã•ã„ã€‚';
+  String get homeNoPrayerTimesSubtitle => '更新して年間データを同期してください。';
 
   @override
-  String get refresh => 'æ›´æ–°';
+  String get refresh => '更新';
 
   @override
-  String get qiblaTitle => 'ã‚­ãƒ–ãƒ©';
+  String get qiblaTitle => 'キブラ';
 
   @override
   String qiblaBearing(int degrees) {
-    return 'ã‚­ãƒ–ãƒ©: $degreesÂ°';
+    return 'キブラ: $degrees°';
   }
 
   @override
-  String get qiblaLocationUnavailable =>
-      'ç¾åœ¨åœ°ã‚’ç‰¹å®šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚GPSã‚’æœ‰åŠ¹ã«ã—ã¦å†è©¦è¡Œã—ã¦ãã ã•ã„ã€‚';
+  String get qiblaLocationUnavailable => '現在地を特定できませんでした。GPSを有効にして再試行してください。';
 
   @override
-  String get qiblaHeadingUnavailable =>
-      'ã‚³ãƒ³ãƒ‘ã‚¹ãŒåˆ©ç”¨ã§ãã¾ã›ã‚“ - å›ºå®šæ–¹å‘ã‚’è¡¨ç¤ºä¸­ã€‚';
+  String get qiblaHeadingUnavailable => 'コンパスが利用できません - 固定方向を表示中。';
 
   @override
-  String get qiblaPointDevice =>
-      'é‡ãŒä¸Šã‚’å‘ãã¾ã§ãƒ‡ãƒã‚¤ã‚¹ã‚’å›žã—ã¦ãã ã•ã„ã€‚';
+  String get qiblaPointDevice => '針が上を向くまでデバイスを回してください。';
 
   @override
-  String get qiblaKaabaShort => 'ã‚­ãƒ–ãƒ©';
+  String get qiblaKaabaShort => 'キブラ';
 
   @override
-  String get shareTodayTimes => 'ä»Šæ—¥ã®æ™‚åˆ»ã‚’å…±æœ‰';
+  String get shareTodayTimes => '今日の時刻を共有';
 
   @override
-  String get calendarPreviousDay => 'å‰ã®æ—¥';
+  String get calendarPreviousDay => '前の日';
 
   @override
-  String get calendarNextDay => 'æ¬¡ã®æ—¥';
+  String get calendarNextDay => '次の日';
 
   @override
   String todayWithDate(Object date) {
-    return 'ä»Šæ—¥ â€¢ $date';
+    return '今日 • $date';
   }
 
   @override
-  String get hijriUnknown => 'ãƒ’ã‚¸ãƒ¥ãƒ©æš¦: -';
+  String get hijriUnknown => 'ヒジュラ暦: -';
 
   @override
   String hijriWithDate(Object date) {
-    return 'ãƒ’ã‚¸ãƒ¥ãƒ©æš¦: $date';
+    return 'ヒジュラ暦: $date';
   }
 
   @override
-  String get reminderSettingsTitle => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼è¨­å®š';
+  String get reminderSettingsTitle => 'リマインダー設定';
 
   @override
-  String get reminderSettingsSubtitle =>
-      'ä¸Šã®ç¤¼æ‹æ™‚é–“ã‚’ã‚¿ãƒƒãƒ—ã—ã¦é€šçŸ¥ã‚¿ã‚¤ãƒ—ã¨äº‹å‰åˆ†æ•°ã‚’è¨­å®šã—ã¾ã™ã€‚';
+  String get reminderSettingsSubtitle => '上の礼拝時間をタップして通知タイプと事前分数を設定します。';
 
   @override
-  String get tooltipScheduledDebug => 'äºˆç´„é€šçŸ¥ãƒ‡ãƒãƒƒã‚°';
+  String get tooltipScheduledDebug => '予約通知デバッグ';
 
   @override
-  String get scheduledRemindersDebugTitle => 'äºˆç´„é€šçŸ¥ï¼ˆãƒ‡ãƒãƒƒã‚°ï¼‰';
+  String get scheduledRemindersDebugTitle => '予約通知（デバッグ）';
 
   @override
   String pendingNotificationsCount(Object count) {
-    return 'ä¿ç•™ä¸­ã®é€šçŸ¥: $count';
+    return '保留中の通知: $count';
   }
 
   @override
-  String get sendTestNotificationNow => 'ãƒ†ã‚¹ãƒˆé€šçŸ¥ã‚’é€ä¿¡';
+  String get sendTestNotificationNow => 'テスト通知を送信';
 
   @override
-  String get testNotificationSent => 'ãƒ†ã‚¹ãƒˆé€šçŸ¥ã‚’é€ä¿¡ã—ã¾ã—ãŸã€‚';
+  String get testNotificationSent => 'テスト通知を送信しました。';
 
   @override
-  String get statusBarMinutesTitle => 'ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼åˆ†è¡¨ç¤º';
+  String get statusBarMinutesTitle => 'ステータスバー分表示';
 
   @override
-  String get statusBarMinutesSubtitle =>
-      'ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒãƒ¼ã«æ®‹ã‚Šåˆ†ã®ç¶™ç¶šé€šçŸ¥ã‚’è¡¨ç¤ºã—ã¾ã™ã€‚';
+  String get statusBarMinutesSubtitle => 'ステータスバーに残り分の継続通知を表示します。';
 
   @override
-  String get statusAutoRestoreTitle => 'å‰Šé™¤æ™‚ã«è‡ªå‹•å¾©å…ƒ';
+  String get statusAutoRestoreTitle => '削除時に自動復元';
 
   @override
-  String get statusAutoRestoreSubtitle =>
-      'ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒæ¶ˆã—ãŸã‚‰å†ä½œæˆã—ã¾ã™ã€‚';
+  String get statusAutoRestoreSubtitle => 'ユーザーが消したら再作成します。';
 
   @override
-  String get noPendingReminders => 'ä¿ç•™ä¸­ã®é€šçŸ¥ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚';
+  String get noPendingReminders => '保留中の通知はありません。';
 
   @override
-  String get unknownFireTime => 'ä¸æ˜Žãªæ™‚åˆ»';
+  String get unknownFireTime => '不明な時刻';
 
   @override
-  String get pastPrefix => '[éŽåŽ»] ';
+  String get pastPrefix => '[過去] ';
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'ã‚ªãƒ³ â€¢ å®šåˆ» + $minutes åˆ†å‰';
+    return 'オン • 定刻 + $minutes 分前';
   }
 
   @override
-  String get reminderOnTimeOnly => 'ã‚ªãƒ³ â€¢ å®šåˆ»';
+  String get reminderOnTimeOnly => 'オン • 定刻';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'ã‚ªãƒ³ â€¢ $minutes åˆ†å‰';
+    return 'オン • $minutes 分前';
   }
 
   @override
-  String get reminderOff => 'é€šçŸ¥ã‚ªãƒ•';
+  String get reminderOff => '通知オフ';
 
   @override
-  String get nextPrayerTitle => 'æ¬¡ã®ç¤¼æ‹';
+  String get nextPrayerTitle => '次の礼拝';
 
   @override
-  String get homeUpcomingRemindersTitle => 'è¿‘æ—¥ã®ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼';
+  String get homeUpcomingRemindersTitle => '近日のリマインダー';
+
+  @override
+  String startsIn(Object remaining) {
+    return '$remaining 後に開始';
+  }
+
+  @override
+  String get selectYourLocation => '場所を選択';
+
+  @override
+  String get locationHelp => 'GPSで簡単設定、または国/都市を手動選択できます。';
+
+  @override
+  String get useCurrentLocation => '現在地を使用';
+
+  @override
+  String get country => '国';
+
+  @override
+  String get stateCity => '州 / 市';
+
+  @override
+  String get district => '地区';
+
+  @override
+  String get saveLocation => '場所を保存';
+
+  @override
+  String selectedLocation(Object location) {
+    return '選択中: $location';
+  }
+
+  @override
+  String get historySelectLocationFirst => '1年分の礼拝一覧を見るには先に場所を選択してください。';
+
+  @override
+  String get historyTableTitle => '礼拝時間表（年間）';
+
+  @override
+  String get todayShort => '今日';
+
+  @override
+  String get dateHeader => '日付';
+
+  @override
+  String get imsak => 'ファジュル';
+
+  @override
+  String get gunes => '日出';
+
+  @override
+  String get ogle => 'ズフル';
+
+  @override
+  String get ikindi => 'アスル';
+
+  @override
+  String get aksam => 'マグリブ';
+
+  @override
+  String get yatsi => 'イシャ';
+
+  @override
+  String get hijriHeader => 'ヒジュラ';
+
+  @override
+  String get preferencesTitle => '設定';
+
+  @override
+  String get languageTitle => '言語';
+
+  @override
+  String get languageSystem => 'システム設定';
+
+  @override
+  String get themeModeTitle => 'テーマモード';
+
+  @override
+  String get themeSystem => 'システム設定';
+
+  @override
+  String get themeLight => 'ライト';
+
+  @override
+  String get themeDark => 'ダーク';
+
+  @override
+  String get appBarRemainingTitle => 'ホーム上部バーの残り時間表示';
+
+  @override
+  String get showInTitle => 'タイトルに表示';
+
+  @override
+  String get showAtRight => '右側に表示';
+
+  @override
+  String get showAsSubtitle => 'サブタイトルに表示';
+
+  @override
+  String get hideRemainingText => '残りテキストを非表示';
+
+  @override
+  String get notificationMessageTitle => '通知メッセージ';
+
+  @override
+  String get notificationMessageShown => '表示';
+
+  @override
+  String get notificationMessageHidden => '非表示';
+
+  @override
+  String get widgetTextSizeTitle => 'ウィジェットの文字サイズ';
+
+  @override
+  String get widgetTextSizeSubtitle => 'ホーム画面ウィジェットで使用する文字サイズ。';
+
+  @override
+  String get widgetTextSizeExtraSmall => '極小';
+
+  @override
+  String get widgetTextSizeSmall => '小';
+
+  @override
+  String get widgetTextSizeMedium => '中';
+
+  @override
+  String get widgetTextSizeLarge => '大';
+
+  @override
+  String get widgetMmssThresholdTitle => 'ウィジェットの秒カウントダウン';
+
+  @override
+  String get widgetMmssThresholdNever => '常にHH:MMを表示';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return '$minutes分未満はMM:SS';
+  }
+
+  @override
+  String get remindersOnOffTitle => 'リマインダー on/off';
+
+  @override
+  String get remindersOnOffSubtitle => '礼拝リマインダー通知のオン/オフ。礼拝ごとの設定は保持されます。';
+
+  @override
+  String get reminderVibrationTitle => 'リマインダーで振動';
+
+  @override
+  String get reminderVibrationSubtitle => 'リマインダー発生時に約10秒間、断続的に振動します。';
+
+  @override
+  String get reminderSoundTitle => 'リマインダーで音を再生';
+
+  @override
+  String get reminderSoundSubtitle => 'リマインダー発生時に通知音を再生します。';
+
+  @override
+  String get remindersOn => 'オン';
+
+  @override
+  String get remindersOff => 'オフ';
+
+  @override
+  String reminderScreenTitle(Object prayer) {
+    return '$prayer リマインダー';
+  }
+
+  @override
+  String get reminderTypeTitle => '通知タイプ（両方選択可）';
+
+  @override
+  String get onTime => '定刻';
+
+  @override
+  String get before => '前';
+
+  @override
+  String get after => '後';
+
+  @override
+  String get reminderAlertTitle => 'アラート';
+
+  @override
+  String get reminderAlertSubtitle => '実際にアラートするには環境設定内の対応するスイッチもオンである必要があります。';
+
+  @override
+  String get vibrateChip => '振動';
+
+  @override
+  String get soundChip => '音';
+
+  @override
+  String get adhanChip => 'アザーン';
 
   @override
   String prayersCompleted(Object completed, Object total) {
@@ -181,391 +366,210 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String startsIn(Object remaining) {
-    return '$remaining å¾Œã«é–‹å§‹';
-  }
+  String get holiday_islamic_new_year => 'イスラム新年';
 
   @override
-  String get selectYourLocation => 'å ´æ‰€ã‚’é¸æŠž';
+  String get holiday_ashura => 'アーシューラー';
 
   @override
-  String get locationHelp =>
-      'GPSã§ç°¡å˜è¨­å®šã€ã¾ãŸã¯å›½/éƒ½å¸‚ã‚’æ‰‹å‹•é¸æŠžã§ãã¾ã™ã€‚';
+  String get holiday_mawlid => '予言者生誕祭';
 
   @override
-  String get useCurrentLocation => 'ç¾åœ¨åœ°ã‚’ä½¿ç”¨';
+  String get holiday_isra_miraj => 'イスラーとミウラージュ';
 
   @override
-  String get country => 'å›½';
+  String get holiday_laylat_barat => 'バラアトの夜';
 
   @override
-  String get stateCity => 'å·ž / å¸‚';
+  String get holiday_ramadan_first => 'ラマダーン初日';
 
   @override
-  String get district => 'åœ°åŒº';
+  String get holiday_laylat_qadr => 'みいつの夜';
 
   @override
-  String get saveLocation => 'å ´æ‰€ã‚’ä¿å­˜';
+  String get holiday_eid_fitr => 'イード・アル＝フィトル';
 
   @override
-  String selectedLocation(Object location) {
-    return 'é¸æŠžä¸­: $location';
-  }
+  String get holiday_arafah => 'アラファの日';
 
   @override
-  String get historySelectLocationFirst =>
-      '1å¹´åˆ†ã®ç¤¼æ‹ä¸€è¦§ã‚’è¦‹ã‚‹ã«ã¯å…ˆã«å ´æ‰€ã‚’é¸æŠžã—ã¦ãã ã•ã„ã€‚';
+  String get holiday_eid_adha => 'イード・アル＝アドハー';
 
   @override
-  String get historyTableTitle => 'ç¤¼æ‹æ™‚é–“è¡¨ï¼ˆå¹´é–“ï¼‰';
+  String get remindBeforePrayerTitle => '礼拝前に通知';
 
   @override
-  String get todayShort => 'ä»Šæ—¥';
-
-  @override
-  String get dateHeader => 'æ—¥ä»˜';
-
-  @override
-  String get imsak => 'ãƒ•ã‚¡ã‚¸ãƒ¥ãƒ«';
-
-  @override
-  String get gunes => 'æ—¥å‡º';
-
-  @override
-  String get ogle => 'ã‚ºãƒ•ãƒ«';
-
-  @override
-  String get ikindi => 'ã‚¢ã‚¹ãƒ«';
-
-  @override
-  String get aksam => 'ãƒžã‚°ãƒªãƒ–';
-
-  @override
-  String get yatsi => 'ã‚¤ã‚·ãƒ£';
-
-  @override
-  String get hijriHeader => 'ãƒ’ã‚¸ãƒ¥ãƒ©';
-
-  @override
-  String get preferencesTitle => 'è¨­å®š';
-
-  @override
-  String get languageTitle => 'è¨€èªž';
-
-  @override
-  String get languageSystem => 'ã‚·ã‚¹ãƒ†ãƒ è¨­å®š';
-
-  @override
-  String get themeModeTitle => 'ãƒ†ãƒ¼ãƒžãƒ¢ãƒ¼ãƒ‰';
-
-  @override
-  String get themeSystem => 'ã‚·ã‚¹ãƒ†ãƒ è¨­å®š';
-
-  @override
-  String get themeLight => 'ãƒ©ã‚¤ãƒˆ';
-
-  @override
-  String get themeDark => 'ãƒ€ãƒ¼ã‚¯';
-
-  @override
-  String get appBarRemainingTitle =>
-      'ãƒ›ãƒ¼ãƒ ä¸Šéƒ¨ãƒãƒ¼ã®æ®‹ã‚Šæ™‚é–“è¡¨ç¤º';
-
-  @override
-  String get showInTitle => 'ã‚¿ã‚¤ãƒˆãƒ«ã«è¡¨ç¤º';
-
-  @override
-  String get showAtRight => 'å³å´ã«è¡¨ç¤º';
-
-  @override
-  String get showAsSubtitle => 'ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«ã«è¡¨ç¤º';
-
-  @override
-  String get hideRemainingText => 'æ®‹ã‚Šãƒ†ã‚­ã‚¹ãƒˆã‚’éžè¡¨ç¤º';
-
-  @override
-  String get notificationMessageTitle => 'é€šçŸ¥ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸';
-
-  @override
-  String get notificationMessageShown => 'è¡¨ç¤º';
-
-  @override
-  String get notificationMessageHidden => 'éžè¡¨ç¤º';
-
-  @override
-  String get widgetTextSizeTitle => 'ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã®æ–‡å­—ã‚µã‚¤ã‚º';
-
-  @override
-  String get widgetTextSizeSubtitle =>
-      'ãƒ›ãƒ¼ãƒ ç”»é¢ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã§ä½¿ç”¨ã™ã‚‹æ–‡å­—ã‚µã‚¤ã‚ºã€‚';
-
-  @override
-  String get widgetTextSizeExtraSmall => 'æ¥µå°';
-
-  @override
-  String get widgetTextSizeSmall => 'å°';
-
-  @override
-  String get widgetTextSizeMedium => 'ä¸­';
-
-  @override
-  String get widgetTextSizeLarge => 'å¤§';
-
-  @override
-  String get widgetMmssThresholdTitle =>
-      'ã‚¦ã‚£ã‚¸ã‚§ãƒƒãƒˆã®ç§’ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³';
-
-  @override
-  String get widgetMmssThresholdNever => 'å¸¸ã«HH:MMã‚’è¡¨ç¤º';
-
-  @override
-  String widgetMmssThresholdValue(Object minutes) {
-    return '$minutesåˆ†æœªæº€ã¯MM:SS';
-  }
-
-  @override
-  String get remindersOnOffTitle => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ on/off';
-
-  @override
-  String get remindersOnOffSubtitle =>
-      'ç¤¼æ‹ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼é€šçŸ¥ã®ã‚ªãƒ³/ã‚ªãƒ•ã€‚ç¤¼æ‹ã”ã¨ã®è¨­å®šã¯ä¿æŒã•ã‚Œã¾ã™ã€‚';
-
-  @override
-  String get reminderVibrationTitle => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã§æŒ¯å‹•';
-
-  @override
-  String get reminderVibrationSubtitle =>
-      'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ç™ºç”Ÿæ™‚ã«ç´„10ç§’é–“ã€æ–­ç¶šçš„ã«æŒ¯å‹•ã—ã¾ã™ã€‚';
-
-  @override
-  String get reminderSoundTitle => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã§éŸ³ã‚’å†ç”Ÿ';
-
-  @override
-  String get reminderSoundSubtitle =>
-      'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ç™ºç”Ÿæ™‚ã«é€šçŸ¥éŸ³ã‚’å†ç”Ÿã—ã¾ã™ã€‚';
-
-  @override
-  String get remindersOn => 'ã‚ªãƒ³';
-
-  @override
-  String get remindersOff => 'ã‚ªãƒ•';
-
-  @override
-  String reminderScreenTitle(Object prayer) {
-    return '$prayer ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼';
-  }
-
-  @override
-  String get reminderTypeTitle => 'é€šçŸ¥ã‚¿ã‚¤ãƒ—ï¼ˆä¸¡æ–¹é¸æŠžå¯ï¼‰';
-
-  @override
-  String get onTime => 'å®šåˆ»';
-
-  @override
-  String get before => 'å‰';
-
-  @override
-  String get after => 'å¾Œ';
-
-  @override
-  String get reminderAlertTitle => 'ã‚¢ãƒ©ãƒ¼ãƒˆ';
-
-  @override
-  String get reminderAlertSubtitle =>
-      'å®Ÿéš›ã«ã‚¢ãƒ©ãƒ¼ãƒˆã™ã‚‹ã«ã¯ç’°å¢ƒè¨­å®šå†…ã®å¯¾å¿œã™ã‚‹ã‚¹ã‚¤ãƒƒãƒã‚‚ã‚ªãƒ³ã§ã‚ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚';
-
-  @override
-  String get vibrateChip => 'æŒ¯å‹•';
-
-  @override
-  String get soundChip => 'éŸ³';
-
-  @override
-  String get adhanChip => 'ã‚¢ã‚¶ãƒ¼ãƒ³';
-
-  @override
-  String get remindBeforePrayerTitle => 'ç¤¼æ‹å‰ã«é€šçŸ¥';
-
-  @override
-  String get remindAfterPrayerTitle => 'ç¤¼æ‹å¾Œã«é€šçŸ¥';
+  String get remindAfterPrayerTitle => '礼拝後に通知';
 
   @override
   String minutesValue(Object minutes) {
-    return '$minutes åˆ†';
+    return '$minutes 分';
   }
 
   @override
-  String get custom => 'ã‚«ã‚¹ã‚¿ãƒ ';
+  String get custom => 'カスタム';
 
   @override
-  String get customMinutes => 'ã‚«ã‚¹ã‚¿ãƒ åˆ†';
+  String get customMinutes => 'カスタム分';
 
   @override
-  String get customMinutesHint => 'ä¾‹: 12';
+  String get customMinutesHint => '例: 12';
 
   @override
-  String get save => 'ä¿å­˜';
+  String get save => '保存';
 
   @override
-  String get enableBeforeToSelectMinutes =>
-      'åˆ†ã‚’é¸ã¶ã«ã¯ã€Œå‰ã€ã‚’æœ‰åŠ¹ã«ã—ã¦ãã ã•ã„ã€‚';
+  String get enableBeforeToSelectMinutes => '分を選ぶには「前」を有効にしてください。';
 
   @override
-  String get enableAfterToSelectMinutes =>
-      'åˆ†ã‚’é¸ã¶ã«ã¯ã€Œå¾Œã€ã‚’æœ‰åŠ¹ã«ã—ã¦ãã ã•ã„ã€‚';
+  String get enableAfterToSelectMinutes => '分を選ぶには「後」を有効にしてください。';
 
   @override
-  String get enterValidPositiveNumber =>
-      'æœ‰åŠ¹ãªæ­£ã®æ•°ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚';
+  String get enterValidPositiveNumber => '有効な正の数を入力してください。';
 
   @override
-  String get useValueUpTo240 =>
-      '240åˆ†ä»¥ä¸‹ã®å€¤ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚';
+  String get useValueUpTo240 => '240分以下の値を入力してください。';
 
   @override
-  String get customMinutesSaved => 'ã‚«ã‚¹ã‚¿ãƒ åˆ†ã‚’ä¿å­˜ã—ã¾ã—ãŸã€‚';
+  String get customMinutesSaved => 'カスタム分を保存しました。';
 
   @override
-  String get cancel => 'ã‚­ãƒ£ãƒ³ã‚»ãƒ«';
+  String get cancel => 'キャンセル';
 
   @override
-  String get calendarTabTooltip => 'ãƒ’ã‚¸ãƒ¥ãƒ©æš¦ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼';
+  String get calendarTabTooltip => 'ヒジュラ暦カレンダー';
 
   @override
-  String get calendarPreviousMonth => 'å‰ã®æœˆ';
+  String get calendarPreviousMonth => '前の月';
 
   @override
-  String get calendarNextMonth => 'æ¬¡ã®æœˆ';
+  String get calendarNextMonth => '次の月';
 
   @override
-  String get calendarSwapPrimary => 'ãƒ’ã‚¸ãƒ¥ãƒ©æš¦/è¥¿æš¦ã‚’åˆ‡æ›¿';
+  String get calendarSwapPrimary => 'ヒジュラ暦/西暦を切替';
 
   @override
-  String get calendarShowSecondary => 'å‰¯æš¦æ—¥ã‚’è¡¨ç¤º';
+  String get calendarShowSecondary => '副暦日を表示';
 
   @override
-  String get calendarHideSecondary => 'å‰¯æš¦æ—¥ã‚’éžè¡¨ç¤º';
+  String get calendarHideSecondary => '副暦日を非表示';
 
   @override
-  String get calendarNoRemindersOnDay =>
-      'ã“ã®æ—¥ã®ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã¯ã‚ã‚Šã¾ã›ã‚“';
+  String get calendarNoRemindersOnDay => 'この日のリマインダーはありません';
 
   @override
-  String get calendarAddReminder => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã‚’è¿½åŠ ';
+  String get calendarAddReminder => 'リマインダーを追加';
 
   @override
-  String get calendarEditReminder => 'ç·¨é›†';
+  String get calendarEditReminder => '編集';
 
   @override
-  String get calendarDeleteReminder => 'å‰Šé™¤';
+  String get calendarDeleteReminder => '削除';
 
   @override
-  String get calendarReminderFormTitleNew => 'æ–°ã—ã„ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼';
+  String get calendarReminderFormTitleNew => '新しいリマインダー';
 
   @override
-  String get calendarReminderFormTitleEdit => 'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ã‚’ç·¨é›†';
+  String get calendarReminderFormTitleEdit => 'リマインダーを編集';
 
   @override
-  String get calendarReminderTitleLabel => 'ã‚¿ã‚¤ãƒˆãƒ«';
+  String get calendarReminderTitleLabel => 'タイトル';
 
   @override
-  String get calendarReminderTitleHint => 'ä¾‹ï¼šãƒ©ãƒžãƒ€ãƒ³é–‹å§‹';
+  String get calendarReminderTitleHint => '例：ラマダン開始';
 
   @override
-  String get calendarReminderNotesLabel => 'ãƒ¡ãƒ¢ï¼ˆä»»æ„ï¼‰';
+  String get calendarReminderNotesLabel => 'メモ（任意）';
 
   @override
-  String get calendarReminderDateTimeLabel => 'æ—¥ä»˜ã¨æ™‚åˆ»';
+  String get calendarReminderDateTimeLabel => '日付と時刻';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'ç¹°ã‚Šè¿”ã—';
+  String get calendarReminderRecurrenceLabel => '繰り返し';
 
   @override
-  String get calendarRecurrenceOnce => '1å›žã®ã¿';
+  String get calendarRecurrenceOnce => '1回のみ';
 
   @override
-  String get calendarRecurrenceDaily => 'æ¯Žæ—¥';
+  String get calendarRecurrenceDaily => '毎日';
 
   @override
-  String get calendarRecurrenceWeekly => 'æ¯Žé€±';
+  String get calendarRecurrenceWeekly => '毎週';
 
   @override
-  String get calendarRecurrenceMonthly => 'æ¯Žæœˆ';
+  String get calendarRecurrenceMonthly => '毎月';
 
   @override
-  String get calendarRecurrenceYearly => 'æ¯Žå¹´';
+  String get calendarRecurrenceYearly => '毎年';
 
   @override
-  String get calendarRepeatCountLabel => 'ç¹°ã‚Šè¿”ã—å›žæ•°';
+  String get calendarRepeatCountLabel => '繰り返し回数';
 
   @override
-  String get calendarRepeatCountHelper =>
-      'ãƒªãƒžã‚¤ãƒ³ãƒ€ãƒ¼ãŒåœæ­¢ã™ã‚‹ã¾ã§ã®ç™ºç«å›žæ•°ï¼ˆã‚ªãƒ• = æ°¸ä¹…ã«ç¹°ã‚Šè¿”ã™ï¼‰';
+  String get calendarRepeatCountHelper => 'リマインダーが停止するまでの発火回数（オフ = 永久に繰り返す）';
 
   @override
-  String get calendarRepeatCountError =>
-      '2ã€œ100ã®æ•°å­—ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„';
+  String get calendarRepeatCountError => '2〜100の数字を入力してください';
 
   @override
-  String get calendarRepeatDaysLabel => 'ç¹°ã‚Šè¿”ã™æ›œæ—¥';
+  String get calendarRepeatDaysLabel => '繰り返す曜日';
 
   @override
-  String get calendarDayOfMonthLabel => 'æœˆã®æ—¥';
+  String get calendarDayOfMonthLabel => '月の日';
 
   @override
-  String get calendarYearlyMonthLabel => 'æœˆ';
+  String get calendarYearlyMonthLabel => '月';
 
   @override
-  String get calendarYearlyDayLabel => 'æ—¥';
+  String get calendarYearlyDayLabel => '日';
 
   @override
-  String get calendarMonthlyBasisLabel => 'æœˆæ¬¡åŸºæº–';
+  String get calendarMonthlyBasisLabel => '月次基準';
 
   @override
-  String get calendarYearlyBasisLabel => 'å¹´æ¬¡åŸºæº–';
+  String get calendarYearlyBasisLabel => '年次基準';
 
   @override
-  String get calendarYearlyBasisGregorian => 'è¥¿æš¦';
+  String get calendarYearlyBasisGregorian => '西暦';
 
   @override
-  String get calendarYearlyBasisHijri => 'ãƒ’ã‚¸ãƒ¥ãƒ©æš¦';
+  String get calendarYearlyBasisHijri => 'ヒジュラ暦';
 
   @override
-  String get calendarReminderTitleRequired =>
-      'ã‚¿ã‚¤ãƒˆãƒ«ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„';
+  String get calendarReminderTitleRequired => 'タイトルを入力してください';
 
   @override
-  String get calendarAnchorClockTime => 'ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼ã®æ—¥ä»˜';
+  String get calendarAnchorClockTime => 'カレンダーの日付';
 
   @override
-  String get calendarAnchorPrayerTime => 'ç¤¼æ‹æ™‚é–“';
+  String get calendarAnchorPrayerTime => '礼拝時間';
 
   @override
-  String get calendarSelectPrayer => 'ç¤¼æ‹ã‚’é¸æŠž';
+  String get calendarSelectPrayer => '礼拝を選択';
 
   @override
-  String get calendarOffsetOnTime => 'å®šåˆ»';
+  String get calendarOffsetOnTime => '定刻';
 
   @override
-  String get calendarOffsetBefore => 'å‰';
+  String get calendarOffsetBefore => '前';
 
   @override
-  String get calendarOffsetAfter => 'å¾Œ';
+  String get calendarOffsetAfter => '後';
 
   @override
-  String get calendarPickAnchorDate => 'æ—¥ä»˜ã‚’é¸æŠž';
+  String get calendarPickAnchorDate => '日付を選択';
 
   @override
-  String get datesPrayerTimesTab => 'ç¤¼æ‹æ™‚é–“';
+  String get datesPrayerTimesTab => '礼拝時間';
 
   @override
-  String get datesCalendarTab => 'ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼';
+  String get datesCalendarTab => 'カレンダー';
 
   @override
-  String get undo => 'å…ƒã«æˆ»ã™';
+  String get undo => '元に戻す';
 
   @override
   String calendarReminderDeleted(Object title) {
-    return 'ã€Œ$titleã€ã‚’å‰Šé™¤ã—ã¾ã—ãŸ';
+    return '「$title」を削除しました';
   }
 }

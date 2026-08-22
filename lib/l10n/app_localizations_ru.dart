@@ -9,184 +9,372 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get appTitle => 'ÐœÐ¾Ð»Ð¸Ñ‚Ð²ÐµÐ½Ð½Ñ‹Ð¹ Ð¿Ð¾Ð¼Ð¾Ñ‰Ð½Ð¸Ðº';
+  String get appTitle => 'Молитвенный помощник';
 
   @override
-  String get tabLocation => 'ÐœÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ';
+  String get tabLocation => 'Местоположение';
 
   @override
-  String get tabToday => 'Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ';
+  String get tabToday => 'Сегодня';
 
   @override
-  String get tabDates => 'Ð”Ð°Ñ‚Ñ‹';
+  String get tabDates => 'Даты';
 
   @override
-  String get tabTesbih => 'Ð¢Ð°ÑÐ±Ð¸Ñ…';
+  String get tabTesbih => 'Тасбих';
 
   @override
-  String get tooltipToggleLightDark =>
-      'ÐŸÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ ÑÐ²ÐµÑ‚Ð»ÑƒÑŽ/Ñ‚Ñ‘Ð¼Ð½ÑƒÑŽ Ñ‚ÐµÐ¼Ñƒ';
+  String get tooltipToggleLightDark => 'Переключить светлую/тёмную тему';
 
   @override
-  String get tooltipRemindersOn => 'Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ';
+  String get tooltipRemindersOn => 'Включить напоминания';
 
   @override
-  String get tooltipRemindersOff => 'Ð’Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ';
+  String get tooltipRemindersOff => 'Выключить напоминания';
 
   @override
-  String get tooltipPreferences => 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸';
+  String get tooltipPreferences => 'Настройки';
 
   @override
   String remainingMinutesValue(Object minutes) {
-    return '$minutes Ð¼Ð¸Ð½';
+    return '$minutes мин';
   }
 
   @override
-  String get remainingMinutesUnknown => '-- Ð¼Ð¸Ð½';
+  String get remainingMinutesUnknown => '-- мин';
 
   @override
-  String get homeNoLocationTitle =>
-      'ÐœÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð½Ðµ Ð²Ñ‹Ð±Ñ€Ð°Ð½Ð¾';
+  String get homeNoLocationTitle => 'Местоположение не выбрано';
 
   @override
   String get homeNoLocationSubtitle =>
-      'ÐŸÐµÑ€ÐµÐ¹Ð´Ð¸Ñ‚Ðµ Ð½Ð° Ð²ÐºÐ»Ð°Ð´ÐºÑƒ Â«ÐœÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸ÐµÂ» Ð¸ ÑÐ¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚Ðµ Ð²Ð°Ñˆ Ñ€Ð°Ð¹Ð¾Ð½.';
+      'Перейдите на вкладку «Местоположение» и сохраните ваш район.';
 
   @override
-  String get homeNoPrayerTimesTitle =>
-      'ÐÐµÑ‚ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð½Ð°Ð¼Ð°Ð·Ð° Ð² ÐºÑÑˆÐµ';
+  String get homeNoPrayerTimesTitle => 'Нет времени намаза в кэше';
 
   @override
   String get homeNoPrayerTimesSubtitle =>
-      'ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Â«ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒÂ», Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð·Ð°Ð³Ñ€ÑƒÐ·Ð¸Ñ‚ÑŒ Ð´Ð°Ð½Ð½Ñ‹Ðµ Ð½Ð° Ð³Ð¾Ð´.';
+      'Нажмите «Обновить», чтобы загрузить данные на год.';
 
   @override
-  String get refresh => 'ÐžÐ±Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ';
+  String get refresh => 'Обновить';
 
   @override
-  String get qiblaTitle => 'ÐšÐ¸Ð±Ð»Ð°';
+  String get qiblaTitle => 'Кибла';
 
   @override
   String qiblaBearing(int degrees) {
-    return 'ÐšÐ¸Ð±Ð»Ð°: $degreesÂ°';
+    return 'Кибла: $degrees°';
   }
 
   @override
   String get qiblaLocationUnavailable =>
-      'ÐÐµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»Ð¸Ñ‚ÑŒ Ð¼ÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ. Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚Ðµ GPS Ð¸ Ð¿Ð¾Ð¿Ñ€Ð¾Ð±ÑƒÐ¹Ñ‚Ðµ ÑÐ½Ð¾Ð²Ð°.';
+      'Не удалось определить местоположение. Включите GPS и попробуйте снова.';
 
   @override
   String get qiblaHeadingUnavailable =>
-      'ÐšÐ¾Ð¼Ð¿Ð°Ñ Ð½ÐµÐ´Ð¾ÑÑ‚ÑƒÐ¿ÐµÐ½ - Ð¿Ð¾ÐºÐ°Ð·Ð°Ð½Ð¾ Ñ„Ð¸ÐºÑÐ¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ð¾Ðµ Ð½Ð°Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ.';
+      'Компас недоступен - показано фиксированное направление.';
 
   @override
   String get qiblaPointDevice =>
-      'ÐŸÐ¾Ð²ÐµÑ€Ð½Ð¸Ñ‚Ðµ ÑƒÑÑ‚Ñ€Ð¾Ð¹ÑÑ‚Ð²Ð¾, Ð¿Ð¾ÐºÐ° ÑÑ‚Ñ€ÐµÐ»ÐºÐ° Ð½Ðµ ÑƒÐºÐ°Ð¶ÐµÑ‚ Ð²Ð²ÐµÑ€Ñ….';
+      'Поверните устройство, пока стрелка не укажет вверх.';
 
   @override
-  String get qiblaKaabaShort => 'ÐšÐ¸Ð±Ð»Ð°';
+  String get qiblaKaabaShort => 'Кибла';
 
   @override
-  String get shareTodayTimes =>
-      'ÐŸÐ¾Ð´ÐµÐ»Ð¸Ñ‚ÑŒÑÑ Ð²Ñ€ÐµÐ¼ÐµÐ½ÐµÐ¼ Ð½Ð° ÑÐµÐ³Ð¾Ð´Ð½Ñ';
+  String get shareTodayTimes => 'Поделиться временем на сегодня';
 
   @override
-  String get calendarPreviousDay => 'ÐŸÑ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð¸Ð¹ Ð´ÐµÐ½ÑŒ';
+  String get calendarPreviousDay => 'Предыдущий день';
 
   @override
-  String get calendarNextDay => 'Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ð´ÐµÐ½ÑŒ';
+  String get calendarNextDay => 'Следующий день';
 
   @override
   String todayWithDate(Object date) {
-    return 'Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ â€¢ $date';
+    return 'Сегодня • $date';
   }
 
   @override
-  String get hijriUnknown => 'Ð¥Ð¸Ð´Ð¶Ñ€Ð°: -';
+  String get hijriUnknown => 'Хиджра: -';
 
   @override
   String hijriWithDate(Object date) {
-    return 'Ð¥Ð¸Ð´Ð¶Ñ€Ð°: $date';
+    return 'Хиджра: $date';
   }
 
   @override
-  String get reminderSettingsTitle =>
-      'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¹';
+  String get reminderSettingsTitle => 'Настройки напоминаний';
 
   @override
   String get reminderSettingsSubtitle =>
-      'ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð° Ð²Ñ€ÐµÐ¼Ñ Ð½Ð°Ð¼Ð°Ð·Ð° Ð²Ñ‹ÑˆÐµ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ Ð¸ Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹ Ð´Ð¾.';
+      'Нажмите на время намаза выше, чтобы настроить напоминание и минуты до.';
 
   @override
-  String get tooltipScheduledDebug =>
-      'ÐžÑ‚Ð»Ð°Ð´ÐºÐ° Ð·Ð°Ð¿Ð»Ð°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ñ… Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¹';
+  String get tooltipScheduledDebug => 'Отладка запланированных напоминаний';
 
   @override
   String get scheduledRemindersDebugTitle =>
-      'Ð—Ð°Ð¿Ð»Ð°Ð½Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ðµ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ (Ð¾Ñ‚Ð»Ð°Ð´ÐºÐ°)';
+      'Запланированные напоминания (отладка)';
 
   @override
   String pendingNotificationsCount(Object count) {
-    return 'ÐžÐ¶Ð¸Ð´Ð°ÑŽÑ‰Ð¸Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ: $count';
+    return 'Ожидающие уведомления: $count';
   }
 
   @override
-  String get sendTestNotificationNow =>
-      'ÐžÑ‚Ð¿Ñ€Ð°Ð²Ð¸Ñ‚ÑŒ Ñ‚ÐµÑÑ‚Ð¾Ð²Ð¾Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ ÑÐµÐ¹Ñ‡Ð°Ñ';
+  String get sendTestNotificationNow => 'Отправить тестовое уведомление сейчас';
 
   @override
-  String get testNotificationSent =>
-      'Ð¢ÐµÑÑ‚Ð¾Ð²Ð¾Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð¾Ñ‚Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¾.';
+  String get testNotificationSent => 'Тестовое уведомление отправлено.';
 
   @override
-  String get statusBarMinutesTitle =>
-      'ÐœÐ¸Ð½ÑƒÑ‚Ñ‹ Ð² ÑÑ‚Ñ€Ð¾ÐºÐµ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ñ';
+  String get statusBarMinutesTitle => 'Минуты в строке состояния';
 
   @override
   String get statusBarMinutesSubtitle =>
-      'ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ð¿Ð¾ÑÑ‚Ð¾ÑÐ½Ð½Ð¾Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ðµ Ð¾Ð± Ð¾ÑÑ‚Ð°Ð²ÑˆÐ¸Ñ…ÑÑ Ð¼Ð¸Ð½ÑƒÑ‚Ð°Ñ… Ð² ÑÑ‚Ñ€Ð¾ÐºÐµ ÑÐ¾ÑÑ‚Ð¾ÑÐ½Ð¸Ñ.';
+      'Показывать постоянное уведомление об оставшихся минутах в строке состояния.';
 
   @override
-  String get statusAutoRestoreTitle =>
-      'ÐÐ²Ñ‚Ð¾Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¸ Ð·Ð°ÐºÑ€Ñ‹Ñ‚Ð¸Ð¸';
+  String get statusAutoRestoreTitle => 'Автовосстановление при закрытии';
 
   @override
   String get statusAutoRestoreSubtitle =>
-      'ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€Ð½Ð¾ ÑÐ¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ ÑÑ‚Ð°Ñ‚ÑƒÑÐ°, ÐµÑÐ»Ð¸ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ ÐµÐ³Ð¾ Ð¾Ñ‚ÐºÐ»Ð¾Ð½Ð¸Ð».';
+      'Повторно создать элемент статуса, если пользователь его отклонил.';
 
   @override
-  String get noPendingReminders =>
-      'ÐÐµÑ‚ Ð¾Ð¶Ð¸Ð´Ð°ÑŽÑ‰Ð¸Ñ… Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¹.';
+  String get noPendingReminders => 'Нет ожидающих напоминаний.';
 
   @override
-  String get unknownFireTime =>
-      'ÐÐµÐ¸Ð·Ð²ÐµÑÑ‚Ð½Ð¾Ðµ Ð²Ñ€ÐµÐ¼Ñ ÑÑ€Ð°Ð±Ð°Ñ‚Ñ‹Ð²Ð°Ð½Ð¸Ñ';
+  String get unknownFireTime => 'Неизвестное время срабатывания';
 
   @override
-  String get pastPrefix => '[ÐŸÐ ÐžÐ¨Ð›ÐžÐ•] ';
+  String get pastPrefix => '[ПРОШЛОЕ] ';
 
   @override
   String reminderOnTimeAndBefore(Object minutes) {
-    return 'Ð’ÐºÐ» â€¢ Ð’Ð¾Ð²Ñ€ÐµÐ¼Ñ + $minutes Ð¼Ð¸Ð½ Ð´Ð¾';
+    return 'Вкл • Вовремя + $minutes мин до';
   }
 
   @override
-  String get reminderOnTimeOnly => 'Ð’ÐºÐ» â€¢ Ð’Ð¾Ð²Ñ€ÐµÐ¼Ñ';
+  String get reminderOnTimeOnly => 'Вкл • Вовремя';
 
   @override
   String reminderBeforeOnly(Object minutes) {
-    return 'Ð’ÐºÐ» â€¢ $minutes Ð¼Ð¸Ð½ Ð´Ð¾';
+    return 'Вкл • $minutes мин до';
   }
 
   @override
-  String get reminderOff => 'ÐÐ°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ Ð²Ñ‹ÐºÐ»ÑŽÑ‡ÐµÐ½Ð¾';
+  String get reminderOff => 'Напоминание выключено';
 
   @override
-  String get nextPrayerTitle => 'Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ð½Ð°Ð¼Ð°Ð·';
+  String get nextPrayerTitle => 'Следующий намаз';
 
   @override
-  String get homeUpcomingRemindersTitle =>
-      'ÐŸÑ€ÐµÐ´ÑÑ‚Ð¾ÑÑ‰Ð¸Ðµ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ';
+  String get homeUpcomingRemindersTitle => 'Предстоящие напоминания';
+
+  @override
+  String startsIn(Object remaining) {
+    return 'Начнётся через $remaining';
+  }
+
+  @override
+  String get selectYourLocation => 'Выберите местоположение';
+
+  @override
+  String get locationHelp =>
+      'Используйте GPS для быстрой настройки или выберите страну/город вручную.';
+
+  @override
+  String get useCurrentLocation => 'Использовать текущее местоположение';
+
+  @override
+  String get country => 'Страна';
+
+  @override
+  String get stateCity => 'Регион / Город';
+
+  @override
+  String get district => 'Район';
+
+  @override
+  String get saveLocation => 'Сохранить местоположение';
+
+  @override
+  String selectedLocation(Object location) {
+    return 'Выбрано: $location';
+  }
+
+  @override
+  String get historySelectLocationFirst =>
+      'Сначала выберите местоположение, чтобы увидеть список намазов за год.';
+
+  @override
+  String get historyTableTitle => 'Таблица времени намаза (весь год)';
+
+  @override
+  String get todayShort => 'Сегодня';
+
+  @override
+  String get dateHeader => 'Дата';
+
+  @override
+  String get imsak => 'Фаджр';
+
+  @override
+  String get gunes => 'Восход';
+
+  @override
+  String get ogle => 'Зухр';
+
+  @override
+  String get ikindi => 'Аср';
+
+  @override
+  String get aksam => 'Магриб';
+
+  @override
+  String get yatsi => 'Иша';
+
+  @override
+  String get hijriHeader => 'Хиджра';
+
+  @override
+  String get preferencesTitle => 'Настройки';
+
+  @override
+  String get languageTitle => 'Язык';
+
+  @override
+  String get languageSystem => 'Системный по умолчанию';
+
+  @override
+  String get themeModeTitle => 'Тема оформления';
+
+  @override
+  String get themeSystem => 'Системная';
+
+  @override
+  String get themeLight => 'Светлая';
+
+  @override
+  String get themeDark => 'Тёмная';
+
+  @override
+  String get appBarRemainingTitle => 'Текст оставшегося времени в заголовке';
+
+  @override
+  String get showInTitle => 'Показывать в заголовке';
+
+  @override
+  String get showAtRight => 'Показывать справа';
+
+  @override
+  String get showAsSubtitle => 'Показывать как подзаголовок';
+
+  @override
+  String get hideRemainingText => 'Скрыть текст оставшегося времени';
+
+  @override
+  String get notificationMessageTitle => 'Сообщение уведомления';
+
+  @override
+  String get notificationMessageShown => 'Показывать';
+
+  @override
+  String get notificationMessageHidden => 'Скрыто';
+
+  @override
+  String get widgetTextSizeTitle => 'Размер текста виджета';
+
+  @override
+  String get widgetTextSizeSubtitle =>
+      'Размер текста, используемый в виджетах главного экрана.';
+
+  @override
+  String get widgetTextSizeExtraSmall => 'Очень маленький';
+
+  @override
+  String get widgetTextSizeSmall => 'Маленький';
+
+  @override
+  String get widgetTextSizeMedium => 'Средний';
+
+  @override
+  String get widgetTextSizeLarge => 'Большой';
+
+  @override
+  String get widgetMmssThresholdTitle => 'Секундный отсчёт в виджете';
+
+  @override
+  String get widgetMmssThresholdNever => 'Всегда показывать ЧЧ:ММ';
+
+  @override
+  String widgetMmssThresholdValue(Object minutes) {
+    return 'ММ:СС менее $minutes мин';
+  }
+
+  @override
+  String get remindersOnOffTitle => 'Напоминания вкл/выкл';
+
+  @override
+  String get remindersOnOffSubtitle =>
+      'Включите или выключите уведомления о намазе. Настройки для каждого намаза сохраняются.';
+
+  @override
+  String get reminderVibrationTitle => 'Вибрация при напоминании';
+
+  @override
+  String get reminderVibrationSubtitle =>
+      'Пульсирующая вибрация около 10 секунд при срабатывании напоминания.';
+
+  @override
+  String get reminderSoundTitle => 'Звук при напоминании';
+
+  @override
+  String get reminderSoundSubtitle =>
+      'Воспроизводить звук уведомления при срабатывании напоминания.';
+
+  @override
+  String get remindersOn => 'Вкл';
+
+  @override
+  String get remindersOff => 'Выкл';
+
+  @override
+  String reminderScreenTitle(Object prayer) {
+    return '$prayer — напоминание';
+  }
+
+  @override
+  String get reminderTypeTitle => 'Тип напоминания (можно выбрать оба)';
+
+  @override
+  String get onTime => 'Вовремя';
+
+  @override
+  String get before => 'До';
+
+  @override
+  String get after => 'После';
+
+  @override
+  String get reminderAlertTitle => 'Сигнал';
+
+  @override
+  String get reminderAlertSubtitle =>
+      'Для фактического сигнала также нужен включённый переключатель в настройках.';
+
+  @override
+  String get vibrateChip => 'Вибрация';
+
+  @override
+  String get soundChip => 'Звук';
+
+  @override
+  String get adhanChip => 'Азан';
 
   @override
   String prayersCompleted(Object completed, Object total) {
@@ -194,409 +382,214 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
-  String startsIn(Object remaining) {
-    return 'ÐÐ°Ñ‡Ð½Ñ‘Ñ‚ÑÑ Ñ‡ÐµÑ€ÐµÐ· $remaining';
-  }
+  String get holiday_islamic_new_year => 'Исламский Новый год';
 
   @override
-  String get selectYourLocation =>
-      'Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¼ÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ';
+  String get holiday_ashura => 'Ашура';
 
   @override
-  String get locationHelp =>
-      'Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐ¹Ñ‚Ðµ GPS Ð´Ð»Ñ Ð±Ñ‹ÑÑ‚Ñ€Ð¾Ð¹ Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¸Ð»Ð¸ Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ ÑÑ‚Ñ€Ð°Ð½Ñƒ/Ð³Ð¾Ñ€Ð¾Ð´ Ð²Ñ€ÑƒÑ‡Ð½ÑƒÑŽ.';
+  String get holiday_mawlid => 'Маулид ан-Наби';
 
   @override
-  String get useCurrentLocation =>
-      'Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ Ñ‚ÐµÐºÑƒÑ‰ÐµÐµ Ð¼ÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ';
+  String get holiday_isra_miraj => 'Исра и Мирадж';
 
   @override
-  String get country => 'Ð¡Ñ‚Ñ€Ð°Ð½Ð°';
+  String get holiday_laylat_barat => 'Ляйлят аль-Бараат';
 
   @override
-  String get stateCity => 'Ð ÐµÐ³Ð¸Ð¾Ð½ / Ð“Ð¾Ñ€Ð¾Ð´';
+  String get holiday_ramadan_first => 'Первый день Рамадана';
 
   @override
-  String get district => 'Ð Ð°Ð¹Ð¾Ð½';
+  String get holiday_laylat_qadr => 'Ляйлят аль-Кадр';
 
   @override
-  String get saveLocation => 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¼ÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ';
+  String get holiday_eid_fitr => 'Ураза-байрам';
 
   @override
-  String selectedLocation(Object location) {
-    return 'Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð¾: $location';
-  }
+  String get holiday_arafah => 'День Арафа';
 
   @override
-  String get historySelectLocationFirst =>
-      'Ð¡Ð½Ð°Ñ‡Ð°Ð»Ð° Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¼ÐµÑÑ‚Ð¾Ð¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ, Ñ‡Ñ‚Ð¾Ð±Ñ‹ ÑƒÐ²Ð¸Ð´ÐµÑ‚ÑŒ ÑÐ¿Ð¸ÑÐ¾Ðº Ð½Ð°Ð¼Ð°Ð·Ð¾Ð² Ð·Ð° Ð³Ð¾Ð´.';
+  String get holiday_eid_adha => 'Курбан-байрам';
 
   @override
-  String get historyTableTitle =>
-      'Ð¢Ð°Ð±Ð»Ð¸Ñ†Ð° Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð½Ð°Ð¼Ð°Ð·Ð° (Ð²ÐµÑÑŒ Ð³Ð¾Ð´)';
+  String get remindBeforePrayerTitle => 'Напомнить перед намазом';
 
   @override
-  String get todayShort => 'Ð¡ÐµÐ³Ð¾Ð´Ð½Ñ';
-
-  @override
-  String get dateHeader => 'Ð”Ð°Ñ‚Ð°';
-
-  @override
-  String get imsak => 'Ð¤Ð°Ð´Ð¶Ñ€';
-
-  @override
-  String get gunes => 'Ð’Ð¾ÑÑ…Ð¾Ð´';
-
-  @override
-  String get ogle => 'Ð—ÑƒÑ…Ñ€';
-
-  @override
-  String get ikindi => 'ÐÑÑ€';
-
-  @override
-  String get aksam => 'ÐœÐ°Ð³Ñ€Ð¸Ð±';
-
-  @override
-  String get yatsi => 'Ð˜ÑˆÐ°';
-
-  @override
-  String get hijriHeader => 'Ð¥Ð¸Ð´Ð¶Ñ€Ð°';
-
-  @override
-  String get preferencesTitle => 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸';
-
-  @override
-  String get languageTitle => 'Ð¯Ð·Ñ‹Ðº';
-
-  @override
-  String get languageSystem => 'Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð½Ñ‹Ð¹ Ð¿Ð¾ ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ';
-
-  @override
-  String get themeModeTitle => 'Ð¢ÐµÐ¼Ð° Ð¾Ñ„Ð¾Ñ€Ð¼Ð»ÐµÐ½Ð¸Ñ';
-
-  @override
-  String get themeSystem => 'Ð¡Ð¸ÑÑ‚ÐµÐ¼Ð½Ð°Ñ';
-
-  @override
-  String get themeLight => 'Ð¡Ð²ÐµÑ‚Ð»Ð°Ñ';
-
-  @override
-  String get themeDark => 'Ð¢Ñ‘Ð¼Ð½Ð°Ñ';
-
-  @override
-  String get appBarRemainingTitle =>
-      'Ð¢ÐµÐºÑÑ‚ Ð¾ÑÑ‚Ð°Ð²ÑˆÐµÐ³Ð¾ÑÑ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸ Ð² Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐµ';
-
-  @override
-  String get showInTitle => 'ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ð² Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²ÐºÐµ';
-
-  @override
-  String get showAtRight => 'ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ ÑÐ¿Ñ€Ð°Ð²Ð°';
-
-  @override
-  String get showAsSubtitle =>
-      'ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ ÐºÐ°Ðº Ð¿Ð¾Ð´Ð·Ð°Ð³Ð¾Ð»Ð¾Ð²Ð¾Ðº';
-
-  @override
-  String get hideRemainingText =>
-      'Ð¡ÐºÑ€Ñ‹Ñ‚ÑŒ Ñ‚ÐµÐºÑÑ‚ Ð¾ÑÑ‚Ð°Ð²ÑˆÐµÐ³Ð¾ÑÑ Ð²Ñ€ÐµÐ¼ÐµÐ½Ð¸';
-
-  @override
-  String get notificationMessageTitle =>
-      'Ð¡Ð¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ';
-
-  @override
-  String get notificationMessageShown => 'ÐŸÐ¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ';
-
-  @override
-  String get notificationMessageHidden => 'Ð¡ÐºÑ€Ñ‹Ñ‚Ð¾';
-
-  @override
-  String get widgetTextSizeTitle => 'Ð Ð°Ð·Ð¼ÐµÑ€ Ñ‚ÐµÐºÑÑ‚Ð° Ð²Ð¸Ð´Ð¶ÐµÑ‚Ð°';
-
-  @override
-  String get widgetTextSizeSubtitle =>
-      'Ð Ð°Ð·Ð¼ÐµÑ€ Ñ‚ÐµÐºÑÑ‚Ð°, Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼Ñ‹Ð¹ Ð² Ð²Ð¸Ð´Ð¶ÐµÑ‚Ð°Ñ… Ð³Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ ÑÐºÑ€Ð°Ð½Ð°.';
-
-  @override
-  String get widgetTextSizeExtraSmall => 'ÐžÑ‡ÐµÐ½ÑŒ Ð¼Ð°Ð»ÐµÐ½ÑŒÐºÐ¸Ð¹';
-
-  @override
-  String get widgetTextSizeSmall => 'ÐœÐ°Ð»ÐµÐ½ÑŒÐºÐ¸Ð¹';
-
-  @override
-  String get widgetTextSizeMedium => 'Ð¡Ñ€ÐµÐ´Ð½Ð¸Ð¹';
-
-  @override
-  String get widgetTextSizeLarge => 'Ð‘Ð¾Ð»ÑŒÑˆÐ¾Ð¹';
-
-  @override
-  String get widgetMmssThresholdTitle =>
-      'Ð¡ÐµÐºÑƒÐ½Ð´Ð½Ñ‹Ð¹ Ð¾Ñ‚ÑÑ‡Ñ‘Ñ‚ Ð² Ð²Ð¸Ð´Ð¶ÐµÑ‚Ðµ';
-
-  @override
-  String get widgetMmssThresholdNever =>
-      'Ð’ÑÐµÐ³Ð´Ð° Ð¿Ð¾ÐºÐ°Ð·Ñ‹Ð²Ð°Ñ‚ÑŒ Ð§Ð§:ÐœÐœ';
-
-  @override
-  String widgetMmssThresholdValue(Object minutes) {
-    return 'ÐœÐœ:Ð¡Ð¡ Ð¼ÐµÐ½ÐµÐµ $minutes Ð¼Ð¸Ð½';
-  }
-
-  @override
-  String get remindersOnOffTitle => 'ÐÐ°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ Ð²ÐºÐ»/Ð²Ñ‹ÐºÐ»';
-
-  @override
-  String get remindersOnOffSubtitle =>
-      'Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚Ðµ Ð¸Ð»Ð¸ Ð²Ñ‹ÐºÐ»ÑŽÑ‡Ð¸Ñ‚Ðµ ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ Ð¾ Ð½Ð°Ð¼Ð°Ð·Ðµ. ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð´Ð»Ñ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ Ð½Ð°Ð¼Ð°Ð·Ð° ÑÐ¾Ñ…Ñ€Ð°Ð½ÑÑŽÑ‚ÑÑ.';
-
-  @override
-  String get reminderVibrationTitle =>
-      'Ð’Ð¸Ð±Ñ€Ð°Ñ†Ð¸Ñ Ð¿Ñ€Ð¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¸';
-
-  @override
-  String get reminderVibrationSubtitle =>
-      'ÐŸÑƒÐ»ÑŒÑÐ¸Ñ€ÑƒÑŽÑ‰Ð°Ñ Ð²Ð¸Ð±Ñ€Ð°Ñ†Ð¸Ñ Ð¾ÐºÐ¾Ð»Ð¾ 10 ÑÐµÐºÑƒÐ½Ð´ Ð¿Ñ€Ð¸ ÑÑ€Ð°Ð±Ð°Ñ‚Ñ‹Ð²Ð°Ð½Ð¸Ð¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ.';
-
-  @override
-  String get reminderSoundTitle => 'Ð—Ð²ÑƒÐº Ð¿Ñ€Ð¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¸';
-
-  @override
-  String get reminderSoundSubtitle =>
-      'Ð’Ð¾ÑÐ¿Ñ€Ð¾Ð¸Ð·Ð²Ð¾Ð´Ð¸Ñ‚ÑŒ Ð·Ð²ÑƒÐº ÑƒÐ²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ Ð¿Ñ€Ð¸ ÑÑ€Ð°Ð±Ð°Ñ‚Ñ‹Ð²Ð°Ð½Ð¸Ð¸ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ.';
-
-  @override
-  String get remindersOn => 'Ð’ÐºÐ»';
-
-  @override
-  String get remindersOff => 'Ð’Ñ‹ÐºÐ»';
-
-  @override
-  String reminderScreenTitle(Object prayer) {
-    return '$prayer â€” Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ';
-  }
-
-  @override
-  String get reminderTypeTitle =>
-      'Ð¢Ð¸Ð¿ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ñ (Ð¼Ð¾Ð¶Ð½Ð¾ Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¾Ð±Ð°)';
-
-  @override
-  String get onTime => 'Ð’Ð¾Ð²Ñ€ÐµÐ¼Ñ';
-
-  @override
-  String get before => 'Ð”Ð¾';
-
-  @override
-  String get after => 'ÐŸÐ¾ÑÐ»Ðµ';
-
-  @override
-  String get reminderAlertTitle => 'Ð¡Ð¸Ð³Ð½Ð°Ð»';
-
-  @override
-  String get reminderAlertSubtitle =>
-      'Ð”Ð»Ñ Ñ„Ð°ÐºÑ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð³Ð¾ ÑÐ¸Ð³Ð½Ð°Ð»Ð° Ñ‚Ð°ÐºÐ¶Ðµ Ð½ÑƒÐ¶ÐµÐ½ Ð²ÐºÐ»ÑŽÑ‡Ñ‘Ð½Ð½Ñ‹Ð¹ Ð¿ÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð°Ñ‚ÐµÐ»ÑŒ Ð² Ð½Ð°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ°Ñ….';
-
-  @override
-  String get vibrateChip => 'Ð’Ð¸Ð±Ñ€Ð°Ñ†Ð¸Ñ';
-
-  @override
-  String get soundChip => 'Ð—Ð²ÑƒÐº';
-
-  @override
-  String get adhanChip => 'ÐÐ·Ð°Ð½';
-
-  @override
-  String get remindBeforePrayerTitle =>
-      'ÐÐ°Ð¿Ð¾Ð¼Ð½Ð¸Ñ‚ÑŒ Ð¿ÐµÑ€ÐµÐ´ Ð½Ð°Ð¼Ð°Ð·Ð¾Ð¼';
-
-  @override
-  String get remindAfterPrayerTitle =>
-      'ÐÐ°Ð¿Ð¾Ð¼Ð½Ð¸Ñ‚ÑŒ Ð¿Ð¾ÑÐ»Ðµ Ð½Ð°Ð¼Ð°Ð·Ð°';
+  String get remindAfterPrayerTitle => 'Напомнить после намаза';
 
   @override
   String minutesValue(Object minutes) {
-    return '$minutes Ð¼Ð¸Ð½';
+    return '$minutes мин';
   }
 
   @override
-  String get custom => 'Ð¡Ð²Ð¾Ñ‘';
+  String get custom => 'Своё';
 
   @override
-  String get customMinutes => 'Ð¡Ð²Ð¾Ð¸ Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹';
+  String get customMinutes => 'Свои минуты';
 
   @override
-  String get customMinutesHint => 'Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€ 12';
+  String get customMinutesHint => 'например 12';
 
   @override
-  String get save => 'Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ';
+  String get save => 'Сохранить';
 
   @override
   String get enableBeforeToSelectMinutes =>
-      'Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚Ðµ Â«Ð”Ð¾Â», Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹.';
+      'Включите «До», чтобы выбрать минуты.';
 
   @override
   String get enableAfterToSelectMinutes =>
-      'Ð’ÐºÐ»ÑŽÑ‡Ð¸Ñ‚Ðµ Â«ÐŸÐ¾ÑÐ»ÐµÂ», Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹.';
+      'Включите «После», чтобы выбрать минуты.';
 
   @override
   String get enterValidPositiveNumber =>
-      'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ ÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ð¾Ðµ Ð¿Ð¾Ð»Ð¾Ð¶Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾.';
+      'Введите корректное положительное число.';
 
   @override
-  String get useValueUpTo240 =>
-      'Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐ¹Ñ‚Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð´Ð¾ 240 Ð¼Ð¸Ð½ÑƒÑ‚.';
+  String get useValueUpTo240 => 'Используйте значение до 240 минут.';
 
   @override
-  String get customMinutesSaved => 'Ð¡Ð²Ð¾Ð¸ Ð¼Ð¸Ð½ÑƒÑ‚Ñ‹ ÑÐ¾Ñ…Ñ€Ð°Ð½ÐµÐ½Ñ‹.';
+  String get customMinutesSaved => 'Свои минуты сохранены.';
 
   @override
-  String get cancel => 'ÐžÑ‚Ð¼ÐµÐ½Ð°';
+  String get cancel => 'Отмена';
 
   @override
-  String get calendarTabTooltip => 'Ð¥Ð¸Ð´Ð¶Ñ€Ð°-ÐºÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ';
+  String get calendarTabTooltip => 'Хиджра-календарь';
 
   @override
-  String get calendarPreviousMonth => 'ÐŸÑ€ÐµÐ´Ñ‹Ð´ÑƒÑ‰Ð¸Ð¹ Ð¼ÐµÑÑÑ†';
+  String get calendarPreviousMonth => 'Предыдущий месяц';
 
   @override
-  String get calendarNextMonth => 'Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ð¼ÐµÑÑÑ†';
+  String get calendarNextMonth => 'Следующий месяц';
 
   @override
-  String get calendarSwapPrimary =>
-      'ÐŸÐµÑ€ÐµÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ Ð¥Ð¸Ð´Ð¶Ñ€Ð°/Ð“Ñ€Ð¸Ð³Ð¾Ñ€Ð¸Ð°Ð½ÑÐºÐ¸Ð¹';
+  String get calendarSwapPrimary => 'Переключить Хиджра/Григорианский';
 
   @override
-  String get calendarShowSecondary =>
-      'ÐŸÐ¾ÐºÐ°Ð·Ð°Ñ‚ÑŒ Ð²Ñ‚Ð¾Ñ€Ð¸Ñ‡Ð½ÑƒÑŽ Ð´Ð°Ñ‚Ñƒ';
+  String get calendarShowSecondary => 'Показать вторичную дату';
 
   @override
-  String get calendarHideSecondary =>
-      'Ð¡ÐºÑ€Ñ‹Ñ‚ÑŒ Ð²Ñ‚Ð¾Ñ€Ð¸Ñ‡Ð½ÑƒÑŽ Ð´Ð°Ñ‚Ñƒ';
+  String get calendarHideSecondary => 'Скрыть вторичную дату';
 
   @override
-  String get calendarNoRemindersOnDay =>
-      'ÐÐµÑ‚ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ð¹ Ð½Ð° ÑÑ‚Ð¾Ñ‚ Ð´ÐµÐ½ÑŒ';
+  String get calendarNoRemindersOnDay => 'Нет напоминаний на этот день';
 
   @override
-  String get calendarAddReminder => 'Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ';
+  String get calendarAddReminder => 'Добавить напоминание';
 
   @override
-  String get calendarEditReminder => 'Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ';
+  String get calendarEditReminder => 'Изменить';
 
   @override
-  String get calendarDeleteReminder => 'Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ';
+  String get calendarDeleteReminder => 'Удалить';
 
   @override
-  String get calendarReminderFormTitleNew =>
-      'ÐÐ¾Ð²Ð¾Ðµ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ';
+  String get calendarReminderFormTitleNew => 'Новое напоминание';
 
   @override
-  String get calendarReminderFormTitleEdit =>
-      'Ð˜Ð·Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ';
+  String get calendarReminderFormTitleEdit => 'Изменить напоминание';
 
   @override
-  String get calendarReminderTitleLabel => 'ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ';
+  String get calendarReminderTitleLabel => 'Название';
 
   @override
-  String get calendarReminderTitleHint =>
-      'Ð½Ð°Ð¿Ñ€Ð¸Ð¼ÐµÑ€, Ð½Ð°Ñ‡Ð°Ð»Ð¾ Ð Ð°Ð¼Ð°Ð´Ð°Ð½Ð°';
+  String get calendarReminderTitleHint => 'например, начало Рамадана';
 
   @override
-  String get calendarReminderNotesLabel =>
-      'Ð—Ð°Ð¼ÐµÑ‚ÐºÐ¸ (Ð½ÐµÐ¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾)';
+  String get calendarReminderNotesLabel => 'Заметки (необязательно)';
 
   @override
-  String get calendarReminderDateTimeLabel => 'Ð”Ð°Ñ‚Ð° Ð¸ Ð²Ñ€ÐµÐ¼Ñ';
+  String get calendarReminderDateTimeLabel => 'Дата и время';
 
   @override
-  String get calendarReminderRecurrenceLabel => 'ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€';
+  String get calendarReminderRecurrenceLabel => 'Повтор';
 
   @override
-  String get calendarRecurrenceOnce => 'ÐžÐ´Ð¸Ð½ Ñ€Ð°Ð·';
+  String get calendarRecurrenceOnce => 'Один раз';
 
   @override
-  String get calendarRecurrenceDaily => 'Ð•Ð¶ÐµÐ´Ð½ÐµÐ²Ð½Ð¾';
+  String get calendarRecurrenceDaily => 'Ежедневно';
 
   @override
-  String get calendarRecurrenceWeekly => 'Ð•Ð¶ÐµÐ½ÐµÐ´ÐµÐ»ÑŒÐ½Ð¾';
+  String get calendarRecurrenceWeekly => 'Еженедельно';
 
   @override
-  String get calendarRecurrenceMonthly => 'Ð•Ð¶ÐµÐ¼ÐµÑÑÑ‡Ð½Ð¾';
+  String get calendarRecurrenceMonthly => 'Ежемесячно';
 
   @override
-  String get calendarRecurrenceYearly => 'Ð•Ð¶ÐµÐ³Ð¾Ð´Ð½Ð¾';
+  String get calendarRecurrenceYearly => 'Ежегодно';
 
   @override
-  String get calendarRepeatCountLabel =>
-      'ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÐµÐ½Ð¸Ð¹';
+  String get calendarRepeatCountLabel => 'Количество повторений';
 
   @override
   String get calendarRepeatCountHelper =>
-      'Ð¡ÐºÐ¾Ð»ÑŒÐºÐ¾ Ñ€Ð°Ð· Ð½Ð°Ð¿Ð¾Ð¼Ð¸Ð½Ð°Ð½Ð¸Ðµ ÑÑ€Ð°Ð±Ð¾Ñ‚Ð°ÐµÑ‚ Ð¿ÐµÑ€ÐµÐ´ Ð¾ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¾Ð¹ (Ð²Ñ‹ÐºÐ» = Ð¿Ð¾Ð²Ñ‚Ð¾Ñ€ÑÑ‚ÑŒ Ð±ÐµÑÐºÐ¾Ð½ÐµÑ‡Ð½Ð¾)';
+      'Сколько раз напоминание сработает перед остановкой (выкл = повторять бесконечно)';
 
   @override
-  String get calendarRepeatCountError =>
-      'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð¾Ñ‚ 2 Ð´Ð¾ 100';
+  String get calendarRepeatCountError => 'Введите число от 2 до 100';
 
   @override
-  String get calendarRepeatDaysLabel => 'ÐŸÐ¾Ð²Ñ‚Ð¾Ñ€ÑÑ‚ÑŒ Ð²';
+  String get calendarRepeatDaysLabel => 'Повторять в';
 
   @override
-  String get calendarDayOfMonthLabel => 'Ð”ÐµÐ½ÑŒ Ð¼ÐµÑÑÑ†Ð°';
+  String get calendarDayOfMonthLabel => 'День месяца';
 
   @override
-  String get calendarYearlyMonthLabel => 'ÐœÐµÑÑÑ†';
+  String get calendarYearlyMonthLabel => 'Месяц';
 
   @override
-  String get calendarYearlyDayLabel => 'Ð”ÐµÐ½ÑŒ';
+  String get calendarYearlyDayLabel => 'День';
 
   @override
-  String get calendarMonthlyBasisLabel => 'ÐžÑÐ½Ð¾Ð²Ð° Ð¼ÐµÑÑÑ†Ð°';
+  String get calendarMonthlyBasisLabel => 'Основа месяца';
 
   @override
-  String get calendarYearlyBasisLabel => 'ÐžÑÐ½Ð¾Ð²Ð° Ð³Ð¾Ð´Ð°';
+  String get calendarYearlyBasisLabel => 'Основа года';
 
   @override
-  String get calendarYearlyBasisGregorian => 'Ð“Ñ€Ð¸Ð³Ð¾Ñ€Ð¸Ð°Ð½ÑÐºÐ¸Ð¹';
+  String get calendarYearlyBasisGregorian => 'Григорианский';
 
   @override
-  String get calendarYearlyBasisHijri => 'Ð¥Ð¸Ð´Ð¶Ñ€Ð°';
+  String get calendarYearlyBasisHijri => 'Хиджра';
 
   @override
-  String get calendarReminderTitleRequired => 'Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ';
+  String get calendarReminderTitleRequired => 'Введите название';
 
   @override
-  String get calendarAnchorClockTime => 'ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€Ð½Ð°Ñ Ð´Ð°Ñ‚Ð°';
+  String get calendarAnchorClockTime => 'Календарная дата';
 
   @override
-  String get calendarAnchorPrayerTime => 'Ð’Ñ€ÐµÐ¼Ñ Ð½Ð°Ð¼Ð°Ð·Ð°';
+  String get calendarAnchorPrayerTime => 'Время намаза';
 
   @override
-  String get calendarSelectPrayer => 'Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð°Ð¼Ð°Ð·';
+  String get calendarSelectPrayer => 'Выберите намаз';
 
   @override
-  String get calendarOffsetOnTime => 'Ð’Ð¾Ð²Ñ€ÐµÐ¼Ñ';
+  String get calendarOffsetOnTime => 'Вовремя';
 
   @override
-  String get calendarOffsetBefore => 'Ð”Ð¾';
+  String get calendarOffsetBefore => 'До';
 
   @override
-  String get calendarOffsetAfter => 'ÐŸÐ¾ÑÐ»Ðµ';
+  String get calendarOffsetAfter => 'После';
 
   @override
-  String get calendarPickAnchorDate => 'Ð’Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ Ð´Ð°Ñ‚Ñƒ';
+  String get calendarPickAnchorDate => 'Выбрать дату';
 
   @override
-  String get datesPrayerTimesTab => 'Ð’Ñ€ÐµÐ¼Ñ Ð½Ð°Ð¼Ð°Ð·Ð°';
+  String get datesPrayerTimesTab => 'Время намаза';
 
   @override
-  String get datesCalendarTab => 'ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ';
+  String get datesCalendarTab => 'Календарь';
 
   @override
-  String get undo => 'ÐžÑ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ';
+  String get undo => 'Отменить';
 
   @override
   String calendarReminderDeleted(Object title) {
-    return 'Â«$titleÂ» ÑƒÐ´Ð°Ð»ÐµÐ½Ð¾';
+    return '«$title» удалено';
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
@@ -26,10 +27,14 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   Timer? _timer;
   DateTime _now = DateTime.now();
+  late final PrayerAppController _controller;
 
   @override
   void initState() {
     super.initState();
+    _controller = context.read<PrayerAppController>();
+    _controller.addListener(_onTabChange);
+    _updateOrientation(_controller.tabIndex);
     _timer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (!mounted) {
         return;
@@ -40,8 +45,25 @@ class _AppShellState extends State<AppShell> {
 
   @override
   void dispose() {
+    _controller.removeListener(_onTabChange);
     _timer?.cancel();
+    SystemChrome.setPreferredOrientations([]);
     super.dispose();
+  }
+
+  void _onTabChange() {
+    _updateOrientation(_controller.tabIndex);
+  }
+
+  void _updateOrientation(int tabIndex) {
+    if (tabIndex == 3) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([]);
+    }
   }
 
   @override

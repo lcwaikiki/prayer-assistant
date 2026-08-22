@@ -108,10 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ]..sort((a, b) => a.next.compareTo(b.next));
         final upcoming = upcomingReminders.take(3).toList(growable: false);
 
-        const outerPadding = 16.0;
+        const outerPadding = 12.0;
         return LayoutBuilder(
           builder: (context, constraints) {
             return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
               padding: const EdgeInsets.all(outerPadding),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
@@ -120,22 +121,57 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: IntrinsicHeight(
                   child: Column(
                     children: [
+                      // Top Header Row
                       Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              context.l10n.todayWithDate(
-                                DateFormat(
-                                  'EEEE, dd MMM yyyy',
-                                ).format(day.date),
-                              ),
-                              style: Theme.of(context).textTheme.titleMedium,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  DateFormat(
+                                    'EEEE, dd MMM yyyy',
+                                    Localizations.localeOf(context).toString(),
+                                  ).format(day.date),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: 12,
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
+                                    const SizedBox(width: 2),
+                                    Expanded(
+                                      child: Text(
+                                        '${selected.districtName} · ${formatHijriDate(day.date, Localizations.localeOf(context).languageCode)}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelSmall,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              ],
                             ),
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
+                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                            padding: EdgeInsets.zero,
                             tooltip: context.l10n.hisnAlMuslimTitle,
                             onPressed: () {
                               Navigator.of(context).push(
@@ -144,10 +180,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             },
-                            icon: const Icon(Icons.menu_book_outlined),
+                            icon: const Icon(Icons.menu_book_outlined, size: 18),
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
+                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                            padding: EdgeInsets.zero,
                             tooltip: context.l10n.shareTodayTimes,
                             onPressed: () {
                               final text = buildSharePrayerTimesText(
@@ -166,89 +204,105 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               }
                             },
-                            icon: const Icon(Icons.share_outlined),
+                            icon: const Icon(Icons.share_outlined, size: 18),
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
+                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                            padding: EdgeInsets.zero,
                             onPressed: controller.isBusy
                                 ? null
                                 : () => controller.refreshPrayerData(
                                     forceSync: true,
                                   ),
-                            icon: const Icon(Icons.refresh),
+                            icon: const Icon(Icons.refresh, size: 18),
                           ),
                         ],
                       ),
-                      Text(
-                        '${selected.fullName} · ${context.l10n.hijriWithDate(formatHijriDate(day.date, Localizations.localeOf(context).languageCode))}',
-                        style: Theme.of(context).textTheme.bodySmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      const SizedBox(height: 4),
+
+                      // Sub-header stats row
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.check_circle_outline,
+                            size: 14,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            context.l10n.prayersCompleted(
+                              controller.completedCountForDate(day.date),
+                              6,
+                            ),
+                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        context.l10n.prayersCompleted(
-                          controller.completedCountForDate(day.date),
-                          6,
-                        ),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      if (nextPrayer != null)
+                      const SizedBox(height: 6),
+
+                      if (nextPrayer != null) ...[
                         _NextPrayerBanner(info: nextPrayer),
-                      if (dailyWisdom != null) ...[
-                        const SizedBox(height: 10),
-                        DailyWisdomCard(wisdom: dailyWisdom),
+                        const SizedBox(height: 6),
                       ],
-                      const SizedBox(height: 10),
+                      if (dailyWisdom != null) ...[
+                        DailyWisdomCard(wisdom: dailyWisdom),
+                        const SizedBox(height: 6),
+                      ],
                       if (upcoming.isNotEmpty) ...[
                         _UpcomingRemindersCard(entries: upcoming),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 6),
                       ],
 
-                      Card(
-                        margin: EdgeInsets.zero,
-                        child: Column(
-                          children: [
-                            for (final entry in prayerOrder.indexed) ...[
-                              if (entry.$1 > 0) const Divider(height: 1),
-                              _CompactPrayerRow(
-                                name: entry.$2,
-                                value: prayers[entry.$2] ?? '--:--',
-                                reminderSetting: controller.reminderFor(
-                                  entry.$2,
-                                ),
-                                isNext: entry.$2 == nextPrayer?.name,
-                                isCompleted: controller.isPrayerCompleted(
-                                  entry.$2,
-                                  day.date,
-                                ),
-                                onTap: () async {
-                                  await Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (_) =>
-                                          ReminderSettingsScreen(
-                                            prayerName: entry.$2,
-                                          ),
-                                    ),
-                                  );
-                                },
-                                onToggleReminder: () =>
-                                    controller.updateReminderSetting(
-                                      prayer: entry.$2,
-                                      notifyOnTime: !controller
-                                          .reminderFor(entry.$2)
-                                          .notifyOnTime,
-                                    ),
-                                onToggleCompleted: () =>
-                                    controller.togglePrayerCompletion(
+                      // Prayer rows taking remaining vertical space
+                      Expanded(
+                        child: Card(
+                          margin: EdgeInsets.zero,
+                          child: Column(
+                            children: [
+                              for (final entry in prayerOrder.indexed) ...[
+                                if (entry.$1 > 0) const Divider(height: 1),
+                                Expanded(
+                                  child: _CompactPrayerRow(
+                                    name: entry.$2,
+                                    value: prayers[entry.$2] ?? '--:--',
+                                    reminderSetting: controller.reminderFor(
                                       entry.$2,
                                     ),
-                              ),
+                                    isNext: entry.$2 == nextPrayer?.name,
+                                    isCompleted: controller.isPrayerCompleted(
+                                      entry.$2,
+                                      day.date,
+                                    ),
+                                    onTap: () async {
+                                      await Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) =>
+                                              ReminderSettingsScreen(
+                                                prayerName: entry.$2,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    onToggleReminder: () =>
+                                        controller.updateReminderSetting(
+                                          prayer: entry.$2,
+                                          notifyOnTime: !controller
+                                              .reminderFor(entry.$2)
+                                              .notifyOnTime,
+                                        ),
+                                    onToggleCompleted: () =>
+                                        controller.togglePrayerCompletion(
+                                          entry.$2,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
                       ),
                     ],
@@ -258,6 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         );
+
+
 
       },
     );
@@ -305,21 +361,27 @@ class _CompactPrayerRow extends StatelessWidget {
     }
     final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
+      dense: true,
+      visualDensity: VisualDensity.compact,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       tileColor: isCompleted
           ? Colors.green.withAlpha(30)
           : (isNext ? colorScheme.primaryContainer : null),
       onTap: onTap,
       leading: IconButton(
         visualDensity: VisualDensity.compact,
+        constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+        padding: EdgeInsets.zero,
         onPressed: onToggleCompleted,
         icon: Icon(
           isCompleted ? Icons.check_circle : Icons.circle_outlined,
-          size: 26,
+          size: 22,
           color: isCompleted
               ? Colors.green
               : (isNext ? colorScheme.onPrimaryContainer : null),
         ),
       ),
+
       title: Text(
         context.l10n.prayerNameLabel(name),
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -383,22 +445,23 @@ class _NextPrayerBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         children: [
           Icon(
             Icons.play_arrow_rounded,
+            size: 18,
             color: Theme.of(context).colorScheme.onPrimaryContainer,
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Expanded(
             child: Text.rich(
               TextSpan(
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodySmall,
                 children: [
                   TextSpan(text: '${context.l10n.nextPrayerTitle}: '),
                   TextSpan(
@@ -411,26 +474,26 @@ class _NextPrayerBanner extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
               DateFormat('HH:mm').format(info.time),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 6),
           Text(
             context.l10n.startsIn(formatRemaining(info.remaining)),
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.bold,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
@@ -440,6 +503,7 @@ class _NextPrayerBanner extends StatelessWidget {
     );
   }
 }
+
 
 class _UpcomingRemindersCard extends StatelessWidget {
   const _UpcomingRemindersCard({required this.entries});
@@ -458,23 +522,17 @@ class _UpcomingRemindersCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 4),
+            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
             child: Text(
               context.l10n.homeUpcomingRemindersTitle,
-              style: Theme.of(context).textTheme.labelLarge,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           for (final entry in entries)
-            ListTile(
-              dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              leading: const Icon(Icons.event_outlined),
-              title: Text(
-                entry.reminder.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: Text(dateFormat.format(entry.next)),
+            InkWell(
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute<void>(
@@ -485,8 +543,41 @@ class _UpcomingRemindersCard extends StatelessWidget {
                   ),
                 );
               },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.event_outlined,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        entry.reminder.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      dateFormat.format(entry.next),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
+
+
         ],
       ),
     );

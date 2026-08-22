@@ -40,9 +40,10 @@ Support for Ramadan and Sunnah fasts throughout the year.
 - [ ] Notifications for Monday/Thursday & White Days (13th, 14th, 15th Hijri)
 - [ ] Annual fasting habit logger
 
-## 7. Daily Wisdom & Supplications (Hisn al-Muslim)
-- [ ] Rotating Ayah/Hadith card on Home screen with share option
-- [ ] Essential supplications library with integrated counter
+## 7. Daily Wisdom & Supplications (Hisn al-Muslim) [DONE]
+- [x] Rotating Ayah/Hadith card on Home screen with share option, Arabic text, transliteration & multi-language support
+- [x] Essential supplications library with integrated counter and 5 category collections (Hisn al-Muslim)
+
 
 ## 8. Backup & Export
 - [ ] Export/import app settings, prayer history & tesbihat counters to JSON

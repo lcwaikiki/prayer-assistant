@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "Daten wiederherstellen?",
   "restoreConfirmBody": "Dies stellt Ihre Qadaa-Ziele, Gebetsverlauf, Erinnerungen und Tesbih-Daten wieder her. Fortfahren?",
   "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
-  "restoreError": "Ungültiges Sicherungsdateiformat"
+  "restoreError": "Ungültiges Sicherungsdateiformat",
+  "shareOrSave": "Teilen / Speichern"
 }

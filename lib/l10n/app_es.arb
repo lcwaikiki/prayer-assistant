@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "¿Restaurar datos de la aplicación?",
   "restoreConfirmBody": "Se restaurarán sus objetivos de Qadaa, historial de oración, recordatorios y Tesbihat. ¿Continuar?",
   "restoreSuccess": "¡Datos restaurados con éxito!",
-  "restoreError": "Formato de archivo de respaldo no válido"
+  "restoreError": "Formato de archivo de respaldo no válido",
+  "shareOrSave": "Compartir / Guardar"
 }

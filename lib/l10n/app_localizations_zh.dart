@@ -731,4 +731,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get restoreError => '无效的备份文件格式';
+
+  @override
+  String get shareOrSave => '分享 / 保存';
 }

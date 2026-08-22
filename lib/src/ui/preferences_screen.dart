@@ -500,8 +500,9 @@ class PreferencesScreen extends StatelessWidget {
             ),
             FilledButton.icon(
               icon: const Icon(Icons.share_rounded, size: 18),
-              label: const Text('Share / Save'),
+              label: Text(context.l10n.shareOrSave),
               onPressed: () async {
+
                 try {
                   final tempDir = Directory.systemTemp;
                   final tempFile = File(path.join(tempDir.path, fileName));

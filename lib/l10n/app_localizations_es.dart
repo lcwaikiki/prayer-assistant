@@ -754,4 +754,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get restoreError => 'Formato de archivo de respaldo no válido';
+
+  @override
+  String get shareOrSave => 'Compartir / Guardar';
 }

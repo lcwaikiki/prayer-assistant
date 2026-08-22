@@ -732,4 +732,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get restoreError => '無効なバックアップファイル形式です';
+
+  @override
+  String get shareOrSave => '共有 / 保存';
 }

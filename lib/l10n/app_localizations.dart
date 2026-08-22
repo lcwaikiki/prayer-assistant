@@ -1485,6 +1485,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid backup file format'**
   String get restoreError;
+
+  /// Button label to share or save exported file
+  ///
+  /// In en, this message translates to:
+  /// **'Share / Save'**
+  String get shareOrSave;
 }
 
 class _AppLocalizationsDelegate

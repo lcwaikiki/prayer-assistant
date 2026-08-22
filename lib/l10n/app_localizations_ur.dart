@@ -752,4 +752,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get restoreError => 'بیک اپ فائل کا فارمیٹ غلط ہے';
+
+  @override
+  String get shareOrSave => 'شیئر / محفوظ کریں';
 }

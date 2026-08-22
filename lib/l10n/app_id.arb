@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "Pulihkan Data Aplikasi?",
   "restoreConfirmBody": "Ini akan memulihkan target Qadha, riwayat shalat, pengingat, dan data Tasbih Anda. Lanjutkan?",
   "restoreSuccess": "Data berhasil dipulihkan!",
-  "restoreError": "Format berkas cadangan tidak valid"
+  "restoreError": "Format berkas cadangan tidak valid",
+  "shareOrSave": "Bagikan / Simpan"
 }

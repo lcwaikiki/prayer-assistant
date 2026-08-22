@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "Restaurer les données?",
   "restoreConfirmBody": "Vos objectifs Qadaa, l'historique des prières, les rappels et les données Tesbihat seront restaurés. Continuer?",
   "restoreSuccess": "Données restaurées avec succès!",
-  "restoreError": "Format de fichier de sauvegarde non valide"
+  "restoreError": "Format de fichier de sauvegarde non valide",
+  "shareOrSave": "Partager / Enregistrer"
 }

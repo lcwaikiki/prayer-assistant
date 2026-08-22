@@ -750,4 +750,7 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get restoreError => 'فرمت فایل پشتیبان نامعتبر است';
+
+  @override
+  String get shareOrSave => 'اشتراک‌گذاری / ذخیره';
 }

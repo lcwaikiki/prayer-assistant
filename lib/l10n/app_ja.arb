@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "データを復元しますか？",
   "restoreConfirmBody": "カザー目標、礼拝履歴、リマインダー、テスビーハットデータが復元されます。続行しますか？",
   "restoreSuccess": "データが正常に復元されました！",
-  "restoreError": "無効なバックアップファイル形式です"
+  "restoreError": "無効なバックアップファイル形式です",
+  "shareOrSave": "共有 / 保存"
 }

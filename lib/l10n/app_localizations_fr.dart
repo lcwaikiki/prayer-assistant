@@ -757,4 +757,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get restoreError => 'Format de fichier de sauvegarde non valide';
+
+  @override
+  String get shareOrSave => 'Partager / Enregistrer';
 }

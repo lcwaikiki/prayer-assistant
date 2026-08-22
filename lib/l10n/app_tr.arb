@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "Veriler Geri Yüklensin mi?",
   "restoreConfirmBody": "Kaza hedefleri, namaz geçmişi, hatırlatıcılar ve Tesbihat verileriniz geri yüklenecektir. Devam edilsin mi?",
   "restoreSuccess": "Veriler başarıyla geri yüklendi!",
-  "restoreError": "Geçersiz yedek dosyası biçimi"
+  "restoreError": "Geçersiz yedek dosyası biçimi",
+  "shareOrSave": "Paylaş / Kaydet"
 }

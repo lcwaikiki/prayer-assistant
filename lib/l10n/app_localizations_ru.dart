@@ -755,4 +755,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get restoreError => 'Неверный формат файла резервной копии';
+
+  @override
+  String get shareOrSave => 'Поделиться / Сохранить';
 }

@@ -753,4 +753,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get restoreError => 'Format berkas cadangan tidak valid';
+
+  @override
+  String get shareOrSave => 'Bagikan / Simpan';
 }

@@ -747,4 +747,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get restoreError => 'تنسيق ملف النسخة الاحتياطية غير صالح';
+
+  @override
+  String get shareOrSave => 'مشاركة / حفظ';
 }

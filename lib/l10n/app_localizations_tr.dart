@@ -754,4 +754,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get restoreError => 'Geçersiz yedek dosyası biçimi';
+
+  @override
+  String get shareOrSave => 'Paylaş / Kaydet';
 }

@@ -753,4 +753,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restoreError => 'Invalid backup file format';
+
+  @override
+  String get shareOrSave => 'Share / Save';
 }

@@ -326,5 +326,9 @@
   "restoreConfirmTitle": "Restore App Data?",
   "restoreConfirmBody": "This will restore your Qadaa targets, prayer history, reminders, and Tesbihat data. Continue?",
   "restoreSuccess": "Data restored successfully!",
-  "restoreError": "Invalid backup file format"
+  "restoreError": "Invalid backup file format",
+  "shareOrSave": "Share / Save",
+  "@shareOrSave": {
+    "description": "Button label to share or save exported file"
+  }
 }

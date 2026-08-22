@@ -754,4 +754,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get restoreError => 'Ungültiges Sicherungsdateiformat';
+
+  @override
+  String get shareOrSave => 'Teilen / Speichern';
 }

@@ -271,5 +271,6 @@
   "restoreConfirmTitle": "恢复应用数据？",
   "restoreConfirmBody": "这将恢复您的补礼目标、礼拜记录、提醒和赞词数据。是否继续？",
   "restoreSuccess": "数据已成功恢复！",
-  "restoreError": "无效的备份文件格式"
+  "restoreError": "无效的备份文件格式",
+  "shareOrSave": "分享 / 保存"
 }

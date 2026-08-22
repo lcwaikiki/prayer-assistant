@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../calendar/models/calendar_reminder.dart';
+import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
@@ -135,6 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 location: selected,
                                 day: day,
                                 label: context.l10n.prayerNameLabel,
+                                locale: Localizations.localeOf(context)
+                                    .languageCode,
                               );
                               final onShare = widget.onShare;
                               if (onShare != null) {
@@ -159,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       Text(
-                        '${selected.fullName} · ${day.hijriDate.isEmpty ? context.l10n.hijriUnknown : context.l10n.hijriWithDate(day.hijriDate)}',
+                        '${selected.fullName} · ${context.l10n.hijriWithDate(formatHijriDate(day.date, Localizations.localeOf(context).languageCode))}',
                         style: Theme.of(context).textTheme.bodySmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

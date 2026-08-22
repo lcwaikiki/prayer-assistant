@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 
+import '../calendar/hijri_utils.dart';
 import '../models/prayer_models.dart';
 
 const prayerOrder = <String>[
@@ -53,11 +54,12 @@ String buildSharePrayerTimesText({
   required SelectedLocation location,
   required PrayerDay day,
   required String Function(String prayerName) label,
+  required String locale,
 }) {
   final buffer = StringBuffer()
     ..writeln(location.fullName)
     ..writeln(DateFormat('EEEE, dd MMM yyyy').format(day.date))
-    ..writeln(day.hijriDate);
+    ..writeln(formatHijriDate(day.date, locale));
   for (final name in prayerOrder) {
     buffer.writeln('${label(name)}: ${prayerMapForDay(day)[name] ?? '--:--'}');
   }

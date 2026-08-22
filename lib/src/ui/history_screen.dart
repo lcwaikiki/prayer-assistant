@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
@@ -488,9 +489,9 @@ class _MonthTable extends StatelessWidget {
                                   SizedBox(
                                     width: hijriWidth,
                                     child: cellText(
-                                      day.hijriDate.isEmpty
-                                          ? '-'
-                                          : day.hijriDate,
+                                      formatHijriDate(day.date,
+                                          Localizations.localeOf(context)
+                                              .languageCode),
                                     ),
                                   ),
                                 ),

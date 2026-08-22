@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "Juga memerlukan sakelar yang sesuai aktif di Preferensi agar benar-benar memberi peringatan.",
   "vibrateChip": "Getar",
   "soundChip": "Suara",
+  "adhanChip": "Azan",
   "remindBeforePrayerTitle": "Ingatkan saya sebelum salat",
   "remindAfterPrayerTitle": "Ingatkan saya setelah salat",
   "minutesValue": "{minutes} mnt",

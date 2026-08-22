@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "Erfordert zusätzlich den passenden Schalter in den Einstellungen, damit tatsächlich alarmiert wird.",
   "vibrateChip": "Vibration",
   "soundChip": "Ton",
+  "adhanChip": "Adhān",
   "remindBeforePrayerTitle": "Erinnere mich vor dem Gebet",
   "remindAfterPrayerTitle": "Erinnere mich nach dem Gebet",
   "minutesValue": "{minutes} Min",

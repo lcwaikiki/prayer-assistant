@@ -370,6 +370,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get soundChip => 'صوت';
 
   @override
+  String get adhanChip => 'أذان';
+
+  @override
   String get remindBeforePrayerTitle => 'ذكّرني قبل الصلاة';
 
   @override

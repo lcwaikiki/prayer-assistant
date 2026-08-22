@@ -358,6 +358,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get soundChip => '声音';
 
   @override
+  String get adhanChip => '宣礼';
+
+  @override
   String get remindBeforePrayerTitle => '在礼拜前提醒我';
 
   @override

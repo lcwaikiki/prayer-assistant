@@ -174,6 +174,7 @@ class ReminderSetting {
     required this.notifyAfter,
     required this.vibrationEnabled,
     required this.soundEnabled,
+    required this.adhanEnabled,
   });
 
   final int minutesBefore;
@@ -185,6 +186,7 @@ class ReminderSetting {
   final bool notifyAfter;
   final bool vibrationEnabled;
   final bool soundEnabled;
+  final bool adhanEnabled;
 
   factory ReminderSetting.defaults() {
     return ReminderSetting(
@@ -197,6 +199,7 @@ class ReminderSetting {
       notifyAfter: false,
       vibrationEnabled: true,
       soundEnabled: true,
+      adhanEnabled: false,
     );
   }
 
@@ -211,6 +214,7 @@ class ReminderSetting {
       'notifyAfter': notifyAfter,
       'vibrationEnabled': vibrationEnabled,
       'soundEnabled': soundEnabled,
+      'adhanEnabled': adhanEnabled,
     };
   }
 
@@ -226,6 +230,7 @@ class ReminderSetting {
         notifyAfter: false,
         vibrationEnabled: true,
         soundEnabled: true,
+        adhanEnabled: false,
       );
     }
     if (value is Map<String, dynamic>) {
@@ -250,6 +255,7 @@ class ReminderSetting {
         notifyAfter: (value['notifyAfter'] as bool?) ?? false,
         vibrationEnabled: (value['vibrationEnabled'] as bool?) ?? true,
         soundEnabled: (value['soundEnabled'] as bool?) ?? true,
+        adhanEnabled: (value['adhanEnabled'] as bool?) ?? false,
       );
     }
     return ReminderSetting.defaults();
@@ -265,6 +271,7 @@ class ReminderSetting {
     bool? notifyAfter,
     bool? vibrationEnabled,
     bool? soundEnabled,
+    bool? adhanEnabled,
   }) {
     return ReminderSetting(
       minutesBefore: minutesBefore ?? this.minutesBefore,
@@ -276,6 +283,7 @@ class ReminderSetting {
       notifyAfter: notifyAfter ?? this.notifyAfter,
       vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
+      adhanEnabled: adhanEnabled ?? this.adhanEnabled,
     );
   }
 
@@ -309,6 +317,12 @@ class ReminderSetting {
     } catch (_) {
       // Stale instance from hot reload before these fields were added.
     }
+    var adhanEnabled = false;
+    try {
+      adhanEnabled = setting.adhanEnabled;
+    } catch (_) {
+      // Stale instance from hot reload before adhanEnabled was added.
+    }
     return ReminderSetting(
       minutesBefore: setting.minutesBefore,
       customMinutesBefore: customMinutes,
@@ -319,6 +333,7 @@ class ReminderSetting {
       notifyAfter: notifyAfter,
       vibrationEnabled: vibrationEnabled,
       soundEnabled: soundEnabled,
+      adhanEnabled: adhanEnabled,
     );
   }
 }

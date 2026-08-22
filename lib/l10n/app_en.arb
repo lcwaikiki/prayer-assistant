@@ -166,6 +166,7 @@
   "reminderAlertSubtitle": "Also needs the matching switch on in Preferences to actually alert.",
   "vibrateChip": "Vibrate",
   "soundChip": "Sound",
+  "adhanChip": "Adhan",
   "remindBeforePrayerTitle": "Remind me before prayer",
   "remindAfterPrayerTitle": "Remind me after prayer",
   "minutesValue": "{minutes} min",

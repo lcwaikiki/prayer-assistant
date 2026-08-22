@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "还需要在偏好设置中打开对应开关才会真正提醒。",
   "vibrateChip": "振动",
   "soundChip": "声音",
+  "adhanChip": "宣礼",
   "remindBeforePrayerTitle": "在礼拜前提醒我",
   "remindAfterPrayerTitle": "在礼拜后提醒我",
   "minutesValue": "{minutes} 分钟",

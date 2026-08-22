@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "يتطلب أيضًا تفعيل المفتاح المطابق في التفضيلات ليعمل التنبيه فعليًا.",
   "vibrateChip": "اهتزاز",
   "soundChip": "صوت",
+  "adhanChip": "أذان",
   "remindBeforePrayerTitle": "ذكّرني قبل الصلاة",
   "remindAfterPrayerTitle": "ذكّرني بعد الصلاة",
   "minutesValue": "{minutes} د",

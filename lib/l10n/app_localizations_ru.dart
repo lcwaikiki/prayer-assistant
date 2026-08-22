@@ -374,6 +374,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get soundChip => 'Звук';
 
   @override
+  String get adhanChip => 'Азан';
+
+  @override
   String get remindBeforePrayerTitle => 'Напомнить перед намазом';
 
   @override

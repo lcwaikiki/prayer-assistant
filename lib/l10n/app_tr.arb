@@ -121,6 +121,7 @@
   "reminderAlertSubtitle": "Gerçekten uyarması için Tercihler'deki ilgili anahtarın da açık olması gerekir.",
   "vibrateChip": "Titreşim",
   "soundChip": "Ses",
+  "adhanChip": "Ezan",
   "remindBeforePrayerTitle": "Namazdan önce hatırlat",
   "remindAfterPrayerTitle": "Namazdan sonra hatırlat",
   "minutesValue": "{minutes} dk",

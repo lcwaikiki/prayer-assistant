@@ -358,6 +358,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get soundChip => '音';
 
   @override
+  String get adhanChip => 'アザーン';
+
+  @override
   String get remindBeforePrayerTitle => '礼拝前に通知';
 
   @override

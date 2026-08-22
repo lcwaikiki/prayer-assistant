@@ -244,6 +244,17 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                                     soundEnabled: value,
                                   ),
                             ),
+                            FilterChip(
+                              label: Text(context.l10n.adhanChip),
+                              selected: setting.adhanEnabled,
+                              onSelected: setting.soundEnabled
+                                  ? (value) => controller
+                                      .updateReminderSetting(
+                                        prayer: widget.prayerName,
+                                        adhanEnabled: value,
+                                      )
+                                  : null,
+                            ),
                           ],
                         ),
                       ],

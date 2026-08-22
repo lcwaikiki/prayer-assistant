@@ -166,6 +166,7 @@
   "reminderAlertSubtitle": "Для фактического сигнала также нужен включённый переключатель в настройках.",
   "vibrateChip": "Вибрация",
   "soundChip": "Звук",
+  "adhanChip": "Азан",
   "remindBeforePrayerTitle": "Напомнить перед намазом",
   "remindAfterPrayerTitle": "Напомнить после намаза",
   "minutesValue": "{minutes} мин",

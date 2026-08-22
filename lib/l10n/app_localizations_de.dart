@@ -372,6 +372,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get soundChip => 'Ton';
 
   @override
+  String get adhanChip => 'Adhān';
+
+  @override
   String get remindBeforePrayerTitle => 'Erinnere mich vor dem Gebet';
 
   @override

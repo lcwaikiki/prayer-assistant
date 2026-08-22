@@ -372,6 +372,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get soundChip => 'آواز';
 
   @override
+  String get adhanChip => 'اذان';
+
+  @override
   String get remindBeforePrayerTitle => 'نماز سے پہلے یاد دلائیں';
 
   @override

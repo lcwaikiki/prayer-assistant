@@ -772,6 +772,12 @@ abstract class AppLocalizations {
   /// **'Sound'**
   String get soundChip;
 
+  /// No description provided for @adhanChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhan'**
+  String get adhanChip;
+
   /// No description provided for @remindBeforePrayerTitle.
   ///
   /// In en, this message translates to:

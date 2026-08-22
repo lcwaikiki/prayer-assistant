@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "برای هشدار واقعی، کلید مربوطه در تنظیمات هم باید روشن باشد.",
   "vibrateChip": "لرزش",
   "soundChip": "صدا",
+  "adhanChip": "اذان",
   "remindBeforePrayerTitle": "قبل از نماز یادآوری کن",
   "remindAfterPrayerTitle": "بعد از نماز یادآوری کن",
   "minutesValue": "{minutes} دقیقه",

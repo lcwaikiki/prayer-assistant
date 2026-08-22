@@ -373,6 +373,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get soundChip => 'صدا';
 
   @override
+  String get adhanChip => 'اذان';
+
+  @override
   String get remindBeforePrayerTitle => 'قبل از نماز یادآوری کن';
 
   @override

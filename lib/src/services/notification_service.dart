@@ -93,25 +93,44 @@ class NotificationService {
   /// All channels play the bundled [reminderChimeResourceName] so reminders
   /// are audible regardless of the device's default notification sound.
   static const reminderChimeResourceName = 'reminder_chime';
+  static const adhanResourceName = 'adhan';
 
   static NotificationDetails _reminderNotificationDetails({
     required bool vibrationEnabled,
     required bool soundEnabled,
+    required bool adhanEnabled,
   }) {
     final String channelId;
     final String channelName;
+    final String? soundResource;
     if (vibrationEnabled && soundEnabled) {
-      channelId = 'prayer_reminders_chime_vibrate_sound';
-      channelName = 'Prayer Reminders (vibrate + sound)';
+      if (adhanEnabled) {
+        channelId = 'prayer_reminders_adhan_vibrate_sound';
+        channelName = 'Prayer Reminders - Adhan (vibrate + sound)';
+        soundResource = adhanResourceName;
+      } else {
+        channelId = 'prayer_reminders_chime_vibrate_sound';
+        channelName = 'Prayer Reminders (vibrate + sound)';
+        soundResource = reminderChimeResourceName;
+      }
     } else if (vibrationEnabled) {
       channelId = 'prayer_reminders_chime_vibrate_only';
       channelName = 'Prayer Reminders (vibrate only)';
+      soundResource = null;
     } else if (soundEnabled) {
-      channelId = 'prayer_reminders_chime_sound_only';
-      channelName = 'Prayer Reminders (sound only)';
+      if (adhanEnabled) {
+        channelId = 'prayer_reminders_adhan_sound_only';
+        channelName = 'Prayer Reminders - Adhan (sound only)';
+        soundResource = adhanResourceName;
+      } else {
+        channelId = 'prayer_reminders_chime_sound_only';
+        channelName = 'Prayer Reminders (sound only)';
+        soundResource = reminderChimeResourceName;
+      }
     } else {
       channelId = 'prayer_reminders_chime_silent';
       channelName = 'Prayer Reminders (silent)';
+      soundResource = null;
     }
 
     return NotificationDetails(
@@ -122,10 +141,8 @@ class NotificationService {
         importance: Importance.high,
         priority: Priority.high,
         playSound: soundEnabled,
-        sound: soundEnabled
-            ? const RawResourceAndroidNotificationSound(
-                reminderChimeResourceName,
-              )
+        sound: soundEnabled && soundResource != null
+            ? RawResourceAndroidNotificationSound(soundResource)
             : null,
         enableVibration: vibrationEnabled,
         vibrationPattern: vibrationEnabled ? _reminderVibrationPattern() : null,
@@ -260,6 +277,7 @@ class NotificationService {
               body: '$locationName - It is time for $displayName prayer.',
               vibrationEnabled: effectiveVibration,
               soundEnabled: effectiveSound,
+              adhanEnabled: setting.adhanEnabled && effectiveSound,
             ),
           );
         }
@@ -277,11 +295,10 @@ class NotificationService {
                     '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
+                adhanEnabled: false,
               ),
             );
           } else if (isTodayDay && prayerTime.isAfter(now)) {
-            // Catch-up reminder when user enables "before" inside the active
-            // pre-prayer window (beforeTime already passed).
             notifications.add(
               _ReminderNotification(
                 fireAt: now.add(const Duration(seconds: 5)),
@@ -290,6 +307,7 @@ class NotificationService {
                     '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
+                adhanEnabled: false,
               ),
             );
           }
@@ -308,6 +326,7 @@ class NotificationService {
                     '$locationName - It has been ${setting.minutesAfter} min since $displayName.',
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
+                adhanEnabled: false,
               ),
             );
           }
@@ -324,6 +343,7 @@ class NotificationService {
       final notificationDetails = _reminderNotificationDetails(
         vibrationEnabled: item.vibrationEnabled,
         soundEnabled: item.soundEnabled,
+        adhanEnabled: item.adhanEnabled,
       );
 
       final payload = jsonEncode({
@@ -394,6 +414,7 @@ class _ReminderNotification {
     required this.body,
     required this.vibrationEnabled,
     required this.soundEnabled,
+    required this.adhanEnabled,
   });
 
   final DateTime fireAt;
@@ -401,4 +422,5 @@ class _ReminderNotification {
   final String body;
   final bool vibrationEnabled;
   final bool soundEnabled;
+  final bool adhanEnabled;
 }

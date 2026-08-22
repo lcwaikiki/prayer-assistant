@@ -107,6 +107,7 @@
   "reminderAlertSubtitle": "Nécessite aussi que l'interrupteur correspondant soit activé dans Préférences pour alerter réellement.",
   "vibrateChip": "Vibrer",
   "soundChip": "Son",
+  "adhanChip": "Adhan",
   "remindBeforePrayerTitle": "Me rappeler avant la prière",
   "remindAfterPrayerTitle": "Me rappeler après la prière",
   "minutesValue": "{minutes} min",

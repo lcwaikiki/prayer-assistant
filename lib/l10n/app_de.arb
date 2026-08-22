@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "Gebetszeiten",
   "datesCalendarTab": "Kalender",
   "undo": "Rückgängig",
-  "calendarReminderDeleted": "\"{title}\" gelöscht"
+  "calendarReminderDeleted": "\"{title}\" gelöscht",
+  "verseOfTheDay": "Vers des Tages",
+  "hadithOfTheDay": "Hadith des Tages",
+  "hisnAlMuslimTitle": "Hisn al-Muslim (Bittgebete)",
+  "morningAdhkar": "Morgendliche Adhkar",
+  "eveningAdhkar": "Abendliche Adhkar",
+  "afterPrayerAdhkar": "Nach dem Gebet",
+  "sleepingAdhkar": "Vor dem Schlafen",
+  "dailyLifeDuas": "Tägliche Bittgebete",
+  "shareWisdom": "Teilen",
+  "copyText": "Kopieren",
+  "copiedToClipboard": "In Zwischenablage kopiert",
+  "searchSupplicationsHint": "Bittgebete suchen...",
+  "noSupplicationsFound": "Keine Bittgebete gefunden",
+  "completed": "Abgeschlossen",
+  "tapToCount": "Tippen zum Zählen",
+  "tabAll": "Alle"
 }
+
+

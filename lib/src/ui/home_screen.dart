@@ -12,6 +12,9 @@ import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import '../supplications/screens/supplications_screen.dart';
+import '../supplications/services/wisdom_service.dart';
+import '../supplications/widgets/daily_wisdom_card.dart';
 import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
 
@@ -35,13 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (!mounted) {
         return;
       }
       setState(() => _now = DateTime.now());
     });
   }
+
 
   @override
   void dispose() {
@@ -51,6 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dailyWisdom = WisdomService.instance.getWisdomForDate(_now);
+
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
         final selected = controller.selectedLocation;
@@ -130,6 +136,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           IconButton(
                             visualDensity: VisualDensity.compact,
+                            tooltip: context.l10n.hisnAlMuslimTitle,
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const SupplicationsScreen(),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.menu_book_outlined),
+                          ),
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
                             tooltip: context.l10n.shareTodayTimes,
                             onPressed: () {
                               final text = buildSharePrayerTimesText(
@@ -180,56 +198,57 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 10),
                       if (nextPrayer != null)
                         _NextPrayerBanner(info: nextPrayer),
+                      if (dailyWisdom != null) ...[
+                        const SizedBox(height: 10),
+                        DailyWisdomCard(wisdom: dailyWisdom),
+                      ],
                       const SizedBox(height: 10),
                       if (upcoming.isNotEmpty) ...[
                         _UpcomingRemindersCard(entries: upcoming),
                         const SizedBox(height: 10),
                       ],
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          child: Column(
-                            children: [
-                              for (final entry in prayerOrder.indexed) ...[
-                                if (entry.$1 > 0) const Divider(height: 1),
-                                Expanded(
-                                  child: _CompactPrayerRow(
-                                    name: entry.$2,
-                                    value: prayers[entry.$2] ?? '--:--',
-                                    reminderSetting: controller.reminderFor(
-                                      entry.$2,
-                                    ),
-                                    isNext: entry.$2 == nextPrayer?.name,
-                                    isCompleted: controller.isPrayerCompleted(
-                                      entry.$2,
-                                      day.date,
-                                    ),
-                                    onTap: () async {
-                                      await Navigator.of(context).push(
-                                        MaterialPageRoute<void>(
-                                          builder: (_) =>
-                                              ReminderSettingsScreen(
-                                                prayerName: entry.$2,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    onToggleReminder: () =>
-                                        controller.updateReminderSetting(
-                                          prayer: entry.$2,
-                                          notifyOnTime: !controller
-                                              .reminderFor(entry.$2)
-                                              .notifyOnTime,
-                                        ),
-                                    onToggleCompleted: () =>
-                                        controller.togglePrayerCompletion(
-                                          entry.$2,
-                                        ),
-                                  ),
+
+                      Card(
+                        margin: EdgeInsets.zero,
+                        child: Column(
+                          children: [
+                            for (final entry in prayerOrder.indexed) ...[
+                              if (entry.$1 > 0) const Divider(height: 1),
+                              _CompactPrayerRow(
+                                name: entry.$2,
+                                value: prayers[entry.$2] ?? '--:--',
+                                reminderSetting: controller.reminderFor(
+                                  entry.$2,
                                 ),
-                              ],
+                                isNext: entry.$2 == nextPrayer?.name,
+                                isCompleted: controller.isPrayerCompleted(
+                                  entry.$2,
+                                  day.date,
+                                ),
+                                onTap: () async {
+                                  await Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) =>
+                                          ReminderSettingsScreen(
+                                            prayerName: entry.$2,
+                                          ),
+                                    ),
+                                  );
+                                },
+                                onToggleReminder: () =>
+                                    controller.updateReminderSetting(
+                                      prayer: entry.$2,
+                                      notifyOnTime: !controller
+                                          .reminderFor(entry.$2)
+                                          .notifyOnTime,
+                                    ),
+                                onToggleCompleted: () =>
+                                    controller.togglePrayerCompletion(
+                                      entry.$2,
+                                    ),
+                              ),
                             ],
-                          ),
+                          ],
                         ),
                       ),
                     ],
@@ -239,6 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           },
         );
+
       },
     );
   }

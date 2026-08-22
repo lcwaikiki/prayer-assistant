@@ -197,7 +197,9 @@ void main() {
         notifyAfter: true,
         vibrationEnabled: false,
         soundEnabled: true,
+        adhanEnabled: false,
       );
+
 
       final restored = ReminderSetting.fromJson(setting.toJson());
 
@@ -300,7 +302,9 @@ void main() {
         notifyAfter: true,
         vibrationEnabled: false,
         soundEnabled: true,
+        adhanEnabled: false,
       );
+
 
       final current = ReminderSetting.ensureCurrent(base);
 

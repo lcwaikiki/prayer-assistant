@@ -572,4 +572,52 @@ class AppLocalizationsZh extends AppLocalizations {
   String calendarReminderDeleted(Object title) {
     return '已删除“$title”';
   }
+
+  @override
+  String get verseOfTheDay => '每日经文';
+
+  @override
+  String get hadithOfTheDay => '每日圣训';
+
+  @override
+  String get hisnAlMuslimTitle => '穆斯林的堡垒 (祈祷与赞词)';
+
+  @override
+  String get morningAdhkar => '晨间赞词';
+
+  @override
+  String get eveningAdhkar => '晚间赞词';
+
+  @override
+  String get afterPrayerAdhkar => '拜后赞词';
+
+  @override
+  String get sleepingAdhkar => '睡前祈祷';
+
+  @override
+  String get dailyLifeDuas => '日常祈祷';
+
+  @override
+  String get shareWisdom => '分享';
+
+  @override
+  String get copyText => '复制';
+
+  @override
+  String get copiedToClipboard => '已复制到剪贴板';
+
+  @override
+  String get searchSupplicationsHint => '搜索祈祷...';
+
+  @override
+  String get noSupplicationsFound => '未找到祈祷';
+
+  @override
+  String get completed => '已完成';
+
+  @override
+  String get tapToCount => '点击计数';
+
+  @override
+  String get tabAll => '全部';
 }

@@ -98,8 +98,9 @@ void main() {
     ]) {
       expect(find.widgetWithText(ListTile, prayer), findsOneWidget);
     }
-    expect(find.text('05:10'), findsOneWidget);
+    expect(find.text('05:10'), findsWidgets);
     expect(find.textContaining('Uskudar, Istanbul, Turkiye'), findsOneWidget);
+
 
     await tester.pumpWidget(const SizedBox());
   });

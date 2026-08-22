@@ -148,8 +148,16 @@ class TestHarness {
       () => database.loadShowSecondaryCalendarDate(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadPrayerCompletions(),
+    ).thenAnswer((_) async => const <String, List<String>>{});
+    when(
+      () => database.savePrayerCompletions(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadCalendarReminders(),
     ).thenAnswer((_) async => const []);
+
+
     when(
       () => database.hasSufficientYearData(
         districtId: any(named: 'districtId'),

@@ -593,4 +593,52 @@ class AppLocalizationsFr extends AppLocalizations {
   String calendarReminderDeleted(Object title) {
     return '« $title » supprimé';
   }
+
+  @override
+  String get verseOfTheDay => 'Verset du jour';
+
+  @override
+  String get hadithOfTheDay => 'Hadith du jour';
+
+  @override
+  String get hisnAlMuslimTitle => 'Hisn al-Muslim (Invocations)';
+
+  @override
+  String get morningAdhkar => 'Invocations du matin';
+
+  @override
+  String get eveningAdhkar => 'Invocations du soir';
+
+  @override
+  String get afterPrayerAdhkar => 'Après la prière';
+
+  @override
+  String get sleepingAdhkar => 'Avant de dormir';
+
+  @override
+  String get dailyLifeDuas => 'Invocations du quotidien';
+
+  @override
+  String get shareWisdom => 'Partager';
+
+  @override
+  String get copyText => 'Copier';
+
+  @override
+  String get copiedToClipboard => 'Copié dans le presse-papiers';
+
+  @override
+  String get searchSupplicationsHint => 'Rechercher une invocation...';
+
+  @override
+  String get noSupplicationsFound => 'Aucune invocation trouvée';
+
+  @override
+  String get completed => 'Terminé';
+
+  @override
+  String get tapToCount => 'Appuyer pour compter';
+
+  @override
+  String get tabAll => 'Tous';
 }

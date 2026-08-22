@@ -246,5 +246,23 @@
     "placeholders": {
       "title": {}
     }
-  }
+  },
+  "verseOfTheDay": "Verse of the Day",
+  "hadithOfTheDay": "Hadith of the Day",
+  "hisnAlMuslimTitle": "Hisn al-Muslim",
+  "morningAdhkar": "Morning Adhkar",
+  "eveningAdhkar": "Evening Adhkar",
+  "afterPrayerAdhkar": "After Prayer",
+  "sleepingAdhkar": "Before Sleeping",
+  "dailyLifeDuas": "Daily Life Duas",
+  "shareWisdom": "Share",
+  "copyText": "Copy",
+  "copiedToClipboard": "Copied to clipboard",
+  "searchSupplicationsHint": "Search supplications...",
+  "noSupplicationsFound": "No supplications found",
+  "completed": "Completed",
+  "tapToCount": "Tap to count",
+  "tabAll": "All"
 }
+
+

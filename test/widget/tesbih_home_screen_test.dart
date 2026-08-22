@@ -62,15 +62,23 @@ void main() {
   });
 
   testWidgets('shows aggregated daily history stats', (tester) async {
+    final now = DateTime.now();
+    final todayKey = '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+    final fiveDaysAgo = now.subtract(const Duration(days: 3));
+    final fiveDaysKey = '${fiveDaysAgo.year.toString().padLeft(4, '0')}-${fiveDaysAgo.month.toString().padLeft(2, '0')}-${fiveDaysAgo.day.toString().padLeft(2, '0')}';
+    final old = now.subtract(const Duration(days: 20));
+    final oldKey = '${old.year.toString().padLeft(4, '0')}-${old.month.toString().padLeft(2, '0')}-${old.day.toString().padLeft(2, '0')}';
+
     final harness = TestHarness.create();
     harness.itemRepository = ItemRepository.memory([_item(), _item(id: 'b')]);
     harness.itemHistoryRepository = ItemHistoryRepository.memory([
-      const DailyItemStat(itemId: 'a', dateKey: '2026-08-17', count: 5),
-      const DailyItemStat(itemId: 'b', dateKey: '2026-08-17', count: 3),
-      const DailyItemStat(itemId: 'a', dateKey: '2026-08-12', count: 4),
-      const DailyItemStat(itemId: 'a', dateKey: '2026-08-01', count: 4),
+      DailyItemStat(itemId: 'a', dateKey: todayKey, count: 5),
+      DailyItemStat(itemId: 'b', dateKey: todayKey, count: 3),
+      DailyItemStat(itemId: 'a', dateKey: fiveDaysKey, count: 4),
+      DailyItemStat(itemId: 'a', dateKey: oldKey, count: 4),
     ]);
     await harness.initialize();
+
 
     await pumpWithHarness(tester, harness, const TesbihHomeScreen());
 

@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "اوقات نماز",
   "datesCalendarTab": "تقویم",
   "undo": "بازگردانی",
-  "calendarReminderDeleted": "«{title}» حذف شد"
+  "calendarReminderDeleted": "«{title}» حذف شد",
+  "verseOfTheDay": "آیه روز",
+  "hadithOfTheDay": "حدیث روز",
+  "hisnAlMuslimTitle": "حصن المسلم (ادعیه و اذکار)",
+  "morningAdhkar": "اذکار صبحگاه",
+  "eveningAdhkar": "اذکار شامگاه",
+  "afterPrayerAdhkar": "اذکار بعد از نماز",
+  "sleepingAdhkar": "اذکار قبل از خواب",
+  "dailyLifeDuas": "دعاهای روزمره",
+  "shareWisdom": "اشتراک‌گذاری",
+  "copyText": "کپی",
+  "copiedToClipboard": "در حافظه کپی شد",
+  "searchSupplicationsHint": "جستجوی دعا...",
+  "noSupplicationsFound": "دعایی یافت نشد",
+  "completed": "تکمیل شد",
+  "tapToCount": "برای شمارش لمس کنید",
+  "tabAll": "همه"
 }
+
+

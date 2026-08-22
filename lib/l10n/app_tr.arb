@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "Namaz Vakitleri",
   "datesCalendarTab": "Takvim",
   "undo": "Geri Al",
-  "calendarReminderDeleted": "\"{title}\" silindi"
+  "calendarReminderDeleted": "\"{title}\" silindi",
+  "verseOfTheDay": "Günün Ayeti",
+  "hadithOfTheDay": "Günün Hadisi",
+  "hisnAlMuslimTitle": "Hısnü'l-Müslim (Dualar)",
+  "morningAdhkar": "Sabah Duaları",
+  "eveningAdhkar": "Akşam Duaları",
+  "afterPrayerAdhkar": "Namaz Sonrası",
+  "sleepingAdhkar": "Uyku Öncesi",
+  "dailyLifeDuas": "Günlük Dualar",
+  "shareWisdom": "Paylaş",
+  "copyText": "Kopyala",
+  "copiedToClipboard": "Panoya kopyalandı",
+  "searchSupplicationsHint": "Dua ara...",
+  "noSupplicationsFound": "Dua bulunamadı",
+  "completed": "Tamamlandı",
+  "tapToCount": "Sarmak için dokun",
+  "tabAll": "Tümü"
 }
+
+

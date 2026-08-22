@@ -12,8 +12,9 @@ void main() {
   test('non-arabic locales return transliterated names', () {
     final month = HijriMonth.fromDate(DateTime(2026, 8, 17));
     expect(month.longMonthName('en'), "Rabi' Al-Awwal");
-    expect(month.longMonthName('tr'), "Rabi' Al-Awwal");
+    expect(month.longMonthName('tr'), "REBİÜLEVVEL");
   });
+
 
   test('switching languages back and forth stays consistent', () {
     final month = HijriMonth.fromDate(DateTime(2026, 8, 17));

@@ -572,4 +572,52 @@ class AppLocalizationsJa extends AppLocalizations {
   String calendarReminderDeleted(Object title) {
     return '「$title」を削除しました';
   }
+
+  @override
+  String get verseOfTheDay => '今日のクルアーン節';
+
+  @override
+  String get hadithOfTheDay => '今日のハディース';
+
+  @override
+  String get hisnAlMuslimTitle => 'ムスリムの砦 (祈り・ズィクル)';
+
+  @override
+  String get morningAdhkar => '朝のズィクル';
+
+  @override
+  String get eveningAdhkar => '夕方のズィクル';
+
+  @override
+  String get afterPrayerAdhkar => '礼拝後のズィクル';
+
+  @override
+  String get sleepingAdhkar => '就寝前の祈り';
+
+  @override
+  String get dailyLifeDuas => '日常の祈り';
+
+  @override
+  String get shareWisdom => '共有';
+
+  @override
+  String get copyText => 'コピー';
+
+  @override
+  String get copiedToClipboard => 'クリップボードにコピーしました';
+
+  @override
+  String get searchSupplicationsHint => '祈りを検索...';
+
+  @override
+  String get noSupplicationsFound => '祈りが見つかりません';
+
+  @override
+  String get completed => '完了';
+
+  @override
+  String get tapToCount => 'タップして数える';
+
+  @override
+  String get tabAll => 'すべて';
 }

@@ -1191,6 +1191,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'\"{title}\" deleted'**
   String calendarReminderDeleted(Object title);
+
+  /// No description provided for @verseOfTheDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse of the Day'**
+  String get verseOfTheDay;
+
+  /// No description provided for @hadithOfTheDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Hadith of the Day'**
+  String get hadithOfTheDay;
+
+  /// No description provided for @hisnAlMuslimTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hisn al-Muslim'**
+  String get hisnAlMuslimTitle;
+
+  /// No description provided for @morningAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Adhkar'**
+  String get morningAdhkar;
+
+  /// No description provided for @eveningAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening Adhkar'**
+  String get eveningAdhkar;
+
+  /// No description provided for @afterPrayerAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'After Prayer'**
+  String get afterPrayerAdhkar;
+
+  /// No description provided for @sleepingAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Before Sleeping'**
+  String get sleepingAdhkar;
+
+  /// No description provided for @dailyLifeDuas.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Life Duas'**
+  String get dailyLifeDuas;
+
+  /// No description provided for @shareWisdom.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareWisdom;
+
+  /// No description provided for @copyText.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copyText;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @searchSupplicationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search supplications...'**
+  String get searchSupplicationsHint;
+
+  /// No description provided for @noSupplicationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No supplications found'**
+  String get noSupplicationsFound;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @tapToCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to count'**
+  String get tapToCount;
+
+  /// No description provided for @tabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get tabAll;
 }
 
 class _AppLocalizationsDelegate

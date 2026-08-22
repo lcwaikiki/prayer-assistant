@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "Waktu Salat",
   "datesCalendarTab": "Kalender",
   "undo": "Batalkan",
-  "calendarReminderDeleted": "\"{title}\" dihapus"
+  "calendarReminderDeleted": "\"{title}\" dihapus",
+  "verseOfTheDay": "Ayat Hari Ini",
+  "hadithOfTheDay": "Hadis Hari Ini",
+  "hisnAlMuslimTitle": "Hisnul Muslim (Doa & Dzikir)",
+  "morningAdhkar": "Dzikir Pagi",
+  "eveningAdhkar": "Dzikir Petang",
+  "afterPrayerAdhkar": "Dzikir Setelah Salat",
+  "sleepingAdhkar": "Sebelum Tidur",
+  "dailyLifeDuas": "Doa Sehari-hari",
+  "shareWisdom": "Bagikan",
+  "copyText": "Salin",
+  "copiedToClipboard": "Disalin ke papan klip",
+  "searchSupplicationsHint": "Cari doa...",
+  "noSupplicationsFound": "Doa tidak ditemukan",
+  "completed": "Selesai",
+  "tapToCount": "Ketuk untuk menghitung",
+  "tabAll": "Semua"
 }
+
+

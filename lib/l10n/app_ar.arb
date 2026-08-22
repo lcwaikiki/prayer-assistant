@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "أوقات الصلاة",
   "datesCalendarTab": "التقويم",
   "undo": "تراجع",
-  "calendarReminderDeleted": "\"{title}\" تم الحذف"
+  "calendarReminderDeleted": "\"{title}\" تم الحذف",
+  "verseOfTheDay": "آية اليوم",
+  "hadithOfTheDay": "حديث اليوم",
+  "hisnAlMuslimTitle": "حصن المسلم (الأذكار)",
+  "morningAdhkar": "أذكار الصباح",
+  "eveningAdhkar": "أذكار المساء",
+  "afterPrayerAdhkar": "أذكار بعد الصلاة",
+  "sleepingAdhkar": "أذكار النوم",
+  "dailyLifeDuas": "أدعية يومية",
+  "shareWisdom": "مشاركة",
+  "copyText": "نسخ",
+  "copiedToClipboard": "تم النسخ إلى الحافظة",
+  "searchSupplicationsHint": "البحث في الأذكار...",
+  "noSupplicationsFound": "لم يتم العثور على أذكار",
+  "completed": "مكتمل",
+  "tapToCount": "اضغط للتسبيح",
+  "tabAll": "الكل"
 }
+
+

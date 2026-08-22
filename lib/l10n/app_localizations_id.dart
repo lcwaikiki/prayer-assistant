@@ -590,4 +590,52 @@ class AppLocalizationsId extends AppLocalizations {
   String calendarReminderDeleted(Object title) {
     return '\"$title\" dihapus';
   }
+
+  @override
+  String get verseOfTheDay => 'Ayat Hari Ini';
+
+  @override
+  String get hadithOfTheDay => 'Hadis Hari Ini';
+
+  @override
+  String get hisnAlMuslimTitle => 'Hisnul Muslim (Doa & Dzikir)';
+
+  @override
+  String get morningAdhkar => 'Dzikir Pagi';
+
+  @override
+  String get eveningAdhkar => 'Dzikir Petang';
+
+  @override
+  String get afterPrayerAdhkar => 'Dzikir Setelah Salat';
+
+  @override
+  String get sleepingAdhkar => 'Sebelum Tidur';
+
+  @override
+  String get dailyLifeDuas => 'Doa Sehari-hari';
+
+  @override
+  String get shareWisdom => 'Bagikan';
+
+  @override
+  String get copyText => 'Salin';
+
+  @override
+  String get copiedToClipboard => 'Disalin ke papan klip';
+
+  @override
+  String get searchSupplicationsHint => 'Cari doa...';
+
+  @override
+  String get noSupplicationsFound => 'Doa tidak ditemukan';
+
+  @override
+  String get completed => 'Selesai';
+
+  @override
+  String get tapToCount => 'Ketuk untuk menghitung';
+
+  @override
+  String get tabAll => 'Semua';
 }

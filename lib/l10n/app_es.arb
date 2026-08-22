@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "Horarios de oración",
   "datesCalendarTab": "Calendario",
   "undo": "Deshacer",
-  "calendarReminderDeleted": "\"{title}\" eliminado"
+  "calendarReminderDeleted": "\"{title}\" eliminado",
+  "verseOfTheDay": "Versículo del día",
+  "hadithOfTheDay": "Hadiz del día",
+  "hisnAlMuslimTitle": "Hisn al-Muslim (Súplicas)",
+  "morningAdhkar": "Adhkar de la mañana",
+  "eveningAdhkar": "Adhkar de la tarde",
+  "afterPrayerAdhkar": "Tras la oración",
+  "sleepingAdhkar": "Antes de dormir",
+  "dailyLifeDuas": "Súplicas cotidianas",
+  "shareWisdom": "Compartir",
+  "copyText": "Copiar",
+  "copiedToClipboard": "Copiado al portapapeles",
+  "searchSupplicationsHint": "Buscar súplicas...",
+  "noSupplicationsFound": "No se encontraron súplicas",
+  "completed": "Completado",
+  "tapToCount": "Toca para contar",
+  "tabAll": "Todos"
 }
+
+

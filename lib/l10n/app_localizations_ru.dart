@@ -592,4 +592,52 @@ class AppLocalizationsRu extends AppLocalizations {
   String calendarReminderDeleted(Object title) {
     return '«$title» удалено';
   }
+
+  @override
+  String get verseOfTheDay => 'Аят дня';
+
+  @override
+  String get hadithOfTheDay => 'Хадис дня';
+
+  @override
+  String get hisnAlMuslimTitle => 'Крепость мусульманина (Мольбы)';
+
+  @override
+  String get morningAdhkar => 'Утренние азкары';
+
+  @override
+  String get eveningAdhkar => 'Вечерние азкары';
+
+  @override
+  String get afterPrayerAdhkar => 'После намаза';
+
+  @override
+  String get sleepingAdhkar => 'Перед сном';
+
+  @override
+  String get dailyLifeDuas => 'Повседневные дуа';
+
+  @override
+  String get shareWisdom => 'Поделиться';
+
+  @override
+  String get copyText => 'Копировать';
+
+  @override
+  String get copiedToClipboard => 'Скопировано в буфер обмена';
+
+  @override
+  String get searchSupplicationsHint => 'Поиск мольбы...';
+
+  @override
+  String get noSupplicationsFound => 'Мольбы не найдены';
+
+  @override
+  String get completed => 'Завершено';
+
+  @override
+  String get tapToCount => 'Нажмите для счета';
+
+  @override
+  String get tabAll => 'Все';
 }

@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "礼拝時間",
   "datesCalendarTab": "カレンダー",
   "undo": "元に戻す",
-  "calendarReminderDeleted": "「{title}」を削除しました"
+  "calendarReminderDeleted": "「{title}」を削除しました",
+  "verseOfTheDay": "今日のクルアーン節",
+  "hadithOfTheDay": "今日のハディース",
+  "hisnAlMuslimTitle": "ムスリムの砦 (祈り・ズィクル)",
+  "morningAdhkar": "朝のズィクル",
+  "eveningAdhkar": "夕方のズィクル",
+  "afterPrayerAdhkar": "礼拝後のズィクル",
+  "sleepingAdhkar": "就寝前の祈り",
+  "dailyLifeDuas": "日常の祈り",
+  "shareWisdom": "共有",
+  "copyText": "コピー",
+  "copiedToClipboard": "クリップボードにコピーしました",
+  "searchSupplicationsHint": "祈りを検索...",
+  "noSupplicationsFound": "祈りが見つかりません",
+  "completed": "完了",
+  "tapToCount": "タップして数える",
+  "tabAll": "すべて"
 }
+
+

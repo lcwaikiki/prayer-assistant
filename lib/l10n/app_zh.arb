@@ -191,5 +191,23 @@
   "datesPrayerTimesTab": "礼拜时间",
   "datesCalendarTab": "日历",
   "undo": "撤销",
-  "calendarReminderDeleted": "已删除“{title}”"
+  "calendarReminderDeleted": "已删除“{title}”",
+  "verseOfTheDay": "每日经文",
+  "hadithOfTheDay": "每日圣训",
+  "hisnAlMuslimTitle": "穆斯林的堡垒 (祈祷与赞词)",
+  "morningAdhkar": "晨间赞词",
+  "eveningAdhkar": "晚间赞词",
+  "afterPrayerAdhkar": "拜后赞词",
+  "sleepingAdhkar": "睡前祈祷",
+  "dailyLifeDuas": "日常祈祷",
+  "shareWisdom": "分享",
+  "copyText": "复制",
+  "copiedToClipboard": "已复制到剪贴板",
+  "searchSupplicationsHint": "搜索祈祷...",
+  "noSupplicationsFound": "未找到祈祷",
+  "completed": "已完成",
+  "tapToCount": "点击计数",
+  "tabAll": "全部"
 }
+
+

@@ -18,6 +18,7 @@ import 'src/services/location_resolver.dart';
 import 'src/services/notification_service.dart';
 import 'src/services/notification_tap_handler.dart';
 import 'src/services/widget_bridge_service.dart';
+import 'src/supplications/services/wisdom_service.dart';
 import 'src/tesbihat/data/item_history_repository.dart';
 import 'src/tesbihat/data/item_repository.dart';
 import 'src/tesbihat/l10n/tesbihat_localizations.dart';
@@ -30,7 +31,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
 
+  await WisdomService.instance.init();
+
   await Hive.initFlutter();
+
   final itemsBox = await Hive.openBox<dynamic>('items_box');
   final itemHistoryBox = await Hive.openBox<dynamic>('item_history_box');
 

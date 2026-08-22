@@ -61,7 +61,9 @@ void main() {
           notifyAfter: true,
           vibrationEnabled: false,
           soundEnabled: true,
+          adhanEnabled: false,
         ),
+
         'Yatsi': ReminderSetting.defaults(),
       };
 

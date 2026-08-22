@@ -245,5 +245,23 @@
     "placeholders": {
       "title": {}
     }
-  }
+  },
+  "verseOfTheDay": "Аят дня",
+  "hadithOfTheDay": "Хадис дня",
+  "hisnAlMuslimTitle": "Крепость мусульманина (Мольбы)",
+  "morningAdhkar": "Утренние азкары",
+  "eveningAdhkar": "Вечерние азкары",
+  "afterPrayerAdhkar": "После намаза",
+  "sleepingAdhkar": "Перед сном",
+  "dailyLifeDuas": "Повседневные дуа",
+  "shareWisdom": "Поделиться",
+  "copyText": "Копировать",
+  "copiedToClipboard": "Скопировано в буфер обмена",
+  "searchSupplicationsHint": "Поиск мольбы...",
+  "noSupplicationsFound": "Мольбы не найдены",
+  "completed": "Завершено",
+  "tapToCount": "Нажмите для счета",
+  "tabAll": "Все"
 }
+
+

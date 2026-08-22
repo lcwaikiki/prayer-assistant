@@ -11,6 +11,12 @@ import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_reminder_form_screen.dart';
 
+String _shortHijriMonth(DateTime date, String languageCode) {
+  final month = HijriMonth.fromDate(date);
+  final full = month.longMonthName(languageCode);
+  return full.length > 3 ? '${full.substring(0, 3)}.' : full;
+}
+
 /// Full-screen wrapper around [HijriCalendarView], used when the calendar
 /// is pushed on its own (e.g. from a reminder notification tap) rather than
 /// embedded as a tab.
@@ -263,6 +269,8 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                           );
                           final isHoliday =
                               islamicHolidayKey(date) != null;
+                          final languageCode =
+                              Localizations.localeOf(context).languageCode;
                           return _DayCell(
                             primaryLabel:
                                 primary == CalendarPrimaryDisplay.hijri
@@ -270,10 +278,8 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                                 : date.day.toString(),
                             secondaryLabel: showSecondary
                                 ? (primary == CalendarPrimaryDisplay.hijri
-                                      ? date.day.toString()
-                                      : HijriCalendar.fromDate(date)
-                                            .hDay
-                                            .toString())
+                                      ? '${date.day} ${DateFormat.MMM(locale).format(date)}'
+                                      : '${HijriCalendar.fromDate(date).hDay} ${_shortHijriMonth(date, languageCode)}')
                                 : null,
                             isToday: isToday,
                             hasReminder: hasReminder,
@@ -374,12 +380,15 @@ class _DayCell extends StatelessWidget {
             if (secondaryLabel != null)
               Text(
                 secondaryLabel!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: isToday
                       ? colors.onPrimaryContainer
                       : (isHoliday
                           ? Colors.amber.shade700
                           : colors.onSurfaceVariant),
+                  fontSize: 9,
                 ),
               ),
             if (hasReminder)

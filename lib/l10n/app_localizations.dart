@@ -1491,6 +1491,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Share / Save'**
   String get shareOrSave;
+
+  /// No description provided for @analyticsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsTab;
+
+  /// No description provided for @currentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Streak'**
+  String get currentStreak;
+
+  /// No description provided for @longestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest Streak'**
+  String get longestStreak;
+
+  /// No description provided for @daysUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'days'**
+  String get daysUnit;
+
+  /// No description provided for @monthlyHeatmapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly Completion'**
+  String get monthlyHeatmapTitle;
+
+  /// No description provided for @completionBreakdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Breakdown'**
+  String get completionBreakdownTitle;
+
+  /// No description provided for @overallConsistency.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall Consistency'**
+  String get overallConsistency;
+
+  /// No description provided for @totalPrayersCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Prayers Logged'**
+  String get totalPrayersCompleted;
+
+  /// No description provided for @last30Days.
+  ///
+  /// In en, this message translates to:
+  /// **'Last 30 Days'**
+  String get last30Days;
+
+  /// No description provided for @allTime.
+  ///
+  /// In en, this message translates to:
+  /// **'All Time'**
+  String get allTime;
 }
 
 class _AppLocalizationsDelegate

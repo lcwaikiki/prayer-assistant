@@ -272,5 +272,15 @@
   "restoreConfirmBody": "Dies stellt Ihre Qadaa-Ziele, Gebetsverlauf, Erinnerungen und Tesbih-Daten wieder her. Fortfahren?",
   "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
   "restoreError": "Ungültiges Sicherungsdateiformat",
-  "shareOrSave": "Teilen / Speichern"
+  "shareOrSave": "Teilen / Speichern",
+  "analyticsTab": "Analysen",
+  "currentStreak": "Aktuelle Serie",
+  "longestStreak": "Längste Serie",
+  "daysUnit": "Tage",
+  "monthlyHeatmapTitle": "Monatliche Erfüllung",
+  "completionBreakdownTitle": "Gebetsaufschlüsselung",
+  "overallConsistency": "Gesamtkonsistenz",
+  "totalPrayersCompleted": "Gesamte Gebete",
+  "last30Days": "Letzte 30 Tage",
+  "allTime": "Gesamter Zeitraum"
 }

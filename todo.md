@@ -22,11 +22,12 @@ Track which prayers the user has completed each day.
 - [x] Highlight holiday cells on calendar grid (amber border and tint)
 - [x] Show holiday name in day detail sheet with star icon
 
-## 4. Prayer Consistency Analytics & Streaks
+## 4. Prayer Consistency Analytics & Streaks [DONE]
 Visual dashboard and insights into prayer completion habits.
-- [ ] Current & longest streak counters
-- [ ] Monthly prayer completion heatmap grid
-- [ ] Completion rate breakdown by prayer (Fajr, Dhuhr, Asr, Maghrib, Isha)
+- [x] Current & longest streak counters
+- [x] Monthly prayer completion heatmap grid
+- [x] Completion rate breakdown by prayer (Fajr, Dhuhr, Asr, Maghrib, Isha)
+
 
 ## 5. Kaza (Qadaa) Missed Prayer Calculator & Tracker [DONE]
 Track missed past prayers that need to be made up.

@@ -5,17 +5,18 @@ import '../../l10n/app_localizations.dart';
 
 extension PrayerNamesL10n on AppLocalizations {
   String prayerNameLabel(String key) {
-    return switch (key) {
-      'Imsak' => imsak,
-      'Gunes' => gunes,
-      'Ogle' => ogle,
-      'Ikindi' => ikindi,
-      'Aksam' => aksam,
-      'Yatsi' => yatsi,
+    return switch (key.toLowerCase()) {
+      'imsak' || 'fajr' => imsak,
+      'gunes' || 'sunrise' => gunes,
+      'ogle' || 'dhuhr' => ogle,
+      'ikindi' || 'asr' => ikindi,
+      'aksam' || 'maghrib' => aksam,
+      'yatsi' || 'isha' => yatsi,
       _ => key,
     };
   }
 }
+
 
 String localizedPrayerName(Locale? locale, String key) {
   final l10n = lookupAppLocalizations(locale ?? PlatformDispatcher.instance.locale);

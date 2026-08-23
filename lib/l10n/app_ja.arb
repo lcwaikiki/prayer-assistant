@@ -272,5 +272,15 @@
   "restoreConfirmBody": "カザー目標、礼拝履歴、リマインダー、テスビーハットデータが復元されます。続行しますか？",
   "restoreSuccess": "データが正常に復元されました！",
   "restoreError": "無効なバックアップファイル形式です",
-  "shareOrSave": "共有 / 保存"
+  "shareOrSave": "共有 / 保存",
+  "analyticsTab": "分析",
+  "currentStreak": "現在の継続",
+  "longestStreak": "最長継続",
+  "daysUnit": "日",
+  "monthlyHeatmapTitle": "月間達成状況",
+  "completionBreakdownTitle": "礼拝の内訳",
+  "overallConsistency": "全体の継続率",
+  "totalPrayersCompleted": "記録された総礼拝数",
+  "last30Days": "過去30日間",
+  "allTime": "全期間"
 }

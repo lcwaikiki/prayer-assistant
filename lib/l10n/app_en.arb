@@ -330,5 +330,15 @@
   "shareOrSave": "Share / Save",
   "@shareOrSave": {
     "description": "Button label to share or save exported file"
-  }
+  },
+  "analyticsTab": "Analytics",
+  "currentStreak": "Current Streak",
+  "longestStreak": "Longest Streak",
+  "daysUnit": "days",
+  "monthlyHeatmapTitle": "Monthly Completion",
+  "completionBreakdownTitle": "Prayer Breakdown",
+  "overallConsistency": "Overall Consistency",
+  "totalPrayersCompleted": "Total Prayers Logged",
+  "last30Days": "Last 30 Days",
+  "allTime": "All Time"
 }

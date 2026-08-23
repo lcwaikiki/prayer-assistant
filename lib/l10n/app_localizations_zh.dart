@@ -734,4 +734,34 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get shareOrSave => '分享 / 保存';
+
+  @override
+  String get analyticsTab => '分析';
+
+  @override
+  String get currentStreak => '当前连续';
+
+  @override
+  String get longestStreak => '最长连续';
+
+  @override
+  String get daysUnit => '天';
+
+  @override
+  String get monthlyHeatmapTitle => '月度完成度';
+
+  @override
+  String get completionBreakdownTitle => '礼拜明细';
+
+  @override
+  String get overallConsistency => '整体一致性';
+
+  @override
+  String get totalPrayersCompleted => '已记录礼拜总数';
+
+  @override
+  String get last30Days => '最近30天';
+
+  @override
+  String get allTime => '所有时间';
 }

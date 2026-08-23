@@ -757,4 +757,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get shareOrSave => 'Paylaş / Kaydet';
+
+  @override
+  String get analyticsTab => 'Analiz';
+
+  @override
+  String get currentStreak => 'Mevcut Seri';
+
+  @override
+  String get longestStreak => 'En Uzun Seri';
+
+  @override
+  String get daysUnit => 'gün';
+
+  @override
+  String get monthlyHeatmapTitle => 'Aylık Tamamlama';
+
+  @override
+  String get completionBreakdownTitle => 'Namaz Dağılımı';
+
+  @override
+  String get overallConsistency => 'Genel İstikrar';
+
+  @override
+  String get totalPrayersCompleted => 'Toplam Kılınan Namaz';
+
+  @override
+  String get last30Days => 'Son 30 Gün';
+
+  @override
+  String get allTime => 'Tüm Zamanlar';
 }

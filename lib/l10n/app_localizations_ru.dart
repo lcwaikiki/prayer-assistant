@@ -758,4 +758,34 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get shareOrSave => 'Поделиться / Сохранить';
+
+  @override
+  String get analyticsTab => 'Аналитика';
+
+  @override
+  String get currentStreak => 'Текущая серия';
+
+  @override
+  String get longestStreak => 'Рекордная серия';
+
+  @override
+  String get daysUnit => 'дней';
+
+  @override
+  String get monthlyHeatmapTitle => 'Месячный прогресс';
+
+  @override
+  String get completionBreakdownTitle => 'Статистика молитв';
+
+  @override
+  String get overallConsistency => 'Общая регулярность';
+
+  @override
+  String get totalPrayersCompleted => 'Всего совершено молитв';
+
+  @override
+  String get last30Days => 'За 30 дней';
+
+  @override
+  String get allTime => 'За всё время';
 }

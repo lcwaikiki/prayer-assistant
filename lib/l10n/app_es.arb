@@ -272,5 +272,15 @@
   "restoreConfirmBody": "Se restaurarán sus objetivos de Qadaa, historial de oración, recordatorios y Tesbihat. ¿Continuar?",
   "restoreSuccess": "¡Datos restaurados con éxito!",
   "restoreError": "Formato de archivo de respaldo no válido",
-  "shareOrSave": "Compartir / Guardar"
+  "shareOrSave": "Compartir / Guardar",
+  "analyticsTab": "Análisis",
+  "currentStreak": "Racha Actual",
+  "longestStreak": "Racha Más Larga",
+  "daysUnit": "días",
+  "monthlyHeatmapTitle": "Cumplimiento Mensual",
+  "completionBreakdownTitle": "Desglose de Oraciones",
+  "overallConsistency": "Consistencia General",
+  "totalPrayersCompleted": "Total de Oraciones",
+  "last30Days": "Últimos 30 Días",
+  "allTime": "Todo el Tiempo"
 }

@@ -756,4 +756,34 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get shareOrSave => 'Bagikan / Simpan';
+
+  @override
+  String get analyticsTab => 'Analistik';
+
+  @override
+  String get currentStreak => 'Beruntun Saat Ini';
+
+  @override
+  String get longestStreak => 'Beruntun Terpanjang';
+
+  @override
+  String get daysUnit => 'hari';
+
+  @override
+  String get monthlyHeatmapTitle => 'Penyelesaian Bulanan';
+
+  @override
+  String get completionBreakdownTitle => 'Rincian Shalat';
+
+  @override
+  String get overallConsistency => 'Konsistensi Keseluruhan';
+
+  @override
+  String get totalPrayersCompleted => 'Total Shalat Dicatat';
+
+  @override
+  String get last30Days => '30 Hari Terakhir';
+
+  @override
+  String get allTime => 'Semua Waktu';
 }

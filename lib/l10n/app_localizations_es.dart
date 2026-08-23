@@ -757,4 +757,34 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get shareOrSave => 'Compartir / Guardar';
+
+  @override
+  String get analyticsTab => 'Análisis';
+
+  @override
+  String get currentStreak => 'Racha Actual';
+
+  @override
+  String get longestStreak => 'Racha Más Larga';
+
+  @override
+  String get daysUnit => 'días';
+
+  @override
+  String get monthlyHeatmapTitle => 'Cumplimiento Mensual';
+
+  @override
+  String get completionBreakdownTitle => 'Desglose de Oraciones';
+
+  @override
+  String get overallConsistency => 'Consistencia General';
+
+  @override
+  String get totalPrayersCompleted => 'Total de Oraciones';
+
+  @override
+  String get last30Days => 'Últimos 30 Días';
+
+  @override
+  String get allTime => 'Todo el Tiempo';
 }

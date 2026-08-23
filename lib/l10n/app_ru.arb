@@ -327,5 +327,15 @@
   "restoreConfirmBody": "Будут восстановлены цели Каза, история намазов, напоминания и данные Тасбих. Продолжить?",
   "restoreSuccess": "Данные успешно восстановлены!",
   "restoreError": "Неверный формат файла резервной копии",
-  "shareOrSave": "Поделиться / Сохранить"
+  "shareOrSave": "Поделиться / Сохранить",
+  "analyticsTab": "Аналитика",
+  "currentStreak": "Текущая серия",
+  "longestStreak": "Рекордная серия",
+  "daysUnit": "дней",
+  "monthlyHeatmapTitle": "Месячный прогресс",
+  "completionBreakdownTitle": "Статистика молитв",
+  "overallConsistency": "Общая регулярность",
+  "totalPrayersCompleted": "Всего совершено молитв",
+  "last30Days": "За 30 дней",
+  "allTime": "За всё время"
 }

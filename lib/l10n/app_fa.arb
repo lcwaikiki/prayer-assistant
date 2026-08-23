@@ -272,5 +272,15 @@
   "restoreConfirmBody": "اهداف قضا، تاریخچه نماز، یادآورها و تسبیحات بازیابی خواهند شد. ادامه می‌دهید؟",
   "restoreSuccess": "داده‌ها با موفقیت بازیابی شدند!",
   "restoreError": "فرمت فایل پشتیبان نامعتبر است",
-  "shareOrSave": "اشتراک‌گذاری / ذخیره"
+  "shareOrSave": "اشتراک‌گذاری / ذخیره",
+  "analyticsTab": "تحلیل و آمار",
+  "currentStreak": "زنجیره فعلی",
+  "longestStreak": "طولانی‌ترین زنجیره",
+  "daysUnit": "روز",
+  "monthlyHeatmapTitle": "تکمیل ماهانه",
+  "completionBreakdownTitle": "تفکیک نمازها",
+  "overallConsistency": "ثبات کلی",
+  "totalPrayersCompleted": "مجموع نمازهای ثبت شده",
+  "last30Days": "۳۰ روز گذشته",
+  "allTime": "همه زمان‌ها"
 }

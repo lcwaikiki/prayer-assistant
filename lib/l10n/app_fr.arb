@@ -272,5 +272,15 @@
   "restoreConfirmBody": "Vos objectifs Qadaa, l'historique des prières, les rappels et les données Tesbihat seront restaurés. Continuer?",
   "restoreSuccess": "Données restaurées avec succès!",
   "restoreError": "Format de fichier de sauvegarde non valide",
-  "shareOrSave": "Partager / Enregistrer"
+  "shareOrSave": "Partager / Enregistrer",
+  "analyticsTab": "Analyses",
+  "currentStreak": "Série Actuelle",
+  "longestStreak": "Plus Longue Série",
+  "daysUnit": "jours",
+  "monthlyHeatmapTitle": "Suivi Mensuel",
+  "completionBreakdownTitle": "Répartition des Prières",
+  "overallConsistency": "Régularité Globale",
+  "totalPrayersCompleted": "Total Prières Enregistrées",
+  "last30Days": "30 Derniers Jours",
+  "allTime": "Tout le Temps"
 }

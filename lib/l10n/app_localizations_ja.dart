@@ -735,4 +735,34 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get shareOrSave => '共有 / 保存';
+
+  @override
+  String get analyticsTab => '分析';
+
+  @override
+  String get currentStreak => '現在の継続';
+
+  @override
+  String get longestStreak => '最長継続';
+
+  @override
+  String get daysUnit => '日';
+
+  @override
+  String get monthlyHeatmapTitle => '月間達成状況';
+
+  @override
+  String get completionBreakdownTitle => '礼拝の内訳';
+
+  @override
+  String get overallConsistency => '全体の継続率';
+
+  @override
+  String get totalPrayersCompleted => '記録された総礼拝数';
+
+  @override
+  String get last30Days => '過去30日間';
+
+  @override
+  String get allTime => '全期間';
 }

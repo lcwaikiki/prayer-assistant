@@ -272,5 +272,15 @@
   "restoreConfirmBody": "سيتم استعادة أهداف القضاء وسجل الصلاة والتذكيرات والتسبيحات. هل تريد الاستمرار؟",
   "restoreSuccess": "تمت استعادة البيانات بنجاح!",
   "restoreError": "تنسيق ملف النسخة الاحتياطية غير صالح",
-  "shareOrSave": "مشاركة / حفظ"
+  "shareOrSave": "مشاركة / حفظ",
+  "analyticsTab": "التحليلات",
+  "currentStreak": "السلسلة الحالية",
+  "longestStreak": "أطول سلسلة",
+  "daysUnit": "أيام",
+  "monthlyHeatmapTitle": "الإكمال الشهري",
+  "completionBreakdownTitle": "توزيع الصلوات",
+  "overallConsistency": "الاستمرارية العامة",
+  "totalPrayersCompleted": "إجمالي الصلوات المسجلة",
+  "last30Days": "آخر 30 يومًا",
+  "allTime": "كل الأوقات"
 }

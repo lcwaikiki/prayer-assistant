@@ -272,5 +272,15 @@
   "restoreConfirmBody": "Kaza hedefleri, namaz geçmişi, hatırlatıcılar ve Tesbihat verileriniz geri yüklenecektir. Devam edilsin mi?",
   "restoreSuccess": "Veriler başarıyla geri yüklendi!",
   "restoreError": "Geçersiz yedek dosyası biçimi",
-  "shareOrSave": "Paylaş / Kaydet"
+  "shareOrSave": "Paylaş / Kaydet",
+  "analyticsTab": "Analiz",
+  "currentStreak": "Mevcut Seri",
+  "longestStreak": "En Uzun Seri",
+  "daysUnit": "gün",
+  "monthlyHeatmapTitle": "Aylık Tamamlama",
+  "completionBreakdownTitle": "Namaz Dağılımı",
+  "overallConsistency": "Genel İstikrar",
+  "totalPrayersCompleted": "Toplam Kılınan Namaz",
+  "last30Days": "Son 30 Gün",
+  "allTime": "Tüm Zamanlar"
 }

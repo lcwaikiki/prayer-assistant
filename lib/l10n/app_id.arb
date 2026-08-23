@@ -272,5 +272,15 @@
   "restoreConfirmBody": "Ini akan memulihkan target Qadha, riwayat shalat, pengingat, dan data Tasbih Anda. Lanjutkan?",
   "restoreSuccess": "Data berhasil dipulihkan!",
   "restoreError": "Format berkas cadangan tidak valid",
-  "shareOrSave": "Bagikan / Simpan"
+  "shareOrSave": "Bagikan / Simpan",
+  "analyticsTab": "Analistik",
+  "currentStreak": "Beruntun Saat Ini",
+  "longestStreak": "Beruntun Terpanjang",
+  "daysUnit": "hari",
+  "monthlyHeatmapTitle": "Penyelesaian Bulanan",
+  "completionBreakdownTitle": "Rincian Shalat",
+  "overallConsistency": "Konsistensi Keseluruhan",
+  "totalPrayersCompleted": "Total Shalat Dicatat",
+  "last30Days": "30 Hari Terakhir",
+  "allTime": "Semua Waktu"
 }

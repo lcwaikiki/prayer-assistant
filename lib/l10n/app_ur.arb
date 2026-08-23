@@ -272,5 +272,15 @@
   "restoreConfirmBody": "آپ کے قضا کے اہداف، نماز کی ہسٹری، ریمائنڈرز اور تسبیحات کا ڈیٹا ری اسٹور ہو جائے گا۔ جاری رکھیں؟",
   "restoreSuccess": "ڈیٹا کامیابی کے ساتھ ری اسٹور ہو گیا!",
   "restoreError": "بیک اپ فائل کا فارمیٹ غلط ہے",
-  "shareOrSave": "شیئر / محفوظ کریں"
+  "shareOrSave": "شیئر / محفوظ کریں",
+  "analyticsTab": "تجزیہ",
+  "currentStreak": "موجودہ تسلسل",
+  "longestStreak": "طویل ترین تسلسل",
+  "daysUnit": "دن",
+  "monthlyHeatmapTitle": "ماہانہ تکمیل",
+  "completionBreakdownTitle": "نماز کی تقسیم",
+  "overallConsistency": "مجموعی تسلسل",
+  "totalPrayersCompleted": "کل ادا کردہ نمازیں",
+  "last30Days": "آخری 30 دن",
+  "allTime": "تمام وقت"
 }

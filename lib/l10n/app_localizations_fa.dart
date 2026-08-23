@@ -753,4 +753,34 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get shareOrSave => 'اشتراک‌گذاری / ذخیره';
+
+  @override
+  String get analyticsTab => 'تحلیل و آمار';
+
+  @override
+  String get currentStreak => 'زنجیره فعلی';
+
+  @override
+  String get longestStreak => 'طولانی‌ترین زنجیره';
+
+  @override
+  String get daysUnit => 'روز';
+
+  @override
+  String get monthlyHeatmapTitle => 'تکمیل ماهانه';
+
+  @override
+  String get completionBreakdownTitle => 'تفکیک نمازها';
+
+  @override
+  String get overallConsistency => 'ثبات کلی';
+
+  @override
+  String get totalPrayersCompleted => 'مجموع نمازهای ثبت شده';
+
+  @override
+  String get last30Days => '۳۰ روز گذشته';
+
+  @override
+  String get allTime => 'همه زمان‌ها';
 }

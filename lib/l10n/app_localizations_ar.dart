@@ -750,4 +750,34 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shareOrSave => 'مشاركة / حفظ';
+
+  @override
+  String get analyticsTab => 'التحليلات';
+
+  @override
+  String get currentStreak => 'السلسلة الحالية';
+
+  @override
+  String get longestStreak => 'أطول سلسلة';
+
+  @override
+  String get daysUnit => 'أيام';
+
+  @override
+  String get monthlyHeatmapTitle => 'الإكمال الشهري';
+
+  @override
+  String get completionBreakdownTitle => 'توزيع الصلوات';
+
+  @override
+  String get overallConsistency => 'الاستمرارية العامة';
+
+  @override
+  String get totalPrayersCompleted => 'إجمالي الصلوات المسجلة';
+
+  @override
+  String get last30Days => 'آخر 30 يومًا';
+
+  @override
+  String get allTime => 'كل الأوقات';
 }

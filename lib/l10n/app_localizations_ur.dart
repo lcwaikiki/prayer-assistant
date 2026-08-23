@@ -755,4 +755,34 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get shareOrSave => 'شیئر / محفوظ کریں';
+
+  @override
+  String get analyticsTab => 'تجزیہ';
+
+  @override
+  String get currentStreak => 'موجودہ تسلسل';
+
+  @override
+  String get longestStreak => 'طویل ترین تسلسل';
+
+  @override
+  String get daysUnit => 'دن';
+
+  @override
+  String get monthlyHeatmapTitle => 'ماہانہ تکمیل';
+
+  @override
+  String get completionBreakdownTitle => 'نماز کی تقسیم';
+
+  @override
+  String get overallConsistency => 'مجموعی تسلسل';
+
+  @override
+  String get totalPrayersCompleted => 'کل ادا کردہ نمازیں';
+
+  @override
+  String get last30Days => 'آخری 30 دن';
+
+  @override
+  String get allTime => 'تمام وقت';
 }

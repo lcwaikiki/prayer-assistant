@@ -780,4 +780,55 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get allTime => 'كل الأوقات';
+
+  @override
+  String get fastingTitle => 'الصيام';
+
+  @override
+  String get suhoorCountdownTitle => 'الوقت المتبقي للسحور (الإمساك)';
+
+  @override
+  String get iftarCountdownTitle => 'الوقت المتبقي للإفطار (المغرب)';
+
+  @override
+  String get fastingTypeRamadan => 'صيام رمضان';
+
+  @override
+  String get fastingTypeSunnah => 'صيام سنة';
+
+  @override
+  String get fastingTypeQadaa => 'صيام قضاء';
+
+  @override
+  String get whiteDaysTitle => 'الأيام البيض (13، 14، 15)';
+
+  @override
+  String get mondayThursdayTitle => 'سنة الإثنين والخميس';
+
+  @override
+  String get logFastAction => 'تسجيل الصوم';
+
+  @override
+  String get totalFastsLogged => 'إجمالي الأيام المصومة';
+
+  @override
+  String get suhoorEndsIn => 'ينتهي السحور خلال';
+
+  @override
+  String get iftarIn => 'الإفطار خلال';
+
+  @override
+  String get fastingTab => 'الصيام';
+
+  @override
+  String get trackTabTitle => 'تتبع';
+
+  @override
+  String get prayerAnalyticsTitle => 'تحليلات الصلاة';
+
+  @override
+  String get prayerQadaaTitle => 'قضاء الصلاة';
+
+  @override
+  String get iftarTimeLabel => 'وقت الإفطار';
 }

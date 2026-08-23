@@ -786,4 +786,55 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get allTime => 'Semua Waktu';
+
+  @override
+  String get fastingTitle => 'Puasa';
+
+  @override
+  String get suhoorCountdownTitle => 'Waktu Menuju Sahur (Imsak)';
+
+  @override
+  String get iftarCountdownTitle => 'Waktu Menuju Buka Puasa (Maghrib)';
+
+  @override
+  String get fastingTypeRamadan => 'Puasa Ramadhan';
+
+  @override
+  String get fastingTypeSunnah => 'Puasa Sunnah';
+
+  @override
+  String get fastingTypeQadaa => 'Puasa Qadha';
+
+  @override
+  String get whiteDaysTitle => 'Ayyamul Bidh (13, 14, 15)';
+
+  @override
+  String get mondayThursdayTitle => 'Sunnah Senin & Kamis';
+
+  @override
+  String get logFastAction => 'Catat Puasa';
+
+  @override
+  String get totalFastsLogged => 'Total Puasa Dicatat';
+
+  @override
+  String get suhoorEndsIn => 'Sahur berakhir dalam';
+
+  @override
+  String get iftarIn => 'Buka puasa dalam';
+
+  @override
+  String get fastingTab => 'Puasa';
+
+  @override
+  String get trackTabTitle => 'Lacak';
+
+  @override
+  String get prayerAnalyticsTitle => 'Analisis Shalat';
+
+  @override
+  String get prayerQadaaTitle => 'Qadha Shalat';
+
+  @override
+  String get iftarTimeLabel => 'Waktu Iftar';
 }

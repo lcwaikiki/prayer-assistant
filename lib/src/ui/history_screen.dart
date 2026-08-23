@@ -8,10 +8,8 @@ import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
-import 'analytics_dashboard_screen.dart';
-
-
 import '../utils/time_utils.dart';
+
 
 const double _dateColWidth = 66;
 const double _minTimeColWidth = 44;
@@ -46,9 +44,10 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController = TabController(
-    length: 3,
+    length: 2,
     vsync: this,
   );
+
 
   final ScrollController _verticalController = ScrollController();
   final ScrollController _headerHorizontalController = ScrollController();
@@ -178,10 +177,6 @@ class _HistoryScreenState extends State<HistoryScreen>
                   text: context.l10n.datesCalendarTab,
                   icon: const Icon(Icons.calendar_month),
                 ),
-                Tab(
-                  text: context.l10n.analyticsTab,
-                  icon: const Icon(Icons.bar_chart),
-                ),
               ],
             ),
             Expanded(
@@ -190,10 +185,10 @@ class _HistoryScreenState extends State<HistoryScreen>
                 children: [
                   _KeepAlive(child: _buildPrayerTimesTab(context, controller)),
                   const _KeepAlive(child: HijriCalendarView()),
-                  const _KeepAlive(child: AnalyticsDashboardScreen()),
                 ],
               ),
             ),
+
 
           ],
         );

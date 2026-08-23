@@ -337,5 +337,22 @@
   "overallConsistency": "Общая регулярность",
   "totalPrayersCompleted": "Всего совершено молитв",
   "last30Days": "За 30 дней",
-  "allTime": "За всё время"
+  "allTime": "За всё время",
+  "fastingTitle": "Пост",
+  "suhoorCountdownTitle": "Время до Сухура (Имсак)",
+  "iftarCountdownTitle": "Время до Ифтара (Магриб)",
+  "fastingTypeRamadan": "Пост в Рамадан",
+  "fastingTypeSunnah": "Сунна-пост",
+  "fastingTypeQadaa": "Восполняемый пост (Када)",
+  "whiteDaysTitle": "Белые дни (13, 14, 15)",
+  "mondayThursdayTitle": "Сунна Понедельник и Четверг",
+  "logFastAction": "Записать пост",
+  "totalFastsLogged": "Всего соблюдено постов",
+  "suhoorEndsIn": "Сухур закончится через",
+  "iftarIn": "До Ифтара",
+  "fastingTab": "Пост",
+  "trackTabTitle": "Отслеживание",
+  "prayerAnalyticsTitle": "Аналитика Молитв",
+  "prayerQadaaTitle": "Када Молитв",
+  "iftarTimeLabel": "Время Ифтара"
 }

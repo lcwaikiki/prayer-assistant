@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../calendar/models/calendar_reminder.dart';
 import '../kaza/models/kaza_tracker.dart';
+import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 
 class LocalDatabase {
@@ -23,6 +24,8 @@ class LocalDatabase {
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
+  static const _fastingLogsKey = 'fasting_logs';
+
   Database? _db;
 
 
@@ -645,11 +648,46 @@ class LocalDatabase {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  String _toDateKey(DateTime date) {
+  Future<Map<String, FastingLog>> loadFastingLogs() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_fastingLogsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return <String, FastingLog>{};
+    }
+    try {
+      final raw =
+          jsonDecode(rows.first['setting_value'] as String)
+              as Map<String, dynamic>;
+      return raw.map(
+        (key, value) => MapEntry(
+          key,
+          FastingLog.fromMap(value as Map<String, dynamic>),
+        ),
+      );
+    } catch (_) {
+      return <String, FastingLog>{};
+    }
+  }
 
+  Future<void> saveFastingLogs(Map<String, FastingLog> logs) async {
+    final db = await instance;
+    final raw = logs.map((key, value) => MapEntry(key, value.toMap()));
+    await db.insert('app_settings', {
+      'setting_key': _fastingLogsKey,
+      'setting_value': jsonEncode(raw),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  String _toDateKey(DateTime date) {
     final safe = DateTime(date.year, date.month, date.day);
     return '${safe.year.toString().padLeft(4, '0')}-'
         '${safe.month.toString().padLeft(2, '0')}-'
         '${safe.day.toString().padLeft(2, '0')}';
   }
 }
+

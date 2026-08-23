@@ -282,5 +282,22 @@
   "overallConsistency": "Consistencia General",
   "totalPrayersCompleted": "Total de Oraciones",
   "last30Days": "Últimos 30 Días",
-  "allTime": "Todo el Tiempo"
+  "allTime": "Todo el Tiempo",
+  "fastingTitle": "Ayuno",
+  "suhoorCountdownTitle": "Tiempo hasta Suhoor (Imsak)",
+  "iftarCountdownTitle": "Tiempo hasta Iftar (Maghrib)",
+  "fastingTypeRamadan": "Ayuno de Ramadan",
+  "fastingTypeSunnah": "Ayuno Sunnah",
+  "fastingTypeQadaa": "Ayuno de Compensación (Qadaa)",
+  "whiteDaysTitle": "Días Blancos (13, 14, 15)",
+  "mondayThursdayTitle": "Sunnah de Lunes y Jueves",
+  "logFastAction": "Registrar Ayuno",
+  "totalFastsLogged": "Total de Ayunos Registrados",
+  "suhoorEndsIn": "Suhoor termina en",
+  "iftarIn": "Iftar en",
+  "fastingTab": "Ayuno",
+  "trackTabTitle": "Seguimiento",
+  "prayerAnalyticsTitle": "Análisis de Oración",
+  "prayerQadaaTitle": "Qadaa de Oración",
+  "iftarTimeLabel": "Hora de Iftar"
 }

@@ -340,5 +340,22 @@
   "overallConsistency": "Overall Consistency",
   "totalPrayersCompleted": "Total Prayers Logged",
   "last30Days": "Last 30 Days",
-  "allTime": "All Time"
+  "allTime": "All Time",
+  "fastingTitle": "Fasting",
+  "suhoorCountdownTitle": "Time Until Suhoor (Imsak)",
+  "iftarCountdownTitle": "Time Until Iftar (Maghrib)",
+  "fastingTypeRamadan": "Ramadan Fast",
+  "fastingTypeSunnah": "Sunnah Fast",
+  "fastingTypeQadaa": "Make-up (Qadaa) Fast",
+  "whiteDaysTitle": "White Days (13th, 14th, 15th)",
+  "mondayThursdayTitle": "Monday & Thursday Sunnah",
+  "logFastAction": "Log Fast",
+  "totalFastsLogged": "Total Fasts Logged",
+  "suhoorEndsIn": "Suhoor ends in",
+  "iftarIn": "Iftar in",
+  "fastingTab": "Fasting",
+  "trackTabTitle": "Track",
+  "prayerAnalyticsTitle": "Prayer Analytics",
+  "prayerQadaaTitle": "Prayer Qadaa",
+  "iftarTimeLabel": "Iftar Time"
 }

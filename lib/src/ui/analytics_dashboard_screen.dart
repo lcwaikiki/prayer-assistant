@@ -555,30 +555,33 @@ class _AnalyticsDayCell extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              primaryLabel,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                color: primaryTextColor,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                primaryLabel,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: primaryTextColor,
+                ),
               ),
             ),
-            if (secondaryLabel != null) ...[
-              const SizedBox(height: 1),
-              Text(
-                secondaryLabel!,
-                style: TextStyle(
-                  fontSize: 8.5,
-                  color: secondaryTextColor,
+            if (secondaryLabel != null)
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  secondaryLabel!,
+                  style: TextStyle(
+                    fontSize: 8,
+                    color: secondaryTextColor,
+                  ),
+                  maxLines: 1,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-            ],
             if (completedCount > 0) ...[
-              const SizedBox(height: 2),
+              const SizedBox(height: 1),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
                 decoration: BoxDecoration(
                   color: primaryTextColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(4),
@@ -586,7 +589,7 @@ class _AnalyticsDayCell extends StatelessWidget {
                 child: Text(
                   '$completedCount/5',
                   style: TextStyle(
-                    fontSize: 8,
+                    fontSize: 7.5,
                     fontWeight: FontWeight.bold,
                     color: primaryTextColor,
                   ),
@@ -599,6 +602,7 @@ class _AnalyticsDayCell extends StatelessWidget {
     );
   }
 }
+
 
 class _PrayerStatRow extends StatelessWidget {
   const _PrayerStatRow({

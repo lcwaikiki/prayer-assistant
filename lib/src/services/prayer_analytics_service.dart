@@ -129,7 +129,8 @@ class PrayerAnalyticsService {
     final key = dateToKey(date);
     final list = completions[key];
     if (list == null) return false;
-    return corePrayers.every(list.contains);
+    final lowerList = list.map((e) => e.toLowerCase()).toSet();
+    return corePrayers.every(lowerList.contains);
   }
 
   /// Gets total completed core prayers count for a specific date (0 to 5).
@@ -140,7 +141,8 @@ class PrayerAnalyticsService {
     final key = dateToKey(date);
     final list = completions[key];
     if (list == null) return 0;
-    return corePrayers.where(list.contains).length;
+    final lowerList = list.map((e) => e.toLowerCase()).toSet();
+    return corePrayers.where(lowerList.contains).length;
   }
 
   /// Calculates current and longest streaks.
@@ -313,7 +315,7 @@ class PrayerAnalyticsService {
     var current = start;
     while (!current.isAfter(end)) {
       final key = dateToKey(current);
-      final list = completions[key] ?? [];
+      final list = (completions[key] ?? []).map((e) => e.toLowerCase()).toSet();
       for (final p in corePrayers) {
         if (list.contains(p)) {
           counts[p] = (counts[p] ?? 0) + 1;
@@ -355,8 +357,10 @@ class PrayerAnalyticsService {
   int calculateTotalPrayersLogged(Map<String, List<String>> completions) {
     int total = 0;
     for (final list in completions.values) {
-      total += list.where(corePrayers.contains).length;
+      final lowerSet = list.map((e) => e.toLowerCase()).toSet();
+      total += corePrayers.where(lowerSet.contains).length;
     }
     return total;
   }
+
 }

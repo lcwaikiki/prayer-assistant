@@ -19,6 +19,8 @@ import '../supplications/services/wisdom_service.dart';
 import '../supplications/widgets/daily_wisdom_card.dart';
 import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
+import 'widgets/iftar_suhoor_countdown_card.dart';
+
 
 typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
 
@@ -254,10 +256,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         DailyWisdomCard(wisdom: dailyWisdom),
                         const SizedBox(height: 6),
                       ],
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 0),
+                        child: IftarSuhoorCountdownCard(),
+                      ),
+                      const SizedBox(height: 6),
                       if (upcoming.isNotEmpty) ...[
                         _UpcomingRemindersCard(entries: upcoming),
                         const SizedBox(height: 6),
                       ],
+
 
                       // Prayer rows taking remaining vertical space
                       Expanded(

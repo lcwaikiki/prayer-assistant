@@ -35,7 +35,8 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.text('Today'), findsOneWidget);
     expect(find.text('Qibla'), findsOneWidget);
-    expect(find.text('Qadaa'), findsOneWidget);
+    expect(find.text('Track'), findsOneWidget);
+
 
     expect(find.text('Location'), findsNothing);
     expect(find.text('Dates'), findsOneWidget);

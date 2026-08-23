@@ -282,5 +282,22 @@
   "overallConsistency": "Régularité Globale",
   "totalPrayersCompleted": "Total Prières Enregistrées",
   "last30Days": "30 Derniers Jours",
-  "allTime": "Tout le Temps"
+  "allTime": "Tout le Temps",
+  "fastingTitle": "Jeûne",
+  "suhoorCountdownTitle": "Temps avant le Suhoor (Imsak)",
+  "iftarCountdownTitle": "Temps avant l'Iftar (Maghrib)",
+  "fastingTypeRamadan": "Jeûne du Ramadan",
+  "fastingTypeSunnah": "Jeûne Surérogatoire (Sunnah)",
+  "fastingTypeQadaa": "Jeûne de Rattrapage (Qadaa)",
+  "whiteDaysTitle": "Jours Blancs (13e, 14e, 15e)",
+  "mondayThursdayTitle": "Sunnah Lundi & Jeudi",
+  "logFastAction": "Enregistrer le Jeûne",
+  "totalFastsLogged": "Total Jeûnes Enregistrés",
+  "suhoorEndsIn": "Fin du Suhoor dans",
+  "iftarIn": "Iftar dans",
+  "fastingTab": "Jeûne",
+  "trackTabTitle": "Suivi",
+  "prayerAnalyticsTitle": "Analyses de Prière",
+  "prayerQadaaTitle": "Qadaa de Prière",
+  "iftarTimeLabel": "Heure de Iftar"
 }

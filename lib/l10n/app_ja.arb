@@ -282,5 +282,22 @@
   "overallConsistency": "全体の継続率",
   "totalPrayersCompleted": "記録された総礼拝数",
   "last30Days": "過去30日間",
-  "allTime": "全期間"
+  "allTime": "全期間",
+  "fastingTitle": "断食",
+  "suhoorCountdownTitle": "スフール（イムサーク）までの時間",
+  "iftarCountdownTitle": "イフタール（マグリブ）までの時間",
+  "fastingTypeRamadan": "ラマダーンの断食",
+  "fastingTypeSunnah": "スンナの断食",
+  "fastingTypeQadaa": "補填断食（カダー）",
+  "whiteDaysTitle": "Primary White Days (13, 14, 15日)",
+  "mondayThursdayTitle": "月曜・木曜のスンナ",
+  "logFastAction": "断食を記録",
+  "totalFastsLogged": "記録された総断食日数",
+  "suhoorEndsIn": "スフール終了まで",
+  "iftarIn": "イフタールまで",
+  "fastingTab": "断食",
+  "trackTabTitle": "トラック",
+  "prayerAnalyticsTitle": "礼拝のアナリティクス",
+  "prayerQadaaTitle": "礼拝のカダー",
+  "iftarTimeLabel": "イフタールの時間"
 }

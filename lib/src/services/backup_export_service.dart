@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/hijri_utils.dart';
 import '../kaza/models/kaza_tracker.dart';
+import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 import '../tesbihat/models/daily_item_stat.dart';
 import '../tesbihat/models/item.dart';
@@ -21,6 +22,7 @@ class BackupExportService {
     required List<ItemGroup> tesbihGroups,
     required List<DailyItemStat> tesbihStats,
     required Map<String, dynamic> preferences,
+    Map<String, FastingLog> fastingLogs = const {},
   }) {
     final data = <String, dynamic>{
       'version': 1,
@@ -33,9 +35,11 @@ class BackupExportService {
       'tesbihGroups': tesbihGroups.map((g) => g.toMap()).toList(),
       'tesbihStats': tesbihStats.map((s) => s.toMap()).toList(),
       'preferences': preferences,
+      'fastingLogs': fastingLogs.map((k, v) => MapEntry(k, v.toMap())),
     };
     return const JsonEncoder.withIndent('  ').convert(data);
   }
+
 
   /// Parses and validates a JSON backup payload. Returns a map with parsed objects.
   Map<String, dynamic> parseAndValidateBackup(String jsonString) {
@@ -108,6 +112,17 @@ class BackupExportService {
     final preferences =
         (raw['preferences'] as Map<String, dynamic>?) ?? <String, dynamic>{};
 
+    final fastingLogsRaw = raw['fastingLogs'] as Map<String, dynamic>?;
+    final fastingLogs = <String, FastingLog>{};
+    if (fastingLogsRaw != null) {
+      for (final entry in fastingLogsRaw.entries) {
+        if (entry.value is Map<String, dynamic>) {
+          fastingLogs[entry.key] =
+              FastingLog.fromMap(entry.value as Map<String, dynamic>);
+        }
+      }
+    }
+
     return {
       'kazaTracker': kazaTracker,
       'prayerCompletions': prayerCompletions,
@@ -116,8 +131,10 @@ class BackupExportService {
       'tesbihGroups': tesbihGroups,
       'tesbihStats': tesbihStats,
       'preferences': preferences,
+      'fastingLogs': fastingLogs,
     };
   }
+
 
 
 

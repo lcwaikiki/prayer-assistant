@@ -144,6 +144,13 @@ void main() {
     when(
       () => database.saveKazaTracker(any()),
     ).thenAnswer((_) async {});
+    when(
+      () => database.loadFastingLogs(),
+    ).thenAnswer((_) async => const {});
+    when(
+      () => database.saveFastingLogs(any()),
+    ).thenAnswer((_) async {});
+
 
 
     when(

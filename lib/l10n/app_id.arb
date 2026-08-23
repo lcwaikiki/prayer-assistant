@@ -282,5 +282,22 @@
   "overallConsistency": "Konsistensi Keseluruhan",
   "totalPrayersCompleted": "Total Shalat Dicatat",
   "last30Days": "30 Hari Terakhir",
-  "allTime": "Semua Waktu"
+  "allTime": "Semua Waktu",
+  "fastingTitle": "Puasa",
+  "suhoorCountdownTitle": "Waktu Menuju Sahur (Imsak)",
+  "iftarCountdownTitle": "Waktu Menuju Buka Puasa (Maghrib)",
+  "fastingTypeRamadan": "Puasa Ramadhan",
+  "fastingTypeSunnah": "Puasa Sunnah",
+  "fastingTypeQadaa": "Puasa Qadha",
+  "whiteDaysTitle": "Ayyamul Bidh (13, 14, 15)",
+  "mondayThursdayTitle": "Sunnah Senin & Kamis",
+  "logFastAction": "Catat Puasa",
+  "totalFastsLogged": "Total Puasa Dicatat",
+  "suhoorEndsIn": "Sahur berakhir dalam",
+  "iftarIn": "Buka puasa dalam",
+  "fastingTab": "Puasa",
+  "trackTabTitle": "Lacak",
+  "prayerAnalyticsTitle": "Analisis Shalat",
+  "prayerQadaaTitle": "Qadha Shalat",
+  "iftarTimeLabel": "Waktu Iftar"
 }

@@ -10,7 +10,12 @@ import '../widgets/kaza_calculator_dialog.dart';
 
 
 class KazaTrackerScreen extends StatelessWidget {
-  const KazaTrackerScreen({super.key});
+  const KazaTrackerScreen({
+    super.key,
+    this.showAppBar = true,
+  });
+
+  final bool showAppBar;
 
   @override
   Widget build(BuildContext context) {
@@ -26,45 +31,54 @@ class KazaTrackerScreen extends StatelessWidget {
       (context.l10n.prayerNameLabel('Aksam'), iconForPrayer('Aksam'), 'maghrib'),
       (context.l10n.prayerNameLabel('Yatsi'), iconForPrayer('Yatsi'), 'isha'),
       (context.l10n.kazaWitrLabel, iconForPrayer('Witr'), 'witr'),
-
     ];
-
-
 
     final estDate = tracker.estimatedCompletionDate();
     final estDateFormatted = estDate != null
         ? DateFormat.yMMMMd(locale).format(estDate)
         : null;
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-
-          IconButton(
-            tooltip: context.l10n.kazaCalculatorWizard,
-            icon: const Icon(Icons.calculate_outlined),
-            onPressed: () {
-              showDialog<void>(
-                context: context,
-                builder: (_) => KazaCalculatorDialog(
-                  initialTracker: tracker,
-                  onSave: (updated) => controller.updateKazaTracker(updated),
-                ),
-              );
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: FilledButton.tonalIcon(
-              onPressed: () => controller.logFullDayKaza(),
-              icon: const Icon(Icons.done_all, size: 16),
-              label: Text(context.l10n.kazaBatchLogDay),
+    final actions = [
+      IconButton(
+        tooltip: context.l10n.kazaCalculatorWizard,
+        icon: const Icon(Icons.calculate_outlined),
+        onPressed: () {
+          showDialog<void>(
+            context: context,
+            builder: (_) => KazaCalculatorDialog(
+              initialTracker: tracker,
+              onSave: (updated) => controller.updateKazaTracker(updated),
             ),
-          ),
-        ],
+          );
+        },
       ),
+      Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: FilledButton.tonalIcon(
+          onPressed: () => controller.logFullDayKaza(),
+          icon: const Icon(Icons.done_all, size: 16),
+          label: Text(context.l10n.kazaBatchLogDay),
+        ),
+      ),
+    ];
+
+    return Scaffold(
+      appBar: showAppBar
+          ? AppBar(actions: actions)
+          : PreferredSize(
+              preferredSize: const Size.fromHeight(52),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: actions,
+                ),
+              ),
+            ),
+
       body: ListView(
         padding: const EdgeInsets.all(12),
+
         children: [
           // Hero Summary Card
           Card(

@@ -11,7 +11,9 @@ import '../kaza/models/kaza_tracker.dart';
 import '../../l10n/app_localizations.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
+import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
+
 import '../services/backup_export_service.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
@@ -72,6 +74,10 @@ class PrayerAppController extends ChangeNotifier {
   bool _showSecondaryCalendarDate = true;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
+  Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
+
+  Map<String, FastingLog> get fastingLogs => _fastingLogs;
+
 
 
   bool get isInitializing => _isInitializing;
@@ -271,6 +277,34 @@ class PrayerAppController extends ChangeNotifier {
         '${safe.day.toString().padLeft(2, '0')}';
   }
 
+  FastingLog? getFastingLog(DateTime date) {
+    final key = _toDateKey(date);
+    return _fastingLogs[key];
+  }
+
+  void toggleFastingLog(DateTime date, FastingType type) {
+    final key = _toDateKey(date);
+    final next = Map<String, FastingLog>.from(_fastingLogs);
+    final existing = next[key];
+    if (existing != null && existing.type == type) {
+      next.remove(key);
+    } else {
+      next[key] = FastingLog(dateKey: key, type: type);
+    }
+    _fastingLogs = next;
+    database.saveFastingLogs(next);
+    notifyListeners();
+  }
+
+  void removeFastingLog(DateTime date) {
+    final key = _toDateKey(date);
+    if (!_fastingLogs.containsKey(key)) return;
+    final next = Map<String, FastingLog>.from(_fastingLogs)..remove(key);
+    _fastingLogs = next;
+    database.saveFastingLogs(next);
+    notifyListeners();
+  }
+
   Future<void> initialize() async {
     _setLoading(true);
     try {
@@ -280,6 +314,8 @@ class PrayerAppController extends ChangeNotifier {
       _reminderSettings = await database.loadReminderSettings();
       _prayerCompletions = await database.loadPrayerCompletions();
       _kazaTracker = await database.loadKazaTracker();
+      _fastingLogs = await database.loadFastingLogs();
+
 
       _reminderSettings = {
         for (final entry in _reminderSettings.entries)
@@ -1010,6 +1046,7 @@ class PrayerAppController extends ChangeNotifier {
       tesbihGroups: groups,
       tesbihStats: stats,
       preferences: prefs,
+      fastingLogs: _fastingLogs,
     );
   }
 
@@ -1032,12 +1069,17 @@ class PrayerAppController extends ChangeNotifier {
     final restoredItems = parsed['tesbihItems'] as List<Item>;
     final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
     final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
+    final restoredFastingLogs =
+        parsed['fastingLogs'] as Map<String, FastingLog>? ?? {};
 
     await database.saveKazaTracker(restoredKaza);
     _kazaTracker = restoredKaza;
 
     await database.savePrayerCompletions(restoredCompletions);
     _prayerCompletions = restoredCompletions;
+
+    await database.saveFastingLogs(restoredFastingLogs);
+    _fastingLogs = restoredFastingLogs;
 
     for (final r in restoredReminders) {
       await database.saveCalendarReminder(r);
@@ -1056,6 +1098,7 @@ class PrayerAppController extends ChangeNotifier {
 
     notifyListeners();
   }
+
 
 
 

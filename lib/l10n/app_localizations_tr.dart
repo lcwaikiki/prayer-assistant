@@ -787,4 +787,55 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get allTime => 'Tüm Zamanlar';
+
+  @override
+  String get fastingTitle => 'Oruç';
+
+  @override
+  String get suhoorCountdownTitle => 'Sahura Kalan Süre (İmsak)';
+
+  @override
+  String get iftarCountdownTitle => 'İftara Kalan Süre (Akşam)';
+
+  @override
+  String get fastingTypeRamadan => 'Ramazan Orucu';
+
+  @override
+  String get fastingTypeSunnah => 'Sünnet Orucu';
+
+  @override
+  String get fastingTypeQadaa => 'Kaza Orucu';
+
+  @override
+  String get whiteDaysTitle => 'Eyyam-ı Biyd (13, 14, 15)';
+
+  @override
+  String get mondayThursdayTitle => 'Pazartesi ve Perşembe Sünneti';
+
+  @override
+  String get logFastAction => 'Oruç Kaydet';
+
+  @override
+  String get totalFastsLogged => 'Toplam Tutulan Oruç';
+
+  @override
+  String get suhoorEndsIn => 'Sahur bitimine';
+
+  @override
+  String get iftarIn => 'İftara kalan';
+
+  @override
+  String get fastingTab => 'Oruç';
+
+  @override
+  String get trackTabTitle => 'Takip';
+
+  @override
+  String get prayerAnalyticsTitle => 'Namaz Analizi';
+
+  @override
+  String get prayerQadaaTitle => 'Kaza Namazları';
+
+  @override
+  String get iftarTimeLabel => 'İftar Vakti';
 }

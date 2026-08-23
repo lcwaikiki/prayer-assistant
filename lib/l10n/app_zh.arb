@@ -282,5 +282,22 @@
   "overallConsistency": "整体一致性",
   "totalPrayersCompleted": "已记录礼拜总数",
   "last30Days": "最近30天",
-  "allTime": "所有时间"
+  "allTime": "所有时间",
+  "fastingTitle": "斋戒",
+  "suhoorCountdownTitle": "距离封斋 (Imsak) 时间",
+  "iftarCountdownTitle": "距离开斋 (Maghrib) 时间",
+  "fastingTypeRamadan": "莱麦丹月斋戒",
+  "fastingTypeSunnah": "副功斋 (Sunnah)",
+  "fastingTypeQadaa": "还补斋 (Qadaa)",
+  "whiteDaysTitle": "白日斋 (希吉来历13, 14, 15日)",
+  "mondayThursdayTitle": "周一与周四圣行斋",
+  "logFastAction": "记录斋戒",
+  "totalFastsLogged": "已记录斋戒总数",
+  "suhoorEndsIn": "距离封斋结束",
+  "iftarIn": "距离开斋剩余",
+  "fastingTab": "斋戒",
+  "trackTabTitle": "追踪",
+  "prayerAnalyticsTitle": "礼拜分析",
+  "prayerQadaaTitle": "还补礼拜 (Qadaa)",
+  "iftarTimeLabel": "开斋时间"
 }

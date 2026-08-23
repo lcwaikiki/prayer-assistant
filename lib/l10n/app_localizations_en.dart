@@ -786,4 +786,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allTime => 'All Time';
+
+  @override
+  String get fastingTitle => 'Fasting';
+
+  @override
+  String get suhoorCountdownTitle => 'Time Until Suhoor (Imsak)';
+
+  @override
+  String get iftarCountdownTitle => 'Time Until Iftar (Maghrib)';
+
+  @override
+  String get fastingTypeRamadan => 'Ramadan Fast';
+
+  @override
+  String get fastingTypeSunnah => 'Sunnah Fast';
+
+  @override
+  String get fastingTypeQadaa => 'Make-up (Qadaa) Fast';
+
+  @override
+  String get whiteDaysTitle => 'White Days (13th, 14th, 15th)';
+
+  @override
+  String get mondayThursdayTitle => 'Monday & Thursday Sunnah';
+
+  @override
+  String get logFastAction => 'Log Fast';
+
+  @override
+  String get totalFastsLogged => 'Total Fasts Logged';
+
+  @override
+  String get suhoorEndsIn => 'Suhoor ends in';
+
+  @override
+  String get iftarIn => 'Iftar in';
+
+  @override
+  String get fastingTab => 'Fasting';
+
+  @override
+  String get trackTabTitle => 'Track';
+
+  @override
+  String get prayerAnalyticsTitle => 'Prayer Analytics';
+
+  @override
+  String get prayerQadaaTitle => 'Prayer Qadaa';
+
+  @override
+  String get iftarTimeLabel => 'Iftar Time';
 }

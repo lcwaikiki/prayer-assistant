@@ -785,4 +785,55 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get allTime => 'تمام وقت';
+
+  @override
+  String get fastingTitle => 'روزہ';
+
+  @override
+  String get suhoorCountdownTitle => 'سحری کا بقایا وقت (امساک)';
+
+  @override
+  String get iftarCountdownTitle => 'افطار کا بقایا وقت (مغرب)';
+
+  @override
+  String get fastingTypeRamadan => 'رمضان کا روزہ';
+
+  @override
+  String get fastingTypeSunnah => 'سنت روزہ';
+
+  @override
+  String get fastingTypeQadaa => 'قضا روزہ';
+
+  @override
+  String get whiteDaysTitle => 'ایام بیض (13، 14، 15)';
+
+  @override
+  String get mondayThursdayTitle => 'پیر اور جمعرات کی سنت';
+
+  @override
+  String get logFastAction => 'روزہ درج کریں';
+
+  @override
+  String get totalFastsLogged => 'کل رکھے گئے روزے';
+
+  @override
+  String get suhoorEndsIn => 'سحری کا وقت ختم ہونے میں';
+
+  @override
+  String get iftarIn => 'افطار میں باقی';
+
+  @override
+  String get fastingTab => 'روزہ';
+
+  @override
+  String get trackTabTitle => 'ٹریک';
+
+  @override
+  String get prayerAnalyticsTitle => 'نماز تجزیات';
+
+  @override
+  String get prayerQadaaTitle => 'قضا نمازیں';
+
+  @override
+  String get iftarTimeLabel => 'افطار کا وقت';
 }

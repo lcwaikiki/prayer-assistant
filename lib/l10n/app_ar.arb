@@ -282,5 +282,22 @@
   "overallConsistency": "الاستمرارية العامة",
   "totalPrayersCompleted": "إجمالي الصلوات المسجلة",
   "last30Days": "آخر 30 يومًا",
-  "allTime": "كل الأوقات"
+  "allTime": "كل الأوقات",
+  "fastingTitle": "الصيام",
+  "suhoorCountdownTitle": "الوقت المتبقي للسحور (الإمساك)",
+  "iftarCountdownTitle": "الوقت المتبقي للإفطار (المغرب)",
+  "fastingTypeRamadan": "صيام رمضان",
+  "fastingTypeSunnah": "صيام سنة",
+  "fastingTypeQadaa": "صيام قضاء",
+  "whiteDaysTitle": "الأيام البيض (13، 14، 15)",
+  "mondayThursdayTitle": "سنة الإثنين والخميس",
+  "logFastAction": "تسجيل الصوم",
+  "totalFastsLogged": "إجمالي الأيام المصومة",
+  "suhoorEndsIn": "ينتهي السحور خلال",
+  "iftarIn": "الإفطار خلال",
+  "fastingTab": "الصيام",
+  "trackTabTitle": "تتبع",
+  "prayerAnalyticsTitle": "تحليلات الصلاة",
+  "prayerQadaaTitle": "قضاء الصلاة",
+  "iftarTimeLabel": "وقت الإفطار"
 }

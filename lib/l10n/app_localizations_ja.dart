@@ -765,4 +765,55 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get allTime => '全期間';
+
+  @override
+  String get fastingTitle => '断食';
+
+  @override
+  String get suhoorCountdownTitle => 'スフール（イムサーク）までの時間';
+
+  @override
+  String get iftarCountdownTitle => 'イフタール（マグリブ）までの時間';
+
+  @override
+  String get fastingTypeRamadan => 'ラマダーンの断食';
+
+  @override
+  String get fastingTypeSunnah => 'スンナの断食';
+
+  @override
+  String get fastingTypeQadaa => '補填断食（カダー）';
+
+  @override
+  String get whiteDaysTitle => 'Primary White Days (13, 14, 15日)';
+
+  @override
+  String get mondayThursdayTitle => '月曜・木曜のスンナ';
+
+  @override
+  String get logFastAction => '断食を記録';
+
+  @override
+  String get totalFastsLogged => '記録された総断食日数';
+
+  @override
+  String get suhoorEndsIn => 'スフール終了まで';
+
+  @override
+  String get iftarIn => 'イフタールまで';
+
+  @override
+  String get fastingTab => '断食';
+
+  @override
+  String get trackTabTitle => 'トラック';
+
+  @override
+  String get prayerAnalyticsTitle => '礼拝のアナリティクス';
+
+  @override
+  String get prayerQadaaTitle => '礼拝のカダー';
+
+  @override
+  String get iftarTimeLabel => 'イフタールの時間';
 }

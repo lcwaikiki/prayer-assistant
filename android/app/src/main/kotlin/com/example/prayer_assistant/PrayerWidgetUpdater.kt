@@ -140,7 +140,79 @@ object PrayerWidgetUpdater {
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
+
+        val fastingIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, FastingCountdownWidgetProvider::class.java)
+        )
+        if (fastingIds.isNotEmpty()) {
+            val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
+            var imsakEpoch: Long? = todayPrayers.getOrNull(0)?.second
+            var aksamEpoch: Long? = todayPrayers.getOrNull(4)?.second
+
+            for (p in todayPrayers) {
+                val n = p.first.lowercase(Locale.getDefault())
+                if (n.contains("imsak") || n.contains("fajr") || n.contains("suhoor") || n.contains("فجر") || n.contains("إمساك")) {
+                    imsakEpoch = p.second
+                }
+                if (n.contains("aksam") || n.contains("akşam") || n.contains("maghrib") || n.contains("iftar") || n.contains("مغرب") || n.contains("إفطار")) {
+                    aksamEpoch = p.second
+                }
+            }
+
+
+            val imsakTimeStr = imsakEpoch?.let { formatClock(it) } ?: "05:00"
+            val aksamTimeStr = aksamEpoch?.let { formatClock(it) } ?: "19:00"
+
+            val isFastingHours = imsakEpoch != null && aksamEpoch != null &&
+                    now in imsakEpoch..aksamEpoch
+
+            val targetEpoch = if (isFastingHours) {
+                aksamEpoch!!
+            } else {
+                if (aksamEpoch != null && now > aksamEpoch) {
+                    (imsakEpoch ?: (now + 36000000L)) + 86400000L
+                } else {
+                    imsakEpoch ?: (now + 36000000L)
+                }
+            }
+
+            val title = if (isFastingHours) "Iftar Countdown" else "Suhoor Countdown"
+            val remainingMs = (targetEpoch - now).coerceAtLeast(0L)
+            val remainingSec = remainingMs / 1000
+            val hours = remainingSec / 3600
+            val minutes = (remainingSec % 3600) / 60
+            val seconds = remainingSec % 60
+            val timeDisplay = String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+
+            var progressPct = 0
+            if (isFastingHours && imsakEpoch != null && aksamEpoch != null && aksamEpoch > imsakEpoch) {
+                val totalFasting = (aksamEpoch - imsakEpoch).toDouble()
+                val elapsed = (now - imsakEpoch).toDouble()
+                progressPct = ((elapsed / totalFasting) * 100).toInt().coerceIn(0, 100)
+            } else if (!isFastingHours && aksamEpoch != null) {
+                val prevAksam = if (aksamEpoch > now) aksamEpoch - 86400000L else aksamEpoch
+                val totalNight = (targetEpoch - prevAksam).toDouble()
+                val elapsed = (now - prevAksam).toDouble()
+                if (totalNight > 0) {
+                    progressPct = ((elapsed / totalNight) * 100).toInt().coerceIn(0, 100)
+                }
+            }
+
+            for (widgetId in fastingIds) {
+                val views = RemoteViews(context.packageName, R.layout.widget_fasting_countdown)
+                views.setTextViewText(R.id.widgetFastingTitle, title)
+                views.setTextViewText(R.id.widgetFastingIftarTime, "Iftar: $aksamTimeStr")
+                views.setTextViewText(R.id.widgetFastingRemaining, timeDisplay)
+                views.setTextViewText(R.id.widgetFastingPercentage, "$progressPct% Fasted")
+                views.setProgressBar(R.id.widgetFastingProgressBar, 100, progressPct, false)
+                views.setTextViewText(R.id.widgetFastingSuhoorLabel, "Suhoor: $imsakTimeStr")
+                views.setTextViewText(R.id.widgetFastingIftarLabel, "Iftar: $aksamTimeStr")
+                views.setOnClickPendingIntent(R.id.widgetFastingRoot, openPendingIntent)
+                widgetManager.updateAppWidget(widgetId, views)
+            }
+        }
     }
+
 
     private fun buildOpenPendingIntent(context: Context): PendingIntent {
         val openIntent = Intent(context, MainActivity::class.java).apply {

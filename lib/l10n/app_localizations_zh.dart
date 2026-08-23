@@ -764,4 +764,55 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get allTime => '所有时间';
+
+  @override
+  String get fastingTitle => '斋戒';
+
+  @override
+  String get suhoorCountdownTitle => '距离封斋 (Imsak) 时间';
+
+  @override
+  String get iftarCountdownTitle => '距离开斋 (Maghrib) 时间';
+
+  @override
+  String get fastingTypeRamadan => '莱麦丹月斋戒';
+
+  @override
+  String get fastingTypeSunnah => '副功斋 (Sunnah)';
+
+  @override
+  String get fastingTypeQadaa => '还补斋 (Qadaa)';
+
+  @override
+  String get whiteDaysTitle => '白日斋 (希吉来历13, 14, 15日)';
+
+  @override
+  String get mondayThursdayTitle => '周一与周四圣行斋';
+
+  @override
+  String get logFastAction => '记录斋戒';
+
+  @override
+  String get totalFastsLogged => '已记录斋戒总数';
+
+  @override
+  String get suhoorEndsIn => '距离封斋结束';
+
+  @override
+  String get iftarIn => '距离开斋剩余';
+
+  @override
+  String get fastingTab => '斋戒';
+
+  @override
+  String get trackTabTitle => '追踪';
+
+  @override
+  String get prayerAnalyticsTitle => '礼拜分析';
+
+  @override
+  String get prayerQadaaTitle => '还补礼拜 (Qadaa)';
+
+  @override
+  String get iftarTimeLabel => '开斋时间';
 }

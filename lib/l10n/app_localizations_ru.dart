@@ -788,4 +788,55 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get allTime => 'За всё время';
+
+  @override
+  String get fastingTitle => 'Пост';
+
+  @override
+  String get suhoorCountdownTitle => 'Время до Сухура (Имсак)';
+
+  @override
+  String get iftarCountdownTitle => 'Время до Ифтара (Магриб)';
+
+  @override
+  String get fastingTypeRamadan => 'Пост в Рамадан';
+
+  @override
+  String get fastingTypeSunnah => 'Сунна-пост';
+
+  @override
+  String get fastingTypeQadaa => 'Восполняемый пост (Када)';
+
+  @override
+  String get whiteDaysTitle => 'Белые дни (13, 14, 15)';
+
+  @override
+  String get mondayThursdayTitle => 'Сунна Понедельник и Четверг';
+
+  @override
+  String get logFastAction => 'Записать пост';
+
+  @override
+  String get totalFastsLogged => 'Всего соблюдено постов';
+
+  @override
+  String get suhoorEndsIn => 'Сухур закончится через';
+
+  @override
+  String get iftarIn => 'До Ифтара';
+
+  @override
+  String get fastingTab => 'Пост';
+
+  @override
+  String get trackTabTitle => 'Отслеживание';
+
+  @override
+  String get prayerAnalyticsTitle => 'Аналитика Молитв';
+
+  @override
+  String get prayerQadaaTitle => 'Када Молитв';
+
+  @override
+  String get iftarTimeLabel => 'Время Ифтара';
 }

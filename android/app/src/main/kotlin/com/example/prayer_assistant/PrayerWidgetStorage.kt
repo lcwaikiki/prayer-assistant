@@ -130,10 +130,12 @@ object PrayerWidgetStorage {
         for (entry in entries) {
             val epoch = (entry["epochMs"] as? Number)?.toLong() ?: continue
             val name = entry["name"]?.toString() ?: continue
+            val rawName = entry["rawName"]?.toString() ?: name
             json.put(
                 JSONObject()
                     .put("epochMs", epoch)
                     .put("name", name)
+                    .put("rawName", rawName)
             )
         }
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -150,14 +152,16 @@ object PrayerWidgetStorage {
         for (i in 0 until json.length()) {
             val item = json.optJSONObject(i) ?: continue
             val name = item.optString("name")
+            val rawName = item.optString("rawName", name)
             val epoch = item.optLong("epochMs", -1L)
             if (name.isEmpty() || epoch <= 0L) {
                 continue
             }
-            parsed.add(name to epoch)
+            parsed.add((if (rawName.isNotEmpty()) rawName else name) to epoch)
         }
         return parsed
     }
+
 
     fun saveStatusConfig(
         context: Context,

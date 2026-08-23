@@ -787,4 +787,55 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get allTime => 'Gesamter Zeitraum';
+
+  @override
+  String get fastingTitle => 'Fasten';
+
+  @override
+  String get suhoorCountdownTitle => 'Zeit bis Suhoor (Imsak)';
+
+  @override
+  String get iftarCountdownTitle => 'Zeit bis Iftar (Maghrib)';
+
+  @override
+  String get fastingTypeRamadan => 'Ramadan Fasten';
+
+  @override
+  String get fastingTypeSunnah => 'Sunnah Fasten';
+
+  @override
+  String get fastingTypeQadaa => 'Nachhol-Fasten (Qadaa)';
+
+  @override
+  String get whiteDaysTitle => 'Weiße Tage (13., 14., 15.)';
+
+  @override
+  String get mondayThursdayTitle => 'Montag & Donnerstag Sunnah';
+
+  @override
+  String get logFastAction => 'Fasten eintragen';
+
+  @override
+  String get totalFastsLogged => 'Gesamt gefastete Tage';
+
+  @override
+  String get suhoorEndsIn => 'Suhoor endet in';
+
+  @override
+  String get iftarIn => 'Iftar in';
+
+  @override
+  String get fastingTab => 'Fasten';
+
+  @override
+  String get trackTabTitle => 'Verfolgen';
+
+  @override
+  String get prayerAnalyticsTitle => 'Gebetsanalysen';
+
+  @override
+  String get prayerQadaaTitle => 'Gebete Qadaa';
+
+  @override
+  String get iftarTimeLabel => 'Iftar-Zeit';
 }

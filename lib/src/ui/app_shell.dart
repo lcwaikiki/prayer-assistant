@@ -13,6 +13,8 @@ import 'history_screen.dart';
 import 'home_screen.dart';
 import 'preferences_screen.dart';
 import 'qibla_screen.dart';
+import 'track_screen.dart';
+
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key, this.qiblaScreen});
@@ -79,7 +81,7 @@ class _AppShellState extends State<AppShell> {
 
         final pages = <Widget>[
           widget.qiblaScreen ?? const QiblaScreen(),
-          const KazaTrackerScreen(),
+          const TrackScreen(),
           const HomeScreen(),
           const HistoryScreen(),
           const TesbihHomeScreen(),
@@ -103,10 +105,11 @@ class _AppShellState extends State<AppShell> {
                 label: context.l10n.qiblaTitle,
               ),
               NavigationDestination(
-                icon: const Icon(Icons.history_toggle_off_outlined),
-                selectedIcon: const Icon(Icons.history_toggle_off),
-                label: context.l10n.kazaTitle,
+                icon: const Icon(Icons.track_changes_outlined),
+                selectedIcon: const Icon(Icons.track_changes),
+                label: context.l10n.trackTabTitle,
               ),
+
               NavigationDestination(
                 icon: const Icon(Icons.mosque_outlined),
                 selectedIcon: const Icon(Icons.mosque),

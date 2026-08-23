@@ -1551,6 +1551,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All Time'**
   String get allTime;
+
+  /// No description provided for @fastingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get fastingTitle;
+
+  /// No description provided for @suhoorCountdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Until Suhoor (Imsak)'**
+  String get suhoorCountdownTitle;
+
+  /// No description provided for @iftarCountdownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Until Iftar (Maghrib)'**
+  String get iftarCountdownTitle;
+
+  /// No description provided for @fastingTypeRamadan.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan Fast'**
+  String get fastingTypeRamadan;
+
+  /// No description provided for @fastingTypeSunnah.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunnah Fast'**
+  String get fastingTypeSunnah;
+
+  /// No description provided for @fastingTypeQadaa.
+  ///
+  /// In en, this message translates to:
+  /// **'Make-up (Qadaa) Fast'**
+  String get fastingTypeQadaa;
+
+  /// No description provided for @whiteDaysTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'White Days (13th, 14th, 15th)'**
+  String get whiteDaysTitle;
+
+  /// No description provided for @mondayThursdayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday & Thursday Sunnah'**
+  String get mondayThursdayTitle;
+
+  /// No description provided for @logFastAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Fast'**
+  String get logFastAction;
+
+  /// No description provided for @totalFastsLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Fasts Logged'**
+  String get totalFastsLogged;
+
+  /// No description provided for @suhoorEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Suhoor ends in'**
+  String get suhoorEndsIn;
+
+  /// No description provided for @iftarIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Iftar in'**
+  String get iftarIn;
+
+  /// No description provided for @fastingTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting'**
+  String get fastingTab;
+
+  /// No description provided for @trackTabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get trackTabTitle;
+
+  /// No description provided for @prayerAnalyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Analytics'**
+  String get prayerAnalyticsTitle;
+
+  /// No description provided for @prayerQadaaTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Qadaa'**
+  String get prayerQadaaTitle;
+
+  /// No description provided for @iftarTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Iftar Time'**
+  String get iftarTimeLabel;
 }
 
 class _AppLocalizationsDelegate

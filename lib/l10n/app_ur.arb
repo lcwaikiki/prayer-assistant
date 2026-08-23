@@ -282,5 +282,22 @@
   "overallConsistency": "مجموعی تسلسل",
   "totalPrayersCompleted": "کل ادا کردہ نمازیں",
   "last30Days": "آخری 30 دن",
-  "allTime": "تمام وقت"
+  "allTime": "تمام وقت",
+  "fastingTitle": "روزہ",
+  "suhoorCountdownTitle": "سحری کا بقایا وقت (امساک)",
+  "iftarCountdownTitle": "افطار کا بقایا وقت (مغرب)",
+  "fastingTypeRamadan": "رمضان کا روزہ",
+  "fastingTypeSunnah": "سنت روزہ",
+  "fastingTypeQadaa": "قضا روزہ",
+  "whiteDaysTitle": "ایام بیض (13، 14، 15)",
+  "mondayThursdayTitle": "پیر اور جمعرات کی سنت",
+  "logFastAction": "روزہ درج کریں",
+  "totalFastsLogged": "کل رکھے گئے روزے",
+  "suhoorEndsIn": "سحری کا وقت ختم ہونے میں",
+  "iftarIn": "افطار میں باقی",
+  "fastingTab": "روزہ",
+  "trackTabTitle": "ٹریک",
+  "prayerAnalyticsTitle": "نماز تجزیات",
+  "prayerQadaaTitle": "قضا نمازیں",
+  "iftarTimeLabel": "افطار کا وقت"
 }

@@ -46,7 +46,21 @@ void main() {
       final result = service.calculateStreaks(completions, today: today);
       expect(result.currentStreak, 2);
     });
+
+    test('handles capitalized prayer keys (Imsak, Ogle, Ikindi, Aksam, Yatsi)', () {
+      final today = DateTime(2026, 8, 23);
+      final completions = <String, List<String>>{
+        '2026-08-22': ['Imsak', 'Ogle', 'Ikindi', 'Aksam', 'Yatsi'],
+        '2026-08-23': ['Imsak', 'Ogle', 'Ikindi', 'Aksam', 'Yatsi'],
+      };
+
+      final result = service.calculateStreaks(completions, today: today);
+      expect(result.currentStreak, 2);
+      expect(result.longestStreak, 2);
+      expect(service.calculateTotalPrayersLogged(completions), 10);
+    });
   });
+
 
   group('PrayerAnalyticsService - Monthly Heatmap', () {
     test('generates correct number of days for a month', () {

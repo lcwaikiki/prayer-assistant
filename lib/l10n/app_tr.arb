@@ -282,5 +282,22 @@
   "overallConsistency": "Genel İstikrar",
   "totalPrayersCompleted": "Toplam Kılınan Namaz",
   "last30Days": "Son 30 Gün",
-  "allTime": "Tüm Zamanlar"
+  "allTime": "Tüm Zamanlar",
+  "fastingTitle": "Oruç",
+  "suhoorCountdownTitle": "Sahura Kalan Süre (İmsak)",
+  "iftarCountdownTitle": "İftara Kalan Süre (Akşam)",
+  "fastingTypeRamadan": "Ramazan Orucu",
+  "fastingTypeSunnah": "Sünnet Orucu",
+  "fastingTypeQadaa": "Kaza Orucu",
+  "whiteDaysTitle": "Eyyam-ı Biyd (13, 14, 15)",
+  "mondayThursdayTitle": "Pazartesi ve Perşembe Sünneti",
+  "logFastAction": "Oruç Kaydet",
+  "totalFastsLogged": "Toplam Tutulan Oruç",
+  "suhoorEndsIn": "Sahur bitimine",
+  "iftarIn": "İftara kalan",
+  "fastingTab": "Oruç",
+  "trackTabTitle": "Takip",
+  "prayerAnalyticsTitle": "Namaz Analizi",
+  "prayerQadaaTitle": "Kaza Namazları",
+  "iftarTimeLabel": "İftar Vakti"
 }

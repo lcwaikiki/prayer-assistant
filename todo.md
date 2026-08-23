@@ -38,11 +38,14 @@ Track missed past prayers that need to be made up.
 
 
 
-## 6. Ramadan & Voluntary Fasting (Sawm) Assistant
+## 6. Ramadan & Voluntary Fasting (Sawm) Assistant [DONE]
 Support for Ramadan and Sunnah fasts throughout the year.
-- [ ] Iftar & Suhoor live countdown timers
-- [ ] Notifications for Monday/Thursday & White Days (13th, 14th, 15th Hijri)
-- [ ] Annual fasting habit logger
+- [x] Iftar & Suhoor live countdown timers
+- [x] Notifications for Monday/Thursday & White Days (13th, 14th, 15th Hijri)
+- [x] Annual fasting habit logger
+- [x] Android Home Screen AppWidget for Iftar & Suhoor Fasting Countdown
+
+
 
 ## 7. Daily Wisdom & Supplications (Hisn al-Muslim) [DONE]
 - [x] Rotating Ayah/Hadith card on Home screen with share option, Arabic text, transliteration & multi-language support

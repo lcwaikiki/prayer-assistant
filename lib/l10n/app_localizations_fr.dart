@@ -790,4 +790,55 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get allTime => 'Tout le Temps';
+
+  @override
+  String get fastingTitle => 'Jeûne';
+
+  @override
+  String get suhoorCountdownTitle => 'Temps avant le Suhoor (Imsak)';
+
+  @override
+  String get iftarCountdownTitle => 'Temps avant l\'Iftar (Maghrib)';
+
+  @override
+  String get fastingTypeRamadan => 'Jeûne du Ramadan';
+
+  @override
+  String get fastingTypeSunnah => 'Jeûne Surérogatoire (Sunnah)';
+
+  @override
+  String get fastingTypeQadaa => 'Jeûne de Rattrapage (Qadaa)';
+
+  @override
+  String get whiteDaysTitle => 'Jours Blancs (13e, 14e, 15e)';
+
+  @override
+  String get mondayThursdayTitle => 'Sunnah Lundi & Jeudi';
+
+  @override
+  String get logFastAction => 'Enregistrer le Jeûne';
+
+  @override
+  String get totalFastsLogged => 'Total Jeûnes Enregistrés';
+
+  @override
+  String get suhoorEndsIn => 'Fin du Suhoor dans';
+
+  @override
+  String get iftarIn => 'Iftar dans';
+
+  @override
+  String get fastingTab => 'Jeûne';
+
+  @override
+  String get trackTabTitle => 'Suivi';
+
+  @override
+  String get prayerAnalyticsTitle => 'Analyses de Prière';
+
+  @override
+  String get prayerQadaaTitle => 'Qadaa de Prière';
+
+  @override
+  String get iftarTimeLabel => 'Heure de Iftar';
 }

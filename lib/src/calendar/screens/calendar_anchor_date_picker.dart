@@ -18,11 +18,13 @@ Future<DateTime?> showAnchorDatePicker(
   return showModalBottomSheet<DateTime>(
     context: context,
     isScrollControlled: true,
+    useSafeArea: true,
     builder: (_) => _AnchorDatePickerSheet(
       initialDate: initialDate,
       hijriPreferred: hijriPreferred,
     ),
   );
+
 }
 
 class _AnchorDatePickerSheet extends StatefulWidget {

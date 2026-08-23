@@ -59,8 +59,10 @@ class GroupScreen extends ConsumerWidget {
     }
     final selected = await showModalBottomSheet<Set<String>>(
       context: context,
-      builder: (context) => _AddBeadsSheet(items: candidates),
+      useSafeArea: true,
+      builder: (context) => SafeArea(child: _AddBeadsSheet(items: candidates)),
     );
+
     if (selected == null || selected.isEmpty) {
       return;
     }
@@ -212,7 +214,9 @@ class GroupScreen extends ConsumerWidget {
         key: const Key('add_bead_fab'),
         onPressed: () => showModalBottomSheet<void>(
           context: context,
+          useSafeArea: true,
           builder: (context) => SafeArea(
+
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

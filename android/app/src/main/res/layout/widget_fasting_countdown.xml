@@ -3,11 +3,11 @@
     android:id="@+id/widgetFastingRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_bg"
+    android:background="@drawable/widget_fasting_bg"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:padding="14dp">
 
-    <!-- Header Row: Title & Iftar Time Badge -->
+    <!-- Header Row: Title & Maghrib/Iftar Time Badge -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,31 +22,29 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Iftar Countdown"
-            android:textColor="#FFFFFFFF"
-            android:textSize="13sp"
+            android:textColor="#FFE082"
+            android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/widgetFastingIftarTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/notification_pill_bg"
-
-            android:paddingHorizontal="6dp"
-            android:paddingVertical="2dp"
+            android:background="@drawable/fasting_pill_badge"
             android:text="Iftar: --:--"
             android:textColor="#FFFFD700"
             android:textSize="11sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Main Section: Countdown Ticker & % Fasted -->
+    <!-- Main Section: Ticker & % Fasted Chip -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetFastingRemaining"
@@ -57,35 +55,36 @@
             android:maxLines="1"
             android:text="--:--:--"
             android:textColor="#FFFFFFFF"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/widgetFastingPercentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/fasting_chip_bg"
             android:text="0% Fasted"
-            android:textColor="#FF81D4FA"
+            android:textColor="#FF00E676"
             android:textSize="12sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Progress Indicator Bar -->
+    <!-- Sleek Gradient Progress Indicator Bar -->
     <ProgressBar
         android:id="@+id/widgetFastingProgressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
+        android:layout_height="8dp"
         android:layout_marginTop="4dp"
         android:max="100"
         android:progress="0"
-        android:progressDrawable="@android:drawable/progress_horizontal" />
+        android:progressDrawable="@drawable/fasting_progress_drawable" />
 
     <!-- Footer Row: Start & End Markers -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
 
         <TextView
@@ -95,7 +94,7 @@
             android:layout_weight="1"
             android:text="Suhoor: --:--"
             android:textColor="#B3FFFFFF"
-            android:textSize="9sp" />
+            android:textSize="10sp" />
 
         <TextView
             android:id="@+id/widgetFastingIftarLabel"
@@ -103,7 +102,7 @@
             android:layout_height="wrap_content"
             android:text="Iftar: --:--"
             android:textColor="#B3FFFFFF"
-            android:textSize="9sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
 </LinearLayout>

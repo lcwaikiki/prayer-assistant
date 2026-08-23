@@ -201,7 +201,9 @@ class TesbihHomeScreen extends ConsumerWidget {
     final l10n = context.tesbihatL10n;
     showModalBottomSheet<void>(
       context: context,
+      useSafeArea: true,
       builder: (context) => SafeArea(
+
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

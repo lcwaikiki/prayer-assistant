@@ -158,12 +158,14 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (ctx) => _CounterModal(item: item),
+      builder: (ctx) => SafeArea(child: _CounterModal(item: item)),
     );
+
   }
 }
 

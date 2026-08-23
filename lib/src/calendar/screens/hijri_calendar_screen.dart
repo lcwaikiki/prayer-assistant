@@ -123,9 +123,11 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
+      useSafeArea: true,
       builder: (sheetContext) =>
           _DayDetailSheet(date: date, primary: primary),
     );
+
   }
 
   @override

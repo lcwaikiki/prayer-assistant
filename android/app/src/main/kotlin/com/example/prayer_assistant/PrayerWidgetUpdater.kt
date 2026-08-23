@@ -200,6 +200,8 @@ object PrayerWidgetUpdater {
 
             for (widgetId in fastingIds) {
                 val views = RemoteViews(context.packageName, R.layout.widget_fasting_countdown)
+                setTextSizeSp(views, R.id.widgetFastingTitle, textSize, 11f, 13f, 15f, 18f)
+                setTextSizeSp(views, R.id.widgetFastingRemaining, textSize, 18f, 24f, 30f, 34f)
                 views.setTextViewText(R.id.widgetFastingTitle, title)
                 views.setTextViewText(R.id.widgetFastingIftarTime, "Iftar: $aksamTimeStr")
                 views.setTextViewText(R.id.widgetFastingRemaining, timeDisplay)
@@ -211,6 +213,7 @@ object PrayerWidgetUpdater {
                 widgetManager.updateAppWidget(widgetId, views)
             }
         }
+
     }
 
 

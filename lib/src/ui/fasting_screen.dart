@@ -86,78 +86,82 @@ class _FastingScreenState extends State<FastingScreen> {
 
     showModalBottomSheet<void>(
       context: context,
+      useSafeArea: true,
       builder: (sheetContext) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.l10n.logFastAction,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                dateStr,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                leading: const Icon(Icons.star, color: Colors.amber),
-                title: Text(context.l10n.fastingTypeRamadan),
-                trailing: existing?.type == FastingType.ramadan
-                    ? const Icon(Icons.check, color: Colors.green)
-                    : null,
-                onTap: () {
-                  controller.toggleFastingLog(date, FastingType.ramadan);
-                  Navigator.of(sheetContext).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.wb_sunny_outlined, color: Colors.blue),
-                title: Text(context.l10n.fastingTypeSunnah),
-                trailing: existing?.type == FastingType.sunnah
-                    ? const Icon(Icons.check, color: Colors.green)
-                    : null,
-                onTap: () {
-                  controller.toggleFastingLog(date, FastingType.sunnah);
-                  Navigator.of(sheetContext).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.history, color: Colors.purple),
-                title: Text(context.l10n.fastingTypeQadaa),
-                trailing: existing?.type == FastingType.qadaa
-                    ? const Icon(Icons.check, color: Colors.green)
-                    : null,
-                onTap: () {
-                  controller.toggleFastingLog(date, FastingType.qadaa);
-                  Navigator.of(sheetContext).pop();
-                },
-              ),
-              if (existing != null) ...[
-                const Divider(),
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.logFastAction,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  dateStr,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                ),
+                const SizedBox(height: 16),
                 ListTile(
-                  leading: const Icon(Icons.delete_outline, color: Colors.red),
-                  title: const Text('Remove Fast Log'),
+                  leading: const Icon(Icons.star, color: Colors.amber),
+                  title: Text(context.l10n.fastingTypeRamadan),
+                  trailing: existing?.type == FastingType.ramadan
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : null,
                   onTap: () {
-                    controller.removeFastingLog(date);
+                    controller.toggleFastingLog(date, FastingType.ramadan);
                     Navigator.of(sheetContext).pop();
                   },
                 ),
+                ListTile(
+                  leading: const Icon(Icons.wb_sunny_outlined, color: Colors.blue),
+                  title: Text(context.l10n.fastingTypeSunnah),
+                  trailing: existing?.type == FastingType.sunnah
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : null,
+                  onTap: () {
+                    controller.toggleFastingLog(date, FastingType.sunnah);
+                    Navigator.of(sheetContext).pop();
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.history, color: Colors.purple),
+                  title: Text(context.l10n.fastingTypeQadaa),
+                  trailing: existing?.type == FastingType.qadaa
+                      ? const Icon(Icons.check, color: Colors.green)
+                      : null,
+                  onTap: () {
+                    controller.toggleFastingLog(date, FastingType.qadaa);
+                    Navigator.of(sheetContext).pop();
+                  },
+                ),
+                if (existing != null) ...[
+                  const Divider(),
+                  ListTile(
+                    leading: const Icon(Icons.delete_outline, color: Colors.red),
+                    title: const Text('Remove Fast Log'),
+                    onTap: () {
+                      controller.removeFastingLog(date);
+                      Navigator.of(sheetContext).pop();
+                    },
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

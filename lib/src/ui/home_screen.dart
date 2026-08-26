@@ -306,8 +306,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .notifyOnTime,
                                         ),
                                     onToggleCompleted: () =>
-                                        controller.togglePrayerCompletion(
+                                        controller.togglePrayerCompletionForDate(
                                           entry.$2,
+                                          day.date,
                                         ),
                                   ),
                                 ),

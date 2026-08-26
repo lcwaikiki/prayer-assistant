@@ -90,7 +90,20 @@ class PrayerAppController extends ChangeNotifier {
   List<LocationNode> get districts => _districts;
 
   SelectedLocation? get selectedLocation => _selectedLocation;
-  PrayerDay? get today => _today;
+  PrayerDay? get today {
+    final now = DateTime.now();
+    if (_today != null) {
+      final t = _today!.date;
+      if (t.year == now.year && t.month == now.month && t.day == now.day) {
+        return _today;
+      }
+    }
+    final currentDay = prayerDayFor(now);
+    if (currentDay != null) {
+      _today = currentDay;
+    }
+    return _today;
+  }
   List<PrayerDay> get yearRange => _yearRange;
 
   PrayerDay? prayerDayFor(DateTime date) {
@@ -104,6 +117,7 @@ class PrayerAppController extends ChangeNotifier {
     }
     return null;
   }
+
 
   Map<String, ReminderSetting> get reminderSettings => _reminderSettings;
   AppBarRemainingPlacement get appBarRemainingPlacement =>
@@ -241,9 +255,13 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   bool isPrayerCompleted(String prayerName, DateTime date) {
-
     final key = _toDateKey(date);
-    return _prayerCompletions[key]?.contains(prayerName) ?? false;
+    final list = _prayerCompletions[key];
+    if (list == null) {
+      return false;
+    }
+    final lowerName = prayerName.toLowerCase();
+    return list.any((item) => item.toLowerCase() == lowerName);
   }
 
   int completedCountForDate(DateTime date) {
@@ -252,15 +270,19 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   void togglePrayerCompletion(String prayerName) {
-    togglePrayerCompletionForDate(prayerName, DateTime.now());
+    final targetDate = today?.date ?? DateTime.now();
+    togglePrayerCompletionForDate(prayerName, targetDate);
   }
 
   void togglePrayerCompletionForDate(String prayerName, DateTime date) {
     final key = _toDateKey(date);
     final next = Map<String, List<String>>.from(_prayerCompletions);
     final current = List<String>.from(next[key] ?? []);
-    if (current.contains(prayerName)) {
-      current.remove(prayerName);
+    final lowerName = prayerName.toLowerCase();
+    final existingIndex =
+        current.indexWhere((item) => item.toLowerCase() == lowerName);
+    if (existingIndex != -1) {
+      current.removeAt(existingIndex);
     } else {
       current.add(prayerName);
     }
@@ -269,6 +291,7 @@ class PrayerAppController extends ChangeNotifier {
     database.savePrayerCompletions(next);
     notifyListeners();
   }
+
 
   String _toDateKey(DateTime date) {
     final safe = DateTime(date.year, date.month, date.day);

@@ -182,7 +182,18 @@ object PrayerWidgetUpdater {
             val hours = remainingSec / 3600
             val minutes = (remainingSec % 3600) / 60
             val seconds = remainingSec % 60
-            val timeDisplay = String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+
+            val showSeconds = mmssThreshold > 0 && remainingSec <= (mmssThreshold * 60L)
+            val timeDisplay = if (showSeconds) {
+                if (hours > 0) {
+                    String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
+                } else {
+                    String.format(Locale.US, "%02d:%02d", minutes, seconds)
+                }
+            } else {
+                String.format(Locale.US, "%02d:%02d", hours, minutes)
+            }
+
 
             var progressPct = 0
             if (isFastingHours && imsakEpoch != null && aksamEpoch != null && aksamEpoch > imsakEpoch) {

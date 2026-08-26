@@ -80,11 +80,29 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
         final diff = targetTime.difference(now);
         final remainingSeconds = diff.inSeconds.clamp(0, 86400);
 
-        final hours = (remainingSeconds ~/ 3600).toString().padLeft(2, '0');
-        final minutes =
-            ((remainingSeconds % 3600) ~/ 60).toString().padLeft(2, '0');
-        final seconds = (remainingSeconds % 60).toString().padLeft(2, '0');
-        final timeDisplay = '$hours:$minutes:$seconds';
+        final thresholdMinutes = controller.widgetMmssThresholdMinutes;
+        final showSeconds = thresholdMinutes > 0 &&
+            remainingSeconds <= thresholdMinutes * 60;
+
+        final hours = remainingSeconds ~/ 3600;
+        final minutes = (remainingSeconds % 3600) ~/ 60;
+        final seconds = remainingSeconds % 60;
+
+        final String timeDisplay;
+        if (showSeconds) {
+          if (hours > 0) {
+            timeDisplay = '${hours.toString().padLeft(2, '0')}:'
+                '${minutes.toString().padLeft(2, '0')}:'
+                '${seconds.toString().padLeft(2, '0')}';
+          } else {
+            timeDisplay = '${minutes.toString().padLeft(2, '0')}:'
+                '${seconds.toString().padLeft(2, '0')}';
+          }
+        } else {
+          timeDisplay = '${hours.toString().padLeft(2, '0')}:'
+              '${minutes.toString().padLeft(2, '0')}';
+        }
+
 
         // Calculate progress percentage
         double progress = 0.0;

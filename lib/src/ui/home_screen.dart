@@ -42,12 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 30), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) {
         return;
       }
       setState(() => _now = DateTime.now());
     });
+
   }
 
 

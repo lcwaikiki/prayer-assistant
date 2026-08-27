@@ -788,10 +788,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get fastingTitle => 'روزه';
 
   @override
-  String get suhoorCountdownTitle => 'زمان باقی‌مانده تا سحر (امساک)';
+  String get suhoorCountdownTitle => 'تا سحر';
 
   @override
-  String get iftarCountdownTitle => 'زمان باقی‌مانده تا افطار (مغرب)';
+  String get iftarCountdownTitle => 'تا افطار';
 
   @override
   String get fastingTypeRamadan => 'روزه رمضان';

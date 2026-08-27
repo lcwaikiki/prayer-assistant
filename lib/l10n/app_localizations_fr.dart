@@ -795,10 +795,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fastingTitle => 'Jeûne';
 
   @override
-  String get suhoorCountdownTitle => 'Temps avant le Suhoor (Imsak)';
+  String get suhoorCountdownTitle => 'Jusqu\'au Suhoor';
 
   @override
-  String get iftarCountdownTitle => 'Temps avant l\'Iftar (Maghrib)';
+  String get iftarCountdownTitle => 'Jusqu\'à l\'Iftar';
 
   @override
   String get fastingTypeRamadan => 'Jeûne du Ramadan';

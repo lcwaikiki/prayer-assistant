@@ -793,10 +793,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fastingTitle => 'Пост';
 
   @override
-  String get suhoorCountdownTitle => 'Время до Сухура (Имсак)';
+  String get suhoorCountdownTitle => 'До Сухура';
 
   @override
-  String get iftarCountdownTitle => 'Время до Ифтара (Магриб)';
+  String get iftarCountdownTitle => 'До Ифтара';
 
   @override
   String get fastingTypeRamadan => 'Пост в Рамадан';

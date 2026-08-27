@@ -1561,13 +1561,13 @@ abstract class AppLocalizations {
   /// No description provided for @suhoorCountdownTitle.
   ///
   /// In en, this message translates to:
-  /// **'Time Until Suhoor (Imsak)'**
+  /// **'Time to Suhoor'**
   String get suhoorCountdownTitle;
 
   /// No description provided for @iftarCountdownTitle.
   ///
   /// In en, this message translates to:
-  /// **'Time Until Iftar (Maghrib)'**
+  /// **'Time to Iftar'**
   String get iftarCountdownTitle;
 
   /// No description provided for @fastingTypeRamadan.

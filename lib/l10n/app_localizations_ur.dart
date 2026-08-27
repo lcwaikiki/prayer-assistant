@@ -790,10 +790,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get fastingTitle => 'روزہ';
 
   @override
-  String get suhoorCountdownTitle => 'سحری کا بقایا وقت (امساک)';
+  String get suhoorCountdownTitle => 'سحری تک وقت';
 
   @override
-  String get iftarCountdownTitle => 'افطار کا بقایا وقت (مغرب)';
+  String get iftarCountdownTitle => 'افطار تک وقت';
 
   @override
   String get fastingTypeRamadan => 'رمضان کا روزہ';

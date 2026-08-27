@@ -770,10 +770,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fastingTitle => '断食';
 
   @override
-  String get suhoorCountdownTitle => 'スフール（イムサーク）までの時間';
+  String get suhoorCountdownTitle => 'スフールまで';
 
   @override
-  String get iftarCountdownTitle => 'イフタール（マグリブ）までの時間';
+  String get iftarCountdownTitle => 'イフタールまで';
 
   @override
   String get fastingTypeRamadan => 'ラマダーンの断食';

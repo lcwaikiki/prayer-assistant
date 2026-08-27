@@ -785,10 +785,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fastingTitle => 'الصيام';
 
   @override
-  String get suhoorCountdownTitle => 'الوقت المتبقي للسحور (الإمساك)';
+  String get suhoorCountdownTitle => 'حتى السحور';
 
   @override
-  String get iftarCountdownTitle => 'الوقت المتبقي للإفطار (المغرب)';
+  String get iftarCountdownTitle => 'حتى الإفطار';
 
   @override
   String get fastingTypeRamadan => 'صيام رمضان';

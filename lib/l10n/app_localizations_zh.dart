@@ -769,10 +769,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fastingTitle => '斋戒';
 
   @override
-  String get suhoorCountdownTitle => '距离封斋 (Imsak) 时间';
+  String get suhoorCountdownTitle => '距离封斋';
 
   @override
-  String get iftarCountdownTitle => '距离开斋 (Maghrib) 时间';
+  String get iftarCountdownTitle => '距离开斋';
 
   @override
   String get fastingTypeRamadan => '莱麦丹月斋戒';

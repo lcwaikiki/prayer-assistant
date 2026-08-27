@@ -792,10 +792,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fastingTitle => 'Fasten';
 
   @override
-  String get suhoorCountdownTitle => 'Zeit bis Suhoor (Imsak)';
+  String get suhoorCountdownTitle => 'Zeit bis Suhoor';
 
   @override
-  String get iftarCountdownTitle => 'Zeit bis Iftar (Maghrib)';
+  String get iftarCountdownTitle => 'Zeit bis Iftar';
 
   @override
   String get fastingTypeRamadan => 'Ramadan Fasten';

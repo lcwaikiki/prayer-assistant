@@ -791,10 +791,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get fastingTitle => 'Puasa';
 
   @override
-  String get suhoorCountdownTitle => 'Waktu Menuju Sahur (Imsak)';
+  String get suhoorCountdownTitle => 'Menuju Sahur';
 
   @override
-  String get iftarCountdownTitle => 'Waktu Menuju Buka Puasa (Maghrib)';
+  String get iftarCountdownTitle => 'Menuju Buka Puasa';
 
   @override
   String get fastingTypeRamadan => 'Puasa Ramadhan';

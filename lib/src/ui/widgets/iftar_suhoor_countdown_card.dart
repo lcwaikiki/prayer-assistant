@@ -16,6 +16,7 @@ class IftarSuhoorCountdownCard extends StatefulWidget {
 
 class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
   Timer? _timer;
+  bool _isExpanded = false;
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
         final todayDay = controller.today;
@@ -53,7 +55,6 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
 
         final imsakTime = parseTime(imsakStr) ?? DateTime(now.year, now.month, now.day, 5, 0);
         final aksamTime = parseTime(aksamStr) ?? DateTime(now.year, now.month, now.day, 19, 0);
-
 
         final bool isFastingHours =
             now.isAfter(imsakTime) && now.isBefore(aksamTime);
@@ -103,7 +104,6 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
               '${minutes.toString().padLeft(2, '0')}';
         }
 
-
         // Calculate progress percentage
         double progress = 0.0;
         if (isFastingHours) {
@@ -126,164 +126,207 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
         }
 
         return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          elevation: 2,
-          clipBehavior: Clip.antiAlias,
+          elevation: 0,
+          margin: EdgeInsets.zero,
+          color: theme.colorScheme.surfaceContainerHigh,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(
+              color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
+            ),
+          ),
           child: InkWell(
+            borderRadius: BorderRadius.circular(12),
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (_) => const FastingScreen(),
-                ),
-              );
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
             },
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [
-                      Icon(
-                        icon,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 22,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 3,
-                        ),
+                            horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .primaryContainer
-                              .withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(12),
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.wb_twilight,
-                              size: 14,
-                              color: Theme.of(context).colorScheme.primary,
+                              icon,
+                              size: 13,
+                              color: theme.colorScheme.onPrimaryContainer,
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 5),
                             Text(
-                              '${context.l10n.iftarTimeLabel}: $aksamStr',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
+                              title,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                fontSize: 11,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right, size: 20),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            timeDisplay,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'monospace',
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                        ],
-                      ),
-                      Chip(
-                        avatar: Icon(
-                          isFastingHours
-                              ? Icons.local_fire_department
-                              : Icons.bedtime,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        label: Text(
-                          isFastingHours
-                              ? '${(progress * 100).round()}% Fasted'
-                              : 'Suhoor Ticker',
-                          style: const TextStyle(
-                            fontSize: 11,
+                      if (!_isExpanded) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          timeDisplay,
+                          style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.bold,
+                            fontFeatures: const [FontFeature.tabularFigures()],
+                            color: theme.colorScheme.primary,
                           ),
                         ),
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: LinearProgressIndicator(
-                      value: progress,
-                      minHeight: 7,
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .surfaceContainerHighest,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Suhoor ($imsakStr)',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontSize: 10,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
-                            ),
-                      ),
-                      Text(
-                        '${(progress * 100).toStringAsFixed(0)}% elapsed',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        const Spacer(),
+                      ] else ...[
+                        const Spacer(),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.secondaryContainer,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '${context.l10n.iftarTimeLabel}: $aksamStr',
+                            style: theme.textTheme.labelSmall?.copyWith(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: theme.colorScheme.onSecondaryContainer,
                             ),
+                          ),
+                        ),
+                        const SizedBox(width: 2),
+                      ],
+                      Icon(
+                        _isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        size: 18,
+                        color: theme.colorScheme.outline,
                       ),
-                      Text(
-                        'Iftar ($aksamStr)',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              fontSize: 10,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSurfaceVariant,
+                      const SizedBox(width: 2),
+                      IconButton(
+                        visualDensity: VisualDensity.compact,
+                        constraints: const BoxConstraints(
+                            minWidth: 28, minHeight: 28),
+                        padding: EdgeInsets.zero,
+                        tooltip: context.l10n.fastingTitle,
+                        icon: const Icon(Icons.open_in_new, size: 16),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const FastingScreen(),
                             ),
+                          );
+                        },
                       ),
                     ],
                   ),
+                  if (!_isExpanded) ...[
+                    const SizedBox(height: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 4,
+                        backgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
+                      ),
+                    ),
+                  ],
+                  if (_isExpanded) ...[
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              timeDisplay,
+                              style: theme.textTheme.headlineMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontFeatures: const [FontFeature.tabularFigures()],
+                                color: theme.colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Chip(
+                          avatar: Icon(
+                            isFastingHours
+                                ? Icons.local_fire_department
+                                : Icons.bedtime,
+                            size: 16,
+                            color: theme.colorScheme.primary,
+                          ),
+                          label: Text(
+                            isFastingHours
+                                ? '${(progress * 100).round()}% Fasted'
+                                : 'Suhoor Ticker',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          visualDensity: VisualDensity.compact,
+                          padding: EdgeInsets.zero,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: progress,
+                        minHeight: 6,
+                        backgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Suhoor ($imsakStr)',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: 10,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          '${(progress * 100).toStringAsFixed(0)}% elapsed',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                        Text(
+                          'Iftar ($aksamStr)',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: 10,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
 
                 ],
               ),
@@ -294,3 +337,4 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
     );
   }
 }
+

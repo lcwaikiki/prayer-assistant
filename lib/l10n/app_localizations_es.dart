@@ -792,10 +792,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get fastingTitle => 'Ayuno';
 
   @override
-  String get suhoorCountdownTitle => 'Tiempo hasta Suhoor (Imsak)';
+  String get suhoorCountdownTitle => 'Tiempo hasta Suhoor';
 
   @override
-  String get iftarCountdownTitle => 'Tiempo hasta Iftar (Maghrib)';
+  String get iftarCountdownTitle => 'Tiempo hasta Iftar';
 
   @override
   String get fastingTypeRamadan => 'Ayuno de Ramadan';

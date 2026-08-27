@@ -210,7 +210,11 @@ class _FastingScreenState extends State<FastingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 1. Live Countdown Card
-                const IftarSuhoorCountdownCard(),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: IftarSuhoorCountdownCard(),
+                ),
+
 
                 // 2. Summary Statistics Row
                 Padding(

@@ -170,14 +170,21 @@ class _DailyWisdomCardState extends State<DailyWisdomCard> {
                       overflow: _isExpanded
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurface,
-                      ),
+                      style: _isExpanded
+                          ? theme.textTheme.titleMedium?.copyWith(
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                              height: 1.6,
+                              color: theme.colorScheme.onSurface,
+                            )
+                          : theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: theme.colorScheme.onSurface,
+                            ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: _isExpanded ? 6 : 2),
               ],
               if (_isExpanded && widget.wisdom.transliteration.isNotEmpty) ...[
                 Text(

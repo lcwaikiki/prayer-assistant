@@ -80,7 +80,7 @@ class _AppShellState extends State<AppShell> {
         }
 
         final pages = <Widget>[
-          widget.qiblaScreen ?? const QiblaScreen(),
+          widget.qiblaScreen ?? const QiblaScreen(embedded: true),
           const TrackScreen(),
           const HomeScreen(),
           const HistoryScreen(),

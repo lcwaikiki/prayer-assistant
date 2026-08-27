@@ -20,7 +20,7 @@ class QiblaScreen extends StatefulWidget {
     this.headingStream,
     this.loadPosition,
     this.compassStreamProvider,
-    this.embedded = false,
+    this.embedded = true,
   });
 
   /// Injectable compass heading stream (degrees, 0-360). Defaults to the

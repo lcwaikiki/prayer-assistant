@@ -278,7 +278,6 @@ class _CounterModalState extends State<_CounterModal> {
         if (hasVibrator == true) {
           Vibration.vibrate(duration: 40);
         }
-
       } catch (_) {}
     }
   }
@@ -291,7 +290,7 @@ class _CounterModalState extends State<_CounterModal> {
     final target = widget.item.targetCount;
     final isDone = _count >= target;
 
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -313,40 +312,59 @@ class _CounterModalState extends State<_CounterModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.item.reference,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+              Expanded(
+                child: Text(
+                  widget.item.reference,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               IconButton(
                 icon: const Icon(Icons.share_outlined, size: 20),
                 onPressed: () {
-                  final text =
-                      '${widget.item.textAr}\n\n$localizedText\n— ${widget.item.reference}';
+                  final text = widget.item.transliteration.isNotEmpty
+                      ? '${widget.item.textAr}\n\n${widget.item.transliteration}\n\n$localizedText\n— ${widget.item.reference}'
+                      : '${widget.item.textAr}\n\n$localizedText\n— ${widget.item.reference}';
                   SharePlus.instance.share(ShareParams(text: text));
                 },
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           Directionality(
             textDirection: TextDirection.rtl,
             child: Text(
               widget.item.textAr,
               textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(
+              style: theme.textTheme.headlineSmall?.copyWith(
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
-                height: 1.6,
+                height: 1.8,
               ),
             ),
           ),
+          if (widget.item.transliteration.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              widget.item.transliteration,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontSize: 13,
+                fontStyle: FontStyle.italic,
+                color: theme.colorScheme.primary,
+                height: 1.4,
+              ),
+            ),
+          ],
           const SizedBox(height: 12),
           Text(
             localizedText,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
+              height: 1.4,
             ),
           ),
           const SizedBox(height: 24),

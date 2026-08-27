@@ -139,12 +139,13 @@ class _AppShellState extends State<AppShell> {
   ) {
     final tabTitle = switch (controller.tabIndex) {
       0 => context.l10n.qiblaTitle,
-      1 => context.l10n.kazaTitle,
+      1 => context.l10n.trackTabTitle,
       2 => context.l10n.tabToday,
       3 => context.l10n.tabDates,
       4 => context.l10n.tabTesbih,
       _ => context.l10n.appTitle,
     };
+
 
     final next = controller.nextPrayer(now);
     final minuteText = next == null

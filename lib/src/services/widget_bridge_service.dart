@@ -85,6 +85,13 @@ class WidgetBridgeService {
       'timeline': timeline,
       'todayPrayers': todayPrayers,
       'locationLabel': locationLabel,
+      'appLocale': locale?.languageCode ?? '',
+    });
+  }
+
+  Future<void> updateWidgetLocale(String localeCode) async {
+    await _channel.invokeMethod<void>('updateWidgetLocale', <String, Object>{
+      'locale': localeCode,
     });
   }
 

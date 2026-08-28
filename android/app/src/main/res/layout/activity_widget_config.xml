@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/configRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#80000000"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:id="@+id/dialogCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/widget_config_dialog_bg"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Widget Ayarları"
+            android:textColor="#212121"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textThemeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Arkaplan Teması"
+            android:textColor="#757575"
+            android:textSize="15sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/radioThemeSystem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telefon Ayarlarıyla Eşleştir"
+                android:textColor="#212121"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/radioThemeLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Açık"
+                android:textColor="#212121"
+                android:textSize="15sp" />
+
+            <RadioButton
+                android:id="@+id/radioThemeDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Koyu"
+                android:textColor="#212121"
+                android:textSize="15sp" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textFontSizeHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Yazı Boyutu Ayarı"
+            android:textColor="#757575"
+            android:textSize="15sp" />
+
+        <SeekBar
+            android:id="@+id/seekbarTextSize"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progressTint="#1F8A70"
+            android:thumbTint="#1F8A70" />
+
+        <TextView
+            android:id="@+id/textPreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="Önizleme 14"
+            android:textColor="#757575"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/btn_save_bg"
+            android:paddingLeft="28dp"
+            android:paddingTop="10dp"
+            android:paddingRight="28dp"
+            android:paddingBottom="10dp"
+            android:text="AYARLARI KAYDET"
+            android:textColor="#212121"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</FrameLayout>

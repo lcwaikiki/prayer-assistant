@@ -96,12 +96,20 @@ object PrayerWidgetUpdater {
     ) {
         val widgetManager = AppWidgetManager.getInstance(context)
         val nextPrayerName = next?.first ?: "--"
+        val dark = isDark(context)
+        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
+        val fastingBgRes = if (dark) R.drawable.widget_fasting_bg else R.drawable.widget_fasting_bg_light
+        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
+        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
 
         val remainingIds = widgetManager.getAppWidgetIds(
             ComponentName(context, RemainingTimeWidgetProvider::class.java)
         )
         for (widgetId in remainingIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time)
+            views.setInt(R.id.widgetRemainingOnlyRoot, "setBackgroundResource", bgRes)
+            views.setTextColor(R.id.widgetRemainingOnlyLabel, secondaryTextColor)
+            views.setTextColor(R.id.widgetRemainingOnlyValue, primaryTextColor)
             views.setTextViewText(R.id.widgetRemainingOnlyLabel, nextPrayerName)
             setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 9f, 11f, 14f, 17f)
             setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 16f, 22f, 30f, 34f)
@@ -117,9 +125,10 @@ object PrayerWidgetUpdater {
             val views = RemoteViews(context.packageName, R.layout.widget_remaining_time_circle)
             val diameterDp = circleDiameterDp(context, widgetId)
             setCircleTextSizeSp(views, context, textSize, diameterDp)
+            views.setTextColor(R.id.widgetRemainingCircleValue, primaryTextColor)
             applyCountdown(views, R.id.widgetRemainingCircleValue, next, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
-            applyCircleBackground(views, context, widgetId)
+            applyCircleBackground(views, context, widgetId, dark)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -128,6 +137,10 @@ object PrayerWidgetUpdater {
         )
         for (widgetId in nextIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_next_prayer)
+            views.setInt(R.id.widgetNextPrayerRoot, "setBackgroundResource", bgRes)
+            views.setTextColor(R.id.widgetNextPrayerName, primaryTextColor)
+            views.setTextColor(R.id.widgetNextPrayerTime, secondaryTextColor)
+            views.setTextColor(R.id.widgetNextPrayerRemaining, primaryTextColor)
             setTextSizeSp(views, R.id.widgetNextPrayerName, textSize, 10f, 12f, 16f, 20f)
             setTextSizeSp(views, R.id.widgetNextPrayerTime, textSize, 10f, 12f, 16f, 20f)
             setTextSizeSp(views, R.id.widgetNextPrayerRemaining, textSize, 15f, 20f, 28f, 32f)
@@ -211,6 +224,13 @@ object PrayerWidgetUpdater {
 
             for (widgetId in fastingIds) {
                 val views = RemoteViews(context.packageName, R.layout.widget_fasting_countdown)
+                views.setInt(R.id.widgetFastingRoot, "setBackgroundResource", fastingBgRes)
+                views.setTextColor(R.id.widgetFastingTitle, primaryTextColor)
+                views.setTextColor(R.id.widgetFastingIftarTime, secondaryTextColor)
+                views.setTextColor(R.id.widgetFastingRemaining, primaryTextColor)
+                views.setTextColor(R.id.widgetFastingPercentage, secondaryTextColor)
+                views.setTextColor(R.id.widgetFastingSuhoorLabel, secondaryTextColor)
+                views.setTextColor(R.id.widgetFastingIftarLabel, secondaryTextColor)
                 setTextSizeSp(views, R.id.widgetFastingTitle, textSize, 11f, 13f, 15f, 18f)
                 setTextSizeSp(views, R.id.widgetFastingRemaining, textSize, 18f, 24f, 30f, 34f)
                 views.setTextViewText(R.id.widgetFastingTitle, title)
@@ -241,6 +261,18 @@ object PrayerWidgetUpdater {
         )
     }
 
+    private fun isDark(context: Context): Boolean {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return when (theme) {
+            "light" -> false
+            "dark" -> true
+            else -> {
+                val nightMode = context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+                nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+            }
+        }
+    }
+
     /**
      * Up to 3 fixed rows (title + pre-formatted, already-localized date/time from the Dart
      * side) rather than a RemoteViewsService-backed list — the reminder count shown here is
@@ -251,7 +283,15 @@ object PrayerWidgetUpdater {
         context: Context,
         openPendingIntent: PendingIntent
     ): RemoteViews {
+        val dark = isDark(context)
+        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
+        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
+        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
+
         val views = RemoteViews(context.packageName, R.layout.widget_upcoming_reminders)
+        views.setInt(R.id.widgetUpcomingRemindersRoot, "setBackgroundResource", bgRes)
+        views.setTextColor(R.id.widgetUpcomingRemindersHeader, primaryTextColor)
+        views.setTextColor(R.id.widgetUpcomingRemindersEmpty, secondaryTextColor)
         views.setTextViewText(
             R.id.widgetUpcomingRemindersHeader,
             PrayerWidgetStorage.readCalendarRemindersHeader(context)
@@ -286,6 +326,8 @@ object PrayerWidgetUpdater {
                 continue
             }
             views.setViewVisibility(rowIds[i], android.view.View.VISIBLE)
+            views.setTextColor(titleIds[i], primaryTextColor)
+            views.setTextColor(whenIds[i], secondaryTextColor)
             views.setTextViewText(titleIds[i], reminder.title)
             views.setTextViewText(whenIds[i], reminder.whenText)
         }
@@ -303,7 +345,14 @@ object PrayerWidgetUpdater {
         next: Pair<String, Long>?,
         openPendingIntent: PendingIntent
     ): RemoteViews {
+        val dark = isDark(context)
+        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
+        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
+        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
+
         val views = RemoteViews(context.packageName, R.layout.widget_daily_prayer_times)
+        views.setInt(R.id.widgetDailyPrayersRoot, "setBackgroundResource", bgRes)
+        views.setTextColor(R.id.widgetDailyPrayersLocation, secondaryTextColor)
         views.setTextViewText(
             R.id.widgetDailyPrayersLocation,
             PrayerWidgetStorage.readLocationLabel(context)
@@ -338,6 +387,8 @@ object PrayerWidgetUpdater {
 
         for (i in rowIds.indices) {
             val prayer = todayPrayers.getOrNull(i)
+            views.setTextColor(nameIds[i], primaryTextColor)
+            views.setTextColor(timeIds[i], primaryTextColor)
             views.setTextViewText(nameIds[i], prayer?.first ?: "--")
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
             val isNext = prayer != null && next != null && prayer.second == next.second
@@ -370,11 +421,16 @@ object PrayerWidgetUpdater {
         sizePreference: String,
         diameterDp: Int
     ) {
-        val preferenceScale = when (sizePreference) {
-            "extraSmall" -> 0.8f
-            "small" -> 0.9f
-            "large" -> 1.15f
-            else -> 1.0f
+        val numericSp = sizePreference.toFloatOrNull()
+        val preferenceScale = if (numericSp != null) {
+            numericSp / 14f
+        } else {
+            when (sizePreference) {
+                "extraSmall" -> 0.8f
+                "small" -> 0.9f
+                "large" -> 1.15f
+                else -> 1.0f
+            }
         }
         val countdownSp = (diameterDp / 3.0f * preferenceScale).coerceIn(20f, 36f)
         views.setTextViewTextSize(
@@ -392,22 +448,25 @@ object PrayerWidgetUpdater {
      * stretches into an ellipse. A plain oval background drawable can't do this — shape
      * drawables always fill whatever bounds the host gives them.
      */
-    private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int) {
+    private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int, isDark: Boolean = true) {
         val density = context.resources.displayMetrics.density
         val diameter = (circleDiameterDp(context, widgetId) * density).toInt()
 
         val bitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val radius = diameter / 2f
+        val circleBgColor = if (isDark) Color.parseColor("#FF1F8A70") else Color.parseColor("#FFFFFFFF")
+        val ringColor = if (isDark) Color.parseColor("#4DFFFFFF") else Color.parseColor("#331F8A70")
+
         canvas.drawCircle(radius, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.parseColor("#FF1F8A70")
+            color = circleBgColor
         })
         canvas.drawCircle(
             radius,
             radius,
             radius - 2f * density,
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = Color.parseColor("#4DFFFFFF")
+                color = ringColor
                 style = Paint.Style.STROKE
                 strokeWidth = 2f * density
             }
@@ -424,11 +483,17 @@ object PrayerWidgetUpdater {
         medium: Float,
         large: Float
     ) {
-        val sp = when (sizePreference) {
-            "extraSmall" -> extraSmall
-            "small" -> small
-            "large" -> large
-            else -> medium
+        val numericSp = sizePreference.toFloatOrNull()
+        val sp = if (numericSp != null) {
+            val scale = numericSp / 14f
+            medium * scale
+        } else {
+            when (sizePreference) {
+                "extraSmall" -> extraSmall
+                "small" -> small
+                "large" -> large
+                else -> medium
+            }
         }
         views.setTextViewTextSize(viewId, TypedValue.COMPLEX_UNIT_SP, sp)
     }

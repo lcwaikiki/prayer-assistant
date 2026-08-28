@@ -13,6 +13,8 @@ object PrayerWidgetStorage {
     private const val TODAY_PRAYERS_KEY = "today_prayers_json"
     private const val LOCATION_LABEL_KEY = "location_label"
     private const val WIDGET_TEXT_SIZE_KEY = "widget_text_size"
+    private const val WIDGET_THEME_KEY = "widget_theme"
+    private const val APP_LOCALE_KEY = "app_locale"
     private const val WIDGET_MMSS_THRESHOLD_KEY = "widget_mmss_threshold_minutes"
     private const val STATUS_ENABLED_KEY = "status_enabled"
     private const val STATUS_AUTO_RESTORE_KEY = "status_auto_restore"
@@ -106,6 +108,30 @@ object PrayerWidgetStorage {
     fun readWidgetTextSize(context: Context): String {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getString(WIDGET_TEXT_SIZE_KEY, "medium") ?: "medium"
+    }
+
+    fun saveWidgetTheme(context: Context, theme: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(WIDGET_THEME_KEY, theme)
+            .apply()
+    }
+
+    fun readWidgetTheme(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(WIDGET_THEME_KEY, "system") ?: "system"
+    }
+
+    fun saveAppLocale(context: Context, locale: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(APP_LOCALE_KEY, locale)
+            .apply()
+    }
+
+    fun readAppLocale(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(APP_LOCALE_KEY, "") ?: ""
     }
 
     /**

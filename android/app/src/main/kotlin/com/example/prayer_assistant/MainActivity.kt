@@ -21,14 +21,25 @@ class MainActivity : FlutterActivity() {
                     val timeline = call.argument<List<Map<String, Any?>>>("timeline") ?: emptyList()
                     val todayPrayers = call.argument<List<Map<String, Any?>>>("todayPrayers") ?: emptyList()
                     val locationLabel = call.argument<String>("locationLabel") ?: ""
+                    val appLocale = call.argument<String>("appLocale") ?: ""
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
                     PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
+                    if (appLocale.isNotEmpty()) {
+                        PrayerWidgetStorage.saveAppLocale(this, appLocale)
+                    }
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
                     PrayerWidgetUpdater.scheduleWidgetMinuteRefresh(this)
                     PrayerWidgetUpdater.scheduleWidgetSecondRefresh(this)
+                    result.success(null)
+                }
+                "updateWidgetLocale" -> {
+                    val locale = call.argument<String>("locale") ?: ""
+                    if (locale.isNotEmpty()) {
+                        PrayerWidgetStorage.saveAppLocale(this, locale)
+                    }
                     result.success(null)
                 }
                 "updateCalendarReminders" -> {
@@ -42,6 +53,12 @@ class MainActivity : FlutterActivity() {
                 "updateWidgetTextSize" -> {
                     val size = call.argument<String>("size") ?: "medium"
                     PrayerWidgetStorage.saveWidgetTextSize(this, size)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
+                "updateWidgetTheme" -> {
+                    val theme = call.argument<String>("theme") ?: "system"
+                    PrayerWidgetStorage.saveWidgetTheme(this, theme)
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }

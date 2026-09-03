@@ -914,6 +914,10 @@ object PrayerWidgetUpdater {
         }
 
         views.setTextViewText(
+            R.id.expandedTimeLeftLabel,
+            getWidgetStrings(locale).timeLeft
+        )
+        views.setTextViewText(
             R.id.expandedLocationLabel,
             PrayerWidgetStorage.readLocationLabel(context)
         )
@@ -947,7 +951,8 @@ object PrayerWidgetUpdater {
         val iftarLabel: String,
         val suhoorLabel: String,
         val fastedFormat: String,
-        val noReminders: String
+        val noReminders: String,
+        val timeLeft: String
     )
 
     private val widgetLocalizations = mapOf(
@@ -957,7 +962,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "İftar",
             suhoorLabel = "Sahur",
             fastedFormat = "%%%d Tamamlandı",
-            noReminders = "Hatırlatıcı yok"
+            noReminders = "Hatırlatıcı yok",
+            timeLeft = "Kalan Süre:"
         ),
         "en" to WidgetStrings(
             iftarCountdown = "Time to Iftar",
@@ -965,7 +971,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Iftar",
             suhoorLabel = "Suhoor",
             fastedFormat = "%d%% Fasted",
-            noReminders = "No upcoming reminders"
+            noReminders = "No upcoming reminders",
+            timeLeft = "Time Left:"
         ),
         "ru" to WidgetStrings(
             iftarCountdown = "До Ифтара",
@@ -973,7 +980,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Ифтар",
             suhoorLabel = "Сухур",
             fastedFormat = "%d%% завершено",
-            noReminders = "Нет предстоящих напоминаний"
+            noReminders = "Нет предстоящих напоминаний",
+            timeLeft = "Осталось:"
         ),
         "ar" to WidgetStrings(
             iftarCountdown = "حتى الإفطار",
@@ -981,7 +989,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "الإفطار",
             suhoorLabel = "السحور",
             fastedFormat = "%d٪ صيام",
-            noReminders = "لا توجد تذكيرات قادمة"
+            noReminders = "لا توجد تذكيرات قادمة",
+            timeLeft = "الوقت المتبقي:"
         ),
         "de" to WidgetStrings(
             iftarCountdown = "Zeit bis Iftar",
@@ -989,7 +998,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Iftar",
             suhoorLabel = "Sahur",
             fastedFormat = "%d%% gefastet",
-            noReminders = "Keine anstehenden Erinnerungen"
+            noReminders = "Keine anstehenden Erinnerungen",
+            timeLeft = "Verbleibende Zeit:"
         ),
         "es" to WidgetStrings(
             iftarCountdown = "Tiempo hasta Iftar",
@@ -997,7 +1007,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Iftar",
             suhoorLabel = "Suhur",
             fastedFormat = "%d%% ayunado",
-            noReminders = "Sin recordatorios próximos"
+            noReminders = "Sin recordatorios próximos",
+            timeLeft = "Tiempo restante:"
         ),
         "fr" to WidgetStrings(
             iftarCountdown = "Jusqu'à l'Iftar",
@@ -1005,7 +1016,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Iftar",
             suhoorLabel = "Suhur",
             fastedFormat = "%d%% jeûné",
-            noReminders = "Aucun rappel à venir"
+            noReminders = "Aucun rappel à venir",
+            timeLeft = "Temps restant :"
         ),
         "fa" to WidgetStrings(
             iftarCountdown = "تا افطار",
@@ -1013,7 +1025,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "افطار",
             suhoorLabel = "سحر",
             fastedFormat = "%d٪ روزه گذشته",
-            noReminders = "یادآوری پیش‌رویی وجود ندارد"
+            noReminders = "یادآوری پیش‌رویی وجود ندارد",
+            timeLeft = "زمان باقیمانده:"
         ),
         "ur" to WidgetStrings(
             iftarCountdown = "افطار تک وقت",
@@ -1021,7 +1034,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "افطار",
             suhoorLabel = "سحری",
             fastedFormat = "%d٪ روزہ مکمل",
-            noReminders = "کوئی آنے والی یاد دہانی نہیں"
+            noReminders = "کوئی آنے والی یاد دہانی نہیں",
+            timeLeft = "باقی وقت:"
         ),
         "id" to WidgetStrings(
             iftarCountdown = "Menuju Buka Puasa",
@@ -1029,7 +1043,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "Iftar",
             suhoorLabel = "Sahur",
             fastedFormat = "%d%% Berpuasa",
-            noReminders = "Tidak ada pengingat mendatang"
+            noReminders = "Tidak ada pengingat mendatang",
+            timeLeft = "Sisa Waktu:"
         ),
         "zh" to WidgetStrings(
             iftarCountdown = "距离开斋",
@@ -1037,7 +1052,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "开斋",
             suhoorLabel = "封斋",
             fastedFormat = "%d%% 已斋戒",
-            noReminders = "没有即将到来的提醒"
+            noReminders = "没有即将到来的提醒",
+            timeLeft = "剩余时间："
         ),
         "ja" to WidgetStrings(
             iftarCountdown = "イフタールまで",
@@ -1045,7 +1061,8 @@ object PrayerWidgetUpdater {
             iftarLabel = "イフタール",
             suhoorLabel = "スフール",
             fastedFormat = "%d%% 断食完了",
-            noReminders = "今後のリマインダーはありません"
+            noReminders = "今後のリマインダーはありません",
+            timeLeft = "残り時間："
         )
     )
 

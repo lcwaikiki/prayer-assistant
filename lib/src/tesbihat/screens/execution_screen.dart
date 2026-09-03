@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' show ReadContext;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../controller/prayer_app_controller.dart';
+import '../../navigation.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../services/haptic_service.dart';
 import '../state/items_notifier.dart';
@@ -31,6 +34,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
   void initState() {
     super.initState();
     _setWakelock(true);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final item = ref
           .read(itemsNotifierProvider)
@@ -45,6 +52,15 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
   @override
   void dispose() {
     _setWakelock(false);
+    try {
+      final context = rootNavigatorKey.currentContext;
+      final controller = context?.read<PrayerAppController>();
+      if (controller == null || controller.tabIndex != 4) {
+        SystemChrome.setPreferredOrientations([]);
+      }
+    } catch (_) {
+      SystemChrome.setPreferredOrientations([]);
+    }
     super.dispose();
   }
 

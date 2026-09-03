@@ -52,7 +52,24 @@ Future<void> main() async {
   await controller.initialize();
 
   final itemReminderService = ItemReminderService();
+  itemReminderService.currentLocale = controller.resolvedLocale;
   await itemReminderService.initialize();
+  controller.onLocaleChanged = (locale) async {
+    itemReminderService.currentLocale = locale;
+    final repository = ItemRepository.hive(itemsBox);
+    final items = repository.loadItems();
+    final groups = repository.loadGroups();
+    for (final item in items) {
+      if (item.reminderEnabled) {
+        await itemReminderService.scheduleReminder(item, locale: locale, catchUp: false);
+      }
+    }
+    for (final group in groups) {
+      if (group.reminderEnabled) {
+        await itemReminderService.scheduleGroupReminder(group, locale: locale, catchUp: false);
+      }
+    }
+  };
   await MidnightReminderScheduler.initializeAndSchedule();
   await CalendarMidnightScheduler.initializeAndSchedule();
 

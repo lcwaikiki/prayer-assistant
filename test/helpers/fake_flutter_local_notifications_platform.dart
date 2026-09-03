@@ -13,6 +13,7 @@ class FakeFlutterLocalNotificationsPlatform
   final scheduledDates = <tz.TZDateTime>[];
   final scheduledMatches = <DateTimeComponents?>[];
   final scheduledPayloads = <String?>[];
+  final scheduledBodies = <String?>[];
   final cancelledIds = <int>[];
 
   /// When true, every zonedSchedule attempt throws (simulating Android's
@@ -43,6 +44,7 @@ class FakeFlutterLocalNotificationsPlatform
     scheduledDates.add(scheduledDate);
     scheduledMatches.add(matchDateTimeComponents);
     scheduledPayloads.add(payload);
+    scheduledBodies.add(body);
   }
 
   @override

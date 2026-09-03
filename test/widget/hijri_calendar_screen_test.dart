@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hijri/hijri_calendar.dart';
+import 'package:intl/intl.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
@@ -95,7 +96,10 @@ void main() {
 
     await tester.tap(find.byTooltip('Today'));
     await tester.pumpAndSettle();
-    expect(find.text('August 2026'), findsOneWidget);
+    expect(
+      find.text(DateFormat('MMMM yyyy', 'en').format(DateTime.now())),
+      findsOneWidget,
+    );
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -389,6 +393,67 @@ void main() {
     expect(harness.controller.calendarReminders, hasLength(1));
     expect(harness.controller.calendarReminders.first.title, 'New Reminder');
     expect(find.text('August 2026'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('tapping Go to date button in Gregorian mode opens date picker', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+    );
+
+    await switchToGregorian(tester);
+    expect(find.byKey(const Key('calendar_go_to_date_button')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('calendar_go_to_date_button')));
+    await tester.pumpAndSettle();
+
+    // Standard showDatePicker dialog is displayed
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+
+    // Cancel the dialog
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('August 2026'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('tapping Go to date button in Hijri mode opens Hijri date picker and navigates', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+    );
+
+    expect(find.byKey(const Key('calendar_go_to_date_button')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('calendar_go_to_date_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Go to Hijri Date'), findsOneWidget);
+    expect(find.byKey(const Key('hijri_year_dropdown')), findsOneWidget);
+    expect(find.byKey(const Key('hijri_month_dropdown')), findsOneWidget);
+    expect(find.byKey(const Key('hijri_day_dropdown')), findsOneWidget);
+
+    // Confirm button
+    await tester.tap(find.byKey(const Key('hijri_picker_confirm')));
+    await tester.pumpAndSettle();
+
+    // Dialog dismissed
+    expect(find.text('Go to Hijri Date'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });

@@ -76,13 +76,16 @@ class TestHarness {
         prayerNameLabel: any(named: 'prayerNameLabel'),
         vibrationEnabled: any(named: 'vibrationEnabled'),
         soundEnabled: any(named: 'soundEnabled'),
+        locale: any(named: 'locale'),
       ),
     ).thenAnswer((_) async {});
     when(
       () => notificationService.getPendingScheduledReminders(),
     ).thenAnswer((_) async => const []);
     when(
-      () => notificationService.showTestNotificationNow(),
+      () => notificationService.showTestNotificationNow(
+        locale: any(named: 'locale'),
+      ),
     ).thenAnswer((_) async {});
 
     when(

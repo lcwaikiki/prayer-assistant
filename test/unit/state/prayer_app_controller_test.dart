@@ -54,13 +54,16 @@ void main() {
         prayerNameLabel: any(named: 'prayerNameLabel'),
         vibrationEnabled: any(named: 'vibrationEnabled'),
         soundEnabled: any(named: 'soundEnabled'),
+        locale: any(named: 'locale'),
       ),
     ).thenAnswer((_) async {});
     when(
       () => notificationService.getPendingScheduledReminders(),
     ).thenAnswer((_) async => const []);
     when(
-      () => notificationService.showTestNotificationNow(),
+      () => notificationService.showTestNotificationNow(
+        locale: any(named: 'locale'),
+      ),
     ).thenAnswer((_) async {});
 
     when(
@@ -258,6 +261,7 @@ void main() {
           prayerNameLabel: any(named: 'prayerNameLabel'),
           vibrationEnabled: any(named: 'vibrationEnabled'),
           soundEnabled: any(named: 'soundEnabled'),
+          locale: any(named: 'locale'),
         ),
       ).called(1);
     });
@@ -618,6 +622,7 @@ void main() {
           prayerNameLabel: any(named: 'prayerNameLabel'),
           vibrationEnabled: any(named: 'vibrationEnabled'),
           soundEnabled: any(named: 'soundEnabled'),
+          locale: any(named: 'locale'),
         ),
       ).called(2);
     });
@@ -642,6 +647,7 @@ void main() {
           prayerNameLabel: any(named: 'prayerNameLabel'),
           vibrationEnabled: any(named: 'vibrationEnabled'),
           soundEnabled: any(named: 'soundEnabled'),
+          locale: any(named: 'locale'),
         ),
       );
     });
@@ -936,7 +942,11 @@ void main() {
 
       await controller.sendTestNotificationNow();
 
-      verify(() => notificationService.showTestNotificationNow()).called(1);
+      verify(
+        () => notificationService.showTestNotificationNow(
+          locale: any(named: 'locale'),
+        ),
+      ).called(1);
     });
   });
 }

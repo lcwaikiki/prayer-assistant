@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, visibleForTesting;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,6 +8,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../services/notification_strings.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
 import '../models/item.dart';
@@ -14,8 +17,10 @@ import '../models/reminder_schedulable.dart';
 import 'prayer_anchor_resolver.dart';
 
 class ItemReminderService {
-  ItemReminderService();
+  ItemReminderService({LocalDatabase? database})
+      : _database = database ?? LocalDatabase();
 
+  final LocalDatabase _database;
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
@@ -126,16 +131,53 @@ class ItemReminderService {
     }
   }
 
-  Future<void> scheduleReminder(Item item, {bool catchUp = false}) =>
-      _schedule(item, tesbihItemPayloadPrefix, catchUp: catchUp);
+  Locale? currentLocale;
 
-  Future<void> scheduleGroupReminder(ItemGroup group, {bool catchUp = false}) =>
-      _schedule(group, tesbihGroupPayloadPrefix, catchUp: catchUp);
+  Future<Locale> _resolveLocale(Locale? override) async {
+    if (override != null) {
+      return override;
+    }
+    if (currentLocale != null) {
+      return currentLocale!;
+    }
+    try {
+      final saved = await _database.loadLocalePreference();
+      if (saved != null && saved.isNotEmpty && saved != 'system') {
+        return Locale(saved);
+      }
+    } catch (_) {}
+    return PlatformDispatcher.instance.locale;
+  }
+
+  Future<void> scheduleReminder(
+    Item item, {
+    bool catchUp = false,
+    Locale? locale,
+  }) =>
+      _schedule(
+        item,
+        tesbihItemPayloadPrefix,
+        catchUp: catchUp,
+        locale: locale,
+      );
+
+  Future<void> scheduleGroupReminder(
+    ItemGroup group, {
+    bool catchUp = false,
+    Locale? locale,
+  }) =>
+      _schedule(
+        group,
+        tesbihGroupPayloadPrefix,
+        catchUp: catchUp,
+        locale: locale,
+      );
 
   Future<void> _schedule(
     ReminderSchedulable subject,
     String payloadPrefix, {
     bool catchUp = true,
+    Locale? locale,
   }) async {
     final id = _notificationId(subject.id);
     // Clear the full per-occurrence id window: a finite count schedules
@@ -160,7 +202,9 @@ class ItemReminderService {
       ),
       iOS: DarwinNotificationDetails(),
     );
-    final body = 'Time for your ${subject.title} dhikr.';
+    final effectiveLocale = await _resolveLocale(locale);
+    final strings = NotificationStrings.of(effectiveLocale);
+    final body = strings.dhikrBody(subject.title);
     final payload = '$payloadPrefix${subject.id}';
 
     final repeatCount = subject.reminderRepeatCount;

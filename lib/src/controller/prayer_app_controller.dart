@@ -75,6 +75,7 @@ class PrayerAppController extends ChangeNotifier {
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
+  Future<void> Function(Locale? locale)? onLocaleChanged;
 
   Map<String, FastingLog> get fastingLogs => _fastingLogs;
 
@@ -882,6 +883,9 @@ class PrayerAppController extends ChangeNotifier {
         await _syncNotifications();
       } catch (_) {}
     }
+    try {
+      await onLocaleChanged?.call(resolvedLocale);
+    } catch (_) {}
   }
 
   Future<void> toggleThemeQuick({required bool isCurrentlyDark}) async {
@@ -961,6 +965,7 @@ class PrayerAppController extends ChangeNotifier {
       prayerNameLabel: (key) => localizedPrayerName(resolvedLocale, key),
       vibrationEnabled: _reminderVibrationEnabled,
       soundEnabled: _reminderSoundEnabled,
+      locale: resolvedLocale,
     );
   }
 
@@ -969,7 +974,7 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   Future<void> sendTestNotificationNow() {
-    return notificationService.showTestNotificationNow();
+    return notificationService.showTestNotificationNow(locale: resolvedLocale);
   }
 
   Future<void> _syncStatusBarConfig() {

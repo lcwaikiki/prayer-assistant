@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -318,6 +320,41 @@ void main() {
         platform.cancelledIds.toSet(),
         {for (var i = 0; i < 100; i++) base + i},
       );
+    });
+  });
+
+  group('notification message localization', () {
+    test('schedules notification with Turkish message when locale is tr', () async {
+      final anchor = DateTime(2099, 12, 31, 12, 0);
+      await service.scheduleReminder(
+        _item(reminderAt: anchor),
+        locale: const Locale('tr'),
+      );
+
+      expect(platform.scheduledBodies, isNotEmpty);
+      expect(platform.scheduledBodies.first, 'Subhanallah zikri vakti geldi.');
+    });
+
+    test('schedules notification with Arabic message when locale is ar', () async {
+      final anchor = DateTime(2099, 12, 31, 12, 0);
+      await service.scheduleReminder(
+        _item(reminderAt: anchor),
+        locale: const Locale('ar'),
+      );
+
+      expect(platform.scheduledBodies, isNotEmpty);
+      expect(platform.scheduledBodies.first, 'حان وقت ذكر Subhanallah.');
+    });
+
+    test('schedules notification with English message when locale is en', () async {
+      final anchor = DateTime(2099, 12, 31, 12, 0);
+      await service.scheduleReminder(
+        _item(reminderAt: anchor),
+        locale: const Locale('en'),
+      );
+
+      expect(platform.scheduledBodies, isNotEmpty);
+      expect(platform.scheduledBodies.first, 'Time for your Subhanallah dhikr.');
     });
   });
 }

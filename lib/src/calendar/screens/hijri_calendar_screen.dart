@@ -12,6 +12,24 @@ import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_reminder_form_screen.dart';
+import 'hijri_date_picker_dialog.dart';
+
+String _goToDateTooltip(String languageCode) {
+  return switch (languageCode.toLowerCase()) {
+    'tr' => 'Tarihe git',
+    'ar' => 'الانتقال إلى تاريخ',
+    'de' => 'Zu Datum springen',
+    'es' => 'Ir a fecha',
+    'fa' => 'رفتن به تاریخ',
+    'fr' => 'Aller à la date',
+    'id' => 'Buka tanggal',
+    'ja' => '日付へ移動',
+    'ru' => 'Перейти к дате',
+    'ur' => 'تاریخ پر جائیں',
+    'zh' => '前往日期',
+    _ => 'Go to date',
+  };
+}
 
 String _shortHijriMonth(DateTime date, String languageCode) {
   final month = HijriMonth.fromDate(date);
@@ -85,6 +103,28 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
 
   void _jumpToToday() {
     setState(() => _focusedDate = DateTime.now());
+  }
+
+  Future<void> _openGoToDate(CalendarPrimaryDisplay primary) async {
+    if (primary == CalendarPrimaryDisplay.hijri) {
+      final picked = await showHijriDatePickerDialog(
+        context,
+        initialDate: _focusedDate,
+      );
+      if (picked != null && mounted) {
+        setState(() => _focusedDate = picked);
+      }
+    } else {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: _focusedDate,
+        firstDate: DateTime(1937, 3, 14),
+        lastDate: DateTime(2077, 11, 16),
+      );
+      if (picked != null && mounted) {
+        setState(() => _focusedDate = picked);
+      }
+    }
   }
 
   List<DateTime> _monthDays(CalendarPrimaryDisplay primary) {
@@ -187,9 +227,16 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                     ),
                   ),
                   IconButton(
+                    key: const Key('calendar_today_button'),
                     tooltip: context.l10n.todayShort,
                     icon: const Icon(Icons.today),
                     onPressed: _jumpToToday,
+                  ),
+                  IconButton(
+                    key: const Key('calendar_go_to_date_button'),
+                    tooltip: _goToDateTooltip(Localizations.localeOf(context).languageCode),
+                    icon: const Icon(Icons.edit_calendar),
+                    onPressed: () => _openGoToDate(primary),
                   ),
                 ],
               ),
@@ -204,12 +251,20 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                     onPressed: () => _shiftMonth(primary, -1),
                   ),
                   Expanded(
-                    child: Text(
-                      _monthTitle(context, primary),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      softWrap: true,
-                      style: Theme.of(context).textTheme.titleLarge,
+                    child: InkWell(
+                      key: const Key('calendar_month_title_button'),
+                      borderRadius: BorderRadius.circular(8),
+                      onTap: () => _openGoToDate(primary),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                        child: Text(
+                          _monthTitle(context, primary),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                      ),
                     ),
                   ),
                   IconButton(

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import 'notification_strings.dart';
 import 'notification_tap_handler.dart';
 import 'timezone_setup.dart';
 
@@ -201,11 +203,12 @@ class NotificationService {
     return entries;
   }
 
-  Future<void> showTestNotificationNow() async {
+  Future<void> showTestNotificationNow({Locale? locale}) async {
+    final strings = NotificationStrings.of(locale);
     await _plugin.show(
       id: 900001,
-      title: 'Prayer Assist test',
-      body: 'Notification pipeline is working on this device.',
+      title: strings.testTitle,
+      body: strings.testBody,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'prayer_reminders_chime_vibrate_sound',
@@ -229,9 +232,11 @@ class NotificationService {
     required String Function(String prayerKey) prayerNameLabel,
     required bool vibrationEnabled,
     required bool soundEnabled,
+    Locale? locale,
   }) async {
     await cancelAllPrayerNotifications();
 
+    final strings = NotificationStrings.of(locale);
     final now = DateTime.now();
     final startDay = DateTime(now.year, now.month, now.day);
     final endDay = startDay.add(const Duration(days: 1));
@@ -273,8 +278,8 @@ class NotificationService {
           notifications.add(
             _ReminderNotification(
               fireAt: prayerTime,
-              title: '$displayName time',
-              body: '$locationName - It is time for $displayName prayer.',
+              title: strings.onTimeTitle(displayName),
+              body: strings.onTimeBody(locationName, displayName),
               vibrationEnabled: effectiveVibration,
               soundEnabled: effectiveSound,
               adhanEnabled: setting.adhanEnabled && effectiveSound,
@@ -290,9 +295,12 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: beforeTime,
-                title: '$displayName in ${setting.minutesBefore} min',
-                body:
-                    '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
+                title: strings.beforeTitle(displayName, setting.minutesBefore),
+                body: strings.beforeBody(
+                  locationName,
+                  displayName,
+                  prayerTimes[prayerName] ?? '',
+                ),
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,
@@ -302,9 +310,12 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: now.add(const Duration(seconds: 5)),
-                title: '$displayName soon',
-                body:
-                    '$locationName - $displayName is at ${prayerTimes[prayerName]}.',
+                title: strings.soonTitle(displayName),
+                body: strings.soonBody(
+                  locationName,
+                  displayName,
+                  prayerTimes[prayerName] ?? '',
+                ),
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,
@@ -321,9 +332,12 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: afterTime,
-                title: '$displayName +${setting.minutesAfter} min',
-                body:
-                    '$locationName - It has been ${setting.minutesAfter} min since $displayName.',
+                title: strings.afterTitle(displayName, setting.minutesAfter),
+                body: strings.afterBody(
+                  locationName,
+                  displayName,
+                  setting.minutesAfter,
+                ),
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,

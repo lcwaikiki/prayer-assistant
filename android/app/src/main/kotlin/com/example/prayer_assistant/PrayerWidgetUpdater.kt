@@ -821,9 +821,24 @@ object PrayerWidgetUpdater {
             views.setTextViewText(R.id.statusCountdown, "--:--")
             return views
         }
+        val locale = PrayerWidgetStorage.readAppLocale(context).lowercase()
+        val atWord = when (locale) {
+            "tr" -> "saat"
+            "de" -> "um"
+            "es" -> "a las"
+            "fr" -> "à"
+            "ar" -> "في"
+            "ru" -> "в"
+            "fa" -> "در"
+            "ur" -> "کو"
+            "id" -> "pukul"
+            "zh", "ja" -> ""
+            else -> "at"
+        }
+        val connector = if (atWord.isEmpty()) "" else " $atWord"
         views.setTextViewText(
             R.id.statusPrayerLabel,
-            "${toDisplayPrayerName(next.first)} at ${formatClock(next.second)} ->"
+            "${toDisplayPrayerName(next.first)}$connector ${formatClock(next.second)} ->".trim()
         )
         val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
         views.setChronometer(R.id.statusCountdown, base, null, true)

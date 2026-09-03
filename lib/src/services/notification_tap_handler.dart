@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 
 import '../calendar/screens/hijri_calendar_screen.dart';
+import '../controller/prayer_app_controller.dart';
 import '../navigation.dart';
 import '../tesbihat/screens/execution_screen.dart';
 import '../tesbihat/screens/group_screen.dart';
@@ -40,6 +43,16 @@ void handleNotificationTap(String? payload) {
     if (itemId.isEmpty) {
       return;
     }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      try {
+        context.read<PrayerAppController>().setTab(4);
+      } catch (_) {}
+    }
     rootNavigatorKey.currentState?.push(
       MaterialPageRoute<void>(builder: (_) => ExecutionScreen(itemId: itemId)),
     );
@@ -47,6 +60,16 @@ void handleNotificationTap(String? payload) {
     final groupId = payload.substring(tesbihGroupPayloadPrefix.length);
     if (groupId.isEmpty) {
       return;
+    }
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      try {
+        context.read<PrayerAppController>().setTab(4);
+      } catch (_) {}
     }
     rootNavigatorKey.currentState?.push(
       MaterialPageRoute<void>(builder: (_) => GroupScreen(groupId: groupId)),

@@ -155,8 +155,8 @@ class _AnchorDatePickerSheetState extends State<_AnchorDatePickerSheet> {
                       : l10n.calendarShowSecondary,
                   icon: Icon(
                     _showSecondary
-                        ? Icons.visibility_off
-                        : Icons.visibility,
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                   ),
                   onPressed: () =>
                       setState(() => _showSecondary = !_showSecondary),

@@ -457,4 +457,39 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('eye icon shows Icons.visibility when both calendar days are visible and Icons.visibility_off when hidden', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+    );
+
+    // By default, showSecondary is true, so the open eye (Icons.visibility) is shown
+    expect(find.byIcon(Icons.visibility), findsOneWidget);
+    expect(find.byIcon(Icons.visibility_off), findsNothing);
+
+    // Tap to hide secondary date
+    await tester.tap(find.byTooltip('Hide secondary date'));
+    await tester.pumpAndSettle();
+
+    // Now secondary is hidden, so crossed eye (Icons.visibility_off) is shown
+    expect(find.byIcon(Icons.visibility_off), findsOneWidget);
+    expect(find.byIcon(Icons.visibility), findsNothing);
+
+    // Tap again to show secondary date
+    await tester.tap(find.byTooltip('Show secondary date'));
+    await tester.pumpAndSettle();
+
+    // Back to open eye (Icons.visibility)
+    expect(find.byIcon(Icons.visibility), findsOneWidget);
+    expect(find.byIcon(Icons.visibility_off), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

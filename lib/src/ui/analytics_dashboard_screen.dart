@@ -236,8 +236,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                                   : context.l10n.calendarShowSecondary,
                               icon: Icon(
                                 showSecondary
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
                               onPressed: () => controller
                                   .updateShowSecondaryCalendarDate(!showSecondary),

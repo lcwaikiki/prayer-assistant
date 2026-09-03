@@ -220,7 +220,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                         ? context.l10n.calendarHideSecondary
                         : context.l10n.calendarShowSecondary,
                     icon: Icon(
-                      showSecondary ? Icons.visibility_off : Icons.visibility,
+                      showSecondary ? Icons.visibility : Icons.visibility_off,
                     ),
                     onPressed: () => controller.updateShowSecondaryCalendarDate(
                       !showSecondary,

@@ -299,5 +299,10 @@
   "trackTabTitle": "追踪",
   "prayerAnalyticsTitle": "礼拜分析",
   "prayerQadaaTitle": "还补礼拜 (Qadaa)",
-  "iftarTimeLabel": "开斋时间"
+  "iftarTimeLabel": "开斋时间",
+  "fastingProgressFasted": "{percent}% 已斋戒",
+  "suhoorTickerTitle": "封斋倒计时",
+  "fastingProgressElapsed": "{percent}% 已过",
+  "suhoorWithTime": "封斋 ({time})",
+  "iftarWithTime": "开斋 ({time})"
 }

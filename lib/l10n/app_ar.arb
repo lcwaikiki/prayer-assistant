@@ -299,5 +299,10 @@
   "trackTabTitle": "تتبع",
   "prayerAnalyticsTitle": "تحليلات الصلاة",
   "prayerQadaaTitle": "قضاء الصلاة",
-  "iftarTimeLabel": "وقت الإفطار"
+  "iftarTimeLabel": "وقت الإفطار",
+  "fastingProgressFasted": "{percent}٪ صيام",
+  "suhoorTickerTitle": "مؤقت السحور",
+  "fastingProgressElapsed": "{percent}٪ مضى",
+  "suhoorWithTime": "السحور ({time})",
+  "iftarWithTime": "الإفطار ({time})"
 }

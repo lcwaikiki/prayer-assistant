@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/ui/fasting_screen.dart';
 import 'package:prayer_assistant/src/ui/widgets/iftar_suhoor_countdown_card.dart';
 
-import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
@@ -29,6 +28,38 @@ void main() {
 
     expect(find.byType(IftarSuhoorCountdownCard), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('IftarSuhoorCountdownCard renders localized progress and labels in Russian',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation())
+        .thenAnswer((_) async => sampleSelectedLocation());
+    when(() => harness.api.getYearlyPrayerTimes(
+          districtId: any(named: 'districtId'),
+          year: any(named: 'year'),
+        )).thenAnswer((_) async => [samplePrayerDay(date: DateTime.now())]);
+
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: IftarSuhoorCountdownCard()),
+      locale: const Locale('ru'),
+    );
+
+    // Tap to expand
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pumpAndSettle();
+
+    // In Russian, Suhoor label contains "Сухур" and Iftar contains "Ифтар"
+    expect(find.textContaining('Сухур'), findsWidgets);
+    expect(find.textContaining('Ифтар'), findsWidgets);
+    // Percentage elapsed text contains "прошло"
+    expect(find.textContaining('прошло'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

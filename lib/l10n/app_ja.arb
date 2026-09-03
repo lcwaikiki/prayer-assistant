@@ -299,5 +299,10 @@
   "trackTabTitle": "トラック",
   "prayerAnalyticsTitle": "礼拝のアナリティクス",
   "prayerQadaaTitle": "礼拝のカダー",
-  "iftarTimeLabel": "イフタールの時間"
+  "iftarTimeLabel": "イフタールの時間",
+  "fastingProgressFasted": "{percent}% 断食完了",
+  "suhoorTickerTitle": "スフールタイマー",
+  "fastingProgressElapsed": "{percent}% 経過",
+  "suhoorWithTime": "スフール ({time})",
+  "iftarWithTime": "イフタール ({time})"
 }

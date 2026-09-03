@@ -276,8 +276,10 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                           ),
                           label: Text(
                             isFastingHours
-                                ? '${(progress * 100).round()}% Fasted'
-                                : 'Suhoor Ticker',
+                                ? context.l10n.fastingProgressFasted(
+                                    (progress * 100).round(),
+                                  )
+                                : context.l10n.suhoorTickerTitle,
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -303,14 +305,16 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Suhoor ($imsakStr)',
+                          context.l10n.suhoorWithTime(imsakStr),
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontSize: 10,
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                         Text(
-                          '${(progress * 100).toStringAsFixed(0)}% elapsed',
+                          context.l10n.fastingProgressElapsed(
+                            (progress * 100).toStringAsFixed(0),
+                          ),
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -318,7 +322,7 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                           ),
                         ),
                         Text(
-                          'Iftar ($aksamStr)',
+                          context.l10n.iftarWithTime(aksamStr),
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontSize: 10,
                             color: theme.colorScheme.onSurfaceVariant,

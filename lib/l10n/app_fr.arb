@@ -299,5 +299,10 @@
   "trackTabTitle": "Suivi",
   "prayerAnalyticsTitle": "Analyses de Prière",
   "prayerQadaaTitle": "Qadaa de Prière",
-  "iftarTimeLabel": "Heure de Iftar"
+  "iftarTimeLabel": "Heure de Iftar",
+  "fastingProgressFasted": "{percent}% jeûné",
+  "suhoorTickerTitle": "Compteur Suhur",
+  "fastingProgressElapsed": "{percent}% écoulé",
+  "suhoorWithTime": "Suhur ({time})",
+  "iftarWithTime": "Iftar ({time})"
 }

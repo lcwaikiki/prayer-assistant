@@ -839,4 +839,27 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get iftarTimeLabel => 'Время Ифтара';
+
+  @override
+  String fastingProgressFasted(int percent) {
+    return '$percent% завершено';
+  }
+
+  @override
+  String get suhoorTickerTitle => 'До сухура';
+
+  @override
+  String fastingProgressElapsed(String percent) {
+    return '$percent% прошло';
+  }
+
+  @override
+  String suhoorWithTime(String time) {
+    return 'Сухур ($time)';
+  }
+
+  @override
+  String iftarWithTime(String time) {
+    return 'Ифтар ($time)';
+  }
 }

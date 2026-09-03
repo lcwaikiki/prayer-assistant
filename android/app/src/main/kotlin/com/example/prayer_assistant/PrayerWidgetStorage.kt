@@ -170,6 +170,26 @@ object PrayerWidgetStorage {
             .apply()
     }
 
+    data class PrayerEntry(val name: String, val rawName: String, val epochMs: Long)
+
+    fun readTodayPrayersDetailed(context: Context): List<PrayerEntry> {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val raw = prefs.getString(TODAY_PRAYERS_KEY, "[]") ?: "[]"
+        val parsed = mutableListOf<PrayerEntry>()
+        val json = JSONArray(raw)
+        for (i in 0 until json.length()) {
+            val item = json.optJSONObject(i) ?: continue
+            val name = item.optString("name")
+            val rawName = item.optString("rawName", name)
+            val epoch = item.optLong("epochMs", -1L)
+            if (name.isEmpty() || epoch <= 0L) {
+                continue
+            }
+            parsed.add(PrayerEntry(name, rawName, epoch))
+        }
+        return parsed
+    }
+
     private fun readEntryList(context: Context, key: String): List<Pair<String, Long>> {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val raw = prefs.getString(key, "[]") ?: "[]"
@@ -183,7 +203,7 @@ object PrayerWidgetStorage {
             if (name.isEmpty() || epoch <= 0L) {
                 continue
             }
-            parsed.add((if (rawName.isNotEmpty()) rawName else name) to epoch)
+            parsed.add((if (name.isNotEmpty()) name else rawName) to epoch)
         }
         return parsed
     }

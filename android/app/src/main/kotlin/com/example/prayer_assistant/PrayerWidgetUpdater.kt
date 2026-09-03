@@ -95,7 +95,8 @@ object PrayerWidgetUpdater {
         openPendingIntent: PendingIntent,
     ) {
         val widgetManager = AppWidgetManager.getInstance(context)
-        val nextPrayerName = next?.first ?: "--"
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+        val nextPrayerName = next?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
         val dark = isDark(context)
         val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
         val fastingBgRes = if (dark) R.drawable.widget_fasting_bg else R.drawable.widget_fasting_bg_light
@@ -158,21 +159,18 @@ object PrayerWidgetUpdater {
             ComponentName(context, FastingCountdownWidgetProvider::class.java)
         )
         if (fastingIds.isNotEmpty()) {
-            val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
-            var imsakEpoch: Long? = todayPrayers.getOrNull(0)?.second
-            var aksamEpoch: Long? = todayPrayers.getOrNull(4)?.second
+            val todayDetailed = PrayerWidgetStorage.readTodayPrayersDetailed(context)
+            val imsakEpoch = todayDetailed.find {
+                val r = it.rawName.lowercase(Locale.ROOT)
+                r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр"
+            }?.epochMs ?: todayDetailed.getOrNull(0)?.epochMs
 
-            for (p in todayPrayers) {
-                val n = p.first.lowercase(Locale.getDefault())
-                if (n.contains("imsak") || n.contains("fajr") || n.contains("suhoor") || n.contains("فجر") || n.contains("إمساك")) {
-                    imsakEpoch = p.second
-                }
-                if (n.contains("aksam") || n.contains("akşam") || n.contains("maghrib") || n.contains("iftar") || n.contains("مغرب") || n.contains("إفطار")) {
-                    aksamEpoch = p.second
-                }
-            }
+            val aksamEpoch = todayDetailed.find {
+                val r = it.rawName.lowercase(Locale.ROOT)
+                r == "aksam" || r == "akşam" || r == "maghrib" || r == "магриб"
+            }?.epochMs ?: todayDetailed.getOrNull(4)?.epochMs
 
-
+            val widgetStrings = getWidgetStrings(appLocale)
             val imsakTimeStr = imsakEpoch?.let { formatClock(it) } ?: "05:00"
             val aksamTimeStr = aksamEpoch?.let { formatClock(it) } ?: "19:00"
 
@@ -180,7 +178,7 @@ object PrayerWidgetUpdater {
                     now in imsakEpoch..aksamEpoch
 
             val targetEpoch = if (isFastingHours) {
-                aksamEpoch!!
+                aksamEpoch
             } else {
                 if (aksamEpoch != null && now > aksamEpoch) {
                     (imsakEpoch ?: (now + 36000000L)) + 86400000L
@@ -189,7 +187,7 @@ object PrayerWidgetUpdater {
                 }
             }
 
-            val title = if (isFastingHours) "Iftar Countdown" else "Suhoor Countdown"
+            val title = if (isFastingHours) widgetStrings.iftarCountdown else widgetStrings.suhoorCountdown
             val remainingMs = (targetEpoch - now).coerceAtLeast(0L)
             val remainingSec = remainingMs / 1000
             val hours = remainingSec / 3600
@@ -206,7 +204,6 @@ object PrayerWidgetUpdater {
             } else {
                 String.format(Locale.US, "%02d:%02d", hours, minutes)
             }
-
 
             var progressPct = 0
             if (isFastingHours && imsakEpoch != null && aksamEpoch != null && aksamEpoch > imsakEpoch) {
@@ -234,12 +231,12 @@ object PrayerWidgetUpdater {
                 setTextSizeSp(views, R.id.widgetFastingTitle, textSize, 11f, 13f, 15f, 18f)
                 setTextSizeSp(views, R.id.widgetFastingRemaining, textSize, 18f, 24f, 30f, 34f)
                 views.setTextViewText(R.id.widgetFastingTitle, title)
-                views.setTextViewText(R.id.widgetFastingIftarTime, "Iftar: $aksamTimeStr")
+                views.setTextViewText(R.id.widgetFastingIftarTime, "${widgetStrings.iftarLabel}: $aksamTimeStr")
                 views.setTextViewText(R.id.widgetFastingRemaining, timeDisplay)
-                views.setTextViewText(R.id.widgetFastingPercentage, "$progressPct% Fasted")
+                views.setTextViewText(R.id.widgetFastingPercentage, String.format(Locale.US, widgetStrings.fastedFormat, progressPct))
                 views.setProgressBar(R.id.widgetFastingProgressBar, 100, progressPct, false)
-                views.setTextViewText(R.id.widgetFastingSuhoorLabel, "Suhoor: $imsakTimeStr")
-                views.setTextViewText(R.id.widgetFastingIftarLabel, "Iftar: $aksamTimeStr")
+                views.setTextViewText(R.id.widgetFastingSuhoorLabel, "${widgetStrings.suhoorLabel}: $imsakTimeStr")
+                views.setTextViewText(R.id.widgetFastingIftarLabel, "${widgetStrings.iftarLabel}: $aksamTimeStr")
                 views.setOnClickPendingIntent(R.id.widgetFastingRoot, openPendingIntent)
                 widgetManager.updateAppWidget(widgetId, views)
             }
@@ -298,6 +295,12 @@ object PrayerWidgetUpdater {
         )
         views.setOnClickPendingIntent(R.id.widgetUpcomingRemindersRoot, openPendingIntent)
 
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+        val widgetStrings = getWidgetStrings(appLocale)
+        views.setTextViewText(
+            R.id.widgetUpcomingRemindersEmpty,
+            widgetStrings.noReminders
+        )
         val reminders = PrayerWidgetStorage.readCalendarReminders(context)
         views.setViewVisibility(
             R.id.widgetUpcomingRemindersEmpty,
@@ -359,6 +362,7 @@ object PrayerWidgetUpdater {
         )
         views.setOnClickPendingIntent(R.id.widgetDailyPrayersRoot, openPendingIntent)
 
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
         val rowIds = intArrayOf(
             R.id.widgetDailyRow1,
@@ -387,9 +391,10 @@ object PrayerWidgetUpdater {
 
         for (i in rowIds.indices) {
             val prayer = todayPrayers.getOrNull(i)
+            val displayName = prayer?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
             views.setTextColor(nameIds[i], primaryTextColor)
             views.setTextColor(timeIds[i], primaryTextColor)
-            views.setTextViewText(nameIds[i], prayer?.first ?: "--")
+            views.setTextViewText(nameIds[i], displayName)
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
             val isNext = prayer != null && next != null && prayer.second == next.second
             if (isNext) {
@@ -836,9 +841,10 @@ object PrayerWidgetUpdater {
             else -> "at"
         }
         val connector = if (atWord.isEmpty()) "" else " $atWord"
+        val displayName = getLocalizedPrayerName(next.first, locale)
         views.setTextViewText(
             R.id.statusPrayerLabel,
-            "${toDisplayPrayerName(next.first)}$connector ${formatClock(next.second)} ->".trim()
+            "$displayName$connector ${formatClock(next.second)} ->".trim()
         )
         val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
         views.setChronometer(R.id.statusCountdown, base, null, true)
@@ -856,6 +862,7 @@ object PrayerWidgetUpdater {
      */
     private fun buildStatusExpandedView(context: Context, next: Pair<String, Long>?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar_expanded)
+        val locale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
         val columnIds = intArrayOf(
             R.id.columnImsak,
@@ -884,7 +891,8 @@ object PrayerWidgetUpdater {
 
         for (i in columnIds.indices) {
             val prayer = todayPrayers.getOrNull(i)
-            views.setTextViewText(nameIds[i], prayer?.first ?: "--")
+            val prayerDisplayName = prayer?.let { getLocalizedPrayerName(it.first, locale) } ?: "--"
+            views.setTextViewText(nameIds[i], prayerDisplayName)
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
             val isNext = prayer != null && next != null && prayer.second == next.second
             if (isNext) {
@@ -931,6 +939,147 @@ object PrayerWidgetUpdater {
     private fun formatClock(epochMs: Long): String {
         val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
         return formatter.format(Date(epochMs))
+    }
+
+    data class WidgetStrings(
+        val iftarCountdown: String,
+        val suhoorCountdown: String,
+        val iftarLabel: String,
+        val suhoorLabel: String,
+        val fastedFormat: String,
+        val noReminders: String
+    )
+
+    private val widgetLocalizations = mapOf(
+        "tr" to WidgetStrings(
+            iftarCountdown = "İftara Kalan",
+            suhoorCountdown = "Sahura Kalan",
+            iftarLabel = "İftar",
+            suhoorLabel = "Sahur",
+            fastedFormat = "%%%d Tamamlandı",
+            noReminders = "Hatırlatıcı yok"
+        ),
+        "en" to WidgetStrings(
+            iftarCountdown = "Time to Iftar",
+            suhoorCountdown = "Time to Suhoor",
+            iftarLabel = "Iftar",
+            suhoorLabel = "Suhoor",
+            fastedFormat = "%d%% Fasted",
+            noReminders = "No upcoming reminders"
+        ),
+        "ru" to WidgetStrings(
+            iftarCountdown = "До Ифтара",
+            suhoorCountdown = "До Сухура",
+            iftarLabel = "Ифтар",
+            suhoorLabel = "Сухур",
+            fastedFormat = "%d%% завершено",
+            noReminders = "Нет предстоящих напоминаний"
+        ),
+        "ar" to WidgetStrings(
+            iftarCountdown = "حتى الإفطار",
+            suhoorCountdown = "حتى السحور",
+            iftarLabel = "الإفطار",
+            suhoorLabel = "السحور",
+            fastedFormat = "%d٪ صيام",
+            noReminders = "لا توجد تذكيرات قادمة"
+        ),
+        "de" to WidgetStrings(
+            iftarCountdown = "Zeit bis Iftar",
+            suhoorCountdown = "Zeit bis Sahur",
+            iftarLabel = "Iftar",
+            suhoorLabel = "Sahur",
+            fastedFormat = "%d%% gefastet",
+            noReminders = "Keine anstehenden Erinnerungen"
+        ),
+        "es" to WidgetStrings(
+            iftarCountdown = "Tiempo hasta Iftar",
+            suhoorCountdown = "Tiempo hasta Suhur",
+            iftarLabel = "Iftar",
+            suhoorLabel = "Suhur",
+            fastedFormat = "%d%% ayunado",
+            noReminders = "Sin recordatorios próximos"
+        ),
+        "fr" to WidgetStrings(
+            iftarCountdown = "Jusqu'à l'Iftar",
+            suhoorCountdown = "Jusqu'au Suhur",
+            iftarLabel = "Iftar",
+            suhoorLabel = "Suhur",
+            fastedFormat = "%d%% jeûné",
+            noReminders = "Aucun rappel à venir"
+        ),
+        "fa" to WidgetStrings(
+            iftarCountdown = "تا افطار",
+            suhoorCountdown = "تا سحر",
+            iftarLabel = "افطار",
+            suhoorLabel = "سحر",
+            fastedFormat = "%d٪ روزه گذشته",
+            noReminders = "یادآوری پیش‌رویی وجود ندارد"
+        ),
+        "ur" to WidgetStrings(
+            iftarCountdown = "افطار تک وقت",
+            suhoorCountdown = "سحری تک وقت",
+            iftarLabel = "افطار",
+            suhoorLabel = "سحری",
+            fastedFormat = "%d٪ روزہ مکمل",
+            noReminders = "کوئی آنے والی یاد دہانی نہیں"
+        ),
+        "id" to WidgetStrings(
+            iftarCountdown = "Menuju Buka Puasa",
+            suhoorCountdown = "Menuju Sahur",
+            iftarLabel = "Iftar",
+            suhoorLabel = "Sahur",
+            fastedFormat = "%d%% Berpuasa",
+            noReminders = "Tidak ada pengingat mendatang"
+        ),
+        "zh" to WidgetStrings(
+            iftarCountdown = "距离开斋",
+            suhoorCountdown = "距离封斋",
+            iftarLabel = "开斋",
+            suhoorLabel = "封斋",
+            fastedFormat = "%d%% 已斋戒",
+            noReminders = "没有即将到来的提醒"
+        ),
+        "ja" to WidgetStrings(
+            iftarCountdown = "イフタールまで",
+            suhoorCountdown = "スフールまで",
+            iftarLabel = "イフタール",
+            suhoorLabel = "スフール",
+            fastedFormat = "%d%% 断食完了",
+            noReminders = "今後のリマインダーはありません"
+        )
+    )
+
+    fun getWidgetStrings(locale: String): WidgetStrings {
+        val key = locale.lowercase(Locale.ROOT)
+        return widgetLocalizations[key] ?: widgetLocalizations["en"]!!
+    }
+
+    fun getLocalizedPrayerName(rawName: String, locale: String): String {
+        val canonical = when (rawName.lowercase(Locale.ROOT).trim()) {
+            "imsak", "fajr", "fajr (imsak)", "фаджр", "فجر", "إمساك", "subuh" -> "imsak"
+            "gunes", "güneş", "sunrise", "восход", "شروق", "sonnenaufgang", "terbit", "日の出", "日出" -> "gunes"
+            "ogle", "öğle", "dhuhr", "zuhr", "зухр", "ظهر", "dzuhur", "ズフル", "晌礼" -> "ogle"
+            "ikindi", "asr", "аср", "عصر", "ashar", "アスル", "晡礼" -> "ikindi"
+            "aksam", "akşam", "maghrib", "магриб", "مغرب", "マグリブ", "昏礼" -> "aksam"
+            "yatsi", "yatsı", "isha", "иша", "عشاء", "isya", "イシャー", "宵礼" -> "yatsi"
+            else -> rawName
+        }
+        val names = mapOf(
+            "tr" to mapOf("imsak" to "İmsak", "gunes" to "Güneş", "ogle" to "Öğle", "ikindi" to "İkindi", "aksam" to "Akşam", "yatsi" to "Yatsı"),
+            "en" to mapOf("imsak" to "Fajr", "gunes" to "Sunrise", "ogle" to "Dhuhr", "ikindi" to "Asr", "aksam" to "Maghrib", "yatsi" to "Isha"),
+            "ar" to mapOf("imsak" to "الفجر", "gunes" to "الشروق", "ogle" to "الظهر", "ikindi" to "العصر", "aksam" to "المغرب", "yatsi" to "العشاء"),
+            "de" to mapOf("imsak" to "Fadschr", "gunes" to "Sonnenaufgang", "ogle" to "Dhuhr", "ikindi" to "Asr", "aksam" to "Maghrib", "yatsi" to "Ischa"),
+            "es" to mapOf("imsak" to "Fajr", "gunes" to "Amanecer", "ogle" to "Dhuhr", "ikindi" to "Asr", "aksam" to "Maghrib", "yatsi" to "Isha"),
+            "fr" to mapOf("imsak" to "Fajr", "gunes" to "Lever du soleil", "ogle" to "Dhuhr", "ikindi" to "Asr", "aksam" to "Maghrib", "yatsi" to "Icha"),
+            "ru" to mapOf("imsak" to "Фаджр", "gunes" to "Восход", "ogle" to "Зухр", "ikindi" to "Аср", "aksam" to "Магриб", "yatsi" to "Иша"),
+            "fa" to mapOf("imsak" to "صبح", "gunes" to "طلوع آفتاب", "ogle" to "ظهر", "ikindi" to "عصر", "aksam" to "مغرب", "yatsi" to "عشاء"),
+            "ur" to mapOf("imsak" to "فجر", "gunes" to "طلوع آفتاب", "ogle" to "ظہر", "ikindi" to "عصر", "aksam" to "مغرب", "yatsi" to "عشاء"),
+            "id" to mapOf("imsak" to "Subuh", "gunes" to "Terbit", "ogle" to "Dzuhur", "ikindi" to "Ashar", "aksam" to "Maghrib", "yatsi" to "Isya"),
+            "zh" to mapOf("imsak" to "晨礼", "gunes" to "日出", "ogle" to "晌礼", "ikindi" to "晡礼", "aksam" to "昏礼", "yatsi" to "宵礼"),
+            "ja" to mapOf("imsak" to "ファジュル", "gunes" to "日の出", "ogle" to "ズフル", "ikindi" to "アスル", "aksam" to "マグリブ", "yatsi" to "イシャー")
+        )
+        val langMap = names[locale.lowercase(Locale.ROOT)] ?: names["en"] ?: emptyMap()
+        return langMap[canonical] ?: rawName
     }
 
     private fun toDisplayPrayerName(raw: String): String = raw

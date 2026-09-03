@@ -57,11 +57,13 @@ LocationNode sampleLocationNode({
 /// screens that call `context.l10n` / `context.tesbihatL10n` render fully.
 Widget testLocalizedApp({
   required Widget child,
+  Locale? locale,
   GlobalKey<NavigatorState>? navigatorKey,
 }) {
   return MaterialApp(
     debugShowCheckedModeBanner: false,
     navigatorKey: navigatorKey,
+    locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,
       ...TesbihatLocalizations.localizationsDelegates,

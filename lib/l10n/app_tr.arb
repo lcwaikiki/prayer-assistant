@@ -299,5 +299,10 @@
   "trackTabTitle": "Takip",
   "prayerAnalyticsTitle": "Namaz Analizi",
   "prayerQadaaTitle": "Kaza Namazları",
-  "iftarTimeLabel": "İftar Vakti"
+  "iftarTimeLabel": "İftar Vakti",
+  "fastingProgressFasted": "%{percent} Tamamlandı",
+  "suhoorTickerTitle": "Sahur Sayacı",
+  "fastingProgressElapsed": "%{percent} geçti",
+  "suhoorWithTime": "Sahur ({time})",
+  "iftarWithTime": "İftar ({time})"
 }

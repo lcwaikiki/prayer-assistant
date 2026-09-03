@@ -1653,6 +1653,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Iftar Time'**
   String get iftarTimeLabel;
+
+  /// No description provided for @fastingProgressFasted.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% Fasted'**
+  String fastingProgressFasted(int percent);
+
+  /// No description provided for @suhoorTickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suhoor Ticker'**
+  String get suhoorTickerTitle;
+
+  /// No description provided for @fastingProgressElapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% elapsed'**
+  String fastingProgressElapsed(String percent);
+
+  /// No description provided for @suhoorWithTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Suhoor ({time})'**
+  String suhoorWithTime(String time);
+
+  /// No description provided for @iftarWithTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Iftar ({time})'**
+  String iftarWithTime(String time);
 }
 
 class _AppLocalizationsDelegate

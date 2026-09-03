@@ -293,6 +293,7 @@ Future<void> pumpWithHarness(
   WidgetTester tester,
   TestHarness harness,
   Widget child, {
+  Locale? locale,
   bool settle = true,
   List<Override> extraOverrides = const [],
 }) async {
@@ -310,7 +311,7 @@ Future<void> pumpWithHarness(
         ),
         ...extraOverrides,
       ],
-      child: testLocalizedApp(child: child),
+      child: testLocalizedApp(child: child, locale: locale),
     ),
   );
   await pumpLocalized(tester, app, settle: settle);

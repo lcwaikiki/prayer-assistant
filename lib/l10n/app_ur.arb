@@ -299,5 +299,10 @@
   "trackTabTitle": "ٹریک",
   "prayerAnalyticsTitle": "نماز تجزیات",
   "prayerQadaaTitle": "قضا نمازیں",
-  "iftarTimeLabel": "افطار کا وقت"
+  "iftarTimeLabel": "افطار کا وقت",
+  "fastingProgressFasted": "{percent}٪ روزہ مکمل",
+  "suhoorTickerTitle": "سحری ٹکر",
+  "fastingProgressElapsed": "{percent}٪ گزر گیا",
+  "suhoorWithTime": "سحری ({time})",
+  "iftarWithTime": "افطار ({time})"
 }

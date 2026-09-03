@@ -395,6 +395,9 @@ class PrayerAppController extends ChangeNotifier {
       await widgetBridgeService.updateWidgetMmssThreshold(
         _widgetMmssThresholdMinutes,
       );
+      try {
+        await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
+      } catch (_) {}
       final rawCalendarPrimaryDisplay = await database
           .loadCalendarPrimaryDisplay();
       var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
@@ -870,6 +873,9 @@ class PrayerAppController extends ChangeNotifier {
     _localePreference = preference;
     await database.saveLocalePreference(preference.name);
     notifyListeners();
+    try {
+      await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
+    } catch (_) {}
     if (_selectedLocation != null && _yearRange.isNotEmpty) {
       final now = DateTime.now();
       await widgetBridgeService.updateFromPrayerDays(

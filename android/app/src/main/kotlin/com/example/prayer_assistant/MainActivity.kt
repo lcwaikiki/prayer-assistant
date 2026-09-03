@@ -39,6 +39,7 @@ class MainActivity : FlutterActivity() {
                     val locale = call.argument<String>("locale") ?: ""
                     if (locale.isNotEmpty()) {
                         PrayerWidgetStorage.saveAppLocale(this, locale)
+                        PrayerWidgetUpdater.updateAll(this)
                     }
                     result.success(null)
                 }

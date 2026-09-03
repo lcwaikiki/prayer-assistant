@@ -357,5 +357,38 @@
   "trackTabTitle": "Track",
   "prayerAnalyticsTitle": "Prayer Analytics",
   "prayerQadaaTitle": "Prayer Qadaa",
-  "iftarTimeLabel": "Iftar Time"
+  "iftarTimeLabel": "Iftar Time",
+  "fastingProgressFasted": "{percent}% Fasted",
+  "@fastingProgressFasted": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "suhoorTickerTitle": "Suhoor Ticker",
+  "fastingProgressElapsed": "{percent}% elapsed",
+  "@fastingProgressElapsed": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "suhoorWithTime": "Suhoor ({time})",
+  "@suhoorWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "iftarWithTime": "Iftar ({time})",
+  "@iftarWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  }
 }

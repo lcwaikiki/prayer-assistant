@@ -815,4 +815,27 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get iftarTimeLabel => '开斋时间';
+
+  @override
+  String fastingProgressFasted(int percent) {
+    return '$percent% 已斋戒';
+  }
+
+  @override
+  String get suhoorTickerTitle => '封斋倒计时';
+
+  @override
+  String fastingProgressElapsed(String percent) {
+    return '$percent% 已过';
+  }
+
+  @override
+  String suhoorWithTime(String time) {
+    return '封斋 ($time)';
+  }
+
+  @override
+  String iftarWithTime(String time) {
+    return '开斋 ($time)';
+  }
 }

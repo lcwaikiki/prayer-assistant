@@ -836,4 +836,27 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get iftarTimeLabel => 'افطار کا وقت';
+
+  @override
+  String fastingProgressFasted(int percent) {
+    return '$percent٪ روزہ مکمل';
+  }
+
+  @override
+  String get suhoorTickerTitle => 'سحری ٹکر';
+
+  @override
+  String fastingProgressElapsed(String percent) {
+    return '$percent٪ گزر گیا';
+  }
+
+  @override
+  String suhoorWithTime(String time) {
+    return 'سحری ($time)';
+  }
+
+  @override
+  String iftarWithTime(String time) {
+    return 'افطار ($time)';
+  }
 }

@@ -299,5 +299,10 @@
   "trackTabTitle": "Lacak",
   "prayerAnalyticsTitle": "Analisis Shalat",
   "prayerQadaaTitle": "Qadha Shalat",
-  "iftarTimeLabel": "Waktu Iftar"
+  "iftarTimeLabel": "Waktu Iftar",
+  "fastingProgressFasted": "{percent}% Berpuasa",
+  "suhoorTickerTitle": "Penghitung Sahur",
+  "fastingProgressElapsed": "{percent}% berlalu",
+  "suhoorWithTime": "Sahur ({time})",
+  "iftarWithTime": "Iftar ({time})"
 }

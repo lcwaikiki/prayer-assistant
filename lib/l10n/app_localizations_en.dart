@@ -837,4 +837,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get iftarTimeLabel => 'Iftar Time';
+
+  @override
+  String fastingProgressFasted(int percent) {
+    return '$percent% Fasted';
+  }
+
+  @override
+  String get suhoorTickerTitle => 'Suhoor Ticker';
+
+  @override
+  String fastingProgressElapsed(String percent) {
+    return '$percent% elapsed';
+  }
+
+  @override
+  String suhoorWithTime(String time) {
+    return 'Suhoor ($time)';
+  }
+
+  @override
+  String iftarWithTime(String time) {
+    return 'Iftar ($time)';
+  }
 }

@@ -354,5 +354,10 @@
   "trackTabTitle": "Отслеживание",
   "prayerAnalyticsTitle": "Аналитика Молитв",
   "prayerQadaaTitle": "Када Молитв",
-  "iftarTimeLabel": "Время Ифтара"
+  "iftarTimeLabel": "Время Ифтара",
+  "fastingProgressFasted": "{percent}% завершено",
+  "suhoorTickerTitle": "До сухура",
+  "fastingProgressElapsed": "{percent}% прошло",
+  "suhoorWithTime": "Сухур ({time})",
+  "iftarWithTime": "Ифтар ({time})"
 }

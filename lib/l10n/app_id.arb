@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "Cembung Tua",
   "moonPhaseLastQuarter": "Kuartal Terakhir",
   "moonPhaseWaningCrescent": "Sabit Tua",
-  "whiteDaysSubtitle": "Hari Puasa Sunnah (13, 14, 15 Hijriyah)"
+  "whiteDaysSubtitle": "Hari Puasa Sunnah (13, 14, 15 Hijriyah)",
+  "homeDashboardCardsSectionTitle": "Kartu Beranda Dashboard",
+  "showCardMoonPhaseTitle": "Tampilkan Kartu Fase Bulan",
+  "showCardMoonPhaseSubtitle": "Tampilkan kartu fase bulan dan Hari-hari Putih",
+  "showCardIftarSuhoorTitle": "Tampilkan Kartu Sahur & Iftar",
+  "showCardIftarSuhoorSubtitle": "Tampilkan hitung mundur langsung Sahur dan Iftar",
+  "showCardDailyWisdomTitle": "Tampilkan Kartu Hikmah Harian",
+  "showCardDailyWisdomSubtitle": "Tampilkan kartu Hadits atau ayat harian",
+  "showCardUpcomingRemindersTitle": "Tampilkan Kartu Pengingat Mendatang",
+  "showCardUpcomingRemindersSubtitle": "Tampilkan 3 pengingat mendatang berikutnya"
 }

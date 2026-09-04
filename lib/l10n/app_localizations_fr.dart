@@ -998,4 +998,36 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get whiteDaysSubtitle =>
       'Jours de jeûne de la Sunna (13, 14, 15 Hégire)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Cartes du Tableau de Bord';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Afficher la carte de phase lunaire';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Afficher la phase lunaire et les Jours Blancs';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Afficher la carte Suhoor & Iftar';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Afficher le compte à rebours Suhoor et Iftar';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Afficher la carte sagesse du jour';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Afficher le Hadith ou verset du jour';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Afficher la carte rappels à venir';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Afficher la liste des 3 prochains rappels';
 }

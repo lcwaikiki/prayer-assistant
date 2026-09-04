@@ -349,5 +349,14 @@
   "moonPhaseWaningGibbous": "Küçülen Şişkin Ay",
   "moonPhaseLastQuarter": "Son Dördün",
   "moonPhaseWaningCrescent": "Küçülen Hilal",
-  "whiteDaysSubtitle": "Sünnet Oruç Günleri (13, 14, 15 Hicri)"
+  "whiteDaysSubtitle": "Sünnet Oruç Günleri (13, 14, 15 Hicri)",
+  "homeDashboardCardsSectionTitle": "Ana Sayfa Kart Ayarları",
+  "showCardMoonPhaseTitle": "Ay Evresi Kartını Göster",
+  "showCardMoonPhaseSubtitle": "Ay evresi ve Eyyam-ı Biyd bilgi kartını göster",
+  "showCardIftarSuhoorTitle": "Sahur & İftar Kartını Göster",
+  "showCardIftarSuhoorSubtitle": "Canlı Sahur ve İftar geri sayım kartını göster",
+  "showCardDailyWisdomTitle": "Günün Hikmeti Kartını Göster",
+  "showCardDailyWisdomSubtitle": "Günlük Hadis veya ayet bilgi kartını göster",
+  "showCardUpcomingRemindersTitle": "Yaklaşan Hatırlatıcılar Kartını Göster",
+  "showCardUpcomingRemindersSubtitle": "Gelecek 3 hatırlatıcıyı listeleyen kartı göster"
 }

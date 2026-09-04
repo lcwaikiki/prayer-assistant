@@ -991,4 +991,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'Sunnah Fasting Days (13, 14, 15 Hijri)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Home Dashboard Cards';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Show Moon Phase Card';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Display vector moon phase and White Days card';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Show Suhoor & Iftar Card';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Display live Suhoor and Iftar countdown card';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Show Daily Wisdom Card';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Display daily inspirational Hadith or verse card';
+
+  @override
+  String get showCardUpcomingRemindersTitle => 'Show Upcoming Reminders Card';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Display card listing your next 3 upcoming calendar reminders';
 }

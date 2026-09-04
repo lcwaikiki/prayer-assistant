@@ -261,28 +261,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         _NextPrayerBanner(info: nextPrayer),
                         const SizedBox(height: 6),
                       ],
-                      if (dailyWisdom != null) ...[
+                      if (controller.showCardDailyWisdom && dailyWisdom != null) ...[
                         DailyWisdomCard(wisdom: dailyWisdom),
                         const SizedBox(height: 6),
                       ],
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 0),
-                        child: IftarSuhoorCountdownCard(),
-                      ),
-                      const SizedBox(height: 6),
-                      MoonPhaseCard(
-                        date: day.date,
-                        hijriOffset: controller.hijriDateOffset,
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const HijriCalendarScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 6),
-                      if (upcoming.isNotEmpty) ...[
+                      if (controller.showCardIftarSuhoor) ...[
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          child: IftarSuhoorCountdownCard(),
+                        ),
+                        const SizedBox(height: 6),
+                      ],
+                      if (controller.showCardMoonPhase) ...[
+                        MoonPhaseCard(
+                          date: day.date,
+                          hijriOffset: controller.hijriDateOffset,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const HijriCalendarScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 6),
+                      ],
+                      if (controller.showCardUpcomingReminders && upcoming.isNotEmpty) ...[
                         UpcomingRemindersCard(entries: upcoming),
                         const SizedBox(height: 6),
                       ],

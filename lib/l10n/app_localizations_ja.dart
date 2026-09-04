@@ -965,4 +965,31 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'スンナ断食の日々（ヒジュラ暦13, 14, 15日）';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'ホームダッシュボードカード';
+
+  @override
+  String get showCardMoonPhaseTitle => '月相カードを表示';
+
+  @override
+  String get showCardMoonPhaseSubtitle => '月相と白の日々カードを表示';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'スフール＆イフタールカードを表示';
+
+  @override
+  String get showCardIftarSuhoorSubtitle => 'スフールとイフタールのカウントダウンを表示';
+
+  @override
+  String get showCardDailyWisdomTitle => '今日の知恵カードを表示';
+
+  @override
+  String get showCardDailyWisdomSubtitle => '日々のハディースまたは聖句カードを表示';
+
+  @override
+  String get showCardUpcomingRemindersTitle => '今後のリマインダーカードを表示';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle => '今後のリマインダー3件を表示';
 }

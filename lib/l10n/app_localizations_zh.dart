@@ -964,4 +964,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => '圣行斋戒日（伊斯兰历13、14、15日）';
+
+  @override
+  String get homeDashboardCardsSectionTitle => '首页仪表板卡片';
+
+  @override
+  String get showCardMoonPhaseTitle => '显示月相卡片';
+
+  @override
+  String get showCardMoonPhaseSubtitle => '显示月相与白日提示卡片';
+
+  @override
+  String get showCardIftarSuhoorTitle => '显示封斋与开斋卡片';
+
+  @override
+  String get showCardIftarSuhoorSubtitle => '显示封斋与开斋实时倒计时卡片';
+
+  @override
+  String get showCardDailyWisdomTitle => '显示每日智慧卡片';
+
+  @override
+  String get showCardDailyWisdomSubtitle => '显示每日圣训或经文卡片';
+
+  @override
+  String get showCardUpcomingRemindersTitle => '显示近期提醒卡片';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle => '显示列出接下来 3 个提醒的卡片';
 }

@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "Abnehmender Dreiviertelmond",
   "moonPhaseLastQuarter": "Letztes Viertel",
   "moonPhaseWaningCrescent": "Abnehmender Sichelmond",
-  "whiteDaysSubtitle": "Sunnah-Fasttage (13., 14., 15. Hijri)"
+  "whiteDaysSubtitle": "Sunnah-Fasttage (13., 14., 15. Hijri)",
+  "homeDashboardCardsSectionTitle": "Startseiten-Karten",
+  "showCardMoonPhaseTitle": "Mondphasen-Karte anzeigen",
+  "showCardMoonPhaseSubtitle": "Mondphase und Weiße Tage Karte anzeigen",
+  "showCardIftarSuhoorTitle": "Suhoor & Iftar Karte anzeigen",
+  "showCardIftarSuhoorSubtitle": "Live-Countdown für Suhoor und Iftar anzeigen",
+  "showCardDailyWisdomTitle": "Tägliche Weisheit Karte anzeigen",
+  "showCardDailyWisdomSubtitle": "Tägliches Hadith- oder Vers-Kärtchen anzeigen",
+  "showCardUpcomingRemindersTitle": "Anstehende Erinnerungen Karte anzeigen",
+  "showCardUpcomingRemindersSubtitle": "Karte mit den nächsten 3 Erinnerungen anzeigen"
 }

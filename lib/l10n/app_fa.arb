@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "تثلیث کاست‌يابی",
   "moonPhaseLastQuarter": "تربیع آخر",
   "moonPhaseWaningCrescent": "هلال کاست‌يابی",
-  "whiteDaysSubtitle": "روزهای روزه سنت (۱۳، ۱۴، ۱۵ هجری)"
+  "whiteDaysSubtitle": "روزهای روزه سنت (۱۳، ۱۴، ۱۵ هجری)",
+  "homeDashboardCardsSectionTitle": "کارت‌های صفحه اصلی",
+  "showCardMoonPhaseTitle": "نمایش کارت حالت ماه",
+  "showCardMoonPhaseSubtitle": "نمایش کارت حالت ماه و ایام البیض",
+  "showCardIftarSuhoorTitle": "نمایش کارت سحر و افطار",
+  "showCardIftarSuhoorSubtitle": "نمایش شمارش معکوس سحر و افطار",
+  "showCardDailyWisdomTitle": "نمایش کارت حکمت روز",
+  "showCardDailyWisdomSubtitle": "نمایش کارت حدیث یا آیه روزانه",
+  "showCardUpcomingRemindersTitle": "نمایش کارت یادآوری‌های آینده",
+  "showCardUpcomingRemindersSubtitle": "نمایش کارت فهرست ۳ یادآوری بعدی"
 }

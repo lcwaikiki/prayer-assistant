@@ -992,4 +992,36 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'Sunnah-Fasttage (13., 14., 15. Hijri)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Startseiten-Karten';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Mondphasen-Karte anzeigen';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Mondphase und Weiße Tage Karte anzeigen';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Suhoor & Iftar Karte anzeigen';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Live-Countdown für Suhoor und Iftar anzeigen';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Tägliche Weisheit Karte anzeigen';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Tägliches Hadith- oder Vers-Kärtchen anzeigen';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Anstehende Erinnerungen Karte anzeigen';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Karte mit den nächsten 3 Erinnerungen anzeigen';
 }

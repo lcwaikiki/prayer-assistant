@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "寝待月",
   "moonPhaseLastQuarter": "下弦の月",
   "moonPhaseWaningCrescent": "有明月",
-  "whiteDaysSubtitle": "スンナ断食の日々（ヒジュラ暦13, 14, 15日）"
+  "whiteDaysSubtitle": "スンナ断食の日々（ヒジュラ暦13, 14, 15日）",
+  "homeDashboardCardsSectionTitle": "ホームダッシュボードカード",
+  "showCardMoonPhaseTitle": "月相カードを表示",
+  "showCardMoonPhaseSubtitle": "月相と白の日々カードを表示",
+  "showCardIftarSuhoorTitle": "スフール＆イフタールカードを表示",
+  "showCardIftarSuhoorSubtitle": "スフールとイフタールのカウントダウンを表示",
+  "showCardDailyWisdomTitle": "今日の知恵カードを表示",
+  "showCardDailyWisdomSubtitle": "日々のハディースまたは聖句カードを表示",
+  "showCardUpcomingRemindersTitle": "今後のリマインダーカードを表示",
+  "showCardUpcomingRemindersSubtitle": "今後のリマインダー3件を表示"
 }

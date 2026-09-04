@@ -995,4 +995,35 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get whiteDaysSubtitle =>
       'Días de ayuno de la Sunnah (13, 14, 15 Híyri)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Tarjetas del Panel Principal';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Mostrar tarjeta de fase lunar';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Mostrar tarjeta de fase lunar y Días Blancos';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Mostrar tarjeta de Suhoor e Iftar';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Mostrar cuenta regresiva de Suhoor e Iftar';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Mostrar tarjeta de sabiduría diaria';
+
+  @override
+  String get showCardDailyWisdomSubtitle => 'Mostrar Hadiz o versículo del día';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Mostrar tarjeta de próximos recordatorios';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Mostrar los próximos 3 recordatorios';
 }

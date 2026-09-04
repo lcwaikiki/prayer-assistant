@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "Lune gibbeuse décroissante",
   "moonPhaseLastQuarter": "Dernier quartier",
   "moonPhaseWaningCrescent": "Dernier croissant",
-  "whiteDaysSubtitle": "Jours de jeûne de la Sunna (13, 14, 15 Hégire)"
+  "whiteDaysSubtitle": "Jours de jeûne de la Sunna (13, 14, 15 Hégire)",
+  "homeDashboardCardsSectionTitle": "Cartes du Tableau de Bord",
+  "showCardMoonPhaseTitle": "Afficher la carte de phase lunaire",
+  "showCardMoonPhaseSubtitle": "Afficher la phase lunaire et les Jours Blancs",
+  "showCardIftarSuhoorTitle": "Afficher la carte Suhoor & Iftar",
+  "showCardIftarSuhoorSubtitle": "Afficher le compte à rebours Suhoor et Iftar",
+  "showCardDailyWisdomTitle": "Afficher la carte sagesse du jour",
+  "showCardDailyWisdomSubtitle": "Afficher le Hadith ou verset du jour",
+  "showCardUpcomingRemindersTitle": "Afficher la carte rappels à venir",
+  "showCardUpcomingRemindersSubtitle": "Afficher la liste des 3 prochains rappels"
 }

@@ -1923,6 +1923,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sunnah Fasting Days (13, 14, 15 Hijri)'**
   String get whiteDaysSubtitle;
+
+  /// No description provided for @homeDashboardCardsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Dashboard Cards'**
+  String get homeDashboardCardsSectionTitle;
+
+  /// No description provided for @showCardMoonPhaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Moon Phase Card'**
+  String get showCardMoonPhaseTitle;
+
+  /// No description provided for @showCardMoonPhaseSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display vector moon phase and White Days card'**
+  String get showCardMoonPhaseSubtitle;
+
+  /// No description provided for @showCardIftarSuhoorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Suhoor & Iftar Card'**
+  String get showCardIftarSuhoorTitle;
+
+  /// No description provided for @showCardIftarSuhoorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display live Suhoor and Iftar countdown card'**
+  String get showCardIftarSuhoorSubtitle;
+
+  /// No description provided for @showCardDailyWisdomTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Daily Wisdom Card'**
+  String get showCardDailyWisdomTitle;
+
+  /// No description provided for @showCardDailyWisdomSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display daily inspirational Hadith or verse card'**
+  String get showCardDailyWisdomSubtitle;
+
+  /// No description provided for @showCardUpcomingRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Upcoming Reminders Card'**
+  String get showCardUpcomingRemindersTitle;
+
+  /// No description provided for @showCardUpcomingRemindersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display card listing your next 3 upcoming calendar reminders'**
+  String get showCardUpcomingRemindersSubtitle;
 }
 
 class _AppLocalizationsDelegate

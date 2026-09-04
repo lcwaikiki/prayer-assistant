@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "گھٹتا ہوا محدب چاند",
   "moonPhaseLastQuarter": "آخری چوتھائی",
   "moonPhaseWaningCrescent": "گھٹتا ہوا ہلال",
-  "whiteDaysSubtitle": "سنت روزوں کے دن (13، 14، 15 ہجری)"
+  "whiteDaysSubtitle": "سنت روزوں کے دن (13، 14، 15 ہجری)",
+  "homeDashboardCardsSectionTitle": "ہوم ڈیش بورڈ کارڈز",
+  "showCardMoonPhaseTitle": "قمری صورت کا کارڈ دکھائیں",
+  "showCardMoonPhaseSubtitle": "قمری صورت اور ایام بیض کا کارڈ دکھائیں",
+  "showCardIftarSuhoorTitle": "سحری و افطاری کا کارڈ دکھائیں",
+  "showCardIftarSuhoorSubtitle": "سحری اور افطاری کا لائیو کاؤنٹ ڈاؤن دکھائیں",
+  "showCardDailyWisdomTitle": "آج کی حکمت کا کارڈ دکھائیں",
+  "showCardDailyWisdomSubtitle": "روزانہ کی حدیث یا آیت کا کارڈ دکھائیں",
+  "showCardUpcomingRemindersTitle": "آنے والی یاد دہانیوں کا کارڈ دکھائیں",
+  "showCardUpcomingRemindersSubtitle": "اگلی 3 یاد دہانیوں کی فہرست والا کارڈ دکھائیں"
 }

@@ -993,4 +993,36 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'Дни сунна-поста (13, 14, 15 Хиджры)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Карточки Главного Экрана';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Показывать карточку фазы Луны';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Отображать карточку фазы Луны и Белых дней';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Показывать карточку Сухура и Ифтара';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Отображать отсчет времени до Сухура и Ифтара';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Показывать карточку мудрости дня';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Отображать ежедневный Хадис или аят';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Показывать карточку ближайших напоминаний';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Отображать карточку с 3 ближайшими напоминаниями';
 }

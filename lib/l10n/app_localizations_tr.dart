@@ -992,4 +992,36 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'Sünnet Oruç Günleri (13, 14, 15 Hicri)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Ana Sayfa Kart Ayarları';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Ay Evresi Kartını Göster';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Ay evresi ve Eyyam-ı Biyd bilgi kartını göster';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Sahur & İftar Kartını Göster';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Canlı Sahur ve İftar geri sayım kartını göster';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Günün Hikmeti Kartını Göster';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Günlük Hadis veya ayet bilgi kartını göster';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Yaklaşan Hatırlatıcılar Kartını Göster';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Gelecek 3 hatırlatıcıyı listeleyen kartı göster';
 }

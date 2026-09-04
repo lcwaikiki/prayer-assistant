@@ -398,5 +398,14 @@
   "moonPhaseWaningGibbous": "Убывающая луна",
   "moonPhaseLastQuarter": "Последняя четверть",
   "moonPhaseWaningCrescent": "Убывающий серп",
-  "whiteDaysSubtitle": "Дни сунна-поста (13, 14, 15 Хиджры)"
+  "whiteDaysSubtitle": "Дни сунна-поста (13, 14, 15 Хиджры)",
+  "homeDashboardCardsSectionTitle": "Карточки Главного Экрана",
+  "showCardMoonPhaseTitle": "Показывать карточку фазы Луны",
+  "showCardMoonPhaseSubtitle": "Отображать карточку фазы Луны и Белых дней",
+  "showCardIftarSuhoorTitle": "Показывать карточку Сухура и Ифтара",
+  "showCardIftarSuhoorSubtitle": "Отображать отсчет времени до Сухура и Ифтара",
+  "showCardDailyWisdomTitle": "Показывать карточку мудрости дня",
+  "showCardDailyWisdomSubtitle": "Отображать ежедневный Хадис или аят",
+  "showCardUpcomingRemindersTitle": "Показывать карточку ближайших напоминаний",
+  "showCardUpcomingRemindersSubtitle": "Отображать карточку с 3 ближайшими напоминаниями"
 }

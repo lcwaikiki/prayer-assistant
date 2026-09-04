@@ -988,4 +988,32 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'روزهای روزه سنت (۱۳، ۱۴، ۱۵ هجری)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'کارت‌های صفحه اصلی';
+
+  @override
+  String get showCardMoonPhaseTitle => 'نمایش کارت حالت ماه';
+
+  @override
+  String get showCardMoonPhaseSubtitle => 'نمایش کارت حالت ماه و ایام البیض';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'نمایش کارت سحر و افطار';
+
+  @override
+  String get showCardIftarSuhoorSubtitle => 'نمایش شمارش معکوس سحر و افطار';
+
+  @override
+  String get showCardDailyWisdomTitle => 'نمایش کارت حکمت روز';
+
+  @override
+  String get showCardDailyWisdomSubtitle => 'نمایش کارت حدیث یا آیه روزانه';
+
+  @override
+  String get showCardUpcomingRemindersTitle => 'نمایش کارت یادآوری‌های آینده';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'نمایش کارت فهرست ۳ یادآوری بعدی';
 }

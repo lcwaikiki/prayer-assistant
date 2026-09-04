@@ -985,4 +985,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'أيام صيام السنة (13، 14، 15 هجري)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'بطاقات الشاشة الرئيسية';
+
+  @override
+  String get showCardMoonPhaseTitle => 'إظهار بطاقة أطوار القمر';
+
+  @override
+  String get showCardMoonPhaseSubtitle => 'عرض بطاقة أطوار القمر والأيام البيض';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'إظهار بطاقة السحور والإفطار';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'عرض بطاقة العداد التنازلي للسحور والإفطار';
+
+  @override
+  String get showCardDailyWisdomTitle => 'إظهار بطاقة حكمة اليوم';
+
+  @override
+  String get showCardDailyWisdomSubtitle => 'عرض بطاقة الحديث أو الآية اليومية';
+
+  @override
+  String get showCardUpcomingRemindersTitle => 'إظهار بطاقة التذكيرات القادمة';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'عرض بطاقة قائمة التذكيرات القادمة';
 }

@@ -988,4 +988,36 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'سنت روزوں کے دن (13، 14، 15 ہجری)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'ہوم ڈیش بورڈ کارڈز';
+
+  @override
+  String get showCardMoonPhaseTitle => 'قمری صورت کا کارڈ دکھائیں';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'قمری صورت اور ایام بیض کا کارڈ دکھائیں';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'سحری و افطاری کا کارڈ دکھائیں';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'سحری اور افطاری کا لائیو کاؤنٹ ڈاؤن دکھائیں';
+
+  @override
+  String get showCardDailyWisdomTitle => 'آج کی حکمت کا کارڈ دکھائیں';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'روزانہ کی حدیث یا آیت کا کارڈ دکھائیں';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'آنے والی یاد دہانیوں کا کارڈ دکھائیں';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'اگلی 3 یاد دہانیوں کی فہرست والا کارڈ دکھائیں';
 }

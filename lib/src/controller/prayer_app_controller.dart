@@ -85,6 +85,10 @@ class PrayerAppController extends ChangeNotifier {
   bool _showFastingBadges = true;
   CalendarPrimaryDisplay _defaultCalendarDisplay = CalendarPrimaryDisplay.hijri;
   bool _showCalendarReminderDots = true;
+  bool _showCardMoonPhase = true;
+  bool _showCardIftarSuhoor = true;
+  bool _showCardDailyWisdom = true;
+  bool _showCardUpcomingReminders = true;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
@@ -165,6 +169,10 @@ class PrayerAppController extends ChangeNotifier {
   bool get showFastingBadges => _showFastingBadges;
   CalendarPrimaryDisplay get defaultCalendarDisplay => _defaultCalendarDisplay;
   bool get showCalendarReminderDots => _showCalendarReminderDots;
+  bool get showCardMoonPhase => _showCardMoonPhase;
+  bool get showCardIftarSuhoor => _showCardIftarSuhoor;
+  bool get showCardDailyWisdom => _showCardDailyWisdom;
+  bool get showCardUpcomingReminders => _showCardUpcomingReminders;
 
   void updateCalendarWeekStart(CalendarWeekStart weekStart) {
     _calendarWeekStart = weekStart;
@@ -199,6 +207,30 @@ class PrayerAppController extends ChangeNotifier {
   void updateShowCalendarReminderDots(bool show) {
     _showCalendarReminderDots = show;
     database.saveShowCalendarReminderDots(show);
+    notifyListeners();
+  }
+
+  void updateShowCardMoonPhase(bool show) {
+    _showCardMoonPhase = show;
+    database.saveShowCardMoonPhase(show);
+    notifyListeners();
+  }
+
+  void updateShowCardIftarSuhoor(bool show) {
+    _showCardIftarSuhoor = show;
+    database.saveShowCardIftarSuhoor(show);
+    notifyListeners();
+  }
+
+  void updateShowCardDailyWisdom(bool show) {
+    _showCardDailyWisdom = show;
+    database.saveShowCardDailyWisdom(show);
+    notifyListeners();
+  }
+
+  void updateShowCardUpcomingReminders(bool show) {
+    _showCardUpcomingReminders = show;
+    database.saveShowCardUpcomingReminders(show);
     notifyListeners();
   }
 
@@ -531,6 +563,11 @@ class PrayerAppController extends ChangeNotifier {
           CalendarPrimaryDisplay.hijri;
       _showCalendarReminderDots =
           await database.loadShowCalendarReminderDots() ?? true;
+      _showCardMoonPhase = await database.loadShowCardMoonPhase() ?? true;
+      _showCardIftarSuhoor = await database.loadShowCardIftarSuhoor() ?? true;
+      _showCardDailyWisdom = await database.loadShowCardDailyWisdom() ?? true;
+      _showCardUpcomingReminders =
+          await database.loadShowCardUpcomingReminders() ?? true;
       _calendarReminders = await database.loadCalendarReminders();
       for (final reminder in _calendarReminders) {
         if (reminder.enabled) {

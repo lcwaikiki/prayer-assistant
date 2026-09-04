@@ -336,6 +336,44 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
+                title: context.l10n.homeDashboardCardsSectionTitle,
+                children: [
+                  SwitchListTile(
+                    key: const Key('show_card_moon_phase_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCardMoonPhaseTitle),
+                    subtitle: Text(context.l10n.showCardMoonPhaseSubtitle),
+                    value: controller.showCardMoonPhase,
+                    onChanged: controller.updateShowCardMoonPhase,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_card_iftar_suhoor_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCardIftarSuhoorTitle),
+                    subtitle: Text(context.l10n.showCardIftarSuhoorSubtitle),
+                    value: controller.showCardIftarSuhoor,
+                    onChanged: controller.updateShowCardIftarSuhoor,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_card_daily_wisdom_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCardDailyWisdomTitle),
+                    subtitle: Text(context.l10n.showCardDailyWisdomSubtitle),
+                    value: controller.showCardDailyWisdom,
+                    onChanged: controller.updateShowCardDailyWisdom,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_card_upcoming_reminders_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCardUpcomingRemindersTitle),
+                    subtitle: Text(context.l10n.showCardUpcomingRemindersSubtitle),
+                    value: controller.showCardUpcomingReminders,
+                    onChanged: controller.updateShowCardUpcomingReminders,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
                 title: context.l10n.calendarSettingsSectionTitle,
                 children: [
                   Align(

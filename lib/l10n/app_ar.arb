@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "أحدب متناقص",
   "moonPhaseLastQuarter": "التربيع الأخير",
   "moonPhaseWaningCrescent": "هلال متناقص",
-  "whiteDaysSubtitle": "أيام صيام السنة (13، 14، 15 هجري)"
+  "whiteDaysSubtitle": "أيام صيام السنة (13، 14، 15 هجري)",
+  "homeDashboardCardsSectionTitle": "بطاقات الشاشة الرئيسية",
+  "showCardMoonPhaseTitle": "إظهار بطاقة أطوار القمر",
+  "showCardMoonPhaseSubtitle": "عرض بطاقة أطوار القمر والأيام البيض",
+  "showCardIftarSuhoorTitle": "إظهار بطاقة السحور والإفطار",
+  "showCardIftarSuhoorSubtitle": "عرض بطاقة العداد التنازلي للسحور والإفطار",
+  "showCardDailyWisdomTitle": "إظهار بطاقة حكمة اليوم",
+  "showCardDailyWisdomSubtitle": "عرض بطاقة الحديث أو الآية اليومية",
+  "showCardUpcomingRemindersTitle": "إظهار بطاقة التذكيرات القادمة",
+  "showCardUpcomingRemindersSubtitle": "عرض بطاقة قائمة التذكيرات القادمة"
 }

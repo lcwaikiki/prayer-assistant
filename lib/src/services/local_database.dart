@@ -31,6 +31,10 @@ class LocalDatabase {
   static const _showFastingBadgesKey = 'show_fasting_badges';
   static const _defaultCalendarDisplayKey = 'default_calendar_display';
   static const _showCalendarReminderDotsKey = 'show_calendar_reminder_dots';
+  static const _showCardMoonPhaseKey = 'show_card_moon_phase';
+  static const _showCardIftarSuhoorKey = 'show_card_iftar_suhoor';
+  static const _showCardDailyWisdomKey = 'show_card_daily_wisdom';
+  static const _showCardUpcomingRemindersKey = 'show_card_upcoming_reminders';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
@@ -677,6 +681,94 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_showCalendarReminderDotsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveShowCardMoonPhase(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showCardMoonPhaseKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowCardMoonPhase() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showCardMoonPhaseKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveShowCardIftarSuhoor(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showCardIftarSuhoorKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowCardIftarSuhoor() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showCardIftarSuhoorKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveShowCardDailyWisdom(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showCardDailyWisdomKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowCardDailyWisdom() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showCardDailyWisdomKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveShowCardUpcomingReminders(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showCardUpcomingRemindersKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowCardUpcomingReminders() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showCardUpcomingRemindersKey],
       limit: 1,
     );
     if (rows.isEmpty) {

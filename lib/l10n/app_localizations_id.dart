@@ -991,4 +991,36 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get whiteDaysSubtitle => 'Hari Puasa Sunnah (13, 14, 15 Hijriyah)';
+
+  @override
+  String get homeDashboardCardsSectionTitle => 'Kartu Beranda Dashboard';
+
+  @override
+  String get showCardMoonPhaseTitle => 'Tampilkan Kartu Fase Bulan';
+
+  @override
+  String get showCardMoonPhaseSubtitle =>
+      'Tampilkan kartu fase bulan dan Hari-hari Putih';
+
+  @override
+  String get showCardIftarSuhoorTitle => 'Tampilkan Kartu Sahur & Iftar';
+
+  @override
+  String get showCardIftarSuhoorSubtitle =>
+      'Tampilkan hitung mundur langsung Sahur dan Iftar';
+
+  @override
+  String get showCardDailyWisdomTitle => 'Tampilkan Kartu Hikmah Harian';
+
+  @override
+  String get showCardDailyWisdomSubtitle =>
+      'Tampilkan kartu Hadits atau ayat harian';
+
+  @override
+  String get showCardUpcomingRemindersTitle =>
+      'Tampilkan Kartu Pengingat Mendatang';
+
+  @override
+  String get showCardUpcomingRemindersSubtitle =>
+      'Tampilkan 3 pengingat mendatang berikutnya';
 }

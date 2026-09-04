@@ -343,5 +343,14 @@
   "moonPhaseWaningGibbous": "Gibosa menguante",
   "moonPhaseLastQuarter": "Cuarto menguante",
   "moonPhaseWaningCrescent": "Menguante",
-  "whiteDaysSubtitle": "Días de ayuno de la Sunnah (13, 14, 15 Híyri)"
+  "whiteDaysSubtitle": "Días de ayuno de la Sunnah (13, 14, 15 Híyri)",
+  "homeDashboardCardsSectionTitle": "Tarjetas del Panel Principal",
+  "showCardMoonPhaseTitle": "Mostrar tarjeta de fase lunar",
+  "showCardMoonPhaseSubtitle": "Mostrar tarjeta de fase lunar y Días Blancos",
+  "showCardIftarSuhoorTitle": "Mostrar tarjeta de Suhoor e Iftar",
+  "showCardIftarSuhoorSubtitle": "Mostrar cuenta regresiva de Suhoor e Iftar",
+  "showCardDailyWisdomTitle": "Mostrar tarjeta de sabiduría diaria",
+  "showCardDailyWisdomSubtitle": "Mostrar Hadiz o versículo del día",
+  "showCardUpcomingRemindersTitle": "Mostrar tarjeta de próximos recordatorios",
+  "showCardUpcomingRemindersSubtitle": "Mostrar los próximos 3 recordatorios"
 }

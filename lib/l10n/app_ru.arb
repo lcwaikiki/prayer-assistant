@@ -359,5 +359,8 @@
   "suhoorTickerTitle": "До сухура",
   "fastingProgressElapsed": "{percent}% прошло",
   "suhoorWithTime": "Сухур ({time})",
-  "iftarWithTime": "Ифтар ({time})"
+  "iftarWithTime": "Ифтар ({time})",
+  "upcomingSunnahDays": "Предстоящие дни сунны",
+  "fastingCalendarLogger": "Календарь учета поста",
+  "removeFastLog": "Удалить запись о посте"
 }

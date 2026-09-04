@@ -859,4 +859,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'افطار ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'آنے والے سنت کے ایام';
+
+  @override
+  String get fastingCalendarLogger => 'روزه کیلنڈر لاگ';
+
+  @override
+  String get removeFastLog => 'روزه لاگ منسوخ کریں';
 }

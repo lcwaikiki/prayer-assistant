@@ -864,4 +864,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'Iftar ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'Jours de Sunnah à venir';
+
+  @override
+  String get fastingCalendarLogger => 'Journal du calendrier de jeûne';
+
+  @override
+  String get removeFastLog => 'Supprimer le journal de jeûne';
 }

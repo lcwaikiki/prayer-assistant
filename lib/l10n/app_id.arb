@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "Penghitung Sahur",
   "fastingProgressElapsed": "{percent}% berlalu",
   "suhoorWithTime": "Sahur ({time})",
-  "iftarWithTime": "Iftar ({time})"
+  "iftarWithTime": "Iftar ({time})",
+  "upcomingSunnahDays": "Hari Sunnah Mendatang",
+  "fastingCalendarLogger": "Pencatat Kalender Puasa",
+  "removeFastLog": "Hapus Log Puasa"
 }

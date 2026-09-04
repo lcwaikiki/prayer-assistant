@@ -857,4 +857,13 @@ class AppLocalizationsFa extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'افطار ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'روزهای سنت در پیش رو';
+
+  @override
+  String get fastingCalendarLogger => 'ثبت تقویم روزه‌داری';
+
+  @override
+  String get removeFastLog => 'حذف ثبت روزه‌داری';
 }

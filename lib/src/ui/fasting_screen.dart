@@ -148,7 +148,7 @@ class _FastingScreenState extends State<FastingScreen> {
                   const Divider(),
                   ListTile(
                     leading: const Icon(Icons.delete_outline, color: Colors.red),
-                    title: const Text('Remove Fast Log'),
+                    title: Text(context.l10n.removeFastLog),
                     onTap: () {
                       controller.removeFastingLog(date);
                       Navigator.of(sheetContext).pop();
@@ -274,7 +274,7 @@ class _FastingScreenState extends State<FastingScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'Upcoming Sunnah Days',
+                      context.l10n.upcomingSunnahDays,
                       style: Theme.of(context)
                           .textTheme
                           .titleMedium
@@ -376,7 +376,7 @@ class _FastingScreenState extends State<FastingScreen> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Fasting Calendar Logger',
+                                  context.l10n.fastingCalendarLogger,
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium

@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "Sahur Sayacı",
   "fastingProgressElapsed": "%{percent} geçti",
   "suhoorWithTime": "Sahur ({time})",
-  "iftarWithTime": "İftar ({time})"
+  "iftarWithTime": "İftar ({time})",
+  "upcomingSunnahDays": "Yaklaşan Sünnet Günleri",
+  "fastingCalendarLogger": "Oruç Takvimi Kaydı",
+  "removeFastLog": "Oruç Kaydını Sil"
 }

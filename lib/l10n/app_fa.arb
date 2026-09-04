@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "شمارش سحر",
   "fastingProgressElapsed": "{percent}٪ سپری شده",
   "suhoorWithTime": "سحر ({time})",
-  "iftarWithTime": "افطار ({time})"
+  "iftarWithTime": "افطار ({time})",
+  "upcomingSunnahDays": "روزهای سنت در پیش رو",
+  "fastingCalendarLogger": "ثبت تقویم روزه‌داری",
+  "removeFastLog": "حذف ثبت روزه‌داری"
 }

@@ -862,4 +862,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'Ифтар ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'Предстоящие дни сунны';
+
+  @override
+  String get fastingCalendarLogger => 'Календарь учета поста';
+
+  @override
+  String get removeFastLog => 'Удалить запись о посте';
 }

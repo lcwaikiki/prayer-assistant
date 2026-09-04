@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "スフールタイマー",
   "fastingProgressElapsed": "{percent}% 経過",
   "suhoorWithTime": "スフール ({time})",
-  "iftarWithTime": "イフタール ({time})"
+  "iftarWithTime": "イフタール ({time})",
+  "upcomingSunnahDays": "今後のスンナの日",
+  "fastingCalendarLogger": "断食カレンダーログ",
+  "removeFastLog": "断食ログを削除"
 }

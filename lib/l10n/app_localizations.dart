@@ -1683,6 +1683,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Iftar ({time})'**
   String iftarWithTime(String time);
+
+  /// No description provided for @upcomingSunnahDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Sunnah Days'**
+  String get upcomingSunnahDays;
+
+  /// No description provided for @fastingCalendarLogger.
+  ///
+  /// In en, this message translates to:
+  /// **'Fasting Calendar Logger'**
+  String get fastingCalendarLogger;
+
+  /// No description provided for @removeFastLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Fast Log'**
+  String get removeFastLog;
 }
 
 class _AppLocalizationsDelegate

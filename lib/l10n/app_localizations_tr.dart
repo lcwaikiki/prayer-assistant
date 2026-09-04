@@ -861,4 +861,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'İftar ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'Yaklaşan Sünnet Günleri';
+
+  @override
+  String get fastingCalendarLogger => 'Oruç Takvimi Kaydı';
+
+  @override
+  String get removeFastLog => 'Oruç Kaydını Sil';
 }

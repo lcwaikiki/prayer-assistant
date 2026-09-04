@@ -390,5 +390,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "upcomingSunnahDays": "Upcoming Sunnah Days",
+  "fastingCalendarLogger": "Fasting Calendar Logger",
+  "removeFastLog": "Remove Fast Log"
 }

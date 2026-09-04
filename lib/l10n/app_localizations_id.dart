@@ -860,4 +860,13 @@ class AppLocalizationsId extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'Iftar ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => 'Hari Sunnah Mendatang';
+
+  @override
+  String get fastingCalendarLogger => 'Pencatat Kalender Puasa';
+
+  @override
+  String get removeFastLog => 'Hapus Log Puasa';
 }

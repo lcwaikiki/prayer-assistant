@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "Compteur Suhur",
   "fastingProgressElapsed": "{percent}% écoulé",
   "suhoorWithTime": "Suhur ({time})",
-  "iftarWithTime": "Iftar ({time})"
+  "iftarWithTime": "Iftar ({time})",
+  "upcomingSunnahDays": "Jours de Sunnah à venir",
+  "fastingCalendarLogger": "Journal du calendrier de jeûne",
+  "removeFastLog": "Supprimer le journal de jeûne"
 }

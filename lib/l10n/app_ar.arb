@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "مؤقت السحور",
   "fastingProgressElapsed": "{percent}٪ مضى",
   "suhoorWithTime": "السحور ({time})",
-  "iftarWithTime": "الإفطار ({time})"
+  "iftarWithTime": "الإفطار ({time})",
+  "upcomingSunnahDays": "أيام السنة القادمة",
+  "fastingCalendarLogger": "سجل تقويم الصيام",
+  "removeFastLog": "إزالة سجل الصيام"
 }

@@ -839,4 +839,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String iftarWithTime(String time) {
     return 'イフタール ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => '今後のスンナの日';
+
+  @override
+  String get fastingCalendarLogger => '断食カレンダーログ';
+
+  @override
+  String get removeFastLog => '断食ログを削除';
 }

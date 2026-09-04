@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "封斋倒计时",
   "fastingProgressElapsed": "{percent}% 已过",
   "suhoorWithTime": "封斋 ({time})",
-  "iftarWithTime": "开斋 ({time})"
+  "iftarWithTime": "开斋 ({time})",
+  "upcomingSunnahDays": "即将来临的圣行日",
+  "fastingCalendarLogger": "斋戒日历记录",
+  "removeFastLog": "删除斋戒记录"
 }

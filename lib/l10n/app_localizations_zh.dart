@@ -838,4 +838,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String iftarWithTime(String time) {
     return '开斋 ($time)';
   }
+
+  @override
+  String get upcomingSunnahDays => '即将来临的圣行日';
+
+  @override
+  String get fastingCalendarLogger => '斋戒日历记录';
+
+  @override
+  String get removeFastLog => '删除斋戒记录';
 }

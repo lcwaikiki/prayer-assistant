@@ -304,5 +304,8 @@
   "suhoorTickerTitle": "Sahur-Ticker",
   "fastingProgressElapsed": "{percent}% vergangen",
   "suhoorWithTime": "Sahur ({time})",
-  "iftarWithTime": "Iftar ({time})"
+  "iftarWithTime": "Iftar ({time})",
+  "upcomingSunnahDays": "Kommende Sunnah-Tage",
+  "fastingCalendarLogger": "Fastenkalender-Protokoll",
+  "removeFastLog": "Fasteneintrag entfernen"
 }

@@ -21,10 +21,8 @@ import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
 import 'widgets/moon_phase_widget.dart';
+import 'widgets/upcoming_reminders_card.dart';
 import '../calendar/moon_phase_utils.dart';
-
-
-typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.onShare});
@@ -107,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final nextPrayer = controller.nextPrayer(_now);
         final prayers = prayerMapForDay(day);
-        final upcomingReminders = <_UpcomingReminder>[
+        final upcomingReminders = <UpcomingReminder>[
           for (final reminder in controller.calendarReminders)
             if (reminder.enabled)
               if (reminder.nextOccurrenceFrom(_now) case final next?)
@@ -285,7 +283,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 6),
                       if (upcoming.isNotEmpty) ...[
-                        _UpcomingRemindersCard(entries: upcoming),
+                        UpcomingRemindersCard(entries: upcoming),
                         const SizedBox(height: 6),
                       ],
 
@@ -552,85 +550,6 @@ class _NextPrayerBanner extends StatelessWidget {
   }
 }
 
-
-class _UpcomingRemindersCard extends StatelessWidget {
-  const _UpcomingRemindersCard({required this.entries});
-
-  final List<_UpcomingReminder> entries;
-
-  @override
-  Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context).toString();
-    final dateFormat = DateFormat('EEE, d MMM · HH:mm', locale);
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 4, 10, 2),
-            child: Text(
-              context.l10n.homeUpcomingRemindersTitle,
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          for (final entry in entries)
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => HijriCalendarScreen(
-                      initialDate: entry.next,
-                      openDetailOnLaunch: true,
-                    ),
-                  ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.event_outlined,
-                      size: 14,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        entry.reminder.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      dateFormat.format(entry.next),
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        fontSize: 11,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          const SizedBox(height: 2),
-
-
-        ],
-      ),
-    );
-  }
-}
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState({

@@ -234,6 +234,59 @@ void main() {
       expect(restored.reminderAnchorDate, isNull);
     });
 
+    test('fromMap preserves weekly recurrence for prayer-time items when reminderAnchorDate is null', () {
+      final source = item(
+        id: 'prayer-weekly',
+        reminderEnabled: true,
+        reminderRecurrence: ReminderRecurrence.weekly,
+        reminderAnchor: ItemReminderAnchor.prayerTime,
+        reminderPrayerName: 'Aksam',
+        reminderWeekdays: [1, 3, 5],
+        reminderAnchorDate: null,
+      );
+
+      final map = source.toMap();
+      final restored = Item.fromMap(map);
+
+      expect(restored.reminderRecurrence, ReminderRecurrence.weekly);
+      expect(restored.reminderWeekdays, [1, 3, 5]);
+      expect(restored.reminderAnchorDate, isNotNull);
+    });
+
+    test('fromMap preserves weekly recurrence for clock-time items across restart/serialization', () {
+      final source = item(
+        id: 'clock-weekly',
+        reminderEnabled: true,
+        reminderRecurrence: ReminderRecurrence.weekly,
+        reminderAnchor: ItemReminderAnchor.clockTime,
+        reminderAt: DateTime(2026, 9, 4, 8, 30),
+        reminderWeekdays: [2, 4, 6],
+      );
+
+      final map = source.toMap();
+      final restored = Item.fromMap(map);
+
+      expect(restored.reminderRecurrence, ReminderRecurrence.weekly);
+      expect(restored.reminderWeekdays, [2, 4, 6]);
+      expect(restored.reminderAt, DateTime(2026, 9, 4, 8, 30));
+    });
+
+    test('fromMap preserves monthly and yearly recurrences without converting to daily', () {
+      final monthly = Item.fromMap(item(
+        reminderRecurrence: ReminderRecurrence.monthly,
+        reminderDayOfMonth: 15,
+      ).toMap());
+      final yearly = Item.fromMap(item(
+        reminderRecurrence: ReminderRecurrence.yearly,
+        reminderYearlyDate: DateTime(2026, 10, 1),
+      ).toMap());
+
+      expect(monthly.reminderRecurrence, ReminderRecurrence.monthly);
+      expect(monthly.reminderDayOfMonth, 15);
+      expect(yearly.reminderRecurrence, ReminderRecurrence.yearly);
+      expect(yearly.reminderYearlyDate, DateTime(2026, 10, 1));
+    });
+
     test('fromMap defaults missing numeric fields', () {
       final restored = Item.fromMap(const {
         'id': 'x',

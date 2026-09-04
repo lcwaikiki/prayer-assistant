@@ -235,18 +235,26 @@ class Item implements ReminderSchedulable {
         .map((part) => part.trim())
         .where((part) => part.isNotEmpty)
         .toList(growable: false);
-    var recurrence = ReminderRecurrence.fromName(
-      map['reminderRecurrence']?.toString() ??
-          map['reminderRepeat']?.toString(),
-    );
-    // Legacy prayer-time reminders stored 'once'/'daily' but always
-    // behaved as daily (the form never exposed recurrence for prayer-time
-    // and the concrete time was re-resolved daily). Since they lack a
-    // reminderAnchorDate, migrate them to daily to avoid a regression where
-    // they'd stop repeating.
-    if (anchor == ItemReminderAnchor.prayerTime && reminderAnchorDate == null) {
+    final rawRecurrence = map['reminderRecurrence']?.toString() ??
+        map['reminderRepeat']?.toString();
+    var recurrence = ReminderRecurrence.fromName(rawRecurrence);
+    final parsedReminderAt = (rawReminderAt == null || rawReminderAt.isEmpty)
+        ? null
+        : DateTime.tryParse(rawReminderAt);
+    final isLegacyPrayer = anchor == ItemReminderAnchor.prayerTime &&
+        reminderAnchorDate == null &&
+        (rawRecurrence == null ||
+            rawRecurrence == 'once' ||
+            rawRecurrence == 'daily');
+    if (isLegacyPrayer && (rawRecurrence == null || rawRecurrence == 'once')) {
       recurrence = ReminderRecurrence.daily;
     }
+    final effectiveAnchorDate = reminderAnchorDate ??
+        (isLegacyPrayer
+            ? null
+            : (recurrence != ReminderRecurrence.once
+                ? (parsedReminderAt ?? DateTime.now())
+                : null));
     return Item(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
@@ -266,13 +274,11 @@ class Item implements ReminderSchedulable {
       reminderYearlyBasis: CalendarBasis.fromName(
         map['reminderYearlyBasis']?.toString(),
       ),
-      reminderAt: (rawReminderAt == null || rawReminderAt.isEmpty)
-          ? null
-          : DateTime.tryParse(rawReminderAt),
+      reminderAt: parsedReminderAt,
       reminderAnchor: anchor,
       reminderPrayerName: map['reminderPrayerName']?.toString(),
       reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
-      reminderAnchorDate: reminderAnchorDate,
+      reminderAnchorDate: effectiveAnchorDate,
       reminderRepeatCount: (map['reminderRepeatCount'] as num?)?.toInt(),
       reminderWeekdays: reminderWeekdays,
       reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),

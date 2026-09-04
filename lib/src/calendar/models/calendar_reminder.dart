@@ -448,27 +448,33 @@ class CalendarReminder {
         .whereType<int>()
         .where((day) => day >= 1 && day <= 7)
         .toList(growable: false);
-    var recurrence = ReminderRecurrence.fromName(map['recurrence']?.toString());
-    // Legacy prayer-time reminders stored any recurrence but always behaved
-    // as daily (the old form never exposed recurrence for prayer time and
-    // the concrete time was re-resolved daily). Since they lack an
-    // anchorDate, migrate them to daily to avoid a regression where they'd
-    // stop repeating.
-    if (anchor == CalendarReminderAnchor.prayerTime && anchorDate == null) {
+    final rawRecurrence = map['recurrence']?.toString();
+    var recurrence = ReminderRecurrence.fromName(rawRecurrence);
+    final anchorAt = DateTime.parse((map['anchor_at'] ?? '').toString());
+    final isLegacyPrayer = anchor == CalendarReminderAnchor.prayerTime &&
+        anchorDate == null &&
+        (rawRecurrence == null ||
+            rawRecurrence == 'once' ||
+            rawRecurrence == 'daily');
+    if (isLegacyPrayer && (rawRecurrence == null || rawRecurrence == 'once')) {
       recurrence = ReminderRecurrence.daily;
     }
+    final effectiveAnchorDate = anchorDate ??
+        (isLegacyPrayer
+            ? null
+            : (recurrence != ReminderRecurrence.once ? anchorAt : null));
     return CalendarReminder(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
       notes: (map['notes'] ?? '').toString(),
-      anchorAt: DateTime.parse((map['anchor_at'] ?? '').toString()),
+      anchorAt: anchorAt,
       recurrence: recurrence,
       monthlyBasis: CalendarBasis.fromName(map['monthly_basis']?.toString()),
       yearlyBasis: CalendarBasis.fromName(map['yearly_basis']?.toString()),
       anchor: anchor,
       anchorPrayerName: map['anchor_prayer_name']?.toString(),
       anchorOffsetMinutes: (map['anchor_offset_minutes'] as num?)?.toInt() ?? 0,
-      anchorDate: anchorDate,
+      anchorDate: effectiveAnchorDate,
       enabled: (map['enabled'] as int? ?? 1) == 1,
       repeatCount: (map['repeat_count'] as num?)?.toInt(),
       weekdays: weekdays,

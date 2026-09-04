@@ -193,7 +193,7 @@ void main() {
         'title': 'Old reminder',
         'notes': '',
         'anchor_at': '2026-08-17T12:00:00.000',
-        'recurrence': 'weekly',
+        'recurrence': 'once',
         'monthly_basis': 'gregorian',
         'yearly_basis': 'gregorian',
         'anchor': 'prayerTime',
@@ -203,6 +203,26 @@ void main() {
 
       expect(r.recurrence, ReminderRecurrence.daily);
       expect(r.anchorDate, isNull);
+    });
+
+    test('fromMap preserves weekly recurrence for prayer-time calendar reminders', () {
+      final r = CalendarReminder.fromMap(const {
+        'id': 'weekly-prayer',
+        'title': 'Weekly prayer reminder',
+        'notes': '',
+        'anchor_at': '2026-08-17T12:00:00.000',
+        'recurrence': 'weekly',
+        'monthly_basis': 'gregorian',
+        'yearly_basis': 'gregorian',
+        'anchor': 'prayerTime',
+        'anchor_offset_minutes': 0,
+        'enabled': 1,
+        'weekdays': '1,3,5',
+      });
+
+      expect(r.recurrence, ReminderRecurrence.weekly);
+      expect(r.weekdays, [1, 3, 5]);
+      expect(r.anchorDate, isNotNull);
     });
 
     test('fromMap defaults missing enabled to on', () {

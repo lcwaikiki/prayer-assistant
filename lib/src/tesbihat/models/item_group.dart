@@ -119,27 +119,42 @@ class ItemGroup implements ReminderSchedulable {
         .whereType<int>()
         .where((day) => day >= 1 && day <= 7)
         .toList(growable: false);
+    final rawRecurrence = map['reminderRecurrence']?.toString() ??
+        map['reminderRepeat']?.toString();
+    var recurrence = ReminderRecurrence.fromName(rawRecurrence);
+    final parsedReminderAt = (rawReminderAt == null || rawReminderAt.isEmpty)
+        ? null
+        : DateTime.tryParse(rawReminderAt);
+    final isLegacyPrayer = anchor == ItemReminderAnchor.prayerTime &&
+        reminderAnchorDate == null &&
+        (rawRecurrence == null ||
+            rawRecurrence == 'once' ||
+            rawRecurrence == 'daily');
+    if (isLegacyPrayer && (rawRecurrence == null || rawRecurrence == 'once')) {
+      recurrence = ReminderRecurrence.daily;
+    }
+    final effectiveAnchorDate = reminderAnchorDate ??
+        (isLegacyPrayer
+            ? null
+            : (recurrence != ReminderRecurrence.once
+                ? (parsedReminderAt ?? DateTime.now())
+                : null));
     return ItemGroup(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
       reminderEnabled: (map['reminderEnabled'] as bool?) ?? false,
-      reminderRecurrence: ReminderRecurrence.fromName(
-        map['reminderRecurrence']?.toString() ??
-            map['reminderRepeat']?.toString(),
-      ),
+      reminderRecurrence: recurrence,
       reminderMonthlyBasis: CalendarBasis.fromName(
         map['reminderMonthlyBasis']?.toString(),
       ),
       reminderYearlyBasis: CalendarBasis.fromName(
         map['reminderYearlyBasis']?.toString(),
       ),
-      reminderAt: (rawReminderAt == null || rawReminderAt.isEmpty)
-          ? null
-          : DateTime.tryParse(rawReminderAt),
+      reminderAt: parsedReminderAt,
       reminderAnchor: anchor,
       reminderPrayerName: map['reminderPrayerName']?.toString(),
       reminderOffsetMinutes: (map['reminderOffsetMinutes'] as num?)?.toInt() ?? 0,
-      reminderAnchorDate: reminderAnchorDate,
+      reminderAnchorDate: effectiveAnchorDate,
       reminderRepeatCount: (map['reminderRepeatCount'] as num?)?.toInt(),
       reminderWeekdays: reminderWeekdays,
       reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),

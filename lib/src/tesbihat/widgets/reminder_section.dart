@@ -212,7 +212,10 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
         monthlyBasis: _monthlyBasis,
         yearlyBasis: _yearlyBasis,
         at: _at,
-        anchorDate: _anchorDate,
+        anchorDate: _anchorDate ??
+            (_recurrence != ReminderRecurrence.once
+                ? (_at ?? DateTime.now())
+                : null),
         prayerName: _prayerName,
         offsetMinutes: _computeOffsetMinutes(),
         repeatCount: _repeatCount == null
@@ -387,7 +390,12 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
           selected: _recurrence == value,
           onSelected: (selected) {
             if (!selected) return;
-            _mutate(() => _recurrence = value);
+            _mutate(() {
+              _recurrence = value;
+              if (value != ReminderRecurrence.once && _anchorDate == null) {
+                _anchorDate = _at ?? DateTime.now();
+              }
+            });
           },
         );
     return Wrap(

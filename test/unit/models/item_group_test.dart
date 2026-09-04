@@ -68,5 +68,20 @@ void main() {
       expect(updated.reminderEnabled, isTrue);
       expect(updated.reminderRecurrence, ReminderRecurrence.once);
     });
+
+    test('round-trips weekly group reminder through toMap/fromMap', () {
+      const group = ItemGroup(
+        id: 'g_weekly',
+        title: 'Weekly Group',
+        reminderEnabled: true,
+        reminderRecurrence: ReminderRecurrence.weekly,
+        reminderWeekdays: [1, 5],
+      );
+
+      final restored = ItemGroup.fromMap(group.toMap());
+
+      expect(restored.reminderRecurrence, ReminderRecurrence.weekly);
+      expect(restored.reminderWeekdays, [1, 5]);
+    });
   });
 }

@@ -240,9 +240,15 @@ object PrayerWidgetUpdater {
                 setTextSizeSp(views, R.id.widgetFastingTitle, textSize, 11f, 13f, 15f, 18f)
                 setTextSizeSp(views, R.id.widgetFastingRemaining, textSize, 18f, 24f, 30f, 34f)
                 views.setTextViewText(R.id.widgetFastingTitle, title)
-                views.setTextViewText(R.id.widgetFastingIftarTime, "${widgetStrings.iftarLabel}: $aksamTimeStr")
+                val targetTimeLabel = if (isFastingHours) "${widgetStrings.iftarLabel}: $aksamTimeStr" else "${widgetStrings.suhoorLabel}: $imsakTimeStr"
+                views.setTextViewText(R.id.widgetFastingIftarTime, targetTimeLabel)
                 views.setTextViewText(R.id.widgetFastingRemaining, timeDisplay)
-                views.setTextViewText(R.id.widgetFastingPercentage, String.format(Locale.US, widgetStrings.fastedFormat, progressPct))
+                val percentageText = if (isFastingHours) {
+                    String.format(Locale.US, widgetStrings.fastedFormat, progressPct)
+                } else {
+                    String.format(Locale.US, "%d%%", progressPct)
+                }
+                views.setTextViewText(R.id.widgetFastingPercentage, percentageText)
                 views.setProgressBar(R.id.widgetFastingProgressBar, 100, progressPct, false)
                 views.setTextViewText(R.id.widgetFastingSuhoorLabel, "${widgetStrings.suhoorLabel}: $imsakTimeStr")
                 views.setTextViewText(R.id.widgetFastingIftarLabel, "${widgetStrings.iftarLabel}: $aksamTimeStr")

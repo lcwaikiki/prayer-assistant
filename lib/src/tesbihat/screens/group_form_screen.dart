@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../widgets/discard_confirmation_dialog.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
 import '../models/item_group.dart';
@@ -24,8 +25,19 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   late final TextEditingController _titleController;
   late ReminderConfig _reminderConfig;
   bool _saving = false;
+  bool _allowPop = false;
 
   bool get _isEditing => widget.groupToEdit != null;
+
+  bool get _isDirty {
+    final initialTitle = widget.groupToEdit?.title ?? '';
+    final initialReminder = widget.groupToEdit != null
+        ? ReminderConfig.fromGroup(widget.groupToEdit!)
+        : const ReminderConfig();
+    if (_titleController.text != initialTitle) return true;
+    if (_reminderConfig != initialReminder) return true;
+    return false;
+  }
 
   @override
   void initState() {
@@ -123,6 +135,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
     }
 
     if (mounted) {
+      setState(() => _allowPop = true);
       Navigator.pop(context);
     }
   }
@@ -130,45 +143,62 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            TextFormField(
-              key: const Key('group_title_field'),
-              controller: _titleController,
-              decoration: InputDecoration(labelText: l10n.groupName),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return l10n.requiredField(l10n.groupName);
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 20),
-            ReminderSection(
-              initial: _isEditing
-                  ? ReminderConfig.fromGroup(widget.groupToEdit!)
-                  : null,
-              onChanged: (config) => _reminderConfig = config,
-            ),
-            const SizedBox(height: 24),
-            FilledButton(
-              onPressed: _saving ? null : _save,
-              child: _saving
-                  ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(_isEditing ? l10n.update : l10n.save),
-            ),
-          ],
+    return PopScope(
+      canPop: _allowPop,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final navigator = Navigator.of(context);
+        if (!_isDirty) {
+          setState(() => _allowPop = true);
+          navigator.pop(result);
+          return;
+        }
+        final shouldDiscard = await showDiscardConfirmationDialog(context);
+        if (shouldDiscard == true && mounted) {
+          setState(() => _allowPop = true);
+          navigator.pop(result);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
+        ),
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              TextFormField(
+                key: const Key('group_title_field'),
+                controller: _titleController,
+                decoration: InputDecoration(labelText: l10n.groupName),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return l10n.requiredField(l10n.groupName);
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ReminderSection(
+                initial: _isEditing
+                    ? ReminderConfig.fromGroup(widget.groupToEdit!)
+                    : null,
+                onChanged: (config) => setState(() => _reminderConfig = config),
+              ),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(_isEditing ? l10n.update : l10n.save),
+              ),
+            ],
+          ),
         ),
       ),
     );

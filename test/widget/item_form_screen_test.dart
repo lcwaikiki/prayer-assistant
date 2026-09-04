@@ -424,7 +424,53 @@ void main() {
       find.byKey(const Key('group_chip_g1')),
     );
     expect(chip.selected, isTrue);
-
     await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
+      'pops directly without prompt when clean, prompts for discard when modified',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await _pumpForm(tester, harness);
+
+    // Pop when clean -> pops immediately
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(ItemFormScreen), findsNothing);
+
+    // Open form again
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    // Modify form field -> dirty
+    await tester.enterText(find.byKey(const Key('title_field')), 'Draft');
+    await tester.pumpAndSettle();
+
+    // Tap back button
+    final backButton = find.byType(BackButton);
+    expect(backButton, findsOneWidget);
+    await tester.tap(backButton);
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    // Discard confirmation dialog appears
+    expect(find.text('Discard changes?'), findsOneWidget);
+
+    // Tap 'Keep Editing' -> stays on screen
+    await tester.tap(find.text('Keep Editing'));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(find.byType(ItemFormScreen), findsOneWidget);
+
+    // Tap back button again and tap 'Discard' -> pops screen
+    await tester.tap(backButton);
+    await tester.pump();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Discard'));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(find.byType(ItemFormScreen), findsNothing);
   });
 }

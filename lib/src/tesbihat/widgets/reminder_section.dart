@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -83,6 +84,42 @@ class ReminderConfig {
   final List<int> weekdays;
   final int? dayOfMonth;
   final DateTime? yearlyDate;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ReminderConfig &&
+        other.enabled == enabled &&
+        other.anchor == anchor &&
+        other.recurrence == recurrence &&
+        other.monthlyBasis == monthlyBasis &&
+        other.yearlyBasis == yearlyBasis &&
+        other.at == at &&
+        other.anchorDate == anchorDate &&
+        other.prayerName == prayerName &&
+        other.offsetMinutes == offsetMinutes &&
+        other.repeatCount == repeatCount &&
+        listEquals(other.weekdays, weekdays) &&
+        other.dayOfMonth == dayOfMonth &&
+        other.yearlyDate == yearlyDate;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+        enabled,
+        anchor,
+        recurrence,
+        monthlyBasis,
+        yearlyBasis,
+        at,
+        anchorDate,
+        prayerName,
+        offsetMinutes,
+        repeatCount,
+        Object.hashAll(weekdays),
+        dayOfMonth,
+        yearlyDate,
+      );
 }
 
 /// The full reminder editor (enable switch, anchor choice, recurrence,

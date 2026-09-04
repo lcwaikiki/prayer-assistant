@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../widgets/discard_confirmation_dialog.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
 import '../services/prayer_anchor_resolver.dart';
@@ -35,8 +37,34 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late ReminderConfig _reminderConfig;
   late Set<String> _selectedGroupIds;
   bool _saving = false;
+  bool _allowPop = false;
 
   bool get _isEditing => widget.itemToEdit != null;
+
+  bool get _isDirty {
+    final item = widget.itemToEdit;
+    final initialTitle = item?.title ?? '';
+    final initialNotes = item?.notes ?? '';
+    final initialCount = item != null ? item.count.toString() : '';
+    final initialCheck = item != null ? item.check.toString() : '';
+    final initialVibration = item?.vibrationIntensity ?? 50;
+    final initialReminder = item != null
+        ? ReminderConfig.fromItem(item)
+        : const ReminderConfig();
+    final initialGroups = item != null
+        ? item.groupIds.toSet()
+        : (widget.initialGroupIds ?? const []).toSet();
+
+    if (_titleController.text != initialTitle) return true;
+    if (_notesController.text != initialNotes) return true;
+    if (_countController.text != initialCount) return true;
+    if (_checkController.text != initialCheck) return true;
+    if (_vibrationIntensity != initialVibration) return true;
+    if (_reminderConfig != initialReminder) return true;
+    if (!setEquals(_selectedGroupIds, initialGroups)) return true;
+
+    return false;
+  }
 
   @override
   void initState() {
@@ -206,6 +234,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     }
 
     if (mounted) {
+      setState(() => _allowPop = true);
       Navigator.pop(context);
     }
   }
@@ -213,107 +242,124 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            TextFormField(
-              key: const Key('title_field'),
-              controller: _titleController,
-              decoration: InputDecoration(labelText: l10n.title),
-              validator: (value) => _requiredValidator(value, l10n.title),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              key: const Key('notes_field'),
-              controller: _notesController,
-              minLines: 3,
-              maxLines: 6,
-              decoration: InputDecoration(
-                labelText: l10n.notes,
-                alignLabelWithHint: true,
-                hintText: l10n.notesHint,
+    return PopScope(
+      canPop: _allowPop,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final navigator = Navigator.of(context);
+        if (!_isDirty) {
+          setState(() => _allowPop = true);
+          navigator.pop(result);
+          return;
+        }
+        final shouldDiscard = await showDiscardConfirmationDialog(context);
+        if (shouldDiscard == true && mounted) {
+          setState(() => _allowPop = true);
+          navigator.pop(result);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
+        ),
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              TextFormField(
+                key: const Key('title_field'),
+                controller: _titleController,
+                decoration: InputDecoration(labelText: l10n.title),
+                validator: (value) => _requiredValidator(value, l10n.title),
               ),
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              key: const Key('count_field'),
-              controller: _countController,
-              decoration: InputDecoration(labelText: l10n.countField),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              validator: _countValidator,
-            ),
-            const SizedBox(height: 12),
-            TextFormField(
-              key: const Key('check_field'),
-              controller: _checkController,
-              decoration: InputDecoration(
-                labelText: l10n.checkInterval,
-                helperText: l10n.checkHelper,
+              const SizedBox(height: 12),
+              TextFormField(
+                key: const Key('notes_field'),
+                controller: _notesController,
+                minLines: 3,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  labelText: l10n.notes,
+                  alignLabelWithHint: true,
+                  hintText: l10n.notesHint,
+                ),
               ),
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              validator: _checkValidator,
-            ),
-            const SizedBox(height: 12),
-            InputDecorator(
-              decoration: InputDecoration(
-                labelText: l10n.setCount,
-                helperText: l10n.setCountReadonlyHelper,
+              const SizedBox(height: 12),
+              TextFormField(
+                key: const Key('count_field'),
+                controller: _countController,
+                decoration: InputDecoration(labelText: l10n.countField),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: _countValidator,
               ),
-              child: Text(
-                _setCountController.text,
-                key: const Key('set_count_readonly_value'),
+              const SizedBox(height: 12),
+              TextFormField(
+                key: const Key('check_field'),
+                controller: _checkController,
+                decoration: InputDecoration(
+                  labelText: l10n.checkInterval,
+                  helperText: l10n.checkHelper,
+                ),
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                validator: _checkValidator,
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              '${l10n.vibrationIntensity}: $_vibrationIntensity',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            Slider(
-              key: const Key('intensity_slider'),
-              value: _vibrationIntensity.toDouble(),
-              min: 1,
-              max: 100,
-              divisions: 99,
-              label: _vibrationIntensity.toString(),
-              onChanged: (value) {
-                setState(() {
-                  _vibrationIntensity = value.round();
-                });
-              },
-            ),
-                        const SizedBox(height: 20),
-            ReminderSection(
-              initial: _isEditing
-                  ? ReminderConfig.fromItem(widget.itemToEdit!)
-                  : null,
-              onChanged: (config) => _reminderConfig = config,
-            ),
-            const SizedBox(height: 20),
-            _GroupSelector(
-              selectedIds: _selectedGroupIds,
-              onChanged: (ids) => setState(() => _selectedGroupIds = ids),
-            ),
-            const SizedBox(height: 24),
-                        FilledButton(
-              onPressed: _saving ? null : _save,
-              child: _saving
-                  ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(_isEditing ? l10n.update : l10n.save),
-            ),
-          ],
+              const SizedBox(height: 12),
+              InputDecorator(
+                decoration: InputDecoration(
+                  labelText: l10n.setCount,
+                  helperText: l10n.setCountReadonlyHelper,
+                ),
+                child: Text(
+                  _setCountController.text,
+                  key: const Key('set_count_readonly_value'),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                '${l10n.vibrationIntensity}: $_vibrationIntensity',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Slider(
+                key: const Key('intensity_slider'),
+                value: _vibrationIntensity.toDouble(),
+                min: 1,
+                max: 100,
+                divisions: 99,
+                label: _vibrationIntensity.toString(),
+                onChanged: (value) {
+                  setState(() {
+                    _vibrationIntensity = value.round();
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              ReminderSection(
+                initial: _isEditing
+                    ? ReminderConfig.fromItem(widget.itemToEdit!)
+                    : null,
+                onChanged: (config) => setState(() => _reminderConfig = config),
+              ),
+              const SizedBox(height: 20),
+              _GroupSelector(
+                selectedIds: _selectedGroupIds,
+                onChanged: (ids) => setState(() => _selectedGroupIds = ids),
+              ),
+              const SizedBox(height: 24),
+              FilledButton(
+                onPressed: _saving ? null : _save,
+                child: _saving
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : Text(_isEditing ? l10n.update : l10n.save),
+              ),
+            ],
+          ),
         ),
       ),
     );

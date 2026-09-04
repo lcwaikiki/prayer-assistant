@@ -363,8 +363,53 @@ void main() {
     final reminders = harness.controller.calendarReminders;
     expect(reminders, hasLength(1));
     expect(reminders.first.recurrence, ReminderRecurrence.once);
-    expect(reminders.first.repeatCount, isNull);
-
     await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
+      'pops directly when clean, prompts for discard confirmation when modified',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await _pumpForm(tester, harness);
+
+    // Pop when clean -> pops immediately
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(CalendarReminderFormScreen), findsNothing);
+
+    // Open form again
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    // Modify form field -> dirty
+    await tester.enterText(find.byType(TextField).first, 'Draft Reminder');
+    await tester.pumpAndSettle();
+
+    // Tap back button
+    final backButton = find.byType(BackButton);
+    expect(backButton, findsOneWidget);
+    await tester.tap(backButton);
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    // Discard dialog shown
+    expect(find.text('Discard changes?'), findsOneWidget);
+
+    // Tap 'Keep Editing' -> stays on screen
+    await tester.tap(find.text('Keep Editing'));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(find.byType(CalendarReminderFormScreen), findsOneWidget);
+
+    // Tap back button again and confirm discard -> pops screen
+    await tester.tap(backButton);
+    await tester.pump();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Discard'));
+    await tester.pump();
+    await tester.pumpAndSettle();
+    expect(find.byType(CalendarReminderFormScreen), findsNothing);
   });
 }

@@ -297,41 +297,46 @@ class AppLocalizationsZh extends AppLocalizations {
   String get widgetTextSizeLarge => '大';
 
   @override
-  String get widgetMmssThresholdTitle => '小组件秒倒计时';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => '倒计时阈值';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => '背景主题';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => '系统默认';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => '浅色';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => '深色';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => '透明';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => '日历日期显示';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => '两者 (伊斯兰历和公历)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => '仅伊斯兰历';
 
   @override
-  String get widgetMmssThresholdNever => '始终显示HH:MM';
+  String get widgetCalendarDisplayGregorian => '仅公历';
+
+  @override
+  String get widgetMmssThresholdNever => '始终显示 HH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return '$minutes 分钟以下显示 MM:SS';
+    return '低于 $minutes 分钟显示 MM:SS';
   }
 
   @override

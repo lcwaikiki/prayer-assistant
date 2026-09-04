@@ -4,109 +4,197 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80000000"
-    android:padding="24dp">
+    android:padding="16dp">
 
-    <LinearLayout
-        android:id="@+id/dialogCard"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/widget_config_dialog_bg"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_gravity="center">
 
-        <TextView
-            android:id="@+id/textTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:text="Widget Ayarları"
-            android:textColor="#212121"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textThemeHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Arkaplan Teması"
-            android:textColor="#757575"
-            android:textSize="15sp" />
-
-        <RadioGroup
-            android:id="@+id/radioGroupTheme"
+        <LinearLayout
+            android:id="@+id/dialogCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:background="@drawable/widget_config_dialog_bg"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <RadioButton
-                android:id="@+id/radioThemeSystem"
+            <TextView
+                android:id="@+id/textTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telefon Ayarlarıyla Eşleştir"
+                android:layout_marginBottom="16dp"
+                android:text="Widget Ayarları"
                 android:textColor="#212121"
-                android:textSize="15sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/radioThemeLight"
+            <!-- Background Theme -->
+            <TextView
+                android:id="@+id/textThemeHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Açık"
-                android:textColor="#212121"
-                android:textSize="15sp" />
+                android:layout_marginBottom="6dp"
+                android:text="Arkaplan Teması"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-            <RadioButton
-                android:id="@+id/radioThemeDark"
+            <RadioGroup
+                android:id="@+id/radioGroupTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <RadioButton
+                    android:id="@+id/radioThemeSystem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Telefon Ayarlarıyla Eşleştir"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioThemeLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Açık"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioThemeDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Koyu"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioThemeTransparent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Saydam (Cam Görünümü)"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <!-- Calendar Display Mode -->
+            <TextView
+                android:id="@+id/textCalendarDisplayHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Koyu"
+                android:layout_marginBottom="6dp"
+                android:text="Takvim Tarih Gösterimi"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupCalendarDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
+
+                <RadioButton
+                    android:id="@+id/radioCalendarBoth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="İkisi de (Hicri ve Miladi)"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioCalendarHijri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yalnızca Hicri"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/radioCalendarGregorian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yalnızca Miladi"
+                    android:textColor="#212121"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <!-- Text Size -->
+            <TextView
+                android:id="@+id/textFontSizeHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Yazı Boyutu Ayarı"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <SeekBar
+                android:id="@+id/seekbarTextSize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressTint="#1F8A70"
+                android:thumbTint="#1F8A70" />
+
+            <TextView
+                android:id="@+id/textPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Önizleme 14"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <!-- MM:SS Countdown Threshold -->
+            <TextView
+                android:id="@+id/textMmssHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:text="Saniye Geri Sayımı Eşiği"
+                android:textColor="#757575"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <SeekBar
+                android:id="@+id/seekbarMmss"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="60"
+                android:progressTint="#1F8A70"
+                android:thumbTint="#1F8A70" />
+
+            <TextView
+                android:id="@+id/textMmssValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:text="Son 15 dk altında saniyeli say"
+                android:textColor="#757575"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/btn_save_bg"
+                android:paddingLeft="28dp"
+                android:paddingTop="10dp"
+                android:paddingRight="28dp"
+                android:paddingBottom="10dp"
+                android:text="AYARLARI KAYDET"
                 android:textColor="#212121"
-                android:textSize="15sp" />
-        </RadioGroup>
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textFontSizeHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Yazı Boyutu Ayarı"
-            android:textColor="#757575"
-            android:textSize="15sp" />
-
-        <SeekBar
-            android:id="@+id/seekbarTextSize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:progressTint="#1F8A70"
-            android:thumbTint="#1F8A70" />
-
-        <TextView
-            android:id="@+id/textPreview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="Önizleme 14"
-            android:textColor="#757575"
-            android:textSize="13sp" />
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/btn_save_bg"
-            android:paddingLeft="28dp"
-            android:paddingTop="10dp"
-            android:paddingRight="28dp"
-            android:paddingBottom="10dp"
-            android:text="AYARLARI KAYDET"
-            android:textColor="#212121"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
+        </LinearLayout>
+    </ScrollView>
 </FrameLayout>

@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "Kecil",
   "widgetTextSizeMedium": "Sedang",
   "widgetTextSizeLarge": "Besar",
-  "widgetMmssThresholdTitle": "Hitung mundur detik widget",
+  "widgetMmssThresholdTitle": "Ambang Hitung Mundur",
+  "widgetThemeTitle": "Tema Latar Belakang",
+  "widgetThemeSystem": "Default Sistem",
+  "widgetThemeLight": "Terang",
+  "widgetThemeDark": "Gelap",
+  "widgetThemeTransparent": "Transparan",
+  "widgetCalendarDisplayTitle": "Tampilan Tanggal Kalender",
+  "widgetCalendarDisplayBoth": "Keduanya (Hijriah & Masehi)",
+  "widgetCalendarDisplayHijri": "Hanya Hijriah",
+  "widgetCalendarDisplayGregorian": "Hanya Masehi",
   "widgetMmssThresholdNever": "Selalu tampilkan HH:MM",
-  "widgetMmssThresholdValue": "MM:SS di bawah {minutes} mnt",
+  "widgetMmssThresholdValue": "MM:SS di bawah {minutes} menit",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

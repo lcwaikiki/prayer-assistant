@@ -137,9 +137,18 @@
   "widgetTextSizeSmall": "Маленький",
   "widgetTextSizeMedium": "Средний",
   "widgetTextSizeLarge": "Большой",
-  "widgetMmssThresholdTitle": "Секундный отсчёт в виджете",
-  "widgetMmssThresholdNever": "Всегда показывать ЧЧ:ММ",
-  "widgetMmssThresholdValue": "ММ:СС менее {minutes} мин",
+  "widgetMmssThresholdTitle": "Порог обратного отсчета",
+  "widgetThemeTitle": "Тема фона",
+  "widgetThemeSystem": "По умолчанию в системе",
+  "widgetThemeLight": "Светлая",
+  "widgetThemeDark": "Тёмная",
+  "widgetThemeTransparent": "Прозрачная",
+  "widgetCalendarDisplayTitle": "Отображение даты в календаре",
+  "widgetCalendarDisplayBoth": "Оба (Хиджра и Григорианский)",
+  "widgetCalendarDisplayHijri": "Только Хиджра",
+  "widgetCalendarDisplayGregorian": "Только Григорианский",
+  "widgetMmssThresholdNever": "Всегда HH:MM",
+  "widgetMmssThresholdValue": "MM:SS менее {minutes} мин",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

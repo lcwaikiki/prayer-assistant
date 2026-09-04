@@ -308,41 +308,46 @@ class AppLocalizationsUr extends AppLocalizations {
   String get widgetTextSizeLarge => 'بڑا';
 
   @override
-  String get widgetMmssThresholdTitle => 'ویجٹ میں سیکنڈ کاؤنٹ ڈاؤن';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'الٹی گنتی کا حد';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'بیک گراؤنڈ تھیم';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'سستم ڈیفالٹ';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'روشنی';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'ڈارک';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => 'شفاف';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'کیلنڈر کی تاریخ کا ڈسپلے';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => 'دونوں (ہجری اور عیسوی)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'صرف ہجری';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'صرف عیسوی';
 
   @override
   String get widgetMmssThresholdNever => 'ہمیشہ HH:MM دکھائیں';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return '$minutes منٹ سے کم پر MM:SS';
+    return 'MM:SS $minutes منٹ سے کم';
   }
 
   @override

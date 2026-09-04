@@ -309,41 +309,46 @@ class AppLocalizationsFa extends AppLocalizations {
   String get widgetTextSizeLarge => 'بزرگ';
 
   @override
-  String get widgetMmssThresholdTitle => 'شمارش معکوس ثانیهای ویجت';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'آستانه شمارش معکوس';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'تم پس‌زمینه';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'پیش‌فرض سیستم';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'روشن';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'تاریک';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => 'شفاف';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'نمایش تاریخ تقویم';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => 'هر دو (هجری و میلادی)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'فقط هجری';
 
   @override
-  String get widgetMmssThresholdNever => 'همیشه HH:MM نمایش بده';
+  String get widgetCalendarDisplayGregorian => 'فقط میلادی';
+
+  @override
+  String get widgetMmssThresholdNever => 'همیشه نمایش HH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return 'MM:SS کمتر از $minutes دقیقه';
+    return 'MM:SS زیر $minutes دقیقه';
   }
 
   @override

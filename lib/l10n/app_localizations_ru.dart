@@ -309,41 +309,46 @@ class AppLocalizationsRu extends AppLocalizations {
   String get widgetTextSizeLarge => 'Большой';
 
   @override
-  String get widgetMmssThresholdTitle => 'Секундный отсчёт в виджете';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Порог обратного отсчета';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'Тема фона';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'По умолчанию в системе';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'Светлая';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'Тёмная';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => 'Прозрачная';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'Отображение даты в календаре';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => 'Оба (Хиджра и Григорианский)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'Только Хиджра';
 
   @override
-  String get widgetMmssThresholdNever => 'Всегда показывать ЧЧ:ММ';
+  String get widgetCalendarDisplayGregorian => 'Только Григорианский';
+
+  @override
+  String get widgetMmssThresholdNever => 'Всегда HH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return 'ММ:СС менее $minutes мин';
+    return 'MM:SS менее $minutes мин';
   }
 
   @override

@@ -81,14 +81,13 @@ void main() {
 
     await tester.tap(find.text('Widget Settings'));
     await tester.pumpAndSettle();
-    await tester.ensureVisible(find.text('Large'));
+    await tester.ensureVisible(find.byType(Slider).first);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Large'));
+    await tester.drag(find.byType(Slider).first, const Offset(100, 0));
     await tester.pumpAndSettle();
 
-
-    expect(harness.controller.widgetTextSize, WidgetTextSize.large);
-    verify(() => harness.widgetBridge.updateWidgetTextSize('large')).called(1);
+    expect(harness.controller.widgetTextSizeValue, greaterThanOrEqualTo(14));
+    verify(() => harness.database.saveWidgetTextSize(any())).called(greaterThanOrEqualTo(1));
 
     await tester.pumpWidget(const SizedBox());
   });

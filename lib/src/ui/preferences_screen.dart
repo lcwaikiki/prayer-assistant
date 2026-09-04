@@ -181,141 +181,156 @@ class PreferencesScreen extends StatelessWidget {
               _PreferenceSection(
                 title: context.l10n.widgetSettingsSectionTitle,
                 children: [
-                  Text(
-                    context.l10n.widgetTextSizeTitle,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  Text(
-                    _widgetTextSizeSubtitle(
-                      context,
-                      controller.widgetTextSize,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.widgetThemeTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  const SizedBox(height: 8),
-                  RadioListTile<WidgetTextSize>(
+                  const SizedBox(height: 4),
+                  RadioListTile<WidgetTheme>(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.widgetTextSizeExtraSmall),
-                    value: WidgetTextSize.extraSmall,
-                    groupValue: controller.widgetTextSize,
+                    dense: true,
+                    title: Text(context.l10n.widgetThemeSystem),
+                    value: WidgetTheme.system,
+                    groupValue: controller.widgetTheme,
                     onChanged: (value) {
                       if (value != null) {
-                        controller.updateWidgetTextSize(value);
+                        controller.updateWidgetTheme(value);
                       }
                     },
                   ),
-                  RadioListTile<WidgetTextSize>(
+                  RadioListTile<WidgetTheme>(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.widgetTextSizeSmall),
-                    value: WidgetTextSize.small,
-                    groupValue: controller.widgetTextSize,
+                    dense: true,
+                    title: Text(context.l10n.widgetThemeLight),
+                    value: WidgetTheme.light,
+                    groupValue: controller.widgetTheme,
                     onChanged: (value) {
                       if (value != null) {
-                        controller.updateWidgetTextSize(value);
+                        controller.updateWidgetTheme(value);
                       }
                     },
                   ),
-                  RadioListTile<WidgetTextSize>(
+                  RadioListTile<WidgetTheme>(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.widgetTextSizeMedium),
-                    value: WidgetTextSize.medium,
-                    groupValue: controller.widgetTextSize,
+                    dense: true,
+                    title: Text(context.l10n.widgetThemeDark),
+                    value: WidgetTheme.dark,
+                    groupValue: controller.widgetTheme,
                     onChanged: (value) {
                       if (value != null) {
-                        controller.updateWidgetTextSize(value);
+                        controller.updateWidgetTheme(value);
                       }
                     },
                   ),
-                  RadioListTile<WidgetTextSize>(
+                  RadioListTile<WidgetTheme>(
                     contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.widgetTextSizeLarge),
-                    value: WidgetTextSize.large,
-                    groupValue: controller.widgetTextSize,
+                    dense: true,
+                    title: Text(context.l10n.widgetThemeTransparent),
+                    value: WidgetTheme.transparent,
+                    groupValue: controller.widgetTheme,
                     onChanged: (value) {
                       if (value != null) {
-                        controller.updateWidgetTextSize(value);
+                        controller.updateWidgetTheme(value);
                       }
                     },
                   ),
                   const Divider(height: 24),
-                  Text(
-                    context.l10n.widgetMmssThresholdTitle,
-                    style: Theme.of(context).textTheme.titleSmall,
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.widgetCalendarDisplayTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
-                  Text(
-                    controller.widgetMmssThresholdMinutes == 0
-                        ? context.l10n.widgetMmssThresholdNever
-                        : context.l10n.widgetMmssThresholdValue(
-                            controller.widgetMmssThresholdMinutes,
-                          ),
-                    style: Theme.of(context).textTheme.bodySmall,
+                  const SizedBox(height: 4),
+                  RadioListTile<WidgetCalendarDisplay>(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(context.l10n.widgetCalendarDisplayBoth),
+                    value: WidgetCalendarDisplay.both,
+                    groupValue: controller.widgetCalendarDisplay,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetCalendarDisplay(value);
+                      }
+                    },
+                  ),
+                  RadioListTile<WidgetCalendarDisplay>(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(context.l10n.widgetCalendarDisplayHijri),
+                    value: WidgetCalendarDisplay.hijri,
+                    groupValue: controller.widgetCalendarDisplay,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetCalendarDisplay(value);
+                      }
+                    },
+                  ),
+                  RadioListTile<WidgetCalendarDisplay>(
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(context.l10n.widgetCalendarDisplayGregorian),
+                    value: WidgetCalendarDisplay.gregorian,
+                    groupValue: controller.widgetCalendarDisplay,
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.updateWidgetCalendarDisplay(value);
+                      }
+                    },
+                  ),
+                  const Divider(height: 24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.widgetTextSizeTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
                   Slider(
-                    value: controller.widgetMmssThresholdMinutes.toDouble(),
+                    value: controller.widgetTextSizeValue.toDouble().clamp(10.0, 18.0),
+                    min: 10,
+                    max: 18,
+                    divisions: 8,
+                    onChanged: (value) =>
+                        controller.updateWidgetTextSizeValue(value.round()),
+                  ),
+                  Center(
+                    child: Text(
+                      context.l10n.widgetTextSizePreview(
+                        controller.widgetTextSizeValue,
+                      ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const Divider(height: 24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.widgetMmssThresholdTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  Slider(
+                    value: controller.widgetMmssThresholdMinutes.toDouble().clamp(0.0, 60.0),
                     min: 0,
                     max: 60,
                     divisions: 60,
-                    label: context.l10n.widgetMmssThresholdValue(
-                      controller.widgetMmssThresholdMinutes,
-                    ),
                     onChanged: (value) =>
                         controller.updateWidgetMmssThreshold(value.round()),
                   ),
-                  const Divider(height: 24),
-                  Text(
-                    context.l10n.widgetThemeTitle,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<WidgetTheme>(
-                    key: const Key('widget_theme_segmented_button'),
-                    segments: [
-                      ButtonSegment(
-                        value: WidgetTheme.system,
-                        label: Text(context.l10n.widgetThemeSystem),
-                      ),
-                      ButtonSegment(
-                        value: WidgetTheme.light,
-                        label: Text(context.l10n.widgetThemeLight),
-                      ),
-                      ButtonSegment(
-                        value: WidgetTheme.dark,
-                        label: Text(context.l10n.widgetThemeDark),
-                      ),
-                      ButtonSegment(
-                        value: WidgetTheme.transparent,
-                        label: Text(context.l10n.widgetThemeTransparent),
-                      ),
-                    ],
-                    selected: {controller.widgetTheme},
-                    onSelectionChanged: (selection) =>
-                        controller.updateWidgetTheme(selection.first),
-                  ),
-                  const Divider(height: 24),
-                  Text(
-                    context.l10n.widgetCalendarDisplayTitle,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<WidgetCalendarDisplay>(
-                    key: const Key('widget_calendar_display_segmented_button'),
-                    segments: [
-                      ButtonSegment(
-                        value: WidgetCalendarDisplay.both,
-                        label: Text(context.l10n.widgetCalendarDisplayBoth),
-                      ),
-                      ButtonSegment(
-                        value: WidgetCalendarDisplay.hijri,
-                        label: Text(context.l10n.widgetCalendarDisplayHijri),
-                      ),
-                      ButtonSegment(
-                        value: WidgetCalendarDisplay.gregorian,
-                        label: Text(context.l10n.widgetCalendarDisplayGregorian),
-                      ),
-                    ],
-                    selected: {controller.widgetCalendarDisplay},
-                    onSelectionChanged: (selection) =>
-                        controller.updateWidgetCalendarDisplay(selection.first),
+                  Center(
+                    child: Text(
+                      controller.widgetMmssThresholdMinutes == 0
+                          ? context.l10n.widgetMmssThresholdNever
+                          : context.l10n.widgetMmssThresholdValue(
+                              controller.widgetMmssThresholdMinutes,
+                            ),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
                   ),
                 ],
               ),

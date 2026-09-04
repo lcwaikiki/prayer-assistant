@@ -288,7 +288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get widgetSettingsSectionTitle => 'Widget Settings';
 
   @override
-  String get widgetTextSizeTitle => 'Widget text size';
+  String get widgetTextSizeTitle => 'Font Size';
 
   @override
   String get widgetTextSizeSubtitle =>
@@ -307,10 +307,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get widgetTextSizeLarge => 'Large';
 
   @override
-  String get widgetMmssThresholdTitle => 'Widget seconds countdown';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Seconds countdown';
+
+  @override
+  String get widgetThemeTitle => 'Background theme';
 
   @override
   String get widgetThemeSystem => 'System';
@@ -325,7 +330,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get widgetThemeTransparent => 'Transparent';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetCalendarDisplayTitle => 'Calendar date display';
 
   @override
   String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';

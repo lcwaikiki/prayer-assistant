@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "چھوٹا",
   "widgetTextSizeMedium": "درمیانہ",
   "widgetTextSizeLarge": "بڑا",
-  "widgetMmssThresholdTitle": "ویجٹ میں سیکنڈ کاؤنٹ ڈاؤن",
+  "widgetMmssThresholdTitle": "الٹی گنتی کا حد",
+  "widgetThemeTitle": "بیک گراؤنڈ تھیم",
+  "widgetThemeSystem": "سستم ڈیفالٹ",
+  "widgetThemeLight": "روشنی",
+  "widgetThemeDark": "ڈارک",
+  "widgetThemeTransparent": "شفاف",
+  "widgetCalendarDisplayTitle": "کیلنڈر کی تاریخ کا ڈسپلے",
+  "widgetCalendarDisplayBoth": "دونوں (ہجری اور عیسوی)",
+  "widgetCalendarDisplayHijri": "صرف ہجری",
+  "widgetCalendarDisplayGregorian": "صرف عیسوی",
   "widgetMmssThresholdNever": "ہمیشہ HH:MM دکھائیں",
-  "widgetMmssThresholdValue": "{minutes} منٹ سے کم پر MM:SS",
+  "widgetMmssThresholdValue": "MM:SS {minutes} منٹ سے کم",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

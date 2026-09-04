@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "小",
   "widgetTextSizeMedium": "中",
   "widgetTextSizeLarge": "大",
-  "widgetMmssThresholdTitle": "小组件秒倒计时",
-  "widgetMmssThresholdNever": "始终显示HH:MM",
-  "widgetMmssThresholdValue": "{minutes} 分钟以下显示 MM:SS",
+  "widgetMmssThresholdTitle": "倒计时阈值",
+  "widgetThemeTitle": "背景主题",
+  "widgetThemeSystem": "系统默认",
+  "widgetThemeLight": "浅色",
+  "widgetThemeDark": "深色",
+  "widgetThemeTransparent": "透明",
+  "widgetCalendarDisplayTitle": "日历日期显示",
+  "widgetCalendarDisplayBoth": "两者 (伊斯兰历和公历)",
+  "widgetCalendarDisplayHijri": "仅伊斯兰历",
+  "widgetCalendarDisplayGregorian": "仅公历",
+  "widgetMmssThresholdNever": "始终显示 HH:MM",
+  "widgetMmssThresholdValue": "低于 {minutes} 分钟显示 MM:SS",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

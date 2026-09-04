@@ -625,7 +625,7 @@ abstract class AppLocalizations {
   /// No description provided for @widgetTextSizeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Widget text size'**
+  /// **'Font Size'**
   String get widgetTextSizeTitle;
 
   /// No description provided for @widgetTextSizeSubtitle.
@@ -658,16 +658,22 @@ abstract class AppLocalizations {
   /// **'Large'**
   String get widgetTextSizeLarge;
 
+  /// No description provided for @widgetTextSizePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview {size}'**
+  String widgetTextSizePreview(Object size);
+
   /// No description provided for @widgetMmssThresholdTitle.
   ///
   /// In en, this message translates to:
-  /// **'Widget seconds countdown'**
+  /// **'Seconds countdown'**
   String get widgetMmssThresholdTitle;
 
   /// No description provided for @widgetThemeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Widget background theme'**
+  /// **'Background theme'**
   String get widgetThemeTitle;
 
   /// No description provided for @widgetThemeSystem.
@@ -697,7 +703,7 @@ abstract class AppLocalizations {
   /// No description provided for @widgetCalendarDisplayTitle.
   ///
   /// In en, this message translates to:
-  /// **'Widget calendar date display'**
+  /// **'Calendar date display'**
   String get widgetCalendarDisplayTitle;
 
   /// No description provided for @widgetCalendarDisplayBoth.

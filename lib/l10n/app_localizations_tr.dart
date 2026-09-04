@@ -289,7 +289,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get widgetSettingsSectionTitle => 'Widget Ayarları';
 
   @override
-  String get widgetTextSizeTitle => 'Widget yazı boyutu';
+  String get widgetTextSizeTitle => 'Yazı Boyutu Ayarı';
 
   @override
   String get widgetTextSizeSubtitle =>
@@ -308,10 +308,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Büyük';
 
   @override
-  String get widgetMmssThresholdTitle => 'Widget saniye geri sayımı';
+  String widgetTextSizePreview(Object size) {
+    return 'Önizleme $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget arka plan teması';
+  String get widgetMmssThresholdTitle => 'Saniye geri sayımı';
+
+  @override
+  String get widgetThemeTitle => 'Arka plan teması';
 
   @override
   String get widgetThemeSystem => 'Sistem';
@@ -326,7 +331,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get widgetThemeTransparent => 'Saydam';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget takvim tarih gösterimi';
+  String get widgetCalendarDisplayTitle => 'Takvim tarih gösterimi';
 
   @override
   String get widgetCalendarDisplayBoth => 'İkisi de (Hicri ve Miladi)';

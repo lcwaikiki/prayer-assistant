@@ -297,41 +297,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get widgetTextSizeLarge => '大';
 
   @override
-  String get widgetMmssThresholdTitle => 'ウィジェットの秒カウントダウン';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'カウントダウン閾値';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => '背景テーマ';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'システムデフォルト';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'ライト';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'ダーク';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => '透明';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'カレンダー日付表示';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => '両方 (ヒジュラ暦 & グレゴリオ暦)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'ヒジュラ暦のみ';
 
   @override
-  String get widgetMmssThresholdNever => '常にHH:MMを表示';
+  String get widgetCalendarDisplayGregorian => 'グレゴリオ暦のみ';
+
+  @override
+  String get widgetMmssThresholdNever => '常に HH:MM を表示';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return '$minutes分未満はMM:SS';
+    return '$minutes分未満で MM:SS を表示';
   }
 
   @override

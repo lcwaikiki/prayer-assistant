@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "کوچک",
   "widgetTextSizeMedium": "متوسط",
   "widgetTextSizeLarge": "بزرگ",
-  "widgetMmssThresholdTitle": "شمارش معکوس ثانیهای ویجت",
-  "widgetMmssThresholdNever": "همیشه HH:MM نمایش بده",
-  "widgetMmssThresholdValue": "MM:SS کمتر از {minutes} دقیقه",
+  "widgetMmssThresholdTitle": "آستانه شمارش معکوس",
+  "widgetThemeTitle": "تم پس‌زمینه",
+  "widgetThemeSystem": "پیش‌فرض سیستم",
+  "widgetThemeLight": "روشن",
+  "widgetThemeDark": "تاریک",
+  "widgetThemeTransparent": "شفاف",
+  "widgetCalendarDisplayTitle": "نمایش تاریخ تقویم",
+  "widgetCalendarDisplayBoth": "هر دو (هجری و میلادی)",
+  "widgetCalendarDisplayHijri": "فقط هجری",
+  "widgetCalendarDisplayGregorian": "فقط میلادی",
+  "widgetMmssThresholdNever": "همیشه نمایش HH:MM",
+  "widgetMmssThresholdValue": "MM:SS زیر {minutes} دقیقه",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

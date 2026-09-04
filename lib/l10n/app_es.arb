@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "Pequeño",
   "widgetTextSizeMedium": "Mediano",
   "widgetTextSizeLarge": "Grande",
-  "widgetMmssThresholdTitle": "Cuenta atrás en segundos del widget",
+  "widgetMmssThresholdTitle": "Umbral de cuenta regresiva",
+  "widgetThemeTitle": "Tema de fondo",
+  "widgetThemeSystem": "Predeterminado del sistema",
+  "widgetThemeLight": "Claro",
+  "widgetThemeDark": "Oscuro",
+  "widgetThemeTransparent": "Transparente",
+  "widgetCalendarDisplayTitle": "Visualización de fecha",
+  "widgetCalendarDisplayBoth": "Ambos (Hiyri y Gregoriano)",
+  "widgetCalendarDisplayHijri": "Solo Hiyri",
+  "widgetCalendarDisplayGregorian": "Solo Gregoriano",
   "widgetMmssThresholdNever": "Mostrar siempre HH:MM",
-  "widgetMmssThresholdValue": "MM:SS por debajo de {minutes} min",
+  "widgetMmssThresholdValue": "MM:SS bajo {minutes} min",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

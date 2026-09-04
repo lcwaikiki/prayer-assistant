@@ -67,6 +67,7 @@ class PrayerAppController extends ChangeNotifier {
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
+  int _widgetTextSizeValue = 14;
   WidgetTheme _widgetTheme = WidgetTheme.system;
   WidgetCalendarDisplay _widgetCalendarDisplay = WidgetCalendarDisplay.both;
   int _widgetMmssThresholdMinutes = 60;
@@ -137,6 +138,7 @@ class PrayerAppController extends ChangeNotifier {
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
   WidgetTextSize get widgetTextSize => _widgetTextSize;
+  int get widgetTextSizeValue => _widgetTextSizeValue;
   WidgetTheme get widgetTheme => _widgetTheme;
   WidgetCalendarDisplay get widgetCalendarDisplay => _widgetCalendarDisplay;
 
@@ -436,13 +438,43 @@ class PrayerAppController extends ChangeNotifier {
       _appBarRemainingPlacement = placement;
       final rawWidgetTextSize = await database.loadWidgetTextSize();
       var widgetTextSize = WidgetTextSize.medium;
-      for (final item in WidgetTextSize.values) {
-        if (item.name == rawWidgetTextSize) {
-          widgetTextSize = item;
-          break;
+      var widgetTextSizeVal = 14;
+      final parsedInt = int.tryParse(rawWidgetTextSize ?? '');
+      if (parsedInt != null) {
+        widgetTextSizeVal = parsedInt.clamp(10, 18);
+        if (widgetTextSizeVal <= 10) {
+          widgetTextSize = WidgetTextSize.extraSmall;
+        } else if (widgetTextSizeVal <= 12) {
+          widgetTextSize = WidgetTextSize.small;
+        } else if (widgetTextSizeVal <= 15) {
+          widgetTextSize = WidgetTextSize.medium;
+        } else {
+          widgetTextSize = WidgetTextSize.large;
+        }
+      } else {
+        for (final item in WidgetTextSize.values) {
+          if (item.name == rawWidgetTextSize) {
+            widgetTextSize = item;
+            break;
+          }
+        }
+        switch (widgetTextSize) {
+          case WidgetTextSize.extraSmall:
+            widgetTextSizeVal = 10;
+            break;
+          case WidgetTextSize.small:
+            widgetTextSizeVal = 12;
+            break;
+          case WidgetTextSize.medium:
+            widgetTextSizeVal = 14;
+            break;
+          case WidgetTextSize.large:
+            widgetTextSizeVal = 16;
+            break;
         }
       }
       _widgetTextSize = widgetTextSize;
+      _widgetTextSizeValue = widgetTextSizeVal;
       final rawWidgetTheme = await database.loadWidgetTheme();
       var widgetTheme = WidgetTheme.system;
       for (final item in WidgetTheme.values) {
@@ -768,8 +800,43 @@ class PrayerAppController extends ChangeNotifier {
       return;
     }
     _widgetTextSize = size;
+    switch (size) {
+      case WidgetTextSize.extraSmall:
+        _widgetTextSizeValue = 10;
+        break;
+      case WidgetTextSize.small:
+        _widgetTextSizeValue = 12;
+        break;
+      case WidgetTextSize.medium:
+        _widgetTextSizeValue = 14;
+        break;
+      case WidgetTextSize.large:
+        _widgetTextSizeValue = 16;
+        break;
+    }
     await database.saveWidgetTextSize(size.name);
     await widgetBridgeService.updateWidgetTextSize(size.name);
+    notifyListeners();
+  }
+
+  Future<void> updateWidgetTextSizeValue(int size) async {
+    final clamped = size.clamp(10, 18);
+    if (_widgetTextSizeValue == clamped) {
+      return;
+    }
+    _widgetTextSizeValue = clamped;
+    if (clamped <= 10) {
+      _widgetTextSize = WidgetTextSize.extraSmall;
+    } else if (clamped <= 12) {
+      _widgetTextSize = WidgetTextSize.small;
+    } else if (clamped <= 15) {
+      _widgetTextSize = WidgetTextSize.medium;
+    } else {
+      _widgetTextSize = WidgetTextSize.large;
+    }
+    final strVal = clamped.toString();
+    await database.saveWidgetTextSize(strVal);
+    await widgetBridgeService.updateWidgetTextSize(strVal);
     notifyListeners();
   }
 

@@ -309,35 +309,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String get widgetTextSizeLarge => 'Grand';
 
   @override
-  String get widgetMmssThresholdTitle =>
-      'Compte à rebours en secondes du widget';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Seuil du compte à rebours';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'Thème d\'arrière-plan';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'Système par défaut';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'Clair';
+
+  @override
+  String get widgetThemeDark => 'Sombre';
 
   @override
   String get widgetThemeTransparent => 'Transparent';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetCalendarDisplayTitle => 'Affichage de la date';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayBoth => 'Les deux (Hégirien & Grégorien)';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayHijri => 'Hégirien seulement';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayGregorian => 'Grégorien seulement';
 
   @override
   String get widgetMmssThresholdNever => 'Toujours afficher HH:MM';

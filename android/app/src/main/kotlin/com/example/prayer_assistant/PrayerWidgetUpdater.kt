@@ -138,7 +138,7 @@ object PrayerWidgetUpdater {
             views.setTextColor(R.id.widgetRemainingCircleValue, primaryTextColor)
             applyCountdown(views, R.id.widgetRemainingCircleValue, next, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
-            applyCircleBackground(views, context, widgetId, dark)
+            applyCircleBackground(views, context, widgetId)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -315,8 +315,8 @@ object PrayerWidgetUpdater {
         val hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
         val gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
         return when (display) {
-            "hijri" -> if (hijri.isNotEmpty()) hijri else gregorian
-            "gregorian" -> if (gregorian.isNotEmpty()) gregorian else hijri
+            "hijri" -> hijri.ifEmpty { gregorian }
+            "gregorian" -> gregorian.ifEmpty { hijri }
             else -> {
                 if (hijri.isNotEmpty() && gregorian.isNotEmpty()) {
                     "$hijri • $gregorian"
@@ -428,13 +428,30 @@ object PrayerWidgetUpdater {
         val gregorianMonthYear = monthYearFormat.format(now.time)
 
         val (headerText, subHeaderText) = when (display) {
-            "gregorian" -> gregorianMonthYear to (if (gregorian.isNotEmpty()) gregorian else "")
-            "hijri" -> (if (hijri.isNotEmpty()) hijri else gregorianMonthYear) to gregorianMonthYear
-            else -> gregorianMonthYear to (if (hijri.isNotEmpty()) hijri else gregorian)
+            "hijri" -> {
+                val mainHeader = hijri.ifEmpty { gregorianMonthYear }
+                mainHeader to ""
+            }
+            "gregorian" -> {
+                val subHeader = if (gregorian.isNotEmpty()) gregorian else ""
+                gregorianMonthYear to subHeader
+            }
+            else -> {
+                val combinedSub = if (hijri.isNotEmpty() && gregorian.isNotEmpty()) {
+                    "$hijri • $gregorian"
+                } else {
+                    hijri.ifEmpty { gregorian }
+                }
+                gregorianMonthYear to combinedSub
+            }
         }
 
         views.setTextViewText(R.id.widgetCalendarHeader, headerText)
         views.setTextViewText(R.id.widgetCalendarSubHeader, subHeaderText)
+        views.setViewVisibility(
+            R.id.widgetCalendarSubHeader,
+            if (subHeaderText.isNotEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+        )
 
         // Weekday header abbreviations
         val weekdayAbbrs = when (appLocale) {
@@ -624,15 +641,29 @@ object PrayerWidgetUpdater {
      * stretches into an ellipse. A plain oval background drawable can't do this — shape
      * drawables always fill whatever bounds the host gives them.
      */
-    private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int, isDark: Boolean = true) {
+    private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int) {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        val isSystemDark = (context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+
         val density = context.resources.displayMetrics.density
-        val diameter = (circleDiameterDp(context, widgetId) * density).toInt()
+        val diameter = (circleDiameterDp(context, widgetId) * density).toInt().coerceAtLeast(1)
 
         val bitmap = Bitmap.createBitmap(diameter, diameter, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val radius = diameter / 2f
-        val circleBgColor = if (isDark) Color.parseColor("#FF1F8A70") else Color.parseColor("#FFFFFFFF")
-        val ringColor = if (isDark) Color.parseColor("#4DFFFFFF") else Color.parseColor("#331F8A70")
+
+        val (circleBgColor, ringColor) = when (theme) {
+            "light" -> Color.parseColor("#FFFFFFFF") to Color.parseColor("#331F8A70")
+            "dark" -> Color.parseColor("#FF1F8A70") to Color.parseColor("#4DFFFFFF")
+            "transparent" -> Color.parseColor("#70121C19") to Color.parseColor("#40FFFFFF")
+            else -> {
+                if (isSystemDark) {
+                    Color.parseColor("#FF1F8A70") to Color.parseColor("#4DFFFFFF")
+                } else {
+                    Color.parseColor("#FFFFFFFF") to Color.parseColor("#331F8A70")
+                }
+            }
+        }
 
         canvas.drawCircle(radius, radius, radius, Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = circleBgColor

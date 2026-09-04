@@ -308,41 +308,46 @@ class AppLocalizationsId extends AppLocalizations {
   String get widgetTextSizeLarge => 'Besar';
 
   @override
-  String get widgetMmssThresholdTitle => 'Hitung mundur detik widget';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Ambang Hitung Mundur';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'Tema Latar Belakang';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'Default Sistem';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'Terang';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'Gelap';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => 'Transparan';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'Tampilan Tanggal Kalender';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => 'Keduanya (Hijriah & Masehi)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'Hanya Hijriah';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Hanya Masehi';
 
   @override
   String get widgetMmssThresholdNever => 'Selalu tampilkan HH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return 'MM:SS di bawah $minutes mnt';
+    return 'MM:SS di bawah $minutes menit';
   }
 
   @override

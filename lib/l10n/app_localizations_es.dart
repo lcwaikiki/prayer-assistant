@@ -309,41 +309,46 @@ class AppLocalizationsEs extends AppLocalizations {
   String get widgetTextSizeLarge => 'Grande';
 
   @override
-  String get widgetMmssThresholdTitle => 'Cuenta atrás en segundos del widget';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Umbral de cuenta regresiva';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'Tema de fondo';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'Predeterminado del sistema';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'Claro';
 
   @override
-  String get widgetThemeTransparent => 'Transparent';
+  String get widgetThemeDark => 'Oscuro';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetThemeTransparent => 'Transparente';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayTitle => 'Visualización de fecha';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayBoth => 'Ambos (Hiyri y Gregoriano)';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayHijri => 'Solo Hiyri';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Solo Gregoriano';
 
   @override
   String get widgetMmssThresholdNever => 'Mostrar siempre HH:MM';
 
   @override
   String widgetMmssThresholdValue(Object minutes) {
-    return 'MM:SS por debajo de $minutes min';
+    return 'MM:SS bajo $minutes min';
   }
 
   @override

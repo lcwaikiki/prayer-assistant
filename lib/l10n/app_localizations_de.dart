@@ -307,34 +307,39 @@ class AppLocalizationsDe extends AppLocalizations {
   String get widgetTextSizeLarge => 'Groß';
 
   @override
-  String get widgetMmssThresholdTitle => 'Widget-Sekunden-Countdown';
+  String widgetTextSizePreview(Object size) {
+    return 'Preview $size';
+  }
 
   @override
-  String get widgetThemeTitle => 'Widget background theme';
+  String get widgetMmssThresholdTitle => 'Countdown-Schwellenwert';
 
   @override
-  String get widgetThemeSystem => 'System';
+  String get widgetThemeTitle => 'Hintergrund-Design';
 
   @override
-  String get widgetThemeLight => 'Light';
+  String get widgetThemeSystem => 'Systemstandard';
 
   @override
-  String get widgetThemeDark => 'Dark';
+  String get widgetThemeLight => 'Hell';
+
+  @override
+  String get widgetThemeDark => 'Dunkel';
 
   @override
   String get widgetThemeTransparent => 'Transparent';
 
   @override
-  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+  String get widgetCalendarDisplayTitle => 'Kalenderdatumsanzeige';
 
   @override
-  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+  String get widgetCalendarDisplayBoth => 'Beide (Hijri & Gregorianisch)';
 
   @override
-  String get widgetCalendarDisplayHijri => 'Hijri only';
+  String get widgetCalendarDisplayHijri => 'Nur Hijri';
 
   @override
-  String get widgetCalendarDisplayGregorian => 'Gregorian only';
+  String get widgetCalendarDisplayGregorian => 'Nur Gregorianisch';
 
   @override
   String get widgetMmssThresholdNever => 'Immer HH:MM anzeigen';

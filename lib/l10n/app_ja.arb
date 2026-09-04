@@ -138,9 +138,18 @@
   "widgetTextSizeSmall": "小",
   "widgetTextSizeMedium": "中",
   "widgetTextSizeLarge": "大",
-  "widgetMmssThresholdTitle": "ウィジェットの秒カウントダウン",
-  "widgetMmssThresholdNever": "常にHH:MMを表示",
-  "widgetMmssThresholdValue": "{minutes}分未満はMM:SS",
+  "widgetMmssThresholdTitle": "カウントダウン閾値",
+  "widgetThemeTitle": "背景テーマ",
+  "widgetThemeSystem": "システムデフォルト",
+  "widgetThemeLight": "ライト",
+  "widgetThemeDark": "ダーク",
+  "widgetThemeTransparent": "透明",
+  "widgetCalendarDisplayTitle": "カレンダー日付表示",
+  "widgetCalendarDisplayBoth": "両方 (ヒジュラ暦 & グレゴリオ暦)",
+  "widgetCalendarDisplayHijri": "ヒジュラ暦のみ",
+  "widgetCalendarDisplayGregorian": "グレゴリオ暦のみ",
+  "widgetMmssThresholdNever": "常に HH:MM を表示",
+  "widgetMmssThresholdValue": "{minutes}分未満で MM:SS を表示",
   "@widgetMmssThresholdValue": {
     "placeholders": {
       "minutes": {}

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/item_form_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
 
+import '../helpers/mocks.dart';
 import '../helpers/test_harness.dart';
 
 Item _item() {
@@ -23,6 +27,7 @@ Future<void> _pumpForm(
   WidgetTester tester,
   TestHarness harness, {
   Item? itemToEdit,
+  List<Override> extraOverrides = const [],
 }) async {
   await pumpWithHarness(
     tester,
@@ -41,6 +46,7 @@ Future<void> _pumpForm(
         ),
       ),
     ),
+    extraOverrides: extraOverrides,
   );
   await tester.tap(find.text('open'));
   await tester.pumpAndSettle();
@@ -56,6 +62,17 @@ Future<void> _tapSave(WidgetTester tester) async {
   await tester.drag(find.byType(ListView), const Offset(0, -150));
   await tester.pumpAndSettle();
   await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+  await tester.pumpAndSettle();
+}
+
+Future<void> _tapUpdate(WidgetTester tester) async {
+  for (var i = 0; i < 8 && tester.any(find.text('Update')) == false; i++) {
+    await tester.drag(find.byType(ListView), const Offset(0, -150));
+    await tester.pumpAndSettle();
+  }
+  await tester.drag(find.byType(ListView), const Offset(0, -150));
+  await tester.pumpAndSettle();
+  await tester.tap(find.widgetWithText(FilledButton, 'Update'));
   await tester.pumpAndSettle();
 }
 
@@ -120,7 +137,7 @@ void main() {
     expect(saved.first.title, 'Tasbih');
     expect(saved.first.count, 33);
     expect(saved.first.check, 11);
-    expect(saved.first.vibrationIntensity, 50);
+    expect(saved.first.vibrationIntensity, 4);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -153,12 +170,7 @@ void main() {
     expect(find.widgetWithText(TextFormField, 'Tasbih'), findsOneWidget);
 
     await tester.enterText(find.byKey(const Key('title_field')), 'Tesbih');
-    for (var i = 0; i < 8 && tester.any(find.text('Update')) == false; i++) {
-      await tester.drag(find.byType(ListView), const Offset(0, -150));
-      await tester.pumpAndSettle();
-    }
-    await tester.tap(find.widgetWithText(FilledButton, 'Update'));
-    await tester.pumpAndSettle();
+    await _tapUpdate(tester);
 
     final saved = harness.itemRepository.loadItems();
     expect(saved, hasLength(1));
@@ -359,12 +371,7 @@ void main() {
     );
     expect(field.controller!.text, '7');
 
-    for (var i = 0; i < 8 && tester.any(find.text('Update')) == false; i++) {
-      await tester.drag(find.byType(ListView), const Offset(0, -150));
-      await tester.pumpAndSettle();
-    }
-    await tester.tap(find.widgetWithText(FilledButton, 'Update'));
-    await tester.pumpAndSettle();
+    await _tapUpdate(tester);
 
     final saved = harness.itemRepository.loadItems();
     expect(saved, hasLength(1));
@@ -472,5 +479,47 @@ void main() {
     await tester.pump();
     await tester.pumpAndSettle();
     expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets(
+      'vibration intensity preview button and slider trigger vibration', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    final mockHaptic = MockHapticService();
+    when(() => mockHaptic.standardDurationMs(intensity: any(named: 'intensity')))
+        .thenAnswer((invocation) {
+      final intensity = invocation.namedArguments[#intensity] as int;
+      final level = intensity > 8 ? (((intensity - 1) * 7) ~/ 99) + 1 : intensity;
+      return 10 + (((level - 1) * 190) ~/ 7);
+    });
+    when(() => mockHaptic.standard(intensity: any(named: 'intensity')))
+        .thenAnswer((_) async {});
+    await harness.initialize();
+
+    await _pumpForm(
+      tester,
+      harness,
+      extraOverrides: [
+        hapticServiceProvider.overrideWithValue(mockHaptic),
+      ],
+    );
+
+    // Initial value is 4
+    expect(find.text('Vibration Intensity: 4'), findsOneWidget);
+
+    // Tap preview button
+    await tester.tap(find.byKey(const Key('vibration_preview_button')));
+    await tester.pumpAndSettle();
+
+    verify(() => mockHaptic.standard(intensity: 4)).called(1);
+
+    // Drag slider
+    await tester.drag(find.byKey(const Key('intensity_slider')), const Offset(100, 0));
+    await tester.pumpAndSettle();
+
+    verify(() => mockHaptic.standard(intensity: any(named: 'intensity'))).called(1);
+
+    await tester.pumpWidget(const SizedBox());
   });
 }

@@ -1,6 +1,11 @@
 import 'dart:math' as math;
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vibration/vibration.dart';
+
+final hapticServiceProvider = Provider<HapticService>((ref) {
+  return HapticService();
+});
 
 class HapticService {
   bool? _hasAmplitudeControl;
@@ -15,13 +20,17 @@ class HapticService {
   }
 
   int standardDurationMs({required int intensity}) {
-    final safe = intensity.clamp(1, 99);
-    return 50 + (((safe - 1) * 950) ~/ 98);
+    int level = intensity;
+    if (level > 8) {
+      level = (((intensity - 1) * 7) ~/ 99) + 1;
+    }
+    final safe = level.clamp(1, 8);
+    return 10 + (((safe - 1) * 190) ~/ 7);
   }
 
   int checkpointDurationMs({required int intensity}) {
     final base = standardDurationMs(intensity: intensity);
-    return (base * 3).clamp(200, 1500);
+    return (base * 3).clamp(30, 600);
   }
 
   int _amplitudeFor(int intensity) {

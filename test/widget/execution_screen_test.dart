@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
 
 import '../helpers/mocks.dart';
 import '../helpers/test_harness.dart';

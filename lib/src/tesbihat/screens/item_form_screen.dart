@@ -8,6 +8,7 @@ import '../../services/local_database.dart';
 import '../../widgets/discard_confirmation_dialog.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
+import '../services/haptic_service.dart';
 import '../services/prayer_anchor_resolver.dart';
 import '../state/groups_notifier.dart';
 import '../state/items_notifier.dart';
@@ -41,13 +42,21 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
   bool get _isEditing => widget.itemToEdit != null;
 
+  static int _normalizeVibration(int? intensity) {
+    if (intensity == null) return 4;
+    if (intensity > 8) {
+      return (((intensity - 1) * 7) ~/ 99) + 1;
+    }
+    return intensity.clamp(1, 8);
+  }
+
   bool get _isDirty {
     final item = widget.itemToEdit;
     final initialTitle = item?.title ?? '';
     final initialNotes = item?.notes ?? '';
     final initialCount = item != null ? item.count.toString() : '';
     final initialCheck = item != null ? item.check.toString() : '';
-    final initialVibration = item?.vibrationIntensity ?? 50;
+    final initialVibration = _normalizeVibration(item?.vibrationIntensity);
     final initialReminder = item != null
         ? ReminderConfig.fromItem(item)
         : const ReminderConfig();
@@ -81,7 +90,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _setCountController = TextEditingController(
       text: item != null ? item.setCount.toString() : '0',
     );
-    _vibrationIntensity = item?.vibrationIntensity ?? 50;
+    _vibrationIntensity = _normalizeVibration(item?.vibrationIntensity);
     _reminderConfig = item != null
         ? ReminderConfig.fromItem(item)
         : const ReminderConfig();
@@ -318,21 +327,41 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text(
-                '${l10n.vibrationIntensity}: $_vibrationIntensity',
-                style: Theme.of(context).textTheme.titleMedium,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${l10n.vibrationIntensity}: $_vibrationIntensity',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  IconButton(
+                    key: const Key('vibration_preview_button'),
+                    icon: const Icon(Icons.vibration),
+                    tooltip: 'Preview vibration',
+                    onPressed: () {
+                      ref.read(hapticServiceProvider).standard(
+                        intensity: _vibrationIntensity,
+                      );
+                    },
+                  ),
+                ],
               ),
               Slider(
                 key: const Key('intensity_slider'),
-                value: _vibrationIntensity.toDouble(),
+                value: _vibrationIntensity.clamp(1, 8).toDouble(),
                 min: 1,
-                max: 100,
-                divisions: 99,
+                max: 8,
+                divisions: 7,
                 label: _vibrationIntensity.toString(),
                 onChanged: (value) {
                   setState(() {
                     _vibrationIntensity = value.round();
                   });
+                },
+                onChangeEnd: (value) {
+                  ref.read(hapticServiceProvider).standard(
+                    intensity: value.round(),
+                  );
                 },
               ),
               const SizedBox(height: 20),

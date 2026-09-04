@@ -10,10 +10,6 @@ import '../l10n/tesbihat_localizations.dart';
 import '../services/haptic_service.dart';
 import '../state/items_notifier.dart';
 
-final hapticServiceProvider = Provider<HapticService>((ref) {
-  return HapticService();
-});
-
 class ExecutionScreen extends ConsumerStatefulWidget {
   const ExecutionScreen({super.key, required this.itemId});
 

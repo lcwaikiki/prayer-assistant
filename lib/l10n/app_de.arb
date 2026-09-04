@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "Gib eine gültige positive Zahl ein.",
   "useValueUpTo240": "Verwende einen Wert bis 240 Minuten.",
   "customMinutesSaved": "Benutzerdefinierte Minuten gespeichert.",
+  "widgetSettingsSectionTitle": "Widget-Einstellungen",
   "widgetTextSizeTitle": "Widget-Textgröße",
   "widgetTextSizeSubtitle": "Textgröße für die Homescreen-Widgets.",
   "widgetTextSizeExtraSmall": "Sehr klein",

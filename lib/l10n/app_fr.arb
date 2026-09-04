@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "Entrez un nombre positif valide.",
   "useValueUpTo240": "Utilisez une valeur jusqu'à 240 minutes.",
   "customMinutesSaved": "Minutes personnalisées enregistrées.",
+  "widgetSettingsSectionTitle": "Paramètres du widget",
   "widgetTextSizeTitle": "Taille du texte des widgets",
   "widgetTextSizeSubtitle": "Taille du texte utilisée dans les widgets d'écran d'accueil.",
   "widgetTextSizeExtraSmall": "Très petit",

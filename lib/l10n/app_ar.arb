@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "أدخل رقمًا موجبًا صحيحًا.",
   "useValueUpTo240": "استخدم قيمة حتى 240 دقيقة.",
   "customMinutesSaved": "تم حفظ الدقائق المخصصة.",
+  "widgetSettingsSectionTitle": "إعدادات الودجت",
   "widgetTextSizeTitle": "حجم خط الودجت",
   "widgetTextSizeSubtitle": "حجم الخط المستخدم في ودجتات الشاشة الرئيسية.",
   "widgetTextSizeExtraSmall": "صغير جدًا",

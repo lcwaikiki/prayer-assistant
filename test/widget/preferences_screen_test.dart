@@ -79,7 +79,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Widget text size'));
+    await tester.tap(find.text('Widget Settings'));
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Large'));
     await tester.pumpAndSettle();

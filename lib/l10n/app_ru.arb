@@ -130,6 +130,7 @@
   "notificationMessageTitle": "Сообщение уведомления",
   "notificationMessageShown": "Показывать",
   "notificationMessageHidden": "Скрыто",
+  "widgetSettingsSectionTitle": "Настройки виджета",
   "widgetTextSizeTitle": "Размер текста виджета",
   "widgetTextSizeSubtitle": "Размер текста, используемый в виджетах главного экрана.",
   "widgetTextSizeExtraSmall": "Очень маленький",

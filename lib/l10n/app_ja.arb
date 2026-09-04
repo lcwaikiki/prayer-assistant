@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "有効な正の数を入力してください。",
   "useValueUpTo240": "240分以下の値を入力してください。",
   "customMinutesSaved": "カスタム分を保存しました。",
+  "widgetSettingsSectionTitle": "ウィジェット設定",
   "widgetTextSizeTitle": "ウィジェットの文字サイズ",
   "widgetTextSizeSubtitle": "ホーム画面ウィジェットで使用する文字サイズ。",
   "widgetTextSizeExtraSmall": "極小",

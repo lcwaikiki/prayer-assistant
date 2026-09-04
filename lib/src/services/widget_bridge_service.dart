@@ -15,6 +15,9 @@ class WidgetBridgeService {
     required DateTime now,
     Locale? locale,
     String locationLabel = '',
+    String dateHeaderHijri = '',
+    String dateHeaderGregorian = '',
+    String calendarDisplay = 'both',
   }) async {
     final timeline = <Map<String, Object>>[];
     final start = DateTime(now.year, now.month, now.day);
@@ -86,6 +89,9 @@ class WidgetBridgeService {
       'todayPrayers': todayPrayers,
       'locationLabel': locationLabel,
       'appLocale': locale?.languageCode ?? '',
+      'dateHeaderHijri': dateHeaderHijri,
+      'dateHeaderGregorian': dateHeaderGregorian,
+      'calendarDisplay': calendarDisplay,
     });
   }
 
@@ -109,6 +115,19 @@ class WidgetBridgeService {
     await _channel.invokeMethod<void>('updateWidgetTextSize', <String, Object>{
       'size': size,
     });
+  }
+
+  Future<void> updateWidgetTheme(String theme) async {
+    await _channel.invokeMethod<void>('updateWidgetTheme', <String, Object>{
+      'theme': theme,
+    });
+  }
+
+  Future<void> updateWidgetCalendarDisplay(String display) async {
+    await _channel.invokeMethod<void>(
+      'updateWidgetCalendarDisplay',
+      <String, Object>{'display': display},
+    );
   }
 
   /// Pushes the minutes threshold below which widgets count down in MM:SS

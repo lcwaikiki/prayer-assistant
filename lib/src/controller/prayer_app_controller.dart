@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 
+import '../calendar/hijri_utils.dart';
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/services/calendar_reminder_service.dart';
 import '../kaza/models/kaza_tracker.dart';
@@ -37,7 +38,10 @@ class PrayerAppController extends ChangeNotifier {
     required this.notificationService,
     required this.widgetBridgeService,
     required this.calendarReminderService,
-  });
+    ItemRepository? itemRepo,
+    ItemHistoryRepository? historyRepo,
+  })  : _itemRepo = itemRepo,
+        _historyRepo = historyRepo;
 
   final ImsakiyemApi api;
   final LocalDatabase database;
@@ -45,17 +49,16 @@ class PrayerAppController extends ChangeNotifier {
   final NotificationService notificationService;
   final WidgetBridgeService widgetBridgeService;
   final CalendarReminderService calendarReminderService;
+  final ItemRepository? _itemRepo;
+  final ItemHistoryRepository? _historyRepo;
 
+  int _tabIndex = 2;
   bool _isInitializing = true;
   bool _isBusy = false;
   String? _error;
-  int _tabIndex = 2;
-
-
   List<LocationNode> _countries = const <LocationNode>[];
   List<LocationNode> _states = const <LocationNode>[];
   List<LocationNode> _districts = const <LocationNode>[];
-
   SelectedLocation? _selectedLocation;
   PrayerDay? _today;
   List<PrayerDay> _yearRange = const <PrayerDay>[];
@@ -64,6 +67,8 @@ class PrayerAppController extends ChangeNotifier {
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
+  WidgetTheme _widgetTheme = WidgetTheme.system;
+  WidgetCalendarDisplay _widgetCalendarDisplay = WidgetCalendarDisplay.both;
   int _widgetMmssThresholdMinutes = 60;
   bool _remindersSilenced = false;
   bool _reminderVibrationEnabled = true;
@@ -132,6 +137,8 @@ class PrayerAppController extends ChangeNotifier {
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
   WidgetTextSize get widgetTextSize => _widgetTextSize;
+  WidgetTheme get widgetTheme => _widgetTheme;
+  WidgetCalendarDisplay get widgetCalendarDisplay => _widgetCalendarDisplay;
 
   /// Minutes below which widgets count down in MM:SS instead of HH:MM.
   int get widgetMmssThresholdMinutes => _widgetMmssThresholdMinutes;
@@ -436,11 +443,33 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _widgetTextSize = widgetTextSize;
+      final rawWidgetTheme = await database.loadWidgetTheme();
+      var widgetTheme = WidgetTheme.system;
+      for (final item in WidgetTheme.values) {
+        if (item.name == rawWidgetTheme) {
+          widgetTheme = item;
+          break;
+        }
+      }
+      _widgetTheme = widgetTheme;
+
+      final rawWidgetCalDisplay = await database.loadWidgetCalendarDisplay();
+      var widgetCalDisplay = WidgetCalendarDisplay.both;
+      for (final item in WidgetCalendarDisplay.values) {
+        if (item.name == rawWidgetCalDisplay) {
+          widgetCalDisplay = item;
+          break;
+        }
+      }
+      _widgetCalendarDisplay = widgetCalDisplay;
+
       _widgetMmssThresholdMinutes = (await database
               .loadWidgetMmssThreshold())
           .clamp(0, 60);
       await _syncStatusBarConfig();
       await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
+      await widgetBridgeService.updateWidgetTheme(_widgetTheme.name);
+      await widgetBridgeService.updateWidgetCalendarDisplay(_widgetCalendarDisplay.name);
       await widgetBridgeService.updateWidgetMmssThreshold(
         _widgetMmssThresholdMinutes,
       );
@@ -755,6 +784,54 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateWidgetTheme(WidgetTheme theme) async {
+    if (_widgetTheme == theme) {
+      return;
+    }
+    _widgetTheme = theme;
+    await database.saveWidgetTheme(theme.name);
+    await widgetBridgeService.updateWidgetTheme(theme.name);
+    notifyListeners();
+  }
+
+  Future<void> updateWidgetCalendarDisplay(
+    WidgetCalendarDisplay display,
+  ) async {
+    if (_widgetCalendarDisplay == display) {
+      return;
+    }
+    _widgetCalendarDisplay = display;
+    await database.saveWidgetCalendarDisplay(display.name);
+    await widgetBridgeService.updateWidgetCalendarDisplay(display.name);
+    await _updateWidgetBridgeData();
+    notifyListeners();
+  }
+
+  Future<void> _updateWidgetBridgeData() async {
+    final now = DateTime.now();
+    final lang = resolvedLocale.languageCode;
+    final hijriStr = formatHijriDate(now, lang, offset: _hijriDateOffset);
+    String gregorianStr;
+    try {
+      gregorianStr = DateFormat.yMMMMd(lang).format(now);
+    } catch (_) {
+      try {
+        gregorianStr = DateFormat('dd MMMM yyyy').format(now);
+      } catch (_) {
+        gregorianStr = '${now.day}.${now.month}.${now.year}';
+      }
+    }
+    await widgetBridgeService.updateFromPrayerDays(
+      days: _yearRange,
+      now: now,
+      locale: resolvedLocale,
+      locationLabel: _selectedLocation?.fullName ?? '',
+      dateHeaderHijri: hijriStr,
+      dateHeaderGregorian: gregorianStr,
+      calendarDisplay: _widgetCalendarDisplay.name,
+    );
+  }
+
   Future<void> updateCalendarPrimaryDisplay(
     CalendarPrimaryDisplay display,
   ) async {
@@ -937,13 +1014,7 @@ class PrayerAppController extends ChangeNotifier {
       await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
     } catch (_) {}
     if (_selectedLocation != null && _yearRange.isNotEmpty) {
-      final now = DateTime.now();
-      await widgetBridgeService.updateFromPrayerDays(
-        days: _yearRange,
-        now: now,
-        locale: resolvedLocale,
-        locationLabel: _selectedLocation?.fullName ?? '',
-      );
+      await _updateWidgetBridgeData();
       await _syncCalendarRemindersWidget();
       try {
         await _syncNotifications();
@@ -1004,12 +1075,7 @@ class PrayerAppController extends ChangeNotifier {
       start: start,
       end: end,
     );
-    await widgetBridgeService.updateFromPrayerDays(
-      days: _yearRange,
-      now: now,
-      locale: resolvedLocale,
-      locationLabel: _selectedLocation?.fullName ?? '',
-    );
+    await _updateWidgetBridgeData();
     notifyListeners();
   }
 

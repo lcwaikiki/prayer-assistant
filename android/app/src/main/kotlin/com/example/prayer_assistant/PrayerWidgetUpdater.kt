@@ -23,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.IconCompat
 import android.app.Notification
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -62,6 +63,14 @@ object PrayerWidgetUpdater {
             widgetManager.updateAppWidget(widgetId, views)
         }
 
+        val calendarWidgetIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, CalendarWidgetProvider::class.java)
+        )
+        for (widgetId in calendarWidgetIds) {
+            val views = buildCalendarWidgetView(context, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
         updateStatusBar(context, next)
     }
 
@@ -98,10 +107,10 @@ object PrayerWidgetUpdater {
         val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val nextPrayerName = next?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
         val dark = isDark(context)
-        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
-        val fastingBgRes = if (dark) R.drawable.widget_fasting_bg else R.drawable.widget_fasting_bg_light
-        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
-        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
+        val bgRes = getWidgetBgRes(context)
+        val fastingBgRes = getWidgetFastingBgRes(context)
+        val primaryTextColor = getPrimaryTextColor(context)
+        val secondaryTextColor = getSecondaryTextColor(context)
 
         val remainingIds = widgetManager.getAppWidgetIds(
             ComponentName(context, RemainingTimeWidgetProvider::class.java)
@@ -263,9 +272,59 @@ object PrayerWidgetUpdater {
         return when (theme) {
             "light" -> false
             "dark" -> true
+            "transparent" -> true
             else -> {
                 val nightMode = context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
                 nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+            }
+        }
+    }
+
+    private fun getWidgetBgRes(context: Context): Int {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return when (theme) {
+            "light" -> R.drawable.widget_bg_light
+            "dark" -> R.drawable.widget_bg
+            "transparent" -> R.drawable.widget_bg_transparent
+            else -> if (isDark(context)) R.drawable.widget_bg else R.drawable.widget_bg_light
+        }
+    }
+
+    private fun getWidgetFastingBgRes(context: Context): Int {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return when (theme) {
+            "light" -> R.drawable.widget_fasting_bg_light
+            "dark" -> R.drawable.widget_fasting_bg
+            "transparent" -> R.drawable.widget_bg_transparent
+            else -> if (isDark(context)) R.drawable.widget_fasting_bg else R.drawable.widget_fasting_bg_light
+        }
+    }
+
+    private fun getPrimaryTextColor(context: Context): Int {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return if (theme == "light") Color.parseColor("#FF1A1C1E") else Color.WHITE
+    }
+
+    private fun getSecondaryTextColor(context: Context): Int {
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return if (theme == "light") Color.parseColor("#FF57605B") else Color.parseColor("#B3FFFFFF")
+    }
+
+    private fun getCalendarDateHeader(context: Context): String {
+        val display = PrayerWidgetStorage.readWidgetCalendarDisplay(context)
+        val hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
+        val gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+        return when (display) {
+            "hijri" -> if (hijri.isNotEmpty()) hijri else gregorian
+            "gregorian" -> if (gregorian.isNotEmpty()) gregorian else hijri
+            else -> {
+                if (hijri.isNotEmpty() && gregorian.isNotEmpty()) {
+                    "$hijri • $gregorian"
+                } else if (hijri.isNotEmpty()) {
+                    hijri
+                } else {
+                    gregorian
+                }
             }
         }
     }
@@ -280,18 +339,21 @@ object PrayerWidgetUpdater {
         context: Context,
         openPendingIntent: PendingIntent
     ): RemoteViews {
-        val dark = isDark(context)
-        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
-        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
-        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
+        val bgRes = getWidgetBgRes(context)
+        val primaryTextColor = getPrimaryTextColor(context)
+        val secondaryTextColor = getSecondaryTextColor(context)
 
         val views = RemoteViews(context.packageName, R.layout.widget_upcoming_reminders)
         views.setInt(R.id.widgetUpcomingRemindersRoot, "setBackgroundResource", bgRes)
         views.setTextColor(R.id.widgetUpcomingRemindersHeader, primaryTextColor)
         views.setTextColor(R.id.widgetUpcomingRemindersEmpty, secondaryTextColor)
+
+        val dateHeader = getCalendarDateHeader(context)
+        val baseHeader = PrayerWidgetStorage.readCalendarRemindersHeader(context)
+        val fullHeader = if (dateHeader.isNotEmpty()) "$baseHeader • $dateHeader" else baseHeader
         views.setTextViewText(
             R.id.widgetUpcomingRemindersHeader,
-            PrayerWidgetStorage.readCalendarRemindersHeader(context)
+            fullHeader
         )
         views.setOnClickPendingIntent(R.id.widgetUpcomingRemindersRoot, openPendingIntent)
 
@@ -338,6 +400,106 @@ object PrayerWidgetUpdater {
     }
 
     /**
+     * Dedicated 7th Home Screen Widget displaying Hijri & Gregorian Calendar dates,
+     * day of the week, and upcoming reminders/events.
+     */
+    private fun buildCalendarWidgetView(
+        context: Context,
+        openPendingIntent: PendingIntent
+    ): RemoteViews {
+        val bgRes = getWidgetBgRes(context)
+        val primaryTextColor = getPrimaryTextColor(context)
+        val secondaryTextColor = getSecondaryTextColor(context)
+
+        val views = RemoteViews(context.packageName, R.layout.widget_calendar)
+        views.setInt(R.id.widgetCalendarRoot, "setBackgroundResource", bgRes)
+        views.setTextColor(R.id.widgetCalendarHeader, primaryTextColor)
+        views.setTextColor(R.id.widgetCalendarSubHeader, secondaryTextColor)
+        views.setTextColor(R.id.widgetCalendarEventText, secondaryTextColor)
+
+        val display = PrayerWidgetStorage.readWidgetCalendarDisplay(context)
+        val hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
+        val gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+        val localeObj = try { Locale(appLocale) } catch (e: Exception) { Locale.getDefault() }
+        val now = Calendar.getInstance()
+        val monthYearFormat = SimpleDateFormat("MMMM yyyy", localeObj)
+        val gregorianMonthYear = monthYearFormat.format(now.time)
+
+        val (headerText, subHeaderText) = when (display) {
+            "gregorian" -> gregorianMonthYear to (if (gregorian.isNotEmpty()) gregorian else "")
+            "hijri" -> (if (hijri.isNotEmpty()) hijri else gregorianMonthYear) to gregorianMonthYear
+            else -> gregorianMonthYear to (if (hijri.isNotEmpty()) hijri else gregorian)
+        }
+
+        views.setTextViewText(R.id.widgetCalendarHeader, headerText)
+        views.setTextViewText(R.id.widgetCalendarSubHeader, subHeaderText)
+
+        // Weekday header abbreviations
+        val weekdayAbbrs = when (appLocale) {
+            "tr" -> arrayOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Pzr")
+            "ar" -> arrayOf("إث", "ثلا", "أرب", "خم", "جم", "سب", "أح")
+            "fr" -> arrayOf("Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di")
+            "es" -> arrayOf("Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do")
+            "de" -> arrayOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
+            "id" -> arrayOf("Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min")
+            "ja" -> arrayOf("月", "火", "水", "木", "金", "土", "日")
+            "ru" -> arrayOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
+            "zh" -> arrayOf("一", "二", "三", "四", "五", "六", "日")
+            "ur" -> arrayOf("پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ", "اتوار")
+            "fa" -> arrayOf("د", "س", "چ", "پ", "ج", "ش", "۱ش")
+            else -> arrayOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su")
+        }
+
+        for (i in 0..6) {
+            val hdrId = context.resources.getIdentifier("grid_hdr_$i", "id", context.packageName)
+            if (hdrId != 0) {
+                views.setTextViewText(hdrId, weekdayAbbrs[i])
+                views.setTextColor(hdrId, secondaryTextColor)
+            }
+        }
+
+        // Full month day grid
+        val todayDay = now.get(Calendar.DAY_OF_MONTH)
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.DAY_OF_MONTH, 1)
+        val daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK) // Sun = 1, Mon = 2, ... Sat = 7
+        val startOffset = (firstDayOfWeek + 5) % 7 // Mon = 0, Tue = 1, ... Sun = 6
+
+        val accentColor = Color.parseColor("#FFD700") // Highlight gold for today
+
+        for (cellIndex in 0..41) {
+            val cellId = context.resources.getIdentifier("day_cell_$cellIndex", "id", context.packageName)
+            if (cellId == 0) continue
+
+            val dayNumber = cellIndex - startOffset + 1
+            if (dayNumber in 1..daysInMonth) {
+                views.setTextViewText(cellId, "$dayNumber")
+                if (dayNumber == todayDay) {
+                    views.setTextColor(cellId, accentColor)
+                } else {
+                    views.setTextColor(cellId, primaryTextColor)
+                }
+            } else {
+                views.setTextViewText(cellId, "")
+            }
+        }
+
+        val reminders = PrayerWidgetStorage.readCalendarReminders(context)
+        val eventSummary = reminders.firstOrNull()?.let { "${it.title} (${it.whenText})" } ?: ""
+        views.setTextViewText(R.id.widgetCalendarEventText, eventSummary)
+        views.setViewVisibility(
+            R.id.widgetCalendarEventText,
+            if (eventSummary.isNotEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+        )
+
+        views.setOnClickPendingIntent(R.id.widgetCalendarRoot, openPendingIntent)
+        return views
+    }
+
+    /**
      * Today's full prayer list as fixed rows (name + time), with the next
      * upcoming prayer highlighted. Reads the same already-localized today
      * snapshot the Dart side pushes for the status notification, so no extra
@@ -348,17 +510,26 @@ object PrayerWidgetUpdater {
         next: Pair<String, Long>?,
         openPendingIntent: PendingIntent
     ): RemoteViews {
-        val dark = isDark(context)
-        val bgRes = if (dark) R.drawable.widget_bg else R.drawable.widget_bg_light
-        val primaryTextColor = if (dark) Color.WHITE else Color.parseColor("#FF1A1C1E")
-        val secondaryTextColor = if (dark) Color.parseColor("#B3FFFFFF") else Color.parseColor("#FF57605B")
+        val bgRes = getWidgetBgRes(context)
+        val primaryTextColor = getPrimaryTextColor(context)
+        val secondaryTextColor = getSecondaryTextColor(context)
 
         val views = RemoteViews(context.packageName, R.layout.widget_daily_prayer_times)
         views.setInt(R.id.widgetDailyPrayersRoot, "setBackgroundResource", bgRes)
         views.setTextColor(R.id.widgetDailyPrayersLocation, secondaryTextColor)
+
+        val location = PrayerWidgetStorage.readLocationLabel(context)
+        val dateHeader = getCalendarDateHeader(context)
+        val fullLocationLabel = if (dateHeader.isNotEmpty() && location.isNotEmpty()) {
+            "$location • $dateHeader"
+        } else if (dateHeader.isNotEmpty()) {
+            dateHeader
+        } else {
+            location
+        }
         views.setTextViewText(
             R.id.widgetDailyPrayersLocation,
-            PrayerWidgetStorage.readLocationLabel(context)
+            fullLocationLabel
         )
         views.setOnClickPendingIntent(R.id.widgetDailyPrayersRoot, openPendingIntent)
 

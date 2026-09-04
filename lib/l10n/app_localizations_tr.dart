@@ -286,6 +286,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get notificationMessageHidden => 'Gizli';
 
   @override
+  String get widgetSettingsSectionTitle => 'Widget Ayarları';
+
+  @override
   String get widgetTextSizeTitle => 'Widget yazı boyutu';
 
   @override
@@ -306,6 +309,33 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'Widget saniye geri sayımı';
+
+  @override
+  String get widgetThemeTitle => 'Widget arka plan teması';
+
+  @override
+  String get widgetThemeSystem => 'Sistem';
+
+  @override
+  String get widgetThemeLight => 'Açık';
+
+  @override
+  String get widgetThemeDark => 'Koyu';
+
+  @override
+  String get widgetThemeTransparent => 'Saydam';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget takvim tarih gösterimi';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'İkisi de (Hicri ve Miladi)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Yalnızca Hicri';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Yalnızca Miladi';
 
   @override
   String get widgetMmssThresholdNever => 'Her zaman HH:MM göster';

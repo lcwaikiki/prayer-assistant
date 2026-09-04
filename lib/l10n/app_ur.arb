@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "درست مثبت نمبر درج کریں۔",
   "useValueUpTo240": "240 منٹ تک کی قدر استعمال کریں۔",
   "customMinutesSaved": "کسٹم منٹس محفوظ ہو گئے۔",
+  "widgetSettingsSectionTitle": "ویجٹ کی ترتیبات",
   "widgetTextSizeTitle": "ویجٹ متن کا سائز",
   "widgetTextSizeSubtitle": "ہوم اسکرین ویجٹس میں استعمال ہونے والے متن کا سائز۔",
   "widgetTextSizeExtraSmall": "بہت چھوٹا",

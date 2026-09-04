@@ -22,9 +22,14 @@ class MainActivity : FlutterActivity() {
                     val todayPrayers = call.argument<List<Map<String, Any?>>>("todayPrayers") ?: emptyList()
                     val locationLabel = call.argument<String>("locationLabel") ?: ""
                     val appLocale = call.argument<String>("appLocale") ?: ""
+                    val dateHeaderHijri = call.argument<String>("dateHeaderHijri") ?: ""
+                    val dateHeaderGregorian = call.argument<String>("dateHeaderGregorian") ?: ""
+                    val calendarDisplay = call.argument<String>("calendarDisplay") ?: "both"
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
                     PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
+                    PrayerWidgetStorage.saveDateHeaders(this, dateHeaderHijri, dateHeaderGregorian)
+                    PrayerWidgetStorage.saveWidgetCalendarDisplay(this, calendarDisplay)
                     if (appLocale.isNotEmpty()) {
                         PrayerWidgetStorage.saveAppLocale(this, appLocale)
                     }
@@ -60,6 +65,12 @@ class MainActivity : FlutterActivity() {
                 "updateWidgetTheme" -> {
                     val theme = call.argument<String>("theme") ?: "system"
                     PrayerWidgetStorage.saveWidgetTheme(this, theme)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
+                "updateWidgetCalendarDisplay" -> {
+                    val display = call.argument<String>("display") ?: "both"
+                    PrayerWidgetStorage.saveWidgetCalendarDisplay(this, display)
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }

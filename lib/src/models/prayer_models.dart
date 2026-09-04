@@ -366,6 +366,19 @@ enum WidgetTextSize {
   large,
 }
 
+enum WidgetTheme {
+  system,
+  light,
+  dark,
+  transparent,
+}
+
+enum WidgetCalendarDisplay {
+  both,
+  hijri,
+  gregorian,
+}
+
 enum AppThemePreference {
   system,
   light,

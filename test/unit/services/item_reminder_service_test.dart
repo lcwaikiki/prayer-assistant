@@ -157,26 +157,31 @@ void main() {
         ),
       );
 
-      var day = _firstDay(anchor);
-      while (day.weekday != anchor.weekday) {
-        day = day.add(const Duration(days: 1));
+      final now = DateTime.now();
+      final expected = <DateTime>[];
+      var from = DateTime(now.year, now.month, now.day);
+      for (var i = 0; i < 2; i++) {
+        var day = from;
+        while (day.weekday != anchor.weekday) {
+          day = day.add(const Duration(days: 1));
+        }
+        final at = DateTime(day.year, day.month, day.day, 12, 0);
+        if (at.isAfter(now)) {
+          expected.add(at);
+        }
+        from = day.add(const Duration(days: 1));
       }
-      final expected = [
-        DateTime(day.year, day.month, day.day, 12, 0),
-        DateTime(
-          day.add(const Duration(days: 7)).year,
-          day.add(const Duration(days: 7)).month,
-          day.add(const Duration(days: 7)).day,
-          12,
-          0,
-        ),
-      ];
-      expect(platform.scheduledIds, [base, base + 1]);
+      expect(platform.scheduledIds, [
+        for (var i = 0; i < expected.length; i++) base + i,
+      ]);
       expect(
         platform.scheduledDates.map((d) => d.microsecondsSinceEpoch).toList(),
         expected.map((d) => d.microsecondsSinceEpoch).toList(),
       );
-      expect(platform.scheduledMatches, [null, null]);
+      expect(
+        platform.scheduledMatches,
+        [for (var i = 0; i < expected.length; i++) null],
+      );
     });
 
     test('monthly gregorian x2 skips months without the 31st', () async {

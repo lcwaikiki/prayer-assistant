@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "请输入有效的正数。",
   "useValueUpTo240": "请输入不超过 240 的分钟值。",
   "customMinutesSaved": "自定义分钟已保存。",
+  "widgetSettingsSectionTitle": "小组件设置",
   "widgetTextSizeTitle": "小组件文字大小",
   "widgetTextSizeSubtitle": "主屏幕小组件使用的文字大小。",
   "widgetTextSizeExtraSmall": "极小",

@@ -287,6 +287,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get notificationMessageHidden => 'پنهان';
 
   @override
+  String get widgetSettingsSectionTitle => 'تنظیمات ابزارک';
+
+  @override
   String get widgetTextSizeTitle => 'اندازه متن ابزارک';
 
   @override
@@ -307,6 +310,33 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'شمارش معکوس ثانیهای ویجت';
+
+  @override
+  String get widgetThemeTitle => 'Widget background theme';
+
+  @override
+  String get widgetThemeSystem => 'System';
+
+  @override
+  String get widgetThemeLight => 'Light';
+
+  @override
+  String get widgetThemeDark => 'Dark';
+
+  @override
+  String get widgetThemeTransparent => 'Transparent';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Hijri only';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Gregorian only';
 
   @override
   String get widgetMmssThresholdNever => 'همیشه HH:MM نمایش بده';

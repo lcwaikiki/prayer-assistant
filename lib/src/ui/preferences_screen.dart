@@ -179,12 +179,20 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
-                title: context.l10n.widgetTextSizeTitle,
-                subtitle: _widgetTextSizeSubtitle(
-                  context,
-                  controller.widgetTextSize,
-                ),
+                title: context.l10n.widgetSettingsSectionTitle,
                 children: [
+                  Text(
+                    context.l10n.widgetTextSizeTitle,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Text(
+                    _widgetTextSizeSubtitle(
+                      context,
+                      controller.widgetTextSize,
+                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 8),
                   RadioListTile<WidgetTextSize>(
                     contentPadding: EdgeInsets.zero,
                     title: Text(context.l10n.widgetTextSizeExtraSmall),
@@ -229,17 +237,19 @@ class PreferencesScreen extends StatelessWidget {
                       }
                     },
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _PreferenceSection(
-                title: context.l10n.widgetMmssThresholdTitle,
-                subtitle: controller.widgetMmssThresholdMinutes == 0
-                    ? context.l10n.widgetMmssThresholdNever
-                    : context.l10n.widgetMmssThresholdValue(
-                        controller.widgetMmssThresholdMinutes,
-                      ),
-                children: [
+                  const Divider(height: 24),
+                  Text(
+                    context.l10n.widgetMmssThresholdTitle,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  Text(
+                    controller.widgetMmssThresholdMinutes == 0
+                        ? context.l10n.widgetMmssThresholdNever
+                        : context.l10n.widgetMmssThresholdValue(
+                            controller.widgetMmssThresholdMinutes,
+                          ),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
                   Slider(
                     value: controller.widgetMmssThresholdMinutes.toDouble(),
                     min: 0,
@@ -250,6 +260,62 @@ class PreferencesScreen extends StatelessWidget {
                     ),
                     onChanged: (value) =>
                         controller.updateWidgetMmssThreshold(value.round()),
+                  ),
+                  const Divider(height: 24),
+                  Text(
+                    context.l10n.widgetThemeTitle,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<WidgetTheme>(
+                    key: const Key('widget_theme_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: WidgetTheme.system,
+                        label: Text(context.l10n.widgetThemeSystem),
+                      ),
+                      ButtonSegment(
+                        value: WidgetTheme.light,
+                        label: Text(context.l10n.widgetThemeLight),
+                      ),
+                      ButtonSegment(
+                        value: WidgetTheme.dark,
+                        label: Text(context.l10n.widgetThemeDark),
+                      ),
+                      ButtonSegment(
+                        value: WidgetTheme.transparent,
+                        label: Text(context.l10n.widgetThemeTransparent),
+                      ),
+                    ],
+                    selected: {controller.widgetTheme},
+                    onSelectionChanged: (selection) =>
+                        controller.updateWidgetTheme(selection.first),
+                  ),
+                  const Divider(height: 24),
+                  Text(
+                    context.l10n.widgetCalendarDisplayTitle,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<WidgetCalendarDisplay>(
+                    key: const Key('widget_calendar_display_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: WidgetCalendarDisplay.both,
+                        label: Text(context.l10n.widgetCalendarDisplayBoth),
+                      ),
+                      ButtonSegment(
+                        value: WidgetCalendarDisplay.hijri,
+                        label: Text(context.l10n.widgetCalendarDisplayHijri),
+                      ),
+                      ButtonSegment(
+                        value: WidgetCalendarDisplay.gregorian,
+                        label: Text(context.l10n.widgetCalendarDisplayGregorian),
+                      ),
+                    ],
+                    selected: {controller.widgetCalendarDisplay},
+                    onSelectionChanged: (selection) =>
+                        controller.updateWidgetCalendarDisplay(selection.first),
                   ),
                 ],
               ),

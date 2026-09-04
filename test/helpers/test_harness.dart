@@ -46,6 +46,8 @@ class TestHarness {
 
     registerFallbackValue(CalendarWeekStart.sunday);
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
+    registerFallbackValue(WidgetTheme.system);
+    registerFallbackValue(WidgetCalendarDisplay.both);
     registerFallbackValue(
       CalendarReminder(id: 'f', title: 'f', anchorAt: DateTime(2026)),
     );
@@ -101,6 +103,12 @@ class TestHarness {
       () => widgetBridge.updateWidgetTextSize(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateWidgetTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateWidgetCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateWidgetMmssThreshold(any()),
     ).thenAnswer((_) async {});
     when(
@@ -109,6 +117,9 @@ class TestHarness {
         now: any(named: 'now'),
         locale: any(named: 'locale'),
         locationLabel: any(named: 'locationLabel'),
+        dateHeaderHijri: any(named: 'dateHeaderHijri'),
+        dateHeaderGregorian: any(named: 'dateHeaderGregorian'),
+        calendarDisplay: any(named: 'calendarDisplay'),
       ),
     ).thenAnswer((_) async {});
     when(
@@ -148,6 +159,10 @@ class TestHarness {
       () => database.loadAppBarRemainingPlacement(),
     ).thenAnswer((_) async => null);
     when(() => database.loadWidgetTextSize()).thenAnswer((_) async => null);
+    when(() => database.loadWidgetTheme()).thenAnswer((_) async => null);
+    when(
+      () => database.loadWidgetCalendarDisplay(),
+    ).thenAnswer((_) async => null);
     when(
       () => database.loadWidgetMmssThreshold(),
     ).thenAnswer((_) async => 60);
@@ -243,6 +258,10 @@ class TestHarness {
       () => database.saveAppBarRemainingPlacement(any()),
     ).thenAnswer((_) async {});
     when(() => database.saveWidgetTextSize(any())).thenAnswer((_) async {});
+    when(() => database.saveWidgetTheme(any())).thenAnswer((_) async {});
+    when(
+      () => database.saveWidgetCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
     when(
       () => database.saveCalendarPrimaryDisplay(any()),
     ).thenAnswer((_) async {});

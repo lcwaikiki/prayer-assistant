@@ -276,6 +276,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notificationMessageHidden => '非表示';
 
   @override
+  String get widgetSettingsSectionTitle => 'ウィジェット設定';
+
+  @override
   String get widgetTextSizeTitle => 'ウィジェットの文字サイズ';
 
   @override
@@ -295,6 +298,33 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'ウィジェットの秒カウントダウン';
+
+  @override
+  String get widgetThemeTitle => 'Widget background theme';
+
+  @override
+  String get widgetThemeSystem => 'System';
+
+  @override
+  String get widgetThemeLight => 'Light';
+
+  @override
+  String get widgetThemeDark => 'Dark';
+
+  @override
+  String get widgetThemeTransparent => 'Transparent';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Hijri only';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Gregorian only';
 
   @override
   String get widgetMmssThresholdNever => '常にHH:MMを表示';

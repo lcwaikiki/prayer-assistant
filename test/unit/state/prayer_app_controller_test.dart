@@ -34,6 +34,8 @@ void main() {
     registerFallbackValue(const KazaTracker());
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
     registerFallbackValue(CalendarWeekStart.monday);
+    registerFallbackValue(WidgetTheme.system);
+    registerFallbackValue(WidgetCalendarDisplay.both);
   });
 
 
@@ -87,6 +89,9 @@ void main() {
         now: any(named: 'now'),
         locale: any(named: 'locale'),
         locationLabel: any(named: 'locationLabel'),
+        dateHeaderHijri: any(named: 'dateHeaderHijri'),
+        dateHeaderGregorian: any(named: 'dateHeaderGregorian'),
+        calendarDisplay: any(named: 'calendarDisplay'),
       ),
     ).thenAnswer((_) async {});
     when(
@@ -126,6 +131,20 @@ void main() {
       () => database.loadAppBarRemainingPlacement(),
     ).thenAnswer((_) async => null);
     when(() => database.loadWidgetTextSize()).thenAnswer((_) async => null);
+    when(() => database.loadWidgetTheme()).thenAnswer((_) async => null);
+    when(
+      () => database.loadWidgetCalendarDisplay(),
+    ).thenAnswer((_) async => null);
+    when(() => database.saveWidgetTheme(any())).thenAnswer((_) async {});
+    when(
+      () => database.saveWidgetCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateWidgetTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateWidgetCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
     when(
       () => database.loadWidgetMmssThreshold(),
     ).thenAnswer((_) async => 60);

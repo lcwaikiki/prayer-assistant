@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "Masukkan angka positif yang valid.",
   "useValueUpTo240": "Gunakan nilai hingga 240 menit.",
   "customMinutesSaved": "Menit kustom tersimpan.",
+  "widgetSettingsSectionTitle": "Pengaturan Widget",
   "widgetTextSizeTitle": "Ukuran teks widget",
   "widgetTextSizeSubtitle": "Ukuran teks yang digunakan pada widget layar utama.",
   "widgetTextSizeExtraSmall": "Sangat kecil",

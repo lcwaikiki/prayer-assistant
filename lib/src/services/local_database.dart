@@ -15,6 +15,8 @@ class LocalDatabase {
   static const _reminderSettingsKey = 'reminder_settings';
   static const _appBarRemainingPlacementKey = 'app_bar_remaining_placement';
   static const _widgetTextSizeKey = 'widget_text_size';
+  static const _widgetThemeKey = 'widget_theme';
+  static const _widgetCalendarDisplayKey = 'widget_calendar_display';
   static const _statusBarRemainingEnabledKey = 'status_bar_remaining_enabled';
   static const _remindersSilencedKey = 'reminders_silenced';
   static const _reminderVibrationEnabledKey = 'reminder_vibration_enabled';
@@ -293,6 +295,50 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_widgetTextSizeKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveWidgetTheme(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _widgetThemeKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadWidgetTheme() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_widgetThemeKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveWidgetCalendarDisplay(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _widgetCalendarDisplayKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadWidgetCalendarDisplay() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_widgetCalendarDisplayKey],
       limit: 1,
     );
     if (rows.isEmpty) {

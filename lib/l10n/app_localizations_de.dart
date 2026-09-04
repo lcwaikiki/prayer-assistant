@@ -286,6 +286,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get notificationMessageHidden => 'Ausgeblendet';
 
   @override
+  String get widgetSettingsSectionTitle => 'Widget-Einstellungen';
+
+  @override
   String get widgetTextSizeTitle => 'Widget-Textgröße';
 
   @override
@@ -305,6 +308,33 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'Widget-Sekunden-Countdown';
+
+  @override
+  String get widgetThemeTitle => 'Widget background theme';
+
+  @override
+  String get widgetThemeSystem => 'System';
+
+  @override
+  String get widgetThemeLight => 'Light';
+
+  @override
+  String get widgetThemeDark => 'Dark';
+
+  @override
+  String get widgetThemeTransparent => 'Transparent';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Hijri only';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Gregorian only';
 
   @override
   String get widgetMmssThresholdNever => 'Immer HH:MM anzeigen';

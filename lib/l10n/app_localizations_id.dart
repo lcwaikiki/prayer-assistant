@@ -286,6 +286,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get notificationMessageHidden => 'Disembunyikan';
 
   @override
+  String get widgetSettingsSectionTitle => 'Pengaturan Widget';
+
+  @override
   String get widgetTextSizeTitle => 'Ukuran teks widget';
 
   @override
@@ -306,6 +309,33 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'Hitung mundur detik widget';
+
+  @override
+  String get widgetThemeTitle => 'Widget background theme';
+
+  @override
+  String get widgetThemeSystem => 'System';
+
+  @override
+  String get widgetThemeLight => 'Light';
+
+  @override
+  String get widgetThemeDark => 'Dark';
+
+  @override
+  String get widgetThemeTransparent => 'Transparent';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Hijri only';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Gregorian only';
 
   @override
   String get widgetMmssThresholdNever => 'Selalu tampilkan HH:MM';

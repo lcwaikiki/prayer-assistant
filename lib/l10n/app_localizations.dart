@@ -616,6 +616,12 @@ abstract class AppLocalizations {
   /// **'Hidden'**
   String get notificationMessageHidden;
 
+  /// No description provided for @widgetSettingsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget Settings'**
+  String get widgetSettingsSectionTitle;
+
   /// No description provided for @widgetTextSizeTitle.
   ///
   /// In en, this message translates to:
@@ -657,6 +663,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Widget seconds countdown'**
   String get widgetMmssThresholdTitle;
+
+  /// No description provided for @widgetThemeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget background theme'**
+  String get widgetThemeTitle;
+
+  /// No description provided for @widgetThemeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get widgetThemeSystem;
+
+  /// No description provided for @widgetThemeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get widgetThemeLight;
+
+  /// No description provided for @widgetThemeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get widgetThemeDark;
+
+  /// No description provided for @widgetThemeTransparent.
+  ///
+  /// In en, this message translates to:
+  /// **'Transparent'**
+  String get widgetThemeTransparent;
+
+  /// No description provided for @widgetCalendarDisplayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Widget calendar date display'**
+  String get widgetCalendarDisplayTitle;
+
+  /// No description provided for @widgetCalendarDisplayBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Both (Hijri & Gregorian)'**
+  String get widgetCalendarDisplayBoth;
+
+  /// No description provided for @widgetCalendarDisplayHijri.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri only'**
+  String get widgetCalendarDisplayHijri;
+
+  /// No description provided for @widgetCalendarDisplayGregorian.
+  ///
+  /// In en, this message translates to:
+  /// **'Gregorian only'**
+  String get widgetCalendarDisplayGregorian;
 
   /// No description provided for @widgetMmssThresholdNever.
   ///

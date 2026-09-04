@@ -122,6 +122,40 @@ object PrayerWidgetStorage {
             .getString(WIDGET_THEME_KEY, "system") ?: "system"
     }
 
+    private const val WIDGET_CALENDAR_DISPLAY_KEY = "widget_calendar_display"
+    private const val DATE_HEADER_HIJRI_KEY = "date_header_hijri"
+    private const val DATE_HEADER_GREGORIAN_KEY = "date_header_gregorian"
+
+    fun saveWidgetCalendarDisplay(context: Context, display: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(WIDGET_CALENDAR_DISPLAY_KEY, display)
+            .apply()
+    }
+
+    fun readWidgetCalendarDisplay(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(WIDGET_CALENDAR_DISPLAY_KEY, "both") ?: "both"
+    }
+
+    fun saveDateHeaders(context: Context, hijri: String, gregorian: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(DATE_HEADER_HIJRI_KEY, hijri)
+            .putString(DATE_HEADER_GREGORIAN_KEY, gregorian)
+            .apply()
+    }
+
+    fun readDateHeaderHijri(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(DATE_HEADER_HIJRI_KEY, "") ?: ""
+    }
+
+    fun readDateHeaderGregorian(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(DATE_HEADER_GREGORIAN_KEY, "") ?: ""
+    }
+
     fun saveAppLocale(context: Context, locale: String) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit()

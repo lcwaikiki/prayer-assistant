@@ -287,6 +287,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get notificationMessageHidden => 'Скрыто';
 
   @override
+  String get widgetSettingsSectionTitle => 'Настройки виджета';
+
+  @override
   String get widgetTextSizeTitle => 'Размер текста виджета';
 
   @override
@@ -307,6 +310,33 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get widgetMmssThresholdTitle => 'Секундный отсчёт в виджете';
+
+  @override
+  String get widgetThemeTitle => 'Widget background theme';
+
+  @override
+  String get widgetThemeSystem => 'System';
+
+  @override
+  String get widgetThemeLight => 'Light';
+
+  @override
+  String get widgetThemeDark => 'Dark';
+
+  @override
+  String get widgetThemeTransparent => 'Transparent';
+
+  @override
+  String get widgetCalendarDisplayTitle => 'Widget calendar date display';
+
+  @override
+  String get widgetCalendarDisplayBoth => 'Both (Hijri & Gregorian)';
+
+  @override
+  String get widgetCalendarDisplayHijri => 'Hijri only';
+
+  @override
+  String get widgetCalendarDisplayGregorian => 'Gregorian only';
 
   @override
   String get widgetMmssThresholdNever => 'Всегда показывать ЧЧ:ММ';

@@ -131,6 +131,7 @@
   "enterValidPositiveNumber": "یک عدد مثبت معتبر وارد کنید.",
   "useValueUpTo240": "از مقدار تا 240 دقیقه استفاده کنید.",
   "customMinutesSaved": "دقیقه سفارشی ذخیره شد.",
+  "widgetSettingsSectionTitle": "تنظیمات ابزارک",
   "widgetTextSizeTitle": "اندازه متن ابزارک",
   "widgetTextSizeSubtitle": "اندازه متن استفاده‌شده در ابزارک‌های صفحه اصلی.",
   "widgetTextSizeExtraSmall": "خیلی کوچک",

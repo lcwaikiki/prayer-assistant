@@ -307,5 +307,19 @@
   "iftarWithTime": "افطار ({time})",
   "upcomingSunnahDays": "روزهای سنت در پیش رو",
   "fastingCalendarLogger": "ثبت تقویم روزه‌داری",
-  "removeFastLog": "حذف ثبت روزه‌داری"
+  "removeFastLog": "حذف ثبت روزه‌داری",
+  "calendarWeekStartTitle": "شروع هفته تقویم",
+  "calendarWeekStartSunday": "یکشنبه",
+  "calendarWeekStartMonday": "دوشنبه",
+  "hijriDateOffsetTitle": "تنظیم تاریخ هجری",
+  "hijriDateOffsetSubtitle": "تنظیم تاریخ هجری بر اساس رؤیت ماه محلی",
+  "showIslamicHolidaysTitle": "برجسته‌سازی مناسبت‌های اسلامی",
+  "showIslamicHolidaysSubtitle": "نمایش نشان‌های ویژه برای روزهای مبارک اسلامی",
+  "showFastingBadgesTitle": "نمایش ثبت روزه‌ها در تقویم",
+  "showFastingBadgesSubtitle": "نمایش نشان در روزهایی که روزه ثبت شده است",
+  "defaultCalendarDisplayTitle": "نمای پیش‌فرض تقویم",
+  "defaultCalendarDisplaySubtitle": "حالت اولیه هنگام باز کردن تقویم",
+  "showCalendarReminderDotsTitle": "نمایش نقاط یادآوری",
+  "showCalendarReminderDotsSubtitle": "نمایش نقطه در روزهای دارای یادآوری",
+  "calendarSettingsSectionTitle": "تنظیمات تقویم"
 }

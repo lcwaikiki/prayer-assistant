@@ -863,4 +863,51 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get removeFastLog => 'إزالة سجل الصيام';
+
+  @override
+  String get calendarWeekStartTitle => 'بداية الأسبوع في التقويم';
+
+  @override
+  String get calendarWeekStartSunday => 'الأحد';
+
+  @override
+  String get calendarWeekStartMonday => 'الإثنين';
+
+  @override
+  String get hijriDateOffsetTitle => 'تعديل التاريخ الهجري';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'تعديل التاريخ الهجري حسب رؤية الهلال المحلية';
+
+  @override
+  String get showIslamicHolidaysTitle => 'تمييز المناسبات الإسلامية';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'إظهار شارات خاصة للأيام المباركة والمناسبات';
+
+  @override
+  String get showFastingBadgesTitle => 'إظهار سجلات الصيام على التقويم';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'إظهار شارات في الأيام المسجلة للصيام';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'عرض التقويم الافتراضي';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'النوع الافتراضي عند فتح التقويم';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'إظهار نقاط التذكير';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'إظهار نقاط في الأيام التي تحتوي على تذكيرات';
+
+  @override
+  String get calendarSettingsSectionTitle => 'إعدادات التقويم';
 }

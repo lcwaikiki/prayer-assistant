@@ -45,6 +45,7 @@ class TestHarness {
     final itemReminderService = MockItemReminderService();
 
     registerFallbackValue(CalendarWeekStart.sunday);
+    registerFallbackValue(CalendarPrimaryDisplay.hijri);
     registerFallbackValue(
       CalendarReminder(id: 'f', title: 'f', anchorAt: DateTime(2026)),
     );
@@ -160,6 +161,21 @@ class TestHarness {
       () => database.loadCalendarWeekStart(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadHijriDateOffset(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowIslamicHolidays(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowFastingBadges(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadDefaultCalendarDisplay(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowCalendarReminderDots(),
+    ).thenAnswer((_) async => null);
+    when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});
     when(
@@ -235,6 +251,21 @@ class TestHarness {
     ).thenAnswer((_) async {});
     when(
       () => database.saveCalendarWeekStart(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveHijriDateOffset(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowIslamicHolidays(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowFastingBadges(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveDefaultCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowCalendarReminderDots(any()),
     ).thenAnswer((_) async {});
     when(() => database.saveCalendarReminder(any())).thenAnswer((_) async {});
     when(() => database.deleteCalendarReminder(any())).thenAnswer((_) async {});

@@ -1701,6 +1701,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove Fast Log'**
   String get removeFastLog;
+
+  /// No description provided for @calendarWeekStartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar Week Starts On'**
+  String get calendarWeekStartTitle;
+
+  /// No description provided for @calendarWeekStartSunday.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday'**
+  String get calendarWeekStartSunday;
+
+  /// No description provided for @calendarWeekStartMonday.
+  ///
+  /// In en, this message translates to:
+  /// **'Monday'**
+  String get calendarWeekStartMonday;
+
+  /// No description provided for @hijriDateOffsetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri Date Adjustment'**
+  String get hijriDateOffsetTitle;
+
+  /// No description provided for @hijriDateOffsetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust Hijri date for local moon sightings'**
+  String get hijriDateOffsetSubtitle;
+
+  /// No description provided for @showIslamicHolidaysTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Highlight Islamic Holidays'**
+  String get showIslamicHolidaysTitle;
+
+  /// No description provided for @showIslamicHolidaysSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show special badges for Islamic holy days'**
+  String get showIslamicHolidaysSubtitle;
+
+  /// No description provided for @showFastingBadgesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Fasting Logs on Calendar'**
+  String get showFastingBadgesTitle;
+
+  /// No description provided for @showFastingBadgesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display badges on dates with logged fasts'**
+  String get showFastingBadgesSubtitle;
+
+  /// No description provided for @defaultCalendarDisplayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Calendar View'**
+  String get defaultCalendarDisplayTitle;
+
+  /// No description provided for @defaultCalendarDisplaySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Initial basis when opening the calendar'**
+  String get defaultCalendarDisplaySubtitle;
+
+  /// No description provided for @showCalendarReminderDotsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Reminder Indicator Dots'**
+  String get showCalendarReminderDotsTitle;
+
+  /// No description provided for @showCalendarReminderDotsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display dots on day cells with scheduled reminders'**
+  String get showCalendarReminderDotsSubtitle;
+
+  /// No description provided for @calendarSettingsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar Settings'**
+  String get calendarSettingsSectionTitle;
 }
 
 class _AppLocalizationsDelegate

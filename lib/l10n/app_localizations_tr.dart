@@ -870,4 +870,51 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get removeFastLog => 'Oruç Kaydını Sil';
+
+  @override
+  String get calendarWeekStartTitle => 'Hafta Başlangıcı';
+
+  @override
+  String get calendarWeekStartSunday => 'Pazar';
+
+  @override
+  String get calendarWeekStartMonday => 'Pazartesi';
+
+  @override
+  String get hijriDateOffsetTitle => 'Hicri Tarih Düzeltmesi';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Yerel ay görme gününe göre Hicri tarihi ayarlayın';
+
+  @override
+  String get showIslamicHolidaysTitle => 'Dini Günleri Vurgula';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'İslam dünyasına ait dini günleri takvimde göster';
+
+  @override
+  String get showFastingBadgesTitle => 'Oruç Kayıtlarını Takvimde Göster';
+
+  @override
+  String get showFastingBadgesSubtitle => 'Oruç tutulan günlerde simge göster';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'Varsayılan Takvim Görünümü';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Takvim açıldığında varsayılan görünüm esası';
+
+  @override
+  String get showCalendarReminderDotsTitle =>
+      'Hatırlatıcı İşaret Noktalarını Göster';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Planlanmış hatırlatıcısı olan gün hücrelerinde nokta göster';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Takvim Ayarları';
 }

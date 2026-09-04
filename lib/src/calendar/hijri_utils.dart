@@ -213,11 +213,17 @@ String _hijriLocale(String languageCode) {
   return 'en';
 }
 
+/// Returns a [HijriCalendar] for [date], applying an optional day [offset].
+HijriCalendar hijriCalendarWithOffset(DateTime date, [int offset = 0]) {
+  final effective = offset == 0 ? date : date.add(Duration(days: offset));
+  return HijriCalendar.fromDate(effective);
+}
+
 /// Returns a localized Hijri date string for [date] in the given
 /// [languageCode], e.g. "1 Muharram 1446" for English or "1 محرم ١٤٤٦"
-/// for Arabic.
-String formatHijriDate(DateTime date, String languageCode) {
-  final hijri = HijriCalendar.fromDate(date);
+/// for Arabic, applying an optional day [offset].
+String formatHijriDate(DateTime date, String languageCode, {int offset = 0}) {
+  final hijri = hijriCalendarWithOffset(date, offset);
   final code = _hijriLocale(languageCode);
   HijriCalendar.language = code;
   final cal = HijriCalendar()
@@ -262,8 +268,8 @@ const _holidays = <_IslamicHoliday>[
 
 /// Returns the key for the Islamic holiday label on [date] based on its
 /// Hijri month and day, or null if the date is not a holiday.
-String? islamicHolidayKey(DateTime date) {
-  final hijri = HijriCalendar.fromDate(date);
+String? islamicHolidayKey(DateTime date, {int offset = 0}) {
+  final hijri = hijriCalendarWithOffset(date, offset);
   for (final holiday in _holidays) {
     if (hijri.hMonth == holiday.hijriMonth &&
         hijri.hDay == holiday.hijriDay) {
@@ -278,9 +284,10 @@ String? islamicHolidayKey(DateTime date) {
 /// [labelResolver] translates the holiday key to a localized string.
 String? islamicHolidayForDate(
   DateTime date,
-  String Function(String key) labelResolver,
-) {
-  final key = islamicHolidayKey(date);
+  String Function(String key) labelResolver, {
+  int offset = 0,
+}) {
+  final key = islamicHolidayKey(date, offset: offset);
   return key != null ? labelResolver(key) : null;
 }
 
@@ -315,8 +322,8 @@ class HijriMonth {
     return HijriMonth(wrappedYear, wrappedMonth + 1);
   }
 
-  static HijriMonth fromDate(DateTime date) {
-    final hijri = HijriCalendar.fromDate(date);
+  static HijriMonth fromDate(DateTime date, {int offset = 0}) {
+    final hijri = hijriCalendarWithOffset(date, offset);
     return HijriMonth(hijri.hYear, hijri.hMonth);
   }
 }

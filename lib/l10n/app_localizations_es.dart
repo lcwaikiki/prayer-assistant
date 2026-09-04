@@ -870,4 +870,53 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get removeFastLog => 'Eliminar registro de ayuno';
+
+  @override
+  String get calendarWeekStartTitle => 'La semana del calendario empieza en';
+
+  @override
+  String get calendarWeekStartSunday => 'Domingo';
+
+  @override
+  String get calendarWeekStartMonday => 'Lunes';
+
+  @override
+  String get hijriDateOffsetTitle => 'Ajuste de fecha Híyri';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Ajustar fecha Híyri según avistamiento local de la luna';
+
+  @override
+  String get showIslamicHolidaysTitle => 'Destacar festividades islámicas';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'Mostrar insignias en días sagrados islámicos';
+
+  @override
+  String get showFastingBadgesTitle =>
+      'Mostrar registros de ayuno en el calendario';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'Mostrar insignias en fechas con ayunos registrados';
+
+  @override
+  String get defaultCalendarDisplayTitle =>
+      'Vista de calendario predeterminada';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Base inicial al abrir el calendario';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'Mostrar puntos de recordatorios';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Mostrar puntos en celdas con recordatorios programados';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Ajustes del calendario';
 }

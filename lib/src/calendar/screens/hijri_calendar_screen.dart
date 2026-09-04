@@ -32,8 +32,8 @@ String _goToDateTooltip(String languageCode) {
   };
 }
 
-String _shortHijriMonth(DateTime date, String languageCode) {
-  final month = HijriMonth.fromDate(date);
+String _shortHijriMonth(DateTime date, String languageCode, {int offset = 0}) {
+  final month = HijriMonth.fromDate(date, offset: offset);
   final full = month.longMonthName(languageCode);
   return full.length > 3 ? '${full.substring(0, 3)}.' : full;
 }
@@ -324,27 +324,39 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                               date.year == today.year &&
                               date.month == today.month &&
                               date.day == today.day;
-                          final hasReminder = controller.calendarReminders.any(
-                            (reminder) =>
-                                reminder.enabled && reminder.occursOn(date),
-                          );
-                          final isHoliday =
-                              islamicHolidayKey(date) != null;
+                          final hasReminder = controller.showCalendarReminderDots &&
+                              controller.calendarReminders.any(
+                                (reminder) =>
+                                    reminder.enabled && reminder.occursOn(date),
+                              );
+                          final isHoliday = controller.showIslamicHolidays &&
+                              islamicHolidayKey(date, offset: controller.hijriDateOffset) != null;
+                          final dateKey =
+                              '${date.year.toString().padLeft(4, '0')}-'
+                              '${date.month.toString().padLeft(2, '0')}-'
+                              '${date.day.toString().padLeft(2, '0')}';
+                          final hasFastingLog = controller.showFastingBadges &&
+                              controller.fastingLogs.containsKey(dateKey);
                           final languageCode =
                               Localizations.localeOf(context).languageCode;
+                          final hijri = hijriCalendarWithOffset(
+                            date,
+                            controller.hijriDateOffset,
+                          );
                           return _DayCell(
                             primaryLabel:
                                 primary == CalendarPrimaryDisplay.hijri
-                                ? HijriCalendar.fromDate(date).hDay.toString()
+                                ? hijri.hDay.toString()
                                 : date.day.toString(),
                             secondaryLabel: showSecondary
                                 ? (primary == CalendarPrimaryDisplay.hijri
                                       ? '${date.day} ${DateFormat.MMM(locale).format(date)}'
-                                      : '${HijriCalendar.fromDate(date).hDay} ${_shortHijriMonth(date, languageCode)}')
+                                      : '${hijri.hDay} ${_shortHijriMonth(date, languageCode, offset: controller.hijriDateOffset)}')
                                 : null,
                             isToday: isToday,
                             hasReminder: hasReminder,
                             isHoliday: isHoliday,
+                            hasFastingLog: hasFastingLog,
                             onTap: () => _openDayDetail(date, primary),
                           );
                         },
@@ -397,6 +409,7 @@ class _DayCell extends StatelessWidget {
     required this.isToday,
     required this.hasReminder,
     required this.isHoliday,
+    required this.hasFastingLog,
     required this.onTap,
   });
 
@@ -405,6 +418,7 @@ class _DayCell extends StatelessWidget {
   final bool isToday;
   final bool hasReminder;
   final bool isHoliday;
+  final bool hasFastingLog;
   final VoidCallback onTap;
 
   @override
@@ -458,15 +472,30 @@ class _DayCell extends StatelessWidget {
                         fontSize: 9,
                       ),
                     ),
-                  if (hasReminder)
-                    Container(
-                      margin: const EdgeInsets.only(top: 3),
-                      width: 5,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: isToday ? colors.onPrimaryContainer : colors.primary,
-                        shape: BoxShape.circle,
-                      ),
+                  if (hasReminder || hasFastingLog)
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (hasReminder)
+                          Container(
+                            margin: const EdgeInsets.only(top: 3, right: 2),
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: isToday ? colors.onPrimaryContainer : colors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        if (hasFastingLog)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Icon(
+                              Icons.nights_stay,
+                              size: 8,
+                              color: isToday ? colors.onPrimaryContainer : Colors.amber.shade800,
+                            ),
+                          ),
+                      ],
                     ),
                 ],
               ),
@@ -497,22 +526,23 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
     });
   }
 
-  String _hijriDateLabel(DateTime date, String languageCode) {
-    final hijri = HijriCalendar.fromDate(date);
+  String _hijriDateLabel(BuildContext context, DateTime date, String languageCode) {
+    final controller = context.read<PrayerAppController>();
+    final hijri = hijriCalendarWithOffset(date, controller.hijriDateOffset);
     return '${hijri.hDay} '
-        '${HijriMonth.fromDate(date).longMonthName(languageCode)} '
+        '${HijriMonth.fromDate(date, offset: controller.hijriDateOffset).longMonthName(languageCode)} '
         '${hijri.hYear}';
   }
 
-  String _primaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
+  String _primaryDateLabel(BuildContext context, CalendarPrimaryDisplay primary, String locale) {
     return primary == CalendarPrimaryDisplay.gregorian
         ? DateFormat.yMMMMd(locale).format(_date)
-        : _hijriDateLabel(_date, locale.split('-').first);
+        : _hijriDateLabel(context, _date, locale.split('-').first);
   }
 
-  String _secondaryDateLabel(CalendarPrimaryDisplay primary, String locale) {
+  String _secondaryDateLabel(BuildContext context, CalendarPrimaryDisplay primary, String locale) {
     return primary == CalendarPrimaryDisplay.gregorian
-        ? _hijriDateLabel(_date, locale.split('-').first)
+        ? _hijriDateLabel(context, _date, locale.split('-').first)
         : DateFormat.yMMMMd(locale).format(_date);
   }
 
@@ -587,6 +617,25 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
         .where((reminder) => reminder.occursOn(_date))
         .toList(growable: false);
     final locale = Localizations.localeOf(context).toString();
+    final String? holiday = controller.showIslamicHolidays
+        ? islamicHolidayForDate(
+            _date,
+            (key) => switch (key) {
+              'holiday_islamic_new_year' => l10n.holiday_islamic_new_year,
+              'holiday_ashura' => l10n.holiday_ashura,
+              'holiday_mawlid' => l10n.holiday_mawlid,
+              'holiday_isra_miraj' => l10n.holiday_isra_miraj,
+              'holiday_laylat_barat' => l10n.holiday_laylat_barat,
+              'holiday_ramadan_first' => l10n.holiday_ramadan_first,
+              'holiday_laylat_qadr' => l10n.holiday_laylat_qadr,
+              'holiday_eid_fitr' => l10n.holiday_eid_fitr,
+              'holiday_arafah' => l10n.holiday_arafah,
+              'holiday_eid_adha' => l10n.holiday_eid_adha,
+              _ => key,
+            },
+            offset: controller.hijriDateOffset,
+          )
+        : null;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -607,13 +656,13 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _primaryDateLabel(widget.primary, locale),
+                        _primaryDateLabel(context, widget.primary, locale),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        _secondaryDateLabel(widget.primary, locale),
+                        _secondaryDateLabel(context, widget.primary, locale),
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -629,24 +678,7 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
                 ),
               ],
             ),
-            if (islamicHolidayForDate(_date, (key) {
-                  return switch (key) {
-                    'holiday_islamic_new_year' =>
-                      l10n.holiday_islamic_new_year,
-                    'holiday_ashura' => l10n.holiday_ashura,
-                    'holiday_mawlid' => l10n.holiday_mawlid,
-                    'holiday_isra_miraj' => l10n.holiday_isra_miraj,
-                    'holiday_laylat_barat' =>
-                      l10n.holiday_laylat_barat,
-                    'holiday_ramadan_first' =>
-                      l10n.holiday_ramadan_first,
-                    'holiday_laylat_qadr' => l10n.holiday_laylat_qadr,
-                    'holiday_eid_fitr' => l10n.holiday_eid_fitr,
-                    'holiday_arafah' => l10n.holiday_arafah,
-                    'holiday_eid_adha' => l10n.holiday_eid_adha,
-                    _ => key,
-                  };
-                }) case final holiday?) ...[
+            if (holiday != null) ...[
               const SizedBox(height: 8),
               Container(
                 width: double.infinity,

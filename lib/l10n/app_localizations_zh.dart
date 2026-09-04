@@ -847,4 +847,46 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get removeFastLog => '删除斋戒记录';
+
+  @override
+  String get calendarWeekStartTitle => '日历一周开始于';
+
+  @override
+  String get calendarWeekStartSunday => '星期日';
+
+  @override
+  String get calendarWeekStartMonday => '星期一';
+
+  @override
+  String get hijriDateOffsetTitle => '伊斯兰历日期微调';
+
+  @override
+  String get hijriDateOffsetSubtitle => '根据当地新月观测微调伊斯兰历';
+
+  @override
+  String get showIslamicHolidaysTitle => '突出显示伊斯兰节日';
+
+  @override
+  String get showIslamicHolidaysSubtitle => '在伊斯兰圣日显示特别徽标';
+
+  @override
+  String get showFastingBadgesTitle => '在日历上显示斋戒记录';
+
+  @override
+  String get showFastingBadgesSubtitle => '在已记录斋戒的日期显示徽标';
+
+  @override
+  String get defaultCalendarDisplayTitle => '默认日历视图';
+
+  @override
+  String get defaultCalendarDisplaySubtitle => '打开日历时的初始基础视图';
+
+  @override
+  String get showCalendarReminderDotsTitle => '显示提醒指示点';
+
+  @override
+  String get showCalendarReminderDotsSubtitle => '在有提醒的日期显示指示点';
+
+  @override
+  String get calendarSettingsSectionTitle => '日历设置';
 }

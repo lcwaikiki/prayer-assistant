@@ -847,5 +847,47 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fastingCalendarLogger => '断食カレンダーログ';
 
   @override
-  String get removeFastLog => '断食ログを削除';
+  String get removeFastLog => '断食記録を削除';
+
+  @override
+  String get calendarWeekStartTitle => '週の開始日';
+
+  @override
+  String get calendarWeekStartSunday => '日曜日';
+
+  @override
+  String get calendarWeekStartMonday => '月曜日';
+
+  @override
+  String get hijriDateOffsetTitle => 'ヒジュラ暦の日付調整';
+
+  @override
+  String get hijriDateOffsetSubtitle => '月齢観測に合わせてヒジュラ暦を調整';
+
+  @override
+  String get showIslamicHolidaysTitle => 'イスラムの祝日を強調表示';
+
+  @override
+  String get showIslamicHolidaysSubtitle => 'イスラムの祝日に特別なバッジを表示';
+
+  @override
+  String get showFastingBadgesTitle => 'カレンダーに断食記録を表示';
+
+  @override
+  String get showFastingBadgesSubtitle => '断食が記録された日にバッジを表示';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'デフォルトのカレンダー表示';
+
+  @override
+  String get defaultCalendarDisplaySubtitle => 'カレンダーを開いた時の初期表示';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'リマインダーのドットを表示';
+
+  @override
+  String get showCalendarReminderDotsSubtitle => 'リマインダーがある日にドットを表示';
+
+  @override
+  String get calendarSettingsSectionTitle => 'カレンダー設定';
 }

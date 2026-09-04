@@ -310,5 +310,16 @@
   "removeFastLog": "إزالة سجل الصيام",
   "calendarWeekStartTitle": "بداية الأسبوع في التقويم",
   "calendarWeekStartSunday": "الأحد",
-  "calendarWeekStartMonday": "الإثنين"
+  "calendarWeekStartMonday": "الإثنين",
+  "hijriDateOffsetTitle": "تعديل التاريخ الهجري",
+  "hijriDateOffsetSubtitle": "تعديل التاريخ الهجري حسب رؤية الهلال المحلية",
+  "showIslamicHolidaysTitle": "تمييز المناسبات الإسلامية",
+  "showIslamicHolidaysSubtitle": "إظهار شارات خاصة للأيام المباركة والمناسبات",
+  "showFastingBadgesTitle": "إظهار سجلات الصيام على التقويم",
+  "showFastingBadgesSubtitle": "إظهار شارات في الأيام المسجلة للصيام",
+  "defaultCalendarDisplayTitle": "عرض التقويم الافتراضي",
+  "defaultCalendarDisplaySubtitle": "النوع الافتراضي عند فتح التقويم",
+  "showCalendarReminderDotsTitle": "إظهار نقاط التذكير",
+  "showCalendarReminderDotsSubtitle": "إظهار نقاط في الأيام التي تحتوي على تذكيرات",
+  "calendarSettingsSectionTitle": "إعدادات التقويم"
 }

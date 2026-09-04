@@ -310,5 +310,16 @@
   "removeFastLog": "Hapus Log Puasa",
   "calendarWeekStartTitle": "Awal Minggu Kalender",
   "calendarWeekStartSunday": "Minggu",
-  "calendarWeekStartMonday": "Senin"
+  "calendarWeekStartMonday": "Senin",
+  "hijriDateOffsetTitle": "Penyesuaian Tanggal Hijriah",
+  "hijriDateOffsetSubtitle": "Sesuaikan tanggal Hijriah untuk rukyatul hilal lokal",
+  "showIslamicHolidaysTitle": "Sorot Hari Besar Islam",
+  "showIslamicHolidaysSubtitle": "Tampilkan lencana khusus untuk hari suci Islam",
+  "showFastingBadgesTitle": "Tampilkan Catatan Puasa di Kalender",
+  "showFastingBadgesSubtitle": "Tampilkan lencana pada tanggal dengan catatan puasa",
+  "defaultCalendarDisplayTitle": "Tampilan Kalender Default",
+  "defaultCalendarDisplaySubtitle": "Basis awal saat membuka kalender",
+  "showCalendarReminderDotsTitle": "Tampilkan Titik Pengingat",
+  "showCalendarReminderDotsSubtitle": "Tampilkan titik pada sel hari dengan pengingat terjadwal",
+  "calendarSettingsSectionTitle": "Pengaturan Kalender"
 }

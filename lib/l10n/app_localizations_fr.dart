@@ -872,5 +872,55 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fastingCalendarLogger => 'Journal du calendrier de jeûne';
 
   @override
-  String get removeFastLog => 'Supprimer le journal de jeûne';
+  String get removeFastLog => 'Supprimer le suivi du jeûne';
+
+  @override
+  String get calendarWeekStartTitle => 'La semaine commence le';
+
+  @override
+  String get calendarWeekStartSunday => 'Dimanche';
+
+  @override
+  String get calendarWeekStartMonday => 'Lundi';
+
+  @override
+  String get hijriDateOffsetTitle => 'Ajustement de la date Hégirienne';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Ajuster la date Hégirienne selon la vision de la lune';
+
+  @override
+  String get showIslamicHolidaysTitle =>
+      'Mettre en valeur les fêtes islamiques';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'Afficher des badges sur les jours saints islamiques';
+
+  @override
+  String get showFastingBadgesTitle =>
+      'Afficher les suivis de jeûne sur le calendrier';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'Afficher des badges sur les dates avec jeûne enregistré';
+
+  @override
+  String get defaultCalendarDisplayTitle =>
+      'Affichage par défaut du calendrier';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Base initiale lors de l\'ouverture du calendrier';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'Afficher les points de rappel';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Afficher des points sur les jours avec rappels programmés';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Paramètres du calendrier';
 }

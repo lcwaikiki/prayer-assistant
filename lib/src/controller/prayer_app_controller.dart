@@ -74,6 +74,11 @@ class PrayerAppController extends ChangeNotifier {
   CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
   bool _showSecondaryCalendarDate = true;
   CalendarWeekStart _calendarWeekStart = CalendarWeekStart.monday;
+  int _hijriDateOffset = 0;
+  bool _showIslamicHolidays = true;
+  bool _showFastingBadges = true;
+  CalendarPrimaryDisplay _defaultCalendarDisplay = CalendarPrimaryDisplay.hijri;
+  bool _showCalendarReminderDots = true;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
@@ -146,10 +151,45 @@ class PrayerAppController extends ChangeNotifier {
   CalendarPrimaryDisplay get calendarPrimaryDisplay => _calendarPrimaryDisplay;
   bool get showSecondaryCalendarDate => _showSecondaryCalendarDate;
   CalendarWeekStart get calendarWeekStart => _calendarWeekStart;
+  int get hijriDateOffset => _hijriDateOffset;
+  bool get showIslamicHolidays => _showIslamicHolidays;
+  bool get showFastingBadges => _showFastingBadges;
+  CalendarPrimaryDisplay get defaultCalendarDisplay => _defaultCalendarDisplay;
+  bool get showCalendarReminderDots => _showCalendarReminderDots;
 
   void updateCalendarWeekStart(CalendarWeekStart weekStart) {
     _calendarWeekStart = weekStart;
     database.saveCalendarWeekStart(weekStart);
+    notifyListeners();
+  }
+
+  void updateHijriDateOffset(int offset) {
+    _hijriDateOffset = offset;
+    database.saveHijriDateOffset(offset);
+    notifyListeners();
+  }
+
+  void updateShowIslamicHolidays(bool show) {
+    _showIslamicHolidays = show;
+    database.saveShowIslamicHolidays(show);
+    notifyListeners();
+  }
+
+  void updateShowFastingBadges(bool show) {
+    _showFastingBadges = show;
+    database.saveShowFastingBadges(show);
+    notifyListeners();
+  }
+
+  void updateDefaultCalendarDisplay(CalendarPrimaryDisplay display) {
+    _defaultCalendarDisplay = display;
+    database.saveDefaultCalendarDisplay(display);
+    notifyListeners();
+  }
+
+  void updateShowCalendarReminderDots(bool show) {
+    _showCalendarReminderDots = show;
+    database.saveShowCalendarReminderDots(show);
     notifyListeners();
   }
 
@@ -421,6 +461,15 @@ class PrayerAppController extends ChangeNotifier {
           await database.loadShowSecondaryCalendarDate() ?? true;
       _calendarWeekStart =
           await database.loadCalendarWeekStart() ?? CalendarWeekStart.monday;
+      _hijriDateOffset = await database.loadHijriDateOffset() ?? 0;
+      _showIslamicHolidays =
+          await database.loadShowIslamicHolidays() ?? true;
+      _showFastingBadges = await database.loadShowFastingBadges() ?? true;
+      _defaultCalendarDisplay =
+          await database.loadDefaultCalendarDisplay() ??
+          CalendarPrimaryDisplay.hijri;
+      _showCalendarReminderDots =
+          await database.loadShowCalendarReminderDots() ?? true;
       _calendarReminders = await database.loadCalendarReminders();
       for (final reminder in _calendarReminders) {
         if (reminder.enabled) {

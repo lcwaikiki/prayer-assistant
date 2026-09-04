@@ -310,5 +310,16 @@
   "removeFastLog": "删除斋戒记录",
   "calendarWeekStartTitle": "日历一周开始于",
   "calendarWeekStartSunday": "星期日",
-  "calendarWeekStartMonday": "星期一"
+  "calendarWeekStartMonday": "星期一",
+  "hijriDateOffsetTitle": "伊斯兰历日期微调",
+  "hijriDateOffsetSubtitle": "根据当地新月观测微调伊斯兰历",
+  "showIslamicHolidaysTitle": "突出显示伊斯兰节日",
+  "showIslamicHolidaysSubtitle": "在伊斯兰圣日显示特别徽标",
+  "showFastingBadgesTitle": "在日历上显示斋戒记录",
+  "showFastingBadgesSubtitle": "在已记录斋戒的日期显示徽标",
+  "defaultCalendarDisplayTitle": "默认日历视图",
+  "defaultCalendarDisplaySubtitle": "打开日历时的初始基础视图",
+  "showCalendarReminderDotsTitle": "显示提醒指示点",
+  "showCalendarReminderDotsSubtitle": "在有提醒的日期显示指示点",
+  "calendarSettingsSectionTitle": "日历设置"
 }

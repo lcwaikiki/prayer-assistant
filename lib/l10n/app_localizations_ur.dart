@@ -867,5 +867,50 @@ class AppLocalizationsUr extends AppLocalizations {
   String get fastingCalendarLogger => 'روزه کیلنڈر لاگ';
 
   @override
-  String get removeFastLog => 'روزه لاگ منسوخ کریں';
+  String get removeFastLog => 'روزہ کا اندراج ہٹائیں';
+
+  @override
+  String get calendarWeekStartTitle => 'تقویم کا ہفتہ شروع ہوتا ہے';
+
+  @override
+  String get calendarWeekStartSunday => 'اتوار';
+
+  @override
+  String get calendarWeekStartMonday => 'پیر';
+
+  @override
+  String get hijriDateOffsetTitle => 'ہجری تاریخ کی ایڈجسٹمنٹ';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'مقامی چاند دیکھنے کے مطابق ہجری تاریخ درست کریں';
+
+  @override
+  String get showIslamicHolidaysTitle => 'اسلامی ایام نمایاں کریں';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'اسلامی ہجرہ ایام پر خصوصی بیج دکھائیں';
+
+  @override
+  String get showFastingBadgesTitle => 'کیلنڈر پر روزوں کے اندراج دکھائیں';
+
+  @override
+  String get showFastingBadgesSubtitle => 'جس دن روزہ درج ہو اس پر بیج دکھائیں';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'ڈیفالٹ کیلنڈر ویو';
+
+  @override
+  String get defaultCalendarDisplaySubtitle => 'کیلنڈر کھولنے پر ابتدائی انداز';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'یاد دہانی کے نقطے دکھائیں';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'جن دنوں میں یاد دہانی ہو ان پر نقطے دکھائیں';
+
+  @override
+  String get calendarSettingsSectionTitle => 'کیلنڈر کی ترتیبات';
 }

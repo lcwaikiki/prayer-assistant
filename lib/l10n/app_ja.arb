@@ -310,5 +310,16 @@
   "removeFastLog": "断食記録を削除",
   "calendarWeekStartTitle": "週の開始日",
   "calendarWeekStartSunday": "日曜日",
-  "calendarWeekStartMonday": "月曜日"
+  "calendarWeekStartMonday": "月曜日",
+  "hijriDateOffsetTitle": "ヒジュラ暦の日付調整",
+  "hijriDateOffsetSubtitle": "月齢観測に合わせてヒジュラ暦を調整",
+  "showIslamicHolidaysTitle": "イスラムの祝日を強調表示",
+  "showIslamicHolidaysSubtitle": "イスラムの祝日に特別なバッジを表示",
+  "showFastingBadgesTitle": "カレンダーに断食記録を表示",
+  "showFastingBadgesSubtitle": "断食が記録された日にバッジを表示",
+  "defaultCalendarDisplayTitle": "デフォルトのカレンダー表示",
+  "defaultCalendarDisplaySubtitle": "カレンダーを開いた時の初期表示",
+  "showCalendarReminderDotsTitle": "リマインダーのドットを表示",
+  "showCalendarReminderDotsSubtitle": "リマインダーがある日にドットを表示",
+  "calendarSettingsSectionTitle": "カレンダー設定"
 }

@@ -7,6 +7,7 @@ import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
 import 'package:prayer_assistant/src/models/calendar_week_start.dart';
+import 'package:prayer_assistant/src/models/fasting_models.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
@@ -497,7 +498,7 @@ void main() {
   testWidgets(
       'HijriCalendarScreen day cell does not overflow with detailed information on mobile width and text scaling',
       (tester) async {
-    tester.view.physicalSize = const Size(360 * 2.0, 740 * 2.0);
+    tester.view.physicalSize = const Size(320 * 2.0, 640 * 2.0);
     tester.view.devicePixelRatio = 2.0;
     addTearDown(() {
       tester.view.resetPhysicalSize();
@@ -515,6 +516,13 @@ void main() {
         ),
       ],
     );
+    when(() => harness.database.loadFastingLogs()).thenAnswer(
+      (_) async => {'2026-08-17': const FastingLog(dateKey: '2026-08-17', type: FastingType.sunnah)},
+    );
+    when(() => harness.database.loadShowIslamicHolidays()).thenAnswer((_) async => true);
+    when(() => harness.database.loadShowFastingBadges()).thenAnswer((_) async => true);
+    when(() => harness.database.loadShowCalendarReminderDots()).thenAnswer((_) async => true);
+    when(() => harness.database.loadHijriDateOffset()).thenAnswer((_) async => 1);
     await harness.initialize();
 
     await pumpWithHarness(
@@ -522,8 +530,8 @@ void main() {
       harness,
       MediaQuery(
         data: const MediaQueryData(
-          size: Size(360, 740),
-          textScaler: TextScaler.linear(1.3),
+          size: Size(320, 640),
+          textScaler: TextScaler.linear(1.5),
         ),
         child: HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
       ),

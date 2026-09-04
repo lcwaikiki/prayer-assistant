@@ -310,5 +310,16 @@
   "removeFastLog": "Supprimer le suivi du jeûne",
   "calendarWeekStartTitle": "La semaine commence le",
   "calendarWeekStartSunday": "Dimanche",
-  "calendarWeekStartMonday": "Lundi"
+  "calendarWeekStartMonday": "Lundi",
+  "hijriDateOffsetTitle": "Ajustement de la date Hégirienne",
+  "hijriDateOffsetSubtitle": "Ajuster la date Hégirienne selon la vision de la lune",
+  "showIslamicHolidaysTitle": "Mettre en valeur les fêtes islamiques",
+  "showIslamicHolidaysSubtitle": "Afficher des badges sur les jours saints islamiques",
+  "showFastingBadgesTitle": "Afficher les suivis de jeûne sur le calendrier",
+  "showFastingBadgesSubtitle": "Afficher des badges sur les dates avec jeûne enregistré",
+  "defaultCalendarDisplayTitle": "Affichage par défaut du calendrier",
+  "defaultCalendarDisplaySubtitle": "Base initiale lors de l'ouverture du calendrier",
+  "showCalendarReminderDotsTitle": "Afficher les points de rappel",
+  "showCalendarReminderDotsSubtitle": "Afficher des points sur les jours avec rappels programmés",
+  "calendarSettingsSectionTitle": "Paramètres du calendrier"
 }

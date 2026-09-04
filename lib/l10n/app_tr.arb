@@ -310,5 +310,16 @@
   "removeFastLog": "Oruç Kaydını Sil",
   "calendarWeekStartTitle": "Hafta Başlangıcı",
   "calendarWeekStartSunday": "Pazar",
-  "calendarWeekStartMonday": "Pazartesi"
+  "calendarWeekStartMonday": "Pazartesi",
+  "hijriDateOffsetTitle": "Hicri Tarih Düzeltmesi",
+  "hijriDateOffsetSubtitle": "Yerel ay görme gününe göre Hicri tarihi ayarlayın",
+  "showIslamicHolidaysTitle": "Dini Günleri Vurgula",
+  "showIslamicHolidaysSubtitle": "İslam dünyasına ait dini günleri takvimde göster",
+  "showFastingBadgesTitle": "Oruç Kayıtlarını Takvimde Göster",
+  "showFastingBadgesSubtitle": "Oruç tutulan günlerde simge göster",
+  "defaultCalendarDisplayTitle": "Varsayılan Takvim Görünümü",
+  "defaultCalendarDisplaySubtitle": "Takvim açıldığında varsayılan görünüm esası",
+  "showCalendarReminderDotsTitle": "Hatırlatıcı İşaret Noktalarını Göster",
+  "showCalendarReminderDotsSubtitle": "Planlanmış hatırlatıcısı olan gün hücrelerinde nokta göster",
+  "calendarSettingsSectionTitle": "Takvim Ayarları"
 }

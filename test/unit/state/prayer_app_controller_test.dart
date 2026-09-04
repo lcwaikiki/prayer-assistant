@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
+import 'package:prayer_assistant/src/models/calendar_week_start.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import 'package:prayer_assistant/src/kaza/models/kaza_tracker.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
@@ -31,6 +32,8 @@ void main() {
       LocationNode(id: 'f', name: 'f', englishName: 'f'),
     );
     registerFallbackValue(const KazaTracker());
+    registerFallbackValue(CalendarPrimaryDisplay.hijri);
+    registerFallbackValue(CalendarWeekStart.monday);
   });
 
 
@@ -132,6 +135,42 @@ void main() {
     when(
       () => database.loadShowSecondaryCalendarDate(),
     ).thenAnswer((_) async => null);
+    when(
+      () => database.loadCalendarWeekStart(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveCalendarWeekStart(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadHijriDateOffset(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveHijriDateOffset(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadShowIslamicHolidays(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveShowIslamicHolidays(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadShowFastingBadges(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveShowFastingBadges(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadDefaultCalendarDisplay(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveDefaultCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadShowCalendarReminderDots(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveShowCalendarReminderDots(any()),
+    ).thenAnswer((_) async {});
     when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});

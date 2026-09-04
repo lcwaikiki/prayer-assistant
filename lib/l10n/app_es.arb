@@ -310,5 +310,16 @@
   "removeFastLog": "Eliminar registro de ayuno",
   "calendarWeekStartTitle": "La semana del calendario empieza en",
   "calendarWeekStartSunday": "Domingo",
-  "calendarWeekStartMonday": "Lunes"
+  "calendarWeekStartMonday": "Lunes",
+  "hijriDateOffsetTitle": "Ajuste de fecha Híyri",
+  "hijriDateOffsetSubtitle": "Ajustar fecha Híyri según avistamiento local de la luna",
+  "showIslamicHolidaysTitle": "Destacar festividades islámicas",
+  "showIslamicHolidaysSubtitle": "Mostrar insignias en días sagrados islámicos",
+  "showFastingBadgesTitle": "Mostrar registros de ayuno en el calendario",
+  "showFastingBadgesSubtitle": "Mostrar insignias en fechas con ayunos registrados",
+  "defaultCalendarDisplayTitle": "Vista de calendario predeterminada",
+  "defaultCalendarDisplaySubtitle": "Base inicial al abrir el calendario",
+  "showCalendarReminderDotsTitle": "Mostrar puntos de recordatorios",
+  "showCalendarReminderDotsSubtitle": "Mostrar puntos en celdas con recordatorios programados",
+  "calendarSettingsSectionTitle": "Ajustes del calendario"
 }

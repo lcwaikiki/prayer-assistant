@@ -870,4 +870,51 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get removeFastLog => 'Fasteneintrag entfernen';
+
+  @override
+  String get calendarWeekStartTitle => 'Kalenderwoche beginnt am';
+
+  @override
+  String get calendarWeekStartSunday => 'Sonntag';
+
+  @override
+  String get calendarWeekStartMonday => 'Montag';
+
+  @override
+  String get hijriDateOffsetTitle => 'Anpassung des Hijri-Datums';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Hijri-Datum an lokale Mondsichtungen anpassen';
+
+  @override
+  String get showIslamicHolidaysTitle => 'Islamische Feiertage hervorheben';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'Besondere Abzeichen für islamische Feiertage anzeigen';
+
+  @override
+  String get showFastingBadgesTitle => 'Fastenprotokolle im Kalender anzeigen';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'Abzeichen an Tagen mit gefastetem Protokoll anzeigen';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'Standard-Kalenderansicht';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Standardbasis beim Öffnen des Kalenders';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'Erinnerungspunkte anzeigen';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Punkte auf Tagesfeldern mit Erinnerungen anzeigen';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Kalendereinstellungen';
 }

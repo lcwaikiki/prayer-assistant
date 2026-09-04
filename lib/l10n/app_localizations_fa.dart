@@ -866,4 +866,51 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get removeFastLog => 'حذف ثبت روزه‌داری';
+
+  @override
+  String get calendarWeekStartTitle => 'شروع هفته تقویم';
+
+  @override
+  String get calendarWeekStartSunday => 'یکشنبه';
+
+  @override
+  String get calendarWeekStartMonday => 'دوشنبه';
+
+  @override
+  String get hijriDateOffsetTitle => 'تنظیم تاریخ هجری';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'تنظیم تاریخ هجری بر اساس رؤیت ماه محلی';
+
+  @override
+  String get showIslamicHolidaysTitle => 'برجسته‌سازی مناسبت‌های اسلامی';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'نمایش نشان‌های ویژه برای روزهای مبارک اسلامی';
+
+  @override
+  String get showFastingBadgesTitle => 'نمایش ثبت روزه‌ها در تقویم';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'نمایش نشان در روزهایی که روزه ثبت شده است';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'نمای پیش‌فرض تقویم';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'حالت اولیه هنگام باز کردن تقویم';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'نمایش نقاط یادآوری';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'نمایش نقطه در روزهای دارای یادآوری';
+
+  @override
+  String get calendarSettingsSectionTitle => 'تنظیمات تقویم';
 }

@@ -870,5 +870,52 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fastingCalendarLogger => 'Календарь учета поста';
 
   @override
-  String get removeFastLog => 'Удалить запись о посте';
+  String get removeFastLog => 'Удалить запись поста';
+
+  @override
+  String get calendarWeekStartTitle => 'Начало недели в календаре';
+
+  @override
+  String get calendarWeekStartSunday => 'Воскресенье';
+
+  @override
+  String get calendarWeekStartMonday => 'Понедельник';
+
+  @override
+  String get hijriDateOffsetTitle => 'Корректировка даты Хиджры';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Корректировка даты Хиджры по местному наблюдению луны';
+
+  @override
+  String get showIslamicHolidaysTitle => 'Выделять исламские праздники';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'Показывать значки для исламских праздничных дней';
+
+  @override
+  String get showFastingBadgesTitle => 'Показывать записи поста в календаре';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'Показывать значки в дни с записанным постом';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'Вид календаря по умолчанию';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Начальный режим при открытии календаря';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'Показывать точки напоминаний';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Показывать точки на днях с напоминаниями';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Настройки календаря';
 }

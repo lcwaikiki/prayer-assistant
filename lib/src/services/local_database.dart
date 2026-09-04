@@ -24,6 +24,11 @@ class LocalDatabase {
   static const _calendarPrimaryDisplayKey = 'calendar_primary_display';
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
   static const _calendarWeekStartKey = 'calendar_week_start';
+  static const _hijriDateOffsetKey = 'hijri_date_offset';
+  static const _showIslamicHolidaysKey = 'show_islamic_holidays';
+  static const _showFastingBadgesKey = 'show_fasting_badges';
+  static const _defaultCalendarDisplayKey = 'default_calendar_display';
+  static const _showCalendarReminderDotsKey = 'show_calendar_reminder_dots';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
@@ -519,6 +524,119 @@ class LocalDatabase {
     }
     final raw = rows.first['setting_value'] as String?;
     return raw != null ? CalendarWeekStart.fromName(raw) : null;
+  }
+
+  Future<void> saveHijriDateOffset(int offset) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _hijriDateOffsetKey,
+      'setting_value': offset.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<int?> loadHijriDateOffset() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_hijriDateOffsetKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return int.tryParse(rows.first['setting_value'] as String);
+  }
+
+  Future<void> saveShowIslamicHolidays(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showIslamicHolidaysKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowIslamicHolidays() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showIslamicHolidaysKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveShowFastingBadges(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showFastingBadgesKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowFastingBadges() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showFastingBadgesKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveDefaultCalendarDisplay(CalendarPrimaryDisplay display) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _defaultCalendarDisplayKey,
+      'setting_value': display.name,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<CalendarPrimaryDisplay?> loadDefaultCalendarDisplay() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_defaultCalendarDisplayKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    final raw = rows.first['setting_value'] as String?;
+    return raw == 'gregorian'
+        ? CalendarPrimaryDisplay.gregorian
+        : (raw == 'hijri' ? CalendarPrimaryDisplay.hijri : null);
+  }
+
+  Future<void> saveShowCalendarReminderDots(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showCalendarReminderDotsKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowCalendarReminderDots() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showCalendarReminderDotsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
   }
 
   Future<List<CalendarReminder>> loadCalendarReminders() async {

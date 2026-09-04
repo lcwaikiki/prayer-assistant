@@ -396,5 +396,16 @@
   "removeFastLog": "Remove Fast Log",
   "calendarWeekStartTitle": "Calendar Week Starts On",
   "calendarWeekStartSunday": "Sunday",
-  "calendarWeekStartMonday": "Monday"
+  "calendarWeekStartMonday": "Monday",
+  "hijriDateOffsetTitle": "Hijri Date Adjustment",
+  "hijriDateOffsetSubtitle": "Adjust Hijri date for local moon sightings",
+  "showIslamicHolidaysTitle": "Highlight Islamic Holidays",
+  "showIslamicHolidaysSubtitle": "Show special badges for Islamic holy days",
+  "showFastingBadgesTitle": "Show Fasting Logs on Calendar",
+  "showFastingBadgesSubtitle": "Display badges on dates with logged fasts",
+  "defaultCalendarDisplayTitle": "Default Calendar View",
+  "defaultCalendarDisplaySubtitle": "Initial basis when opening the calendar",
+  "showCalendarReminderDotsTitle": "Show Reminder Indicator Dots",
+  "showCalendarReminderDotsSubtitle": "Display dots on day cells with scheduled reminders",
+  "calendarSettingsSectionTitle": "Calendar Settings"
 }

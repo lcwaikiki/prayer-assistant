@@ -255,11 +255,16 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
-                title: context.l10n.calendarWeekStartTitle,
-                subtitle: controller.calendarWeekStart == CalendarWeekStart.sunday
-                    ? context.l10n.calendarWeekStartSunday
-                    : context.l10n.calendarWeekStartMonday,
+                title: context.l10n.calendarSettingsSectionTitle,
                 children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.calendarWeekStartTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   SegmentedButton<CalendarWeekStart>(
                     key: const Key('calendar_week_start_segmented_button'),
                     segments: [
@@ -275,6 +280,95 @@ class PreferencesScreen extends StatelessWidget {
                     selected: {controller.calendarWeekStart},
                     onSelectionChanged: (selection) =>
                         controller.updateCalendarWeekStart(selection.first),
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.defaultCalendarDisplayTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.defaultCalendarDisplaySubtitle,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<CalendarPrimaryDisplay>(
+                    key: const Key('default_calendar_display_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: CalendarPrimaryDisplay.hijri,
+                        label: Text(context.l10n.calendarYearlyBasisHijri),
+                      ),
+                      ButtonSegment(
+                        value: CalendarPrimaryDisplay.gregorian,
+                        label: Text(context.l10n.calendarYearlyBasisGregorian),
+                      ),
+                    ],
+                    selected: {controller.defaultCalendarDisplay},
+                    onSelectionChanged: (selection) =>
+                        controller.updateDefaultCalendarDisplay(selection.first),
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.hijriDateOffsetTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.hijriDateOffsetSubtitle,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<int>(
+                    key: const Key('hijri_date_offset_segmented_button'),
+                    segments: const [
+                      ButtonSegment(value: -2, label: Text('-2d')),
+                      ButtonSegment(value: -1, label: Text('-1d')),
+                      ButtonSegment(value: 0, label: Text('0d')),
+                      ButtonSegment(value: 1, label: Text('+1d')),
+                      ButtonSegment(value: 2, label: Text('+2d')),
+                    ],
+                    selected: {controller.hijriDateOffset},
+                    onSelectionChanged: (selection) =>
+                        controller.updateHijriDateOffset(selection.first),
+                  ),
+                  const SizedBox(height: 12),
+                  const Divider(),
+                  SwitchListTile(
+                    key: const Key('show_islamic_holidays_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showIslamicHolidaysTitle),
+                    subtitle: Text(context.l10n.showIslamicHolidaysSubtitle),
+                    value: controller.showIslamicHolidays,
+                    onChanged: controller.updateShowIslamicHolidays,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_fasting_badges_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showFastingBadgesTitle),
+                    subtitle: Text(context.l10n.showFastingBadgesSubtitle),
+                    value: controller.showFastingBadges,
+                    onChanged: controller.updateShowFastingBadges,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_calendar_reminder_dots_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCalendarReminderDotsTitle),
+                    subtitle: Text(context.l10n.showCalendarReminderDotsSubtitle),
+                    value: controller.showCalendarReminderDots,
+                    onChanged: controller.updateShowCalendarReminderDots,
                   ),
                 ],
               ),
@@ -564,21 +658,22 @@ class PreferencesScreen extends StatelessWidget {
 class _PreferenceSection extends StatelessWidget {
   const _PreferenceSection({
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     required this.children,
   });
 
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) {
+    final sub = subtitle;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
         title: Text(title, style: Theme.of(context).textTheme.titleMedium),
-        subtitle: Text(subtitle),
+        subtitle: sub != null ? Text(sub) : null,
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),

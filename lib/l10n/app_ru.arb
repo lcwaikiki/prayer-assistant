@@ -365,5 +365,16 @@
   "removeFastLog": "Удалить запись поста",
   "calendarWeekStartTitle": "Начало недели в календаре",
   "calendarWeekStartSunday": "Воскресенье",
-  "calendarWeekStartMonday": "Понедельник"
+  "calendarWeekStartMonday": "Понедельник",
+  "hijriDateOffsetTitle": "Корректировка даты Хиджры",
+  "hijriDateOffsetSubtitle": "Корректировка даты Хиджры по местному наблюдению луны",
+  "showIslamicHolidaysTitle": "Выделять исламские праздники",
+  "showIslamicHolidaysSubtitle": "Показывать значки для исламских праздничных дней",
+  "showFastingBadgesTitle": "Показывать записи поста в календаре",
+  "showFastingBadgesSubtitle": "Показывать значки в дни с записанным постом",
+  "defaultCalendarDisplayTitle": "Вид календаря по умолчанию",
+  "defaultCalendarDisplaySubtitle": "Начальный режим при открытии календаря",
+  "showCalendarReminderDotsTitle": "Показывать точки напоминаний",
+  "showCalendarReminderDotsSubtitle": "Показывать точки на днях с напоминаниями",
+  "calendarSettingsSectionTitle": "Настройки календаря"
 }

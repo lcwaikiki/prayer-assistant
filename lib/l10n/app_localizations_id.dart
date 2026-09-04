@@ -869,4 +869,51 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get removeFastLog => 'Hapus Log Puasa';
+
+  @override
+  String get calendarWeekStartTitle => 'Awal Minggu Kalender';
+
+  @override
+  String get calendarWeekStartSunday => 'Minggu';
+
+  @override
+  String get calendarWeekStartMonday => 'Senin';
+
+  @override
+  String get hijriDateOffsetTitle => 'Penyesuaian Tanggal Hijriah';
+
+  @override
+  String get hijriDateOffsetSubtitle =>
+      'Sesuaikan tanggal Hijriah untuk rukyatul hilal lokal';
+
+  @override
+  String get showIslamicHolidaysTitle => 'Sorot Hari Besar Islam';
+
+  @override
+  String get showIslamicHolidaysSubtitle =>
+      'Tampilkan lencana khusus untuk hari suci Islam';
+
+  @override
+  String get showFastingBadgesTitle => 'Tampilkan Catatan Puasa di Kalender';
+
+  @override
+  String get showFastingBadgesSubtitle =>
+      'Tampilkan lencana pada tanggal dengan catatan puasa';
+
+  @override
+  String get defaultCalendarDisplayTitle => 'Tampilan Kalender Default';
+
+  @override
+  String get defaultCalendarDisplaySubtitle =>
+      'Basis awal saat membuka kalender';
+
+  @override
+  String get showCalendarReminderDotsTitle => 'Tampilkan Titik Pengingat';
+
+  @override
+  String get showCalendarReminderDotsSubtitle =>
+      'Tampilkan titik pada sel hari dengan pengingat terjadwal';
+
+  @override
+  String get calendarSettingsSectionTitle => 'Pengaturan Kalender';
 }

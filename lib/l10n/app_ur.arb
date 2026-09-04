@@ -310,5 +310,16 @@
   "removeFastLog": "روزہ کا اندراج ہٹائیں",
   "calendarWeekStartTitle": "تقویم کا ہفتہ شروع ہوتا ہے",
   "calendarWeekStartSunday": "اتوار",
-  "calendarWeekStartMonday": "پیر"
+  "calendarWeekStartMonday": "پیر",
+  "hijriDateOffsetTitle": "ہجری تاریخ کی ایڈجسٹمنٹ",
+  "hijriDateOffsetSubtitle": "مقامی چاند دیکھنے کے مطابق ہجری تاریخ درست کریں",
+  "showIslamicHolidaysTitle": "اسلامی ایام نمایاں کریں",
+  "showIslamicHolidaysSubtitle": "اسلامی ہجرہ ایام پر خصوصی بیج دکھائیں",
+  "showFastingBadgesTitle": "کیلنڈر پر روزوں کے اندراج دکھائیں",
+  "showFastingBadgesSubtitle": "جس دن روزہ درج ہو اس پر بیج دکھائیں",
+  "defaultCalendarDisplayTitle": "ڈیفالٹ کیلنڈر ویو",
+  "defaultCalendarDisplaySubtitle": "کیلنڈر کھولنے پر ابتدائی انداز",
+  "showCalendarReminderDotsTitle": "یاد دہانی کے نقطے دکھائیں",
+  "showCalendarReminderDotsSubtitle": "جن دنوں میں یاد دہانی ہو ان پر نقطے دکھائیں",
+  "calendarSettingsSectionTitle": "کیلنڈر کی ترتیبات"
 }

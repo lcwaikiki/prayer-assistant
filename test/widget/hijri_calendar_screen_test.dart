@@ -492,4 +492,44 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+      'HijriCalendarScreen day cell does not overflow with detailed information on mobile width and text scaling',
+      (tester) async {
+    tester.view.physicalSize = const Size(360 * 2.0, 740 * 2.0);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final harness = TestHarness.create();
+    when(() => harness.database.loadCalendarReminders()).thenAnswer(
+      (_) async => [
+        CalendarReminder(
+          id: 'rem-1',
+          title: 'Doctor Appointment',
+          anchorAt: DateTime(2026, 8, 17, 10, 0),
+          recurrence: ReminderRecurrence.once,
+        ),
+      ],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      MediaQuery(
+        data: const MediaQueryData(
+          size: Size(360, 740),
+          textScaler: TextScaler.linear(1.3),
+        ),
+        child: HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      ),
+    );
+
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+  });
 }
+

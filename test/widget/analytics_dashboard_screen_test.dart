@@ -4,7 +4,6 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/ui/analytics_dashboard_screen.dart';
 
 
-import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
@@ -62,4 +61,39 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('AnalyticsDashboardScreen day cell does not overflow with detailed information on mobile width',
+      (tester) async {
+    tester.view.physicalSize = const Size(360 * 2.0, 740 * 2.0);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final now = DateTime.now();
+    final todayKey =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    final harness = TestHarness.create();
+    when(() => harness.database.loadPrayerCompletions()).thenAnswer(
+      (_) async => {
+        todayKey: ['imsak', 'ogle', 'ikindi', 'aksam', 'yatsi'],
+      },
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: AnalyticsDashboardScreen()),
+    );
+
+    // Verify cell content renders
+    expect(find.text('5/5'), findsWidgets);
+    expect(tester.takeException(), isNull);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
+

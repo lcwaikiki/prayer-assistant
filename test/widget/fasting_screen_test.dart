@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/models/fasting_models.dart';
 import 'package:prayer_assistant/src/ui/fasting_screen.dart';
 import 'package:prayer_assistant/src/ui/widgets/iftar_suhoor_countdown_card.dart';
 
@@ -97,4 +98,42 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('FastingScreen day cell does not overflow with detailed information on mobile width',
+      (tester) async {
+    tester.view.physicalSize = const Size(360 * 2.0, 740 * 2.0);
+    tester.view.devicePixelRatio = 2.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final now = DateTime.now();
+    final todayKey =
+        '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation())
+        .thenAnswer((_) async => sampleSelectedLocation());
+    when(() => harness.api.getYearlyPrayerTimes(
+          districtId: any(named: 'districtId'),
+          year: any(named: 'year'),
+        )).thenAnswer((_) async => [samplePrayerDay(date: DateTime.now())]);
+    when(() => harness.database.loadFastingLogs()).thenAnswer(
+      (_) async => {
+        todayKey: FastingLog(dateKey: todayKey, type: FastingType.ramadan),
+      },
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const FastingScreen(),
+    );
+
+    expect(tester.takeException(), isNull);
+    await tester.pumpWidget(const SizedBox());
+  });
 }
+

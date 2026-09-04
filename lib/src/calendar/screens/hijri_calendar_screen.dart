@@ -422,45 +422,54 @@ class _DayCell extends StatelessWidget {
               ? Border.all(color: Colors.amber.shade700, width: 1.5)
               : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              primaryLabel,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: isToday || isHoliday
-                    ? FontWeight.w700
-                    : FontWeight.w500,
-                color: isToday
-                    ? colors.onPrimaryContainer
-                    : (isHoliday ? Colors.amber.shade800 : null),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    primaryLabel,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: isToday || isHoliday
+                          ? FontWeight.w700
+                          : FontWeight.w500,
+                      color: isToday
+                          ? colors.onPrimaryContainer
+                          : (isHoliday ? Colors.amber.shade800 : null),
+                    ),
+                  ),
+                  if (secondaryLabel != null)
+                    Text(
+                      secondaryLabel!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: isToday
+                            ? colors.onPrimaryContainer
+                            : (isHoliday
+                                ? Colors.amber.shade700
+                                : colors.onSurfaceVariant),
+                        fontSize: 9,
+                      ),
+                    ),
+                  if (hasReminder)
+                    Container(
+                      margin: const EdgeInsets.only(top: 3),
+                      width: 5,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: isToday ? colors.onPrimaryContainer : colors.primary,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                ],
               ),
             ),
-            if (secondaryLabel != null)
-              Text(
-                secondaryLabel!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: isToday
-                      ? colors.onPrimaryContainer
-                      : (isHoliday
-                          ? Colors.amber.shade700
-                          : colors.onSurfaceVariant),
-                  fontSize: 9,
-                ),
-              ),
-            if (hasReminder)
-              Container(
-                margin: const EdgeInsets.only(top: 3),
-                width: 5,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: isToday ? colors.onPrimaryContainer : colors.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );

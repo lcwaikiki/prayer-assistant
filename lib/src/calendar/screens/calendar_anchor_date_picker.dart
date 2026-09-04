@@ -194,13 +194,13 @@ class _AnchorDatePickerSheetState extends State<_AnchorDatePickerSheet> {
             ),
             _WeekdayHeaderRow(locale: locale),
             SizedBox(
-              height: 280,
+              height: 295,
               child: GridView.builder(
                 padding: const EdgeInsets.all(4),
                 gridDelegate:
                     const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 7,
-                  childAspectRatio: 0.85,
+                  childAspectRatio: 0.78,
                 ),
                 itemCount: leadingBlanks + monthDays.length,
                 itemBuilder: (context, index) {
@@ -302,28 +302,39 @@ class _PickerDayCell extends StatelessWidget {
               ? Border.all(color: colors.secondary, width: 1.5)
               : null,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              primaryLabel,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: isToday || isSelected
-                    ? FontWeight.w700
-                    : FontWeight.w500,
-                color: isToday ? colors.onPrimaryContainer : null,
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    primaryLabel,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: isToday || isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w500,
+                      color: isToday ? colors.onPrimaryContainer : null,
+                    ),
+                  ),
+                  if (secondaryLabel != null)
+                    Text(
+                      secondaryLabel!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: isToday
+                            ? colors.onPrimaryContainer
+                            : colors.onSurfaceVariant,
+                      ),
+                    ),
+                ],
               ),
             ),
-            if (secondaryLabel != null)
-              Text(
-                secondaryLabel!,
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: isToday
-                      ? colors.onPrimaryContainer
-                      : colors.onSurfaceVariant,
-                ),
-              ),
-          ],
+          ),
         ),
       ),
     );

@@ -87,9 +87,10 @@ class _FastingScreenState extends State<FastingScreen> {
     showModalBottomSheet<void>(
       context: context,
       useSafeArea: true,
+      isScrollControlled: true,
       builder: (sheetContext) {
         return SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -468,7 +469,7 @@ class _FastingScreenState extends State<FastingScreen> {
                               crossAxisCount: 7,
                               mainAxisSpacing: 6,
                               crossAxisSpacing: 6,
-                              childAspectRatio: 0.85,
+                              childAspectRatio: 0.72,
                             ),
                             itemBuilder: (context, index) {
                               if (index < leadingBlanks) {
@@ -654,35 +655,41 @@ class _FastingDayCell extends StatelessWidget {
               : null,
         ),
         padding: const EdgeInsets.all(2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                primaryLabel,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: primaryTextColor,
-                ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    primaryLabel,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: primaryTextColor,
+                    ),
+                  ),
+                  if (secondaryLabel != null)
+                    Text(
+                      secondaryLabel!,
+                      style: TextStyle(
+                        fontSize: 8,
+                        color: secondaryTextColor,
+                      ),
+                      maxLines: 1,
+                    ),
+                  if (logIcon != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 1),
+                      child: Icon(logIcon, size: 11, color: iconColor),
+                    ),
+                ],
               ),
             ),
-            if (secondaryLabel != null)
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  secondaryLabel!,
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: secondaryTextColor,
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-            if (logIcon != null)
-              Icon(logIcon, size: 11, color: iconColor),
-          ],
+          ),
         ),
       ),
     );

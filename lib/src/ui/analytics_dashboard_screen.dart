@@ -196,10 +196,12 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                                         Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    '${context.l10n.totalPrayersCompleted}: $totalLogged',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
+                                  Expanded(
+                                    child: Text(
+                                      '${context.l10n.totalPrayersCompleted}: $totalLogged',
+                                      style:
+                                          Theme.of(context).textTheme.bodyMedium,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -312,7 +314,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                             crossAxisCount: 7,
                             mainAxisSpacing: 6,
                             crossAxisSpacing: 6,
-                            childAspectRatio: 0.85,
+                            childAspectRatio: 0.72,
                           ),
                           itemBuilder: (context, index) {
                             if (index < leadingBlanks) {
@@ -552,51 +554,57 @@ class _AnalyticsDayCell extends StatelessWidget {
               : null,
         ),
         padding: const EdgeInsets.all(2),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                primaryLabel,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: primaryTextColor,
-                ),
+        child: Center(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    primaryLabel,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: primaryTextColor,
+                    ),
+                  ),
+                  if (secondaryLabel != null)
+                    Text(
+                      secondaryLabel!,
+                      style: TextStyle(
+                        fontSize: 8,
+                        color: secondaryTextColor,
+                      ),
+                      maxLines: 1,
+                    ),
+                  if (completedCount > 0) ...[
+                    const SizedBox(height: 1),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 3, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: primaryTextColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        '$completedCount/5',
+                        maxLines: 1,
+                        softWrap: false,
+                        style: TextStyle(
+                          fontSize: 7.5,
+                          fontWeight: FontWeight.bold,
+                          color: primaryTextColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            if (secondaryLabel != null)
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  secondaryLabel!,
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: secondaryTextColor,
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-            if (completedCount > 0) ...[
-              const SizedBox(height: 1),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
-                decoration: BoxDecoration(
-                  color: primaryTextColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Text(
-                  '$completedCount/5',
-                  style: TextStyle(
-                    fontSize: 7.5,
-                    fontWeight: FontWeight.bold,
-                    color: primaryTextColor,
-                  ),
-                ),
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );

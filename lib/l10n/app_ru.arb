@@ -354,7 +354,7 @@
   "fastingTypeRamadan": "Пост в Рамадан",
   "fastingTypeSunnah": "Сунна-пост",
   "fastingTypeQadaa": "Восполняемый пост (Када)",
-  "whiteDaysTitle": "Белые дни (13, 14, 15)",
+  "whiteDaysTitle": "Белые дни (Аййام аль-Бид)",
   "mondayThursdayTitle": "Сунна Понедельник и Четверг",
   "logFastAction": "Записать пост",
   "totalFastsLogged": "Всего соблюдено постов",
@@ -386,5 +386,17 @@
   "defaultCalendarDisplaySubtitle": "Начальный режим при открытии календаря",
   "showCalendarReminderDotsTitle": "Показывать точки напоминаний",
   "showCalendarReminderDotsSubtitle": "Показывать точки на днях с напоминаниями",
-  "calendarSettingsSectionTitle": "Настройки календаря"
+  "calendarSettingsSectionTitle": "Настройки календаря",
+  "moonPhaseTitle": "Фаза Луны",
+  "moonIllumination": "{percent}% Освещено",
+  "moonAgeDays": "День {days} цикла",
+  "moonPhaseNewMoon": "Новолуние (Хилал)",
+  "moonPhaseWaxingCrescent": "Растущий серп",
+  "moonPhaseFirstQuarter": "Первая четверть",
+  "moonPhaseWaxingGibbous": "Растущая луна",
+  "moonPhaseFullMoon": "Полнолуние (Бадр)",
+  "moonPhaseWaningGibbous": "Убывающая луна",
+  "moonPhaseLastQuarter": "Последняя четверть",
+  "moonPhaseWaningCrescent": "Убывающий серп",
+  "whiteDaysSubtitle": "Дни сунна-поста (13, 14, 15 Хиджры)"
 }

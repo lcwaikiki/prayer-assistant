@@ -11,7 +11,9 @@ import '../../models/prayer_models.dart';
 
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
+import '../moon_phase_utils.dart';
 import '../models/calendar_reminder.dart';
+import '../../ui/widgets/moon_phase_widget.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
 
@@ -698,19 +700,21 @@ class _DayDetailSheetState extends State<_DayDetailSheet> {
                     Expanded(
                       child: Text(
                         holiday,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.amber.shade900,
-                            ),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.amber.shade900,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ],
+            const SizedBox(height: 12),
+            MoonPhaseCard(
+              date: _date,
+              hijriOffset: controller.hijriDateOffset,
+            ),
             if (controller.prayerDayFor(_date) case final day?) ...[
               const SizedBox(height: 8),
               Card(

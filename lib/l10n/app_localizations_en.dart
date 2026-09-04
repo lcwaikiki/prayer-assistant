@@ -841,7 +841,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fastingTypeQadaa => 'Make-up (Qadaa) Fast';
 
   @override
-  String get whiteDaysTitle => 'White Days (13th, 14th, 15th)';
+  String get whiteDaysTitle => 'White Days (Ayyam al-Beed)';
 
   @override
   String get mondayThursdayTitle => 'Monday & Thursday Sunnah';
@@ -951,4 +951,44 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Calendar Settings';
+
+  @override
+  String get moonPhaseTitle => 'Moon Phase';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% Illuminated';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'Day $days of cycle';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'New Moon (Hilal)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Waxing Crescent';
+
+  @override
+  String get moonPhaseFirstQuarter => 'First Quarter';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Waxing Gibbous';
+
+  @override
+  String get moonPhaseFullMoon => 'Full Moon (Badr)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Waning Gibbous';
+
+  @override
+  String get moonPhaseLastQuarter => 'Last Quarter';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Waning Crescent';
+
+  @override
+  String get whiteDaysSubtitle => 'Sunnah Fasting Days (13, 14, 15 Hijri)';
 }

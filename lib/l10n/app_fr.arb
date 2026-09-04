@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "Jeûne du Ramadan",
   "fastingTypeSunnah": "Jeûne Surérogatoire (Sunnah)",
   "fastingTypeQadaa": "Jeûne de Rattrapage (Qadaa)",
-  "whiteDaysTitle": "Jours Blancs (13e, 14e, 15e)",
+  "whiteDaysTitle": "Jours Blancs (Ayyam al-Beed)",
   "mondayThursdayTitle": "Sunnah Lundi & Jeudi",
   "logFastAction": "Enregistrer le Jeûne",
   "totalFastsLogged": "Total Jeûnes Enregistrés",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "Base initiale lors de l'ouverture du calendrier",
   "showCalendarReminderDotsTitle": "Afficher les points de rappel",
   "showCalendarReminderDotsSubtitle": "Afficher des points sur les jours avec rappels programmés",
-  "calendarSettingsSectionTitle": "Paramètres du calendrier"
+  "calendarSettingsSectionTitle": "Paramètres du calendrier",
+  "moonPhaseTitle": "Phase de la lune",
+  "moonIllumination": "{percent}% Illuminé",
+  "moonAgeDays": "Jour {days} du cycle",
+  "moonPhaseNewMoon": "Nouvelle lune (Hilal)",
+  "moonPhaseWaxingCrescent": "Premier croissant",
+  "moonPhaseFirstQuarter": "Premier quartier",
+  "moonPhaseWaxingGibbous": "Lune gibbeuse croissante",
+  "moonPhaseFullMoon": "Pleine lune (Badr)",
+  "moonPhaseWaningGibbous": "Lune gibbeuse décroissante",
+  "moonPhaseLastQuarter": "Dernier quartier",
+  "moonPhaseWaningCrescent": "Dernier croissant",
+  "whiteDaysSubtitle": "Jours de jeûne de la Sunna (13, 14, 15 Hégire)"
 }

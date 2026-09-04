@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "صيام رمضان",
   "fastingTypeSunnah": "صيام سنة",
   "fastingTypeQadaa": "صيام قضاء",
-  "whiteDaysTitle": "الأيام البيض (13، 14، 15)",
+  "whiteDaysTitle": "الأيام البيض",
   "mondayThursdayTitle": "سنة الإثنين والخميس",
   "logFastAction": "تسجيل الصوم",
   "totalFastsLogged": "إجمالي الأيام المصومة",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "النوع الافتراضي عند فتح التقويم",
   "showCalendarReminderDotsTitle": "إظهار نقاط التذكير",
   "showCalendarReminderDotsSubtitle": "إظهار نقاط في الأيام التي تحتوي على تذكيرات",
-  "calendarSettingsSectionTitle": "إعدادات التقويم"
+  "calendarSettingsSectionTitle": "إعدادات التقويم",
+  "moonPhaseTitle": "أطوار القمر",
+  "moonIllumination": "%{percent} مضاء",
+  "moonAgeDays": "اليوم {days} من الدورة",
+  "moonPhaseNewMoon": "محاق (هلال)",
+  "moonPhaseWaxingCrescent": "هلال متزايد",
+  "moonPhaseFirstQuarter": "التربيع الأول",
+  "moonPhaseWaxingGibbous": "أحدب متزايد",
+  "moonPhaseFullMoon": "بدر",
+  "moonPhaseWaningGibbous": "أحدب متناقص",
+  "moonPhaseLastQuarter": "التربيع الأخير",
+  "moonPhaseWaningCrescent": "هلال متناقص",
+  "whiteDaysSubtitle": "أيام صيام السنة (13، 14، 15 هجري)"
 }

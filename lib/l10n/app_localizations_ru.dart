@@ -843,7 +843,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get fastingTypeQadaa => 'Восполняемый пост (Када)';
 
   @override
-  String get whiteDaysTitle => 'Белые дни (13, 14, 15)';
+  String get whiteDaysTitle => 'Белые дни (Аййام аль-Бид)';
 
   @override
   String get mondayThursdayTitle => 'Сунна Понедельник и Четверг';
@@ -953,4 +953,44 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Настройки календаря';
+
+  @override
+  String get moonPhaseTitle => 'Фаза Луны';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% Освещено';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'День $days цикла';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'Новолуние (Хилал)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Растущий серп';
+
+  @override
+  String get moonPhaseFirstQuarter => 'Первая четверть';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Растущая луна';
+
+  @override
+  String get moonPhaseFullMoon => 'Полнолуние (Бадр)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Убывающая луна';
+
+  @override
+  String get moonPhaseLastQuarter => 'Последняя четверть';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Убывающий серп';
+
+  @override
+  String get whiteDaysSubtitle => 'Дни сунна-поста (13, 14, 15 Хиджры)';
 }

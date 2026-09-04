@@ -1657,7 +1657,7 @@ abstract class AppLocalizations {
   /// No description provided for @whiteDaysTitle.
   ///
   /// In en, this message translates to:
-  /// **'White Days (13th, 14th, 15th)'**
+  /// **'White Days (Ayyam al-Beed)'**
   String get whiteDaysTitle;
 
   /// No description provided for @mondayThursdayTitle.
@@ -1851,6 +1851,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Calendar Settings'**
   String get calendarSettingsSectionTitle;
+
+  /// No description provided for @moonPhaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon Phase'**
+  String get moonPhaseTitle;
+
+  /// No description provided for @moonIllumination.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% Illuminated'**
+  String moonIllumination(int percent);
+
+  /// No description provided for @moonAgeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Day {days} of cycle'**
+  String moonAgeDays(String days);
+
+  /// No description provided for @moonPhaseNewMoon.
+  ///
+  /// In en, this message translates to:
+  /// **'New Moon (Hilal)'**
+  String get moonPhaseNewMoon;
+
+  /// No description provided for @moonPhaseWaxingCrescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing Crescent'**
+  String get moonPhaseWaxingCrescent;
+
+  /// No description provided for @moonPhaseFirstQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'First Quarter'**
+  String get moonPhaseFirstQuarter;
+
+  /// No description provided for @moonPhaseWaxingGibbous.
+  ///
+  /// In en, this message translates to:
+  /// **'Waxing Gibbous'**
+  String get moonPhaseWaxingGibbous;
+
+  /// No description provided for @moonPhaseFullMoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Moon (Badr)'**
+  String get moonPhaseFullMoon;
+
+  /// No description provided for @moonPhaseWaningGibbous.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning Gibbous'**
+  String get moonPhaseWaningGibbous;
+
+  /// No description provided for @moonPhaseLastQuarter.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Quarter'**
+  String get moonPhaseLastQuarter;
+
+  /// No description provided for @moonPhaseWaningCrescent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waning Crescent'**
+  String get moonPhaseWaningCrescent;
+
+  /// No description provided for @whiteDaysSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunnah Fasting Days (13, 14, 15 Hijri)'**
+  String get whiteDaysSubtitle;
 }
 
 class _AppLocalizationsDelegate

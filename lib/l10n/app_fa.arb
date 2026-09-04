@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "روزه رمضان",
   "fastingTypeSunnah": "روزه مستحبی",
   "fastingTypeQadaa": "روزه قضا",
-  "whiteDaysTitle": "ایام البيض (۱۳، ۱۴، ۱۵)",
+  "whiteDaysTitle": "ایام البیض",
   "mondayThursdayTitle": "سنت دوشنبه و پنج‌شنبه",
   "logFastAction": "ثبت روزه",
   "totalFastsLogged": "مجموع روزه‌های گرفته‌شده",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "حالت اولیه هنگام باز کردن تقویم",
   "showCalendarReminderDotsTitle": "نمایش نقاط یادآوری",
   "showCalendarReminderDotsSubtitle": "نمایش نقطه در روزهای دارای یادآوری",
-  "calendarSettingsSectionTitle": "تنظیمات تقویم"
+  "calendarSettingsSectionTitle": "تنظیمات تقویم",
+  "moonPhaseTitle": "حالت‌های ماه",
+  "moonIllumination": "{percent}٪ روشن",
+  "moonAgeDays": "روز {days} از چرخه",
+  "moonPhaseNewMoon": "ماه نو (هلال)",
+  "moonPhaseWaxingCrescent": "هلال فزون‌يابی",
+  "moonPhaseFirstQuarter": "تربیع اول",
+  "moonPhaseWaxingGibbous": "تثلیث فزون‌يابی",
+  "moonPhaseFullMoon": "ماه کامل (بدر)",
+  "moonPhaseWaningGibbous": "تثلیث کاست‌يابی",
+  "moonPhaseLastQuarter": "تربیع آخر",
+  "moonPhaseWaningCrescent": "هلال کاست‌يابی",
+  "whiteDaysSubtitle": "روزهای روزه سنت (۱۳، ۱۴، ۱۵ هجری)"
 }

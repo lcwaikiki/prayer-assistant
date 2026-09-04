@@ -423,5 +423,32 @@
   "defaultCalendarDisplaySubtitle": "Initial basis when opening the calendar",
   "showCalendarReminderDotsTitle": "Show Reminder Indicator Dots",
   "showCalendarReminderDotsSubtitle": "Display dots on day cells with scheduled reminders",
-  "calendarSettingsSectionTitle": "Calendar Settings"
+  "calendarSettingsSectionTitle": "Calendar Settings",
+  "moonPhaseTitle": "Moon Phase",
+  "moonIllumination": "{percent}% Illuminated",
+  "@moonIllumination": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "moonAgeDays": "Day {days} of cycle",
+  "@moonAgeDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "moonPhaseNewMoon": "New Moon (Hilal)",
+  "moonPhaseWaxingCrescent": "Waxing Crescent",
+  "moonPhaseFirstQuarter": "First Quarter",
+  "moonPhaseWaxingGibbous": "Waxing Gibbous",
+  "moonPhaseFullMoon": "Full Moon (Badr)",
+  "moonPhaseWaningGibbous": "Waning Gibbous",
+  "moonPhaseLastQuarter": "Last Quarter",
+  "moonPhaseWaningCrescent": "Waning Crescent",
+  "whiteDaysTitle": "White Days (Ayyam al-Beed)",
+  "whiteDaysSubtitle": "Sunnah Fasting Days (13, 14, 15 Hijri)"
 }

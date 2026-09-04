@@ -20,6 +20,8 @@ import '../supplications/widgets/daily_wisdom_card.dart';
 import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
+import 'widgets/moon_phase_widget.dart';
+import '../calendar/moon_phase_utils.dart';
 
 
 typedef _UpcomingReminder = ({CalendarReminder reminder, DateTime next});
@@ -150,25 +152,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
 
                                 Row(
-                                  children: [
-                                    Icon(
-                                      Icons.location_on,
-                                      size: 12,
-                                      color: Theme.of(context).colorScheme.primary,
-                                    ),
-                                    const SizedBox(width: 2),
-                                    Expanded(
-                                      child: Text(
-                                        '${selected.districtName} · ${formatHijriDate(day.date, Localizations.localeOf(context).languageCode)}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .labelSmall,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                   children: [
+                                     Icon(
+                                       Icons.location_on,
+                                       size: 12,
+                                       color: Theme.of(context).colorScheme.primary,
+                                     ),
+                                     const SizedBox(width: 2),
+                                     Expanded(
+                                       child: Text(
+                                         '${selected.districtName} · ${formatHijriDate(day.date, Localizations.localeOf(context).languageCode)}',
+                                         style: Theme.of(context)
+                                             .textTheme
+                                             .labelSmall,
+                                         maxLines: 1,
+                                         overflow: TextOverflow.ellipsis,
+                                       ),
+                                     ),
+                                     const SizedBox(width: 4),
+                                     SubtleMoonIcon(
+                                       phaseValue: getMoonPhase(
+                                         day.date,
+                                         hijriOffset: controller.hijriDateOffset,
+                                       ).phaseValue,
+                                       size: 13,
+                                     ),
+                                   ],
+                                 ),
 
                               ],
                             ),
@@ -260,6 +270,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 0),
                         child: IftarSuhoorCountdownCard(),
+                      ),
+                      const SizedBox(height: 6),
+                      MoonPhaseCard(
+                        date: day.date,
+                        hijriOffset: controller.hijriDateOffset,
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => const HijriCalendarScreen(),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 6),
                       if (upcoming.isNotEmpty) ...[

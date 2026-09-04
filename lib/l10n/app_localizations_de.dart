@@ -842,7 +842,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get fastingTypeQadaa => 'Nachhol-Fasten (Qadaa)';
 
   @override
-  String get whiteDaysTitle => 'Weiße Tage (13., 14., 15.)';
+  String get whiteDaysTitle => 'Weiße Tage (Ayyam al-Beed)';
 
   @override
   String get mondayThursdayTitle => 'Montag & Donnerstag Sunnah';
@@ -952,4 +952,44 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Kalendereinstellungen';
+
+  @override
+  String get moonPhaseTitle => 'Mondphase';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% Beleuchtet';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'Tag $days des Zyklus';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'Neumond (Hilal)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Zunehmender Sichelmond';
+
+  @override
+  String get moonPhaseFirstQuarter => 'Erstes Viertel';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Zunehmender Dreiviertelmond';
+
+  @override
+  String get moonPhaseFullMoon => 'Vollmond (Badr)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Abnehmender Dreiviertelmond';
+
+  @override
+  String get moonPhaseLastQuarter => 'Letztes Viertel';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Abnehmender Sichelmond';
+
+  @override
+  String get whiteDaysSubtitle => 'Sunnah-Fasttage (13., 14., 15. Hijri)';
 }

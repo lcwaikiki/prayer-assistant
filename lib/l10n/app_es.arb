@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "Ayuno de Ramadan",
   "fastingTypeSunnah": "Ayuno Sunnah",
   "fastingTypeQadaa": "Ayuno de Compensación (Qadaa)",
-  "whiteDaysTitle": "Días Blancos (13, 14, 15)",
+  "whiteDaysTitle": "Días Blancos (Ayyam al-Beed)",
   "mondayThursdayTitle": "Sunnah de Lunes y Jueves",
   "logFastAction": "Registrar Ayuno",
   "totalFastsLogged": "Total de Ayunos Registrados",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "Base inicial al abrir el calendario",
   "showCalendarReminderDotsTitle": "Mostrar puntos de recordatorios",
   "showCalendarReminderDotsSubtitle": "Mostrar puntos en celdas con recordatorios programados",
-  "calendarSettingsSectionTitle": "Ajustes del calendario"
+  "calendarSettingsSectionTitle": "Ajustes del calendario",
+  "moonPhaseTitle": "Fase lunar",
+  "moonIllumination": "{percent}% Iluminada",
+  "moonAgeDays": "Día {days} del ciclo",
+  "moonPhaseNewMoon": "Luna nueva (Hilal)",
+  "moonPhaseWaxingCrescent": "Creciente",
+  "moonPhaseFirstQuarter": "Cuarto creciente",
+  "moonPhaseWaxingGibbous": "Gibosa creciente",
+  "moonPhaseFullMoon": "Luna llena (Badr)",
+  "moonPhaseWaningGibbous": "Gibosa menguante",
+  "moonPhaseLastQuarter": "Cuarto menguante",
+  "moonPhaseWaningCrescent": "Menguante",
+  "whiteDaysSubtitle": "Días de ayuno de la Sunnah (13, 14, 15 Híyri)"
 }

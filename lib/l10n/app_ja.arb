@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "ラマダーンの断食",
   "fastingTypeSunnah": "スンナの断食",
   "fastingTypeQadaa": "補填断食（カダー）",
-  "whiteDaysTitle": "Primary White Days (13, 14, 15日)",
+  "whiteDaysTitle": "白の日々（アイヤーム・アル＝ビード）",
   "mondayThursdayTitle": "月曜・木曜のスンナ",
   "logFastAction": "断食を記録",
   "totalFastsLogged": "記録された総断食日数",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "カレンダーを開いた時の初期表示",
   "showCalendarReminderDotsTitle": "リマインダーのドットを表示",
   "showCalendarReminderDotsSubtitle": "リマインダーがある日にドットを表示",
-  "calendarSettingsSectionTitle": "カレンダー設定"
+  "calendarSettingsSectionTitle": "カレンダー設定",
+  "moonPhaseTitle": "月相",
+  "moonIllumination": "{percent}% 輝度",
+  "moonAgeDays": "周期の{days}日目",
+  "moonPhaseNewMoon": "新月（ヒラル）",
+  "moonPhaseWaxingCrescent": "三日月",
+  "moonPhaseFirstQuarter": "上弦の月",
+  "moonPhaseWaxingGibbous": "十三夜",
+  "moonPhaseFullMoon": "満月（バドル）",
+  "moonPhaseWaningGibbous": "寝待月",
+  "moonPhaseLastQuarter": "下弦の月",
+  "moonPhaseWaningCrescent": "有明月",
+  "whiteDaysSubtitle": "スンナ断食の日々（ヒジュラ暦13, 14, 15日）"
 }

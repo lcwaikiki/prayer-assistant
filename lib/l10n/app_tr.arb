@@ -305,7 +305,7 @@
   "fastingTypeRamadan": "Ramazan Orucu",
   "fastingTypeSunnah": "Sünnet Orucu",
   "fastingTypeQadaa": "Kaza Orucu",
-  "whiteDaysTitle": "Eyyam-ı Biyd (13, 14, 15)",
+  "whiteDaysTitle": "Eyyam-ı Biyd (Aydınlık Günler)",
   "mondayThursdayTitle": "Pazartesi ve Perşembe Sünneti",
   "logFastAction": "Oruç Kaydet",
   "totalFastsLogged": "Toplam Tutulan Oruç",
@@ -337,5 +337,17 @@
   "defaultCalendarDisplaySubtitle": "Takvim açıldığında varsayılan görünüm esası",
   "showCalendarReminderDotsTitle": "Hatırlatıcı İşaret Noktalarını Göster",
   "showCalendarReminderDotsSubtitle": "Planlanmış hatırlatıcısı olan gün hücrelerinde nokta göster",
-  "calendarSettingsSectionTitle": "Takvim Ayarları"
+  "calendarSettingsSectionTitle": "Takvim Ayarları",
+  "moonPhaseTitle": "Ay Evresi",
+  "moonIllumination": "%{percent} Aydınlık",
+  "moonAgeDays": "Döngünün {days}. günü",
+  "moonPhaseNewMoon": "Yeni Ay (Hilal)",
+  "moonPhaseWaxingCrescent": "Büyüyen Hilal",
+  "moonPhaseFirstQuarter": "İlk Dördün",
+  "moonPhaseWaxingGibbous": "Büyüyen Şişkin Ay",
+  "moonPhaseFullMoon": "Dolunay (Bedir)",
+  "moonPhaseWaningGibbous": "Küçülen Şişkin Ay",
+  "moonPhaseLastQuarter": "Son Dördün",
+  "moonPhaseWaningCrescent": "Küçülen Hilal",
+  "whiteDaysSubtitle": "Sünnet Oruç Günleri (13, 14, 15 Hicri)"
 }

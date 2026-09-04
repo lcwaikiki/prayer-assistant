@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "رمضان کا روزہ",
   "fastingTypeSunnah": "سنت روزہ",
   "fastingTypeQadaa": "قضا روزہ",
-  "whiteDaysTitle": "ایام بیض (13، 14، 15)",
+  "whiteDaysTitle": "ایام بیض",
   "mondayThursdayTitle": "پیر اور جمعرات کی سنت",
   "logFastAction": "روزہ درج کریں",
   "totalFastsLogged": "کل رکھے گئے روزے",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "کیلنڈر کھولنے پر ابتدائی انداز",
   "showCalendarReminderDotsTitle": "یاد دہانی کے نقطے دکھائیں",
   "showCalendarReminderDotsSubtitle": "جن دنوں میں یاد دہانی ہو ان پر نقطے دکھائیں",
-  "calendarSettingsSectionTitle": "کیلنڈر کی ترتیبات"
+  "calendarSettingsSectionTitle": "کیلنڈر کی ترتیبات",
+  "moonPhaseTitle": "قمری صورتیں",
+  "moonIllumination": "{percent}% روشن",
+  "moonAgeDays": "سائیکل کا {days} واں دن",
+  "moonPhaseNewMoon": "نیا چاند (ہلال)",
+  "moonPhaseWaxingCrescent": "بڑھتا ہوا ہلال",
+  "moonPhaseFirstQuarter": "پہلا چوتھائی",
+  "moonPhaseWaxingGibbous": "بڑھتا ہوا محدب چاند",
+  "moonPhaseFullMoon": "پورا چاند (بدر)",
+  "moonPhaseWaningGibbous": "گھٹتا ہوا محدب چاند",
+  "moonPhaseLastQuarter": "آخری چوتھائی",
+  "moonPhaseWaningCrescent": "گھٹتا ہوا ہلال",
+  "whiteDaysSubtitle": "سنت روزوں کے دن (13، 14، 15 ہجری)"
 }

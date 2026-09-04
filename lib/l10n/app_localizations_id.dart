@@ -841,7 +841,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get fastingTypeQadaa => 'Puasa Qadha';
 
   @override
-  String get whiteDaysTitle => 'Ayyamul Bidh (13, 14, 15)';
+  String get whiteDaysTitle => 'Hari-hari Putih (Ayyamul Bidh)';
 
   @override
   String get mondayThursdayTitle => 'Sunnah Senin & Kamis';
@@ -951,4 +951,44 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Pengaturan Kalender';
+
+  @override
+  String get moonPhaseTitle => 'Fase Bulan';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% Terang';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'Hari ke-$days dari siklus';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'Bulan Baru (Hilal)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Sabit Muda';
+
+  @override
+  String get moonPhaseFirstQuarter => 'Kuartal Pertama';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Cembung Muda';
+
+  @override
+  String get moonPhaseFullMoon => 'Bulan Purnama (Badr)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Cembung Tua';
+
+  @override
+  String get moonPhaseLastQuarter => 'Kuartal Terakhir';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Sabit Tua';
+
+  @override
+  String get whiteDaysSubtitle => 'Hari Puasa Sunnah (13, 14, 15 Hijriyah)';
 }

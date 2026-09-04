@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "Ramadan Fasten",
   "fastingTypeSunnah": "Sunnah Fasten",
   "fastingTypeQadaa": "Nachhol-Fasten (Qadaa)",
-  "whiteDaysTitle": "Weiße Tage (13., 14., 15.)",
+  "whiteDaysTitle": "Weiße Tage (Ayyam al-Beed)",
   "mondayThursdayTitle": "Montag & Donnerstag Sunnah",
   "logFastAction": "Fasten eintragen",
   "totalFastsLogged": "Gesamt gefastete Tage",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "Standardbasis beim Öffnen des Kalenders",
   "showCalendarReminderDotsTitle": "Erinnerungspunkte anzeigen",
   "showCalendarReminderDotsSubtitle": "Punkte auf Tagesfeldern mit Erinnerungen anzeigen",
-  "calendarSettingsSectionTitle": "Kalendereinstellungen"
+  "calendarSettingsSectionTitle": "Kalendereinstellungen",
+  "moonPhaseTitle": "Mondphase",
+  "moonIllumination": "{percent}% Beleuchtet",
+  "moonAgeDays": "Tag {days} des Zyklus",
+  "moonPhaseNewMoon": "Neumond (Hilal)",
+  "moonPhaseWaxingCrescent": "Zunehmender Sichelmond",
+  "moonPhaseFirstQuarter": "Erstes Viertel",
+  "moonPhaseWaxingGibbous": "Zunehmender Dreiviertelmond",
+  "moonPhaseFullMoon": "Vollmond (Badr)",
+  "moonPhaseWaningGibbous": "Abnehmender Dreiviertelmond",
+  "moonPhaseLastQuarter": "Letztes Viertel",
+  "moonPhaseWaningCrescent": "Abnehmender Sichelmond",
+  "whiteDaysSubtitle": "Sunnah-Fasttage (13., 14., 15. Hijri)"
 }

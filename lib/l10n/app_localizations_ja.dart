@@ -820,7 +820,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get fastingTypeQadaa => '補填断食（カダー）';
 
   @override
-  String get whiteDaysTitle => 'Primary White Days (13, 14, 15日)';
+  String get whiteDaysTitle => '白の日々（アイヤーム・アル＝ビード）';
 
   @override
   String get mondayThursdayTitle => '月曜・木曜のスンナ';
@@ -925,4 +925,44 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'カレンダー設定';
+
+  @override
+  String get moonPhaseTitle => '月相';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% 輝度';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return '周期の$days日目';
+  }
+
+  @override
+  String get moonPhaseNewMoon => '新月（ヒラル）';
+
+  @override
+  String get moonPhaseWaxingCrescent => '三日月';
+
+  @override
+  String get moonPhaseFirstQuarter => '上弦の月';
+
+  @override
+  String get moonPhaseWaxingGibbous => '十三夜';
+
+  @override
+  String get moonPhaseFullMoon => '満月（バドル）';
+
+  @override
+  String get moonPhaseWaningGibbous => '寝待月';
+
+  @override
+  String get moonPhaseLastQuarter => '下弦の月';
+
+  @override
+  String get moonPhaseWaningCrescent => '有明月';
+
+  @override
+  String get whiteDaysSubtitle => 'スンナ断食の日々（ヒジュラ暦13, 14, 15日）';
 }

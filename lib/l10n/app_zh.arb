@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "莱麦丹月斋戒",
   "fastingTypeSunnah": "副功斋 (Sunnah)",
   "fastingTypeQadaa": "还补斋 (Qadaa)",
-  "whiteDaysTitle": "白日斋 (希吉来历13, 14, 15日)",
+  "whiteDaysTitle": "白日（Ayyam al-Beed）",
   "mondayThursdayTitle": "周一与周四圣行斋",
   "logFastAction": "记录斋戒",
   "totalFastsLogged": "已记录斋戒总数",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "打开日历时的初始基础视图",
   "showCalendarReminderDotsTitle": "显示提醒指示点",
   "showCalendarReminderDotsSubtitle": "在有提醒的日期显示指示点",
-  "calendarSettingsSectionTitle": "日历设置"
+  "calendarSettingsSectionTitle": "日历设置",
+  "moonPhaseTitle": "月相",
+  "moonIllumination": "{percent}% 照亮",
+  "moonAgeDays": "周期的第 {days} 天",
+  "moonPhaseNewMoon": "新月（新月）",
+  "moonPhaseWaxingCrescent": "峨眉月",
+  "moonPhaseFirstQuarter": "上弦月",
+  "moonPhaseWaxingGibbous": "盈凸月",
+  "moonPhaseFullMoon": "满月（满月）",
+  "moonPhaseWaningGibbous": "亏凸月",
+  "moonPhaseLastQuarter": "下弦月",
+  "moonPhaseWaningCrescent": "残月",
+  "whiteDaysSubtitle": "圣行斋戒日（伊斯兰历13、14、15日）"
 }

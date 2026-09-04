@@ -299,7 +299,7 @@
   "fastingTypeRamadan": "Puasa Ramadhan",
   "fastingTypeSunnah": "Puasa Sunnah",
   "fastingTypeQadaa": "Puasa Qadha",
-  "whiteDaysTitle": "Ayyamul Bidh (13, 14, 15)",
+  "whiteDaysTitle": "Hari-hari Putih (Ayyamul Bidh)",
   "mondayThursdayTitle": "Sunnah Senin & Kamis",
   "logFastAction": "Catat Puasa",
   "totalFastsLogged": "Total Puasa Dicatat",
@@ -331,5 +331,17 @@
   "defaultCalendarDisplaySubtitle": "Basis awal saat membuka kalender",
   "showCalendarReminderDotsTitle": "Tampilkan Titik Pengingat",
   "showCalendarReminderDotsSubtitle": "Tampilkan titik pada sel hari dengan pengingat terjadwal",
-  "calendarSettingsSectionTitle": "Pengaturan Kalender"
+  "calendarSettingsSectionTitle": "Pengaturan Kalender",
+  "moonPhaseTitle": "Fase Bulan",
+  "moonIllumination": "{percent}% Terang",
+  "moonAgeDays": "Hari ke-{days} dari siklus",
+  "moonPhaseNewMoon": "Bulan Baru (Hilal)",
+  "moonPhaseWaxingCrescent": "Sabit Muda",
+  "moonPhaseFirstQuarter": "Kuartal Pertama",
+  "moonPhaseWaxingGibbous": "Cembung Muda",
+  "moonPhaseFullMoon": "Bulan Purnama (Badr)",
+  "moonPhaseWaningGibbous": "Cembung Tua",
+  "moonPhaseLastQuarter": "Kuartal Terakhir",
+  "moonPhaseWaningCrescent": "Sabit Tua",
+  "whiteDaysSubtitle": "Hari Puasa Sunnah (13, 14, 15 Hijriyah)"
 }

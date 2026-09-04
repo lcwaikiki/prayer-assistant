@@ -819,7 +819,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fastingTypeQadaa => '还补斋 (Qadaa)';
 
   @override
-  String get whiteDaysTitle => '白日斋 (希吉来历13, 14, 15日)';
+  String get whiteDaysTitle => '白日（Ayyam al-Beed）';
 
   @override
   String get mondayThursdayTitle => '周一与周四圣行斋';
@@ -924,4 +924,44 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => '日历设置';
+
+  @override
+  String get moonPhaseTitle => '月相';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% 照亮';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return '周期的第 $days 天';
+  }
+
+  @override
+  String get moonPhaseNewMoon => '新月（新月）';
+
+  @override
+  String get moonPhaseWaxingCrescent => '峨眉月';
+
+  @override
+  String get moonPhaseFirstQuarter => '上弦月';
+
+  @override
+  String get moonPhaseWaxingGibbous => '盈凸月';
+
+  @override
+  String get moonPhaseFullMoon => '满月（满月）';
+
+  @override
+  String get moonPhaseWaningGibbous => '亏凸月';
+
+  @override
+  String get moonPhaseLastQuarter => '下弦月';
+
+  @override
+  String get moonPhaseWaningCrescent => '残月';
+
+  @override
+  String get whiteDaysSubtitle => '圣行斋戒日（伊斯兰历13、14、15日）';
 }

@@ -835,7 +835,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fastingTypeQadaa => 'صيام قضاء';
 
   @override
-  String get whiteDaysTitle => 'الأيام البيض (13، 14، 15)';
+  String get whiteDaysTitle => 'الأيام البيض';
 
   @override
   String get mondayThursdayTitle => 'سنة الإثنين والخميس';
@@ -945,4 +945,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'إعدادات التقويم';
+
+  @override
+  String get moonPhaseTitle => 'أطوار القمر';
+
+  @override
+  String moonIllumination(int percent) {
+    return '%$percent مضاء';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'اليوم $days من الدورة';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'محاق (هلال)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'هلال متزايد';
+
+  @override
+  String get moonPhaseFirstQuarter => 'التربيع الأول';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'أحدب متزايد';
+
+  @override
+  String get moonPhaseFullMoon => 'بدر';
+
+  @override
+  String get moonPhaseWaningGibbous => 'أحدب متناقص';
+
+  @override
+  String get moonPhaseLastQuarter => 'التربيع الأخير';
+
+  @override
+  String get moonPhaseWaningCrescent => 'هلال متناقص';
+
+  @override
+  String get whiteDaysSubtitle => 'أيام صيام السنة (13، 14، 15 هجري)';
 }

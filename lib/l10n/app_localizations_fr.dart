@@ -844,7 +844,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get fastingTypeQadaa => 'Jeûne de Rattrapage (Qadaa)';
 
   @override
-  String get whiteDaysTitle => 'Jours Blancs (13e, 14e, 15e)';
+  String get whiteDaysTitle => 'Jours Blancs (Ayyam al-Beed)';
 
   @override
   String get mondayThursdayTitle => 'Sunnah Lundi & Jeudi';
@@ -957,4 +957,45 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Paramètres du calendrier';
+
+  @override
+  String get moonPhaseTitle => 'Phase de la lune';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% Illuminé';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'Jour $days du cycle';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'Nouvelle lune (Hilal)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Premier croissant';
+
+  @override
+  String get moonPhaseFirstQuarter => 'Premier quartier';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Lune gibbeuse croissante';
+
+  @override
+  String get moonPhaseFullMoon => 'Pleine lune (Badr)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Lune gibbeuse décroissante';
+
+  @override
+  String get moonPhaseLastQuarter => 'Dernier quartier';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Dernier croissant';
+
+  @override
+  String get whiteDaysSubtitle =>
+      'Jours de jeûne de la Sunna (13, 14, 15 Hégire)';
 }

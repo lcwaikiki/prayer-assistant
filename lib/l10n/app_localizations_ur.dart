@@ -840,7 +840,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get fastingTypeQadaa => 'قضا روزہ';
 
   @override
-  String get whiteDaysTitle => 'ایام بیض (13، 14، 15)';
+  String get whiteDaysTitle => 'ایام بیض';
 
   @override
   String get mondayThursdayTitle => 'پیر اور جمعرات کی سنت';
@@ -948,4 +948,44 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'کیلنڈر کی ترتیبات';
+
+  @override
+  String get moonPhaseTitle => 'قمری صورتیں';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent% روشن';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'سائیکل کا $days واں دن';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'نیا چاند (ہلال)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'بڑھتا ہوا ہلال';
+
+  @override
+  String get moonPhaseFirstQuarter => 'پہلا چوتھائی';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'بڑھتا ہوا محدب چاند';
+
+  @override
+  String get moonPhaseFullMoon => 'پورا چاند (بدر)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'گھٹتا ہوا محدب چاند';
+
+  @override
+  String get moonPhaseLastQuarter => 'آخری چوتھائی';
+
+  @override
+  String get moonPhaseWaningCrescent => 'گھٹتا ہوا ہلال';
+
+  @override
+  String get whiteDaysSubtitle => 'سنت روزوں کے دن (13، 14، 15 ہجری)';
 }

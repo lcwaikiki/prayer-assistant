@@ -838,7 +838,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get fastingTypeQadaa => 'روزه قضا';
 
   @override
-  String get whiteDaysTitle => 'ایام البيض (۱۳، ۱۴، ۱۵)';
+  String get whiteDaysTitle => 'ایام البیض';
 
   @override
   String get mondayThursdayTitle => 'سنت دوشنبه و پنج‌شنبه';
@@ -948,4 +948,44 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'تنظیمات تقویم';
+
+  @override
+  String get moonPhaseTitle => 'حالت‌های ماه';
+
+  @override
+  String moonIllumination(int percent) {
+    return '$percent٪ روشن';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'روز $days از چرخه';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'ماه نو (هلال)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'هلال فزون‌يابی';
+
+  @override
+  String get moonPhaseFirstQuarter => 'تربیع اول';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'تثلیث فزون‌يابی';
+
+  @override
+  String get moonPhaseFullMoon => 'ماه کامل (بدر)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'تثلیث کاست‌يابی';
+
+  @override
+  String get moonPhaseLastQuarter => 'تربیع آخر';
+
+  @override
+  String get moonPhaseWaningCrescent => 'هلال کاست‌يابی';
+
+  @override
+  String get whiteDaysSubtitle => 'روزهای روزه سنت (۱۳، ۱۴، ۱۵ هجری)';
 }

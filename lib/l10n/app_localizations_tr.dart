@@ -842,7 +842,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get fastingTypeQadaa => 'Kaza Orucu';
 
   @override
-  String get whiteDaysTitle => 'Eyyam-ı Biyd (13, 14, 15)';
+  String get whiteDaysTitle => 'Eyyam-ı Biyd (Aydınlık Günler)';
 
   @override
   String get mondayThursdayTitle => 'Pazartesi ve Perşembe Sünneti';
@@ -952,4 +952,44 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get calendarSettingsSectionTitle => 'Takvim Ayarları';
+
+  @override
+  String get moonPhaseTitle => 'Ay Evresi';
+
+  @override
+  String moonIllumination(int percent) {
+    return '%$percent Aydınlık';
+  }
+
+  @override
+  String moonAgeDays(String days) {
+    return 'Döngünün $days. günü';
+  }
+
+  @override
+  String get moonPhaseNewMoon => 'Yeni Ay (Hilal)';
+
+  @override
+  String get moonPhaseWaxingCrescent => 'Büyüyen Hilal';
+
+  @override
+  String get moonPhaseFirstQuarter => 'İlk Dördün';
+
+  @override
+  String get moonPhaseWaxingGibbous => 'Büyüyen Şişkin Ay';
+
+  @override
+  String get moonPhaseFullMoon => 'Dolunay (Bedir)';
+
+  @override
+  String get moonPhaseWaningGibbous => 'Küçülen Şişkin Ay';
+
+  @override
+  String get moonPhaseLastQuarter => 'Son Dördün';
+
+  @override
+  String get moonPhaseWaningCrescent => 'Küçülen Hilal';
+
+  @override
+  String get whiteDaysSubtitle => 'Sünnet Oruç Günleri (13, 14, 15 Hicri)';
 }

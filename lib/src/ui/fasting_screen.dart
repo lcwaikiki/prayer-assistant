@@ -10,6 +10,7 @@ import '../models/calendar_week_start.dart';
 import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
+import 'widgets/moon_phase_widget.dart';
 
 String _shortHijriMonth(DateTime date, String languageCode) {
   final month = HijriMonth.fromDate(date);
@@ -216,6 +217,15 @@ class _FastingScreenState extends State<FastingScreen> {
                 const Padding(
                   padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
                   child: IftarSuhoorCountdownCard(),
+                ),
+
+                // Moon Phase & White Days Card
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: MoonPhaseCard(
+                    date: today,
+                    hijriOffset: controller.hijriDateOffset,
+                  ),
                 ),
 
 

@@ -332,7 +332,7 @@ class PrayerAppController extends ChangeNotifier {
   Future<void> initialize() async {
     _setLoading(true);
     try {
-      widgetBridgeService.registerOpenHomeHandler(() => setTab(1));
+      widgetBridgeService.registerOpenHomeHandler(() => setTab(2));
       await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();

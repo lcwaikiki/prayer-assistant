@@ -218,6 +218,24 @@ void main() {
       verify(() => widgetBridge.updateWidgetTextSize('medium')).called(1);
     });
 
+    test('registers widget open handler to switch to today tab (index 2)', () async {
+      VoidCallback? capturedCallback;
+      when(() => widgetBridge.registerOpenHomeHandler(any())).thenAnswer((invocation) {
+        capturedCallback = invocation.positionalArguments.first as VoidCallback;
+      });
+
+      final controller = buildController();
+      await controller.initialize();
+
+      controller.setTab(0);
+      expect(controller.tabIndex, 0);
+
+      expect(capturedCallback, isNotNull);
+      capturedCallback!();
+
+      expect(controller.tabIndex, 2);
+    });
+
     test('restores a saved location and refreshes prayer data', () async {
       final location = sampleSelectedLocation();
       when(() => database.loadSelectedLocation()).thenAnswer(

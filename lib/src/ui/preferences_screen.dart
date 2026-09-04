@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 
@@ -12,6 +13,7 @@ import '../controller/prayer_app_controller.dart';
 import '../kaza/screens/kaza_tracker_screen.dart';
 import '../l10n/l10n.dart';
 import '../l10n/locale_options.dart';
+import '../models/calendar_week_start.dart';
 import '../models/prayer_models.dart';
 import 'location_screen.dart';
 
@@ -248,6 +250,31 @@ class PreferencesScreen extends StatelessWidget {
                     ),
                     onChanged: (value) =>
                         controller.updateWidgetMmssThreshold(value.round()),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.calendarWeekStartTitle,
+                subtitle: controller.calendarWeekStart == CalendarWeekStart.sunday
+                    ? context.l10n.calendarWeekStartSunday
+                    : context.l10n.calendarWeekStartMonday,
+                children: [
+                  SegmentedButton<CalendarWeekStart>(
+                    key: const Key('calendar_week_start_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: CalendarWeekStart.sunday,
+                        label: Text(context.l10n.calendarWeekStartSunday),
+                      ),
+                      ButtonSegment(
+                        value: CalendarWeekStart.monday,
+                        label: Text(context.l10n.calendarWeekStartMonday),
+                      ),
+                    ],
+                    selected: {controller.calendarWeekStart},
+                    onSelectionChanged: (selection) =>
+                        controller.updateCalendarWeekStart(selection.first),
                   ),
                 ],
               ),

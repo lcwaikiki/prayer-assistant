@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
+import 'package:prayer_assistant/src/models/calendar_week_start.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
@@ -531,5 +532,36 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+    'calendar headers respect calendarWeekStart setting when configured to Monday',
+    (tester) async {
+      final harness = TestHarness.create();
+      when(
+        () => harness.database.loadCalendarWeekStart(),
+      ).thenAnswer((_) async => CalendarWeekStart.monday);
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      // Verify that weekday labels appear in Monday-first order
+      final headerRow = tester.widget<Row>(
+        find.widgetWithText(Row, 'Mon'),
+      );
+      final textWidgets = headerRow.children
+          .map((widget) => (widget as Expanded).child as Center)
+          .map((center) => center.child as Text)
+          .map((text) => text.data)
+          .toList();
+
+      expect(textWidgets, equals(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']));
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }
 

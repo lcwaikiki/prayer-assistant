@@ -307,5 +307,8 @@
   "iftarWithTime": "Iftar ({time})",
   "upcomingSunnahDays": "Kommende Sunnah-Tage",
   "fastingCalendarLogger": "Fastenkalender-Protokoll",
-  "removeFastLog": "Fasteneintrag entfernen"
+  "removeFastLog": "Fasteneintrag entfernen",
+  "calendarWeekStartTitle": "Kalenderwoche beginnt am",
+  "calendarWeekStartSunday": "Sonntag",
+  "calendarWeekStartMonday": "Montag"
 }

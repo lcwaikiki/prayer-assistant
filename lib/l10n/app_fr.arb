@@ -307,5 +307,8 @@
   "iftarWithTime": "Iftar ({time})",
   "upcomingSunnahDays": "Jours de Sunnah à venir",
   "fastingCalendarLogger": "Journal du calendrier de jeûne",
-  "removeFastLog": "Supprimer le journal de jeûne"
+  "removeFastLog": "Supprimer le suivi du jeûne",
+  "calendarWeekStartTitle": "La semaine commence le",
+  "calendarWeekStartSunday": "Dimanche",
+  "calendarWeekStartMonday": "Lundi"
 }

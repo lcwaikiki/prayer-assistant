@@ -307,5 +307,8 @@
   "iftarWithTime": "افطار ({time})",
   "upcomingSunnahDays": "آنے والے سنت کے ایام",
   "fastingCalendarLogger": "روزه کیلنڈر لاگ",
-  "removeFastLog": "روزه لاگ منسوخ کریں"
+  "removeFastLog": "روزہ کا اندراج ہٹائیں",
+  "calendarWeekStartTitle": "تقویم کا ہفتہ شروع ہوتا ہے",
+  "calendarWeekStartSunday": "اتوار",
+  "calendarWeekStartMonday": "پیر"
 }

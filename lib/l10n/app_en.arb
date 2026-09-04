@@ -393,5 +393,8 @@
   },
   "upcomingSunnahDays": "Upcoming Sunnah Days",
   "fastingCalendarLogger": "Fasting Calendar Logger",
-  "removeFastLog": "Remove Fast Log"
+  "removeFastLog": "Remove Fast Log",
+  "calendarWeekStartTitle": "Calendar Week Starts On",
+  "calendarWeekStartSunday": "Sunday",
+  "calendarWeekStartMonday": "Monday"
 }

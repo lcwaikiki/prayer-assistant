@@ -307,5 +307,8 @@
   "iftarWithTime": "Iftar ({time})",
   "upcomingSunnahDays": "Hari Sunnah Mendatang",
   "fastingCalendarLogger": "Pencatat Kalender Puasa",
-  "removeFastLog": "Hapus Log Puasa"
+  "removeFastLog": "Hapus Log Puasa",
+  "calendarWeekStartTitle": "Awal Minggu Kalender",
+  "calendarWeekStartSunday": "Minggu",
+  "calendarWeekStartMonday": "Senin"
 }

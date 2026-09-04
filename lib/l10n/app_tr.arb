@@ -307,5 +307,8 @@
   "iftarWithTime": "İftar ({time})",
   "upcomingSunnahDays": "Yaklaşan Sünnet Günleri",
   "fastingCalendarLogger": "Oruç Takvimi Kaydı",
-  "removeFastLog": "Oruç Kaydını Sil"
+  "removeFastLog": "Oruç Kaydını Sil",
+  "calendarWeekStartTitle": "Hafta Başlangıcı",
+  "calendarWeekStartSunday": "Pazar",
+  "calendarWeekStartMonday": "Pazartesi"
 }

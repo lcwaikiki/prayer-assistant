@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../calendar/models/calendar_reminder.dart';
 import '../kaza/models/kaza_tracker.dart';
+import '../models/calendar_week_start.dart';
 import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 
@@ -22,6 +23,7 @@ class LocalDatabase {
   static const _localePreferenceKey = 'locale_preference';
   static const _calendarPrimaryDisplayKey = 'calendar_primary_display';
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
+  static const _calendarWeekStartKey = 'calendar_week_start';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
@@ -494,6 +496,29 @@ class LocalDatabase {
       return null;
     }
     return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveCalendarWeekStart(CalendarWeekStart weekStart) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _calendarWeekStartKey,
+      'setting_value': weekStart.name,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<CalendarWeekStart?> loadCalendarWeekStart() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_calendarWeekStartKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    final raw = rows.first['setting_value'] as String?;
+    return raw != null ? CalendarWeekStart.fromName(raw) : null;
   }
 
   Future<List<CalendarReminder>> loadCalendarReminders() async {

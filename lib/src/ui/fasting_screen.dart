@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../calendar/hijri_utils.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
+import '../models/calendar_week_start.dart';
 import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
@@ -170,8 +171,9 @@ class _FastingScreenState extends State<FastingScreen> {
       builder: (context, controller, _) {
         final primary = controller.calendarPrimaryDisplay;
         final showSecondary = controller.showSecondaryCalendarDate;
+        final weekStart = controller.calendarWeekStart;
         final monthDays = _monthDays(primary);
-        final leadingBlanks = monthDays.first.weekday % 7;
+        final int leadingBlanks = weekStart.leadingBlanks(monthDays.first);
         final today = DateTime.now();
         final locale = Localizations.localeOf(context).toString();
         final fastingLogs = controller.fastingLogs;
@@ -458,7 +460,7 @@ class _FastingScreenState extends State<FastingScreen> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          _WeekdayHeaderRow(locale: locale),
+                          _WeekdayHeaderRow(locale: locale, weekStart: weekStart),
                           const SizedBox(height: 8),
                           GridView.builder(
                             shrinkWrap: true,
@@ -572,15 +574,17 @@ class _StatCard extends StatelessWidget {
 }
 
 class _WeekdayHeaderRow extends StatelessWidget {
-  const _WeekdayHeaderRow({required this.locale});
+  const _WeekdayHeaderRow({required this.locale, required this.weekStart});
 
   final String locale;
+  final CalendarWeekStart weekStart;
 
   @override
   Widget build(BuildContext context) {
+    final startOffset = weekStart == CalendarWeekStart.sunday ? 7 : 8;
     final labels = List.generate(
       7,
-      (i) => DateFormat.E(locale).format(DateTime(2024, 1, 7 + i)),
+      (i) => DateFormat.E(locale).format(DateTime(2024, 1, startOffset + i)),
     );
     final style = Theme.of(context).textTheme.labelMedium;
     return Row(

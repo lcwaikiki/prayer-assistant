@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
 import '../../l10n/prayer_names.dart';
+import '../../models/calendar_week_start.dart';
 import '../../models/prayer_models.dart';
 
 import '../../utils/time_utils.dart';
@@ -176,8 +177,9 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
       builder: (context, controller, _) {
         final primary = controller.calendarPrimaryDisplay;
         final showSecondary = controller.showSecondaryCalendarDate;
+        final weekStart = controller.calendarWeekStart;
         final monthDays = _monthDays(primary);
-        final leadingBlanks = monthDays.first.weekday % 7;
+        final int leadingBlanks = weekStart.leadingBlanks(monthDays.first);
         final today = DateTime.now();
         final locale = Localizations.localeOf(context).toString();
 
@@ -282,7 +284,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
             Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 560),
-                child: _WeekdayHeaderRow(locale: locale),
+                child: _WeekdayHeaderRow(locale: locale, weekStart: weekStart),
               ),
             ),
             Expanded(
@@ -360,17 +362,17 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
 }
 
 class _WeekdayHeaderRow extends StatelessWidget {
-  const _WeekdayHeaderRow({required this.locale});
+  const _WeekdayHeaderRow({required this.locale, required this.weekStart});
 
   final String locale;
+  final CalendarWeekStart weekStart;
 
   @override
   Widget build(BuildContext context) {
-    // 2024-01-07 was a Sunday; used purely to derive locale-correct short
-    // weekday labels in Sunday-first order.
+    final startOffset = weekStart == CalendarWeekStart.sunday ? 7 : 8;
     final labels = List.generate(
       7,
-      (i) => DateFormat.E(locale).format(DateTime(2024, 1, 7 + i)),
+      (i) => DateFormat.E(locale).format(DateTime(2024, 1, startOffset + i)),
     );
     final style = Theme.of(context).textTheme.labelMedium;
     return Padding(

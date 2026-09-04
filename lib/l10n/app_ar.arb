@@ -307,5 +307,8 @@
   "iftarWithTime": "الإفطار ({time})",
   "upcomingSunnahDays": "أيام السنة القادمة",
   "fastingCalendarLogger": "سجل تقويم الصيام",
-  "removeFastLog": "إزالة سجل الصيام"
+  "removeFastLog": "إزالة سجل الصيام",
+  "calendarWeekStartTitle": "بداية الأسبوع في التقويم",
+  "calendarWeekStartSunday": "الأحد",
+  "calendarWeekStartMonday": "الإثنين"
 }

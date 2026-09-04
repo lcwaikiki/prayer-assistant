@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import 'package:prayer_assistant/src/kaza/models/kaza_tracker.dart';
+import 'package:prayer_assistant/src/models/calendar_week_start.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 
@@ -43,6 +44,7 @@ class TestHarness {
     final calendarReminderService = MockCalendarReminderService();
     final itemReminderService = MockItemReminderService();
 
+    registerFallbackValue(CalendarWeekStart.sunday);
     registerFallbackValue(
       CalendarReminder(id: 'f', title: 'f', anchorAt: DateTime(2026)),
     );
@@ -155,6 +157,9 @@ class TestHarness {
       () => database.loadShowSecondaryCalendarDate(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadCalendarWeekStart(),
+    ).thenAnswer((_) async => null);
+    when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});
     when(
@@ -227,6 +232,9 @@ class TestHarness {
     ).thenAnswer((_) async {});
     when(
       () => database.saveShowSecondaryCalendarDate(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveCalendarWeekStart(any()),
     ).thenAnswer((_) async {});
     when(() => database.saveCalendarReminder(any())).thenAnswer((_) async {});
     when(() => database.deleteCalendarReminder(any())).thenAnswer((_) async {});

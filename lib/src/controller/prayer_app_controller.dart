@@ -11,6 +11,7 @@ import '../kaza/models/kaza_tracker.dart';
 import '../../l10n/app_localizations.dart';
 import '../l10n/locale_options.dart';
 import '../l10n/prayer_names.dart';
+import '../models/calendar_week_start.dart';
 import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 
@@ -72,6 +73,7 @@ class PrayerAppController extends ChangeNotifier {
   List<CalendarReminder> _calendarReminders = const <CalendarReminder>[];
   CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
   bool _showSecondaryCalendarDate = true;
+  CalendarWeekStart _calendarWeekStart = CalendarWeekStart.monday;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
@@ -143,6 +145,13 @@ class PrayerAppController extends ChangeNotifier {
   List<CalendarReminder> get calendarReminders => _calendarReminders;
   CalendarPrimaryDisplay get calendarPrimaryDisplay => _calendarPrimaryDisplay;
   bool get showSecondaryCalendarDate => _showSecondaryCalendarDate;
+  CalendarWeekStart get calendarWeekStart => _calendarWeekStart;
+
+  void updateCalendarWeekStart(CalendarWeekStart weekStart) {
+    _calendarWeekStart = weekStart;
+    database.saveCalendarWeekStart(weekStart);
+    notifyListeners();
+  }
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
   KazaTracker get kazaTracker => _kazaTracker;
@@ -410,6 +419,8 @@ class PrayerAppController extends ChangeNotifier {
       _calendarPrimaryDisplay = calendarPrimaryDisplay;
       _showSecondaryCalendarDate =
           await database.loadShowSecondaryCalendarDate() ?? true;
+      _calendarWeekStart =
+          await database.loadCalendarWeekStart() ?? CalendarWeekStart.monday;
       _calendarReminders = await database.loadCalendarReminders();
       for (final reminder in _calendarReminders) {
         if (reminder.enabled) {

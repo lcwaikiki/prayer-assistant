@@ -307,5 +307,8 @@
   "iftarWithTime": "イフタール ({time})",
   "upcomingSunnahDays": "今後のスンナの日",
   "fastingCalendarLogger": "断食カレンダーログ",
-  "removeFastLog": "断食ログを削除"
+  "removeFastLog": "断食記録を削除",
+  "calendarWeekStartTitle": "週の開始日",
+  "calendarWeekStartSunday": "日曜日",
+  "calendarWeekStartMonday": "月曜日"
 }

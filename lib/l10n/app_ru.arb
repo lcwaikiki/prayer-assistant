@@ -362,5 +362,8 @@
   "iftarWithTime": "Ифтар ({time})",
   "upcomingSunnahDays": "Предстоящие дни сунны",
   "fastingCalendarLogger": "Календарь учета поста",
-  "removeFastLog": "Удалить запись о посте"
+  "removeFastLog": "Удалить запись поста",
+  "calendarWeekStartTitle": "Начало недели в календаре",
+  "calendarWeekStartSunday": "Воскресенье",
+  "calendarWeekStartMonday": "Понедельник"
 }

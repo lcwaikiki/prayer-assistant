@@ -621,6 +621,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get datesCalendarTab => 'Calendario';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'Deshacer';
 
   @override

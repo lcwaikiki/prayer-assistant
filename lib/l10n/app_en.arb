@@ -255,6 +255,7 @@
   "calendarPickAnchorDate": "Pick date",
   "datesPrayerTimesTab": "Prayer Times",
   "datesCalendarTab": "Calendar",
+  "datesMoonPhaseTab": "Moon Phase",
   "undo": "Undo",
   "calendarReminderDeleted": "\"{title}\" deleted",
   "@calendarReminderDeleted": {

@@ -1246,6 +1246,12 @@ abstract class AppLocalizations {
   /// **'Calendar'**
   String get datesCalendarTab;
 
+  /// No description provided for @datesMoonPhaseTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon Phase'**
+  String get datesMoonPhaseTab;
+
   /// No description provided for @undo.
   ///
   /// In en, this message translates to:

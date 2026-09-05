@@ -621,6 +621,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get datesCalendarTab => 'Календарь';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'Отменить';
 
   @override

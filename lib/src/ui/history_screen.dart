@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
+import '../calendar/screens/moon_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../l10n/prayer_names.dart';
@@ -44,7 +45,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController = TabController(
-    length: 2,
+    length: 3,
     vsync: this,
   );
 
@@ -76,7 +77,9 @@ class _HistoryScreenState extends State<HistoryScreen>
     }
     _syncingHorizontal = true;
 
-    if (source != 'header' && _headerHorizontalController.hasClients) {
+    if (source != 'header' &&
+        _headerHorizontalController.hasClients &&
+        (_headerHorizontalController.offset - offset).abs() > 0.1) {
       final max = _headerHorizontalController.position.maxScrollExtent;
       _headerHorizontalController.jumpTo(offset.clamp(0.0, max));
     }
@@ -85,8 +88,10 @@ class _HistoryScreenState extends State<HistoryScreen>
       if (source == entry.key || !entry.value.hasClients) {
         continue;
       }
-      final max = entry.value.position.maxScrollExtent;
-      entry.value.jumpTo(offset.clamp(0.0, max));
+      if ((entry.value.offset - offset).abs() > 0.1) {
+        final max = entry.value.position.maxScrollExtent;
+        entry.value.jumpTo(offset.clamp(0.0, max));
+      }
     }
 
     _syncingHorizontal = false;
@@ -104,49 +109,21 @@ class _HistoryScreenState extends State<HistoryScreen>
       }
       final estimatedTop = _monthTopOffsets[monthKey];
       if (estimatedTop != null && _verticalController.hasClients) {
+        final maxScroll = _verticalController.position.maxScrollExtent;
         _verticalController.jumpTo(
-          estimatedTop + (today.day - 1) * _dayRowHeight,
+          (estimatedTop + (today.day - 1) * _dayRowHeight).clamp(0.0, maxScroll),
         );
-      }
-      _refineScrollToToday(monthKey, attempts: 12);
-    });
-  }
-
-  void _refineScrollToToday(String monthKey, {required int attempts}) {
-    if (attempts <= 0) {
-      return;
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
         return;
       }
       final targetContext = _todayRowKey.currentContext;
       if (targetContext != null) {
-        Scrollable.ensureVisible(
-          targetContext,
-          duration: const Duration(milliseconds: 450),
-          curve: Curves.easeOutCubic,
-          alignment: 0.18,
-        );
+        Scrollable.ensureVisible(targetContext, alignment: 0.18);
         return;
       }
       final fallbackContext = _monthKeys[monthKey]?.currentContext;
       if (fallbackContext != null) {
-        Scrollable.ensureVisible(
-          fallbackContext,
-          duration: const Duration(milliseconds: 450),
-          curve: Curves.easeOutCubic,
-          alignment: 0.08,
-        );
-        return;
+        Scrollable.ensureVisible(fallbackContext, alignment: 0.08);
       }
-      if (_verticalController.hasClients) {
-        final position = _verticalController.position;
-        _verticalController.jumpTo(
-          position.pixels + position.viewportDimension,
-        );
-      }
-      _refineScrollToToday(monthKey, attempts: attempts - 1);
     });
   }
 
@@ -156,7 +133,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       builder: (context, controller, _) {
         if (_lastTabIndex != controller.tabIndex) {
           _lastTabIndex = controller.tabIndex;
-          if (controller.tabIndex == 2) {
+          if (controller.tabIndex == 3) {
             _scheduleScrollToToday(
               controller.yearRange,
               locale: Localizations.localeOf(context).toString(),
@@ -177,6 +154,10 @@ class _HistoryScreenState extends State<HistoryScreen>
                   text: context.l10n.datesCalendarTab,
                   icon: const Icon(Icons.calendar_month),
                 ),
+                Tab(
+                  text: context.l10n.datesMoonPhaseTab,
+                  icon: const Icon(Icons.brightness_3),
+                ),
               ],
             ),
             Expanded(
@@ -185,6 +166,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                 children: [
                   _KeepAlive(child: _buildPrayerTimesTab(context, controller)),
                   const _KeepAlive(child: HijriCalendarView()),
+                  const _KeepAlive(child: MoonCalendarView()),
                 ],
               ),
             ),
@@ -246,10 +228,12 @@ class _HistoryScreenState extends State<HistoryScreen>
                 clipBehavior: Clip.antiAlias,
                   child: NotificationListener<ScrollUpdateNotification>(
                     onNotification: (notification) {
-                      _syncHorizontalTo(
-                        notification.metrics.pixels,
-                        source: 'header',
-                      );
+                      if (notification.dragDetails != null) {
+                        _syncHorizontalTo(
+                          notification.metrics.pixels,
+                          source: 'header',
+                        );
+                      }
                       return false;
                     },
                     child: LayoutBuilder(
@@ -400,7 +384,9 @@ class _MonthTable extends StatelessWidget {
             ),
             NotificationListener<ScrollUpdateNotification>(
               onNotification: (notification) {
-                onHorizontalScroll(notification.metrics.pixels);
+                if (notification.dragDetails != null) {
+                  onHorizontalScroll(notification.metrics.pixels);
+                }
                 return false;
               },
               child: LayoutBuilder(

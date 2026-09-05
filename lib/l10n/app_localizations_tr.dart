@@ -619,6 +619,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get datesCalendarTab => 'Takvim';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'Geri Al';
 
   @override

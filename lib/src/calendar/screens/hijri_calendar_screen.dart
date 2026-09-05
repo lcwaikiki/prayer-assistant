@@ -16,6 +16,7 @@ import '../models/calendar_reminder.dart';
 import '../../ui/widgets/moon_phase_widget.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
+import 'moon_calendar_screen.dart';
 
 String _goToDateTooltip(String languageCode) {
   return switch (languageCode.toLowerCase()) {
@@ -168,7 +169,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
       isScrollControlled: true,
       useSafeArea: true,
       builder: (sheetContext) =>
-          _DayDetailSheet(date: date, primary: primary),
+          DayDetailSheet(date: date, primary: primary),
     );
 
   }
@@ -509,17 +510,17 @@ class _DayCell extends StatelessWidget {
   }
 }
 
-class _DayDetailSheet extends StatefulWidget {
-  const _DayDetailSheet({required this.date, required this.primary});
+class DayDetailSheet extends StatefulWidget {
+  const DayDetailSheet({super.key, required this.date, required this.primary});
 
   final DateTime date;
   final CalendarPrimaryDisplay primary;
 
   @override
-  State<_DayDetailSheet> createState() => _DayDetailSheetState();
+  State<DayDetailSheet> createState() => _DayDetailSheetState();
 }
 
-class _DayDetailSheetState extends State<_DayDetailSheet> {
+class _DayDetailSheetState extends State<DayDetailSheet> {
   late DateTime _date = widget.date;
 
   void _shiftDay(int delta) {

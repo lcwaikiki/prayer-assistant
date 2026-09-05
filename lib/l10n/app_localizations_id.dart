@@ -619,6 +619,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get datesCalendarTab => 'Kalender';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'Batalkan';
 
   @override

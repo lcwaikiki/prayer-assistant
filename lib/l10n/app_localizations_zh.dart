@@ -601,6 +601,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get datesCalendarTab => '日历';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => '撤销';
 
   @override

@@ -11,6 +11,7 @@ import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
 import 'widgets/moon_phase_widget.dart';
+import '../calendar/screens/moon_calendar_screen.dart';
 
 String _shortHijriMonth(DateTime date, String languageCode) {
   final month = HijriMonth.fromDate(date);
@@ -225,6 +226,13 @@ class _FastingScreenState extends State<FastingScreen> {
                   child: MoonPhaseCard(
                     date: today,
                     hijriOffset: controller.hijriDateOffset,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => MoonCalendarScreen(initialDate: today),
+                        ),
+                      );
+                    },
                   ),
                 ),
 

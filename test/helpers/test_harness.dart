@@ -373,5 +373,8 @@ Future<void> pumpWithHarness(
       child: testLocalizedApp(child: child, locale: locale),
     ),
   );
-  await pumpLocalized(tester, app, settle: settle);
+  await tester.pumpWidget(app);
+  if (settle) {
+    await tester.pumpAndSettle();
+  }
 }

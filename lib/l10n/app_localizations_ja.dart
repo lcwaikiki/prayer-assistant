@@ -601,6 +601,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get datesCalendarTab => 'カレンダー';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => '元に戻す';
 
   @override

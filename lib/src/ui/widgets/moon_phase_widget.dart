@@ -273,6 +273,14 @@ class MoonPhaseCard extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (onTap != null) ...[
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                    ),
+                  ],
                 ],
               ),
 

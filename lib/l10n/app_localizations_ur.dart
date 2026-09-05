@@ -618,6 +618,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get datesCalendarTab => 'کیلنڈر';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'واپس لائیں';
 
   @override

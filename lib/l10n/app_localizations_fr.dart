@@ -621,6 +621,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get datesCalendarTab => 'Calendrier';
 
   @override
+  String get datesMoonPhaseTab => 'Moon Phase';
+
+  @override
   String get undo => 'Annuler';
 
   @override

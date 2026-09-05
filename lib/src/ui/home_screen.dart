@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import '../calendar/models/calendar_reminder.dart';
 import '../calendar/hijri_utils.dart';
 import '../calendar/screens/hijri_calendar_screen.dart';
+import '../calendar/screens/moon_calendar_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../l10n/prayer_names.dart';
@@ -279,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute<void>(
-                                builder: (_) => const HijriCalendarScreen(),
+                                builder: (_) => MoonCalendarScreen(initialDate: day.date),
                               ),
                             );
                           },

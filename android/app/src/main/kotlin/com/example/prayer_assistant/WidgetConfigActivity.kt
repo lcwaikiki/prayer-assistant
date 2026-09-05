@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -25,9 +26,9 @@ class WidgetConfigActivity : Activity() {
         val themeDark: String,
         val themeTransparent: String,
         val calendarDisplayHeader: String,
-        val calendarDisplayBoth: String,
         val calendarDisplayHijri: String,
         val calendarDisplayGregorian: String,
+        val showSecondaryCalendar: String,
         val fontSizeHeader: String,
         val previewFormat: String,
         val mmssHeader: String,
@@ -45,9 +46,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Koyu",
             themeTransparent = "Saydam (Cam Görünümü)",
             calendarDisplayHeader = "Takvim Tarih Gösterimi",
-            calendarDisplayBoth = "İkisi de (Hicri ve Miladi)",
-            calendarDisplayHijri = "Yalnızca Hicri",
-            calendarDisplayGregorian = "Yalnızca Miladi",
+            calendarDisplayHijri = "Hicri Takvim",
+            calendarDisplayGregorian = "Miladi Takvim",
+            showSecondaryCalendar = "İkincil takvim tarihini göster",
             fontSizeHeader = "Yazı Boyutu Ayarı",
             previewFormat = "Önizleme %d",
             mmssHeader = "Saniye Geri Sayımı Eşiği",
@@ -63,9 +64,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Dark",
             themeTransparent = "Transparent",
             calendarDisplayHeader = "Calendar Date Display",
-            calendarDisplayBoth = "Both (Hijri & Gregorian)",
-            calendarDisplayHijri = "Hijri only",
-            calendarDisplayGregorian = "Gregorian only",
+            calendarDisplayHijri = "Hijri Calendar",
+            calendarDisplayGregorian = "Gregorian Calendar",
+            showSecondaryCalendar = "Show secondary calendar date",
             fontSizeHeader = "Font Size",
             previewFormat = "Preview %d",
             mmssHeader = "Seconds Countdown Threshold",
@@ -81,9 +82,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "داكن",
             themeTransparent = "شفاف",
             calendarDisplayHeader = "عرض تاريخ التقويم",
-            calendarDisplayBoth = "كلاهما (هجري وميلادي)",
-            calendarDisplayHijri = "هجري فقط",
-            calendarDisplayGregorian = "ميلادي فقط",
+            calendarDisplayHijri = "التقويم الهجري",
+            calendarDisplayGregorian = "التقويم الميلادي",
+            showSecondaryCalendar = "عرض تاريخ التقويم الثانوي",
             fontSizeHeader = "حجم الخط",
             previewFormat = "معاينة %d",
             mmssHeader = "عتبة العد التنازلي",
@@ -99,9 +100,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Oscuro",
             themeTransparent = "Transparente",
             calendarDisplayHeader = "Visualización de fecha",
-            calendarDisplayBoth = "Ambos (Hiyri y Gregoriano)",
-            calendarDisplayHijri = "Solo Hiyri",
-            calendarDisplayGregorian = "Solo Gregoriano",
+            calendarDisplayHijri = "Calendario Hiyri",
+            calendarDisplayGregorian = "Calendario Gregoriano",
+            showSecondaryCalendar = "Mostrar fecha de calendario secundario",
             fontSizeHeader = "Tamaño de fuente",
             previewFormat = "Vista previa %d",
             mmssHeader = "Umbral de cuenta regresiva",
@@ -117,9 +118,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Sombre",
             themeTransparent = "Transparent",
             calendarDisplayHeader = "Affichage de la date",
-            calendarDisplayBoth = "Les deux (Hégirien & Grégorien)",
-            calendarDisplayHijri = "Hégirien seulement",
-            calendarDisplayGregorian = "Grégorien seulement",
+            calendarDisplayHijri = "Calendrier Hégirien",
+            calendarDisplayGregorian = "Calendrier Grégorien",
+            showSecondaryCalendar = "Afficher la date du calendrier secondaire",
             fontSizeHeader = "Taille de police",
             previewFormat = "Aperçu %d",
             mmssHeader = "Seuil du compte à rebours",
@@ -135,9 +136,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Dunkel",
             themeTransparent = "Transparent",
             calendarDisplayHeader = "Kalenderdatumsanzeige",
-            calendarDisplayBoth = "Beide (Hijri & Gregorianisch)",
-            calendarDisplayHijri = "Nur Hijri",
-            calendarDisplayGregorian = "Nur Gregorianisch",
+            calendarDisplayHijri = "Hijri-Kalender",
+            calendarDisplayGregorian = "Gregorianischer Kalender",
+            showSecondaryCalendar = "Sekundäres Kalenderdatum anzeigen",
             fontSizeHeader = "Schriftgröße",
             previewFormat = "Vorschau %d",
             mmssHeader = "Countdown-Schwellenwert",
@@ -153,9 +154,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Тёмная",
             themeTransparent = "Прозрачная",
             calendarDisplayHeader = "Отображение даты в календаре",
-            calendarDisplayBoth = "Оба (Хиджра и Григорианский)",
-            calendarDisplayHijri = "Только Хиджра",
-            calendarDisplayGregorian = "Только Григорианский",
+            calendarDisplayHijri = "Календарь Хиджра",
+            calendarDisplayGregorian = "Григорианский календарь",
+            showSecondaryCalendar = "Показывать дату второго календаря",
             fontSizeHeader = "Размер шрифта",
             previewFormat = "Предпросмотр %d",
             mmssHeader = "Порог обратного отсчета",
@@ -171,9 +172,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "تاریک",
             themeTransparent = "شفاف",
             calendarDisplayHeader = "نمایش تاریخ تقویم",
-            calendarDisplayBoth = "هر دو (هجری و میلادی)",
-            calendarDisplayHijri = "فقط هجری",
-            calendarDisplayGregorian = "فقط میلادی",
+            calendarDisplayHijri = "تقویم هجری",
+            calendarDisplayGregorian = "تقویم میلادی",
+            showSecondaryCalendar = "نمایش تاریخ تقویم دوم",
             fontSizeHeader = "اندازه قلم",
             previewFormat = "پیش‌نمایش %d",
             mmssHeader = "آستانه شمارش معکوس",
@@ -189,9 +190,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "ڈارک",
             themeTransparent = "شفاف",
             calendarDisplayHeader = "کیلنڈر کی تاریخ کا ڈسپلے",
-            calendarDisplayBoth = "دونوں (ہجری اور عیسوی)",
-            calendarDisplayHijri = "صرف ہجری",
-            calendarDisplayGregorian = "صرف عیسوی",
+            calendarDisplayHijri = "ہجری کیلنڈر",
+            calendarDisplayGregorian = "عیسوی کیلنڈر",
+            showSecondaryCalendar = "ثانوی کیلنڈر کی تاریخ دکھائیں",
             fontSizeHeader = "فونٹ سائز",
             previewFormat = "پیش نظارہ %d",
             mmssHeader = "الٹی گنتی کا حد",
@@ -207,9 +208,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "Gelap",
             themeTransparent = "Transparan",
             calendarDisplayHeader = "Tampilan Tanggal Kalender",
-            calendarDisplayBoth = "Keduanya (Hijriah & Masehi)",
-            calendarDisplayHijri = "Hanya Hijriah",
-            calendarDisplayGregorian = "Hanya Masehi",
+            calendarDisplayHijri = "Kalender Hijriah",
+            calendarDisplayGregorian = "Kalender Masehi",
+            showSecondaryCalendar = "Tampilkan tanggal kalender sekunder",
             fontSizeHeader = "Ukuran Font",
             previewFormat = "Pratinjau %d",
             mmssHeader = "Ambang Hitung Mundur",
@@ -225,9 +226,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "深色",
             themeTransparent = "透明",
             calendarDisplayHeader = "日历日期显示",
-            calendarDisplayBoth = "两者 (伊斯兰历和公历)",
-            calendarDisplayHijri = "仅伊斯兰历",
-            calendarDisplayGregorian = "仅公历",
+            calendarDisplayHijri = "伊斯兰历",
+            calendarDisplayGregorian = "公历",
+            showSecondaryCalendar = "显示次要日历日期",
             fontSizeHeader = "字体大小设置",
             previewFormat = "预览 %d",
             mmssHeader = "倒计时阈值",
@@ -243,9 +244,9 @@ class WidgetConfigActivity : Activity() {
             themeDark = "ダーク",
             themeTransparent = "透明",
             calendarDisplayHeader = "カレンダー日付表示",
-            calendarDisplayBoth = "両方 (ヒジュラ暦 & グレゴリオ暦)",
-            calendarDisplayHijri = "ヒジュラ暦のみ",
-            calendarDisplayGregorian = "グレゴリオ暦のみ",
+            calendarDisplayHijri = "ヒジュラ暦",
+            calendarDisplayGregorian = "グレゴリオ暦",
+            showSecondaryCalendar = "副カレンダーの日付を表示",
             fontSizeHeader = "フォントサイズ設定",
             previewFormat = "プレビュー %d",
             mmssHeader = "カウントダウン閾値",
@@ -267,9 +268,9 @@ class WidgetConfigActivity : Activity() {
     private lateinit var radioDark: RadioButton
     private lateinit var radioTransparent: RadioButton
     private lateinit var radioGroupCalendarDisplay: RadioGroup
-    private lateinit var radioCalendarBoth: RadioButton
     private lateinit var radioCalendarHijri: RadioButton
     private lateinit var radioCalendarGregorian: RadioButton
+    private lateinit var checkShowSecondaryCalendar: CheckBox
     private lateinit var seekbarTextSize: SeekBar
     private lateinit var textPreview: TextView
     private lateinit var seekbarMmss: SeekBar
@@ -309,9 +310,9 @@ class WidgetConfigActivity : Activity() {
         radioTransparent = findViewById(R.id.radioThemeTransparent)
 
         radioGroupCalendarDisplay = findViewById(R.id.radioGroupCalendarDisplay)
-        radioCalendarBoth = findViewById(R.id.radioCalendarBoth)
         radioCalendarHijri = findViewById(R.id.radioCalendarHijri)
         radioCalendarGregorian = findViewById(R.id.radioCalendarGregorian)
+        checkShowSecondaryCalendar = findViewById(R.id.checkShowSecondaryCalendar)
 
         seekbarTextSize = findViewById(R.id.seekbarTextSize)
         textPreview = findViewById(R.id.textPreview)
@@ -343,9 +344,9 @@ class WidgetConfigActivity : Activity() {
         radioTransparent.text = currentStrings.themeTransparent
 
         textCalendarDisplayHeader.text = currentStrings.calendarDisplayHeader
-        radioCalendarBoth.text = currentStrings.calendarDisplayBoth
         radioCalendarHijri.text = currentStrings.calendarDisplayHijri
         radioCalendarGregorian.text = currentStrings.calendarDisplayGregorian
+        checkShowSecondaryCalendar.text = currentStrings.showSecondaryCalendar
 
         textFontSizeHeader.text = currentStrings.fontSizeHeader
         textMmssHeader.text = currentStrings.mmssHeader
@@ -363,10 +364,12 @@ class WidgetConfigActivity : Activity() {
         // Load existing calendar display preference
         val currentDisplay = PrayerWidgetStorage.readWidgetCalendarDisplay(this)
         when (currentDisplay) {
-            "hijri" -> radioCalendarHijri.isChecked = true
             "gregorian" -> radioCalendarGregorian.isChecked = true
-            else -> radioCalendarBoth.isChecked = true
+            else -> radioCalendarHijri.isChecked = true
         }
+
+        val showSecondary = PrayerWidgetStorage.readWidgetShowSecondaryCalendar(this)
+        checkShowSecondaryCalendar.isChecked = showSecondary
 
         applyDialogTheme(currentTheme)
 
@@ -422,16 +425,17 @@ class WidgetConfigActivity : Activity() {
             }
 
             val selectedCalendarDisplay = when (radioGroupCalendarDisplay.checkedRadioButtonId) {
-                R.id.radioCalendarHijri -> "hijri"
                 R.id.radioCalendarGregorian -> "gregorian"
-                else -> "both"
+                else -> "hijri"
             }
 
+            val selectedShowSecondary = checkShowSecondaryCalendar.isChecked
             val selectedSize = 10 + seekbarTextSize.progress
             val selectedMmss = seekbarMmss.progress
 
             PrayerWidgetStorage.saveWidgetTheme(this, selectedTheme)
             PrayerWidgetStorage.saveWidgetCalendarDisplay(this, selectedCalendarDisplay)
+            PrayerWidgetStorage.saveWidgetShowSecondaryCalendar(this, selectedShowSecondary)
             PrayerWidgetStorage.saveWidgetTextSize(this, selectedSize.toString())
             PrayerWidgetStorage.saveWidgetMmssThreshold(this, selectedMmss)
 
@@ -479,9 +483,9 @@ class WidgetConfigActivity : Activity() {
             radioDark.setTextColor(Color.parseColor("#FFFFFFFF"))
             radioTransparent.setTextColor(Color.parseColor("#FFFFFFFF"))
 
-            radioCalendarBoth.setTextColor(Color.parseColor("#FFFFFFFF"))
             radioCalendarHijri.setTextColor(Color.parseColor("#FFFFFFFF"))
             radioCalendarGregorian.setTextColor(Color.parseColor("#FFFFFFFF"))
+            checkShowSecondaryCalendar.setTextColor(Color.parseColor("#FFFFFFFF"))
 
             btnSave.setBackgroundResource(R.drawable.btn_save_bg_dark)
             btnSave.setTextColor(Color.parseColor("#FFFFFFFF"))
@@ -500,9 +504,9 @@ class WidgetConfigActivity : Activity() {
             radioDark.setTextColor(Color.parseColor("#FF212121"))
             radioTransparent.setTextColor(Color.parseColor("#FF212121"))
 
-            radioCalendarBoth.setTextColor(Color.parseColor("#FF212121"))
             radioCalendarHijri.setTextColor(Color.parseColor("#FF212121"))
             radioCalendarGregorian.setTextColor(Color.parseColor("#FF212121"))
+            checkShowSecondaryCalendar.setTextColor(Color.parseColor("#FF212121"))
 
             btnSave.setBackgroundResource(R.drawable.btn_save_bg)
             btnSave.setTextColor(Color.parseColor("#FF212121"))

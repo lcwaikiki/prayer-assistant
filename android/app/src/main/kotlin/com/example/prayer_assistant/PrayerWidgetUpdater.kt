@@ -71,8 +71,17 @@ object PrayerWidgetUpdater {
             widgetManager.updateAppWidget(widgetId, views)
         }
 
+        val moonPhaseIds = widgetManager.getAppWidgetIds(
+            ComponentName(context, MoonPhaseWidgetProvider::class.java)
+        )
+        for (widgetId in moonPhaseIds) {
+            val views = buildMoonPhaseView(context, openPendingIntent)
+            widgetManager.updateAppWidget(widgetId, views)
+        }
+
         updateStatusBar(context, next)
     }
+
 
     /**
      * Re-renders only the three countdown widgets (Remaining Time, Circle,
@@ -316,20 +325,94 @@ object PrayerWidgetUpdater {
         return if (theme == "light") Color.parseColor("#FF57605B") else Color.parseColor("#B3FFFFFF")
     }
 
+    private fun computeFallbackHijriDate(context: Context): String {
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                val uCal = android.icu.util.IslamicCalendar()
+                val day = uCal.get(android.icu.util.IslamicCalendar.DAY_OF_MONTH)
+                val month = uCal.get(android.icu.util.IslamicCalendar.MONTH)
+                val year = uCal.get(android.icu.util.IslamicCalendar.YEAR)
+
+                val monthNames = when (appLocale) {
+                    "tr" -> arrayOf(
+                        "Muharrem", "Sefer", "Rebiülevvel", "Rebiülahir",
+                        "Cemaziyelevvel", "Cemaziyelahir", "Recep", "Şaban",
+                        "Ramazan", "Şevval", "Zilkade", "Zilhicce"
+                    )
+                    "ar" -> arrayOf(
+                        "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
+                        "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+                    )
+                    "ur" -> arrayOf(
+                        "محرم", "صفر", "ربیع الأول", "ربیع الثانی",
+                        "جمادی الأول", "جمادی الثانی", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+                    )
+                    "fa" -> arrayOf(
+                        "محرم", "صفر", "ربیع‌الاول", "ربیع‌الثانی",
+                        "جمادی‌الاول", "جمادی‌الثانی", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه"
+                    )
+                    "fr" -> arrayOf(
+                        "Mouharram", "Safar", "Rabi' al-awwal", "Rabi' ath-thani",
+                        "Joumada al-oula", "Joumada ath-thaniya", "Rajab", "Cha'bane",
+                        "Ramadan", "Chawwal", "Dhou al-qi'da", "Dhou al-hijja"
+                    )
+                    "es" -> arrayOf(
+                        "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
+                        "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                        "Ramadán", "Shawwal", "Dhu al-Qada", "Dhu al-Hijjah"
+                    )
+                    "de" -> arrayOf(
+                        "Muharram", "Safar", "Rabi' al-awwal", "Rabi' ath-thani",
+                        "Dschumada al-ula", "Dschumada ath-thaniya", "Radschab", "Scha'ban",
+                        "Ramadan", "Schawwal", "Dhu l-qa'da", "Dhu l-hiddscha"
+                    )
+                    "id" -> arrayOf(
+                        "Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir",
+                        "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban",
+                        "Ramadhan", "Syawal", "Zulkaidah", "Zulhijjah"
+                    )
+                    "ru" -> arrayOf(
+                        "Мухаррам", "Сафар", "Раби аль-аввал", "Раби ас-сани",
+                        "Джумада аль-уля", "Джумада ас-сани", "Раджаб", "Шабан",
+                        "Рамадан", "Шавваль", "Зу-ль-када", "Зу-ль-хиджа"
+                    )
+                    else -> arrayOf(
+                        "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
+                        "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                        "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
+                    )
+                }
+                val monthName = monthNames.getOrElse(month) { "" }
+                return "$day $monthName $year"
+            }
+        } catch (_: Exception) {}
+        return ""
+    }
+
     private fun getCalendarDateHeader(context: Context): String {
         val display = PrayerWidgetStorage.readWidgetCalendarDisplay(context)
-        val hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
-        val gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+        var hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
+        var gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+        if (hijri.isEmpty()) {
+            hijri = computeFallbackHijriDate(context)
+        }
+        if (gregorian.isEmpty()) {
+            val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+            val localeObj = try { Locale(appLocale) } catch (e: Exception) { Locale.getDefault() }
+            gregorian = SimpleDateFormat("d MMMM yyyy", localeObj).format(Date())
+        }
         return when (display) {
             "hijri" -> hijri.ifEmpty { gregorian }
             "gregorian" -> gregorian.ifEmpty { hijri }
             else -> {
                 if (hijri.isNotEmpty() && gregorian.isNotEmpty()) {
                     "$hijri • $gregorian"
-                } else if (hijri.isNotEmpty()) {
-                    hijri
                 } else {
-                    gregorian
+                    hijri.ifEmpty { gregorian }
                 }
             }
         }
@@ -424,90 +507,179 @@ object PrayerWidgetUpdater {
         views.setTextColor(R.id.widgetCalendarEventText, secondaryTextColor)
 
         val display = PrayerWidgetStorage.readWidgetCalendarDisplay(context)
-        val hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
-        val gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+        val showSecondary = PrayerWidgetStorage.readWidgetShowSecondaryCalendar(context)
+        var hijri = PrayerWidgetStorage.readDateHeaderHijri(context)
+        var gregorian = PrayerWidgetStorage.readDateHeaderGregorian(context)
+        if (hijri.isEmpty()) {
+            hijri = computeFallbackHijriDate(context)
+        }
 
         val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val localeObj = try { Locale(appLocale) } catch (e: Exception) { Locale.getDefault() }
         val now = Calendar.getInstance()
         val monthYearFormat = SimpleDateFormat("MMMM yyyy", localeObj)
         val gregorianMonthYear = monthYearFormat.format(now.time)
-
-        val (headerText, subHeaderText) = when (display) {
-            "hijri" -> {
-                val mainHeader = hijri.ifEmpty { gregorianMonthYear }
-                mainHeader to ""
-            }
-            "gregorian" -> {
-                val subHeader = if (gregorian.isNotEmpty()) gregorian else ""
-                gregorianMonthYear to subHeader
-            }
-            else -> {
-                val combinedSub = if (hijri.isNotEmpty() && gregorian.isNotEmpty()) {
-                    "$hijri • $gregorian"
-                } else {
-                    hijri.ifEmpty { gregorian }
-                }
-                gregorianMonthYear to combinedSub
-            }
+        if (gregorian.isEmpty()) {
+            val fullGregorianFormat = SimpleDateFormat("d MMMM yyyy", localeObj)
+            gregorian = fullGregorianFormat.format(now.time)
         }
-
-        views.setTextViewText(R.id.widgetCalendarHeader, headerText)
-        views.setTextViewText(R.id.widgetCalendarSubHeader, subHeaderText)
-        views.setViewVisibility(
-            R.id.widgetCalendarSubHeader,
-            if (subHeaderText.isNotEmpty()) android.view.View.VISIBLE else android.view.View.GONE
-        )
-
-        // Weekday header abbreviations
-        val weekdayAbbrs = when (appLocale) {
-            "tr" -> arrayOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Pzr")
-            "ar" -> arrayOf("إث", "ثلا", "أرب", "خم", "جم", "سب", "أح")
-            "fr" -> arrayOf("Lu", "Ma", "Me", "Je", "Ve", "Sa", "Di")
-            "es" -> arrayOf("Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do")
-            "de" -> arrayOf("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So")
-            "id" -> arrayOf("Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min")
-            "ja" -> arrayOf("月", "火", "水", "木", "金", "土", "日")
-            "ru" -> arrayOf("Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс")
-            "zh" -> arrayOf("一", "二", "三", "四", "五", "六", "日")
-            "ur" -> arrayOf("پیر", "منگل", "بدھ", "جمعرات", "جمعہ", "ہفتہ", "اتوار")
-            "fa" -> arrayOf("د", "س", "چ", "پ", "ج", "ش", "۱ش")
-            else -> arrayOf("Mo", "Tu", "We", "Th", "Fr", "Sa", "Su")
-        }
-
-        for (i in 0..6) {
-            val hdrId = context.resources.getIdentifier("grid_hdr_$i", "id", context.packageName)
-            if (hdrId != 0) {
-                views.setTextViewText(hdrId, weekdayAbbrs[i])
-                views.setTextColor(hdrId, secondaryTextColor)
-            }
-        }
-
-        // Full month day grid
-        val todayDay = now.get(Calendar.DAY_OF_MONTH)
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.DAY_OF_MONTH, 1)
-        val daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
-        val firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK) // Sun = 1, Mon = 2, ... Sat = 7
-        val startOffset = (firstDayOfWeek + 5) % 7 // Mon = 0, Tue = 1, ... Sun = 6
 
         val accentColor = Color.parseColor("#FFD700") // Highlight gold for today
+        val isHijriMode = display == "hijri" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        if (isHijriMode) {
+            try {
+                val uCal = android.icu.util.IslamicCalendar()
+                uCal.timeInMillis = now.timeInMillis
+                val todayHijriDay = uCal.get(android.icu.util.IslamicCalendar.DAY_OF_MONTH)
+                val month = uCal.get(android.icu.util.IslamicCalendar.MONTH)
+                val year = uCal.get(android.icu.util.IslamicCalendar.YEAR)
 
-        for (cellIndex in 0..41) {
-            val cellId = context.resources.getIdentifier("day_cell_$cellIndex", "id", context.packageName)
-            if (cellId == 0) continue
-
-            val dayNumber = cellIndex - startOffset + 1
-            if (dayNumber in 1..daysInMonth) {
-                views.setTextViewText(cellId, "$dayNumber")
-                if (dayNumber == todayDay) {
-                    views.setTextColor(cellId, accentColor)
-                } else {
-                    views.setTextColor(cellId, primaryTextColor)
+                val monthNames = when (appLocale) {
+                    "tr" -> arrayOf(
+                        "Muharrem", "Sefer", "Rebiülevvel", "Rebiülahir",
+                        "Cemaziyelevvel", "Cemaziyelahir", "Recep", "Şaban",
+                        "Ramazan", "Şevval", "Zilkade", "Zilhicce"
+                    )
+                    "ar" -> arrayOf(
+                        "محرم", "صفر", "ربيع الأول", "ربيع الثاني",
+                        "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+                    )
+                    "ur" -> arrayOf(
+                        "محرم", "صفر", "ربیع الأول", "ربیع الثانی",
+                        "جمادی الأول", "جمادی الثانی", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذو القعدة", "ذو الحجة"
+                    )
+                    "fa" -> arrayOf(
+                        "محرم", "صفر", "ربیع‌الاول", "ربیع‌الثانی",
+                        "جمادی‌الاول", "جمادی‌الثانی", "رجب", "شعبان",
+                        "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه"
+                    )
+                    "fr" -> arrayOf(
+                        "Mouharram", "Safar", "Rabi' al-awwal", "Rabi' ath-thani",
+                        "Joumada al-oula", "Joumada ath-thaniya", "Rajab", "Cha'bane",
+                        "Ramadan", "Chawwal", "Dhou al-qi'da", "Dhou al-hijja"
+                    )
+                    "es" -> arrayOf(
+                        "Muharram", "Safar", "Rabi al-Awwal", "Rabi al-Thani",
+                        "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                        "Ramadán", "Shawwal", "Dhu al-Qada", "Dhu al-Hijjah"
+                    )
+                    "de" -> arrayOf(
+                        "Muharram", "Safar", "Rabi' al-awwal", "Rabi' ath-thani",
+                        "Dschumada al-ula", "Dschumada ath-thaniya", "Radschab", "Scha'ban",
+                        "Ramadan", "Schawwal", "Dhu l-qa'da", "Dhu l-hiddscha"
+                    )
+                    "id" -> arrayOf(
+                        "Muharram", "Safar", "Rabiul Awal", "Rabiul Akhir",
+                        "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban",
+                        "Ramadhan", "Syawal", "Zulkaidah", "Zulhijjah"
+                    )
+                    "ru" -> arrayOf(
+                        "Мухаррам", "Сафар", "Раби аль-аввал", "Раби ас-сани",
+                        "Джумада аль-уля", "Джумада ас-сани", "Раджаб", "Шабан",
+                        "Рамадан", "Шавваль", "Зу-ль-када", "Зу-ль-хиджа"
+                    )
+                    else -> arrayOf(
+                        "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
+                        "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
+                        "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
+                    )
                 }
-            } else {
-                views.setTextViewText(cellId, "")
+                val hijriMonthName = monthNames.getOrElse(month) { "" }
+                val hijriMonthYear = "$hijriMonthName $year"
+
+                val headerText = hijriMonthYear
+                val subHeaderText = if (showSecondary) gregorian else ""
+
+                views.setTextViewText(R.id.widgetCalendarHeader, headerText)
+                views.setTextViewText(R.id.widgetCalendarSubHeader, subHeaderText)
+                views.setViewVisibility(
+                    R.id.widgetCalendarSubHeader,
+                    if (subHeaderText.isNotEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+                )
+
+                uCal.timeInMillis = now.timeInMillis
+                uCal.set(android.icu.util.IslamicCalendar.DAY_OF_MONTH, 1)
+                val daysInMonth = uCal.getActualMaximum(android.icu.util.IslamicCalendar.DAY_OF_MONTH)
+                val firstDayOfWeek = uCal.get(android.icu.util.Calendar.DAY_OF_WEEK)
+                val startOffset = (firstDayOfWeek + 5) % 7
+
+                val gCalCell = Calendar.getInstance()
+
+                for (cellIndex in 0..41) {
+                    val cellId = context.resources.getIdentifier("day_cell_$cellIndex", "id", context.packageName)
+                    if (cellId == 0) continue
+
+                    val hijriDay = cellIndex - startOffset + 1
+                    if (hijriDay in 1..daysInMonth) {
+                        uCal.set(android.icu.util.IslamicCalendar.DAY_OF_MONTH, hijriDay)
+                        val isToday = (hijriDay == todayHijriDay)
+
+                        if (showSecondary) {
+                            gCalCell.timeInMillis = uCal.timeInMillis
+                            val gregDay = gCalCell.get(Calendar.DAY_OF_MONTH)
+
+                            val span = android.text.SpannableStringBuilder()
+                            val topText = "$hijriDay"
+                            span.append(topText)
+                            span.setSpan(
+                                android.text.style.AbsoluteSizeSpan(11, true),
+                                0,
+                                topText.length,
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            span.setSpan(
+                                android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                                0,
+                                topText.length,
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            span.setSpan(
+                                android.text.style.ForegroundColorSpan(if (isToday) accentColor else primaryTextColor),
+                                0,
+                                topText.length,
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+
+                            span.append("\n")
+                            val btmStart = span.length
+                            val btmText = "$gregDay"
+                            span.append(btmText)
+                            val btmEnd = span.length
+
+                            span.setSpan(
+                                android.text.style.AbsoluteSizeSpan(8, true),
+                                btmStart,
+                                btmEnd,
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+                            span.setSpan(
+                                android.text.style.ForegroundColorSpan(if (isToday) accentColor else secondaryTextColor),
+                                btmStart,
+                                btmEnd,
+                                android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                            )
+
+                            views.setTextViewText(cellId, span)
+                        } else {
+                            views.setTextViewText(cellId, "$hijriDay")
+                            views.setTextViewTextSize(cellId, TypedValue.COMPLEX_UNIT_SP, 11f)
+                            if (isToday) {
+                                views.setTextColor(cellId, accentColor)
+                            } else {
+                                views.setTextColor(cellId, primaryTextColor)
+                            }
+                        }
+                    } else {
+                        views.setTextViewText(cellId, "")
+                    }
+                }
+            } catch (_: Exception) {
+                renderGregorianGrid(context, views, gregorianMonthYear, gregorian, hijri, display, showSecondary, primaryTextColor, secondaryTextColor, accentColor, now)
             }
+        } else {
+            renderGregorianGrid(context, views, gregorianMonthYear, gregorian, hijri, display, showSecondary, primaryTextColor, secondaryTextColor, accentColor, now)
         }
 
         val reminders = PrayerWidgetStorage.readCalendarReminders(context)
@@ -520,6 +692,115 @@ object PrayerWidgetUpdater {
 
         views.setOnClickPendingIntent(R.id.widgetCalendarRoot, openPendingIntent)
         return views
+    }
+
+    private fun renderGregorianGrid(
+        context: Context,
+        views: RemoteViews,
+        gregorianMonthYear: String,
+        gregorian: String,
+        hijri: String,
+        display: String,
+        showSecondary: Boolean,
+        primaryTextColor: Int,
+        secondaryTextColor: Int,
+        accentColor: Int,
+        now: Calendar
+    ) {
+        val headerText = gregorianMonthYear
+        val subHeaderText = if (showSecondary) {
+            hijri.ifEmpty { gregorian }
+        } else ""
+
+        views.setTextViewText(R.id.widgetCalendarHeader, headerText)
+        views.setTextViewText(R.id.widgetCalendarSubHeader, subHeaderText)
+        views.setViewVisibility(
+            R.id.widgetCalendarSubHeader,
+            if (subHeaderText.isNotEmpty()) android.view.View.VISIBLE else android.view.View.GONE
+        )
+
+        val todayGregDay = now.get(Calendar.DAY_OF_MONTH)
+        val cellCal = Calendar.getInstance()
+        cellCal.set(Calendar.DAY_OF_MONTH, 1)
+        val daysInMonth = cellCal.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val firstDayOfWeek = cellCal.get(Calendar.DAY_OF_WEEK)
+        val startOffset = (firstDayOfWeek + 5) % 7
+
+        var uCal: android.icu.util.IslamicCalendar? = null
+        if (showSecondary && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            try {
+                uCal = android.icu.util.IslamicCalendar()
+            } catch (_: Exception) {}
+        }
+
+        for (cellIndex in 0..41) {
+            val cellId = context.resources.getIdentifier("day_cell_$cellIndex", "id", context.packageName)
+            if (cellId == 0) continue
+
+            val gregDay = cellIndex - startOffset + 1
+            if (gregDay in 1..daysInMonth) {
+                val isToday = (gregDay == todayGregDay)
+
+                if (showSecondary && uCal != null) {
+                    cellCal.set(Calendar.DAY_OF_MONTH, gregDay)
+                    uCal.timeInMillis = cellCal.timeInMillis
+                    val hijriDay = uCal.get(android.icu.util.IslamicCalendar.DAY_OF_MONTH)
+
+                    val span = android.text.SpannableStringBuilder()
+                    val topText = "$gregDay"
+                    span.append(topText)
+                    span.setSpan(
+                        android.text.style.AbsoluteSizeSpan(11, true),
+                        0,
+                        topText.length,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    span.setSpan(
+                        android.text.style.StyleSpan(android.graphics.Typeface.BOLD),
+                        0,
+                        topText.length,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    span.setSpan(
+                        android.text.style.ForegroundColorSpan(if (isToday) accentColor else primaryTextColor),
+                        0,
+                        topText.length,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    span.append("\n")
+                    val btmStart = span.length
+                    val btmText = "$hijriDay"
+                    span.append(btmText)
+                    val btmEnd = span.length
+
+                    span.setSpan(
+                        android.text.style.AbsoluteSizeSpan(8, true),
+                        btmStart,
+                        btmEnd,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                    span.setSpan(
+                        android.text.style.ForegroundColorSpan(if (isToday) accentColor else secondaryTextColor),
+                        btmStart,
+                        btmEnd,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+
+                    views.setTextViewText(cellId, span)
+                } else {
+                    views.setTextViewText(cellId, "$gregDay")
+                    views.setTextViewTextSize(cellId, TypedValue.COMPLEX_UNIT_SP, 11f)
+                    if (isToday) {
+                        views.setTextColor(cellId, accentColor)
+                    } else {
+                        views.setTextColor(cellId, primaryTextColor)
+                    }
+                }
+            } else {
+                views.setTextViewText(cellId, "")
+            }
+        }
     }
 
     /**
@@ -1307,5 +1588,110 @@ object PrayerWidgetUpdater {
         return langMap[canonical] ?: rawName
     }
 
+    private fun buildMoonPhaseView(context: Context, openPendingIntent: PendingIntent): RemoteViews {
+        val views = RemoteViews(context.packageName, R.layout.widget_moon_phase)
+        val data = PrayerWidgetStorage.readMoonPhaseData(context)
+        val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
+        val dark = isDark(context)
+        val bgRes = getWidgetBgRes(context)
+        val primaryTextColor = getPrimaryTextColor(context)
+        val secondaryTextColor = getSecondaryTextColor(context)
+
+        views.setInt(R.id.widgetMoonRoot, "setBackgroundResource", bgRes)
+        views.setTextColor(R.id.widgetMoonDateHeader, primaryTextColor)
+        views.setTextColor(R.id.widgetMoonPhaseName, primaryTextColor)
+        views.setTextColor(R.id.widgetMoonIllumination, secondaryTextColor)
+        views.setTextColor(R.id.widgetMoonSubHeader, secondaryTextColor)
+
+        setTextSizeSp(views, R.id.widgetMoonDateHeader, textSize, 11f, 13f, 15f, 18f)
+        setTextSizeSp(views, R.id.widgetMoonPhaseName, textSize, 12f, 14f, 16f, 19f)
+        setTextSizeSp(views, R.id.widgetMoonIllumination, textSize, 10f, 12f, 14f, 16f)
+        setTextSizeSp(views, R.id.widgetMoonSubHeader, textSize, 9f, 11f, 13f, 15f)
+
+        val hijriStr = data.hijriDate.ifEmpty { PrayerWidgetStorage.readDateHeaderHijri(context) }
+        val gregorianStr = data.gregorianDate.ifEmpty { PrayerWidgetStorage.readDateHeaderGregorian(context) }
+
+        views.setTextViewText(R.id.widgetMoonDateHeader, hijriStr)
+        views.setTextViewText(R.id.widgetMoonPhaseName, data.phaseName.ifEmpty { "Moon Phase" })
+        val illuminationText = String.format(Locale.US, "%.0f%% Illuminated", data.illumination)
+        views.setTextViewText(R.id.widgetMoonIllumination, illuminationText)
+        views.setTextViewText(R.id.widgetMoonSubHeader, gregorianStr)
+
+        if (data.isWhiteDay) {
+            views.setViewVisibility(R.id.widgetMoonWhiteDaysBadge, android.view.View.VISIBLE)
+            views.setTextViewText(R.id.widgetMoonWhiteDaysBadge, data.whiteDayBadgeText)
+        } else {
+            views.setViewVisibility(R.id.widgetMoonWhiteDaysBadge, android.view.View.GONE)
+        }
+
+        val moonBitmap = createMoonPhaseBitmap(context, data.phaseValue, dark)
+        views.setImageViewBitmap(R.id.widgetMoonGraphic, moonBitmap)
+
+        views.setOnClickPendingIntent(R.id.widgetMoonRoot, openPendingIntent)
+        return views
+    }
+
+    private fun createMoonPhaseBitmap(context: Context, phaseValue: Double, dark: Boolean): Bitmap {
+        val density = context.resources.displayMetrics.density
+        val sizePx = (100 * density).toInt().coerceAtLeast(60)
+        val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+
+        val cx = sizePx / 2f
+        val cy = sizePx / 2f
+        val radius = sizePx * 0.44f
+
+        // Dark moon background circle
+        val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = if (dark) Color.parseColor("#334455") else Color.parseColor("#CCCCCC")
+            style = Paint.Style.FILL
+        }
+        canvas.drawCircle(cx, cy, radius, bgPaint)
+
+        // Moon illuminated paint
+        val litPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = if (dark) Color.parseColor("#FFF5E0") else Color.parseColor("#FFD700")
+            style = Paint.Style.FILL
+        }
+
+        val normalizedPhase = (phaseValue % 1.0 + 1.0) % 1.0
+        val isWaxing = normalizedPhase <= 0.5
+
+        val rectF = android.graphics.RectF(cx - radius, cy - radius, cx + radius, cy + radius)
+
+        if (normalizedPhase >= 0.48 && normalizedPhase <= 0.52) {
+            // Full Moon
+            canvas.drawCircle(cx, cy, radius, litPaint)
+        } else if (normalizedPhase > 0.02 && normalizedPhase < 0.98) {
+            val path = android.graphics.Path()
+            val xRadius = Math.abs(radius * Math.cos(normalizedPhase * 2.0 * Math.PI)).toFloat()
+
+            if (isWaxing) {
+                path.arcTo(rectF, -90f, 180f)
+                val innerRect = android.graphics.RectF(cx - xRadius, cy - radius, cx + xRadius, cy + radius)
+                val sweep = if (normalizedPhase < 0.25) -180f else 180f
+                path.arcTo(innerRect, 90f, sweep)
+            } else {
+                path.arcTo(rectF, 90f, 180f)
+                val innerRect = android.graphics.RectF(cx - xRadius, cy - radius, cx + xRadius, cy + radius)
+                val sweep = if (normalizedPhase > 0.75) -180f else 180f
+                path.arcTo(innerRect, -90f, sweep)
+            }
+            path.close()
+            canvas.drawPath(path, litPaint)
+        }
+
+        // Crisp outer ring
+        val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = if (dark) Color.parseColor("#44FFFFFF") else Color.parseColor("#44000000")
+            style = Paint.Style.STROKE
+            strokeWidth = 2f * density
+        }
+        canvas.drawCircle(cx, cy, radius, borderPaint)
+
+        return bitmap
+    }
+
     private fun toDisplayPrayerName(raw: String): String = raw
 }
+

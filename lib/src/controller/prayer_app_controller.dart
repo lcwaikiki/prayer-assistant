@@ -69,7 +69,7 @@ class PrayerAppController extends ChangeNotifier {
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
   int _widgetTextSizeValue = 14;
   WidgetTheme _widgetTheme = WidgetTheme.system;
-  WidgetCalendarDisplay _widgetCalendarDisplay = WidgetCalendarDisplay.both;
+  WidgetCalendarDisplay _widgetCalendarDisplay = WidgetCalendarDisplay.hijri;
   int _widgetMmssThresholdMinutes = 60;
   bool _remindersSilenced = false;
   bool _reminderVibrationEnabled = true;
@@ -518,7 +518,7 @@ class PrayerAppController extends ChangeNotifier {
       _widgetTheme = widgetTheme;
 
       final rawWidgetCalDisplay = await database.loadWidgetCalendarDisplay();
-      var widgetCalDisplay = WidgetCalendarDisplay.both;
+      var widgetCalDisplay = WidgetCalendarDisplay.hijri;
       for (final item in WidgetCalendarDisplay.values) {
         if (item.name == rawWidgetCalDisplay) {
           widgetCalDisplay = item;
@@ -533,7 +533,10 @@ class PrayerAppController extends ChangeNotifier {
       await _syncStatusBarConfig();
       await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
       await widgetBridgeService.updateWidgetTheme(_widgetTheme.name);
-      await widgetBridgeService.updateWidgetCalendarDisplay(_widgetCalendarDisplay.name);
+      await widgetBridgeService.updateWidgetCalendarDisplay(
+        _widgetCalendarDisplay.name,
+        _showSecondaryCalendarDate,
+      );
       await widgetBridgeService.updateWidgetMmssThreshold(
         _widgetMmssThresholdMinutes,
       );
@@ -587,11 +590,7 @@ class PrayerAppController extends ChangeNotifier {
         await refreshPrayerData(forceSync: false);
       } else {
         await notificationService.cancelAllPrayerNotifications();
-        await widgetBridgeService.updateFromPrayerDays(
-          days: const <PrayerDay>[],
-          now: DateTime.now(),
-          locale: resolvedLocale,
-        );
+        await _updateWidgetBridgeData();
       }
       _error = null;
     } catch (e) {
@@ -906,7 +905,10 @@ class PrayerAppController extends ChangeNotifier {
     }
     _widgetCalendarDisplay = display;
     await database.saveWidgetCalendarDisplay(display.name);
-    await widgetBridgeService.updateWidgetCalendarDisplay(display.name);
+    await widgetBridgeService.updateWidgetCalendarDisplay(
+      display.name,
+      _showSecondaryCalendarDate,
+    );
     await _updateWidgetBridgeData();
     notifyListeners();
   }
@@ -933,6 +935,7 @@ class PrayerAppController extends ChangeNotifier {
       dateHeaderHijri: hijriStr,
       dateHeaderGregorian: gregorianStr,
       calendarDisplay: _widgetCalendarDisplay.name,
+      showSecondaryCalendarDate: _showSecondaryCalendarDate,
     );
   }
 
@@ -953,6 +956,11 @@ class PrayerAppController extends ChangeNotifier {
     }
     _showSecondaryCalendarDate = show;
     await database.saveShowSecondaryCalendarDate(show);
+    await widgetBridgeService.updateWidgetCalendarDisplay(
+      _widgetCalendarDisplay.name,
+      show,
+    );
+    await _updateWidgetBridgeData();
     notifyListeners();
   }
 

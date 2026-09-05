@@ -92,6 +92,54 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('widget calendar display selection and secondary calendar toggle update settings',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.saveWidgetCalendarDisplay(any()))
+        .thenAnswer((_) async {});
+    when(() => harness.database.saveShowSecondaryCalendarDate(any()))
+        .thenAnswer((_) async {});
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const PreferencesScreen());
+
+    await tester.scrollUntilVisible(
+      find.text('Widget Settings'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(find.text('Widget Settings'));
+    await tester.pumpAndSettle();
+
+    final gregorianFinder = find.byWidgetPredicate(
+      (widget) => widget is RadioListTile<WidgetCalendarDisplay> && widget.value == WidgetCalendarDisplay.gregorian,
+    );
+    await tester.scrollUntilVisible(
+      gregorianFinder,
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(gregorianFinder);
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.widgetCalendarDisplay, WidgetCalendarDisplay.gregorian);
+    verify(() => harness.database.saveWidgetCalendarDisplay('gregorian')).called(1);
+
+    final switchFinder = find.byKey(const Key('show_secondary_calendar_date_switch'));
+    await tester.scrollUntilVisible(
+      switchFinder,
+      100,
+      scrollable: find.byType(Scrollable).first,
+    );
+    await tester.tap(switchFinder);
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.showSecondaryCalendarDate, isFalse);
+    verify(() => harness.database.saveShowSecondaryCalendarDate(false)).called(1);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('vibration switch persists the reminder vibration preference',
       (tester) async {
     final harness = TestHarness.create();

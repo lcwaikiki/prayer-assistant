@@ -24,12 +24,33 @@ class MainActivity : FlutterActivity() {
                     val appLocale = call.argument<String>("appLocale") ?: ""
                     val dateHeaderHijri = call.argument<String>("dateHeaderHijri") ?: ""
                     val dateHeaderGregorian = call.argument<String>("dateHeaderGregorian") ?: ""
-                    val calendarDisplay = call.argument<String>("calendarDisplay") ?: "both"
+                    val calendarDisplay = call.argument<String>("calendarDisplay") ?: "hijri"
+                    val showSecondaryDate = call.argument<Boolean>("showSecondaryDate") ?: true
+                    val moonPhaseValue = call.argument<Double>("moonPhaseValue") ?: 0.5
+                    val moonIllumination = call.argument<Double>("moonIllumination") ?: 50.0
+                    val moonPhaseName = call.argument<String>("moonPhaseName") ?: ""
+                    val moonHijriDate = call.argument<String>("moonHijriDate") ?: ""
+                    val moonGregorianDate = call.argument<String>("moonGregorianDate") ?: ""
+                    val isWhiteDay = call.argument<Boolean>("isWhiteDay") ?: false
+                    val whiteDayBadgeText = call.argument<String>("whiteDayBadgeText") ?: "White Days"
+
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
                     PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
                     PrayerWidgetStorage.saveDateHeaders(this, dateHeaderHijri, dateHeaderGregorian)
                     PrayerWidgetStorage.saveWidgetCalendarDisplay(this, calendarDisplay)
+                    PrayerWidgetStorage.saveWidgetShowSecondaryCalendar(this, showSecondaryDate)
+                    PrayerWidgetStorage.saveMoonPhaseData(
+                        this,
+                        moonPhaseValue,
+                        moonIllumination,
+                        moonPhaseName,
+                        moonHijriDate,
+                        moonGregorianDate,
+                        isWhiteDay,
+                        whiteDayBadgeText
+                    )
+
                     if (appLocale.isNotEmpty()) {
                         PrayerWidgetStorage.saveAppLocale(this, appLocale)
                     }
@@ -69,8 +90,10 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
                 "updateWidgetCalendarDisplay" -> {
-                    val display = call.argument<String>("display") ?: "both"
+                    val display = call.argument<String>("display") ?: "hijri"
+                    val showSecondaryDate = call.argument<Boolean>("showSecondaryDate") ?: true
                     PrayerWidgetStorage.saveWidgetCalendarDisplay(this, display)
+                    PrayerWidgetStorage.saveWidgetShowSecondaryCalendar(this, showSecondaryDate)
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }

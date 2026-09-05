@@ -47,7 +47,7 @@ class TestHarness {
     registerFallbackValue(CalendarWeekStart.sunday);
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
     registerFallbackValue(WidgetTheme.system);
-    registerFallbackValue(WidgetCalendarDisplay.both);
+    registerFallbackValue(WidgetCalendarDisplay.hijri);
     registerFallbackValue(
       CalendarReminder(id: 'f', title: 'f', anchorAt: DateTime(2026)),
     );
@@ -106,7 +106,7 @@ class TestHarness {
       () => widgetBridge.updateWidgetTheme(any()),
     ).thenAnswer((_) async {});
     when(
-      () => widgetBridge.updateWidgetCalendarDisplay(any()),
+      () => widgetBridge.updateWidgetCalendarDisplay(any(), any()),
     ).thenAnswer((_) async {});
     when(
       () => widgetBridge.updateWidgetMmssThreshold(any()),
@@ -120,6 +120,7 @@ class TestHarness {
         dateHeaderHijri: any(named: 'dateHeaderHijri'),
         dateHeaderGregorian: any(named: 'dateHeaderGregorian'),
         calendarDisplay: any(named: 'calendarDisplay'),
+        showSecondaryCalendarDate: any(named: 'showSecondaryCalendarDate'),
       ),
     ).thenAnswer((_) async {});
     when(

@@ -374,7 +374,6 @@ enum WidgetTheme {
 }
 
 enum WidgetCalendarDisplay {
-  both,
   hijri,
   gregorian,
 }

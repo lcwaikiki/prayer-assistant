@@ -94,21 +94,13 @@
                 android:id="@+id/radioGroupCalendarDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <RadioButton
-                    android:id="@+id/radioCalendarBoth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="İkisi de (Hicri ve Miladi)"
-                    android:textColor="#212121"
-                    android:textSize="14sp" />
+                android:layout_marginBottom="6dp">
 
                 <RadioButton
                     android:id="@+id/radioCalendarHijri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yalnızca Hicri"
+                    android:text="Hicri Takvim"
                     android:textColor="#212121"
                     android:textSize="14sp" />
 
@@ -116,10 +108,20 @@
                     android:id="@+id/radioCalendarGregorian"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Yalnızca Miladi"
+                    android:text="Miladi Takvim"
                     android:textColor="#212121"
                     android:textSize="14sp" />
             </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/checkShowSecondaryCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:checked="true"
+                android:text="İkincil takvim tarihini göster"
+                android:textColor="#212121"
+                android:textSize="14sp" />
 
             <!-- Text Size -->
             <TextView

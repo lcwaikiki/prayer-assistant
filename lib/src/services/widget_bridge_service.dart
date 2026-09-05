@@ -2,6 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 
+import '../../l10n/app_localizations.dart';
+import '../../l10n/app_localizations_en.dart';
+
+import '../calendar/moon_phase_utils.dart';
 import '../l10n/prayer_names.dart';
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
@@ -17,7 +21,8 @@ class WidgetBridgeService {
     String locationLabel = '',
     String dateHeaderHijri = '',
     String dateHeaderGregorian = '',
-    String calendarDisplay = 'both',
+    String calendarDisplay = 'hijri',
+    bool showSecondaryCalendarDate = true,
   }) async {
     final timeline = <Map<String, Object>>[];
     final start = DateTime(now.year, now.month, now.day);
@@ -84,6 +89,20 @@ class WidgetBridgeService {
       break;
     }
 
+    final moonInfo = getMoonPhase(now);
+    final safeLocale = (locale != null && locale.languageCode.isNotEmpty)
+        ? locale
+        : const Locale('en');
+    AppLocalizations l10n;
+    try {
+      l10n = lookupAppLocalizations(safeLocale);
+    } catch (_) {
+      l10n = AppLocalizationsEn();
+    }
+    final localizedPhaseName = _getLocalizedPhaseName(l10n, moonInfo.phaseNameKey);
+    final whiteDayBadgeText = l10n.whiteDaysTitle;
+
+
     await _channel.invokeMethod<void>('updateWidgetData', <String, Object>{
       'timeline': timeline,
       'todayPrayers': todayPrayers,
@@ -92,8 +111,41 @@ class WidgetBridgeService {
       'dateHeaderHijri': dateHeaderHijri,
       'dateHeaderGregorian': dateHeaderGregorian,
       'calendarDisplay': calendarDisplay,
+      'showSecondaryDate': showSecondaryCalendarDate,
+      'moonPhaseValue': moonInfo.phaseValue,
+      'moonIllumination': moonInfo.illumination,
+      'moonPhaseName': localizedPhaseName,
+      'moonHijriDate': dateHeaderHijri,
+      'moonGregorianDate': dateHeaderGregorian,
+      'isWhiteDay': moonInfo.isWhiteDay,
+      'whiteDayBadgeText': whiteDayBadgeText,
     });
   }
+
+  String _getLocalizedPhaseName(AppLocalizations l10n, String key) {
+    switch (key) {
+      case 'moonPhaseNewMoon':
+        return l10n.moonPhaseNewMoon;
+      case 'moonPhaseWaxingCrescent':
+        return l10n.moonPhaseWaxingCrescent;
+      case 'moonPhaseFirstQuarter':
+        return l10n.moonPhaseFirstQuarter;
+      case 'moonPhaseWaxingGibbous':
+        return l10n.moonPhaseWaxingGibbous;
+      case 'moonPhaseFullMoon':
+        return l10n.moonPhaseFullMoon;
+      case 'moonPhaseWaningGibbous':
+        return l10n.moonPhaseWaningGibbous;
+      case 'moonPhaseLastQuarter':
+        return l10n.moonPhaseLastQuarter;
+      case 'moonPhaseWaningCrescent':
+        return l10n.moonPhaseWaningCrescent;
+      default:
+        return l10n.moonPhaseTitle;
+
+    }
+  }
+
 
   Future<void> updateWidgetLocale(String localeCode) async {
     await _channel.invokeMethod<void>('updateWidgetLocale', <String, Object>{
@@ -123,10 +175,16 @@ class WidgetBridgeService {
     });
   }
 
-  Future<void> updateWidgetCalendarDisplay(String display) async {
+  Future<void> updateWidgetCalendarDisplay(
+    String display,
+    bool showSecondaryDate,
+  ) async {
     await _channel.invokeMethod<void>(
       'updateWidgetCalendarDisplay',
-      <String, Object>{'display': display},
+      <String, Object>{
+        'display': display,
+        'showSecondaryDate': showSecondaryDate,
+      },
     );
   }
 

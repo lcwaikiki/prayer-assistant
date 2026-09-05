@@ -123,6 +123,7 @@ object PrayerWidgetStorage {
     }
 
     private const val WIDGET_CALENDAR_DISPLAY_KEY = "widget_calendar_display"
+    private const val WIDGET_SHOW_SECONDARY_CALENDAR_KEY = "widget_show_secondary_calendar"
     private const val DATE_HEADER_HIJRI_KEY = "date_header_hijri"
     private const val DATE_HEADER_GREGORIAN_KEY = "date_header_gregorian"
 
@@ -134,8 +135,25 @@ object PrayerWidgetStorage {
     }
 
     fun readWidgetCalendarDisplay(context: Context): String {
-        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .getString(WIDGET_CALENDAR_DISPLAY_KEY, "both") ?: "both"
+        val display = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(WIDGET_CALENDAR_DISPLAY_KEY, "hijri") ?: "hijri"
+        return if (display == "both") "hijri" else display
+    }
+
+    fun saveWidgetShowSecondaryCalendar(context: Context, show: Boolean) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(WIDGET_SHOW_SECONDARY_CALENDAR_KEY, show)
+            .apply()
+    }
+
+    fun readWidgetShowSecondaryCalendar(context: Context): Boolean {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val legacyDisplay = prefs.getString(WIDGET_CALENDAR_DISPLAY_KEY, null)
+        if (legacyDisplay == "both") {
+            return true
+        }
+        return prefs.getBoolean(WIDGET_SHOW_SECONDARY_CALENDAR_KEY, true)
     }
 
     fun saveDateHeaders(context: Context, hijri: String, gregorian: String) {
@@ -263,4 +281,58 @@ object PrayerWidgetStorage {
     fun isStatusAutoRestore(context: Context): Boolean {
         return isStatusEnabled(context)
     }
+
+    data class MoonPhaseData(
+        val phaseValue: Double,
+        val illumination: Double,
+        val phaseName: String,
+        val hijriDate: String,
+        val gregorianDate: String,
+        val isWhiteDay: Boolean,
+        val whiteDayBadgeText: String
+    )
+
+    private const val MOON_PHASE_VALUE_KEY = "moon_phase_value"
+    private const val MOON_ILLUMINATION_KEY = "moon_illumination"
+    private const val MOON_PHASE_NAME_KEY = "moon_phase_name"
+    private const val MOON_HIJRI_DATE_KEY = "moon_hijri_date"
+    private const val MOON_GREGORIAN_DATE_KEY = "moon_gregorian_date"
+    private const val MOON_IS_WHITE_DAY_KEY = "moon_is_white_day"
+    private const val MOON_WHITE_DAY_TEXT_KEY = "moon_white_day_text"
+
+    fun saveMoonPhaseData(
+        context: Context,
+        phaseValue: Double,
+        illumination: Double,
+        phaseName: String,
+        hijriDate: String,
+        gregorianDate: String,
+        isWhiteDay: Boolean,
+        whiteDayBadgeText: String
+    ) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putFloat(MOON_PHASE_VALUE_KEY, phaseValue.toFloat())
+            .putFloat(MOON_ILLUMINATION_KEY, illumination.toFloat())
+            .putString(MOON_PHASE_NAME_KEY, phaseName)
+            .putString(MOON_HIJRI_DATE_KEY, hijriDate)
+            .putString(MOON_GREGORIAN_DATE_KEY, gregorianDate)
+            .putBoolean(MOON_IS_WHITE_DAY_KEY, isWhiteDay)
+            .putString(MOON_WHITE_DAY_TEXT_KEY, whiteDayBadgeText)
+            .apply()
+    }
+
+    fun readMoonPhaseData(context: Context): MoonPhaseData {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return MoonPhaseData(
+            phaseValue = prefs.getFloat(MOON_PHASE_VALUE_KEY, 0.5f).toDouble(),
+            illumination = prefs.getFloat(MOON_ILLUMINATION_KEY, 50.0f).toDouble(),
+            phaseName = prefs.getString(MOON_PHASE_NAME_KEY, "") ?: "",
+            hijriDate = prefs.getString(MOON_HIJRI_DATE_KEY, "") ?: "",
+            gregorianDate = prefs.getString(MOON_GREGORIAN_DATE_KEY, "") ?: "",
+            isWhiteDay = prefs.getBoolean(MOON_IS_WHITE_DAY_KEY, false),
+            whiteDayBadgeText = prefs.getString(MOON_WHITE_DAY_TEXT_KEY, "White Days") ?: "White Days"
+        )
+    }
 }
+

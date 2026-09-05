@@ -26,7 +26,7 @@
         android:layout_marginBottom="6dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:maxLines="1"
+        android:maxLines="2"
         android:text="Ramadan 1447"
         android:textColor="#B3FFFFFF"
         android:textSize="11sp" />

@@ -35,7 +35,7 @@ void main() {
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
     registerFallbackValue(CalendarWeekStart.monday);
     registerFallbackValue(WidgetTheme.system);
-    registerFallbackValue(WidgetCalendarDisplay.both);
+    registerFallbackValue(WidgetCalendarDisplay.hijri);
   });
 
 
@@ -92,6 +92,7 @@ void main() {
         dateHeaderHijri: any(named: 'dateHeaderHijri'),
         dateHeaderGregorian: any(named: 'dateHeaderGregorian'),
         calendarDisplay: any(named: 'calendarDisplay'),
+        showSecondaryCalendarDate: any(named: 'showSecondaryCalendarDate'),
       ),
     ).thenAnswer((_) async {});
     when(
@@ -143,7 +144,7 @@ void main() {
       () => widgetBridge.updateWidgetTheme(any()),
     ).thenAnswer((_) async {});
     when(
-      () => widgetBridge.updateWidgetCalendarDisplay(any()),
+      () => widgetBridge.updateWidgetCalendarDisplay(any(), any()),
     ).thenAnswer((_) async {});
     when(
       () => database.loadWidgetMmssThreshold(),
@@ -190,6 +191,15 @@ void main() {
     when(
       () => database.saveShowCalendarReminderDots(any()),
     ).thenAnswer((_) async {});
+    when(() => database.loadShowCardMoonPhase()).thenAnswer((_) async => null);
+    when(() => database.loadShowCardIftarSuhoor()).thenAnswer((_) async => null);
+    when(() => database.loadShowCardDailyWisdom()).thenAnswer((_) async => null);
+    when(() => database.loadShowCardUpcomingReminders()).thenAnswer((_) async => null);
+    when(() => database.saveShowCardMoonPhase(any())).thenAnswer((_) async {});
+    when(() => database.saveShowCardIftarSuhoor(any())).thenAnswer((_) async {});
+    when(() => database.saveShowCardDailyWisdom(any())).thenAnswer((_) async {});
+    when(() => database.saveShowCardUpcomingReminders(any())).thenAnswer((_) async {});
+
     when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});

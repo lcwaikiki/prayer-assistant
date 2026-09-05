@@ -249,18 +249,6 @@ class PreferencesScreen extends StatelessWidget {
                   RadioListTile<WidgetCalendarDisplay>(
                     contentPadding: EdgeInsets.zero,
                     dense: true,
-                    title: Text(context.l10n.widgetCalendarDisplayBoth),
-                    value: WidgetCalendarDisplay.both,
-                    groupValue: controller.widgetCalendarDisplay,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateWidgetCalendarDisplay(value);
-                      }
-                    },
-                  ),
-                  RadioListTile<WidgetCalendarDisplay>(
-                    contentPadding: EdgeInsets.zero,
-                    dense: true,
                     title: Text(context.l10n.widgetCalendarDisplayHijri),
                     value: WidgetCalendarDisplay.hijri,
                     groupValue: controller.widgetCalendarDisplay,
@@ -281,6 +269,14 @@ class PreferencesScreen extends StatelessWidget {
                         controller.updateWidgetCalendarDisplay(value);
                       }
                     },
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_secondary_calendar_date_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(context.l10n.calendarShowSecondary),
+                    value: controller.showSecondaryCalendarDate,
+                    onChanged: controller.updateShowSecondaryCalendarDate,
                   ),
                   const Divider(height: 24),
                   Align(

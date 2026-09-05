@@ -11,7 +11,7 @@ void main() {
       final controller = harness.controller;
 
       expect(controller.widgetTheme, equals(WidgetTheme.system));
-      expect(controller.widgetCalendarDisplay, equals(WidgetCalendarDisplay.both));
+      expect(controller.widgetCalendarDisplay, equals(WidgetCalendarDisplay.hijri));
     });
 
     test('updates widgetTheme and persists to database and widget bridge', () async {
@@ -29,11 +29,11 @@ void main() {
       final harness = TestHarness.create();
       await harness.initialize();
 
-      await harness.controller.updateWidgetCalendarDisplay(WidgetCalendarDisplay.hijri);
+      await harness.controller.updateWidgetCalendarDisplay(WidgetCalendarDisplay.gregorian);
 
-      expect(harness.controller.widgetCalendarDisplay, equals(WidgetCalendarDisplay.hijri));
-      verify(() => harness.database.saveWidgetCalendarDisplay('hijri')).called(1);
-      verify(() => harness.widgetBridge.updateWidgetCalendarDisplay('hijri')).called(1);
+      expect(harness.controller.widgetCalendarDisplay, equals(WidgetCalendarDisplay.gregorian));
+      verify(() => harness.database.saveWidgetCalendarDisplay('gregorian')).called(1);
+      verify(() => harness.widgetBridge.updateWidgetCalendarDisplay('gregorian', true)).called(1);
     });
   });
 }

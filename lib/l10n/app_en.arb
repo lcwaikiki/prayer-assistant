@@ -450,7 +450,6 @@
   "moonPhaseWaningGibbous": "Waning Gibbous",
   "moonPhaseLastQuarter": "Last Quarter",
   "moonPhaseWaningCrescent": "Waning Crescent",
-  "whiteDaysTitle": "White Days (Ayyam al-Beed)",
   "whiteDaysSubtitle": "Sunnah Fasting Days (13, 14, 15 Hijri)",
   "homeDashboardCardsSectionTitle": "Home Dashboard Cards",
   "showCardMoonPhaseTitle": "Show Moon Phase Card",
@@ -460,5 +459,8 @@
   "showCardDailyWisdomTitle": "Show Daily Wisdom Card",
   "showCardDailyWisdomSubtitle": "Display daily inspirational Hadith or verse card",
   "showCardUpcomingRemindersTitle": "Show Upcoming Reminders Card",
-  "showCardUpcomingRemindersSubtitle": "Display card listing your next 3 upcoming calendar reminders"
+  "showCardUpcomingRemindersSubtitle": "Display card listing your next 3 upcoming calendar reminders",
+  "moonCalendarTitle": "Moon Phase Calendar",
+  "calendarGoToDate": "Go to date",
+  "whiteDaysBannerPrefix": "White Days (13, 14, 15)"
 }

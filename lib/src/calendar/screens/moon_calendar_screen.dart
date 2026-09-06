@@ -13,40 +13,6 @@ import '../moon_phase_utils.dart';
 import 'hijri_calendar_screen.dart';
 import 'hijri_date_picker_dialog.dart';
 
-String _moonCalendarTitle(String languageCode) {
-  return switch (languageCode.toLowerCase()) {
-    'tr' => 'Ay Takvimi & Evreleri',
-    'ar' => 'تقويم أطوار القمر',
-    'de' => 'Mondphasen-Kalender',
-    'es' => 'Calendario de Fases Lunares',
-    'fa' => 'تقویم گام‌های ماه',
-    'fr' => 'Calendrier des Phases de la Lune',
-    'id' => 'Kalender Fase Bulan',
-    'ja' => '月齢カレンダー',
-    'ru' => 'Календарь фаз Луны',
-    'ur' => 'چاند کی حالتوں کا کیلنڈر',
-    'zh' => '月相日历',
-    _ => 'Moon Phase Calendar',
-  };
-}
-
-String _goToDateTooltip(String languageCode) {
-  return switch (languageCode.toLowerCase()) {
-    'tr' => 'Tarihe git',
-    'ar' => 'الانتقال إلى تاريخ',
-    'de' => 'Zu Datum springen',
-    'es' => 'Ir a fecha',
-    'fa' => 'رفتن به تاریخ',
-    'fr' => 'Aller à la date',
-    'id' => 'Buka tanggal',
-    'ja' => '日付へ移動',
-    'ru' => 'Перейти к дате',
-    'ur' => 'تاریخ پر جائیں',
-    'zh' => '前往日期',
-    _ => 'Go to date',
-  };
-}
-
 String _shortHijriMonth(DateTime date, String languageCode, {int offset = 0}) {
   final month = HijriMonth.fromDate(date, offset: offset);
   final full = month.longMonthName(languageCode);
@@ -63,12 +29,9 @@ class MoonCalendarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final languageCode = Localizations.localeOf(context).languageCode;
-    final title = _moonCalendarTitle(languageCode);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(context.l10n.moonCalendarTitle),
       ),
       body: MoonCalendarView(initialDate: initialDate),
     );
@@ -248,7 +211,7 @@ class _MoonCalendarViewState extends State<MoonCalendarView> {
                     ),
                     IconButton(
                       key: const Key('moon_calendar_go_to_date_button'),
-                      tooltip: _goToDateTooltip(languageCode),
+                      tooltip: context.l10n.calendarGoToDate,
                       icon: const Icon(Icons.edit_calendar),
                       onPressed: () => _openGoToDate(primary),
                     ),
@@ -313,10 +276,10 @@ class _MoonCalendarViewState extends State<MoonCalendarView> {
                       Expanded(
                         child: Text(
                           whiteDaysList.isNotEmpty
-                              ? 'White Days (13, 14, 15): ${DateFormat.d(locale).format(whiteDaysList.first)} - ${DateFormat.d(locale).format(whiteDaysList.last)} ${DateFormat.MMM(locale).format(whiteDaysList.last)}'
+                              ? '${context.l10n.whiteDaysBannerPrefix}: ${DateFormat.d(locale).format(whiteDaysList.first)} - ${DateFormat.d(locale).format(whiteDaysList.last)} ${DateFormat.MMM(locale).format(whiteDaysList.last)}'
                               : (fullMoonDate != null
-                                  ? 'Full Moon: ${DateFormat.MMMd(locale).format(fullMoonDate)}'
-                                  : 'Moon Phase Calendar View'),
+                                  ? '${context.l10n.moonPhaseFullMoon}: ${DateFormat.MMMd(locale).format(fullMoonDate)}'
+                                  : context.l10n.moonCalendarTitle),
                           style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),

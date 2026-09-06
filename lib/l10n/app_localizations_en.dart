@@ -844,7 +844,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fastingTypeQadaa => 'Make-up (Qadaa) Fast';
 
   @override
-  String get whiteDaysTitle => 'White Days (Ayyam al-Beed)';
+  String get whiteDaysTitle => 'White Days (13th, 14th, 15th)';
 
   @override
   String get mondayThursdayTitle => 'Monday & Thursday Sunnah';
@@ -1025,4 +1025,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'Display card listing your next 3 upcoming calendar reminders';
+
+  @override
+  String get moonCalendarTitle => 'Moon Phase Calendar';
+
+  @override
+  String get calendarGoToDate => 'Go to date';
+
+  @override
+  String get whiteDaysBannerPrefix => 'White Days (13, 14, 15)';
 }

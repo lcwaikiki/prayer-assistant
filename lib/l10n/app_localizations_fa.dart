@@ -619,7 +619,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get datesCalendarTab => 'تقویم';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'حالت‌های ماه';
 
   @override
   String get undo => 'بازگردانی';
@@ -1019,4 +1019,13 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'نمایش کارت فهرست ۳ یادآوری بعدی';
+
+  @override
+  String get moonCalendarTitle => 'تقویم گام‌های ماه';
+
+  @override
+  String get calendarGoToDate => 'رفتن به تاریخ';
+
+  @override
+  String get whiteDaysBannerPrefix => 'ایام البیض (۱۳، ۱۴، ۱۵)';
 }

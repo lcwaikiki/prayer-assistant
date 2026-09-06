@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "Pilih tanggal",
   "datesPrayerTimesTab": "Waktu Salat",
   "datesCalendarTab": "Kalender",
+  "datesMoonPhaseTab": "Fase Bulan",
   "undo": "Batalkan",
   "calendarReminderDeleted": "\"{title}\" dihapus",
   "verseOfTheDay": "Ayat Hari Ini",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "Tampilkan Kartu Hikmah Harian",
   "showCardDailyWisdomSubtitle": "Tampilkan kartu Hadits atau ayat harian",
   "showCardUpcomingRemindersTitle": "Tampilkan Kartu Pengingat Mendatang",
-  "showCardUpcomingRemindersSubtitle": "Tampilkan 3 pengingat mendatang berikutnya"
+  "showCardUpcomingRemindersSubtitle": "Tampilkan 3 pengingat mendatang berikutnya",
+  "moonCalendarTitle": "Kalender Fase Bulan",
+  "calendarGoToDate": "Buka tanggal",
+  "whiteDaysBannerPrefix": "Hari-hari Putih (13, 14, 15)"
 }

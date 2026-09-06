@@ -601,7 +601,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get datesCalendarTab => 'カレンダー';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => '月相';
 
   @override
   String get undo => '元に戻す';
@@ -995,4 +995,13 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get showCardUpcomingRemindersSubtitle => '今後のリマインダー3件を表示';
+
+  @override
+  String get moonCalendarTitle => '月齢カレンダー';
+
+  @override
+  String get calendarGoToDate => '日付へ移動';
+
+  @override
+  String get whiteDaysBannerPrefix => '白の日々（13, 14, 15日）';
 }

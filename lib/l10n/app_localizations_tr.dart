@@ -619,7 +619,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get datesCalendarTab => 'Takvim';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'Ay Evresi';
 
   @override
   String get undo => 'Geri Al';
@@ -1027,4 +1027,13 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'Gelecek 3 hatırlatıcıyı listeleyen kartı göster';
+
+  @override
+  String get moonCalendarTitle => 'Ay Takvimi & Evreleri';
+
+  @override
+  String get calendarGoToDate => 'Tarihe git';
+
+  @override
+  String get whiteDaysBannerPrefix => 'Eyyam-ı Biyd (13, 14, 15)';
 }

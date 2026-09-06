@@ -619,7 +619,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get datesCalendarTab => 'Kalender';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'Fase Bulan';
 
   @override
   String get undo => 'Batalkan';
@@ -1026,4 +1026,13 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'Tampilkan 3 pengingat mendatang berikutnya';
+
+  @override
+  String get moonCalendarTitle => 'Kalender Fase Bulan';
+
+  @override
+  String get calendarGoToDate => 'Buka tanggal';
+
+  @override
+  String get whiteDaysBannerPrefix => 'Hari-hari Putih (13, 14, 15)';
 }

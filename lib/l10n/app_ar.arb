@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "اختر التاريخ",
   "datesPrayerTimesTab": "أوقات الصلاة",
   "datesCalendarTab": "التقويم",
+  "datesMoonPhaseTab": "أطوار القمر",
   "undo": "تراجع",
   "calendarReminderDeleted": "\"{title}\" تم الحذف",
   "verseOfTheDay": "آية اليوم",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "إظهار بطاقة حكمة اليوم",
   "showCardDailyWisdomSubtitle": "عرض بطاقة الحديث أو الآية اليومية",
   "showCardUpcomingRemindersTitle": "إظهار بطاقة التذكيرات القادمة",
-  "showCardUpcomingRemindersSubtitle": "عرض بطاقة قائمة التذكيرات القادمة"
+  "showCardUpcomingRemindersSubtitle": "عرض بطاقة قائمة التذكيرات القادمة",
+  "moonCalendarTitle": "تقويم أطوار القمر",
+  "calendarGoToDate": "الانتقال إلى تاريخ",
+  "whiteDaysBannerPrefix": "الأيام البيض (13، 14، 15)"
 }

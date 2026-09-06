@@ -1663,7 +1663,7 @@ abstract class AppLocalizations {
   /// No description provided for @whiteDaysTitle.
   ///
   /// In en, this message translates to:
-  /// **'White Days (Ayyam al-Beed)'**
+  /// **'White Days (13th, 14th, 15th)'**
   String get whiteDaysTitle;
 
   /// No description provided for @mondayThursdayTitle.
@@ -1983,6 +1983,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Display card listing your next 3 upcoming calendar reminders'**
   String get showCardUpcomingRemindersSubtitle;
+
+  /// No description provided for @moonCalendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Moon Phase Calendar'**
+  String get moonCalendarTitle;
+
+  /// No description provided for @calendarGoToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to date'**
+  String get calendarGoToDate;
+
+  /// No description provided for @whiteDaysBannerPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'White Days (13, 14, 15)'**
+  String get whiteDaysBannerPrefix;
 }
 
 class _AppLocalizationsDelegate

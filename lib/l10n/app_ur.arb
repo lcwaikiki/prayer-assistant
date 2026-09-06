@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "تاریخ منتخب کریں",
   "datesPrayerTimesTab": "نماز کے اوقات",
   "datesCalendarTab": "کیلنڈر",
+  "datesMoonPhaseTab": "قمری صورتیں",
   "undo": "واپس لائیں",
   "calendarReminderDeleted": "\"{title}\" حذف ہوگیا",
   "verseOfTheDay": "آج کی آیت",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "آج کی حکمت کا کارڈ دکھائیں",
   "showCardDailyWisdomSubtitle": "روزانہ کی حدیث یا آیت کا کارڈ دکھائیں",
   "showCardUpcomingRemindersTitle": "آنے والی یاد دہانیوں کا کارڈ دکھائیں",
-  "showCardUpcomingRemindersSubtitle": "اگلی 3 یاد دہانیوں کی فہرست والا کارڈ دکھائیں"
+  "showCardUpcomingRemindersSubtitle": "اگلی 3 یاد دہانیوں کی فہرست والا کارڈ دکھائیں",
+  "moonCalendarTitle": "چاند کی حالتوں کا کیلنڈر",
+  "calendarGoToDate": "تاریخ پر جائیں",
+  "whiteDaysBannerPrefix": "ایام بیض (13، 14، 15)"
 }

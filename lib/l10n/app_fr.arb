@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "Choisir la date",
   "datesPrayerTimesTab": "Heures de prière",
   "datesCalendarTab": "Calendrier",
+  "datesMoonPhaseTab": "Phase de la lune",
   "undo": "Annuler",
   "calendarReminderDeleted": "« {title} » supprimé",
   "verseOfTheDay": "Verset du Jour",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "Afficher la carte sagesse du jour",
   "showCardDailyWisdomSubtitle": "Afficher le Hadith ou verset du jour",
   "showCardUpcomingRemindersTitle": "Afficher la carte rappels à venir",
-  "showCardUpcomingRemindersSubtitle": "Afficher la liste des 3 prochains rappels"
+  "showCardUpcomingRemindersSubtitle": "Afficher la liste des 3 prochains rappels",
+  "moonCalendarTitle": "Calendrier des Phases de la Lune",
+  "calendarGoToDate": "Aller à la date",
+  "whiteDaysBannerPrefix": "Jours Blancs (13, 14, 15)"
 }

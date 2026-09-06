@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "日付を選択",
   "datesPrayerTimesTab": "礼拝時間",
   "datesCalendarTab": "カレンダー",
+  "datesMoonPhaseTab": "月相",
   "undo": "元に戻す",
   "calendarReminderDeleted": "「{title}」を削除しました",
   "verseOfTheDay": "今日のクルアーン",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "今日の知恵カードを表示",
   "showCardDailyWisdomSubtitle": "日々のハディースまたは聖句カードを表示",
   "showCardUpcomingRemindersTitle": "今後のリマインダーカードを表示",
-  "showCardUpcomingRemindersSubtitle": "今後のリマインダー3件を表示"
+  "showCardUpcomingRemindersSubtitle": "今後のリマインダー3件を表示",
+  "moonCalendarTitle": "月齢カレンダー",
+  "calendarGoToDate": "日付へ移動",
+  "whiteDaysBannerPrefix": "白の日々（13, 14, 15日）"
 }

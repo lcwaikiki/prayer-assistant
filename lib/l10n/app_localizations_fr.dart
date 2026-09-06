@@ -621,7 +621,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get datesCalendarTab => 'Calendrier';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'Phase de la lune';
 
   @override
   String get undo => 'Annuler';
@@ -1033,4 +1033,13 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'Afficher la liste des 3 prochains rappels';
+
+  @override
+  String get moonCalendarTitle => 'Calendrier des Phases de la Lune';
+
+  @override
+  String get calendarGoToDate => 'Aller à la date';
+
+  @override
+  String get whiteDaysBannerPrefix => 'Jours Blancs (13, 14, 15)';
 }

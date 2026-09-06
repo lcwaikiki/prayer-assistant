@@ -621,7 +621,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get datesCalendarTab => 'Календарь';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'Фаза Луны';
 
   @override
   String get undo => 'Отменить';
@@ -1028,4 +1028,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'Отображать карточку с 3 ближайшими напоминаниями';
+
+  @override
+  String get moonCalendarTitle => 'Календарь фаз Луны';
+
+  @override
+  String get calendarGoToDate => 'Перейти к дате';
+
+  @override
+  String get whiteDaysBannerPrefix => 'Белые дни (13, 14, 15)';
 }

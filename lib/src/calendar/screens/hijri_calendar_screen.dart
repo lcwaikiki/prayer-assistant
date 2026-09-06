@@ -18,22 +18,6 @@ import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
 import 'moon_calendar_screen.dart';
 
-String _goToDateTooltip(String languageCode) {
-  return switch (languageCode.toLowerCase()) {
-    'tr' => 'Tarihe git',
-    'ar' => 'الانتقال إلى تاريخ',
-    'de' => 'Zu Datum springen',
-    'es' => 'Ir a fecha',
-    'fa' => 'رفتن به تاریخ',
-    'fr' => 'Aller à la date',
-    'id' => 'Buka tanggal',
-    'ja' => '日付へ移動',
-    'ru' => 'Перейти к дате',
-    'ur' => 'تاریخ پر جائیں',
-    'zh' => '前往日期',
-    _ => 'Go to date',
-  };
-}
 
 String _shortHijriMonth(DateTime date, String languageCode, {int offset = 0}) {
   final month = HijriMonth.fromDate(date, offset: offset);
@@ -239,7 +223,7 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                   ),
                   IconButton(
                     key: const Key('calendar_go_to_date_button'),
-                    tooltip: _goToDateTooltip(Localizations.localeOf(context).languageCode),
+                    tooltip: context.l10n.calendarGoToDate,
                     icon: const Icon(Icons.edit_calendar),
                     onPressed: () => _openGoToDate(primary),
                   ),

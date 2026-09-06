@@ -618,7 +618,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get datesCalendarTab => 'کیلنڈر';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'قمری صورتیں';
 
   @override
   String get undo => 'واپس لائیں';
@@ -1023,4 +1023,13 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'اگلی 3 یاد دہانیوں کی فہرست والا کارڈ دکھائیں';
+
+  @override
+  String get moonCalendarTitle => 'چاند کی حالتوں کا کیلنڈر';
+
+  @override
+  String get calendarGoToDate => 'تاریخ پر جائیں';
+
+  @override
+  String get whiteDaysBannerPrefix => 'ایام بیض (13، 14، 15)';
 }

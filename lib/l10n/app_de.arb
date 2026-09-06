@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "Datum wählen",
   "datesPrayerTimesTab": "Gebetszeiten",
   "datesCalendarTab": "Kalender",
+  "datesMoonPhaseTab": "Mondphase",
   "undo": "Rückgängig",
   "calendarReminderDeleted": "\"{title}\" gelöscht",
   "verseOfTheDay": "Vers des Tages",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "Tägliche Weisheit Karte anzeigen",
   "showCardDailyWisdomSubtitle": "Tägliches Hadith- oder Vers-Kärtchen anzeigen",
   "showCardUpcomingRemindersTitle": "Anstehende Erinnerungen Karte anzeigen",
-  "showCardUpcomingRemindersSubtitle": "Karte mit den nächsten 3 Erinnerungen anzeigen"
+  "showCardUpcomingRemindersSubtitle": "Karte mit den nächsten 3 Erinnerungen anzeigen",
+  "moonCalendarTitle": "Mondphasen-Kalender",
+  "calendarGoToDate": "Zu Datum springen",
+  "whiteDaysBannerPrefix": "Weiße Tage (13., 14., 15.)"
 }

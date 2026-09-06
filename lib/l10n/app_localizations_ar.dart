@@ -614,7 +614,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get datesCalendarTab => 'التقويم';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => 'أطوار القمر';
 
   @override
   String get undo => 'تراجع';
@@ -1017,4 +1017,13 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get showCardUpcomingRemindersSubtitle =>
       'عرض بطاقة قائمة التذكيرات القادمة';
+
+  @override
+  String get moonCalendarTitle => 'تقويم أطوار القمر';
+
+  @override
+  String get calendarGoToDate => 'الانتقال إلى تاريخ';
+
+  @override
+  String get whiteDaysBannerPrefix => 'الأيام البيض (13، 14، 15)';
 }

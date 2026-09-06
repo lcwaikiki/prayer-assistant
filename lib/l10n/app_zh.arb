@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "选择日期",
   "datesPrayerTimesTab": "礼拜时间",
   "datesCalendarTab": "日历",
+  "datesMoonPhaseTab": "月相",
   "undo": "撤销",
   "calendarReminderDeleted": "已删除“{title}”",
   "verseOfTheDay": "今日节文",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "显示每日智慧卡片",
   "showCardDailyWisdomSubtitle": "显示每日圣训或经文卡片",
   "showCardUpcomingRemindersTitle": "显示近期提醒卡片",
-  "showCardUpcomingRemindersSubtitle": "显示列出接下来 3 个提醒的卡片"
+  "showCardUpcomingRemindersSubtitle": "显示列出接下来 3 个提醒的卡片",
+  "moonCalendarTitle": "月相日历",
+  "calendarGoToDate": "前往日期",
+  "whiteDaysBannerPrefix": "白日（13、14、15日）"
 }

@@ -199,6 +199,7 @@
   "calendarPickAnchorDate": "انتخاب تاریخ",
   "datesPrayerTimesTab": "اوقات نماز",
   "datesCalendarTab": "تقویم",
+  "datesMoonPhaseTab": "حالت‌های ماه",
   "undo": "بازگردانی",
   "calendarReminderDeleted": "«{title}» حذف شد",
   "verseOfTheDay": "آیه روز",
@@ -352,5 +353,8 @@
   "showCardDailyWisdomTitle": "نمایش کارت حکمت روز",
   "showCardDailyWisdomSubtitle": "نمایش کارت حدیث یا آیه روزانه",
   "showCardUpcomingRemindersTitle": "نمایش کارت یادآوری‌های آینده",
-  "showCardUpcomingRemindersSubtitle": "نمایش کارت فهرست ۳ یادآوری بعدی"
+  "showCardUpcomingRemindersSubtitle": "نمایش کارت فهرست ۳ یادآوری بعدی",
+  "moonCalendarTitle": "تقویم گام‌های ماه",
+  "calendarGoToDate": "رفتن به تاریخ",
+  "whiteDaysBannerPrefix": "ایام البیض (۱۳، ۱۴، ۱۵)"
 }

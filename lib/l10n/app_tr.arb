@@ -205,6 +205,7 @@
   "calendarPickAnchorDate": "Tarih seç",
   "datesPrayerTimesTab": "Namaz Vakitleri",
   "datesCalendarTab": "Takvim",
+  "datesMoonPhaseTab": "Ay Evresi",
   "undo": "Geri Al",
   "calendarReminderDeleted": "\"{title}\" silindi",
   "verseOfTheDay": "Günün Ayeti",
@@ -358,5 +359,8 @@
   "showCardDailyWisdomTitle": "Günün Hikmeti Kartını Göster",
   "showCardDailyWisdomSubtitle": "Günlük Hadis veya ayet bilgi kartını göster",
   "showCardUpcomingRemindersTitle": "Yaklaşan Hatırlatıcılar Kartını Göster",
-  "showCardUpcomingRemindersSubtitle": "Gelecek 3 hatırlatıcıyı listeleyen kartı göster"
+  "showCardUpcomingRemindersSubtitle": "Gelecek 3 hatırlatıcıyı listeleyen kartı göster",
+  "moonCalendarTitle": "Ay Takvimi & Evreleri",
+  "calendarGoToDate": "Tarihe git",
+  "whiteDaysBannerPrefix": "Eyyam-ı Biyd (13, 14, 15)"
 }

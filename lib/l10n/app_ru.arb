@@ -249,6 +249,7 @@
   "calendarPickAnchorDate": "Выбрать дату",
   "datesPrayerTimesTab": "Время намаза",
   "datesCalendarTab": "Календарь",
+  "datesMoonPhaseTab": "Фаза Луны",
   "undo": "Отменить",
   "calendarReminderDeleted": "«{title}» удалено",
   "@calendarReminderDeleted": {
@@ -407,5 +408,8 @@
   "showCardDailyWisdomTitle": "Показывать карточку мудрости дня",
   "showCardDailyWisdomSubtitle": "Отображать ежедневный Хадис или аят",
   "showCardUpcomingRemindersTitle": "Показывать карточку ближайших напоминаний",
-  "showCardUpcomingRemindersSubtitle": "Отображать карточку с 3 ближайшими напоминаниями"
+  "showCardUpcomingRemindersSubtitle": "Отображать карточку с 3 ближайшими напоминаниями",
+  "moonCalendarTitle": "Календарь фаз Луны",
+  "calendarGoToDate": "Перейти к дате",
+  "whiteDaysBannerPrefix": "Белые дни (13, 14, 15)"
 }

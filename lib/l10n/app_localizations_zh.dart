@@ -601,7 +601,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get datesCalendarTab => '日历';
 
   @override
-  String get datesMoonPhaseTab => 'Moon Phase';
+  String get datesMoonPhaseTab => '月相';
 
   @override
   String get undo => '撤销';
@@ -994,4 +994,13 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showCardUpcomingRemindersSubtitle => '显示列出接下来 3 个提醒的卡片';
+
+  @override
+  String get moonCalendarTitle => '月相日历';
+
+  @override
+  String get calendarGoToDate => '前往日期';
+
+  @override
+  String get whiteDaysBannerPrefix => '白日（13、14、15日）';
 }

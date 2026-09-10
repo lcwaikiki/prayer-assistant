@@ -1564,6 +1564,78 @@ abstract class AppLocalizations {
   /// **'Share / Save'**
   String get shareOrSave;
 
+  /// No description provided for @googleDriveSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to Google Drive'**
+  String get googleDriveSignIn;
+
+  /// No description provided for @googleDriveSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of Google Drive'**
+  String get googleDriveSignOut;
+
+  /// No description provided for @googleDriveBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Backup to Google Drive'**
+  String get googleDriveBackup;
+
+  /// No description provided for @googleDriveRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from Google Drive'**
+  String get googleDriveRestore;
+
+  /// No description provided for @googleDriveBackupSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved to Google Drive'**
+  String get googleDriveBackupSuccess;
+
+  /// No description provided for @googleDriveBackupError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save backup to Google Drive'**
+  String get googleDriveBackupError;
+
+  /// No description provided for @googleDriveWorking.
+  ///
+  /// In en, this message translates to:
+  /// **'Working...'**
+  String get googleDriveWorking;
+
+  /// No description provided for @googleDriveRestoreConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'This will restore data from your Google Drive backup. Continue?'**
+  String get googleDriveRestoreConfirm;
+
+  /// Shows when the last Google Drive backup was made
+  ///
+  /// In en, this message translates to:
+  /// **'Last backup: {date}'**
+  String googleDriveLastBackup(String date);
+
+  /// No description provided for @googleDriveNotSignedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to use Google Drive backup'**
+  String get googleDriveNotSignedIn;
+
+  /// No description provided for @googleDriveSignInError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign in to Google Drive'**
+  String get googleDriveSignInError;
+
+  /// No description provided for @googleDriveConfigError.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.'**
+  String get googleDriveConfigError;
+
   /// No description provided for @analyticsTab.
   ///
   /// In en, this message translates to:

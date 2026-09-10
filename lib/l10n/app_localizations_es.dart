@@ -797,6 +797,50 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shareOrSave => 'Compartir / Guardar';
 
   @override
+  String get googleDriveSignIn => 'Iniciar sesión en Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'Cerrar sesión de Google Drive';
+
+  @override
+  String get googleDriveBackup => 'Guardar copia de seguridad en Google Drive';
+
+  @override
+  String get googleDriveRestore => 'Restaurar desde Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'Copia de seguridad guardada en Google Drive';
+
+  @override
+  String get googleDriveBackupError =>
+      'No se pudo guardar la copia de seguridad en Google Drive';
+
+  @override
+  String get googleDriveWorking => 'Procesando...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Esto restaurará los datos desde su copia de seguridad de Google Drive. ¿Continuar?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Última copia de seguridad: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Inicie sesión para usar la copia de seguridad de Google Drive';
+
+  @override
+  String get googleDriveSignInError =>
+      'No se pudo iniciar sesión en Google Drive';
+
+  @override
+  String get googleDriveConfigError =>
+      'El inicio de sesión de Google Drive no está configurado. Agregue el ID de cliente web OAuth mediante --dart-define=GOOGLE_SERVER_CLIENT_ID y la huella SHA-1 en Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'Análisis';
 
   @override

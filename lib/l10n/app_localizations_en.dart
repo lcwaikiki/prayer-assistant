@@ -796,6 +796,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shareOrSave => 'Share / Save';
 
   @override
+  String get googleDriveSignIn => 'Sign in to Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'Sign out of Google Drive';
+
+  @override
+  String get googleDriveBackup => 'Save Backup to Google Drive';
+
+  @override
+  String get googleDriveRestore => 'Restore from Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess => 'Backup saved to Google Drive';
+
+  @override
+  String get googleDriveBackupError => 'Failed to save backup to Google Drive';
+
+  @override
+  String get googleDriveWorking => 'Working...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'This will restore data from your Google Drive backup. Continue?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Last backup: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn => 'Sign in to use Google Drive backup';
+
+  @override
+  String get googleDriveSignInError => 'Failed to sign in to Google Drive';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'Analytics';
 
   @override

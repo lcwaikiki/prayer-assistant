@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -525,6 +526,115 @@ class PreferencesScreen extends StatelessWidget {
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.zero,
+                    leading: Icon(
+                      controller.isGoogleDriveSignedIn
+                          ? Icons.cloud_done_outlined
+                          : Icons.cloud_outlined,
+                    ),
+                    title: Text(
+                      controller.isGoogleDriveSignedIn
+                          ? context.l10n.googleDriveSignOut
+                          : context.l10n.googleDriveSignIn,
+                    ),
+                    subtitle: controller.isGoogleDriveSignedIn &&
+                            controller.googleDriveAccountEmail != null
+                        ? Text(controller.googleDriveAccountEmail!)
+                        : null,
+                    onTap: () async {
+                      try {
+                        if (controller.isGoogleDriveSignedIn) {
+                          await controller.signOutFromGoogleDrive();
+                        } else {
+                          final signedIn =
+                              await controller.signInToGoogleDrive();
+                          if (!signedIn && context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  context.l10n.googleDriveNotSignedIn,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      } on GoogleSignInException catch (e) {
+                        if (context.mounted) {
+                          final message = e.code ==
+                                  GoogleSignInExceptionCode
+                                      .clientConfigurationError
+                              ? context.l10n.googleDriveConfigError
+                              : context.l10n.googleDriveSignInError;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                e.description?.isNotEmpty == true
+                                    ? '$message\n${e.description}'
+                                    : message,
+                              ),
+                              duration: const Duration(seconds: 5),
+                            ),
+                          );
+                        }
+                      } catch (_) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                context.l10n.googleDriveSignInError,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    enabled: controller.isGoogleDriveSignedIn,
+                    leading: const Icon(Icons.cloud_upload_outlined),
+                    title: Text(context.l10n.googleDriveBackup),
+                    onTap: () async {
+                      try {
+                        await _runWithGoogleDriveProgress(
+                          context,
+                          controller,
+                          controller.uploadBackupToGoogleDrive,
+                        );
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                context.l10n.googleDriveBackupSuccess,
+                              ),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                '${context.l10n.googleDriveBackupError}: $e',
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    enabled: controller.isGoogleDriveSignedIn,
+                    leading: const Icon(Icons.cloud_download_outlined),
+                    title: Text(context.l10n.googleDriveRestore),
+                    onTap: () => _showGoogleDriveRestoreDialog(
+                      context,
+                      controller,
+                    ),
+                  ),
+                  const Divider(height: 24),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.download_outlined),
                     title: Text(context.l10n.exportBackupJson),
                     onTap: () async {
@@ -654,6 +764,88 @@ class PreferencesScreen extends StatelessWidget {
                   }
                 } catch (_) {
                   if (dialogContext.mounted) {
+                    ScaffoldMessenger.of(dialogContext).showSnackBar(
+                      SnackBar(content: Text(context.l10n.restoreError)),
+                    );
+                  }
+                }
+              },
+              child: Text(context.l10n.save),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<T> _runWithGoogleDriveProgress<T>(
+    BuildContext context,
+    PrayerAppController controller,
+    Future<T> Function() task,
+  ) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return PopScope<void>(
+          canPop: false,
+          child: AlertDialog(
+            content: Row(
+              children: [
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 3),
+                ),
+                const SizedBox(width: 16),
+                Expanded(child: Text(context.l10n.googleDriveWorking)),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    try {
+      return await task();
+    } finally {
+      if (context.mounted) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
+    }
+  }
+
+  void _showGoogleDriveRestoreDialog(
+    BuildContext context,
+    PrayerAppController controller,
+  ) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(context.l10n.googleDriveRestore),
+          content: Text(context.l10n.googleDriveRestoreConfirm),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(context.l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () async {
+                try {
+                  await _runWithGoogleDriveProgress(
+                    context,
+                    controller,
+                    controller.restoreBackupFromGoogleDrive,
+                  );
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(context.l10n.restoreSuccess)),
+                    );
+                  }
+                } catch (_) {
+                  if (dialogContext.mounted) {
+                    Navigator.of(dialogContext).pop();
                     ScaffoldMessenger.of(dialogContext).showSnackBar(
                       SnackBar(content: Text(context.l10n.restoreError)),
                     );

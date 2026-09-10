@@ -775,6 +775,46 @@ class AppLocalizationsJa extends AppLocalizations {
   String get shareOrSave => '共有 / 保存';
 
   @override
+  String get googleDriveSignIn => 'Google ドライブにサインイン';
+
+  @override
+  String get googleDriveSignOut => 'Google ドライブからサインアウト';
+
+  @override
+  String get googleDriveBackup => 'Google ドライブにバックアップを保存';
+
+  @override
+  String get googleDriveRestore => 'Google ドライブから復元';
+
+  @override
+  String get googleDriveBackupSuccess => 'Google ドライブにバックアップを保存しました';
+
+  @override
+  String get googleDriveBackupError => 'Google ドライブへのバックアップ保存に失敗しました';
+
+  @override
+  String get googleDriveWorking => '処理中...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Google ドライブのバックアップからデータを復元します。続行しますか？';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return '最終バックアップ: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn => 'Google ドライブのバックアップを使用するにはサインインしてください';
+
+  @override
+  String get googleDriveSignInError => 'Google ドライブへのサインインに失敗しました';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google ドライブのサインインが設定されていません。--dart-define=GOOGLE_SERVER_CLIENT_ID でウェブ OAuth クライアント ID を追加し、Google Cloud Console で SHA-1 フィンガープリントを設定してください。';
+
+  @override
   String get analyticsTab => '分析';
 
   @override

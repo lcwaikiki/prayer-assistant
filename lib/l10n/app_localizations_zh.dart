@@ -774,6 +774,45 @@ class AppLocalizationsZh extends AppLocalizations {
   String get shareOrSave => '分享 / 保存';
 
   @override
+  String get googleDriveSignIn => '登录 Google 云端硬盘';
+
+  @override
+  String get googleDriveSignOut => '退出 Google 云端硬盘';
+
+  @override
+  String get googleDriveBackup => '将备份保存到 Google 云端硬盘';
+
+  @override
+  String get googleDriveRestore => '从 Google 云端硬盘恢复';
+
+  @override
+  String get googleDriveBackupSuccess => '备份已保存到 Google 云端硬盘';
+
+  @override
+  String get googleDriveBackupError => '无法将备份保存到 Google 云端硬盘';
+
+  @override
+  String get googleDriveWorking => '处理中...';
+
+  @override
+  String get googleDriveRestoreConfirm => '这将从您的 Google 云端硬盘备份中恢复数据。继续吗？';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return '上次备份：$date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn => '登录以使用 Google 云端硬盘备份';
+
+  @override
+  String get googleDriveSignInError => '无法登录 Google 云端硬盘';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google 云端硬盘登录未配置。请通过 --dart-define=GOOGLE_SERVER_CLIENT_ID 添加 Web OAuth 客户端 ID，并在 Google Cloud Console 中添加 SHA-1 指纹。';
+
+  @override
   String get analyticsTab => '分析';
 
   @override

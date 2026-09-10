@@ -799,6 +799,49 @@ class AppLocalizationsFr extends AppLocalizations {
   String get shareOrSave => 'Partager / Enregistrer';
 
   @override
+  String get googleDriveSignIn => 'Se connecter à Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'Se déconnecter de Google Drive';
+
+  @override
+  String get googleDriveBackup => 'Enregistrer la sauvegarde sur Google Drive';
+
+  @override
+  String get googleDriveRestore => 'Restaurer depuis Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'Sauvegarde enregistrée sur Google Drive';
+
+  @override
+  String get googleDriveBackupError =>
+      'Échec de l\'enregistrement de la sauvegarde sur Google Drive';
+
+  @override
+  String get googleDriveWorking => 'Traitement en cours...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Cela restaurera les données de votre sauvegarde Google Drive. Continuer ?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Dernière sauvegarde : $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Connectez-vous pour utiliser la sauvegarde Google Drive';
+
+  @override
+  String get googleDriveSignInError => 'Échec de la connexion à Google Drive';
+
+  @override
+  String get googleDriveConfigError =>
+      'La connexion à Google Drive n\'est pas configurée. Ajoutez l\'ID client Web OAuth via --dart-define=GOOGLE_SERVER_CLIENT_ID et l\'empreinte SHA-1 dans Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'Analyses';
 
   @override

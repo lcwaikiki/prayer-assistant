@@ -17,6 +17,7 @@ import '../models/fasting_models.dart';
 import '../models/prayer_models.dart';
 
 import '../services/backup_export_service.dart';
+import '../services/google_drive_backup_service.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
@@ -1384,6 +1385,41 @@ class PrayerAppController extends ChangeNotifier {
       days: _yearRange,
       holidayLabel: holidayLabel,
     );
+  }
+
+  final _driveService = GoogleDriveBackupService();
+
+  bool get isGoogleDriveSignedIn => _driveService.isSignedIn;
+
+  String? get googleDriveAccountEmail => _driveService.accountEmail;
+
+  Future<bool> signInToGoogleDrive() async {
+    final signedIn = await _driveService.signIn();
+    notifyListeners();
+    return signedIn;
+  }
+
+  Future<void> signOutFromGoogleDrive() async {
+    await _driveService.signOut();
+    notifyListeners();
+  }
+
+  Future<String> uploadBackupToGoogleDrive() async {
+    final jsonStr = await exportBackupJson();
+    await _driveService.uploadBackup(jsonStr);
+    return jsonStr;
+  }
+
+  Future<void> restoreBackupFromGoogleDrive() async {
+    final jsonStr = await _driveService.downloadBackup();
+    if (jsonStr == null) {
+      throw StateError('No backup found on Google Drive');
+    }
+    await restoreBackupJson(jsonStr);
+  }
+
+  Future<DateTime?> getLastGoogleDriveBackupTime() async {
+    return _driveService.getLastBackupTime();
   }
 }
 

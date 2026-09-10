@@ -796,6 +796,48 @@ class AppLocalizationsId extends AppLocalizations {
   String get shareOrSave => 'Bagikan / Simpan';
 
   @override
+  String get googleDriveSignIn => 'Masuk ke Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'Keluar dari Google Drive';
+
+  @override
+  String get googleDriveBackup => 'Simpan Cadangan ke Google Drive';
+
+  @override
+  String get googleDriveRestore => 'Pulihkan dari Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess => 'Cadangan disimpan ke Google Drive';
+
+  @override
+  String get googleDriveBackupError =>
+      'Gagal menyimpan cadangan ke Google Drive';
+
+  @override
+  String get googleDriveWorking => 'Memproses...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Ini akan memulihkan data dari cadangan Google Drive Anda. Lanjutkan?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Cadangan terakhir: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Masuk untuk menggunakan cadangan Google Drive';
+
+  @override
+  String get googleDriveSignInError => 'Gagal masuk ke Google Drive';
+
+  @override
+  String get googleDriveConfigError =>
+      'Masuk Google Drive belum dikonfigurasi. Tambahkan ID klien web OAuth melalui --dart-define=GOOGLE_SERVER_CLIENT_ID dan sidik jari SHA-1 di Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'Analistik';
 
   @override

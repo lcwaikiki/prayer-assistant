@@ -790,6 +790,49 @@ class AppLocalizationsAr extends AppLocalizations {
   String get shareOrSave => 'مشاركة / حفظ';
 
   @override
+  String get googleDriveSignIn => 'تسجيل الدخول إلى Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'تسجيل الخروج من Google Drive';
+
+  @override
+  String get googleDriveBackup => 'حفظ النسخة الاحتياطية إلى Google Drive';
+
+  @override
+  String get googleDriveRestore => 'استعادة من Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'تم حفظ النسخة الاحتياطية في Google Drive';
+
+  @override
+  String get googleDriveBackupError =>
+      'فشل حفظ النسخة الاحتياطية إلى Google Drive';
+
+  @override
+  String get googleDriveWorking => 'جارٍ المعالجة...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'سيتم استعادة البيانات من النسخة الاحتياطية في Google Drive. هل تريد المتابعة؟';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'آخر نسخة احتياطية: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'سجّل الدخول لاستخدام النسخة الاحتياطية من Google Drive';
+
+  @override
+  String get googleDriveSignInError => 'تعذّر تسجيل الدخول إلى Google Drive';
+
+  @override
+  String get googleDriveConfigError =>
+      'تسجيل الدخول إلى Google Drive غير مُهيأ. أضف معرف عميل OAuth عبر الويب باستخدام --dart-define=GOOGLE_SERVER_CLIENT_ID وبصمة SHA-1 في Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'التحليلات';
 
   @override

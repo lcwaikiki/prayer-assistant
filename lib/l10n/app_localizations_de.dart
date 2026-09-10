@@ -797,6 +797,50 @@ class AppLocalizationsDe extends AppLocalizations {
   String get shareOrSave => 'Teilen / Speichern';
 
   @override
+  String get googleDriveSignIn => 'Bei Google Drive anmelden';
+
+  @override
+  String get googleDriveSignOut => 'Von Google Drive abmelden';
+
+  @override
+  String get googleDriveBackup => 'Sicherung auf Google Drive speichern';
+
+  @override
+  String get googleDriveRestore => 'Von Google Drive wiederherstellen';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'Sicherung auf Google Drive gespeichert';
+
+  @override
+  String get googleDriveBackupError =>
+      'Sicherung auf Google Drive fehlgeschlagen';
+
+  @override
+  String get googleDriveWorking => 'Wird verarbeitet...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Dies stellt Daten aus Ihrer Google-Drive-Sicherung wieder her. Fortfahren?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Letzte Sicherung: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Melden Sie sich an, um die Google-Drive-Sicherung zu nutzen';
+
+  @override
+  String get googleDriveSignInError =>
+      'Anmeldung bei Google Drive fehlgeschlagen';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google-Drive-Anmeldung ist nicht konfiguriert. Fügen Sie die Web-OAuth-Client-ID per --dart-define=GOOGLE_SERVER_CLIENT_ID und den SHA-1-Fingerabdruck in der Google Cloud Console hinzu.';
+
+  @override
   String get analyticsTab => 'Analysen';
 
   @override

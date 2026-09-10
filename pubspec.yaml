@@ -56,6 +56,9 @@ dependencies:
   hijri: ^3.0.1
   share_plus: ^13.3.0
   flutter_compass: ^0.8.1
+  google_sign_in: 7.2.0
+  googleapis: ^17.0.0
+  extension_google_sign_in_as_googleapis_auth: 3.0.0
 
 dev_dependencies:
   flutter_test:

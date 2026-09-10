@@ -795,6 +795,48 @@ class AppLocalizationsUr extends AppLocalizations {
   String get shareOrSave => 'شیئر / محفوظ کریں';
 
   @override
+  String get googleDriveSignIn => 'Google Drive میں سائن ان کریں';
+
+  @override
+  String get googleDriveSignOut => 'Google Drive سے سائن آؤٹ کریں';
+
+  @override
+  String get googleDriveBackup => 'بیک اپ Google Drive میں محفوظ کریں';
+
+  @override
+  String get googleDriveRestore => 'Google Drive سے بحال کریں';
+
+  @override
+  String get googleDriveBackupSuccess => 'بیک اپ Google Drive میں محفوظ ہو گیا';
+
+  @override
+  String get googleDriveBackupError =>
+      'بیک اپ Google Drive میں محفوظ نہیں ہو سکا';
+
+  @override
+  String get googleDriveWorking => 'عمل جاری ہے...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'یہ آپ کے Google Drive بیک اپ سے ڈیٹا بحال کرے گا۔ جاری رکھیں؟';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'آخری بیک اپ: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Google Drive بیک اپ استعمال کرنے کے لیے سائن ان کریں';
+
+  @override
+  String get googleDriveSignInError => 'Google Drive میں سائن ان ناکام ہوا';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google Drive سائن ان کنفیگر نہیں ہے۔ --dart-define=GOOGLE_SERVER_CLIENT_ID کے ذریعے ویب OAuth کلائنٹ ID اور Google Cloud Console میں SHA-1 فنگر پرنٹ شامل کریں۔';
+
+  @override
   String get analyticsTab => 'تجزیہ';
 
   @override

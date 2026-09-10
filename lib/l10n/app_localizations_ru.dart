@@ -798,6 +798,49 @@ class AppLocalizationsRu extends AppLocalizations {
   String get shareOrSave => 'Поделиться / Сохранить';
 
   @override
+  String get googleDriveSignIn => 'Войти в Google Диск';
+
+  @override
+  String get googleDriveSignOut => 'Выйти из Google Диска';
+
+  @override
+  String get googleDriveBackup => 'Сохранить резервную копию на Google Диск';
+
+  @override
+  String get googleDriveRestore => 'Восстановить из Google Диска';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'Резервная копия сохранена на Google Диске';
+
+  @override
+  String get googleDriveBackupError =>
+      'Не удалось сохранить резервную копию на Google Диск';
+
+  @override
+  String get googleDriveWorking => 'Обработка...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Это восстановит данные из вашей резервной копии Google Диска. Продолжить?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Последняя резервная копия: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Войдите, чтобы использовать резервное копирование Google Диска';
+
+  @override
+  String get googleDriveSignInError => 'Не удалось войти в Google Диск';
+
+  @override
+  String get googleDriveConfigError =>
+      'Вход в Google Диск не настроен. Добавьте веб-идентификатор клиента OAuth через --dart-define=GOOGLE_SERVER_CLIENT_ID и SHA-1 отпечаток в Google Cloud Console.';
+
+  @override
   String get analyticsTab => 'Аналитика';
 
   @override

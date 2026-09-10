@@ -797,6 +797,47 @@ class AppLocalizationsTr extends AppLocalizations {
   String get shareOrSave => 'Paylaş / Kaydet';
 
   @override
+  String get googleDriveSignIn => 'Google Drive\'a Giriş Yap';
+
+  @override
+  String get googleDriveSignOut => 'Google Drive\'dan Çıkış Yap';
+
+  @override
+  String get googleDriveBackup => 'Yedeği Google Drive\'a Kaydet';
+
+  @override
+  String get googleDriveRestore => 'Google Drive\'dan Geri Yükle';
+
+  @override
+  String get googleDriveBackupSuccess => 'Yedek Google Drive\'a kaydedildi';
+
+  @override
+  String get googleDriveBackupError => 'Yedek Google Drive\'a kaydedilemedi';
+
+  @override
+  String get googleDriveWorking => 'İşleniyor...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'Bu, verilerinizi Google Drive yedeğinizden geri yükleyecektir. Devam edilsin mi?';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'Son yedekleme: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'Google Drive yedeğini kullanmak için giriş yapın';
+
+  @override
+  String get googleDriveSignInError => 'Google Drive\'a giriş yapılamadı';
+
+  @override
+  String get googleDriveConfigError =>
+      'Google Drive girişi yapılandırılmamış. --dart-define=GOOGLE_SERVER_CLIENT_ID ile web OAuth istemci kimliğini ve Google Cloud Console\'da SHA-1 parmak izini ekleyin.';
+
+  @override
   String get analyticsTab => 'Analiz';
 
   @override

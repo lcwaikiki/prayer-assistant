@@ -348,6 +348,26 @@
   "@shareOrSave": {
     "description": "Button label to share or save exported file"
   },
+  "googleDriveSignIn": "Sign in to Google Drive",
+  "googleDriveSignOut": "Sign out of Google Drive",
+  "googleDriveBackup": "Save Backup to Google Drive",
+  "googleDriveRestore": "Restore from Google Drive",
+  "googleDriveBackupSuccess": "Backup saved to Google Drive",
+  "googleDriveBackupError": "Failed to save backup to Google Drive",
+  "googleDriveWorking": "Working...",
+  "googleDriveRestoreConfirm": "This will restore data from your Google Drive backup. Continue?",
+  "googleDriveLastBackup": "Last backup: {date}",
+  "@googleDriveLastBackup": {
+    "description": "Shows when the last Google Drive backup was made",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveNotSignedIn": "Sign in to use Google Drive backup",
+  "googleDriveSignInError": "Failed to sign in to Google Drive",
+  "googleDriveConfigError": "Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.",
   "analyticsTab": "Analytics",
   "currentStreak": "Current Streak",
   "longestStreak": "Longest Streak",

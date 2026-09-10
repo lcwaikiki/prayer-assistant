@@ -793,6 +793,49 @@ class AppLocalizationsFa extends AppLocalizations {
   String get shareOrSave => 'اشتراک‌گذاری / ذخیره';
 
   @override
+  String get googleDriveSignIn => 'ورود به Google Drive';
+
+  @override
+  String get googleDriveSignOut => 'خروج از Google Drive';
+
+  @override
+  String get googleDriveBackup => 'ذخیره نسخه پشتیبان در Google Drive';
+
+  @override
+  String get googleDriveRestore => 'بازیابی از Google Drive';
+
+  @override
+  String get googleDriveBackupSuccess =>
+      'نسخه پشتیبان در Google Drive ذخیره شد';
+
+  @override
+  String get googleDriveBackupError =>
+      'خطا در ذخیره نسخه پشتیبان در Google Drive';
+
+  @override
+  String get googleDriveWorking => 'در حال پردازش...';
+
+  @override
+  String get googleDriveRestoreConfirm =>
+      'این کار داده‌ها را از نسخه پشتیبان Google Drive شما بازیابی می‌کند. ادامه می‌دهید؟';
+
+  @override
+  String googleDriveLastBackup(String date) {
+    return 'آخرین نسخه پشتیبان: $date';
+  }
+
+  @override
+  String get googleDriveNotSignedIn =>
+      'برای استفاده از نسخه پشتیبان Google Drive وارد شوید';
+
+  @override
+  String get googleDriveSignInError => 'ورود به Google Drive ناموفق بود';
+
+  @override
+  String get googleDriveConfigError =>
+      'ورود به Google Drive پیکربندی نشده است. شناسه سرویس‌گیرنده وب OAuth را از طریق --dart-define=GOOGLE_SERVER_CLIENT_ID و اثر انگشت SHA-1 در Google Cloud Console اضافه کنید.';
+
+  @override
   String get analyticsTab => 'تحلیل و آمار';
 
   @override

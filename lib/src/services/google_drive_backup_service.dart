@@ -95,42 +95,60 @@ class GoogleDriveBackupService {
     await prefs.setInt(_listLimitPrefsKey, limit);
   }
 
-  /// Signs in and authorizes Drive access.
+  /// Signs in and returns whether the user granted a Google account.
   ///
-  /// Uses the standard sign-in flow to obtain the account, falling back to the
-  /// authorization client if Credential Manager's getCredential fails (e.g.
-  /// "[16] Account reauth failed" on Android 16).
+  /// Cancelling the account chooser is not an error: it returns false and
+  /// leaves the app signed out. Drive scope is requested lazily by [_driveApi]
+  /// only when a backup operation actually runs.
   Future<bool> signIn() async {
     await _ensureInitialized();
     await _googleSignIn.signOut();
+    _accountEmail = null;
     await _persistEmail(null);
     try {
-      final account = await _googleSignIn.authenticate(scopeHint: _scopes);
-      _accountEmail = account.email;
-      _signedIn = true;
-      await _persistEmail(_accountEmail);
-      return true;
+      return await _authenticate();
     } on GoogleSignInException catch (e) {
-      final canFallback = e.code == GoogleSignInExceptionCode.canceled ||
-          e.code == GoogleSignInExceptionCode.interrupted ||
-          e.code == GoogleSignInExceptionCode.uiUnavailable;
-      if (!canFallback) {
+      if (_isCancellation(e)) {
+        return false;
+      }
+      if (!_isRetryableSignInError(e)) {
         rethrow;
       }
+      // Transient Credential Manager failures such as "Failed to retrieve an
+      // ID token" [28404] often succeed on a second attempt.
+      await _googleSignIn.signOut();
       try {
-        await _googleSignIn.authorizationClient.authorizeScopes(_scopes);
-        _signedIn = true;
-        await _persistEmail(_accountEmail);
-        return true;
-      } on GoogleSignInException catch (fallbackError) {
-        if (fallbackError.code == GoogleSignInExceptionCode.canceled ||
-            fallbackError.code == GoogleSignInExceptionCode.interrupted ||
-            fallbackError.code == GoogleSignInExceptionCode.uiUnavailable) {
+        return await _authenticate();
+      } on GoogleSignInException catch (retryError) {
+        if (_isCancellation(retryError)) {
           return false;
         }
         rethrow;
       }
     }
+  }
+
+  Future<bool> _authenticate() async {
+    final account = await _googleSignIn.authenticate(scopeHint: _scopes);
+    _accountEmail = account.email;
+    _signedIn = true;
+    await _persistEmail(_accountEmail);
+    return true;
+  }
+
+  bool _isRetryableSignInError(GoogleSignInException e) {
+    final description = e.description?.toLowerCase() ?? '';
+    return description.contains('id token') || description.contains('28404');
+  }
+
+  /// True when the sign-in exception is just the user dismissing the sheet.
+  bool _isCancellation(GoogleSignInException e) {
+    if (e.code == GoogleSignInExceptionCode.canceled ||
+        e.code == GoogleSignInExceptionCode.interrupted ||
+        e.code == GoogleSignInExceptionCode.uiUnavailable) {
+      return true;
+    }
+    return e.description?.toLowerCase().contains('cancel') ?? false;
   }
 
   Future<void> signOut() async {

@@ -1686,6 +1686,7 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   final _driveService = GoogleDriveBackupService();
+  bool _googleDriveBusy = false;
 
   bool get isGoogleDriveSignedIn => _driveService.isSignedIn;
 
@@ -1693,15 +1694,29 @@ class PrayerAppController extends ChangeNotifier {
 
   int get googleDriveBackupListLimit => _driveService.listLimit;
 
+  /// True while a Google Drive sign-in or sign-out is in flight.
+  bool get googleDriveBusy => _googleDriveBusy;
+
   Future<bool> signInToGoogleDrive() async {
-    final signedIn = await _driveService.signIn();
+    _googleDriveBusy = true;
     notifyListeners();
-    return signedIn;
+    try {
+      return await _driveService.signIn();
+    } finally {
+      _googleDriveBusy = false;
+      notifyListeners();
+    }
   }
 
   Future<void> signOutFromGoogleDrive() async {
-    await _driveService.signOut();
+    _googleDriveBusy = true;
     notifyListeners();
+    try {
+      await _driveService.signOut();
+    } finally {
+      _googleDriveBusy = false;
+      notifyListeners();
+    }
   }
 
   Future<void> setGoogleDriveBackupListLimit(int limit) async {

@@ -107,22 +107,32 @@ class _HistoryScreenState extends State<HistoryScreen>
       if (!mounted) {
         return;
       }
+      // Coarse jump to the top of today's month so its rows are laid out,
+      // then align today's row to the top precisely. The per-row height
+      // estimate drifts over many months and left today near the bottom.
       final estimatedTop = _monthTopOffsets[monthKey];
       if (estimatedTop != null && _verticalController.hasClients) {
         final maxScroll = _verticalController.position.maxScrollExtent;
-        _verticalController.jumpTo(
-          (estimatedTop + (today.day - 1) * _dayRowHeight).clamp(0.0, maxScroll),
-        );
+        _verticalController.jumpTo(estimatedTop.clamp(0.0, maxScroll));
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) {
+            return;
+          }
+          final targetContext = _todayRowKey.currentContext;
+          if (targetContext != null) {
+            Scrollable.ensureVisible(targetContext, alignment: 0.5);
+          }
+        });
         return;
       }
       final targetContext = _todayRowKey.currentContext;
       if (targetContext != null) {
-        Scrollable.ensureVisible(targetContext, alignment: 0.18);
+        Scrollable.ensureVisible(targetContext, alignment: 0.5);
         return;
       }
       final fallbackContext = _monthKeys[monthKey]?.currentContext;
       if (fallbackContext != null) {
-        Scrollable.ensureVisible(fallbackContext, alignment: 0.08);
+        Scrollable.ensureVisible(fallbackContext, alignment: 0.0);
       }
     });
   }

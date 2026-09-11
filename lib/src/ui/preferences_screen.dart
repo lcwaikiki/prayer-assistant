@@ -526,11 +526,18 @@ class PreferencesScreen extends StatelessWidget {
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: Icon(
-                      controller.isGoogleDriveSignedIn
-                          ? Icons.cloud_done_outlined
-                          : Icons.cloud_outlined,
-                    ),
+                    enabled: !controller.googleDriveBusy,
+                    leading: controller.googleDriveBusy
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Icon(
+                            controller.isGoogleDriveSignedIn
+                                ? Icons.cloud_done_outlined
+                                : Icons.cloud_outlined,
+                          ),
                     title: Text(
                       controller.isGoogleDriveSignedIn
                           ? context.l10n.googleDriveSignOut
@@ -540,82 +547,78 @@ class PreferencesScreen extends StatelessWidget {
                             controller.googleDriveAccountEmail != null
                         ? Text(controller.googleDriveAccountEmail!)
                         : null,
-                    onTap: () async {
-                      if (controller.isGoogleDriveSignedIn) {
-                        final confirmed = await showDialog<bool>(
-                          context: context,
-                          builder: (dialogContext) => AlertDialog(
-                            title: Text(
-                              context.l10n.googleDriveSignOutConfirmTitle,
-                            ),
-                            content: Text(
-                              context.l10n.googleDriveSignOutConfirmBody(
-                                controller.googleDriveAccountEmail ?? '',
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.of(dialogContext).pop(false),
-                                child: Text(context.l10n.cancel),
-                              ),
-                              FilledButton(
-                                onPressed: () =>
-                                    Navigator.of(dialogContext).pop(true),
-                                child: Text(
-                                  context.l10n.googleDriveSignOut,
+                    onTap: controller.googleDriveBusy
+                        ? null
+                        : () async {
+                            if (controller.isGoogleDriveSignedIn) {
+                              final confirmed = await showDialog<bool>(
+                                context: context,
+                                builder: (dialogContext) => AlertDialog(
+                                  title: Text(
+                                    context.l10n
+                                        .googleDriveSignOutConfirmTitle,
+                                  ),
+                                  content: Text(
+                                    context.l10n
+                                        .googleDriveSignOutConfirmBody(
+                                          controller.googleDriveAccountEmail ??
+                                              '',
+                                        ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(false),
+                                      child: Text(context.l10n.cancel),
+                                    ),
+                                    FilledButton(
+                                      onPressed: () =>
+                                          Navigator.of(dialogContext).pop(true),
+                                      child: Text(
+                                        context.l10n.googleDriveSignOut,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmed == true && context.mounted) {
-                          await controller.signOutFromGoogleDrive();
-                        }
-                        return;
-                      }
-                      try {
-                        final signedIn = await controller.signInToGoogleDrive();
-                        if (!signedIn && context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.l10n.googleDriveNotSignedIn,
-                              ),
-                            ),
-                          );
-                        }
-                      } on GoogleSignInException catch (e) {
-                        if (context.mounted) {
-                          final message = e.code ==
-                                  GoogleSignInExceptionCode
-                                      .clientConfigurationError
-                              ? context.l10n.googleDriveConfigError
-                              : context.l10n.googleDriveSignInError;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                e.description?.isNotEmpty == true
-                                    ? '$message\n${e.description}'
-                                    : message,
-                              ),
-                              duration: const Duration(seconds: 5),
-                            ),
-                          );
-                        }
-                      } catch (_) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.l10n.googleDriveSignInError,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
+                              );
+                              if (confirmed == true && context.mounted) {
+                                await controller.signOutFromGoogleDrive();
+                              }
+                              return;
+                            }
+                            try {
+                              await controller.signInToGoogleDrive();
+                            } on GoogleSignInException catch (e) {
+                              if (context.mounted) {
+                                final message = e.code ==
+                                        GoogleSignInExceptionCode
+                                            .clientConfigurationError
+                                    ? context.l10n.googleDriveConfigError
+                                    : context.l10n.googleDriveSignInError;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      e.description?.isNotEmpty == true
+                                          ? '$message\n${e.description}'
+                                          : message,
+                                    ),
+                                    duration: const Duration(seconds: 5),
+                                  ),
+                                );
+                              }
+                            } catch (_) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      context.l10n.googleDriveSignInError,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     enabled: controller.isGoogleDriveSignedIn,
@@ -905,9 +908,10 @@ class PreferencesScreen extends StatelessWidget {
                 itemBuilder: (itemContext, index) {
                   final backup = backups[index];
                   final ml = MaterialLocalizations.of(itemContext);
+                  final createdLocal = backup.createdTime.toLocal();
                   final dateTime =
-                      '${ml.formatMediumDate(backup.createdTime)}  '
-                      '${ml.formatTimeOfDay(TimeOfDay.fromDateTime(backup.createdTime))}';
+                      '${ml.formatMediumDate(createdLocal)}  '
+                      '${ml.formatTimeOfDay(TimeOfDay.fromDateTime(createdLocal))}';
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.cloud_download_outlined),

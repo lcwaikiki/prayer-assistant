@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "Daten wiederherstellen?",
   "restoreConfirmBody": "Dies stellt Ihre Qadaa-Ziele, Gebetsverlauf, Erinnerungen und Tesbih-Daten wieder her. Fortfahren?",
   "restoreSuccess": "Daten erfolgreich wiederhergestellt!",
+  "restoreNewerVersionError": "Diese Sicherung wurde mit einer neueren App-Version erstellt. Bitte aktualisieren Sie die App und versuchen Sie es erneut.",
   "restoreError": "Ungültiges Sicherungsdateiformat",
   "shareOrSave": "Teilen / Speichern",
   "googleDriveSignIn": "Bei Google Drive anmelden",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Melden Sie sich an, um die Google-Drive-Sicherung zu nutzen",
   "googleDriveSignInError": "Anmeldung bei Google Drive fehlgeschlagen",
   "googleDriveConfigError": "Google-Drive-Anmeldung ist nicht konfiguriert. Fügen Sie die Web-OAuth-Client-ID per --dart-define=GOOGLE_SERVER_CLIENT_ID und den SHA-1-Fingerabdruck in der Google Cloud Console hinzu.",
+  "googleDriveSignOutConfirmTitle": "Von Google Drive abmelden?",
+  "googleDriveSignOutConfirmBody": "Abmelden mit {email}? Sie können sich später erneut anmelden.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Bestätigung beim Abmelden von Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Keine Backups auf Google Drive gefunden.",
+  "googleDriveBackupItemCount": "{count} Einträge",
+  "@googleDriveBackupItemCount": {
+    "description": "Anzahl der Einträge in einem Backup",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Backup-Verlaufslänge",
+  "googleDriveHistoryLimitAll": "Alle",
   "analyticsTab": "Analysen",
   "currentStreak": "Aktuelle Serie",
   "longestStreak": "Längste Serie",

@@ -768,6 +768,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get restoreSuccess => '数据已成功恢复！';
 
   @override
+  String get restoreNewerVersionError => '此备份由更新版本的应用创建。请更新应用后重试。';
+
+  @override
   String get restoreError => '无效的备份文件格式';
 
   @override
@@ -811,6 +814,28 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Google 云端硬盘登录未配置。请通过 --dart-define=GOOGLE_SERVER_CLIENT_ID 添加 Web OAuth 客户端 ID，并在 Google Cloud Console 中添加 SHA-1 指纹。';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => '退出 Google Drive？';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return '使用 $email 退出？您可以稍后重新登录。';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty => '未找到 Google Drive 上的备份。';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count 项';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => '备份历史记录数量';
+
+  @override
+  String get googleDriveHistoryLimitAll => '全部';
 
   @override
   String get analyticsTab => '分析';

@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "بازیابی داده‌های برنامه؟",
   "restoreConfirmBody": "اهداف قضا، تاریخچه نماز، یادآورها و تسبیحات بازیابی خواهند شد. ادامه می‌دهید؟",
   "restoreSuccess": "داده‌ها با موفقیت بازیابی شدند!",
+  "restoreNewerVersionError": "این نسخه پشتیبان توسط نسخه جدیدتری از برنامه ساخته شده است. لطفاً برنامه را به‌روزرسانی کنید و دوباره تلاش کنید.",
   "restoreError": "فرمت فایل پشتیبان نامعتبر است",
   "shareOrSave": "اشتراک‌گذاری / ذخیره",
   "googleDriveSignIn": "ورود به Google Drive",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "برای استفاده از نسخه پشتیبان Google Drive وارد شوید",
   "googleDriveSignInError": "ورود به Google Drive ناموفق بود",
   "googleDriveConfigError": "ورود به Google Drive پیکربندی نشده است. شناسه سرویس‌گیرنده وب OAuth را از طریق --dart-define=GOOGLE_SERVER_CLIENT_ID و اثر انگشت SHA-1 در Google Cloud Console اضافه کنید.",
+  "googleDriveSignOutConfirmTitle": "از Google Drive خارج شوید؟",
+  "googleDriveSignOutConfirmBody": "خروج با {email}؟ می‌توانید بعداً دوباره وارد شوید.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "پیام تایید هنگام خروج از Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "هیچ نسخه پشتیبانی در Google Drive یافت نشد.",
+  "googleDriveBackupItemCount": "{count} مورد",
+  "@googleDriveBackupItemCount": {
+    "description": "تعداد موارد در یک نسخه پشتیبان",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "تعداد نسخه‌های پشتیبان",
+  "googleDriveHistoryLimitAll": "همه",
   "analyticsTab": "تحلیل و آمار",
   "currentStreak": "زنجیره فعلی",
   "longestStreak": "طولانی‌ترین زنجیره",

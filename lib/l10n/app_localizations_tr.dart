@@ -791,6 +791,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get restoreSuccess => 'Veriler başarıyla geri yüklendi!';
 
   @override
+  String get restoreNewerVersionError =>
+      'Bu yedek, uygulamanın daha yeni bir sürümüyle oluşturuldu. Lütfen uygulamayı güncelleyip tekrar deneyin.';
+
+  @override
   String get restoreError => 'Geçersiz yedek dosyası biçimi';
 
   @override
@@ -836,6 +840,29 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Google Drive girişi yapılandırılmamış. --dart-define=GOOGLE_SERVER_CLIENT_ID ile web OAuth istemci kimliğini ve Google Cloud Console\'da SHA-1 parmak izini ekleyin.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle =>
+      'Google Drive oturumu kapatılsın mı?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return '$email ile oturumu kapat? Daha sonra tekrar giriş yapabilirsin.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty => 'Google Drive\'da yedek bulunamadı.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count öğe';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'Yedek geçmişi sayısı';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'Tümü';
 
   @override
   String get analyticsTab => 'Analiz';

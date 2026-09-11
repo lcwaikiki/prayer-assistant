@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "¿Restaurar datos de la aplicación?",
   "restoreConfirmBody": "Se restaurarán sus objetivos de Qadaa, historial de oración, recordatorios y Tesbihat. ¿Continuar?",
   "restoreSuccess": "¡Datos restaurados con éxito!",
+  "restoreNewerVersionError": "Esta copia de seguridad fue creada por una versión más reciente de la app. Actualiza la app e inténtalo de nuevo.",
   "restoreError": "Formato de archivo de respaldo no válido",
   "shareOrSave": "Compartir / Guardar",
   "googleDriveSignIn": "Iniciar sesión en Google Drive",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Inicie sesión para usar la copia de seguridad de Google Drive",
   "googleDriveSignInError": "No se pudo iniciar sesión en Google Drive",
   "googleDriveConfigError": "El inicio de sesión de Google Drive no está configurado. Agregue el ID de cliente web OAuth mediante --dart-define=GOOGLE_SERVER_CLIENT_ID y la huella SHA-1 en Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "¿Cerrar sesión de Google Drive?",
+  "googleDriveSignOutConfirmBody": "¿Cerrar sesión con {email}? Puedes iniciar sesión más tarde.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Mensaje de confirmación al cerrar sesión de Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "No se encontraron copias de seguridad en Google Drive.",
+  "googleDriveBackupItemCount": "{count} elementos",
+  "@googleDriveBackupItemCount": {
+    "description": "Número de elementos en una copia de seguridad",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Historial de copias de seguridad",
+  "googleDriveHistoryLimitAll": "Todos",
   "analyticsTab": "Análisis",
   "currentStreak": "Racha Actual",
   "longestStreak": "Racha Más Larga",

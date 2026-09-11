@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "データを復元しますか？",
   "restoreConfirmBody": "カザー目標、礼拝履歴、リマインダー、テスビーハットデータが復元されます。続行しますか？",
   "restoreSuccess": "データが正常に復元されました！",
+  "restoreNewerVersionError": "このバックアップは新しいバージョンのアプリで作成されました。アプリを更新して再試行してください。",
   "restoreError": "無効なバックアップファイル形式です",
   "shareOrSave": "共有 / 保存",
   "googleDriveSignIn": "Google ドライブにサインイン",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Google ドライブのバックアップを使用するにはサインインしてください",
   "googleDriveSignInError": "Google ドライブへのサインインに失敗しました",
   "googleDriveConfigError": "Google ドライブのサインインが設定されていません。--dart-define=GOOGLE_SERVER_CLIENT_ID でウェブ OAuth クライアント ID を追加し、Google Cloud Console で SHA-1 フィンガープリントを設定してください。",
+  "googleDriveSignOutConfirmTitle": "Google ドライブからサインアウトしますか？",
+  "googleDriveSignOutConfirmBody": "{email} でサインアウトしますか？後から再度サインインできます。",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Google ドライブからサインアウト時の確認メッセージ",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Google ドライブにバックアップが見つかりませんでした。",
+  "googleDriveBackupItemCount": "{count} 件",
+  "@googleDriveBackupItemCount": {
+    "description": "バックアップのアイテム数",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "バックアップ履歴の表示数",
+  "googleDriveHistoryLimitAll": "すべて",
   "analyticsTab": "分析",
   "currentStreak": "現在の継続",
   "longestStreak": "最長継続",

@@ -792,6 +792,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get restoreSuccess => 'Данные успешно восстановлены!';
 
   @override
+  String get restoreNewerVersionError =>
+      'Эта резервная копия создана более новой версией приложения. Обновите приложение и попробуйте снова.';
+
+  @override
   String get restoreError => 'Неверный формат файла резервной копии';
 
   @override
@@ -839,6 +843,29 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Вход в Google Диск не настроен. Добавьте веб-идентификатор клиента OAuth через --dart-define=GOOGLE_SERVER_CLIENT_ID и SHA-1 отпечаток в Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'Выйти из Google Drive?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'Выйти с аккаунта $email? Вы можете войти позже.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'Резервные копии не найдены в Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count элементов';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'История резервных копий';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'Все';
 
   @override
   String get analyticsTab => 'Аналитика';

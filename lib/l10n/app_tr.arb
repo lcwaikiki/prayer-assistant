@@ -288,6 +288,7 @@
   "restoreConfirmTitle": "Veriler Geri Yüklensin mi?",
   "restoreConfirmBody": "Kaza hedefleri, namaz geçmişi, hatırlatıcılar ve Tesbihat verileriniz geri yüklenecektir. Devam edilsin mi?",
   "restoreSuccess": "Veriler başarıyla geri yüklendi!",
+  "restoreNewerVersionError": "Bu yedek, uygulamanın daha yeni bir sürümüyle oluşturuldu. Lütfen uygulamayı güncelleyip tekrar deneyin.",
   "restoreError": "Geçersiz yedek dosyası biçimi",
   "shareOrSave": "Paylaş / Kaydet",
   "googleDriveSignIn": "Google Drive'a Giriş Yap",
@@ -302,6 +303,28 @@
   "googleDriveNotSignedIn": "Google Drive yedeğini kullanmak için giriş yapın",
   "googleDriveSignInError": "Google Drive'a giriş yapılamadı",
   "googleDriveConfigError": "Google Drive girişi yapılandırılmamış. --dart-define=GOOGLE_SERVER_CLIENT_ID ile web OAuth istemci kimliğini ve Google Cloud Console'da SHA-1 parmak izini ekleyin.",
+  "googleDriveSignOutConfirmTitle": "Google Drive oturumu kapatılsın mı?",
+  "googleDriveSignOutConfirmBody": "{email} ile oturumu kapat? Daha sonra tekrar giriş yapabilirsin.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Google Drive oturumu kapatma onay mesajı",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Google Drive'da yedek bulunamadı.",
+  "googleDriveBackupItemCount": "{count} öğe",
+  "@googleDriveBackupItemCount": {
+    "description": "Yedek içindeki öğe sayısı",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Yedek geçmişi sayısı",
+  "googleDriveHistoryLimitAll": "Tümü",
   "analyticsTab": "Analiz",
   "currentStreak": "Mevcut Seri",
   "longestStreak": "En Uzun Seri",

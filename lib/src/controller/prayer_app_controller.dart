@@ -593,6 +593,7 @@ class PrayerAppController extends ChangeNotifier {
         await notificationService.cancelAllPrayerNotifications();
         await _updateWidgetBridgeData();
       }
+      await _driveService.restoreSession();
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -1393,6 +1394,8 @@ class PrayerAppController extends ChangeNotifier {
 
   String? get googleDriveAccountEmail => _driveService.accountEmail;
 
+  int get googleDriveBackupListLimit => _driveService.listLimit;
+
   Future<bool> signInToGoogleDrive() async {
     final signedIn = await _driveService.signIn();
     notifyListeners();
@@ -1404,22 +1407,24 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setGoogleDriveBackupListLimit(int limit) async {
+    await _driveService.setListLimit(limit);
+    notifyListeners();
+  }
+
   Future<String> uploadBackupToGoogleDrive() async {
     final jsonStr = await exportBackupJson();
     await _driveService.uploadBackup(jsonStr);
     return jsonStr;
   }
 
-  Future<void> restoreBackupFromGoogleDrive() async {
-    final jsonStr = await _driveService.downloadBackup();
-    if (jsonStr == null) {
-      throw StateError('No backup found on Google Drive');
-    }
-    await restoreBackupJson(jsonStr);
+  Future<List<DriveBackupInfo>> listGoogleDriveBackups() async {
+    return _driveService.listBackups();
   }
 
-  Future<DateTime?> getLastGoogleDriveBackupTime() async {
-    return _driveService.getLastBackupTime();
+  Future<void> restoreBackupFromGoogleDrive(String fileId) async {
+    final jsonStr = await _driveService.downloadBackup(fileId);
+    await restoreBackupJson(jsonStr);
   }
 }
 

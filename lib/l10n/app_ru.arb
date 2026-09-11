@@ -337,6 +337,7 @@
   "restoreConfirmTitle": "Восстановить данные приложения?",
   "restoreConfirmBody": "Будут восстановлены цели Каза, история намазов, напоминания и данные Тасбих. Продолжить?",
   "restoreSuccess": "Данные успешно восстановлены!",
+  "restoreNewerVersionError": "Эта резервная копия создана более новой версией приложения. Обновите приложение и попробуйте снова.",
   "restoreError": "Неверный формат файла резервной копии",
   "shareOrSave": "Поделиться / Сохранить",
   "googleDriveSignIn": "Войти в Google Диск",
@@ -351,6 +352,28 @@
   "googleDriveNotSignedIn": "Войдите, чтобы использовать резервное копирование Google Диска",
   "googleDriveSignInError": "Не удалось войти в Google Диск",
   "googleDriveConfigError": "Вход в Google Диск не настроен. Добавьте веб-идентификатор клиента OAuth через --dart-define=GOOGLE_SERVER_CLIENT_ID и SHA-1 отпечаток в Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "Выйти из Google Drive?",
+  "googleDriveSignOutConfirmBody": "Выйти с аккаунта {email}? Вы можете войти позже.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Сообщение подтверждения при выходе из Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Резервные копии не найдены в Google Drive.",
+  "googleDriveBackupItemCount": "{count} элементов",
+  "@googleDriveBackupItemCount": {
+    "description": "Количество элементов в резервной копии",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "История резервных копий",
+  "googleDriveHistoryLimitAll": "Все",
   "analyticsTab": "Аналитика",
   "currentStreak": "Текущая серия",
   "longestStreak": "Рекордная серия",

@@ -450,7 +450,10 @@ class CalendarReminder {
         .toList(growable: false);
     final rawRecurrence = map['recurrence']?.toString();
     var recurrence = ReminderRecurrence.fromName(rawRecurrence);
-    final anchorAt = DateTime.parse((map['anchor_at'] ?? '').toString());
+    final rawAnchorAt = map['anchor_at']?.toString();
+    final anchorAt = (rawAnchorAt == null || rawAnchorAt.isEmpty)
+        ? (anchorDate ?? DateTime.now())
+        : (DateTime.tryParse(rawAnchorAt) ?? anchorDate ?? DateTime.now());
     final isLegacyPrayer = anchor == CalendarReminderAnchor.prayerTime &&
         anchorDate == null &&
         (rawRecurrence == null ||

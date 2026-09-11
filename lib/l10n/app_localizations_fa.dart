@@ -787,6 +787,10 @@ class AppLocalizationsFa extends AppLocalizations {
   String get restoreSuccess => 'داده‌ها با موفقیت بازیابی شدند!';
 
   @override
+  String get restoreNewerVersionError =>
+      'این نسخه پشتیبان توسط نسخه جدیدتری از برنامه ساخته شده است. لطفاً برنامه را به‌روزرسانی کنید و دوباره تلاش کنید.';
+
+  @override
   String get restoreError => 'فرمت فایل پشتیبان نامعتبر است';
 
   @override
@@ -834,6 +838,29 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'ورود به Google Drive پیکربندی نشده است. شناسه سرویس‌گیرنده وب OAuth را از طریق --dart-define=GOOGLE_SERVER_CLIENT_ID و اثر انگشت SHA-1 در Google Cloud Console اضافه کنید.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'از Google Drive خارج شوید؟';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'خروج با $email؟ می‌توانید بعداً دوباره وارد شوید.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'هیچ نسخه پشتیبانی در Google Drive یافت نشد.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count مورد';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'تعداد نسخه‌های پشتیبان';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'همه';
 
   @override
   String get analyticsTab => 'تحلیل و آمار';

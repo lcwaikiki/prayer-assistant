@@ -1552,6 +1552,12 @@ abstract class AppLocalizations {
   /// **'Data restored successfully!'**
   String get restoreSuccess;
 
+  /// No description provided for @restoreNewerVersionError.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup was created by a newer app version. Please update the app and try again.'**
+  String get restoreNewerVersionError;
+
   /// No description provided for @restoreError.
   ///
   /// In en, this message translates to:
@@ -1635,6 +1641,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.'**
   String get googleDriveConfigError;
+
+  /// No description provided for @googleDriveSignOutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out of Google Drive?'**
+  String get googleDriveSignOutConfirmTitle;
+
+  /// Confirmation message when signing out of Google Drive
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out using {email}? You can sign in again later.'**
+  String googleDriveSignOutConfirmBody(String email);
+
+  /// No description provided for @googleDriveRestoreEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No backups found on Google Drive.'**
+  String get googleDriveRestoreEmpty;
+
+  /// Number of items in a backup
+  ///
+  /// In en, this message translates to:
+  /// **'{count} items'**
+  String googleDriveBackupItemCount(int count);
+
+  /// No description provided for @googleDriveHistoryLimitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup history length'**
+  String get googleDriveHistoryLimitTitle;
+
+  /// No description provided for @googleDriveHistoryLimitAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get googleDriveHistoryLimitAll;
 
   /// No description provided for @analyticsTab.
   ///

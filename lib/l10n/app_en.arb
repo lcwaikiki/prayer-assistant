@@ -343,6 +343,7 @@
   "restoreConfirmTitle": "Restore App Data?",
   "restoreConfirmBody": "This will restore your Qadaa targets, prayer history, reminders, and Tesbihat data. Continue?",
   "restoreSuccess": "Data restored successfully!",
+  "restoreNewerVersionError": "This backup was created by a newer app version. Please update the app and try again.",
   "restoreError": "Invalid backup file format",
   "shareOrSave": "Share / Save",
   "@shareOrSave": {
@@ -368,6 +369,28 @@
   "googleDriveNotSignedIn": "Sign in to use Google Drive backup",
   "googleDriveSignInError": "Failed to sign in to Google Drive",
   "googleDriveConfigError": "Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "Sign out of Google Drive?",
+  "googleDriveSignOutConfirmBody": "Sign out using {email}? You can sign in again later.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Confirmation message when signing out of Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "No backups found on Google Drive.",
+  "googleDriveBackupItemCount": "{count} items",
+  "@googleDriveBackupItemCount": {
+    "description": "Number of items in a backup",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Backup history length",
+  "googleDriveHistoryLimitAll": "All",
   "analyticsTab": "Analytics",
   "currentStreak": "Current Streak",
   "longestStreak": "Longest Streak",

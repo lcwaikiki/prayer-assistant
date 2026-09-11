@@ -784,6 +784,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get restoreSuccess => 'تمت استعادة البيانات بنجاح!';
 
   @override
+  String get restoreNewerVersionError =>
+      'تم إنشاء هذه النسخة الاحتياطية بواسطة إصدار أحدث من التطبيق. يرجى تحديث التطبيق والمحاولة مرة أخرى.';
+
+  @override
   String get restoreError => 'تنسيق ملف النسخة الاحتياطية غير صالح';
 
   @override
@@ -831,6 +835,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'تسجيل الدخول إلى Google Drive غير مُهيأ. أضف معرف عميل OAuth عبر الويب باستخدام --dart-define=GOOGLE_SERVER_CLIENT_ID وبصمة SHA-1 في Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'تسجيل الخروج من Google Drive؟';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'تسجيل الخروج باستخدام $email؟ يمكنك تسجيل الدخول لاحقاً.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'لم يتم العثور على نسخ احتياطية على Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count عنصر';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'عدد سجلات النسخ الاحتياطية';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'الكل';
 
   @override
   String get analyticsTab => 'التحليلات';

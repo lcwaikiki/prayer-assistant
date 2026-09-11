@@ -789,6 +789,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get restoreSuccess => 'ڈیٹا کامیابی کے ساتھ ری اسٹور ہو گیا!';
 
   @override
+  String get restoreNewerVersionError =>
+      'یہ بیک اپ ایپ کے نئے ورژن کے ذریعے بنایا گیا ہے۔ براہ کرم ایپ کو اپ ڈیٹ کریں اور دوبارہ کوشش کریں۔';
+
+  @override
   String get restoreError => 'بیک اپ فائل کا فارمیٹ غلط ہے';
 
   @override
@@ -835,6 +839,28 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Google Drive سائن ان کنفیگر نہیں ہے۔ --dart-define=GOOGLE_SERVER_CLIENT_ID کے ذریعے ویب OAuth کلائنٹ ID اور Google Cloud Console میں SHA-1 فنگر پرنٹ شامل کریں۔';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'Google Drive سے لاگ آؤٹ کریں؟';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return '$email کے ساتھ لاگ آؤٹ کریں؟ آپ بعد میں دوبارہ لاگ ان کر سکتے ہیں۔';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty => 'Google Drive پر کوئی بیک اپ نہیں ملا۔';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count اشیاء';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'بیک اپ کی تاریخ کی تعداد';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'سب';
 
   @override
   String get analyticsTab => 'تجزیہ';

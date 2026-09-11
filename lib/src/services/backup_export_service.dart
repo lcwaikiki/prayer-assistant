@@ -13,6 +13,10 @@ import '../tesbihat/models/item_group.dart';
 class BackupExportService {
   const BackupExportService();
 
+  /// Current backup schema version. Bump this whenever the JSON layout
+  /// changes so older/newer releases can be told apart on restore.
+  static const int currentVersion = 2;
+
   /// Generates a comprehensive JSON backup string containing all app data.
   String generateJsonBackup({
     required KazaTracker kazaTracker,
@@ -25,7 +29,7 @@ class BackupExportService {
     Map<String, FastingLog> fastingLogs = const {},
   }) {
     final data = <String, dynamic>{
-      'version': 1,
+      'version': currentVersion,
       'app': 'PrayerAssistant',
       'exportedAt': DateTime.now().toUtc().toIso8601String(),
       'kazaTracker': kazaTracker.toMap(),
@@ -41,6 +45,44 @@ class BackupExportService {
   }
 
 
+  /// Counts the meaningful data items inside a raw backup map: kaza targets,
+  /// prayer completion days, calendar reminders, tesbihat items, groups and
+  /// stats, and fasting log entries.
+  static int countItems(Map<String, dynamic> raw) {
+    var count = 0;
+
+    final kaza = raw['kazaTracker'] as Map<String, dynamic>?;
+    if (kaza != null) {
+      for (final entry in kaza.entries) {
+        if (entry.key.endsWith('Target')) {
+          count += (entry.value as num?)?.toInt() ?? 0;
+        }
+      }
+    }
+
+    final completions = raw['prayerCompletions'] as Map<String, dynamic>?;
+    if (completions != null) {
+      for (final list in completions.values) {
+        if (list is List) {
+          count += list.length;
+        }
+      }
+    }
+
+    for (final arrayKey in [
+      'calendarReminders',
+      'tesbihItems',
+      'tesbihGroups',
+      'tesbihStats',
+    ]) {
+      count += (raw[arrayKey] as List?)?.length ?? 0;
+    }
+
+    count += (raw['fastingLogs'] as Map?)?.length ?? 0;
+
+    return count;
+  }
+
   /// Parses and validates a JSON backup payload. Returns a map with parsed objects.
   Map<String, dynamic> parseAndValidateBackup(String jsonString) {
     final Map<String, dynamic> raw;
@@ -52,6 +94,14 @@ class BackupExportService {
 
     if (raw['app'] != 'PrayerAssistant' && !raw.containsKey('kazaTracker')) {
       throw const FormatException('Unrecognized backup format');
+    }
+
+    // Backups never carry a version before v2; treat a missing version as the
+    // original (v1) schema. A backup from a newer release cannot be safely
+    // interpreted here, so reject it with a distinct reason.
+    final version = (raw['version'] as num?)?.toInt() ?? 1;
+    if (version > currentVersion) {
+      throw const FormatException('Unsupported backup version');
     }
 
     final kazaTrackerMap = raw['kazaTracker'] as Map<String, dynamic>?;

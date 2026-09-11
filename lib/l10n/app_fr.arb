@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "Restaurer les données?",
   "restoreConfirmBody": "Vos objectifs Qadaa, l'historique des prières, les rappels et les données Tesbihat seront restaurés. Continuer?",
   "restoreSuccess": "Données restaurées avec succès!",
+  "restoreNewerVersionError": "Cette sauvegarde a été créée par une version plus récente de l'application. Veuillez mettre à jour l'application et réessayer.",
   "restoreError": "Format de fichier de sauvegarde non valide",
   "shareOrSave": "Partager / Enregistrer",
   "googleDriveSignIn": "Se connecter à Google Drive",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Connectez-vous pour utiliser la sauvegarde Google Drive",
   "googleDriveSignInError": "Échec de la connexion à Google Drive",
   "googleDriveConfigError": "La connexion à Google Drive n'est pas configurée. Ajoutez l'ID client Web OAuth via --dart-define=GOOGLE_SERVER_CLIENT_ID et l'empreinte SHA-1 dans Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "Se déconnecter de Google Drive ?",
+  "googleDriveSignOutConfirmBody": "Se déconnecter avec {email} ? Vous pourrez vous reconnecter plus tard.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Message de confirmation lors de la déconnexion de Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Aucune sauvegarde trouvée sur Google Drive.",
+  "googleDriveBackupItemCount": "{count} éléments",
+  "@googleDriveBackupItemCount": {
+    "description": "Nombre d'éléments dans une sauvegarde",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Historique des sauvegardes",
+  "googleDriveHistoryLimitAll": "Toutes",
   "analyticsTab": "Analyses",
   "currentStreak": "Série Actuelle",
   "longestStreak": "Plus Longue Série",

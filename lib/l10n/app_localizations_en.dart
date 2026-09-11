@@ -790,6 +790,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get restoreSuccess => 'Data restored successfully!';
 
   @override
+  String get restoreNewerVersionError =>
+      'This backup was created by a newer app version. Please update the app and try again.';
+
+  @override
   String get restoreError => 'Invalid backup file format';
 
   @override
@@ -834,6 +838,28 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Google Drive sign-in is not configured. Add the web OAuth client ID via --dart-define=GOOGLE_SERVER_CLIENT_ID and the SHA-1 fingerprint in Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'Sign out of Google Drive?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'Sign out using $email? You can sign in again later.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty => 'No backups found on Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'Backup history length';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'All';
 
   @override
   String get analyticsTab => 'Analytics';

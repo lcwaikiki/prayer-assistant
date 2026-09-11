@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "ڈیٹا ری اسٹور کریں؟",
   "restoreConfirmBody": "آپ کے قضا کے اہداف، نماز کی ہسٹری، ریمائنڈرز اور تسبیحات کا ڈیٹا ری اسٹور ہو جائے گا۔ جاری رکھیں؟",
   "restoreSuccess": "ڈیٹا کامیابی کے ساتھ ری اسٹور ہو گیا!",
+  "restoreNewerVersionError": "یہ بیک اپ ایپ کے نئے ورژن کے ذریعے بنایا گیا ہے۔ براہ کرم ایپ کو اپ ڈیٹ کریں اور دوبارہ کوشش کریں۔",
   "restoreError": "بیک اپ فائل کا فارمیٹ غلط ہے",
   "shareOrSave": "شیئر / محفوظ کریں",
   "googleDriveSignIn": "Google Drive میں سائن ان کریں",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Google Drive بیک اپ استعمال کرنے کے لیے سائن ان کریں",
   "googleDriveSignInError": "Google Drive میں سائن ان ناکام ہوا",
   "googleDriveConfigError": "Google Drive سائن ان کنفیگر نہیں ہے۔ --dart-define=GOOGLE_SERVER_CLIENT_ID کے ذریعے ویب OAuth کلائنٹ ID اور Google Cloud Console میں SHA-1 فنگر پرنٹ شامل کریں۔",
+  "googleDriveSignOutConfirmTitle": "Google Drive سے لاگ آؤٹ کریں؟",
+  "googleDriveSignOutConfirmBody": "{email} کے ساتھ لاگ آؤٹ کریں؟ آپ بعد میں دوبارہ لاگ ان کر سکتے ہیں۔",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Google Drive سے لاگ آؤٹ کرنے کی تصدیق کا پیغام",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Google Drive پر کوئی بیک اپ نہیں ملا۔",
+  "googleDriveBackupItemCount": "{count} اشیاء",
+  "@googleDriveBackupItemCount": {
+    "description": "بیک اپ میں اشیاء کی تعداد",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "بیک اپ کی تاریخ کی تعداد",
+  "googleDriveHistoryLimitAll": "سب",
   "analyticsTab": "تجزیہ",
   "currentStreak": "موجودہ تسلسل",
   "longestStreak": "طویل ترین تسلسل",

@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "استعادة بيانات التطبيق؟",
   "restoreConfirmBody": "سيتم استعادة أهداف القضاء وسجل الصلاة والتذكيرات والتسبيحات. هل تريد الاستمرار؟",
   "restoreSuccess": "تمت استعادة البيانات بنجاح!",
+  "restoreNewerVersionError": "تم إنشاء هذه النسخة الاحتياطية بواسطة إصدار أحدث من التطبيق. يرجى تحديث التطبيق والمحاولة مرة أخرى.",
   "restoreError": "تنسيق ملف النسخة الاحتياطية غير صالح",
   "shareOrSave": "مشاركة / حفظ",
   "googleDriveSignIn": "تسجيل الدخول إلى Google Drive",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "سجّل الدخول لاستخدام النسخة الاحتياطية من Google Drive",
   "googleDriveSignInError": "تعذّر تسجيل الدخول إلى Google Drive",
   "googleDriveConfigError": "تسجيل الدخول إلى Google Drive غير مُهيأ. أضف معرف عميل OAuth عبر الويب باستخدام --dart-define=GOOGLE_SERVER_CLIENT_ID وبصمة SHA-1 في Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "تسجيل الخروج من Google Drive؟",
+  "googleDriveSignOutConfirmBody": "تسجيل الخروج باستخدام {email}؟ يمكنك تسجيل الدخول لاحقاً.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "رسالة التأكيد عند تسجيل الخروج من Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "لم يتم العثور على نسخ احتياطية على Google Drive.",
+  "googleDriveBackupItemCount": "{count} عنصر",
+  "@googleDriveBackupItemCount": {
+    "description": "عدد العناصر في النسخة الاحتياطية",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "عدد سجلات النسخ الاحتياطية",
+  "googleDriveHistoryLimitAll": "الكل",
   "analyticsTab": "التحليلات",
   "currentStreak": "السلسلة الحالية",
   "longestStreak": "أطول سلسلة",

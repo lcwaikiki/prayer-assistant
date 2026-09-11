@@ -791,6 +791,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get restoreSuccess => '¡Datos restaurados con éxito!';
 
   @override
+  String get restoreNewerVersionError =>
+      'Esta copia de seguridad fue creada por una versión más reciente de la app. Actualiza la app e inténtalo de nuevo.';
+
+  @override
   String get restoreError => 'Formato de archivo de respaldo no válido';
 
   @override
@@ -839,6 +843,30 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'El inicio de sesión de Google Drive no está configurado. Agregue el ID de cliente web OAuth mediante --dart-define=GOOGLE_SERVER_CLIENT_ID y la huella SHA-1 en Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle =>
+      '¿Cerrar sesión de Google Drive?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return '¿Cerrar sesión con $email? Puedes iniciar sesión más tarde.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'No se encontraron copias de seguridad en Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count elementos';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'Historial de copias de seguridad';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'Todos';
 
   @override
   String get analyticsTab => 'Análisis';

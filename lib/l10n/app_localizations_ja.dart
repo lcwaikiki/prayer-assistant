@@ -769,6 +769,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get restoreSuccess => 'データが正常に復元されました！';
 
   @override
+  String get restoreNewerVersionError =>
+      'このバックアップは新しいバージョンのアプリで作成されました。アプリを更新して再試行してください。';
+
+  @override
   String get restoreError => '無効なバックアップファイル形式です';
 
   @override
@@ -813,6 +817,28 @@ class AppLocalizationsJa extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Google ドライブのサインインが設定されていません。--dart-define=GOOGLE_SERVER_CLIENT_ID でウェブ OAuth クライアント ID を追加し、Google Cloud Console で SHA-1 フィンガープリントを設定してください。';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'Google ドライブからサインアウトしますか？';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return '$email でサインアウトしますか？後から再度サインインできます。';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty => 'Google ドライブにバックアップが見つかりませんでした。';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count 件';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'バックアップ履歴の表示数';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'すべて';
 
   @override
   String get analyticsTab => '分析';

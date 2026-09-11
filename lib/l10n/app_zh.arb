@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "恢复应用数据？",
   "restoreConfirmBody": "这将恢复您的补礼目标、礼拜记录、提醒和赞词数据。是否继续？",
   "restoreSuccess": "数据已成功恢复！",
+  "restoreNewerVersionError": "此备份由更新版本的应用创建。请更新应用后重试。",
   "restoreError": "无效的备份文件格式",
   "shareOrSave": "分享 / 保存",
   "googleDriveSignIn": "登录 Google 云端硬盘",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "登录以使用 Google 云端硬盘备份",
   "googleDriveSignInError": "无法登录 Google 云端硬盘",
   "googleDriveConfigError": "Google 云端硬盘登录未配置。请通过 --dart-define=GOOGLE_SERVER_CLIENT_ID 添加 Web OAuth 客户端 ID，并在 Google Cloud Console 中添加 SHA-1 指纹。",
+  "googleDriveSignOutConfirmTitle": "退出 Google Drive？",
+  "googleDriveSignOutConfirmBody": "使用 {email} 退出？您可以稍后重新登录。",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "退出 Google Drive 时的确认消息",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "未找到 Google Drive 上的备份。",
+  "googleDriveBackupItemCount": "{count} 项",
+  "@googleDriveBackupItemCount": {
+    "description": "备份中的项目数量",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "备份历史记录数量",
+  "googleDriveHistoryLimitAll": "全部",
   "analyticsTab": "分析",
   "currentStreak": "当前连续",
   "longestStreak": "最长连续",

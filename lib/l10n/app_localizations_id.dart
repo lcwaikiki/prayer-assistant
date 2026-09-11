@@ -790,6 +790,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get restoreSuccess => 'Data berhasil dipulihkan!';
 
   @override
+  String get restoreNewerVersionError =>
+      'Cadangan ini dibuat oleh versi aplikasi yang lebih baru. Perbarui aplikasi dan coba lagi.';
+
+  @override
   String get restoreError => 'Format berkas cadangan tidak valid';
 
   @override
@@ -836,6 +840,29 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'Masuk Google Drive belum dikonfigurasi. Tambahkan ID klien web OAuth melalui --dart-define=GOOGLE_SERVER_CLIENT_ID dan sidik jari SHA-1 di Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle => 'Keluar dari Google Drive?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'Keluar menggunakan $email? Anda dapat masuk kembali nanti.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'Tidak ada cadangan yang ditemukan di Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count item';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'Riwayat cadangan';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'Semua';
 
   @override
   String get analyticsTab => 'Analistik';

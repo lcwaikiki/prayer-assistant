@@ -793,6 +793,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get restoreSuccess => 'Données restaurées avec succès!';
 
   @override
+  String get restoreNewerVersionError =>
+      'Cette sauvegarde a été créée par une version plus récente de l\'application. Veuillez mettre à jour l\'application et réessayer.';
+
+  @override
   String get restoreError => 'Format de fichier de sauvegarde non valide';
 
   @override
@@ -840,6 +844,30 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get googleDriveConfigError =>
       'La connexion à Google Drive n\'est pas configurée. Ajoutez l\'ID client Web OAuth via --dart-define=GOOGLE_SERVER_CLIENT_ID et l\'empreinte SHA-1 dans Google Cloud Console.';
+
+  @override
+  String get googleDriveSignOutConfirmTitle =>
+      'Se déconnecter de Google Drive ?';
+
+  @override
+  String googleDriveSignOutConfirmBody(String email) {
+    return 'Se déconnecter avec $email ? Vous pourrez vous reconnecter plus tard.';
+  }
+
+  @override
+  String get googleDriveRestoreEmpty =>
+      'Aucune sauvegarde trouvée sur Google Drive.';
+
+  @override
+  String googleDriveBackupItemCount(int count) {
+    return '$count éléments';
+  }
+
+  @override
+  String get googleDriveHistoryLimitTitle => 'Historique des sauvegardes';
+
+  @override
+  String get googleDriveHistoryLimitAll => 'Toutes';
 
   @override
   String get analyticsTab => 'Analyses';

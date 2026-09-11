@@ -282,6 +282,7 @@
   "restoreConfirmTitle": "Pulihkan Data Aplikasi?",
   "restoreConfirmBody": "Ini akan memulihkan target Qadha, riwayat shalat, pengingat, dan data Tasbih Anda. Lanjutkan?",
   "restoreSuccess": "Data berhasil dipulihkan!",
+  "restoreNewerVersionError": "Cadangan ini dibuat oleh versi aplikasi yang lebih baru. Perbarui aplikasi dan coba lagi.",
   "restoreError": "Format berkas cadangan tidak valid",
   "shareOrSave": "Bagikan / Simpan",
   "googleDriveSignIn": "Masuk ke Google Drive",
@@ -296,6 +297,28 @@
   "googleDriveNotSignedIn": "Masuk untuk menggunakan cadangan Google Drive",
   "googleDriveSignInError": "Gagal masuk ke Google Drive",
   "googleDriveConfigError": "Masuk Google Drive belum dikonfigurasi. Tambahkan ID klien web OAuth melalui --dart-define=GOOGLE_SERVER_CLIENT_ID dan sidik jari SHA-1 di Google Cloud Console.",
+  "googleDriveSignOutConfirmTitle": "Keluar dari Google Drive?",
+  "googleDriveSignOutConfirmBody": "Keluar menggunakan {email}? Anda dapat masuk kembali nanti.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Pesan konfirmasi saat keluar dari Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Tidak ada cadangan yang ditemukan di Google Drive.",
+  "googleDriveBackupItemCount": "{count} item",
+  "@googleDriveBackupItemCount": {
+    "description": "Jumlah item dalam cadangan",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "Riwayat cadangan",
+  "googleDriveHistoryLimitAll": "Semua",
   "analyticsTab": "Analistik",
   "currentStreak": "Beruntun Saat Ini",
   "longestStreak": "Beruntun Terpanjang",

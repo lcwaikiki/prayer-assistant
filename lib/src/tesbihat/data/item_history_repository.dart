@@ -39,6 +39,16 @@ class ItemHistoryRepository {
 
   List<DailyItemStat> loadStats() => List<DailyItemStat>.from(_cache);
 
+  /// Re-reads the cached stats from storage, for example after a backup
+  /// restore wrote new stats through another repository instance.
+  void reload() {
+    if (_memoryStats != null) {
+      _cache = List<DailyItemStat>.from(_memoryStats!);
+      return;
+    }
+    _cache = _readFromBox();
+  }
+
   void saveStats(List<DailyItemStat> stats) {
     _cache = List<DailyItemStat>.from(stats);
     _persist();

@@ -24,6 +24,7 @@ import 'src/tesbihat/data/item_repository.dart';
 import 'src/tesbihat/l10n/tesbihat_localizations.dart';
 import 'src/tesbihat/services/item_reminder_service.dart';
 import 'src/tesbihat/services/midnight_reminder_scheduler.dart';
+import 'src/tesbihat/state/groups_notifier.dart';
 import 'src/tesbihat/state/items_notifier.dart';
 import 'src/ui/app_shell.dart';
 
@@ -73,15 +74,24 @@ Future<void> main() async {
   await MidnightReminderScheduler.initializeAndSchedule();
   await CalendarMidnightScheduler.initializeAndSchedule();
 
+  final container = ProviderContainer(
+    overrides: [
+      itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
+      itemHistoryRepositoryProvider.overrideWithValue(
+        ItemHistoryRepository.hive(itemHistoryBox),
+      ),
+      itemReminderServiceProvider.overrideWithValue(itemReminderService),
+    ],
+  );
+  controller.onAppDataRestored = () async {
+    container.read(itemHistoryRepositoryProvider).reload();
+    container.invalidate(itemsNotifierProvider);
+    container.invalidate(groupsNotifierProvider);
+  };
+
   runApp(
-    ProviderScope(
-      overrides: [
-        itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
-        itemHistoryRepositoryProvider.overrideWithValue(
-          ItemHistoryRepository.hive(itemHistoryBox),
-        ),
-        itemReminderServiceProvider.overrideWithValue(itemReminderService),
-      ],
+    UncontrolledProviderScope(
+      container: container,
       child: PrayerAssistantApp(controller: controller),
     ),
   );

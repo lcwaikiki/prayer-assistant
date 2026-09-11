@@ -26,9 +26,9 @@ final itemsNotifierProvider = NotifierProvider<ItemsNotifier, List<Item>>(
 );
 
 class ItemsNotifier extends Notifier<List<Item>> {
-  late final ItemRepository _repository;
-  late final ItemHistoryRepository _historyRepository;
-  late final ItemReminderService _reminderService;
+  late ItemRepository _repository;
+  late ItemHistoryRepository _historyRepository;
+  late ItemReminderService _reminderService;
 
   @override
   List<Item> build() {

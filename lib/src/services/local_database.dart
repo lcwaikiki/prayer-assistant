@@ -797,6 +797,11 @@ class LocalDatabase {
     await db.delete('calendar_reminders', where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<void> clearCalendarReminders() async {
+    final db = await instance;
+    await db.delete('calendar_reminders');
+  }
+
   Future<void> upsertPrayerDays(String districtId, List<PrayerDay> days) async {
     if (days.isEmpty) {
       return;

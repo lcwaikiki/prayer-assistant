@@ -12,8 +12,8 @@ final groupsNotifierProvider = NotifierProvider<GroupsNotifier, List<ItemGroup>>
 );
 
 class GroupsNotifier extends Notifier<List<ItemGroup>> {
-  late final ItemRepository _repository;
-  late final ItemReminderService _reminderService;
+  late ItemRepository _repository;
+  late ItemReminderService _reminderService;
 
   @override
   List<ItemGroup> build() {

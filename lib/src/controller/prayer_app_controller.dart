@@ -95,6 +95,10 @@ class PrayerAppController extends ChangeNotifier {
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
   Future<void> Function(Locale? locale)? onLocaleChanged;
 
+  /// Invoked after a backup restore so externally held state (such as the
+  /// Riverpod tesbihat items/groups/stats) can reload from storage.
+  Future<void> Function()? onAppDataRestored;
+
   Map<String, FastingLog> get fastingLogs => _fastingLogs;
 
 
@@ -1304,12 +1308,30 @@ class PrayerAppController extends ChangeNotifier {
       'localePreference': _localePreference.name,
       'appBarRemainingPlacement': _appBarRemainingPlacement.name,
       'widgetTextSize': _widgetTextSize.name,
+      'widgetTextSizeValue': _widgetTextSizeValue,
+      'widgetTheme': _widgetTheme.name,
+      'widgetCalendarDisplay': _widgetCalendarDisplay.name,
+      'widgetMmssThreshold': _widgetMmssThresholdMinutes,
       'statusBarRemainingEnabled': _statusBarRemainingEnabled,
-
       'reminderVibrationEnabled': _reminderVibrationEnabled,
       'reminderSoundEnabled': _reminderSoundEnabled,
       'calendarPrimaryDisplay': _calendarPrimaryDisplay.name,
+      'defaultCalendarDisplay': _defaultCalendarDisplay.name,
       'showSecondaryCalendarDate': _showSecondaryCalendarDate,
+      'calendarWeekStart': _calendarWeekStart.name,
+      'hijriDateOffset': _hijriDateOffset,
+      'showIslamicHolidays': _showIslamicHolidays,
+      'showFastingBadges': _showFastingBadges,
+      'showCalendarReminderDots': _showCalendarReminderDots,
+      'showCardMoonPhase': _showCardMoonPhase,
+      'showCardIftarSuhoor': _showCardIftarSuhoor,
+      'showCardDailyWisdom': _showCardDailyWisdom,
+      'showCardUpcomingReminders': _showCardUpcomingReminders,
+      'reminderSettings': {
+        for (final entry in _reminderSettings.entries)
+          entry.key: entry.value.toJson(),
+      },
+      'selectedLocation': _selectedLocation?.toJson(),
     };
 
     return service.generateJsonBackup(
@@ -1355,10 +1377,30 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveFastingLogs(restoredFastingLogs);
     _fastingLogs = restoredFastingLogs;
 
+    final previousReminderIds = _calendarReminders
+        .map((reminder) => reminder.id)
+        .toList(growable: false);
+    await database.clearCalendarReminders();
     for (final r in restoredReminders) {
       await database.saveCalendarReminder(r);
     }
     _calendarReminders = await database.loadCalendarReminders();
+    for (final id in previousReminderIds) {
+      try {
+        await calendarReminderService.cancelReminder(id);
+      } catch (_) {}
+    }
+    for (final reminder in _calendarReminders) {
+      if (reminder.enabled) {
+        try {
+          await calendarReminderService.scheduleReminder(
+            reminder,
+            catchUp: false,
+          );
+        } catch (_) {}
+      }
+    }
+    await _syncCalendarRemindersWidget();
 
     if (restoredItems.isNotEmpty) {
       repo.saveItems(restoredItems);
@@ -1370,7 +1412,262 @@ class PrayerAppController extends ChangeNotifier {
       hRepo.saveStats(restoredStats);
     }
 
+    final restoredPreferences =
+        parsed['preferences'] as Map<String, dynamic>? ?? <String, dynamic>{};
+    try {
+      await _applyRestoredPreferences(restoredPreferences);
+    } catch (_) {
+      // Data restore above already succeeded; preferences are best-effort.
+    }
+
+    try {
+      await onAppDataRestored?.call();
+    } catch (_) {
+      // External state refresh is best-effort.
+    }
+
     notifyListeners();
+  }
+
+  T _enumByName<T extends Enum>(List<T> values, Object? name, T fallback) {
+    final target = name?.toString();
+    for (final value in values) {
+      if (value.name == target) return value;
+    }
+    return fallback;
+  }
+
+  /// Applies the preference block from a backup, persisting each value and
+  /// then re-syncing the widgets, notifications and locale. Missing keys leave
+  /// the current setting untouched so old backups stay compatible.
+  Future<void> _applyRestoredPreferences(Map<String, dynamic> prefs) async {
+    if (prefs.isEmpty) return;
+
+    bool asBool(Object? value, bool fallback) =>
+        value is bool ? value : fallback;
+    int asInt(Object? value, int fallback) =>
+        value is num ? value.toInt() : fallback;
+
+    if (prefs.containsKey('remindersSilenced')) {
+      _remindersSilenced = asBool(prefs['remindersSilenced'], _remindersSilenced);
+    }
+    if (prefs.containsKey('reminderVibrationEnabled')) {
+      _reminderVibrationEnabled = asBool(
+        prefs['reminderVibrationEnabled'],
+        _reminderVibrationEnabled,
+      );
+    }
+    if (prefs.containsKey('reminderSoundEnabled')) {
+      _reminderSoundEnabled = asBool(
+        prefs['reminderSoundEnabled'],
+        _reminderSoundEnabled,
+      );
+    }
+    if (prefs.containsKey('statusBarRemainingEnabled')) {
+      _statusBarRemainingEnabled = asBool(
+        prefs['statusBarRemainingEnabled'],
+        _statusBarRemainingEnabled,
+      );
+    }
+    if (prefs.containsKey('showSecondaryCalendarDate')) {
+      _showSecondaryCalendarDate = asBool(
+        prefs['showSecondaryCalendarDate'],
+        _showSecondaryCalendarDate,
+      );
+    }
+    if (prefs.containsKey('showIslamicHolidays')) {
+      _showIslamicHolidays = asBool(
+        prefs['showIslamicHolidays'],
+        _showIslamicHolidays,
+      );
+    }
+    if (prefs.containsKey('showFastingBadges')) {
+      _showFastingBadges = asBool(
+        prefs['showFastingBadges'],
+        _showFastingBadges,
+      );
+    }
+    if (prefs.containsKey('showCalendarReminderDots')) {
+      _showCalendarReminderDots = asBool(
+        prefs['showCalendarReminderDots'],
+        _showCalendarReminderDots,
+      );
+    }
+    if (prefs.containsKey('showCardMoonPhase')) {
+      _showCardMoonPhase = asBool(
+        prefs['showCardMoonPhase'],
+        _showCardMoonPhase,
+      );
+    }
+    if (prefs.containsKey('showCardIftarSuhoor')) {
+      _showCardIftarSuhoor = asBool(
+        prefs['showCardIftarSuhoor'],
+        _showCardIftarSuhoor,
+      );
+    }
+    if (prefs.containsKey('showCardDailyWisdom')) {
+      _showCardDailyWisdom = asBool(
+        prefs['showCardDailyWisdom'],
+        _showCardDailyWisdom,
+      );
+    }
+    if (prefs.containsKey('showCardUpcomingReminders')) {
+      _showCardUpcomingReminders = asBool(
+        prefs['showCardUpcomingReminders'],
+        _showCardUpcomingReminders,
+      );
+    }
+    if (prefs.containsKey('hijriDateOffset')) {
+      _hijriDateOffset = asInt(prefs['hijriDateOffset'], _hijriDateOffset);
+    }
+    if (prefs.containsKey('widgetMmssThreshold')) {
+      _widgetMmssThresholdMinutes = asInt(
+        prefs['widgetMmssThreshold'],
+        _widgetMmssThresholdMinutes,
+      ).clamp(0, 60);
+    }
+    if (prefs.containsKey('widgetTextSizeValue')) {
+      _widgetTextSizeValue = asInt(
+        prefs['widgetTextSizeValue'],
+        _widgetTextSizeValue,
+      ).clamp(10, 18);
+    }
+
+    _themePreference = _enumByName(
+      AppThemePreference.values,
+      prefs['themePreference'],
+      _themePreference,
+    );
+    _localePreference = _enumByName(
+      AppLocalePreference.values,
+      prefs['localePreference'],
+      _localePreference,
+    );
+    _appBarRemainingPlacement = _enumByName(
+      AppBarRemainingPlacement.values,
+      prefs['appBarRemainingPlacement'],
+      _appBarRemainingPlacement,
+    );
+    _widgetTextSize = _enumByName(
+      WidgetTextSize.values,
+      prefs['widgetTextSize'],
+      _widgetTextSize,
+    );
+    _widgetTheme = _enumByName(
+      WidgetTheme.values,
+      prefs['widgetTheme'],
+      _widgetTheme,
+    );
+    _widgetCalendarDisplay = _enumByName(
+      WidgetCalendarDisplay.values,
+      prefs['widgetCalendarDisplay'],
+      _widgetCalendarDisplay,
+    );
+    _calendarPrimaryDisplay = _enumByName(
+      CalendarPrimaryDisplay.values,
+      prefs['calendarPrimaryDisplay'],
+      _calendarPrimaryDisplay,
+    );
+    _defaultCalendarDisplay = _enumByName(
+      CalendarPrimaryDisplay.values,
+      prefs['defaultCalendarDisplay'],
+      _defaultCalendarDisplay,
+    );
+    _calendarWeekStart = _enumByName(
+      CalendarWeekStart.values,
+      prefs['calendarWeekStart'],
+      _calendarWeekStart,
+    );
+
+    final reminderSettingsRaw = prefs['reminderSettings'];
+    if (reminderSettingsRaw is Map) {
+      final restored = <String, ReminderSetting>{};
+      for (final entry in reminderSettingsRaw.entries) {
+        restored[entry.key.toString()] = ReminderSetting.fromJson(entry.value);
+      }
+      if (restored.isNotEmpty) {
+        _reminderSettings = restored;
+      }
+    }
+
+    await database.saveRemindersSilenced(_remindersSilenced);
+    await database.saveReminderVibrationEnabled(_reminderVibrationEnabled);
+    await database.saveReminderSoundEnabled(_reminderSoundEnabled);
+    await database.saveStatusBarRemainingEnabled(_statusBarRemainingEnabled);
+    await database.saveShowSecondaryCalendarDate(_showSecondaryCalendarDate);
+    await database.saveShowIslamicHolidays(_showIslamicHolidays);
+    await database.saveShowFastingBadges(_showFastingBadges);
+    await database.saveShowCalendarReminderDots(_showCalendarReminderDots);
+    await database.saveShowCardMoonPhase(_showCardMoonPhase);
+    await database.saveShowCardIftarSuhoor(_showCardIftarSuhoor);
+    await database.saveShowCardDailyWisdom(_showCardDailyWisdom);
+    await database.saveShowCardUpcomingReminders(_showCardUpcomingReminders);
+    await database.saveHijriDateOffset(_hijriDateOffset);
+    await database.saveWidgetMmssThreshold(_widgetMmssThresholdMinutes);
+    await database.saveThemePreference(_themePreference.name);
+    await database.saveLocalePreference(_localePreference.name);
+    await database.saveAppBarRemainingPlacement(
+      _appBarRemainingPlacement.name,
+    );
+    await database.saveWidgetTheme(_widgetTheme.name);
+    await database.saveWidgetCalendarDisplay(_widgetCalendarDisplay.name);
+    await database.saveCalendarPrimaryDisplay(_calendarPrimaryDisplay.name);
+    await database.saveDefaultCalendarDisplay(_defaultCalendarDisplay);
+    await database.saveCalendarWeekStart(_calendarWeekStart);
+    await database.saveWidgetTextSize(
+      prefs.containsKey('widgetTextSizeValue')
+          ? _widgetTextSizeValue.toString()
+          : _widgetTextSize.name,
+    );
+    if (reminderSettingsRaw is Map) {
+      await database.saveReminderSettings(_reminderSettings);
+    }
+
+    final locationRaw = prefs['selectedLocation'];
+    if (locationRaw is Map) {
+      final selected = SelectedLocation.fromJson(
+        Map<String, dynamic>.from(locationRaw),
+      );
+      await database.saveSelectedLocation(selected);
+      _selectedLocation = selected;
+      try {
+        await _loadStates(selected.countryId);
+        await _loadDistricts(selected.stateId);
+        await refreshPrayerData(forceSync: false);
+      } catch (_) {
+        // Location is saved; prayer data can refresh on the next launch.
+      }
+    }
+
+    await _syncStatusBarConfig();
+    try {
+      await widgetBridgeService.updateWidgetTextSize(
+        _widgetTextSizeValue.toString(),
+      );
+      await widgetBridgeService.updateWidgetTheme(_widgetTheme.name);
+      await widgetBridgeService.updateWidgetCalendarDisplay(
+        _widgetCalendarDisplay.name,
+        _showSecondaryCalendarDate,
+      );
+      await widgetBridgeService.updateWidgetMmssThreshold(
+        _widgetMmssThresholdMinutes,
+      );
+      await widgetBridgeService.updateWidgetLocale(
+        resolvedLocale.languageCode,
+      );
+    } catch (_) {
+      // Widget updates are best-effort.
+    }
+    await _updateWidgetBridgeData();
+    await _syncCalendarRemindersWidget();
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    try {
+      await onLocaleChanged?.call(resolvedLocale);
+    } catch (_) {}
   }
 
 

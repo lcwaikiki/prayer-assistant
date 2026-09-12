@@ -183,14 +183,17 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  /// Restores from the full backup file in a folder the user re-picks. Works
-  /// fully offline. The empty-data guard prevents clobbering the file first.
+  /// Restores from the full backup file in the backup folder. Works fully
+  /// offline; only asks for a folder when none is available (e.g. no
+  /// Documents folder). The empty-data guard prevents clobbering it first.
   Future<void> _restoreFromFolder() async {
     await _markDriveRestoreSeen();
     try {
-      final chosen = await _controller.chooseOfflineBackupFolder();
-      if (!chosen || !mounted) {
-        return;
+      if (!_controller.hasOfflineBackupFolder) {
+        final chosen = await _controller.chooseOfflineBackupFolder();
+        if (!chosen || !mounted) {
+          return;
+        }
       }
       await _controller.restoreFromOfflineFolder();
       if (!mounted) {

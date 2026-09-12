@@ -710,9 +710,9 @@ class PreferencesScreen extends StatelessWidget {
                         ? _backupProgress
                         : const Icon(Icons.folder_outlined),
                     title: Text(
-                      controller.offlineBackupFolderUri == null
-                          ? context.l10n.offlineFolderChoose
-                          : context.l10n.offlineFolderChange,
+                      controller.hasOfflineBackupFolder
+                          ? context.l10n.offlineFolderChange
+                          : context.l10n.offlineFolderChoose,
                     ),
                     subtitle: Text(
                       controller.offlineBackupFolderName ??
@@ -744,7 +744,7 @@ class PreferencesScreen extends StatelessWidget {
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     enabled:
-                        controller.offlineBackupFolderUri != null &&
+                        controller.hasOfflineBackupFolder &&
                         !controller.backupBusy,
                     leading:
                         controller.backupActivity ==

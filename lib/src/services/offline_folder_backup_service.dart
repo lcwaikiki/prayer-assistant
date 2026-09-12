@@ -32,6 +32,27 @@ class OfflineFolderBackupService {
   Future<String?> readBackup() =>
       _channel.invokeMethod<String>('readBackup', {'fileName': fileName});
 
+  /// True when the shared Documents folder exists, so it can be used by
+  /// default without asking the user to pick it.
+  Future<bool> documentsFolderAvailable() async {
+    final available =
+        await _channel.invokeMethod<bool>('documentsFolderAvailable');
+    return available ?? false;
+  }
+
+  /// Writes [json] to the shared Documents folder without a permission prompt.
+  Future<bool> writeDocumentsBackup(String json) async {
+    final ok = await _channel.invokeMethod<bool>('writeDocumentsBackup', {
+      'content': json,
+      'fileName': fileName,
+    });
+    return ok ?? false;
+  }
+
+  /// Reads the backup file from the shared Documents folder, or null.
+  Future<String?> readDocumentsBackup() => _channel
+      .invokeMethod<String>('readDocumentsBackup', {'fileName': fileName});
+
   /// Human-readable folder label derived from a SAF tree URI.
   static String displayName(String uri) {
     try {

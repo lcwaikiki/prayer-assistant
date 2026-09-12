@@ -2,13 +2,19 @@ package com.pirci.prayer_assistant
 
 import android.app.Activity
 import android.content.ContentResolver
+import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.Environment
 import android.provider.DocumentsContract
+import android.provider.MediaStore
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
+import java.io.File
 
 class MainActivity : FlutterActivity() {
     private lateinit var widgetChannel: MethodChannel
@@ -23,6 +29,17 @@ class MainActivity : FlutterActivity() {
 
     private fun storedFolderUri(): Uri? =
         backupFolderPrefs.getString("tree_uri", null)?.let { Uri.parse(it) }
+
+    /// Document URI for the shared Documents folder, used to open the folder
+    /// picker there by default. Null when the provider is unavailable.
+    private fun defaultDocumentsUri(): Uri? = try {
+        DocumentsContract.buildDocumentUri(
+            "com.android.externalstorage.documents",
+            "primary:Documents"
+        )
+    } catch (_: Exception) {
+        null
+    }
 
     private fun documentChildrenUri(treeUri: Uri): Uri =
         DocumentsContract.buildChildDocumentsUriUsingTree(
@@ -103,6 +120,113 @@ class MainActivity : FlutterActivity() {
         val docUri = findChildDocument(resolver, treeUri, name) ?: return null
         return resolver.openInputStream(docUri)?.use { input ->
             input.readBytes().toString(Charsets.UTF_8)
+        }
+    }
+
+    private val documentsRelativePath = "${Environment.DIRECTORY_DOCUMENTS}/"
+
+    private fun documentsDirectory(): File = Environment
+        .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+
+    private fun documentsFolderExists(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Scoped storage blocks stat() on the public path, so probe the
+            // MediaStore Documents collection instead.
+            return try {
+                contentResolver.query(
+                    defaultDocumentsCollection(),
+                    arrayOf(MediaStore.MediaColumns._ID),
+                    null,
+                    null,
+                    null
+                ) != null
+            } catch (_: Exception) {
+                false
+            }
+        }
+        return documentsDirectory().exists()
+    }
+
+    private fun documentsFile(name: String): File = File(documentsDirectory(), name)
+
+    private fun defaultDocumentsCollection(): Uri =
+        MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+
+    private fun findDocumentsEntry(name: String): Uri? {
+        contentResolver.query(
+            defaultDocumentsCollection(),
+            arrayOf(
+                MediaStore.MediaColumns._ID,
+                MediaStore.MediaColumns.DISPLAY_NAME,
+                MediaStore.MediaColumns.RELATIVE_PATH
+            ),
+            "${MediaStore.MediaColumns.DISPLAY_NAME} = ?",
+            arrayOf(name),
+            null
+        )?.use { cursor ->
+            val idIndex = cursor.getColumnIndex(MediaStore.MediaColumns._ID)
+            val nameIndex =
+                cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
+            val pathIndex =
+                cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH)
+            while (cursor.moveToNext()) {
+                val display = cursor.getString(nameIndex)
+                val relative = cursor.getString(pathIndex)
+                if (display == name &&
+                    relative != null &&
+                    relative.startsWith(Environment.DIRECTORY_DOCUMENTS)
+                ) {
+                    val id = cursor.getLong(idIndex)
+                    return ContentUris.withAppendedId(
+                        defaultDocumentsCollection(),
+                        id
+                    )
+                }
+            }
+        }
+        return null
+    }
+
+    private fun writeDocumentsBackup(name: String, content: String): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            return try {
+                val file = documentsFile(name)
+                if (!documentsFolderExists()) return false
+                file.writeText(content, Charsets.UTF_8)
+                true
+            } catch (_: Exception) {
+                false
+            }
+        }
+        val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+            put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, documentsRelativePath)
+        }
+        val uri = findDocumentsEntry(name)
+            ?: contentResolver.insert(defaultDocumentsCollection(), values)
+            ?: return false
+        return try {
+            contentResolver.openOutputStream(uri, "wt")?.use { out ->
+                out.write(content.toByteArray(Charsets.UTF_8))
+                out.flush()
+            } != null
+        } catch (_: Exception) {
+            false
+        }
+    }
+
+    private fun readDocumentsBackup(name: String): String? {
+        val uri = findDocumentsEntry(name) ?: documentsFile(name)
+            .takeIf { it.exists() }
+            ?.let { Uri.fromFile(it) }
+            ?: return null
+        return try {
+            contentResolver.openInputStream(uri)?.use { input ->
+                input.readBytes().toString(Charsets.UTF_8)
+            }
+        } catch (_: Exception) {
+            null
         }
     }
 
@@ -234,6 +358,10 @@ class MainActivity : FlutterActivity() {
                                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION or
                                 Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
                         )
+                        val start = storedFolderUri() ?: defaultDocumentsUri()
+                        if (start != null) {
+                            putExtra(DocumentsContract.EXTRA_INITIAL_URI, start)
+                        }
                     }
                     try {
                         startActivityForResult(intent, pickFolderRequest)
@@ -288,6 +416,20 @@ class MainActivity : FlutterActivity() {
                     } catch (e: Exception) {
                         result.error("read_failed", e.message, null)
                     }
+                }
+                "documentsFolderAvailable" -> {
+                    result.success(documentsFolderExists())
+                }
+                "writeDocumentsBackup" -> {
+                    val content = call.argument<String>("content") ?: ""
+                    val name = call.argument<String>("fileName")
+                        ?: "prayer_assistant_backup.json"
+                    result.success(writeDocumentsBackup(name, content))
+                }
+                "readDocumentsBackup" -> {
+                    val name = call.argument<String>("fileName")
+                        ?: "prayer_assistant_backup.json"
+                    result.success(readDocumentsBackup(name))
                 }
                 else -> result.notImplemented()
             }

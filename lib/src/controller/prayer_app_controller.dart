@@ -601,6 +601,9 @@ class PrayerAppController extends ChangeNotifier {
       }
       await _driveService.restoreSession();
       _offlineFolderUri = await _offlineFolderService.currentFolder();
+      _useDefaultDocumentsFolder = _offlineFolderUri == null
+          ? await _offlineFolderService.documentsFolderAvailable()
+          : false;
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -1709,6 +1712,7 @@ class PrayerAppController extends ChangeNotifier {
   int? _lastAutoBackupFingerprint;
   final _offlineFolderService = OfflineFolderBackupService();
   String? _offlineFolderUri;
+  bool _useDefaultDocumentsFolder = false;
   bool _folderBackupInProgress = false;
   int? _lastFolderBackupFingerprint;
 
@@ -1810,13 +1814,20 @@ class PrayerAppController extends ChangeNotifier {
     });
   }
 
-  /// Folder chosen for offline backups, or null when none is set.
+  /// Folder chosen for offline backups, or null when a custom one is set.
   String? get offlineBackupFolderUri => _offlineFolderUri;
 
+  /// True when a backup folder is available (custom folder or Documents).
+  bool get hasOfflineBackupFolder =>
+      _offlineFolderUri != null || _useDefaultDocumentsFolder;
+
   /// Human-readable name of the offline backup folder.
-  String? get offlineBackupFolderName => _offlineFolderUri == null
-      ? null
-      : OfflineFolderBackupService.displayName(_offlineFolderUri!);
+  String? get offlineBackupFolderName {
+    if (_offlineFolderUri != null) {
+      return OfflineFolderBackupService.displayName(_offlineFolderUri!);
+    }
+    return _useDefaultDocumentsFolder ? 'Documents' : null;
+  }
 
   /// Opens the system folder picker, remembers it, and saves a backup there.
   Future<bool> chooseOfflineBackupFolder() {
@@ -1826,6 +1837,7 @@ class PrayerAppController extends ChangeNotifier {
         return false;
       }
       _offlineFolderUri = uri;
+      _useDefaultDocumentsFolder = false;
       _lastFolderBackupFingerprint = null;
       notifyListeners();
       await autoBackupToFolder();
@@ -1837,13 +1849,16 @@ class PrayerAppController extends ChangeNotifier {
     await _offlineFolderService.clearFolder();
     _offlineFolderUri = null;
     _lastFolderBackupFingerprint = null;
+    _useDefaultDocumentsFolder =
+        await _offlineFolderService.documentsFolderAvailable();
     notifyListeners();
   }
 
-  /// Best-effort silent write of the full backup into the chosen folder.
+  /// Best-effort silent write of the full backup into the backup folder.
+  /// Uses the custom folder when set, otherwise the shared Documents folder.
   /// Works fully offline and keeps the previous file until it is replaced.
   Future<void> autoBackupToFolder() async {
-    if (_offlineFolderUri == null || _folderBackupInProgress) {
+    if (!hasOfflineBackupFolder || _folderBackupInProgress) {
       return;
     }
     _folderBackupInProgress = true;
@@ -1857,7 +1872,9 @@ class PrayerAppController extends ChangeNotifier {
       if (fingerprint == _lastFolderBackupFingerprint) {
         return;
       }
-      final written = await _offlineFolderService.writeBackup(jsonStr);
+      final written = _offlineFolderUri != null
+          ? await _offlineFolderService.writeBackup(jsonStr)
+          : await _offlineFolderService.writeDocumentsBackup(jsonStr);
       if (written) {
         _lastFolderBackupFingerprint = fingerprint;
       }
@@ -1868,10 +1885,28 @@ class PrayerAppController extends ChangeNotifier {
     }
   }
 
-  /// Restores all app data from the backup file in the chosen folder.
+  /// Restores all app data from the backup file in the backup folder.
+  ///
+  /// The default Documents file can be read on the same install, but Android
+  /// blocks reading it after a reinstall, so in that case one folder pick is
+  /// requested to regain access before reading.
   Future<void> restoreFromOfflineFolder() {
     return _runBackupOperation(BackupActivity.folderRestore, () async {
-      final jsonStr = await _offlineFolderService.readBackup();
+      String? jsonStr;
+      if (_offlineFolderUri != null) {
+        jsonStr = await _offlineFolderService.readBackup();
+      } else {
+        jsonStr = await _offlineFolderService.readDocumentsBackup();
+        if (jsonStr == null) {
+          final uri = await _offlineFolderService.pickFolder();
+          if (uri != null) {
+            _offlineFolderUri = uri;
+            _useDefaultDocumentsFolder = false;
+            notifyListeners();
+            jsonStr = await _offlineFolderService.readBackup();
+          }
+        }
+      }
       if (jsonStr == null || jsonStr.isEmpty) {
         throw StateError('No backup file found in the chosen folder');
       }

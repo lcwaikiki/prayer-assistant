@@ -1704,7 +1704,7 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   final _driveService = GoogleDriveBackupService();
-  bool _googleDriveBusy = false;
+  BackupActivity _backupActivity = BackupActivity.idle;
   bool _autoBackupInProgress = false;
   int? _lastAutoBackupFingerprint;
   final _offlineFolderService = OfflineFolderBackupService();
@@ -1718,29 +1718,40 @@ class PrayerAppController extends ChangeNotifier {
 
   int get googleDriveBackupListLimit => _driveService.listLimit;
 
-  /// True while a Google Drive sign-in or sign-out is in flight.
-  bool get googleDriveBusy => _googleDriveBusy;
+  /// The manual backup or restore currently running, if any.
+  BackupActivity get backupActivity => _backupActivity;
 
-  Future<bool> signInToGoogleDrive() async {
-    _googleDriveBusy = true;
+  /// True while a Google Drive sign-in or sign-out is in flight.
+  bool get googleDriveBusy =>
+      _backupActivity == BackupActivity.signingIn ||
+      _backupActivity == BackupActivity.signingOut;
+
+  /// True while a manual backup or restore is in flight.
+  bool get backupBusy => _backupActivity != BackupActivity.idle;
+
+  Future<T> _runBackupOperation<T>(
+    BackupActivity activity,
+    Future<T> Function() task,
+  ) async {
+    _backupActivity = activity;
     notifyListeners();
     try {
-      return await _driveService.signIn();
+      return await task();
     } finally {
-      _googleDriveBusy = false;
+      _backupActivity = BackupActivity.idle;
       notifyListeners();
     }
   }
 
-  Future<void> signOutFromGoogleDrive() async {
-    _googleDriveBusy = true;
-    notifyListeners();
-    try {
-      await _driveService.signOut();
-    } finally {
-      _googleDriveBusy = false;
-      notifyListeners();
-    }
+  Future<bool> signInToGoogleDrive() {
+    return _runBackupOperation(BackupActivity.signingIn, _driveService.signIn);
+  }
+
+  Future<void> signOutFromGoogleDrive() {
+    return _runBackupOperation(
+      BackupActivity.signingOut,
+      _driveService.signOut,
+    );
   }
 
   Future<void> setGoogleDriveBackupListLimit(int limit) async {
@@ -1748,10 +1759,12 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> uploadBackupToGoogleDrive() async {
-    final jsonStr = await exportBackupJson();
-    await _driveService.uploadBackup(jsonStr);
-    return jsonStr;
+  Future<String> uploadBackupToGoogleDrive() {
+    return _runBackupOperation(BackupActivity.driveUpload, () async {
+      final jsonStr = await exportBackupJson();
+      await _driveService.uploadBackup(jsonStr);
+      return jsonStr;
+    });
   }
 
   /// Best-effort silent backup to Google Drive, called when the app is
@@ -1783,13 +1796,18 @@ class PrayerAppController extends ChangeNotifier {
     return raw.toString().hashCode;
   }
 
-  Future<List<DriveBackupInfo>> listGoogleDriveBackups() async {
-    return _driveService.listBackups();
+  Future<List<DriveBackupInfo>> listGoogleDriveBackups() {
+    return _runBackupOperation(
+      BackupActivity.driveRestore,
+      _driveService.listBackups,
+    );
   }
 
-  Future<void> restoreBackupFromGoogleDrive(String fileId) async {
-    final jsonStr = await _driveService.downloadBackup(fileId);
-    await restoreBackupJson(jsonStr);
+  Future<void> restoreBackupFromGoogleDrive(String fileId) {
+    return _runBackupOperation(BackupActivity.driveRestore, () async {
+      final jsonStr = await _driveService.downloadBackup(fileId);
+      await restoreBackupJson(jsonStr);
+    });
   }
 
   /// Folder chosen for offline backups, or null when none is set.
@@ -1801,16 +1819,18 @@ class PrayerAppController extends ChangeNotifier {
       : OfflineFolderBackupService.displayName(_offlineFolderUri!);
 
   /// Opens the system folder picker, remembers it, and saves a backup there.
-  Future<bool> chooseOfflineBackupFolder() async {
-    final uri = await _offlineFolderService.pickFolder();
-    if (uri == null) {
-      return false;
-    }
-    _offlineFolderUri = uri;
-    _lastFolderBackupFingerprint = null;
-    notifyListeners();
-    await autoBackupToFolder();
-    return true;
+  Future<bool> chooseOfflineBackupFolder() {
+    return _runBackupOperation(BackupActivity.folderChoose, () async {
+      final uri = await _offlineFolderService.pickFolder();
+      if (uri == null) {
+        return false;
+      }
+      _offlineFolderUri = uri;
+      _lastFolderBackupFingerprint = null;
+      notifyListeners();
+      await autoBackupToFolder();
+      return true;
+    });
   }
 
   Future<void> clearOfflineBackupFolder() async {
@@ -1849,12 +1869,25 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   /// Restores all app data from the backup file in the chosen folder.
-  Future<void> restoreFromOfflineFolder() async {
-    final jsonStr = await _offlineFolderService.readBackup();
-    if (jsonStr == null || jsonStr.isEmpty) {
-      throw StateError('No backup file found in the chosen folder');
-    }
-    await restoreBackupJson(jsonStr);
+  Future<void> restoreFromOfflineFolder() {
+    return _runBackupOperation(BackupActivity.folderRestore, () async {
+      final jsonStr = await _offlineFolderService.readBackup();
+      if (jsonStr == null || jsonStr.isEmpty) {
+        throw StateError('No backup file found in the chosen folder');
+      }
+      await restoreBackupJson(jsonStr);
+    });
   }
+}
+
+/// A manual backup or restore currently in progress, or idle.
+enum BackupActivity {
+  idle,
+  signingIn,
+  signingOut,
+  driveUpload,
+  driveRestore,
+  folderChoose,
+  folderRestore,
 }
 

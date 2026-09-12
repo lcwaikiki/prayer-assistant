@@ -18,6 +18,12 @@ import '../models/calendar_week_start.dart';
 import '../models/prayer_models.dart';
 import 'location_screen.dart';
 
+const Widget _backupProgress = SizedBox(
+  width: 24,
+  height: 24,
+  child: CircularProgressIndicator(strokeWidth: 2),
+);
+
 class PreferencesScreen extends StatelessWidget {
   const PreferencesScreen({super.key});
 
@@ -526,13 +532,9 @@ class PreferencesScreen extends StatelessWidget {
                 children: [
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    enabled: !controller.googleDriveBusy,
+                    enabled: !controller.backupBusy,
                     leading: controller.googleDriveBusy
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
+                        ? _backupProgress
                         : Icon(
                             controller.isGoogleDriveSignedIn
                                 ? Icons.cloud_done_outlined
@@ -547,7 +549,7 @@ class PreferencesScreen extends StatelessWidget {
                             controller.googleDriveAccountEmail != null
                         ? Text(controller.googleDriveAccountEmail!)
                         : null,
-                    onTap: controller.googleDriveBusy
+                    onTap: controller.backupBusy
                         ? null
                         : () async {
                             if (controller.isGoogleDriveSignedIn) {
@@ -621,16 +623,18 @@ class PreferencesScreen extends StatelessWidget {
                    ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    enabled: controller.isGoogleDriveSignedIn,
-                    leading: const Icon(Icons.cloud_upload_outlined),
+                    enabled:
+                        controller.isGoogleDriveSignedIn &&
+                        !controller.backupBusy,
+                    leading:
+                        controller.backupActivity ==
+                            BackupActivity.driveUpload
+                        ? _backupProgress
+                        : const Icon(Icons.cloud_upload_outlined),
                     title: Text(context.l10n.googleDriveBackup),
                     onTap: () async {
                       try {
-                        await _runWithGoogleDriveProgress(
-                          context,
-                          controller,
-                          controller.uploadBackupToGoogleDrive,
-                        );
+                        await controller.uploadBackupToGoogleDrive();
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -655,8 +659,14 @@ class PreferencesScreen extends StatelessWidget {
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    enabled: controller.isGoogleDriveSignedIn,
-                    leading: const Icon(Icons.cloud_download_outlined),
+                    enabled:
+                        controller.isGoogleDriveSignedIn &&
+                        !controller.backupBusy,
+                    leading:
+                        controller.backupActivity ==
+                            BackupActivity.driveRestore
+                        ? _backupProgress
+                        : const Icon(Icons.cloud_download_outlined),
                     title: Text(context.l10n.googleDriveRestore),
                     onTap: () => _showGoogleDriveBackupPicker(
                       context,
@@ -681,17 +691,24 @@ class PreferencesScreen extends StatelessWidget {
                             ),
                           ),
                       ],
-                      onChanged: (v) {
-                        if (v != null) {
-                          controller.setGoogleDriveBackupListLimit(v);
-                        }
-                      },
+                      onChanged: controller.backupBusy
+                          ? null
+                          : (v) {
+                              if (v != null) {
+                                controller.setGoogleDriveBackupListLimit(v);
+                              }
+                            },
                     ),
                   ),
                   const Divider(height: 24),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.folder_outlined),
+                    enabled: !controller.backupBusy,
+                    leading:
+                        controller.backupActivity ==
+                            BackupActivity.folderChoose
+                        ? _backupProgress
+                        : const Icon(Icons.folder_outlined),
                     title: Text(
                       controller.offlineBackupFolderUri == null
                           ? context.l10n.offlineFolderChoose
@@ -726,8 +743,14 @@ class PreferencesScreen extends StatelessWidget {
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    enabled: controller.offlineBackupFolderUri != null,
-                    leading: const Icon(Icons.folder_open_outlined),
+                    enabled:
+                        controller.offlineBackupFolderUri != null &&
+                        !controller.backupBusy,
+                    leading:
+                        controller.backupActivity ==
+                            BackupActivity.folderRestore
+                        ? _backupProgress
+                        : const Icon(Icons.folder_open_outlined),
                     title: Text(context.l10n.offlineFolderRestore),
                     onTap: () async {
                       try {
@@ -755,12 +778,14 @@ class PreferencesScreen extends StatelessWidget {
                   if (controller.offlineBackupFolderUri != null)
                     ListTile(
                       contentPadding: EdgeInsets.zero,
+                      enabled: !controller.backupBusy,
                       leading: const Icon(Icons.folder_delete_outlined),
                       title: Text(context.l10n.offlineFolderRemove),
                       onTap: controller.clearOfflineBackupFolder,
                     ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
+                    enabled: !controller.backupBusy,
                     leading: const Icon(Icons.download_outlined),
                     title: Text(context.l10n.exportBackupJson),
                     onTap: () async {
@@ -786,6 +811,7 @@ class PreferencesScreen extends StatelessWidget {
                   ),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
+                    enabled: !controller.backupBusy,
                     leading: const Icon(Icons.upload_outlined),
                     title: Text(context.l10n.restoreBackupJson),
                     onTap: () => _showRestoreDialog(context, controller),
@@ -904,42 +930,6 @@ class PreferencesScreen extends StatelessWidget {
     );
   }
 
-  Future<T> _runWithGoogleDriveProgress<T>(
-    BuildContext context,
-    PrayerAppController controller,
-    Future<T> Function() task,
-  ) async {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return PopScope<void>(
-          canPop: false,
-          child: AlertDialog(
-            content: Row(
-              children: [
-                const SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: CircularProgressIndicator(strokeWidth: 3),
-                ),
-                const SizedBox(width: 16),
-                Expanded(child: Text(context.l10n.googleDriveWorking)),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-    try {
-      return await task();
-    } finally {
-      if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pop();
-      }
-    }
-  }
-
   String _restoreErrorMessage(BuildContext context, Object error) {
     if (error is FormatException &&
         error.message == 'Unsupported backup version') {
@@ -953,11 +943,7 @@ class PreferencesScreen extends StatelessWidget {
     PrayerAppController controller,
   ) async {
     try {
-      final backups = await _runWithGoogleDriveProgress(
-        context,
-        controller,
-        controller.listGoogleDriveBackups,
-      );
+      final backups = await controller.listGoogleDriveBackups();
       if (!context.mounted) return;
       if (backups.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -1019,12 +1005,8 @@ class PreferencesScreen extends StatelessWidget {
                         Navigator.of(dialogContext).pop();
                       }
                       try {
-                        await _runWithGoogleDriveProgress(
-                          context,
-                          controller,
-                          () => controller.restoreBackupFromGoogleDrive(
-                            backup.fileId,
-                          ),
+                        await controller.restoreBackupFromGoogleDrive(
+                          backup.fileId,
                         );
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

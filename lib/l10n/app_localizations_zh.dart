@@ -827,6 +827,30 @@ class AppLocalizationsZh extends AppLocalizations {
   String get googleDriveRestoreEmpty => '未找到 Google Drive 上的备份。';
 
   @override
+  String get driveRestorePromptBody => '此设备上未找到数据。要从 Google Drive 恢复数据吗？';
+
+  @override
+  String get offlineFolderChoose => '选择备份文件夹';
+
+  @override
+  String get offlineFolderChange => '更改备份文件夹';
+
+  @override
+  String get offlineFolderNone => '未选择文件夹。备份不会离线保存。';
+
+  @override
+  String get offlineFolderSaved => '备份已保存到文件夹。';
+
+  @override
+  String get offlineFolderRestore => '从备份文件夹恢复';
+
+  @override
+  String get offlineFolderRestoreEmpty => '在所选文件夹中未找到备份文件。';
+
+  @override
+  String get offlineFolderRemove => '移除备份文件夹';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count 项';
   }

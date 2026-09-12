@@ -851,6 +851,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get googleDriveRestoreEmpty => 'No backups found on Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'No data found on this device. Restore your data from Google Drive?';
+
+  @override
+  String get offlineFolderChoose => 'Choose backup folder';
+
+  @override
+  String get offlineFolderChange => 'Change backup folder';
+
+  @override
+  String get offlineFolderNone =>
+      'No folder chosen. Backups are not saved offline.';
+
+  @override
+  String get offlineFolderSaved => 'Backup saved to folder.';
+
+  @override
+  String get offlineFolderRestore => 'Restore from backup folder';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'No backup file found in the chosen folder.';
+
+  @override
+  String get offlineFolderRemove => 'Remove backup folder';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count items';
   }

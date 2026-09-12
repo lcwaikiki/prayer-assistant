@@ -691,6 +691,76 @@ class PreferencesScreen extends StatelessWidget {
                   const Divider(height: 24),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.folder_outlined),
+                    title: Text(
+                      controller.offlineBackupFolderUri == null
+                          ? context.l10n.offlineFolderChoose
+                          : context.l10n.offlineFolderChange,
+                    ),
+                    subtitle: Text(
+                      controller.offlineBackupFolderName ??
+                          context.l10n.offlineFolderNone,
+                    ),
+                    onTap: () async {
+                      try {
+                        final chosen =
+                            await controller.chooseOfflineBackupFolder();
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              chosen
+                                  ? context.l10n.offlineFolderSaved
+                                  : context.l10n.offlineFolderNone,
+                            ),
+                          ),
+                        );
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('$e')),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    enabled: controller.offlineBackupFolderUri != null,
+                    leading: const Icon(Icons.folder_open_outlined),
+                    title: Text(context.l10n.offlineFolderRestore),
+                    onTap: () async {
+                      try {
+                        await controller.restoreFromOfflineFolder();
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(context.l10n.restoreSuccess),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                context.l10n.offlineFolderRestoreEmpty,
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  if (controller.offlineBackupFolderUri != null)
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.folder_delete_outlined),
+                      title: Text(context.l10n.offlineFolderRemove),
+                      onTap: controller.clearOfflineBackupFolder,
+                    ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.download_outlined),
                     title: Text(context.l10n.exportBackupJson),
                     onTap: () async {

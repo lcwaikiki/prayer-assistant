@@ -854,6 +854,33 @@ class AppLocalizationsTr extends AppLocalizations {
   String get googleDriveRestoreEmpty => 'Google Drive\'da yedek bulunamadı.';
 
   @override
+  String get driveRestorePromptBody =>
+      'Bu cihazda veri bulunamadı. Verilerinizi Google Drive\'dan geri yüklemek ister misiniz?';
+
+  @override
+  String get offlineFolderChoose => 'Yedek klasörü seç';
+
+  @override
+  String get offlineFolderChange => 'Yedek klasörünü değiştir';
+
+  @override
+  String get offlineFolderNone =>
+      'Klasör seçilmedi. Yedekler çevrimdışı kaydedilmiyor.';
+
+  @override
+  String get offlineFolderSaved => 'Yedek klasöre kaydedildi.';
+
+  @override
+  String get offlineFolderRestore => 'Yedek klasöründen geri yükle';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'Seçilen klasörde yedek dosyası bulunamadı.';
+
+  @override
+  String get offlineFolderRemove => 'Yedek klasörünü kaldır';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count öğe';
   }

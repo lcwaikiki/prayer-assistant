@@ -830,6 +830,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get googleDriveRestoreEmpty => 'Google ドライブにバックアップが見つかりませんでした。';
 
   @override
+  String get driveRestorePromptBody =>
+      'このデバイスにデータが見つかりません。Google ドライブからデータを復元しますか？';
+
+  @override
+  String get offlineFolderChoose => 'バックアップフォルダを選択';
+
+  @override
+  String get offlineFolderChange => 'バックアップフォルダを変更';
+
+  @override
+  String get offlineFolderNone => 'フォルダが選択されていません。バックアップはオフラインでは保存されません。';
+
+  @override
+  String get offlineFolderSaved => 'バックアップをフォルダに保存しました。';
+
+  @override
+  String get offlineFolderRestore => 'バックアップフォルダから復元';
+
+  @override
+  String get offlineFolderRestoreEmpty => '選択したフォルダにバックアップファイルが見つかりません。';
+
+  @override
+  String get offlineFolderRemove => 'バックアップフォルダを削除';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count 件';
   }

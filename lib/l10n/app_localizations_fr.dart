@@ -859,6 +859,34 @@ class AppLocalizationsFr extends AppLocalizations {
       'Aucune sauvegarde trouvée sur Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'Aucune donnée trouvée sur cet appareil. Restaurer vos données depuis Google Drive ?';
+
+  @override
+  String get offlineFolderChoose => 'Choisir un dossier de sauvegarde';
+
+  @override
+  String get offlineFolderChange => 'Changer le dossier de sauvegarde';
+
+  @override
+  String get offlineFolderNone =>
+      'Aucun dossier sélectionné. Les sauvegardes ne sont pas enregistrées hors ligne.';
+
+  @override
+  String get offlineFolderSaved => 'Sauvegarde enregistrée dans le dossier.';
+
+  @override
+  String get offlineFolderRestore =>
+      'Restaurer depuis le dossier de sauvegarde';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'Aucun fichier de sauvegarde trouvé dans le dossier sélectionné.';
+
+  @override
+  String get offlineFolderRemove => 'Supprimer le dossier de sauvegarde';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count éléments';
   }

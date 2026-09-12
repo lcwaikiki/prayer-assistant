@@ -858,6 +858,34 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se encontraron copias de seguridad en Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'No se encontraron datos en este dispositivo. ¿Restaurar sus datos desde Google Drive?';
+
+  @override
+  String get offlineFolderChoose => 'Elegir carpeta de copia de seguridad';
+
+  @override
+  String get offlineFolderChange => 'Cambiar carpeta de copia de seguridad';
+
+  @override
+  String get offlineFolderNone =>
+      'Ninguna carpeta seleccionada. Las copias no se guardan sin conexión.';
+
+  @override
+  String get offlineFolderSaved => 'Copia de seguridad guardada en la carpeta.';
+
+  @override
+  String get offlineFolderRestore =>
+      'Restaurar desde la carpeta de copia de seguridad';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'No se encontró ningún archivo de copia en la carpeta elegida.';
+
+  @override
+  String get offlineFolderRemove => 'Eliminar carpeta de copia de seguridad';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count elementos';
   }

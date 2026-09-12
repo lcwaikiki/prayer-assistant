@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "No se encontraron copias de seguridad en Google Drive.",
+  "driveRestorePromptBody": "No se encontraron datos en este dispositivo. ¿Restaurar sus datos desde Google Drive?",
+  "offlineFolderChoose": "Elegir carpeta de copia de seguridad",
+  "offlineFolderChange": "Cambiar carpeta de copia de seguridad",
+  "offlineFolderNone": "Ninguna carpeta seleccionada. Las copias no se guardan sin conexión.",
+  "offlineFolderSaved": "Copia de seguridad guardada en la carpeta.",
+  "offlineFolderRestore": "Restaurar desde la carpeta de copia de seguridad",
+  "offlineFolderRestoreEmpty": "No se encontró ningún archivo de copia en la carpeta elegida.",
+  "offlineFolderRemove": "Eliminar carpeta de copia de seguridad",
   "googleDriveBackupItemCount": "{count} elementos",
   "@googleDriveBackupItemCount": {
     "description": "Número de elementos en una copia de seguridad",

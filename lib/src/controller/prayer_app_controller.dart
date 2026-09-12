@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import '../models/prayer_models.dart';
 
 import '../services/backup_export_service.dart';
 import '../services/google_drive_backup_service.dart';
+import '../services/offline_folder_backup_service.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
@@ -598,6 +600,7 @@ class PrayerAppController extends ChangeNotifier {
         await _updateWidgetBridgeData();
       }
       await _driveService.restoreSession();
+      _offlineFolderUri = await _offlineFolderService.currentFolder();
       _error = null;
     } catch (e) {
       _error = e.toString();
@@ -1346,6 +1349,21 @@ class PrayerAppController extends ChangeNotifier {
     );
   }
 
+  /// True when the device already holds user data. Used to detect a fresh
+  /// install and offer a Google Drive restore on first launch.
+  bool hasLocalData() {
+    if (_defaultItemRepo.loadItems().isNotEmpty ||
+        _defaultItemRepo.loadGroups().isNotEmpty) {
+      return true;
+    }
+    if (_prayerCompletions.isNotEmpty ||
+        _calendarReminders.isNotEmpty ||
+        _fastingLogs.isNotEmpty) {
+      return true;
+    }
+    return _kazaTracker.totalTarget > 0 || _kazaTracker.totalCompleted > 0;
+  }
+
   /// Restores all app data from a valid JSON backup string.
   Future<void> restoreBackupJson(
     String jsonString, {
@@ -1687,6 +1705,12 @@ class PrayerAppController extends ChangeNotifier {
 
   final _driveService = GoogleDriveBackupService();
   bool _googleDriveBusy = false;
+  bool _autoBackupInProgress = false;
+  int? _lastAutoBackupFingerprint;
+  final _offlineFolderService = OfflineFolderBackupService();
+  String? _offlineFolderUri;
+  bool _folderBackupInProgress = false;
+  int? _lastFolderBackupFingerprint;
 
   bool get isGoogleDriveSignedIn => _driveService.isSignedIn;
 
@@ -1730,12 +1754,106 @@ class PrayerAppController extends ChangeNotifier {
     return jsonStr;
   }
 
+  /// Best-effort silent backup to Google Drive, called when the app is
+  /// paused. Skips when Drive is not signed in, an auto backup is already
+  /// running, or the data did not change since the last successful one.
+  Future<void> autoBackupToGoogleDrive() async {
+    if (!isGoogleDriveSignedIn || _autoBackupInProgress) {
+      return;
+    }
+    _autoBackupInProgress = true;
+    try {
+      final jsonStr = await exportBackupJson();
+      final fingerprint = _dataFingerprint(jsonStr);
+      if (fingerprint == _lastAutoBackupFingerprint) {
+        return;
+      }
+      await _driveService.uploadBackup(jsonStr);
+      _lastAutoBackupFingerprint = fingerprint;
+    } catch (_) {
+      // Auto backups are best-effort; a failing upload must not surface.
+    } finally {
+      _autoBackupInProgress = false;
+    }
+  }
+
+  int _dataFingerprint(String jsonStr) {
+    final raw = jsonDecode(jsonStr) as Map<String, dynamic>;
+    raw.remove('exportedAt');
+    return raw.toString().hashCode;
+  }
+
   Future<List<DriveBackupInfo>> listGoogleDriveBackups() async {
     return _driveService.listBackups();
   }
 
   Future<void> restoreBackupFromGoogleDrive(String fileId) async {
     final jsonStr = await _driveService.downloadBackup(fileId);
+    await restoreBackupJson(jsonStr);
+  }
+
+  /// Folder chosen for offline backups, or null when none is set.
+  String? get offlineBackupFolderUri => _offlineFolderUri;
+
+  /// Human-readable name of the offline backup folder.
+  String? get offlineBackupFolderName => _offlineFolderUri == null
+      ? null
+      : OfflineFolderBackupService.displayName(_offlineFolderUri!);
+
+  /// Opens the system folder picker, remembers it, and saves a backup there.
+  Future<bool> chooseOfflineBackupFolder() async {
+    final uri = await _offlineFolderService.pickFolder();
+    if (uri == null) {
+      return false;
+    }
+    _offlineFolderUri = uri;
+    _lastFolderBackupFingerprint = null;
+    notifyListeners();
+    await autoBackupToFolder();
+    return true;
+  }
+
+  Future<void> clearOfflineBackupFolder() async {
+    await _offlineFolderService.clearFolder();
+    _offlineFolderUri = null;
+    _lastFolderBackupFingerprint = null;
+    notifyListeners();
+  }
+
+  /// Best-effort silent write of the full backup into the chosen folder.
+  /// Works fully offline and keeps the previous file until it is replaced.
+  Future<void> autoBackupToFolder() async {
+    if (_offlineFolderUri == null || _folderBackupInProgress) {
+      return;
+    }
+    _folderBackupInProgress = true;
+    try {
+      final jsonStr = await exportBackupJson();
+      final raw = jsonDecode(jsonStr) as Map<String, dynamic>;
+      if (BackupExportService.countItems(raw) == 0) {
+        return;
+      }
+      final fingerprint = _dataFingerprint(jsonStr);
+      if (fingerprint == _lastFolderBackupFingerprint) {
+        return;
+      }
+      final written = await _offlineFolderService.writeBackup(jsonStr);
+      if (written) {
+        _lastFolderBackupFingerprint = fingerprint;
+      }
+    } catch (_) {
+      // Offline backups are best-effort; never surface errors here.
+    } finally {
+      _folderBackupInProgress = false;
+    }
+  }
+
+  /// Restores all app data from the backup file in the chosen folder.
+  Future<void> restoreFromOfflineFolder() async {
+    final jsonStr = await _offlineFolderService.readBackup();
+    if (jsonStr == null || jsonStr.isEmpty) {
+      throw StateError('No backup file found in the chosen folder');
+    }
     await restoreBackupJson(jsonStr);
   }
 }

@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "لم يتم العثور على نسخ احتياطية على Google Drive.",
+  "driveRestorePromptBody": "لا توجد بيانات على هذا الجهاز. هل تريد استعادة بياناتك من Google Drive؟",
+  "offlineFolderChoose": "اختر مجلد النسخ الاحتياطي",
+  "offlineFolderChange": "تغيير مجلد النسخ الاحتياطي",
+  "offlineFolderNone": "لم يتم اختيار مجلد. لا تُحفظ النسخ الاحتياطية دون اتصال.",
+  "offlineFolderSaved": "تم حفظ النسخة الاحتياطية في المجلد.",
+  "offlineFolderRestore": "الاستعادة من مجلد النسخ الاحتياطي",
+  "offlineFolderRestoreEmpty": "لم يتم العثور على ملف نسخ احتياطي في المجلد المحدد.",
+  "offlineFolderRemove": "إزالة مجلد النسخ الاحتياطي",
   "googleDriveBackupItemCount": "{count} عنصر",
   "@googleDriveBackupItemCount": {
     "description": "عدد العناصر في النسخة الاحتياطية",

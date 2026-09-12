@@ -12,6 +12,7 @@ import 'src/calendar/services/calendar_reminder_service.dart';
 import 'src/controller/prayer_app_controller.dart';
 import 'src/l10n/locale_options.dart';
 import 'src/navigation.dart';
+import 'src/services/auto_backup_observer.dart';
 import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
@@ -51,6 +52,8 @@ Future<void> main() async {
     calendarReminderService: calendarReminderService,
   );
   await controller.initialize();
+
+  WidgetsBinding.instance.addObserver(AutoBackupObserver(controller));
 
   final itemReminderService = ItemReminderService();
   itemReminderService.currentLocale = controller.resolvedLocale;

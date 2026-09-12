@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Keine Backups auf Google Drive gefunden.",
+  "driveRestorePromptBody": "Keine Daten auf diesem Gerät gefunden. Daten aus Google Drive wiederherstellen?",
+  "offlineFolderChoose": "Backup-Ordner wählen",
+  "offlineFolderChange": "Backup-Ordner ändern",
+  "offlineFolderNone": "Kein Ordner gewählt. Backups werden nicht offline gespeichert.",
+  "offlineFolderSaved": "Backup im Ordner gespeichert.",
+  "offlineFolderRestore": "Aus Backup-Ordner wiederherstellen",
+  "offlineFolderRestoreEmpty": "Keine Backup-Datei im gewählten Ordner gefunden.",
+  "offlineFolderRemove": "Backup-Ordner entfernen",
   "googleDriveBackupItemCount": "{count} Einträge",
   "@googleDriveBackupItemCount": {
     "description": "Anzahl der Einträge in einem Backup",

@@ -852,6 +852,33 @@ class AppLocalizationsFa extends AppLocalizations {
       'هیچ نسخه پشتیبانی در Google Drive یافت نشد.';
 
   @override
+  String get driveRestorePromptBody =>
+      'داده‌ای روی این دستگاه یافت نشد. داده‌های خود را از Google Drive بازیابی کنید؟';
+
+  @override
+  String get offlineFolderChoose => 'انتخاب پوشه پشتیبان';
+
+  @override
+  String get offlineFolderChange => 'تغییر پوشه پشتیبان';
+
+  @override
+  String get offlineFolderNone =>
+      'پوشه‌ای انتخاب نشده است. نسخه‌های پشتیبان آفلاین ذخیره نمی‌شوند.';
+
+  @override
+  String get offlineFolderSaved => 'نسخه پشتیبان در پوشه ذخیره شد.';
+
+  @override
+  String get offlineFolderRestore => 'بازیابی از پوشه پشتیبان';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'فایل پشتیبانی در پوشه انتخاب‌شده یافت نشد.';
+
+  @override
+  String get offlineFolderRemove => 'حذف پوشه پشتیبان';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count مورد';
   }

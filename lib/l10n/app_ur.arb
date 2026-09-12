@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Google Drive پر کوئی بیک اپ نہیں ملا۔",
+  "driveRestorePromptBody": "اس ڈیوائس پر کوئی ڈیٹا نہیں ملا۔ کیا آپ Google Drive سے ڈیٹا بحال کرنا چاہتے ہیں؟",
+  "offlineFolderChoose": "بیک اپ فولڈر منتخب کریں",
+  "offlineFolderChange": "بیک اپ فولڈر تبدیل کریں",
+  "offlineFolderNone": "کوئی فولڈر منتخب نہیں۔ بیک اپ آف لائن محفوظ نہیں ہوتے۔",
+  "offlineFolderSaved": "بیک اپ فولڈر میں محفوظ ہو گیا۔",
+  "offlineFolderRestore": "بیک اپ فولڈر سے بحال کریں",
+  "offlineFolderRestoreEmpty": "منتخب فولڈر میں بیک اپ فائل نہیں ملی۔",
+  "offlineFolderRemove": "بیک اپ فولڈر ہٹائیں",
   "googleDriveBackupItemCount": "{count} اشیاء",
   "@googleDriveBackupItemCount": {
     "description": "بیک اپ میں اشیاء کی تعداد",

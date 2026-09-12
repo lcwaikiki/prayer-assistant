@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Google ドライブにバックアップが見つかりませんでした。",
+  "driveRestorePromptBody": "このデバイスにデータが見つかりません。Google ドライブからデータを復元しますか？",
+  "offlineFolderChoose": "バックアップフォルダを選択",
+  "offlineFolderChange": "バックアップフォルダを変更",
+  "offlineFolderNone": "フォルダが選択されていません。バックアップはオフラインでは保存されません。",
+  "offlineFolderSaved": "バックアップをフォルダに保存しました。",
+  "offlineFolderRestore": "バックアップフォルダから復元",
+  "offlineFolderRestoreEmpty": "選択したフォルダにバックアップファイルが見つかりません。",
+  "offlineFolderRemove": "バックアップフォルダを削除",
   "googleDriveBackupItemCount": "{count} 件",
   "@googleDriveBackupItemCount": {
     "description": "バックアップのアイテム数",

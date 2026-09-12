@@ -1660,6 +1660,54 @@ abstract class AppLocalizations {
   /// **'No backups found on Google Drive.'**
   String get googleDriveRestoreEmpty;
 
+  /// No description provided for @driveRestorePromptBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No data found on this device. Restore your data from Google Drive?'**
+  String get driveRestorePromptBody;
+
+  /// No description provided for @offlineFolderChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose backup folder'**
+  String get offlineFolderChoose;
+
+  /// No description provided for @offlineFolderChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change backup folder'**
+  String get offlineFolderChange;
+
+  /// No description provided for @offlineFolderNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No folder chosen. Backups are not saved offline.'**
+  String get offlineFolderNone;
+
+  /// No description provided for @offlineFolderSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup saved to folder.'**
+  String get offlineFolderSaved;
+
+  /// No description provided for @offlineFolderRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore from backup folder'**
+  String get offlineFolderRestore;
+
+  /// No description provided for @offlineFolderRestoreEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No backup file found in the chosen folder.'**
+  String get offlineFolderRestoreEmpty;
+
+  /// No description provided for @offlineFolderRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove backup folder'**
+  String get offlineFolderRemove;
+
   /// Number of items in a backup
   ///
   /// In en, this message translates to:

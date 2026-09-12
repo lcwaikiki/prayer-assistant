@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/prayer_app_controller.dart';
 import '../kaza/screens/kaza_tracker_screen.dart';
@@ -44,14 +45,30 @@ class _AppShellState extends State<AppShell> {
       }
       setState(() => _now = DateTime.now());
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.isInitializing) {
+        _controller.addListener(_onInitializeDone);
+      } else {
+        _assessDriveRestore();
+      }
+    });
   }
 
   @override
   void dispose() {
     _controller.removeListener(_onTabChange);
+    _controller.removeListener(_onInitializeDone);
     _timer?.cancel();
     SystemChrome.setPreferredOrientations([]);
     super.dispose();
+  }
+
+  void _onInitializeDone() {
+    if (_controller.isInitializing) {
+      return;
+    }
+    _controller.removeListener(_onInitializeDone);
+    _assessDriveRestore();
   }
 
   void _onTabChange() {
@@ -66,6 +83,129 @@ class _AppShellState extends State<AppShell> {
       ]);
     } else {
       SystemChrome.setPreferredOrientations([]);
+    }
+  }
+
+  static const _driveRestorePromptSeenKey = 'drive_restore_prompt_seen';
+
+  /// Offers a Google Drive restore on a fresh install (no local data yet).
+  /// Runs only after initialization completes so the data check is accurate.
+  Future<void> _assessDriveRestore() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_controller.hasLocalData()) {
+      await prefs.setBool(_driveRestorePromptSeenKey, true);
+      return;
+    }
+    if (prefs.getBool(_driveRestorePromptSeenKey) ?? false) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    _showDriveRestorePrompt();
+  }
+
+  void _showDriveRestorePrompt() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return PopScope<void>(
+          canPop: false,
+          child: AlertDialog(
+            title: Text(context.l10n.googleDriveRestore),
+            content: Text(context.l10n.driveRestorePromptBody),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  _markDriveRestoreSeen();
+                },
+                child: Text(context.l10n.cancel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  _restoreFromFolder();
+                },
+                child: Text(context.l10n.offlineFolderRestore),
+              ),
+              FilledButton(
+                onPressed: () {
+                  Navigator.of(dialogContext).pop();
+                  _restoreFromDrive();
+                },
+                child: Text(context.l10n.googleDriveRestore),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _markDriveRestoreSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_driveRestorePromptSeenKey, true);
+  }
+
+  Future<void> _restoreFromDrive() async {
+    await _markDriveRestoreSeen();
+    try {
+      final signedIn = await _controller.signInToGoogleDrive();
+      if (!signedIn || !mounted) {
+        return;
+      }
+      final backups = await _controller.listGoogleDriveBackups();
+      if (!mounted) {
+        return;
+      }
+      if (backups.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.l10n.googleDriveRestoreEmpty)),
+        );
+        return;
+      }
+      await _controller.restoreBackupFromGoogleDrive(backups.first.fileId);
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.restoreSuccess)),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${context.l10n.restoreError}\n$e')),
+      );
+    }
+  }
+
+  /// Restores from the full backup file in a folder the user re-picks. Works
+  /// fully offline. The empty-data guard prevents clobbering the file first.
+  Future<void> _restoreFromFolder() async {
+    await _markDriveRestoreSeen();
+    try {
+      final chosen = await _controller.chooseOfflineBackupFolder();
+      if (!chosen || !mounted) {
+        return;
+      }
+      await _controller.restoreFromOfflineFolder();
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.restoreSuccess)),
+      );
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.offlineFolderRestoreEmpty)),
+      );
     }
   }
 

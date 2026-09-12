@@ -852,6 +852,33 @@ class AppLocalizationsUr extends AppLocalizations {
   String get googleDriveRestoreEmpty => 'Google Drive پر کوئی بیک اپ نہیں ملا۔';
 
   @override
+  String get driveRestorePromptBody =>
+      'اس ڈیوائس پر کوئی ڈیٹا نہیں ملا۔ کیا آپ Google Drive سے ڈیٹا بحال کرنا چاہتے ہیں؟';
+
+  @override
+  String get offlineFolderChoose => 'بیک اپ فولڈر منتخب کریں';
+
+  @override
+  String get offlineFolderChange => 'بیک اپ فولڈر تبدیل کریں';
+
+  @override
+  String get offlineFolderNone =>
+      'کوئی فولڈر منتخب نہیں۔ بیک اپ آف لائن محفوظ نہیں ہوتے۔';
+
+  @override
+  String get offlineFolderSaved => 'بیک اپ فولڈر میں محفوظ ہو گیا۔';
+
+  @override
+  String get offlineFolderRestore => 'بیک اپ فولڈر سے بحال کریں';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'منتخب فولڈر میں بیک اپ فائل نہیں ملی۔';
+
+  @override
+  String get offlineFolderRemove => 'بیک اپ فولڈر ہٹائیں';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count اشیاء';
   }

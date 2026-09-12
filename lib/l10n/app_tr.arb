@@ -314,6 +314,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Google Drive'da yedek bulunamadı.",
+  "driveRestorePromptBody": "Bu cihazda veri bulunamadı. Verilerinizi Google Drive'dan geri yüklemek ister misiniz?",
+  "offlineFolderChoose": "Yedek klasörü seç",
+  "offlineFolderChange": "Yedek klasörünü değiştir",
+  "offlineFolderNone": "Klasör seçilmedi. Yedekler çevrimdışı kaydedilmiyor.",
+  "offlineFolderSaved": "Yedek klasöre kaydedildi.",
+  "offlineFolderRestore": "Yedek klasöründen geri yükle",
+  "offlineFolderRestoreEmpty": "Seçilen klasörde yedek dosyası bulunamadı.",
+  "offlineFolderRemove": "Yedek klasörünü kaldır",
   "googleDriveBackupItemCount": "{count} öğe",
   "@googleDriveBackupItemCount": {
     "description": "Yedek içindeki öğe sayısı",

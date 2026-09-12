@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Tidak ada cadangan yang ditemukan di Google Drive.",
+  "driveRestorePromptBody": "Tidak ada data di perangkat ini. Pulihkan data Anda dari Google Drive?",
+  "offlineFolderChoose": "Pilih folder cadangan",
+  "offlineFolderChange": "Ubah folder cadangan",
+  "offlineFolderNone": "Tidak ada folder dipilih. Cadangan tidak disimpan offline.",
+  "offlineFolderSaved": "Cadangan disimpan ke folder.",
+  "offlineFolderRestore": "Pulihkan dari folder cadangan",
+  "offlineFolderRestoreEmpty": "Tidak ada berkas cadangan ditemukan di folder yang dipilih.",
+  "offlineFolderRemove": "Hapus folder cadangan",
   "googleDriveBackupItemCount": "{count} item",
   "@googleDriveBackupItemCount": {
     "description": "Jumlah item dalam cadangan",

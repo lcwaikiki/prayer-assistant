@@ -363,6 +363,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Резервные копии не найдены в Google Drive.",
+  "driveRestorePromptBody": "На этом устройстве нет данных. Восстановить данные из Google Диска?",
+  "offlineFolderChoose": "Выбрать папку для резервных копий",
+  "offlineFolderChange": "Изменить папку резервных копий",
+  "offlineFolderNone": "Папка не выбрана. Копии не сохраняются офлайн.",
+  "offlineFolderSaved": "Резервная копия сохранена в папке.",
+  "offlineFolderRestore": "Восстановить из папки резервных копий",
+  "offlineFolderRestoreEmpty": "В выбранной папке не найден файл резервной копии.",
+  "offlineFolderRemove": "Удалить папку резервных копий",
   "googleDriveBackupItemCount": "{count} элементов",
   "@googleDriveBackupItemCount": {
     "description": "Количество элементов в резервной копии",

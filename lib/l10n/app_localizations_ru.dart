@@ -857,6 +857,33 @@ class AppLocalizationsRu extends AppLocalizations {
       'Резервные копии не найдены в Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'На этом устройстве нет данных. Восстановить данные из Google Диска?';
+
+  @override
+  String get offlineFolderChoose => 'Выбрать папку для резервных копий';
+
+  @override
+  String get offlineFolderChange => 'Изменить папку резервных копий';
+
+  @override
+  String get offlineFolderNone =>
+      'Папка не выбрана. Копии не сохраняются офлайн.';
+
+  @override
+  String get offlineFolderSaved => 'Резервная копия сохранена в папке.';
+
+  @override
+  String get offlineFolderRestore => 'Восстановить из папки резервных копий';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'В выбранной папке не найден файл резервной копии.';
+
+  @override
+  String get offlineFolderRemove => 'Удалить папку резервных копий';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count элементов';
   }

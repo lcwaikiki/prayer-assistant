@@ -857,6 +857,33 @@ class AppLocalizationsDe extends AppLocalizations {
       'Keine Backups auf Google Drive gefunden.';
 
   @override
+  String get driveRestorePromptBody =>
+      'Keine Daten auf diesem Gerät gefunden. Daten aus Google Drive wiederherstellen?';
+
+  @override
+  String get offlineFolderChoose => 'Backup-Ordner wählen';
+
+  @override
+  String get offlineFolderChange => 'Backup-Ordner ändern';
+
+  @override
+  String get offlineFolderNone =>
+      'Kein Ordner gewählt. Backups werden nicht offline gespeichert.';
+
+  @override
+  String get offlineFolderSaved => 'Backup im Ordner gespeichert.';
+
+  @override
+  String get offlineFolderRestore => 'Aus Backup-Ordner wiederherstellen';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'Keine Backup-Datei im gewählten Ordner gefunden.';
+
+  @override
+  String get offlineFolderRemove => 'Backup-Ordner entfernen';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count Einträge';
   }

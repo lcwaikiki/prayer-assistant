@@ -854,6 +854,33 @@ class AppLocalizationsId extends AppLocalizations {
       'Tidak ada cadangan yang ditemukan di Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'Tidak ada data di perangkat ini. Pulihkan data Anda dari Google Drive?';
+
+  @override
+  String get offlineFolderChoose => 'Pilih folder cadangan';
+
+  @override
+  String get offlineFolderChange => 'Ubah folder cadangan';
+
+  @override
+  String get offlineFolderNone =>
+      'Tidak ada folder dipilih. Cadangan tidak disimpan offline.';
+
+  @override
+  String get offlineFolderSaved => 'Cadangan disimpan ke folder.';
+
+  @override
+  String get offlineFolderRestore => 'Pulihkan dari folder cadangan';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'Tidak ada berkas cadangan ditemukan di folder yang dipilih.';
+
+  @override
+  String get offlineFolderRemove => 'Hapus folder cadangan';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count item';
   }

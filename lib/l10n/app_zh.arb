@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "未找到 Google Drive 上的备份。",
+  "driveRestorePromptBody": "此设备上未找到数据。要从 Google Drive 恢复数据吗？",
+  "offlineFolderChoose": "选择备份文件夹",
+  "offlineFolderChange": "更改备份文件夹",
+  "offlineFolderNone": "未选择文件夹。备份不会离线保存。",
+  "offlineFolderSaved": "备份已保存到文件夹。",
+  "offlineFolderRestore": "从备份文件夹恢复",
+  "offlineFolderRestoreEmpty": "在所选文件夹中未找到备份文件。",
+  "offlineFolderRemove": "移除备份文件夹",
   "googleDriveBackupItemCount": "{count} 项",
   "@googleDriveBackupItemCount": {
     "description": "备份中的项目数量",

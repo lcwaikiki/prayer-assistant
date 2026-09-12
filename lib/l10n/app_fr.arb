@@ -308,6 +308,14 @@
     }
   },
   "googleDriveRestoreEmpty": "Aucune sauvegarde trouvée sur Google Drive.",
+  "driveRestorePromptBody": "Aucune donnée trouvée sur cet appareil. Restaurer vos données depuis Google Drive ?",
+  "offlineFolderChoose": "Choisir un dossier de sauvegarde",
+  "offlineFolderChange": "Changer le dossier de sauvegarde",
+  "offlineFolderNone": "Aucun dossier sélectionné. Les sauvegardes ne sont pas enregistrées hors ligne.",
+  "offlineFolderSaved": "Sauvegarde enregistrée dans le dossier.",
+  "offlineFolderRestore": "Restaurer depuis le dossier de sauvegarde",
+  "offlineFolderRestoreEmpty": "Aucun fichier de sauvegarde trouvé dans le dossier sélectionné.",
+  "offlineFolderRemove": "Supprimer le dossier de sauvegarde",
   "googleDriveBackupItemCount": "{count} éléments",
   "@googleDriveBackupItemCount": {
     "description": "Nombre d'éléments dans une sauvegarde",

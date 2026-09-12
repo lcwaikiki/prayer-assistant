@@ -849,6 +849,33 @@ class AppLocalizationsAr extends AppLocalizations {
       'لم يتم العثور على نسخ احتياطية على Google Drive.';
 
   @override
+  String get driveRestorePromptBody =>
+      'لا توجد بيانات على هذا الجهاز. هل تريد استعادة بياناتك من Google Drive؟';
+
+  @override
+  String get offlineFolderChoose => 'اختر مجلد النسخ الاحتياطي';
+
+  @override
+  String get offlineFolderChange => 'تغيير مجلد النسخ الاحتياطي';
+
+  @override
+  String get offlineFolderNone =>
+      'لم يتم اختيار مجلد. لا تُحفظ النسخ الاحتياطية دون اتصال.';
+
+  @override
+  String get offlineFolderSaved => 'تم حفظ النسخة الاحتياطية في المجلد.';
+
+  @override
+  String get offlineFolderRestore => 'الاستعادة من مجلد النسخ الاحتياطي';
+
+  @override
+  String get offlineFolderRestoreEmpty =>
+      'لم يتم العثور على ملف نسخ احتياطي في المجلد المحدد.';
+
+  @override
+  String get offlineFolderRemove => 'إزالة مجلد النسخ الاحتياطي';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count عنصر';
   }

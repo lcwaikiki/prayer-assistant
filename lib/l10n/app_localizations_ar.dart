@@ -876,6 +876,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get offlineFolderRemove => 'إزالة مجلد النسخ الاحتياطي';
 
   @override
+  String get restoreOptionsTitle => 'ماذا تريد استعادته؟';
+
+  @override
+  String get restoreOptionsData => 'بيانات التطبيق';
+
+  @override
+  String get restoreOptionsPreferences => 'التفضيلات';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count عنصر';
   }

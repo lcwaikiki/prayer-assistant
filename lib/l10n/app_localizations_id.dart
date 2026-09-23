@@ -881,6 +881,15 @@ class AppLocalizationsId extends AppLocalizations {
   String get offlineFolderRemove => 'Hapus folder cadangan';
 
   @override
+  String get restoreOptionsTitle => 'Apa yang dipulihkan?';
+
+  @override
+  String get restoreOptionsData => 'Data aplikasi';
+
+  @override
+  String get restoreOptionsPreferences => 'Preferensi';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count item';
   }

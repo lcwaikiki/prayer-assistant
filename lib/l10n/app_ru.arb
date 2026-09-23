@@ -371,6 +371,9 @@
   "offlineFolderRestore": "Восстановить из папки резервных копий",
   "offlineFolderRestoreEmpty": "В выбранной папке не найден файл резервной копии.",
   "offlineFolderRemove": "Удалить папку резервных копий",
+  "restoreOptionsTitle": "Что восстановить?",
+  "restoreOptionsData": "Данные приложения",
+  "restoreOptionsPreferences": "Настройки",
   "googleDriveBackupItemCount": "{count} элементов",
   "@googleDriveBackupItemCount": {
     "description": "Количество элементов в резервной копии",

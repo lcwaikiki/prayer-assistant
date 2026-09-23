@@ -316,6 +316,9 @@
   "offlineFolderRestore": "بیک اپ فولڈر سے بحال کریں",
   "offlineFolderRestoreEmpty": "منتخب فولڈر میں بیک اپ فائل نہیں ملی۔",
   "offlineFolderRemove": "بیک اپ فولڈر ہٹائیں",
+  "restoreOptionsTitle": "کیا بحال کریں؟",
+  "restoreOptionsData": "ایپ ڈیٹا",
+  "restoreOptionsPreferences": "ترجیحات",
   "googleDriveBackupItemCount": "{count} اشیاء",
   "@googleDriveBackupItemCount": {
     "description": "بیک اپ میں اشیاء کی تعداد",

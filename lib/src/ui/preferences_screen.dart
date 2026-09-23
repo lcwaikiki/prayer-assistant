@@ -17,6 +17,7 @@ import '../l10n/locale_options.dart';
 import '../models/calendar_week_start.dart';
 import '../models/prayer_models.dart';
 import 'location_screen.dart';
+import 'restore_options_dialog.dart';
 
 const Widget _backupProgress = SizedBox(
   width: 24,
@@ -753,8 +754,15 @@ class PreferencesScreen extends StatelessWidget {
                         : const Icon(Icons.folder_open_outlined),
                     title: Text(context.l10n.offlineFolderRestore),
                     onTap: () async {
+                      final selection = await showRestoreOptionsDialog(
+                        context,
+                      );
+                      if (selection == null) return;
                       try {
-                        await controller.restoreFromOfflineFolder();
+                        await controller.restoreFromOfflineFolder(
+                          restoreData: selection.data,
+                          restorePreferences: selection.preferences,
+                        );
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -906,8 +914,14 @@ class PreferencesScreen extends StatelessWidget {
               onPressed: () async {
                 final jsonStr = textController.text.trim();
                 if (jsonStr.isEmpty) return;
+                final selection = await showRestoreOptionsDialog(context);
+                if (selection == null) return;
                 try {
-                  await controller.restoreBackupJson(jsonStr);
+                  await controller.restoreBackupJson(
+                    jsonStr,
+                    restoreData: selection.data,
+                    restorePreferences: selection.preferences,
+                  );
                   if (dialogContext.mounted) {
                     Navigator.of(dialogContext).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -978,28 +992,10 @@ class PreferencesScreen extends StatelessWidget {
                       ),
                     ),
                     onTap: () async {
-                      final confirmed = await showDialog<bool>(
-                        context: dialogContext,
-                        builder: (confirmContext) => AlertDialog(
-                          title: Text(context.l10n.googleDriveRestore),
-                          content: Text(
-                            context.l10n.googleDriveRestoreConfirm,
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.of(confirmContext).pop(false),
-                              child: Text(context.l10n.cancel),
-                            ),
-                            FilledButton(
-                              onPressed: () =>
-                                  Navigator.of(confirmContext).pop(true),
-                              child: Text(context.l10n.save),
-                            ),
-                          ],
-                        ),
+                      final selection = await showRestoreOptionsDialog(
+                        context,
                       );
-                      if (confirmed != true) return;
+                      if (selection == null) return;
                       if (!context.mounted) return;
                       if (dialogContext.mounted) {
                         Navigator.of(dialogContext).pop();
@@ -1007,6 +1003,8 @@ class PreferencesScreen extends StatelessWidget {
                       try {
                         await controller.restoreBackupFromGoogleDrive(
                           backup.fileId,
+                          restoreData: selection.data,
+                          restorePreferences: selection.preferences,
                         );
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(

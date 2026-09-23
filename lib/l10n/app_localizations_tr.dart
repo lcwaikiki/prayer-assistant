@@ -881,6 +881,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get offlineFolderRemove => 'Yedek klasörünü kaldır';
 
   @override
+  String get restoreOptionsTitle => 'Neler geri yüklensin?';
+
+  @override
+  String get restoreOptionsData => 'Uygulama verileri';
+
+  @override
+  String get restoreOptionsPreferences => 'Tercihler';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count öğe';
   }

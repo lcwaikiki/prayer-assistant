@@ -316,6 +316,9 @@
   "offlineFolderRestore": "بازیابی از پوشه پشتیبان",
   "offlineFolderRestoreEmpty": "فایل پشتیبانی در پوشه انتخاب‌شده یافت نشد.",
   "offlineFolderRemove": "حذف پوشه پشتیبان",
+  "restoreOptionsTitle": "چه چیزی بازیابی شود؟",
+  "restoreOptionsData": "داده‌های برنامه",
+  "restoreOptionsPreferences": "تنظیمات",
   "googleDriveBackupItemCount": "{count} مورد",
   "@googleDriveBackupItemCount": {
     "description": "تعداد موارد در یک نسخه پشتیبان",

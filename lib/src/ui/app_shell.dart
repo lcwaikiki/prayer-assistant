@@ -14,6 +14,7 @@ import 'history_screen.dart';
 import 'home_screen.dart';
 import 'preferences_screen.dart';
 import 'qibla_screen.dart';
+import 'restore_options_dialog.dart';
 import 'track_screen.dart';
 
 
@@ -166,7 +167,15 @@ class _AppShellState extends State<AppShell> {
         );
         return;
       }
-      await _controller.restoreBackupFromGoogleDrive(backups.first.fileId);
+      final selection = await showRestoreOptionsDialog(context);
+      if (selection == null || !mounted) {
+        return;
+      }
+      await _controller.restoreBackupFromGoogleDrive(
+        backups.first.fileId,
+        restoreData: selection.data,
+        restorePreferences: selection.preferences,
+      );
       if (!mounted) {
         return;
       }
@@ -195,7 +204,14 @@ class _AppShellState extends State<AppShell> {
           return;
         }
       }
-      await _controller.restoreFromOfflineFolder();
+      final selection = await showRestoreOptionsDialog(context);
+      if (selection == null || !mounted) {
+        return;
+      }
+      await _controller.restoreFromOfflineFolder(
+        restoreData: selection.data,
+        restorePreferences: selection.preferences,
+      );
       if (!mounted) {
         return;
       }

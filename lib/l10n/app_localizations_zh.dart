@@ -851,6 +851,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get offlineFolderRemove => '移除备份文件夹';
 
   @override
+  String get restoreOptionsTitle => '恢复哪些内容？';
+
+  @override
+  String get restoreOptionsData => '应用数据';
+
+  @override
+  String get restoreOptionsPreferences => '偏好设置';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count 项';
   }

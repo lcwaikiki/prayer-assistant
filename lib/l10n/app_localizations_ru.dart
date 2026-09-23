@@ -884,6 +884,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get offlineFolderRemove => 'Удалить папку резервных копий';
 
   @override
+  String get restoreOptionsTitle => 'Что восстановить?';
+
+  @override
+  String get restoreOptionsData => 'Данные приложения';
+
+  @override
+  String get restoreOptionsPreferences => 'Настройки';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count элементов';
   }

@@ -316,6 +316,9 @@
   "offlineFolderRestore": "从备份文件夹恢复",
   "offlineFolderRestoreEmpty": "在所选文件夹中未找到备份文件。",
   "offlineFolderRemove": "移除备份文件夹",
+  "restoreOptionsTitle": "恢复哪些内容？",
+  "restoreOptionsData": "应用数据",
+  "restoreOptionsPreferences": "偏好设置",
   "googleDriveBackupItemCount": "{count} 项",
   "@googleDriveBackupItemCount": {
     "description": "备份中的项目数量",

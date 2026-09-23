@@ -879,6 +879,15 @@ class AppLocalizationsFa extends AppLocalizations {
   String get offlineFolderRemove => 'حذف پوشه پشتیبان';
 
   @override
+  String get restoreOptionsTitle => 'چه چیزی بازیابی شود؟';
+
+  @override
+  String get restoreOptionsData => 'داده‌های برنامه';
+
+  @override
+  String get restoreOptionsPreferences => 'تنظیمات';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count مورد';
   }

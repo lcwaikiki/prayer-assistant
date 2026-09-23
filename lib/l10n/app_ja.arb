@@ -316,6 +316,9 @@
   "offlineFolderRestore": "バックアップフォルダから復元",
   "offlineFolderRestoreEmpty": "選択したフォルダにバックアップファイルが見つかりません。",
   "offlineFolderRemove": "バックアップフォルダを削除",
+  "restoreOptionsTitle": "何を復元しますか？",
+  "restoreOptionsData": "アプリデータ",
+  "restoreOptionsPreferences": "設定",
   "googleDriveBackupItemCount": "{count} 件",
   "@googleDriveBackupItemCount": {
     "description": "バックアップのアイテム数",

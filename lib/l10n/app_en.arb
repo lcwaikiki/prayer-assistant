@@ -388,6 +388,9 @@
   "offlineFolderRestore": "Restore from backup folder",
   "offlineFolderRestoreEmpty": "No backup file found in the chosen folder.",
   "offlineFolderRemove": "Remove backup folder",
+  "restoreOptionsTitle": "What to restore?",
+  "restoreOptionsData": "App data",
+  "restoreOptionsPreferences": "Preferences",
   "googleDriveBackupItemCount": "{count} items",
   "@googleDriveBackupItemCount": {
     "description": "Number of items in a backup",

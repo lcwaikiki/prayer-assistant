@@ -879,6 +879,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get offlineFolderRemove => 'بیک اپ فولڈر ہٹائیں';
 
   @override
+  String get restoreOptionsTitle => 'کیا بحال کریں؟';
+
+  @override
+  String get restoreOptionsData => 'ایپ ڈیٹا';
+
+  @override
+  String get restoreOptionsPreferences => 'ترجیحات';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count اشیاء';
   }

@@ -322,6 +322,9 @@
   "offlineFolderRestore": "Yedek klasöründen geri yükle",
   "offlineFolderRestoreEmpty": "Seçilen klasörde yedek dosyası bulunamadı.",
   "offlineFolderRemove": "Yedek klasörünü kaldır",
+  "restoreOptionsTitle": "Neler geri yüklensin?",
+  "restoreOptionsData": "Uygulama verileri",
+  "restoreOptionsPreferences": "Tercihler",
   "googleDriveBackupItemCount": "{count} öğe",
   "@googleDriveBackupItemCount": {
     "description": "Yedek içindeki öğe sayısı",

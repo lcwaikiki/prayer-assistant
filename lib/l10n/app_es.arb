@@ -316,6 +316,9 @@
   "offlineFolderRestore": "Restaurar desde la carpeta de copia de seguridad",
   "offlineFolderRestoreEmpty": "No se encontró ningún archivo de copia en la carpeta elegida.",
   "offlineFolderRemove": "Eliminar carpeta de copia de seguridad",
+  "restoreOptionsTitle": "¿Qué restaurar?",
+  "restoreOptionsData": "Datos de la aplicación",
+  "restoreOptionsPreferences": "Preferencias",
   "googleDriveBackupItemCount": "{count} elementos",
   "@googleDriveBackupItemCount": {
     "description": "Número de elementos en una copia de seguridad",

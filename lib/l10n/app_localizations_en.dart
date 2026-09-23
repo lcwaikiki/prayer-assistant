@@ -878,6 +878,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get offlineFolderRemove => 'Remove backup folder';
 
   @override
+  String get restoreOptionsTitle => 'What to restore?';
+
+  @override
+  String get restoreOptionsData => 'App data';
+
+  @override
+  String get restoreOptionsPreferences => 'Preferences';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count items';
   }

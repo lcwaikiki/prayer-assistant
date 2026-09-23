@@ -316,6 +316,9 @@
   "offlineFolderRestore": "Pulihkan dari folder cadangan",
   "offlineFolderRestoreEmpty": "Tidak ada berkas cadangan ditemukan di folder yang dipilih.",
   "offlineFolderRemove": "Hapus folder cadangan",
+  "restoreOptionsTitle": "Apa yang dipulihkan?",
+  "restoreOptionsData": "Data aplikasi",
+  "restoreOptionsPreferences": "Preferensi",
   "googleDriveBackupItemCount": "{count} item",
   "@googleDriveBackupItemCount": {
     "description": "Jumlah item dalam cadangan",

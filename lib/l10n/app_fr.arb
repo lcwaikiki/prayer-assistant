@@ -316,6 +316,9 @@
   "offlineFolderRestore": "Restaurer depuis le dossier de sauvegarde",
   "offlineFolderRestoreEmpty": "Aucun fichier de sauvegarde trouvé dans le dossier sélectionné.",
   "offlineFolderRemove": "Supprimer le dossier de sauvegarde",
+  "restoreOptionsTitle": "Que restaurer ?",
+  "restoreOptionsData": "Données de l'application",
+  "restoreOptionsPreferences": "Préférences",
   "googleDriveBackupItemCount": "{count} éléments",
   "@googleDriveBackupItemCount": {
     "description": "Nombre d'éléments dans une sauvegarde",

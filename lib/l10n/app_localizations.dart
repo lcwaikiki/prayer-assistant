@@ -1708,6 +1708,24 @@ abstract class AppLocalizations {
   /// **'Remove backup folder'**
   String get offlineFolderRemove;
 
+  /// No description provided for @restoreOptionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What to restore?'**
+  String get restoreOptionsTitle;
+
+  /// No description provided for @restoreOptionsData.
+  ///
+  /// In en, this message translates to:
+  /// **'App data'**
+  String get restoreOptionsData;
+
+  /// No description provided for @restoreOptionsPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get restoreOptionsPreferences;
+
   /// Number of items in a backup
   ///
   /// In en, this message translates to:

@@ -855,6 +855,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get offlineFolderRemove => 'バックアップフォルダを削除';
 
   @override
+  String get restoreOptionsTitle => '何を復元しますか？';
+
+  @override
+  String get restoreOptionsData => 'アプリデータ';
+
+  @override
+  String get restoreOptionsPreferences => '設定';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count 件';
   }

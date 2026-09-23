@@ -886,6 +886,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get offlineFolderRemove => 'Eliminar carpeta de copia de seguridad';
 
   @override
+  String get restoreOptionsTitle => '¿Qué restaurar?';
+
+  @override
+  String get restoreOptionsData => 'Datos de la aplicación';
+
+  @override
+  String get restoreOptionsPreferences => 'Preferencias';
+
+  @override
   String googleDriveBackupItemCount(int count) {
     return '$count elementos';
   }

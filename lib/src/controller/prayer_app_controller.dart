@@ -1367,9 +1367,11 @@ class PrayerAppController extends ChangeNotifier {
     return _kazaTracker.totalTarget > 0 || _kazaTracker.totalCompleted > 0;
   }
 
-  /// Restores all app data from a valid JSON backup string.
+  /// Restores app data and/or preferences from a valid JSON backup string.
   Future<void> restoreBackupJson(
     String jsonString, {
+    bool restoreData = true,
+    bool restorePreferences = true,
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
   }) async {
@@ -1378,67 +1380,71 @@ class PrayerAppController extends ChangeNotifier {
     final hRepo = historyRepo ?? _defaultHistoryRepo;
     final parsed = service.parseAndValidateBackup(jsonString);
 
-    final restoredKaza = parsed['kazaTracker'] as KazaTracker;
-    final restoredCompletions =
-        parsed['prayerCompletions'] as Map<String, List<String>>;
-    final restoredReminders =
-        parsed['calendarReminders'] as List<CalendarReminder>;
-    final restoredItems = parsed['tesbihItems'] as List<Item>;
-    final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
-    final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
-    final restoredFastingLogs =
-        parsed['fastingLogs'] as Map<String, FastingLog>? ?? {};
+    if (restoreData) {
+      final restoredKaza = parsed['kazaTracker'] as KazaTracker;
+      final restoredCompletions =
+          parsed['prayerCompletions'] as Map<String, List<String>>;
+      final restoredReminders =
+          parsed['calendarReminders'] as List<CalendarReminder>;
+      final restoredItems = parsed['tesbihItems'] as List<Item>;
+      final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
+      final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
+      final restoredFastingLogs =
+          parsed['fastingLogs'] as Map<String, FastingLog>? ?? {};
 
-    await database.saveKazaTracker(restoredKaza);
-    _kazaTracker = restoredKaza;
+      await database.saveKazaTracker(restoredKaza);
+      _kazaTracker = restoredKaza;
 
-    await database.savePrayerCompletions(restoredCompletions);
-    _prayerCompletions = restoredCompletions;
+      await database.savePrayerCompletions(restoredCompletions);
+      _prayerCompletions = restoredCompletions;
 
-    await database.saveFastingLogs(restoredFastingLogs);
-    _fastingLogs = restoredFastingLogs;
+      await database.saveFastingLogs(restoredFastingLogs);
+      _fastingLogs = restoredFastingLogs;
 
-    final previousReminderIds = _calendarReminders
-        .map((reminder) => reminder.id)
-        .toList(growable: false);
-    await database.clearCalendarReminders();
-    for (final r in restoredReminders) {
-      await database.saveCalendarReminder(r);
-    }
-    _calendarReminders = await database.loadCalendarReminders();
-    for (final id in previousReminderIds) {
-      try {
-        await calendarReminderService.cancelReminder(id);
-      } catch (_) {}
-    }
-    for (final reminder in _calendarReminders) {
-      if (reminder.enabled) {
+      final previousReminderIds = _calendarReminders
+          .map((reminder) => reminder.id)
+          .toList(growable: false);
+      await database.clearCalendarReminders();
+      for (final r in restoredReminders) {
+        await database.saveCalendarReminder(r);
+      }
+      _calendarReminders = await database.loadCalendarReminders();
+      for (final id in previousReminderIds) {
         try {
-          await calendarReminderService.scheduleReminder(
-            reminder,
-            catchUp: false,
-          );
+          await calendarReminderService.cancelReminder(id);
         } catch (_) {}
       }
-    }
-    await _syncCalendarRemindersWidget();
+      for (final reminder in _calendarReminders) {
+        if (reminder.enabled) {
+          try {
+            await calendarReminderService.scheduleReminder(
+              reminder,
+              catchUp: false,
+            );
+          } catch (_) {}
+        }
+      }
+      await _syncCalendarRemindersWidget();
 
-    if (restoredItems.isNotEmpty) {
-      repo.saveItems(restoredItems);
-    }
-    if (restoredGroups.isNotEmpty) {
-      repo.saveGroups(restoredGroups);
-    }
-    if (restoredStats.isNotEmpty) {
-      hRepo.saveStats(restoredStats);
+      if (restoredItems.isNotEmpty) {
+        repo.saveItems(restoredItems);
+      }
+      if (restoredGroups.isNotEmpty) {
+        repo.saveGroups(restoredGroups);
+      }
+      if (restoredStats.isNotEmpty) {
+        hRepo.saveStats(restoredStats);
+      }
     }
 
-    final restoredPreferences =
-        parsed['preferences'] as Map<String, dynamic>? ?? <String, dynamic>{};
-    try {
-      await _applyRestoredPreferences(restoredPreferences);
-    } catch (_) {
-      // Data restore above already succeeded; preferences are best-effort.
+    if (restorePreferences) {
+      final restoredPreferences =
+          parsed['preferences'] as Map<String, dynamic>? ?? <String, dynamic>{};
+      try {
+        await _applyRestoredPreferences(restoredPreferences);
+      } catch (_) {
+        // Data restore above already succeeded; preferences are best-effort.
+      }
     }
 
     try {
@@ -1807,10 +1813,18 @@ class PrayerAppController extends ChangeNotifier {
     );
   }
 
-  Future<void> restoreBackupFromGoogleDrive(String fileId) {
+  Future<void> restoreBackupFromGoogleDrive(
+    String fileId, {
+    bool restoreData = true,
+    bool restorePreferences = true,
+  }) {
     return _runBackupOperation(BackupActivity.driveRestore, () async {
       final jsonStr = await _driveService.downloadBackup(fileId);
-      await restoreBackupJson(jsonStr);
+      await restoreBackupJson(
+        jsonStr,
+        restoreData: restoreData,
+        restorePreferences: restorePreferences,
+      );
     });
   }
 
@@ -1890,7 +1904,10 @@ class PrayerAppController extends ChangeNotifier {
   /// The default Documents file can be read on the same install, but Android
   /// blocks reading it after a reinstall, so in that case one folder pick is
   /// requested to regain access before reading.
-  Future<void> restoreFromOfflineFolder() {
+  Future<void> restoreFromOfflineFolder({
+    bool restoreData = true,
+    bool restorePreferences = true,
+  }) {
     return _runBackupOperation(BackupActivity.folderRestore, () async {
       String? jsonStr;
       if (_offlineFolderUri != null) {
@@ -1910,7 +1927,11 @@ class PrayerAppController extends ChangeNotifier {
       if (jsonStr == null || jsonStr.isEmpty) {
         throw StateError('No backup file found in the chosen folder');
       }
-      await restoreBackupJson(jsonStr);
+      await restoreBackupJson(
+        jsonStr,
+        restoreData: restoreData,
+        restorePreferences: restorePreferences,
+      );
     });
   }
 }

@@ -316,6 +316,9 @@
   "offlineFolderRestore": "الاستعادة من مجلد النسخ الاحتياطي",
   "offlineFolderRestoreEmpty": "لم يتم العثور على ملف نسخ احتياطي في المجلد المحدد.",
   "offlineFolderRemove": "إزالة مجلد النسخ الاحتياطي",
+  "restoreOptionsTitle": "ماذا تريد استعادته؟",
+  "restoreOptionsData": "بيانات التطبيق",
+  "restoreOptionsPreferences": "التفضيلات",
   "googleDriveBackupItemCount": "{count} عنصر",
   "@googleDriveBackupItemCount": {
     "description": "عدد العناصر في النسخة الاحتياطية",

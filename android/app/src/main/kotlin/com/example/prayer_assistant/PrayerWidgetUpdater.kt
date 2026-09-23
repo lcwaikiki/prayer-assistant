@@ -36,6 +36,20 @@ object PrayerWidgetUpdater {
     const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
 
+    /**
+     * Refreshes widgets and the status-bar icon in response to the screen turning
+     * on, then re-arms the update alarms relative to the new time. Widget and icon
+     * bitmaps are static and their exact alarms can be deferred by Doze, so without
+     * this the launcher can show a stale or blank snapshot at screen-on.
+     */
+    fun screenOnRefresh(context: Context) {
+        updateAll(context)
+        scheduleNextUpdate(context)
+        scheduleIconRefresh(context)
+        scheduleWidgetMinuteRefresh(context)
+        scheduleWidgetSecondRefresh(context)
+    }
+
     fun updateAll(context: Context) {
         val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
@@ -525,6 +539,13 @@ object PrayerWidgetUpdater {
         }
 
         val accentColor = Color.parseColor("#FFD700") // Highlight gold for today
+        val headerLabels = weekdayHeaderLabels(context)
+        for (i in headerLabels.indices) {
+            val headerId = context.resources.getIdentifier("grid_hdr_$i", "id", context.packageName)
+            if (headerId != 0) {
+                views.setTextViewText(headerId, headerLabels[i])
+            }
+        }
         val isHijriMode = display == "hijri" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
         if (isHijriMode) {
             try {
@@ -603,7 +624,7 @@ object PrayerWidgetUpdater {
                 uCal.set(android.icu.util.IslamicCalendar.DAY_OF_MONTH, 1)
                 val daysInMonth = uCal.getActualMaximum(android.icu.util.IslamicCalendar.DAY_OF_MONTH)
                 val firstDayOfWeek = uCal.get(android.icu.util.Calendar.DAY_OF_WEEK)
-                val startOffset = (firstDayOfWeek + 5) % 7
+                val startOffset = weekStartOffset(context, firstDayOfWeek)
 
                 val gCalCell = Calendar.getInstance()
 
@@ -724,7 +745,7 @@ object PrayerWidgetUpdater {
         cellCal.set(Calendar.DAY_OF_MONTH, 1)
         val daysInMonth = cellCal.getActualMaximum(Calendar.DAY_OF_MONTH)
         val firstDayOfWeek = cellCal.get(Calendar.DAY_OF_WEEK)
-        val startOffset = (firstDayOfWeek + 5) % 7
+        val startOffset = weekStartOffset(context, firstDayOfWeek)
 
         var uCal: android.icu.util.IslamicCalendar? = null
         if (showSecondary && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1558,6 +1579,44 @@ object PrayerWidgetUpdater {
     fun getWidgetStrings(locale: String): WidgetStrings {
         val key = locale.lowercase(Locale.ROOT)
         return widgetLocalizations[key] ?: widgetLocalizations["en"]!!
+    }
+
+    /**
+     * Leading blank cells before day 1 in the calendar widget grid, honoring the
+     * app's week-start setting. [firstDayOfWeek] is ICU/Calendar DAY_OF_WEEK
+     * (1=Sunday..7=Saturday).
+     */
+    private fun weekStartOffset(context: Context, firstDayOfWeek: Int): Int {
+        return if (PrayerWidgetStorage.readWeekStart(context) == "sunday") {
+            firstDayOfWeek % 7
+        } else {
+            (firstDayOfWeek + 5) % 7
+        }
+    }
+
+    /**
+     * Short weekday header labels ("Mo".."Su") in the app locale, reordered so the
+     * first label matches the configured week start.
+     */
+    private fun weekdayHeaderLabels(context: Context): List<String> {
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
+        val localeObj = try { Locale(appLocale) } catch (_: Exception) { Locale.getDefault() }
+        val shortDays = android.icu.text.DateFormatSymbols(localeObj).shortWeekdays.toList()
+        return orderWeekdayLabels(
+            shortDays,
+            sundayFirst = PrayerWidgetStorage.readWeekStart(context) == "sunday",
+        )
+    }
+
+    /**
+     * Reorders ICU [shortWeekdays] (index 0 empty, 1=Sunday..7=Saturday) into the
+     * display order for the grid header: Monday-first by default, or Sunday-first
+     * when [sundayFirst]. Pure so it is unit testable without a Context.
+     */
+    internal fun orderWeekdayLabels(shortWeekdays: List<String>, sundayFirst: Boolean): List<String> {
+        val byWeekday = { day: Int -> shortWeekdays.getOrElse(day) { "" } }
+        val mondayFirst = listOf(2, 3, 4, 5, 6, 7, 1).map(byWeekday)
+        return if (sundayFirst) listOf(mondayFirst[6]) + mondayFirst.take(6) else mondayFirst
     }
 
     fun getLocalizedPrayerName(rawName: String, locale: String): String {

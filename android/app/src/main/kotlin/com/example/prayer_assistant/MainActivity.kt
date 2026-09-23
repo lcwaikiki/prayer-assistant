@@ -1,11 +1,13 @@
 package com.pirci.prayer_assistant
 
 import android.app.Activity
+import android.content.BroadcastReceiver
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -22,6 +24,19 @@ class MainActivity : FlutterActivity() {
     private var pendingOpenHome: Boolean = false
     private var pendingFolderResult: MethodChannel.Result? = null
     private val pickFolderRequest = 4097
+    private var screenReceiverRegistered = false
+
+    /**
+     * Context-registered screen-on/unlock listener. Manifest receivers for these
+     * implicit broadcasts no longer fire on Android 8+, so it lives here while the
+     * activity exists; [onResume] covers the foreground case and this covers an
+     * unlock that lands on the home screen while the app is backgrounded.
+     */
+    private val screenReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent?) {
+            PrayerWidgetUpdater.screenOnRefresh(context)
+        }
+    }
 
     private val backupFolderPrefs by lazy {
         getSharedPreferences("backup_folder_prefs", Context.MODE_PRIVATE)
@@ -254,6 +269,7 @@ class MainActivity : FlutterActivity() {
                     val moonGregorianDate = call.argument<String>("moonGregorianDate") ?: ""
                     val isWhiteDay = call.argument<Boolean>("isWhiteDay") ?: false
                     val whiteDayBadgeText = call.argument<String>("whiteDayBadgeText") ?: "White Days"
+                    val weekStart = call.argument<String>("weekStart") ?: "monday"
 
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
@@ -261,6 +277,7 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetStorage.saveDateHeaders(this, dateHeaderHijri, dateHeaderGregorian)
                     PrayerWidgetStorage.saveWidgetCalendarDisplay(this, calendarDisplay)
                     PrayerWidgetStorage.saveWidgetShowSecondaryCalendar(this, showSecondaryDate)
+                    PrayerWidgetStorage.saveWeekStart(this, weekStart)
                     PrayerWidgetStorage.saveMoonPhaseData(
                         this,
                         moonPhaseValue,
@@ -465,6 +482,37 @@ class MainActivity : FlutterActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         maybeNotifyOpenHome(intent)
+    }
+
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (!screenReceiverRegistered) {
+            val filter = IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_USER_PRESENT)
+            }
+            registerReceiver(screenReceiver, filter)
+            screenReceiverRegistered = true
+        }
+    }
+
+    override fun onDestroy() {
+        if (screenReceiverRegistered) {
+            unregisterReceiver(screenReceiver)
+            screenReceiverRegistered = false
+        }
+        super.onDestroy()
+    }
+
+    /**
+     * Re-renders widgets and the status-bar icon whenever the app comes back to
+     * the foreground (including right after the screen turns on). Widget/icon
+     * bitmaps are static and their exact alarms can be deferred by Doze, so
+     * without this the launcher shows a stale or blank snapshot at screen-on.
+     */
+    override fun onResume() {
+        super.onResume()
+        PrayerWidgetUpdater.screenOnRefresh(this)
     }
 
     private fun maybeNotifyOpenHome(intent: Intent?) {

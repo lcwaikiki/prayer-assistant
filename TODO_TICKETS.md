@@ -49,10 +49,10 @@
 
 ## 🔴 Issues (Bug / Fix)
 - [ ] **Widgets & Status Bar:**
-  - [ ] Widgets and status bar icon number is blank when turning on the screen `[Not Started]`
-  - [ ] Widget refresh issue on Android 12 (should refresh when screen is on) `[Not Started]`
-  - [ ] Status bar time-to-prayer number icon and widgets do not refresh sometimes `[Not Started]`
-  - [ ] Calendar widget week start day does not match app settings `[Not Started]`
+  - [x] Widgets and status bar icon number is blank when turning on the screen `[Done]`
+  - [x] Widget refresh issue on Android 12 (should refresh when screen is on) `[Done]`
+  - [x] Status bar time-to-prayer number icon and widgets do not refresh sometimes `[Done]`
+  - [x] Calendar widget week start day does not match app settings `[Done]`
   - [x] Today top-left date is not refreshed (part of general refresh issues) `[Done]`
 - [ ] **Beads:**
   - [ ] Beads clone duplicate item (not working for Groups) `[Not Started]`

@@ -203,6 +203,20 @@ object PrayerWidgetStorage {
             .coerceIn(0, 60)
     }
 
+    private const val WEEK_START_KEY = "calendar_week_start"
+
+    fun saveWeekStart(context: Context, weekStart: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(WEEK_START_KEY, weekStart)
+            .apply()
+    }
+
+    fun readWeekStart(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(WEEK_START_KEY, "monday") ?: "monday"
+    }
+
     private fun saveEntryList(context: Context, key: String, entries: List<Map<String, Any?>>) {
         val json = JSONArray()
         for (entry in entries) {

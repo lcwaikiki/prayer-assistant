@@ -23,6 +23,7 @@ class WidgetBridgeService {
     String dateHeaderGregorian = '',
     String calendarDisplay = 'hijri',
     bool showSecondaryCalendarDate = true,
+    String weekStart = 'monday',
   }) async {
     final timeline = <Map<String, Object>>[];
     final start = DateTime(now.year, now.month, now.day);
@@ -112,6 +113,7 @@ class WidgetBridgeService {
       'dateHeaderGregorian': dateHeaderGregorian,
       'calendarDisplay': calendarDisplay,
       'showSecondaryDate': showSecondaryCalendarDate,
+      'weekStart': weekStart,
       'moonPhaseValue': moonInfo.phaseValue,
       'moonIllumination': moonInfo.illumination,
       'moonPhaseName': localizedPhaseName,

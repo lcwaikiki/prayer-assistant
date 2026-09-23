@@ -181,10 +181,11 @@ class PrayerAppController extends ChangeNotifier {
   bool get showCardDailyWisdom => _showCardDailyWisdom;
   bool get showCardUpcomingReminders => _showCardUpcomingReminders;
 
-  void updateCalendarWeekStart(CalendarWeekStart weekStart) {
+  Future<void> updateCalendarWeekStart(CalendarWeekStart weekStart) async {
     _calendarWeekStart = weekStart;
-    database.saveCalendarWeekStart(weekStart);
+    await database.saveCalendarWeekStart(weekStart);
     notifyListeners();
+    await _updateWidgetBridgeData();
   }
 
   void updateHijriDateOffset(int offset) {
@@ -948,6 +949,7 @@ class PrayerAppController extends ChangeNotifier {
       dateHeaderGregorian: gregorianStr,
       calendarDisplay: _widgetCalendarDisplay.name,
       showSecondaryCalendarDate: _showSecondaryCalendarDate,
+      weekStart: _calendarWeekStart.name,
     );
   }
 

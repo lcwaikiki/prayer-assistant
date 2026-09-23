@@ -297,46 +297,87 @@ object PrayerWidgetUpdater {
     }
 
     private fun isDark(context: Context): Boolean {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        return !isLight(context)
+    }
+
+    /**
+     * Whether widgets should use the light (white background / dark text)
+     * palette. Single source of truth shared by the background and text color
+     * resolvers so they can never disagree: explicit "light" is light, explicit
+     * "dark"/"transparent" are dark, and "system" follows the phone's night mode.
+     */
+    private fun isLight(context: Context): Boolean {
+        return themeIsLight(
+            PrayerWidgetStorage.readWidgetTheme(context),
+            isSystemNightMode(context),
+        )
+    }
+
+    /**
+     * Pure palette resolution: explicit "light" is light, explicit
+     * "dark"/"transparent" are dark, and anything else ("system") follows the
+     * phone's night mode. Unit testable without a Context.
+     */
+    internal fun themeIsLight(theme: String, systemNightMode: Boolean): Boolean {
         return when (theme) {
-            "light" -> false
-            "dark" -> true
-            "transparent" -> true
-            else -> {
-                val nightMode = context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
-                nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
-            }
+            "light" -> true
+            "dark", "transparent" -> false
+            else -> !systemNightMode
+        }
+    }
+
+    private fun isSystemNightMode(context: Context): Boolean {
+        val nightMode = context.resources.configuration.uiMode and
+            android.content.res.Configuration.UI_MODE_NIGHT_MASK
+        return nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+    }
+
+    /**
+     * Text colors for the custom status-bar notification views. The system
+     * notification shade is white in light mode, so the white text baked into
+     * the XML is unreadable there; these are applied at runtime per the current
+     * UI mode instead.
+     */
+    private fun notificationPrimaryTextColor(context: Context): Int {
+        return if (isSystemNightMode(context)) Color.WHITE else Color.parseColor("#FF1A1C1E")
+    }
+
+    private fun notificationSecondaryTextColor(context: Context): Int {
+        return if (isSystemNightMode(context)) {
+            Color.parseColor("#B3FFFFFF")
+        } else {
+            Color.parseColor("#FF57605B")
         }
     }
 
     private fun getWidgetBgRes(context: Context): Int {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
-        return when (theme) {
-            "light" -> R.drawable.widget_bg_light
-            "dark" -> R.drawable.widget_bg
+        return when (PrayerWidgetStorage.readWidgetTheme(context)) {
             "transparent" -> R.drawable.widget_bg_transparent
-            else -> if (isDark(context)) R.drawable.widget_bg else R.drawable.widget_bg_light
+            else -> if (isLight(context)) R.drawable.widget_bg_light else R.drawable.widget_bg
         }
     }
 
     private fun getWidgetFastingBgRes(context: Context): Int {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
-        return when (theme) {
-            "light" -> R.drawable.widget_fasting_bg_light
-            "dark" -> R.drawable.widget_fasting_bg
+        return when (PrayerWidgetStorage.readWidgetTheme(context)) {
             "transparent" -> R.drawable.widget_bg_transparent
-            else -> if (isDark(context)) R.drawable.widget_fasting_bg else R.drawable.widget_fasting_bg_light
+            else -> if (isLight(context)) {
+                R.drawable.widget_fasting_bg_light
+            } else {
+                R.drawable.widget_fasting_bg
+            }
         }
     }
 
     private fun getPrimaryTextColor(context: Context): Int {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
-        return if (theme == "light") Color.parseColor("#FF1A1C1E") else Color.WHITE
+        return if (isLight(context)) Color.parseColor("#FF1A1C1E") else Color.WHITE
     }
 
     private fun getSecondaryTextColor(context: Context): Int {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
-        return if (theme == "light") Color.parseColor("#FF57605B") else Color.parseColor("#B3FFFFFF")
+        return if (isLight(context)) {
+            Color.parseColor("#FF57605B")
+        } else {
+            Color.parseColor("#B3FFFFFF")
+        }
     }
 
     private fun computeFallbackHijriDate(context: Context): String {
@@ -1330,6 +1371,9 @@ object PrayerWidgetUpdater {
      */
     private fun buildStatusContentView(context: Context, next: Pair<String, Long>?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar)
+        val textColor = notificationPrimaryTextColor(context)
+        views.setTextColor(R.id.statusPrayerLabel, textColor)
+        views.setTextColor(R.id.statusCountdown, textColor)
         if (next == null) {
             views.setTextViewText(R.id.statusPrayerLabel, "--")
             views.setChronometer(R.id.statusCountdown, SystemClock.elapsedRealtime(), null, false)
@@ -1372,6 +1416,8 @@ object PrayerWidgetUpdater {
      */
     private fun buildStatusExpandedView(context: Context, next: Pair<String, Long>?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar_expanded)
+        val primaryColor = notificationPrimaryTextColor(context)
+        val secondaryColor = notificationSecondaryTextColor(context)
         val locale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
         val columnIds = intArrayOf(
@@ -1404,6 +1450,8 @@ object PrayerWidgetUpdater {
             val prayerDisplayName = prayer?.let { getLocalizedPrayerName(it.first, locale) } ?: "--"
             views.setTextViewText(nameIds[i], prayerDisplayName)
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
+            views.setTextColor(nameIds[i], secondaryColor)
+            views.setTextColor(timeIds[i], primaryColor)
             val isNext = prayer != null && next != null && prayer.second == next.second
             if (isNext) {
                 views.setInt(columnIds[i], "setBackgroundResource", R.drawable.notification_pill_bg)
@@ -1411,6 +1459,10 @@ object PrayerWidgetUpdater {
                 views.setInt(columnIds[i], "setBackgroundColor", 0)
             }
         }
+
+        views.setTextColor(R.id.expandedTimeLeftLabel, secondaryColor)
+        views.setTextColor(R.id.expandedCountdown, primaryColor)
+        views.setTextColor(R.id.expandedLocationLabel, secondaryColor)
 
         if (next == null) {
             views.setChronometer(R.id.expandedCountdown, SystemClock.elapsedRealtime(), null, false)

@@ -60,8 +60,8 @@
   - [ ] Groups drag-to-order issue `[Not Started]`
   - [ ] Bead check interval can be set to zero when it should be "none" `[Not Started]`
   - [x] Weekly reminder in beads turns to everyday after app restart (recheck, fix, and unit tests) `[Done]`
-- [ ] **Notifications & Theme:**
-  - [ ] Notifications theme issue in light mode `[Not Started]`
+- [x] **Notifications & Theme:**
+  - [x] Notifications and widgets cannot be read when the theme in light mode issue `[Done]`
 - [ ] **Tracking & Prayer Times:**
   - [ ] Everyday reminders should not be marked in day? `[Not Started]`
   - [x] Checks at the beginning of 6 prayer times in Today tab stop working after some time `[Done]`

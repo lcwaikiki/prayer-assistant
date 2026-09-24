@@ -276,7 +276,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         appBar: AppBar(
           title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
         ),
-        body: Form(
+        body: SafeArea(
+          child: Form(
           key: _formKey,
           child: ListView(
             padding: const EdgeInsets.all(16),
@@ -394,6 +395,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

@@ -592,7 +592,8 @@ class _CalendarReminderFormScreenState
                 : l10n.calendarReminderFormTitleNew,
           ),
         ),
-        body: ListView(
+        body: SafeArea(
+          child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
             TextField(
@@ -913,6 +914,7 @@ class _CalendarReminderFormScreenState
                   : Text(l10n.save),
             ),
           ],
+        ),
         ),
       ),
     );

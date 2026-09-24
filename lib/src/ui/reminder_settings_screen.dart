@@ -174,7 +174,8 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
               ),
             ),
             ),
-            body: ListView(
+            body: SafeArea(
+              child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 Card(
@@ -631,6 +632,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                   ),
                 ),
               ],
+            ),
             ),
           ),
         );

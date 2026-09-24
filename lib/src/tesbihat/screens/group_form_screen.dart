@@ -163,7 +163,8 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
         appBar: AppBar(
           title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
         ),
-        body: Form(
+        body: SafeArea(
+          child: Form(
           key: _formKey,
           child: ListView(
             padding: const EdgeInsets.all(16),
@@ -199,6 +200,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

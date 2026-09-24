@@ -34,7 +34,8 @@ class PreferencesScreen extends StatelessWidget {
       builder: (context, controller, _) {
         return Scaffold(
           appBar: AppBar(title: Text(context.l10n.preferencesTitle)),
-          body: ListView(
+          body: SafeArea(
+            child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
               _PreferenceSection(
@@ -873,6 +874,7 @@ class PreferencesScreen extends StatelessWidget {
               ),
 
             ],
+          ),
           ),
         );
       },

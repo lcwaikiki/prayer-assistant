@@ -228,7 +228,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
 
     return Scaffold(
       appBar: AppBar(title: Text(item.title)),
-      body: Padding(
+      body: SafeArea(
+        child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
@@ -319,6 +320,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
               ),
             ),
           ],
+        ),
         ),
       ),
     );

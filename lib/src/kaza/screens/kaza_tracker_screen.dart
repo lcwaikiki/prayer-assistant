@@ -76,7 +76,8 @@ class KazaTrackerScreen extends StatelessWidget {
               ),
             ),
 
-      body: ListView(
+      body: SafeArea(
+        child: ListView(
         padding: const EdgeInsets.all(12),
 
         children: [
@@ -241,6 +242,7 @@ class KazaTrackerScreen extends StatelessWidget {
             const SizedBox(height: 8),
           ],
         ],
+        ),
       ),
     );
   }

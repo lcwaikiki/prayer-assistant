@@ -24,7 +24,7 @@
 ---
 
 ## 🔵 Improvements (Imp / Impr)
-- [ ] **General UI / Form:** Form screens bottom buttons are behind system navigation buttons `[Not Started]`
+- [x] **General UI / Form:** Form screens bottom buttons are behind system navigation buttons `[Done]`
 - [ ] **Beads & Groups:**
   - [ ] Bulk delete feature `[Not Started]`
   - [ ] Delete this occurrence in calendar `[Not Started]`

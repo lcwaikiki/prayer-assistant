@@ -156,6 +156,33 @@ void main() {
       expect(repository.loadItems().map((i) => i.id), ['b']);
       verify(() => reminderService.cancelReminder('a')).called(1);
     });
+
+    test('deleteItems removes every listed item and cancels reminders', () {
+      final repository = ItemRepository.memory([
+        item('a'),
+        item('b'),
+        item('c'),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).deleteItems(['a', 'c']);
+
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), ['b']);
+      expect(repository.loadItems().map((i) => i.id), ['b']);
+      verify(() => reminderService.cancelReminder('a')).called(1);
+      verify(() => reminderService.cancelReminder('c')).called(1);
+    });
+
+    test('deleteItems ignores unknown ids and empty input', () {
+      final repository = ItemRepository.memory([item('a')]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).deleteItems(['nope']);
+      container.read(itemsNotifierProvider.notifier).deleteItems([]);
+
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), ['a']);
+      verifyNever(() => reminderService.cancelReminder(any()));
+    });
   });
 
   group('ItemsNotifier.restoreItem', () {
@@ -602,6 +629,21 @@ void main() {
           .removeGroupFromItems('g1');
 
       expect(repository.loadItems()[0].groupIds, ['g2']);
+      expect(repository.loadItems()[1].groupIds, isEmpty);
+    });
+
+    test('removeGroupsFromItems strips several groups from every item', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['g1', 'g2', 'g3']),
+        item('b').copyWith(groupIds: const ['g2']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .removeGroupsFromItems(['g1', 'g2']);
+
+      expect(repository.loadItems()[0].groupIds, ['g3']);
       expect(repository.loadItems()[1].groupIds, isEmpty);
     });
   });

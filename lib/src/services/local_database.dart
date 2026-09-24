@@ -184,6 +184,11 @@ class LocalDatabase {
         'ALTER TABLE calendar_reminders ADD COLUMN yearly_date TEXT',
       );
     }
+    if (!names.contains('excluded_dates')) {
+      await db.execute(
+        "ALTER TABLE calendar_reminders ADD COLUMN excluded_dates TEXT NOT NULL DEFAULT ''",
+      );
+    }
   }
 
   static const _createCalendarRemindersTableSql = '''
@@ -203,7 +208,8 @@ class LocalDatabase {
       repeat_count INTEGER,
       weekdays TEXT NOT NULL DEFAULT '',
       day_of_month INTEGER,
-      yearly_date TEXT
+      yearly_date TEXT,
+      excluded_dates TEXT NOT NULL DEFAULT ''
     )
   ''';
 

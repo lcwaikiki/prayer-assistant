@@ -537,6 +537,25 @@ class AppLocalizationsRu extends AppLocalizations {
   String get calendarDeleteReminder => 'Удалить';
 
   @override
+  String get calendarDeleteOccurrence => 'Удалить это повторение';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm =>
+      'Удалить только этот день из серии?';
+
+  @override
+  String get calendarOccurrenceDeleted => 'Повторение удалено';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => 'Удалённые повторения';
+
+  @override
+  String get calendarRestoreOccurrence => 'Восстановить';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'Восстановить все';
+
+  @override
   String get calendarReminderFormTitleNew => 'Новое напоминание';
 
   @override

@@ -517,6 +517,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarDeleteReminder => '削除';
 
   @override
+  String get calendarDeleteOccurrence => 'この回を削除';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm => 'この日だけをシリーズから削除しますか？';
+
+  @override
+  String get calendarOccurrenceDeleted => 'この回を削除しました';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => '削除した回';
+
+  @override
+  String get calendarRestoreOccurrence => '復元';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'すべて復元';
+
+  @override
   String get calendarReminderFormTitleNew => '新しいリマインダー';
 
   @override

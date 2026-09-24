@@ -7,6 +7,7 @@ import '../models/item.dart';
 import '../models/item_group.dart';
 import '../state/groups_notifier.dart';
 import '../state/items_notifier.dart';
+import '../state/tesbih_selection.dart';
 import 'execution_screen.dart';
 import 'group_form_screen.dart';
 import 'group_screen.dart';
@@ -105,6 +106,8 @@ class TesbihHomeScreen extends ConsumerWidget {
     final l10n = context.tesbihatL10n;
     final items = ref.watch(itemsNotifierProvider);
     final groups = ref.watch(groupsNotifierProvider);
+    final selection = ref.watch(tesbihSelectionProvider);
+    final selectionActive = selection.active;
     final ungrouped = items
         .where((item) => item.groupIds.isEmpty)
         .toList(growable: false);
@@ -176,6 +179,11 @@ class TesbihHomeScreen extends ConsumerWidget {
                               item: item,
                               index: index,
                               key: ValueKey(item.id),
+                              selectionActive: selectionActive,
+                              selected: selection.contains(item.id),
+                              onToggle: () => ref
+                                  .read(tesbihSelectionProvider.notifier)
+                                  .toggle(item.id),
                               onAction: (action) => _handleAction(
                                 context,
                                 ref,
@@ -189,10 +197,12 @@ class TesbihHomeScreen extends ConsumerWidget {
                 ),
               ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddMenu(context),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: selectionActive
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _showAddMenu(context),
+              child: const Icon(Icons.add),
+            ),
     );
   }
 
@@ -242,11 +252,17 @@ class _UngroupedItemCard extends StatelessWidget {
     super.key,
     required this.item,
     required this.index,
+    required this.selectionActive,
+    required this.selected,
+    required this.onToggle,
     required this.onAction,
   });
 
   final Item item;
   final int index;
+  final bool selectionActive;
+  final bool selected;
+  final VoidCallback onToggle;
   final ValueChanged<_ItemAction> onAction;
 
   @override
@@ -255,64 +271,70 @@ class _UngroupedItemCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: ListTile(
-        leading: item.reminderEnabled
-            ? Icon(
-                Icons.notifications_active,
-                color: Theme.of(context).colorScheme.primary,
-              )
-            : null,
+        leading: selectionActive
+            ? Checkbox(value: selected, onChanged: (_) => onToggle())
+            : item.reminderEnabled
+                ? Icon(
+                    Icons.notifications_active,
+                    color: Theme.of(context).colorScheme.primary,
+                  )
+                : null,
         title: Text(item.title),
         subtitle: Text(
           '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
           '${l10n.progress}: ${item.currentProgress} / ${item.count}',
         ),
         isThreeLine: true,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PopupMenuButton<_ItemAction>(
-              onSelected: onAction,
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: _ItemAction.edit,
-                  child: ListTile(
-                    dense: true,
-                    leading: const Icon(Icons.edit),
-                    title: Text(l10n.edit),
+        trailing: selectionActive
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PopupMenuButton<_ItemAction>(
+                    onSelected: onAction,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: _ItemAction.edit,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.edit),
+                          title: Text(l10n.edit),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _ItemAction.duplicate,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.copy_outlined),
+                          title: Text(l10n.duplicate),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _ItemAction.delete,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.delete, color: Colors.red),
+                          title: Text(l10n.delete),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                PopupMenuItem(
-                  value: _ItemAction.duplicate,
-                  child: ListTile(
-                    dense: true,
-                    leading: const Icon(Icons.copy_outlined),
-                    title: Text(l10n.duplicate),
+                  ReorderableDelayedDragStartListener(
+                    index: index,
+                    child: const Icon(Icons.drag_indicator),
                   ),
-                ),
-                PopupMenuItem(
-                  value: _ItemAction.delete,
-                  child: ListTile(
-                    dense: true,
-                    leading: const Icon(Icons.delete, color: Colors.red),
-                    title: Text(l10n.delete),
+                ],
+              ),
+        onTap: selectionActive
+            ? onToggle
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ExecutionScreen(itemId: item.id),
                   ),
-                ),
-              ],
-            ),
-            ReorderableDelayedDragStartListener(
-              index: index,
-              child: const Icon(Icons.drag_indicator),
-            ),
-          ],
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ExecutionScreen(itemId: item.id),
-            ),
-          );
-        },
+                );
+              },
       ),
     );
   }
@@ -326,20 +348,30 @@ class _GroupCardList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(itemsNotifierProvider);
+    final selection = ref.watch(tesbihSelectionProvider);
+    final selectionActive = selection.active;
+    void toggle(String id) =>
+        ref.read(tesbihSelectionProvider.notifier).toggle(id);
     return SizedBox(
       height: 92,
       child: ReorderableListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: groups.length,
-        onReorderItem: (oldIndex, newIndex) => ref
-            .read(groupsNotifierProvider.notifier)
-            .reorderGroups(oldIndex, newIndex),
+        onReorderItem: (oldIndex, newIndex) {
+          if (selectionActive) {
+            return;
+          }
+          ref
+              .read(groupsNotifierProvider.notifier)
+              .reorderGroups(oldIndex, newIndex);
+        },
         itemBuilder: (context, index) {
           final group = groups[index];
           final memberCount = items
               .where((item) => item.groupIds.contains(group.id))
               .length;
+          final isSelected = selection.contains(group.id);
           return Padding(
             key: ValueKey(group.id),
             padding: EdgeInsets.only(right: index == groups.length - 1 ? 0 : 8),
@@ -347,12 +379,14 @@ class _GroupCardList extends ConsumerWidget {
               margin: EdgeInsets.zero,
               child: InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => GroupScreen(groupId: group.id),
-                  ),
-                ),
+                onTap: selectionActive
+                    ? () => toggle(group.id)
+                    : () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => GroupScreen(groupId: group.id),
+                        ),
+                      ),
                 child: SizedBox(
                   width: 140,
                   child: Padding(
@@ -362,15 +396,21 @@ class _GroupCardList extends ConsumerWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(
-                              group.reminderEnabled
-                                  ? Icons.notifications_active
-                                  : Icons.folder_outlined,
-                              size: 20,
-                              color: group.reminderEnabled
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
-                            ),
+                            if (selectionActive)
+                              Checkbox(
+                                value: isSelected,
+                                onChanged: (_) => toggle(group.id),
+                              )
+                            else
+                              Icon(
+                                group.reminderEnabled
+                                    ? Icons.notifications_active
+                                    : Icons.folder_outlined,
+                                size: 20,
+                                color: group.reminderEnabled
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                              ),
                             const Spacer(),
                             Text(
                               '$memberCount',
@@ -389,10 +429,12 @@ class _GroupCardList extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                             ),
-                            ReorderableDelayedDragStartListener(
-                              index: index,
-                              child: const Icon(Icons.drag_indicator, size: 18),
-                            ),
+                            if (!selectionActive)
+                              ReorderableDelayedDragStartListener(
+                                index: index,
+                                child:
+                                    const Icon(Icons.drag_indicator, size: 18),
+                              ),
                           ],
                         ),
                       ],

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/ui/app_shell.dart';
 import 'package:prayer_assistant/src/ui/qibla_screen.dart';
 
@@ -189,6 +192,173 @@ void main() {
     expect(find.byTooltip('Hide secondary date'), findsOneWidget);
 
 await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('bulk delete removes the selected beads', (tester) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      Item(
+        id: 'a',
+        title: 'Tasbih',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ),
+      Item(
+        id: 'b',
+        title: 'Salavat',
+        count: 100,
+        check: 25,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    await tester.tap(find.text('Beads'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('select_items_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('0 selected'), findsOneWidget);
+
+    await tester.tap(find.text('Tasbih'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 selected'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('bulk_delete_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Delete 1 selected items?'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tasbih'), findsNothing);
+    expect(find.text('Salavat'), findsOneWidget);
+    expect(find.text('1 deleted'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('bulk delete removes a selected group and detaches its beads', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    final repository = ItemRepository.memory([
+      Item(
+        id: 'a',
+        title: 'Tasbih',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ).copyWith(groupIds: const ['g1']),
+    ]);
+    repository.saveGroups([const ItemGroup(id: 'g1', title: 'Morning')]);
+    harness.itemRepository = repository;
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    await tester.tap(find.text('Beads'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('select_items_button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Morning'));
+    await tester.pumpAndSettle();
+    expect(find.text('1 selected'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('bulk_delete_button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, 'Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Morning'), findsNothing);
+    expect(repository.loadGroups(), isEmpty);
+    expect(repository.loadItems().single.groupIds, isEmpty);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('back cancels the bulk selection instead of leaving the tab', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      Item(
+        id: 'a',
+        title: 'Tasbih',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    await tester.tap(find.text('Beads'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('select_items_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('0 selected'), findsOneWidget);
+
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    expect(find.text('0 selected'), findsNothing);
+    expect(find.byKey(const Key('select_items_button')), findsOneWidget);
+    expect(harness.controller.tabIndex, 4);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('select all toggles back to deselect all', (tester) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      Item(
+        id: 'a',
+        title: 'Tasbih',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ),
+      Item(
+        id: 'b',
+        title: 'Salavat',
+        count: 100,
+        check: 25,
+        setCount: 0,
+        vibrationIntensity: 50,
+      ),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    await tester.tap(find.text('Beads'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('select_items_button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('select_all_items_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('2 selected'), findsOneWidget);
+    expect(find.byIcon(Icons.deselect), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('select_all_items_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('0 selected'), findsOneWidget);
+    expect(find.byIcon(Icons.select_all), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
   });
 }
 

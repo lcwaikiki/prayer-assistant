@@ -535,6 +535,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarDeleteReminder => 'Sil';
 
   @override
+  String get calendarDeleteOccurrence => 'Bu tekrarı sil';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm =>
+      'Sadece bu günü seriden kaldır?';
+
+  @override
+  String get calendarOccurrenceDeleted => 'Tekrar silindi';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => 'Silinen tekrarlar';
+
+  @override
+  String get calendarRestoreOccurrence => 'Geri yükle';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'Tümünü geri yükle';
+
+  @override
   String get calendarReminderFormTitleNew => 'Yeni hatırlatıcı';
 
   @override

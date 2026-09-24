@@ -141,6 +141,34 @@ void main() {
       expect(repository.loadGroups().map((g) => g.id), ['g2']);
       verify(() => reminderService.cancelReminder('g1')).called(1);
     });
+
+    test('deleteGroups removes every listed group and cancels reminders', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([
+        const ItemGroup(id: 'g1', title: 'A'),
+        const ItemGroup(id: 'g2', title: 'B'),
+        const ItemGroup(id: 'g3', title: 'C'),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).deleteGroups(['g1', 'g3']);
+
+      expect(container.read(groupsNotifierProvider).map((g) => g.id), ['g2']);
+      expect(repository.loadGroups().map((g) => g.id), ['g2']);
+      verify(() => reminderService.cancelReminder('g1')).called(1);
+      verify(() => reminderService.cancelReminder('g3')).called(1);
+    });
+
+    test('deleteGroups is a no-op for unknown ids', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([const ItemGroup(id: 'g1', title: 'A')]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).deleteGroups(['nope']);
+
+      expect(container.read(groupsNotifierProvider), hasLength(1));
+      verifyNever(() => reminderService.cancelReminder(any()));
+    });
   });
 
   group('GroupsNotifier.restoreGroup', () {

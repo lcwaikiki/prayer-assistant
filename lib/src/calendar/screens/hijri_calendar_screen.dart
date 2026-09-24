@@ -596,6 +596,60 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
     );
   }
 
+  Future<void> _deleteOccurrence(
+    BuildContext context,
+    PrayerAppController controller,
+    CalendarReminder reminder,
+  ) async {
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.calendarDeleteOccurrence),
+        content: Text(l10n.calendarDeleteOccurrenceConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.calendarDeleteReminder),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+    final messenger = ScaffoldMessenger.of(context);
+    final day = _date;
+    await controller.excludeCalendarReminderOccurrence(reminder.id, day);
+    if (!context.mounted) {
+      return;
+    }
+    Navigator.pop(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(child: Text(l10n.calendarOccurrenceDeleted)),
+            TextButton(
+              onPressed: () {
+                controller.restoreCalendarReminderOccurrence(reminder.id, day);
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -781,6 +835,14 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
                           );
                         },
                       ),
+                      if (reminder.recurrence != ReminderRecurrence.once)
+                        IconButton(
+                          key: Key('delete_occurrence_${reminder.id}'),
+                          tooltip: l10n.calendarDeleteOccurrence,
+                          icon: const Icon(Icons.event_busy),
+                          onPressed: () =>
+                              _deleteOccurrence(context, controller, reminder),
+                        ),
                       IconButton(
                         tooltip: l10n.calendarDeleteReminder,
                         icon: const Icon(Icons.delete, color: Colors.red),

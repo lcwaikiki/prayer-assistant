@@ -14,6 +14,7 @@ CalendarReminder reminder({
   int anchorOffsetMinutes = 0,
   DateTime? anchorDate,
   bool enabled = true,
+  List<DateTime> excludedDates = const [],
 }) {
   return CalendarReminder(
     id: id,
@@ -28,6 +29,7 @@ CalendarReminder reminder({
     anchorOffsetMinutes: anchorOffsetMinutes,
     anchorDate: anchorDate,
     enabled: enabled,
+    excludedDates: excludedDates,
   );
 }
 
@@ -112,6 +114,39 @@ void main() {
     });
   });
 
+  group('CalendarReminder exclusions', () {
+    test('isExcluded matches by date ignoring time-of-day', () {
+      final r = reminder(excludedDates: [DateTime(2026, 8, 24)]);
+
+      expect(r.isExcluded(DateTime(2026, 8, 24, 18, 30)), isTrue);
+      expect(r.isExcluded(DateTime(2026, 8, 25)), isFalse);
+    });
+
+    test('occursOn skips an excluded day in a recurring series', () {
+      final r = reminder(
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        recurrence: ReminderRecurrence.daily,
+        excludedDates: [DateTime(2026, 8, 24)],
+      );
+
+      expect(r.occursOn(DateTime(2026, 8, 23)), isTrue);
+      expect(r.occursOn(DateTime(2026, 8, 24)), isFalse);
+      expect(r.occursOn(DateTime(2026, 8, 25)), isTrue);
+    });
+
+    test('nextOccurrenceFrom skips an excluded occurrence', () {
+      final r = reminder(
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        recurrence: ReminderRecurrence.daily,
+        excludedDates: [DateTime(2026, 8, 18)],
+      );
+
+      final next = r.nextOccurrenceFrom(DateTime(2026, 8, 17, 13, 0));
+
+      expect(next, DateTime(2026, 8, 19, 12, 0));
+    });
+  });
+
   group('CalendarReminder.nextOccurrenceFrom', () {
     test('returns null when disabled', () {
       final r = reminder(enabled: false);
@@ -170,6 +205,7 @@ void main() {
         anchorOffsetMinutes: -15,
         anchorDate: DateTime(2026, 8, 17),
         enabled: false,
+        excludedDates: [DateTime(2026, 8, 24), DateTime(2026, 9, 1)],
       );
 
       final restored = CalendarReminder.fromMap(r.toMap());
@@ -185,6 +221,10 @@ void main() {
       expect(restored.anchorOffsetMinutes, -15);
       expect(restored.anchorDate, DateTime(2026, 8, 17));
       expect(restored.enabled, isFalse);
+      expect(restored.excludedDates, [
+        DateTime(2026, 8, 24),
+        DateTime(2026, 9, 1),
+      ]);
     });
 
     test('fromMap migrates legacy prayer-time recurrence to daily', () {

@@ -23,6 +23,7 @@ class GroupFormScreen extends ConsumerStatefulWidget {
 class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _titleController;
+  late final TextEditingController _notesController;
   late ReminderConfig _reminderConfig;
   bool _saving = false;
   bool _allowPop = false;
@@ -31,10 +32,12 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
 
   bool get _isDirty {
     final initialTitle = widget.groupToEdit?.title ?? '';
+    final initialNotes = widget.groupToEdit?.notes ?? '';
     final initialReminder = widget.groupToEdit != null
         ? ReminderConfig.fromGroup(widget.groupToEdit!)
         : const ReminderConfig();
     if (_titleController.text != initialTitle) return true;
+    if (_notesController.text != initialNotes) return true;
     if (_reminderConfig != initialReminder) return true;
     return false;
   }
@@ -42,7 +45,12 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController(text: widget.groupToEdit?.title ?? '');
+    _titleController = TextEditingController(
+      text: widget.groupToEdit?.title ?? '',
+    );
+    _notesController = TextEditingController(
+      text: widget.groupToEdit?.notes ?? '',
+    );
     _reminderConfig = widget.groupToEdit != null
         ? ReminderConfig.fromGroup(widget.groupToEdit!)
         : const ReminderConfig();
@@ -51,6 +59,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -88,6 +97,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       notifier.updateGroup(
         widget.groupToEdit!.copyWith(
           title: title,
+          notes: _notesController.text.trim(),
           reminderEnabled: reminder.enabled,
           reminderAnchor: reminder.anchor,
           reminderRecurrence: reminder.recurrence,
@@ -112,6 +122,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
     } else {
       notifier.addGroup(
         title: title,
+        notes: _notesController.text.trim(),
         reminderEnabled: reminder.enabled,
         reminderAnchor: reminder.anchor,
         reminderRecurrence: reminder.recurrence,
@@ -179,6 +190,18 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                key: const Key('group_notes_field'),
+                controller: _notesController,
+                minLines: 3,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  labelText: l10n.notes,
+                  alignLabelWithHint: true,
+                  hintText: l10n.notesHint,
+                ),
               ),
               const SizedBox(height: 20),
               ReminderSection(

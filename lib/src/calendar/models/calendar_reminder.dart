@@ -64,6 +64,7 @@ class CalendarReminder {
     this.weekdays = const [],
     this.dayOfMonth,
     this.yearlyDate,
+    this.excludedDates = const [],
   });
 
   final String id;
@@ -127,6 +128,11 @@ class CalendarReminder {
   /// date's month/day is used (legacy behavior).
   final DateTime? yearlyDate;
 
+  /// Individual days (date-only) removed from this reminder's series, e.g.
+  /// via "delete this occurrence". A day listed here never occurs, even if
+  /// the recurrence pattern would otherwise match it.
+  final List<DateTime> excludedDates;
+
   CalendarReminder copyWith({
     String? title,
     String? notes,
@@ -143,6 +149,7 @@ class CalendarReminder {
     List<int>? weekdays,
     int? dayOfMonth,
     DateTime? yearlyDate,
+    List<DateTime>? excludedDates,
   }) {
     return CalendarReminder(
       id: id,
@@ -161,6 +168,7 @@ class CalendarReminder {
       weekdays: weekdays ?? this.weekdays,
       dayOfMonth: dayOfMonth ?? this.dayOfMonth,
       yearlyDate: yearlyDate ?? this.yearlyDate,
+      excludedDates: excludedDates ?? this.excludedDates,
     );
   }
 
@@ -173,6 +181,9 @@ class CalendarReminder {
   /// follow [recurrence] anchored on [anchorDate].
   bool occursOn(DateTime date) {
     final day = DateTime(date.year, date.month, date.day);
+    if (isExcluded(day)) {
+      return false;
+    }
     final anchorDay = _recurrenceAnchorDay;
     if (day.isBefore(anchorDay)) {
       return false;
@@ -190,6 +201,19 @@ class CalendarReminder {
       return false;
     }
     return _withinRepeatCount(day);
+  }
+
+  /// Whether [date] has been individually removed from this series.
+  bool isExcluded(DateTime date) {
+    final day = DateTime(date.year, date.month, date.day);
+    for (final excluded in excludedDates) {
+      if (excluded.year == day.year &&
+          excluded.month == day.month &&
+          excluded.day == day.day) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /// The date part that anchors the recurrence: [anchorDate] for newer
@@ -390,6 +414,16 @@ class CalendarReminder {
         }
         cursor = normalized;
       }
+      if (isExcluded(cursor)) {
+        // An individually removed day is not an occurrence and does not
+        // consume a slot in the repeat count.
+        final next = _nextMatchDate(cursor);
+        if (next == null) {
+          return null;
+        }
+        cursor = next;
+        continue;
+      }
       final candidate = DateTime(
         cursor.year,
         cursor.month,
@@ -429,6 +463,9 @@ class CalendarReminder {
       'weekdays': weekdays.join(','),
       'day_of_month': dayOfMonth,
       'yearly_date': yearlyDate?.toIso8601String(),
+      'excluded_dates': excludedDates
+          .map((d) => DateTime(d.year, d.month, d.day).toIso8601String())
+          .join(','),
     };
   }
 
@@ -447,6 +484,12 @@ class CalendarReminder {
         .map((part) => int.tryParse(part.trim()))
         .whereType<int>()
         .where((day) => day >= 1 && day <= 7)
+        .toList(growable: false);
+    final excludedDates = (map['excluded_dates']?.toString() ?? '')
+        .split(',')
+        .map((part) => DateTime.tryParse(part.trim()))
+        .whereType<DateTime>()
+        .map((d) => DateTime(d.year, d.month, d.day))
         .toList(growable: false);
     final rawRecurrence = map['recurrence']?.toString();
     var recurrence = ReminderRecurrence.fromName(rawRecurrence);
@@ -483,6 +526,7 @@ class CalendarReminder {
       weekdays: weekdays,
       dayOfMonth: (map['day_of_month'] as num?)?.toInt(),
       yearlyDate: yearlyDate,
+      excludedDates: excludedDates,
     );
   }
 }

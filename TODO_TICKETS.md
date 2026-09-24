@@ -30,10 +30,11 @@
 ## 🔵 Improvements (Imp / Impr)
 - [x] **General UI / Form:** Form screens bottom buttons are behind system navigation buttons `[Done]`
 - [x] **Connectivity:** Show a "cannot connect to internet" message with a Retry button on all internet connection errors (e.g. "Could not reach prayer server... Failed host lookup") `[Done]`
-- [ ] **Beads & Groups:**
-  - [ ] Bulk delete feature `[Not Started]`
-  - [ ] Delete this occurrence in calendar `[Not Started]`
-  - [ ] Group beads: Add notes `[Not Started]`
+- [x] **Beads & Groups:**
+  - [x] Bulk delete feature `[Done]`
+  - [x] Delete this occurrence in calendar `[Done]`
+  - [x] Group beads: Add notes `[Done]`
+  - [x] Group beads: Drag to reorder beads inside a group `[Done]`
 - [ ] **Reminders:**
   - [ ] Tap button inside empty `[Not Started]`
   - [ ] Preferences menu reorder `[Not Started]`

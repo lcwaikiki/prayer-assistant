@@ -535,6 +535,25 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarDeleteReminder => 'Hapus';
 
   @override
+  String get calendarDeleteOccurrence => 'Hapus kemunculan ini';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm =>
+      'Hapus hanya hari ini dari rangkaian?';
+
+  @override
+  String get calendarOccurrenceDeleted => 'Kemunculan dihapus';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => 'Kemunculan dihapus';
+
+  @override
+  String get calendarRestoreOccurrence => 'Pulihkan';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'Pulihkan semua';
+
+  @override
   String get calendarReminderFormTitleNew => 'Pengingat baru';
 
   @override

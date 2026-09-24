@@ -537,6 +537,25 @@ class AppLocalizationsFr extends AppLocalizations {
   String get calendarDeleteReminder => 'Supprimer';
 
   @override
+  String get calendarDeleteOccurrence => 'Supprimer cette occurrence';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm =>
+      'Supprimer uniquement ce jour de la série ?';
+
+  @override
+  String get calendarOccurrenceDeleted => 'Occurrence supprimée';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => 'Occurrences supprimées';
+
+  @override
+  String get calendarRestoreOccurrence => 'Restaurer';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'Tout restaurer';
+
+  @override
   String get calendarReminderFormTitleNew => 'Nouveau rappel';
 
   @override

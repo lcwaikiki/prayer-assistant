@@ -24,6 +24,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
 
   void addGroup({
     required String title,
+    String notes = '',
     bool reminderEnabled = false,
     ItemReminderAnchor reminderAnchor = ItemReminderAnchor.clockTime,
     ReminderRecurrence reminderRecurrence = ReminderRecurrence.once,
@@ -41,6 +42,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
     final newGroup = ItemGroup(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       title: title,
+      notes: notes,
       reminderEnabled: reminderEnabled,
       reminderAnchor: reminderAnchor,
       reminderRecurrence: reminderRecurrence,
@@ -73,6 +75,28 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
     state = state.where((group) => group.id != id).toList(growable: false);
     _repository.saveGroups(state);
     _reminderService.cancelReminder(id);
+  }
+
+  /// Removes every group whose id is in [ids] in one batch, cancelling each
+  /// removed group's reminder.
+  void deleteGroups(List<String> ids) {
+    if (ids.isEmpty) {
+      return;
+    }
+    final idSet = ids.toSet();
+    final removed = state
+        .where((group) => idSet.contains(group.id))
+        .toList(growable: false);
+    if (removed.isEmpty) {
+      return;
+    }
+    state = state
+        .where((group) => !idSet.contains(group.id))
+        .toList(growable: false);
+    _repository.saveGroups(state);
+    for (final group in removed) {
+      _reminderService.cancelReminder(group.id);
+    }
   }
 
   void restoreGroup(ItemGroup group, {required int index}) {

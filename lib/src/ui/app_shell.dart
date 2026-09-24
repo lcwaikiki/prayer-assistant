@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,11 @@ import '../controller/prayer_app_controller.dart';
 import '../kaza/screens/kaza_tracker_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
+import '../tesbihat/l10n/tesbihat_localizations.dart';
 import '../tesbihat/screens/tesbih_home_screen.dart';
+import '../tesbihat/state/groups_notifier.dart';
+import '../tesbihat/state/items_notifier.dart';
+import '../tesbihat/state/tesbih_selection.dart';
 import 'history_screen.dart';
 import 'home_screen.dart';
 import 'preferences_screen.dart';
@@ -17,6 +22,8 @@ import 'qibla_screen.dart';
 import 'restore_options_dialog.dart';
 import 'track_screen.dart';
 
+
+const int _tesbihTabIndex = 4;
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key, this.qiblaScreen});
@@ -246,15 +253,27 @@ class _AppShellState extends State<AppShell> {
           const TesbihHomeScreen(),
         ];
 
-        return Scaffold(
-          appBar: _buildAppBar(context, controller, _now),
-          body: SafeArea(
-            child: _LazyIndexedStack(
-              index: controller.tabIndex,
-              children: pages,
-            ),
-          ),
-          bottomNavigationBar: NavigationBar(
+        return riverpod.Consumer(
+          builder: (context, ref, _) {
+            final selection = ref.watch(tesbihSelectionProvider);
+            return PopScope(
+              canPop: !selection.active,
+              onPopInvokedWithResult: (didPop, _) {
+                if (!didPop && selection.active) {
+                  ref.read(tesbihSelectionProvider.notifier).cancel();
+                }
+              },
+              child: Scaffold(
+              appBar: controller.tabIndex == _tesbihTabIndex && selection.active
+                  ? _buildSelectionAppBar(context, ref)
+                  : _buildAppBar(context, controller, _now, ref),
+              body: SafeArea(
+                child: _LazyIndexedStack(
+                  index: controller.tabIndex,
+                  children: pages,
+                ),
+              ),
+              bottomNavigationBar: NavigationBar(
             selectedIndex: controller.tabIndex,
             onDestinationSelected: controller.setTab,
             destinations: <NavigationDestination>[
@@ -286,6 +305,9 @@ class _AppShellState extends State<AppShell> {
               ),
             ],
           ),
+        ),
+            );
+          },
         );
       },
     );
@@ -295,6 +317,7 @@ class _AppShellState extends State<AppShell> {
     BuildContext context,
     PrayerAppController controller,
     DateTime now,
+    riverpod.WidgetRef ref,
   ) {
     final tabTitle = switch (controller.tabIndex) {
       0 => context.l10n.qiblaTitle,
@@ -343,6 +366,14 @@ class _AppShellState extends State<AppShell> {
       title: titleWidget,
       actions: [
         if (trailing != null) trailing,
+        if (controller.tabIndex == _tesbihTabIndex)
+          IconButton(
+            key: const Key('select_items_button'),
+            tooltip: context.tesbihatL10n.select,
+            icon: const Icon(Icons.checklist),
+            onPressed: () =>
+                ref.read(tesbihSelectionProvider.notifier).start(),
+          ),
         IconButton(
           tooltip: controller.remindersSilenced
               ? context.l10n.tooltipRemindersOn
@@ -378,6 +409,105 @@ class _AppShellState extends State<AppShell> {
         ),
       ],
     );
+  }
+
+  PreferredSizeWidget _buildSelectionAppBar(
+    BuildContext context,
+    riverpod.WidgetRef ref,
+  ) {
+    final l10n = context.tesbihatL10n;
+    final selection = ref.watch(tesbihSelectionProvider);
+    final notifier = ref.read(tesbihSelectionProvider.notifier);
+    final allIds = <String>{
+      ...ref.read(itemsNotifierProvider).map((item) => item.id),
+      ...ref.read(groupsNotifierProvider).map((group) => group.id),
+    };
+    final allSelected =
+        allIds.isNotEmpty && selection.count == allIds.length;
+    return AppBar(
+      leading: IconButton(
+        key: const Key('cancel_selection_button'),
+        tooltip: l10n.cancel,
+        icon: const Icon(Icons.close),
+        onPressed: notifier.cancel,
+      ),
+      title: Text(l10n.selectedCount(selection.count)),
+      actions: [
+        IconButton(
+          key: const Key('select_all_items_button'),
+          tooltip: l10n.selectAll,
+          icon: Icon(allSelected ? Icons.deselect : Icons.select_all),
+          onPressed: () {
+            if (allSelected) {
+              notifier.clearSelection();
+            } else {
+              notifier.setSelected(allIds);
+            }
+          },
+        ),
+        IconButton(
+          key: const Key('bulk_delete_button'),
+          tooltip: l10n.delete,
+          icon: const Icon(Icons.delete_outline),
+          onPressed: selection.count == 0
+              ? null
+              : () => _bulkDelete(context, ref),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _bulkDelete(
+    BuildContext context,
+    riverpod.WidgetRef ref,
+  ) async {
+    final l10n = context.tesbihatL10n;
+    final selected = ref.read(tesbihSelectionProvider).selectedIds;
+    if (selected.isEmpty) {
+      return;
+    }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.delete),
+        content: Text(l10n.deleteSelectedConfirm(selected.length)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+    final items = ref.read(itemsNotifierProvider);
+    final groups = ref.read(groupsNotifierProvider);
+    final itemIds = [
+      for (final item in items)
+        if (selected.contains(item.id)) item.id,
+    ];
+    final groupIds = [
+      for (final group in groups)
+        if (selected.contains(group.id)) group.id,
+    ];
+    ref.read(itemsNotifierProvider.notifier).deleteItems(itemIds);
+    if (groupIds.isNotEmpty) {
+      ref.read(itemsNotifierProvider.notifier).removeGroupsFromItems(groupIds);
+      ref.read(groupsNotifierProvider.notifier).deleteGroups(groupIds);
+    }
+    ref.read(tesbihSelectionProvider.notifier).cancel();
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(content: Text(l10n.deletedSelected(selected.length))),
+      );
   }
 }
 

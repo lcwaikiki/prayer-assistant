@@ -132,6 +132,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'Delete this group? Its beads are kept.',
       'removeFromGroup': 'Remove from group',
       'noNotesAdded': 'No notes added.',
+      'select': 'Select',
+      'selectAll': 'Select all',
+      'selectedCount': '{count} selected',
+      'deleteSelectedConfirm': 'Delete {count} selected items?',
+      'deletedSelected': '{count} deleted',
     },
     'es': {
       'appTitle': 'Contador de Cuentas',
@@ -236,6 +241,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': '¿Eliminar este grupo? Sus cuentas se conservan.',
       'removeFromGroup': 'Quitar del grupo',
       'noNotesAdded': 'No se agregaron notas.',
+      'select': 'Seleccionar',
+      'selectAll': 'Seleccionar todo',
+      'selectedCount': '{count} seleccionados',
+      'deleteSelectedConfirm': '¿Eliminar {count} elementos seleccionados?',
+      'deletedSelected': '{count} eliminados',
     },
     'fa': {
       'appTitle': 'شمارنده تسبیح',
@@ -336,6 +346,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'این گروه حذف شود؟ تسبیح‌ها حفظ می‌شوند.',
       'removeFromGroup': 'حذف از گروه',
       'noNotesAdded': 'یادداشتی اضافه نشده است.',
+      'select': 'انتخاب',
+      'selectAll': 'انتخاب همه',
+      'selectedCount': '{count} انتخاب شده',
+      'deleteSelectedConfirm': '{count} مورد انتخاب‌شده حذف شود؟',
+      'deletedSelected': '{count} حذف شد',
     },
     'fr': {
       'appTitle': 'Compteur de Perles',
@@ -441,6 +456,11 @@ class TesbihatLocalizations {
           'Supprimer ce groupe\u00A0? Ses perles sont conserv\u00E9es.',
       'removeFromGroup': 'Retirer du groupe',
       'noNotesAdded': 'Aucune note ajoutée.',
+      'select': 'Sélectionner',
+      'selectAll': 'Tout sélectionner',
+      'selectedCount': '{count} sélectionnés',
+      'deleteSelectedConfirm': 'Supprimer {count} éléments sélectionnés ?',
+      'deletedSelected': '{count} supprimés',
     },
     'de': {
       'appTitle': 'Perlen-Zähler',
@@ -544,6 +564,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'Diese Gruppe löschen? Die Perlen bleiben erhalten.',
       'removeFromGroup': 'Aus Gruppe entfernen',
       'noNotesAdded': 'Keine Notizen hinzugefügt.',
+      'select': 'Auswählen',
+      'selectAll': 'Alle auswählen',
+      'selectedCount': '{count} ausgewählt',
+      'deleteSelectedConfirm': '{count} ausgewählte Elemente löschen?',
+      'deletedSelected': '{count} gelöscht',
     },
     'ar': {
       'appTitle': 'عداد المسبحة',
@@ -644,6 +669,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'حذف هذه المجموعة؟ ستبقى المسبحات.',
       'removeFromGroup': 'إزالة من المجموعة',
       'noNotesAdded': 'لم يتم إضافة ملاحظات.',
+      'select': 'تحديد',
+      'selectAll': 'تحديد الكل',
+      'selectedCount': 'تم تحديد {count}',
+      'deleteSelectedConfirm': 'حذف {count} من العناصر المحددة؟',
+      'deletedSelected': 'تم حذف {count}',
     },
     'ja': {
       'appTitle': 'ビーズカウンター',
@@ -746,6 +776,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'このグループを削除しますか？数珠は保持されます。',
       'removeFromGroup': 'グループから削除',
       'noNotesAdded': 'メモはありません。',
+      'select': '選択',
+      'selectAll': 'すべて選択',
+      'selectedCount': '{count} 件選択中',
+      'deleteSelectedConfirm': '選択した {count} 件を削除しますか？',
+      'deletedSelected': '{count} 件を削除しました',
     },
     'zh': {
       'appTitle': '念珠计数器',
@@ -846,6 +881,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': '删除此分组？念珠将保留。',
       'removeFromGroup': '从分组移除',
       'noNotesAdded': '暂无备注。',
+      'select': '选择',
+      'selectAll': '全选',
+      'selectedCount': '已选择 {count} 项',
+      'deleteSelectedConfirm': '删除选中的 {count} 项？',
+      'deletedSelected': '已删除 {count} 项',
     },
     'tr': {
       'appTitle': 'Tesbih Sayacı',
@@ -947,6 +987,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'Bu grup silinsin mi? Tespihler kalır.',
       'removeFromGroup': 'Gruptan çıkar',
       'noNotesAdded': 'Not eklenmedi.',
+      'select': 'Seç',
+      'selectAll': 'Tümünü seç',
+      'selectedCount': '{count} seçili',
+      'deleteSelectedConfirm': '{count} seçili öğe silinsin mi?',
+      'deletedSelected': '{count} silindi',
     },
     'ur': {
       'appTitle': 'تسبیح کاؤنٹر',
@@ -1048,6 +1093,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'یہ گروہ حذف کریں؟ تسبیحیں محفوظ رہیں گی۔',
       'removeFromGroup': 'گروہ سے نکالیں',
       'noNotesAdded': 'کوئی نوٹس شامل نہیں کیے گئے۔',
+      'select': 'منتخب کریں',
+      'selectAll': 'سب منتخب کریں',
+      'selectedCount': '{count} منتخب',
+      'deleteSelectedConfirm': 'منتخب {count} اشیاء حذف کریں؟',
+      'deletedSelected': '{count} حذف ہوگئے',
     },
     'ru': {
       'appTitle': 'Счётчик тасбиха',
@@ -1151,6 +1201,11 @@ class TesbihatLocalizations {
       'deleteGroupConfirm': 'Удалить эту группу? Чётки сохранятся.',
       'removeFromGroup': 'Убрать из группы',
       'noNotesAdded': 'Заметки не добавлены.',
+      'select': 'Выбрать',
+      'selectAll': 'Выбрать все',
+      'selectedCount': 'Выбрано: {count}',
+      'deleteSelectedConfirm': 'Удалить выбранные элементы ({count})?',
+      'deletedSelected': 'Удалено: {count}',
     },
   };
 
@@ -1262,6 +1317,14 @@ class TesbihatLocalizations {
   String get removeFromGroup => _t('removeFromGroup');
   String get duplicate => _t('duplicate');
   String get clear => _t('clear');
+  String get select => _t('select');
+  String get selectAll => _t('selectAll');
+  String selectedCount(int count) =>
+      _t('selectedCount').replaceAll('{count}', '$count');
+  String deleteSelectedConfirm(int count) =>
+      _t('deleteSelectedConfirm').replaceAll('{count}', '$count');
+  String deletedSelected(int count) =>
+      _t('deletedSelected').replaceAll('{count}', '$count');
 }
 
 class _TesbihatLocalizationsDelegate

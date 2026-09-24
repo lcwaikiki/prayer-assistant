@@ -105,6 +105,28 @@ class ItemsNotifier extends Notifier<List<Item>> {
     _reminderService.cancelReminder(id);
   }
 
+  /// Removes every item whose id is in [ids] in one batch, cancelling each
+  /// removed item's reminder.
+  void deleteItems(List<String> ids) {
+    if (ids.isEmpty) {
+      return;
+    }
+    final idSet = ids.toSet();
+    final removed = state
+        .where((item) => idSet.contains(item.id))
+        .toList(growable: false);
+    if (removed.isEmpty) {
+      return;
+    }
+    state = state
+        .where((item) => !idSet.contains(item.id))
+        .toList(growable: false);
+    _repository.saveItems(state);
+    for (final item in removed) {
+      _reminderService.cancelReminder(item.id);
+    }
+  }
+
   /// Inserts a copy of [source] right after it. Everything (including reminder
   /// settings and group memberships) is carried over; only the id is new and
   /// progress/set count start fresh.
@@ -155,6 +177,36 @@ class ItemsNotifier extends Notifier<List<Item>> {
     final nextState = [...state];
     final movedItem = nextState.removeAt(oldIndex);
     nextState.insert(newIndex, movedItem);
+    state = nextState;
+    _repository.saveItems(state);
+  }
+
+  /// Drops every id in [groupIds] from each item's membership after those
+  /// groups are deleted, so no item keeps pointing at a nonexistent group.
+  void removeGroupsFromItems(List<String> groupIds) {
+    if (groupIds.isEmpty) {
+      return;
+    }
+    final groupSet = groupIds.toSet();
+    final nextState = <Item>[];
+    var changed = false;
+    for (final item in state) {
+      if (item.groupIds.any(groupSet.contains)) {
+        changed = true;
+        nextState.add(
+          item.copyWith(
+            groupIds: item.groupIds
+                .where((id) => !groupSet.contains(id))
+                .toList(growable: false),
+          ),
+        );
+      } else {
+        nextState.add(item);
+      }
+    }
+    if (!changed) {
+      return;
+    }
     state = nextState;
     _repository.saveItems(state);
   }

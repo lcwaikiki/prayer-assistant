@@ -534,6 +534,24 @@ class AppLocalizationsUr extends AppLocalizations {
   String get calendarDeleteReminder => 'حذف کریں';
 
   @override
+  String get calendarDeleteOccurrence => 'یہ واقعہ حذف کریں';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm => 'صرف یہ دن سلسلے سے ہٹائیں؟';
+
+  @override
+  String get calendarOccurrenceDeleted => 'واقعہ حذف ہوگیا';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => 'حذف شدہ واقعات';
+
+  @override
+  String get calendarRestoreOccurrence => 'بحال کریں';
+
+  @override
+  String get calendarRestoreAllOccurrences => 'سب بحال کریں';
+
+  @override
   String get calendarReminderFormTitleNew => 'نئی یاد دہانی';
 
   @override

@@ -1078,6 +1078,42 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get calendarDeleteReminder;
 
+  /// No description provided for @calendarDeleteOccurrence.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this occurrence'**
+  String get calendarDeleteOccurrence;
+
+  /// No description provided for @calendarDeleteOccurrenceConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove just this day from the series?'**
+  String get calendarDeleteOccurrenceConfirm;
+
+  /// No description provided for @calendarOccurrenceDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Occurrence deleted'**
+  String get calendarOccurrenceDeleted;
+
+  /// No description provided for @calendarExcludedOccurrencesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted occurrences'**
+  String get calendarExcludedOccurrencesLabel;
+
+  /// No description provided for @calendarRestoreOccurrence.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore'**
+  String get calendarRestoreOccurrence;
+
+  /// No description provided for @calendarRestoreAllOccurrences.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore all'**
+  String get calendarRestoreAllOccurrences;
+
   /// No description provided for @calendarReminderFormTitleNew.
   ///
   /// In en, this message translates to:

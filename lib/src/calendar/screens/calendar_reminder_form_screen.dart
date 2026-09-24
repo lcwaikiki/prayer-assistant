@@ -55,6 +55,7 @@ class _CalendarReminderFormScreenState
   late List<int> _weekdays;
   late int _dayOfMonth;
   late DateTime _yearlyDate;
+  late List<DateTime> _excludedDates;
   bool _saving = false;
   bool _allowPop = false;
 
@@ -62,8 +63,20 @@ class _CalendarReminderFormScreenState
   late final List<int> _initialWeekdays;
   late final int _initialDayOfMonth;
   late final DateTime _initialYearlyDate;
+  late final List<DateTime> _initialExcludedDates;
 
   bool get _isEditing => widget.reminder != null;
+
+  static bool _sameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
+  static String _dateKey(DateTime date) =>
+      '${date.year}-${date.month}-${date.day}';
+
+  /// Order-independent, date-only comparison of two excluded-date lists.
+  static bool _sameDayList(List<DateTime> a, List<DateTime> b) =>
+      a.length == b.length &&
+      a.every((date) => b.any((other) => _sameDay(date, other)));
 
   bool get _isDirty {
     final reminder = widget.reminder;
@@ -99,6 +112,7 @@ class _CalendarReminderFormScreenState
     if (_offsetMinutesController.text.trim() != initialOffsetMinutesText) return true;
     if (_dayOfMonth != _initialDayOfMonth) return true;
     if (_yearlyDate != _initialYearlyDate) return true;
+    if (!_sameDayList(_excludedDates, _initialExcludedDates)) return true;
 
     if (_weekdays.length != _initialWeekdays.length) return true;
     for (var i = 0; i < _weekdays.length; i++) {
@@ -145,11 +159,13 @@ class _CalendarReminderFormScreenState
     _dayOfMonth = reminder?.dayOfMonth ?? anchorDay.day;
     _yearlyDate =
         reminder?.yearlyDate ?? DateTime(anchorDay.year, anchorDay.month, anchorDay.day);
+    _excludedDates = List<DateTime>.from(reminder?.excludedDates ?? const []);
 
     _initialAnchorAt = _anchorAt;
     _initialWeekdays = List<int>.from(_weekdays);
     _initialDayOfMonth = _dayOfMonth;
     _initialYearlyDate = _yearlyDate;
+    _initialExcludedDates = List<DateTime>.from(_excludedDates);
   }
 
   @override
@@ -486,6 +502,56 @@ class _CalendarReminderFormScreenState
     return DateFormat.MMMM(locale).format(DateTime(2024, month, 1));
   }
 
+  /// Lists the individually skipped occurrences ("delete this occurrence")
+  /// with a per-date restore action and a "restore all" action. The list is
+  /// carried into the saved reminder so editing other fields never silently
+  /// re-enables them.
+  Widget _buildExcludedDatesSection(AppLocalizations l10n, String locale) {
+    if (_excludedDates.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.calendarExcludedOccurrencesLabel,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+            ),
+            TextButton.icon(
+              key: const Key('restore_all_excluded_dates'),
+              onPressed: () => setState(() => _excludedDates = <DateTime>[]),
+              icon: const Icon(Icons.restore),
+              label: Text(l10n.calendarRestoreAllOccurrences),
+            ),
+          ],
+        ),
+        for (final date in _excludedDates)
+          ListTile(
+            key: Key('excluded_date_${_dateKey(date)}'),
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            leading: const Icon(Icons.event_busy),
+            title: Text(DateFormat.yMMMd(locale).format(date)),
+            trailing: IconButton(
+              key: Key('restore_excluded_date_${_dateKey(date)}'),
+              tooltip: l10n.calendarRestoreOccurrence,
+              icon: const Icon(Icons.restore),
+              onPressed: () => setState(() {
+                _excludedDates = _excludedDates
+                    .where((excluded) => !_sameDay(excluded, date))
+                    .toList(growable: false);
+              }),
+            ),
+          ),
+      ],
+    );
+  }
+
   Future<void> _save() async {
     final title = _titleController.text.trim();
     if (title.isEmpty) {
@@ -541,6 +607,7 @@ class _CalendarReminderFormScreenState
       yearlyDate: _recurrence == ReminderRecurrence.yearly
           ? _yearlyDate
           : null,
+      excludedDates: _excludedDates,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);
@@ -902,6 +969,7 @@ class _CalendarReminderFormScreenState
                 ),
               ],
             ],
+            _buildExcludedDatesSection(l10n, locale),
             const SizedBox(height: 28),
             FilledButton(
               onPressed: _saving ? null : _save,

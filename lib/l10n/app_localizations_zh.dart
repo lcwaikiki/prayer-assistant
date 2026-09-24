@@ -517,6 +517,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarDeleteReminder => '删除';
 
   @override
+  String get calendarDeleteOccurrence => '删除此次';
+
+  @override
+  String get calendarDeleteOccurrenceConfirm => '仅从重复中删除这一天？';
+
+  @override
+  String get calendarOccurrenceDeleted => '已删除此次';
+
+  @override
+  String get calendarExcludedOccurrencesLabel => '已删除的日期';
+
+  @override
+  String get calendarRestoreOccurrence => '恢复';
+
+  @override
+  String get calendarRestoreAllOccurrences => '全部恢复';
+
+  @override
   String get calendarReminderFormTitleNew => '新建提醒';
 
   @override

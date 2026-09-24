@@ -12,10 +12,127 @@ import 'item_form_screen.dart';
 
 enum _MemberAction { edit, duplicate, remove, delete }
 
-class GroupScreen extends ConsumerWidget {
+class GroupScreen extends ConsumerStatefulWidget {
   const GroupScreen({super.key, required this.groupId});
 
   final String groupId;
+
+  @override
+  ConsumerState<GroupScreen> createState() => _GroupScreenState();
+}
+
+class _GroupScreenState extends ConsumerState<GroupScreen> {
+  bool _selecting = false;
+  final Set<String> _selected = <String>{};
+
+  void _cancelSelection() {
+    setState(() {
+      _selecting = false;
+      _selected.clear();
+    });
+  }
+
+  Future<void> _bulkDeleteMembers(
+    BuildContext context,
+    List<Item> members,
+  ) async {
+    final l10n = context.tesbihatL10n;
+    if (_selected.isEmpty) {
+      return;
+    }
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.delete),
+        content: Text(l10n.deleteSelectedConfirm(_selected.length)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+    final allItems = ref.read(itemsNotifierProvider);
+    final removed = <({Item item, int index})>[
+      for (final member in members)
+        if (_selected.contains(member.id))
+          (
+            item: member,
+            index: allItems.indexWhere((item) => item.id == member.id),
+          ),
+    ];
+    final count = removed.length;
+    ref.read(itemsNotifierProvider.notifier).deleteItems(
+          [for (final entry in removed) entry.item.id],
+        );
+    _cancelSelection();
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(child: Text(l10n.deletedSelected(count))),
+            TextButton(
+              onPressed: () {
+                // Ascending order keeps every original index valid as the
+                // earlier items are re-inserted first.
+                final ordered = [...removed]
+                  ..sort((a, b) => a.index.compareTo(b.index));
+                for (final entry in ordered) {
+                  ref
+                      .read(itemsNotifierProvider.notifier)
+                      .restoreItem(entry.item, index: entry.index);
+                }
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _deleteMemberWithUndo(BuildContext context, Item item) {
+    final l10n = context.tesbihatL10n;
+    final notifier = ref.read(itemsNotifierProvider.notifier);
+    final index = ref
+        .read(itemsNotifierProvider)
+        .indexWhere((existing) => existing.id == item.id);
+    notifier.deleteItem(item.id);
+
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(child: Text(l10n.deletedItem(item.title))),
+            TextButton(
+              onPressed: () {
+                notifier.restoreItem(item, index: index);
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Future<void> _deleteGroup(BuildContext context, WidgetRef ref) async {
     final l10n = context.tesbihatL10n;
@@ -39,8 +156,10 @@ class GroupScreen extends ConsumerWidget {
     if (confirmed != true || !context.mounted) {
       return;
     }
-    ref.read(groupsNotifierProvider.notifier).deleteGroup(groupId);
-    ref.read(itemsNotifierProvider.notifier).removeGroupFromItems(groupId);
+    ref.read(groupsNotifierProvider.notifier).deleteGroup(widget.groupId);
+    ref
+        .read(itemsNotifierProvider.notifier)
+        .removeGroupFromItems(widget.groupId);
     if (context.mounted) {
       Navigator.pop(context);
     }
@@ -49,7 +168,7 @@ class GroupScreen extends ConsumerWidget {
   Future<void> _addBeads(BuildContext context, WidgetRef ref) async {
     final items = ref.read(itemsNotifierProvider);
     final candidates = items
-        .where((item) => !item.groupIds.contains(groupId))
+        .where((item) => !item.groupIds.contains(widget.groupId))
         .toList(growable: false);
     if (candidates.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -68,7 +187,7 @@ class GroupScreen extends ConsumerWidget {
     }
     ref
         .read(itemsNotifierProvider.notifier)
-        .addItemsToGroup(selected.toList(growable: false), groupId);
+        .addItemsToGroup(selected.toList(growable: false), widget.groupId);
   }
 
   Future<void> _handleMemberAction(
@@ -90,85 +209,184 @@ class GroupScreen extends ConsumerWidget {
       case _MemberAction.remove:
         ref.read(itemsNotifierProvider.notifier).removeItemFromGroup(
               item.id,
-              groupId,
+              widget.groupId,
             );
         break;
       case _MemberAction.delete:
-        ref.read(itemsNotifierProvider.notifier).deleteItem(item.id);
+        _deleteMemberWithUndo(context, item);
         break;
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
     final groups = ref.watch(groupsNotifierProvider);
     ItemGroup? group;
     for (final candidate in groups) {
-      if (candidate.id == groupId) {
+      if (candidate.id == widget.groupId) {
         group = candidate;
         break;
       }
     }
     final items = ref.watch(itemsNotifierProvider);
     final members = items
-        .where((item) => item.groupIds.contains(groupId))
+        .where((item) => item.groupIds.contains(widget.groupId))
         .toList(growable: false);
 
     if (group == null) {
       return Scaffold(appBar: AppBar(), body: const SizedBox());
     }
 
-    return Scaffold(
+    return PopScope(
+      canPop: !_selecting,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _selecting) {
+          _cancelSelection();
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
-        title: Text(group.title),
-        actions: [
-          IconButton(
-            key: const Key('edit_group_button'),
-            tooltip: l10n.editGroup,
-            icon: const Icon(Icons.edit_outlined),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => GroupFormScreen(groupToEdit: group),
+        leading: _selecting
+            ? IconButton(
+                key: const Key('cancel_member_selection_button'),
+                tooltip: l10n.cancel,
+                icon: const Icon(Icons.close),
+                onPressed: _cancelSelection,
+              )
+            : null,
+        title: _selecting
+            ? Text(l10n.selectedCount(_selected.length))
+            : Text(group.title),
+        actions: _selecting
+            ? [
+                IconButton(
+                  key: const Key('select_all_members_button'),
+                  tooltip: l10n.selectAll,
+                  icon: Icon(
+                    members.isNotEmpty && _selected.length == members.length
+                        ? Icons.deselect
+                        : Icons.select_all,
+                  ),
+                  onPressed: () => setState(() {
+                    if (members.isNotEmpty &&
+                        _selected.length == members.length) {
+                      _selected.clear();
+                    } else {
+                      _selected
+                        ..clear()
+                        ..addAll(members.map((item) => item.id));
+                    }
+                  }),
+                ),
+                IconButton(
+                  key: const Key('bulk_delete_members_button'),
+                  tooltip: l10n.delete,
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: _selected.isEmpty
+                      ? null
+                      : () => _bulkDeleteMembers(context, members),
+                ),
+              ]
+            : [
+                IconButton(
+                  key: const Key('select_members_button'),
+                  tooltip: l10n.select,
+                  icon: const Icon(Icons.checklist),
+                  onPressed: () => setState(() => _selecting = true),
+                ),
+                IconButton(
+                  key: const Key('edit_group_button'),
+                  tooltip: l10n.editGroup,
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => GroupFormScreen(groupToEdit: group),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  key: const Key('delete_group_button'),
+                  tooltip: l10n.deleteGroup,
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: () => _deleteGroup(context, ref),
+                ),
+              ],
+      ),
+      body: Column(
+        children: [
+          if (group.notes.trim().isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+              child: Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(group.notes),
+                  ),
+                ),
               ),
             ),
-          ),
-          IconButton(
-            key: const Key('delete_group_button'),
-            tooltip: l10n.deleteGroup,
-            icon: const Icon(Icons.delete_outline),
-            onPressed: () => _deleteGroup(context, ref),
-          ),
-        ],
-      ),
-      body: members.isEmpty
-          ? Center(child: Text(l10n.noBeadsInGroup))
-          : ListView.builder(
-              padding: const EdgeInsets.only(bottom: 6),
-              itemCount: members.length,
-              itemBuilder: (context, index) {
-                final item = members[index];
-                return Card(
-                  key: ValueKey(item.id),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  child: ListTile(
-                    leading: item.reminderEnabled
-                        ? Icon(
-                            Icons.notifications_active,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : null,
-                    title: Text(item.title),
-                    subtitle: Text(
-                      '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
-                      '${l10n.progress}: ${item.currentProgress} / ${item.count}',
-                    ),
+          Expanded(
+            child: members.isEmpty
+                ? Center(child: Text(l10n.noBeadsInGroup))
+                : ReorderableListView.builder(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    buildDefaultDragHandles: false,
+                    itemCount: members.length,
+                    onReorderItem: (oldIndex, newIndex) {
+                      if (_selecting) {
+                        return;
+                      }
+                      final allItems = ref.read(itemsNotifierProvider);
+                      final movedFullIndex = allItems.indexOf(members[oldIndex]);
+                      final targetFullIndex = newIndex < members.length
+                          ? allItems.indexOf(members[newIndex])
+                          : allItems.length - 1;
+                      ref
+                          .read(itemsNotifierProvider.notifier)
+                          .reorderItems(movedFullIndex, targetFullIndex);
+                    },
+                    itemBuilder: (context, index) {
+                      final item = members[index];
+                      return Card(
+                        key: ValueKey(item.id),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: ListTile(
+                          leading: _selecting
+                              ? Checkbox(
+                                  value: _selected.contains(item.id),
+                                  onChanged: (_) => setState(() {
+                                    if (!_selected.remove(item.id)) {
+                                      _selected.add(item.id);
+                                    }
+                                  }),
+                                )
+                              : item.reminderEnabled
+                                  ? Icon(
+                                      Icons.notifications_active,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    )
+                                  : null,
+                          title: Text(item.title),
+                          subtitle: Text(
+                            '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
+                            '${l10n.progress}: ${item.currentProgress} / ${item.count}',
+                          ),
                     isThreeLine: true,
-                    trailing: PopupMenuButton<_MemberAction>(
+                    trailing: _selecting
+                        ? null
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              PopupMenuButton<_MemberAction>(
                       onSelected: (action) =>
                           _handleMemberAction(context, ref, item, action),
                       itemBuilder: (context) => [
@@ -208,20 +426,38 @@ class GroupScreen extends ConsumerWidget {
                           ),
                         ),
                       ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ExecutionScreen(itemId: item.id),
-                        ),
-                      );
-                    },
+                              ),
+                              ReorderableDelayedDragStartListener(
+                                index: index,
+                                child: const Icon(Icons.drag_indicator),
+                              ),
+                            ],
+                          ),
+                    onTap: _selecting
+                        ? () => setState(() {
+                              if (!_selected.remove(item.id)) {
+                                _selected.add(item.id);
+                              }
+                            })
+                        : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ExecutionScreen(itemId: item.id),
+                              ),
+                            );
+                          },
                   ),
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton.extended(
+          ),
+        ],
+      ),
+      floatingActionButton: _selecting
+          ? null
+          : FloatingActionButton.extended(
         key: const Key('add_bead_fab'),
         onPressed: () => showModalBottomSheet<void>(
           context: context,
@@ -250,7 +486,7 @@ class GroupScreen extends ConsumerWidget {
                       context,
                       MaterialPageRoute(
                         builder: (_) => ItemFormScreen(
-                          initialGroupIds: [groupId],
+                          initialGroupIds: [widget.groupId],
                         ),
                       ),
                     );
@@ -262,6 +498,7 @@ class GroupScreen extends ConsumerWidget {
         ),
         icon: const Icon(Icons.add),
         label: Text(l10n.addBead),
+      ),
       ),
     );
   }

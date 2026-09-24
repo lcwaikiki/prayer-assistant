@@ -327,6 +327,91 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('editing preserves excluded occurrences and can restore one',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final reminder = CalendarReminder(
+      id: 'r1',
+      title: 'Daily',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+      recurrence: ReminderRecurrence.daily,
+      excludedDates: [DateTime(2026, 8, 24), DateTime(2026, 9, 1)],
+    );
+    harness.controller.addCalendarReminder(reminder);
+
+    await _pumpForm(tester, harness, reminder: reminder);
+
+    expect(find.text('Deleted occurrences'), findsOneWidget);
+
+    final restoreButton = find.byKey(
+      const Key('restore_excluded_date_2026-8-24'),
+    );
+    await tester.ensureVisible(restoreButton);
+    await tester.pumpAndSettle();
+    await tester.tap(restoreButton);
+    await tester.pumpAndSettle();
+
+    await _scrollToSave(tester);
+
+    final updated = harness.controller.calendarReminders.single;
+    expect(updated.excludedDates, [DateTime(2026, 9, 1)]);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('restore all clears every excluded occurrence', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final reminder = CalendarReminder(
+      id: 'r1',
+      title: 'Daily',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+      recurrence: ReminderRecurrence.daily,
+      excludedDates: [DateTime(2026, 8, 24), DateTime(2026, 9, 1)],
+    );
+    harness.controller.addCalendarReminder(reminder);
+
+    await _pumpForm(tester, harness, reminder: reminder);
+
+    final restoreAll = find.byKey(const Key('restore_all_excluded_dates'));
+    await tester.ensureVisible(restoreAll);
+    await tester.pumpAndSettle();
+    await tester.tap(restoreAll);
+    await tester.pumpAndSettle();
+
+    await _scrollToSave(tester);
+
+    expect(harness.controller.calendarReminders.single.excludedDates, isEmpty);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('editing other fields keeps existing excluded occurrences',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final reminder = CalendarReminder(
+      id: 'r1',
+      title: 'Daily',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+      recurrence: ReminderRecurrence.daily,
+      excludedDates: [DateTime(2026, 8, 24)],
+    );
+    harness.controller.addCalendarReminder(reminder);
+
+    await _pumpForm(tester, harness, reminder: reminder);
+
+    await tester.enterText(find.byType(TextField).first, 'Renamed');
+    await _scrollToSave(tester);
+
+    final updated = harness.controller.calendarReminders.single;
+    expect(updated.title, 'Renamed');
+    expect(updated.excludedDates, [DateTime(2026, 8, 24)]);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('switching back to once drops the saved repeat count',
       (tester) async {
     final harness = TestHarness.create();

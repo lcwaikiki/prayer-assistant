@@ -362,6 +362,59 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets(
+    'deleting an occurrence removes only that day from a recurring reminder',
+    (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+      harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'r1',
+          title: 'Daily Reminder',
+          anchorAt: DateTime(2026, 8, 17, 9, 0),
+          recurrence: ReminderRecurrence.daily,
+        ),
+      );
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      await switchToGregorian(tester);
+      await hideSecondary(tester);
+      await openDayDetail(tester);
+
+      expect(find.text('Daily Reminder'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Delete this occurrence'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('Remove just this day from the series?'),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('Delete'));
+      await tester.pumpAndSettle();
+
+      final reminder = harness.controller.calendarReminders.single;
+      expect(reminder.excludedDates, [DateTime(2026, 8, 17)]);
+      expect(find.text('Occurrence deleted'), findsOneWidget);
+
+      await tester.tap(find.text('Undo'));
+      await tester.pumpAndSettle();
+
+      expect(
+        harness.controller.calendarReminders.single.excludedDates,
+        isEmpty,
+      );
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
   testWidgets('adding a reminder from the sheet saves it via the form', (
     tester,
   ) async {

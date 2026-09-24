@@ -10,6 +10,7 @@ class ItemGroup implements ReminderSchedulable {
   const ItemGroup({
     required this.id,
     required this.title,
+    this.notes = '',
     this.reminderEnabled = false,
     this.reminderRecurrence = ReminderRecurrence.once,
     this.reminderMonthlyBasis = CalendarBasis.gregorian,
@@ -27,6 +28,7 @@ class ItemGroup implements ReminderSchedulable {
 
   final String id;
   final String title;
+  final String notes;
   final bool reminderEnabled;
   final ReminderRecurrence reminderRecurrence;
   final CalendarBasis reminderMonthlyBasis;
@@ -44,6 +46,7 @@ class ItemGroup implements ReminderSchedulable {
   ItemGroup copyWith({
     String? id,
     String? title,
+    String? notes,
     bool? reminderEnabled,
     ReminderRecurrence? reminderRecurrence,
     CalendarBasis? reminderMonthlyBasis,
@@ -61,6 +64,7 @@ class ItemGroup implements ReminderSchedulable {
     return ItemGroup(
       id: id ?? this.id,
       title: title ?? this.title,
+      notes: notes ?? this.notes,
       reminderEnabled: reminderEnabled ?? this.reminderEnabled,
       reminderRecurrence: reminderRecurrence ?? this.reminderRecurrence,
       reminderMonthlyBasis:
@@ -83,6 +87,7 @@ class ItemGroup implements ReminderSchedulable {
     return {
       'id': id,
       'title': title,
+      'notes': notes,
       'reminderEnabled': reminderEnabled,
       'reminderRecurrence': reminderRecurrence.name,
       'reminderMonthlyBasis': reminderMonthlyBasis.name,
@@ -142,6 +147,7 @@ class ItemGroup implements ReminderSchedulable {
     return ItemGroup(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
+      notes: (map['notes'] ?? '').toString(),
       reminderEnabled: (map['reminderEnabled'] as bool?) ?? false,
       reminderRecurrence: recurrence,
       reminderMonthlyBasis: CalendarBasis.fromName(

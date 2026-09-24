@@ -1024,6 +1024,69 @@ class PrayerAppController extends ChangeNotifier {
     await calendarReminderService.cancelReminder(id);
   }
 
+  /// Removes a single [date]'s occurrence from a recurring reminder's series
+  /// ("delete this occurrence"), leaving the rest of the series intact.
+  Future<void> excludeCalendarReminderOccurrence(
+    String id,
+    DateTime date,
+  ) async {
+    final index = _calendarReminders.indexWhere((r) => r.id == id);
+    if (index == -1) {
+      return;
+    }
+    final reminder = _calendarReminders[index];
+    final day = DateTime(date.year, date.month, date.day);
+    if (reminder.isExcluded(day)) {
+      return;
+    }
+    final updated = reminder.copyWith(
+      excludedDates: [...reminder.excludedDates, day],
+    );
+    _calendarReminders = [
+      for (final r in _calendarReminders)
+        if (r.id == id) updated else r,
+    ];
+    notifyListeners();
+    _syncCalendarRemindersWidget();
+    await database.saveCalendarReminder(updated);
+    await calendarReminderService.scheduleReminder(updated);
+  }
+
+  /// Re-adds a previously excluded [date] to a recurring reminder's series
+  /// (undo for [excludeCalendarReminderOccurrence]).
+  Future<void> restoreCalendarReminderOccurrence(
+    String id,
+    DateTime date,
+  ) async {
+    final index = _calendarReminders.indexWhere((r) => r.id == id);
+    if (index == -1) {
+      return;
+    }
+    final reminder = _calendarReminders[index];
+    final day = DateTime(date.year, date.month, date.day);
+    if (!reminder.isExcluded(day)) {
+      return;
+    }
+    final updated = reminder.copyWith(
+      excludedDates: reminder.excludedDates
+          .where(
+            (excluded) =>
+                excluded.year != day.year ||
+                excluded.month != day.month ||
+                excluded.day != day.day,
+          )
+          .toList(growable: false),
+    );
+    _calendarReminders = [
+      for (final r in _calendarReminders)
+        if (r.id == id) updated else r,
+    ];
+    notifyListeners();
+    _syncCalendarRemindersWidget();
+    await database.saveCalendarReminder(updated);
+    await calendarReminderService.scheduleReminder(updated);
+  }
+
   Future<void> restoreCalendarReminder(
     CalendarReminder reminder, {
     required int index,

@@ -105,6 +105,26 @@ class ItemsNotifier extends Notifier<List<Item>> {
     _reminderService.cancelReminder(id);
   }
 
+  /// Inserts a copy of [source] right after it. Everything (including reminder
+  /// settings and group memberships) is carried over; only the id is new and
+  /// progress/set count start fresh.
+  void duplicateItem(Item source) {
+    final index = state.indexWhere((item) => item.id == source.id);
+    if (index == -1) {
+      return;
+    }
+    final copy = source.copyWith(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      currentProgress: 0,
+      setCount: 0,
+    );
+    final nextState = [...state];
+    nextState.insert(index + 1, copy);
+    state = nextState;
+    _repository.saveItems(state);
+    _reminderService.scheduleReminder(copy);
+  }
+
   void restoreItem(Item item, {required int index}) {
     if (state.any((existing) => existing.id == item.id)) {
       return;
@@ -118,18 +138,21 @@ class ItemsNotifier extends Notifier<List<Item>> {
     _reminderService.scheduleReminder(item);
   }
 
+  /// Moves the item at [oldIndex] to [newIndex], where [newIndex] is the final
+  /// insertion index in the list after removal (ReorderableListView's
+  /// `onReorderItem` semantics, which already accounts for the removal).
   void reorderItems(int oldIndex, int newIndex) {
     if (oldIndex < 0 || oldIndex >= state.length) {
       return;
     }
-    if (newIndex < 0 || newIndex > state.length) {
+    if (newIndex < 0 || newIndex >= state.length) {
+      return;
+    }
+    if (oldIndex == newIndex) {
       return;
     }
 
     final nextState = [...state];
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final movedItem = nextState.removeAt(oldIndex);
     nextState.insert(newIndex, movedItem);
     state = nextState;

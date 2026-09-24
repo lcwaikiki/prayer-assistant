@@ -56,8 +56,12 @@ void main() {
       expect(() => item(count: 0), throwsAssertionError);
     });
 
-    test('rejects non-positive check', () {
-      expect(() => item(check: 0), throwsAssertionError);
+    test('allows zero check to mean no checkpoints', () {
+      expect(() => item(check: 0), returnsNormally);
+    });
+
+    test('rejects negative check', () {
+      expect(() => item(check: -1), throwsAssertionError);
     });
 
     test('rejects check above half of count', () {
@@ -312,10 +316,14 @@ void main() {
       );
     });
 
-    test('non-positive check is rejected', () {
+    test('zero check is allowed and means no checkpoints', () {
+      expect(Item.validateCheckValue(count: 10, check: 0), isNull);
+    });
+
+    test('negative check is rejected', () {
       expect(
-        Item.validateCheckValue(count: 10, check: 0),
-        'Check must be greater than 0',
+        Item.validateCheckValue(count: 10, check: -1),
+        'Check cannot be negative',
       );
     });
 

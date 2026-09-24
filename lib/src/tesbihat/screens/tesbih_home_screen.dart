@@ -12,7 +12,7 @@ import 'group_form_screen.dart';
 import 'group_screen.dart';
 import 'item_form_screen.dart';
 
-enum _ItemAction { edit, delete }
+enum _ItemAction { edit, duplicate, delete }
 
 String _dayKey(DateTime date) {
   final month = date.month.toString().padLeft(2, '0');
@@ -91,6 +91,9 @@ class TesbihHomeScreen extends ConsumerWidget {
           MaterialPageRoute(builder: (_) => ItemFormScreen(itemToEdit: item)),
         );
         break;
+      case _ItemAction.duplicate:
+        ref.read(itemsNotifierProvider.notifier).duplicateItem(item);
+        break;
       case _ItemAction.delete:
         _deleteWithUndo(context, ref, item, index: index);
         break;
@@ -151,25 +154,21 @@ class TesbihHomeScreen extends ConsumerWidget {
                       : ReorderableListView.builder(
                           padding: const EdgeInsets.only(bottom: 6),
                           itemCount: ungrouped.length,
-                          onReorder: (oldIndex, newIndex) {
+                          onReorderItem: (oldIndex, newIndex) {
                             // Reordering happens inside the filtered ungrouped
                             // list; map back onto the full items list (which
-                            // also holds grouped beads).
+                            // also holds grouped beads). onReorderItem already
+                            // gives the final index after removal.
                             final movedFullIndex = items.indexOf(
                               ungrouped[oldIndex],
                             );
-                            final nextUngrouped = [...ungrouped];
-                            if (oldIndex < newIndex) {
-                              newIndex -= 1;
-                            }
-                            final moved = nextUngrouped.removeAt(oldIndex);
-                            nextUngrouped.insert(newIndex, moved);
-                            final fullIndex = items.indexOf(
-                              nextUngrouped[newIndex],
-                            );
+                            final targetFullIndex =
+                                newIndex < ungrouped.length
+                                    ? items.indexOf(ungrouped[newIndex])
+                                    : items.length - 1;
                             ref
                                 .read(itemsNotifierProvider.notifier)
-                                .reorderItems(movedFullIndex, fullIndex);
+                                .reorderItems(movedFullIndex, targetFullIndex);
                           },
                           itemBuilder: (context, index) {
                             final item = ungrouped[index];
@@ -283,6 +282,14 @@ class _UngroupedItemCard extends StatelessWidget {
                   ),
                 ),
                 PopupMenuItem(
+                  value: _ItemAction.duplicate,
+                  child: ListTile(
+                    dense: true,
+                    leading: const Icon(Icons.copy_outlined),
+                    title: Text(l10n.duplicate),
+                  ),
+                ),
+                PopupMenuItem(
                   value: _ItemAction.delete,
                   child: ListTile(
                     dense: true,
@@ -321,60 +328,75 @@ class _GroupCardList extends ConsumerWidget {
     final items = ref.watch(itemsNotifierProvider);
     return SizedBox(
       height: 92,
-      child: ListView.separated(
+      child: ReorderableListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
         itemCount: groups.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        onReorderItem: (oldIndex, newIndex) => ref
+            .read(groupsNotifierProvider.notifier)
+            .reorderGroups(oldIndex, newIndex),
         itemBuilder: (context, index) {
           final group = groups[index];
           final memberCount = items
               .where((item) => item.groupIds.contains(group.id))
               .length;
-          return Card(
+          return Padding(
             key: ValueKey(group.id),
-            margin: EdgeInsets.zero,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12),
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => GroupScreen(groupId: group.id),
+            padding: EdgeInsets.only(right: index == groups.length - 1 ? 0 : 8),
+            child: Card(
+              margin: EdgeInsets.zero,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => GroupScreen(groupId: group.id),
+                  ),
                 ),
-              ),
-              child: SizedBox(
-                width: 140,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            group.reminderEnabled
-                                ? Icons.notifications_active
-                                : Icons.folder_outlined,
-                            size: 20,
-                            color: group.reminderEnabled
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                          ),
-                          const Spacer(),
-                          Text(
-                            '$memberCount',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        group.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    ],
+                child: SizedBox(
+                  width: 140,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              group.reminderEnabled
+                                  ? Icons.notifications_active
+                                  : Icons.folder_outlined,
+                              size: 20,
+                              color: group.reminderEnabled
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
+                            const Spacer(),
+                            Text(
+                              '$memberCount',
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                group.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ),
+                            ReorderableDelayedDragStartListener(
+                              index: index,
+                              child: const Icon(Icons.drag_indicator, size: 18),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -55,10 +55,10 @@
   - [x] Calendar widget week start day does not match app settings `[Done]`
   - [x] Today top-left date is not refreshed (part of general refresh issues) `[Done]`
 - [ ] **Beads:**
-  - [ ] Beads clone duplicate item (not working for Groups) `[Not Started]`
-  - [ ] Beads drag-to-order issue `[Not Started]`
-  - [ ] Groups drag-to-order issue `[Not Started]`
-  - [ ] Bead check interval can be set to zero when it should be "none" `[Not Started]`
+  - [x] Beads clone duplicate item (not working for Groups) `[Done]`
+  - [x] Beads drag-to-order issue `[Done]`
+  - [x] Groups drag-to-order issue `[Done]`
+  - [x] Bead check interval can be set to zero when it should be "none" `[Done]`
   - [x] Weekly reminder in beads turns to everyday after app restart (recheck, fix, and unit tests) `[Done]`
 - [x] **Notifications & Theme:**
   - [x] Notifications and widgets cannot be read when the theme in light mode issue `[Done]`

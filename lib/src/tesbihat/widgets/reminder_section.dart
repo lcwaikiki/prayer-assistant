@@ -233,6 +233,29 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
     _notify();
   }
 
+  /// Resets every reminder field back to defaults, leaving the enabled switch
+  /// untouched so a cleared reminder stays on.
+  void _resetToDefaults() {
+    setState(() {
+      _anchor = ItemReminderAnchor.clockTime;
+      _recurrence = ReminderRecurrence.once;
+      _monthlyBasis = CalendarBasis.gregorian;
+      _yearlyBasis = CalendarBasis.gregorian;
+      _at = null;
+      _anchorDate = null;
+      _prayerName = prayerOrder.first;
+      _offsetDirection = _OffsetDirection.onTime;
+      _offsetMinutesController.text = '10';
+      _repeatCount = null;
+      _repeatCountController.text = '';
+      final now = DateTime.now();
+      _weekdays = <int>[now.weekday];
+      _dayOfMonth = now.day;
+      _yearlyDate = DateTime(now.year, now.month, now.day);
+    });
+    _notify();
+  }
+
   int _computeOffsetMinutes() {
     if (_offsetDirection == _OffsetDirection.onTime) {
       return 0;
@@ -599,13 +622,30 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SwitchListTile(
-          key: const Key('reminder_enable_switch'),
-          contentPadding: EdgeInsets.zero,
-          title: Text(l10n.reminderTitle),
-          subtitle: Text(l10n.reminderEnable),
-          value: _enabled,
-          onChanged: (value) => _mutate(() => _enabled = value),
+        Row(
+          children: [
+            Expanded(
+              child: SwitchListTile(
+                key: const Key('reminder_enable_switch'),
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.reminderTitle),
+                subtitle: Text(l10n.reminderEnable),
+                value: _enabled,
+                onChanged: (value) => _mutate(() => _enabled = value),
+              ),
+            ),
+            if (_enabled)
+              OutlinedButton.icon(
+                key: const Key('reminder_clear_button'),
+                onPressed: _resetToDefaults,
+                icon: const Icon(Icons.cleaning_services_outlined, size: 18),
+                label: Text(l10n.clear),
+                style: OutlinedButton.styleFrom(
+                  visualDensity: VisualDensity.compact,
+                  foregroundColor: colorScheme.primary,
+                ),
+              ),
+          ],
         ),
         if (_enabled) ...[
           const SizedBox(height: 8),

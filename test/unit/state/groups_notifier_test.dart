@@ -172,4 +172,51 @@ void main() {
       expect(container.read(groupsNotifierProvider).single.title, 'Morning');
     });
   });
+
+  group('GroupsNotifier.reorderGroups', () {
+    test('moves a group down using onReorderItem semantics', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([
+        const ItemGroup(id: 'g1', title: 'A'),
+        const ItemGroup(id: 'g2', title: 'B'),
+        const ItemGroup(id: 'g3', title: 'C'),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).reorderGroups(0, 2);
+
+      expect(container.read(groupsNotifierProvider).map((g) => g.id), [
+        'g2',
+        'g3',
+        'g1',
+      ]);
+      expect(repository.loadGroups().map((g) => g.id), ['g2', 'g3', 'g1']);
+    });
+
+    test('moves a group up', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([
+        const ItemGroup(id: 'g1', title: 'A'),
+        const ItemGroup(id: 'g2', title: 'B'),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).reorderGroups(1, 0);
+
+      expect(container.read(groupsNotifierProvider).map((g) => g.id), [
+        'g2',
+        'g1',
+      ]);
+    });
+
+    test('ignores out-of-range indexes', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([const ItemGroup(id: 'g1', title: 'A')]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).reorderGroups(5, 0);
+
+      expect(container.read(groupsNotifierProvider), hasLength(1));
+    });
+  });
 }

@@ -86,4 +86,25 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
     _repository.saveGroups(state);
     _reminderService.scheduleGroupReminder(group);
   }
+
+  /// Moves the group at [oldIndex] to [newIndex], where [newIndex] is the final
+  /// insertion index in the list after removal (ReorderableListView's
+  /// `onReorderItem` semantics, which already accounts for the removal).
+  void reorderGroups(int oldIndex, int newIndex) {
+    if (oldIndex < 0 || oldIndex >= state.length) {
+      return;
+    }
+    if (newIndex < 0 || newIndex >= state.length) {
+      return;
+    }
+    if (oldIndex == newIndex) {
+      return;
+    }
+
+    final nextState = [...state];
+    final movedGroup = nextState.removeAt(oldIndex);
+    nextState.insert(newIndex, movedGroup);
+    state = nextState;
+    _repository.saveGroups(state);
+  }
 }

@@ -44,9 +44,9 @@ class Item implements ReminderSchedulable {
     this.reminderYearlyDate,
     this.groupIds = const [],
   }) : assert(count > 0, 'count must be positive'),
-       assert(check > 0, 'check must be positive'),
+       assert(check >= 0, 'check cannot be negative'),
        assert(setCount >= 0, 'setCount cannot be negative'),
-       assert(check * 2 <= count, 'check must not exceed half of count'),
+       assert(check == 0 || check * 2 <= count, 'check must not exceed half of count'),
        assert(
          vibrationIntensity >= 1 && vibrationIntensity <= 100,
          'vibrationIntensity must be between 1 and 100',
@@ -294,8 +294,11 @@ class Item implements ReminderSchedulable {
     if (check == null) {
       return 'Check is required';
     }
-    if (check <= 0) {
-      return 'Check must be greater than 0';
+    if (check < 0) {
+      return 'Check cannot be negative';
+    }
+    if (check == 0) {
+      return null;
     }
     if (count == null || count <= 0) {
       return 'Enter a valid count first';

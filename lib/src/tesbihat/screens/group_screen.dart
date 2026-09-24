@@ -10,7 +10,7 @@ import 'execution_screen.dart';
 import 'group_form_screen.dart';
 import 'item_form_screen.dart';
 
-enum _MemberAction { edit, remove, delete }
+enum _MemberAction { edit, duplicate, remove, delete }
 
 class GroupScreen extends ConsumerWidget {
   const GroupScreen({super.key, required this.groupId});
@@ -83,6 +83,9 @@ class GroupScreen extends ConsumerWidget {
           context,
           MaterialPageRoute(builder: (_) => ItemFormScreen(itemToEdit: item)),
         );
+        break;
+      case _MemberAction.duplicate:
+        ref.read(itemsNotifierProvider.notifier).duplicateItem(item);
         break;
       case _MemberAction.remove:
         ref.read(itemsNotifierProvider.notifier).removeItemFromGroup(
@@ -175,6 +178,14 @@ class GroupScreen extends ConsumerWidget {
                             dense: true,
                             leading: const Icon(Icons.edit),
                             title: Text(l10n.edit),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: _MemberAction.duplicate,
+                          child: ListTile(
+                            dense: true,
+                            leading: const Icon(Icons.copy_outlined),
+                            title: Text(l10n.duplicate),
                           ),
                         ),
                         PopupMenuItem(

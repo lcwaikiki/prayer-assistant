@@ -142,6 +142,23 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('an empty check saves as zero (no checkpoints)', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await _pumpForm(tester, harness);
+
+    await tester.enterText(find.byKey(const Key('title_field')), 'Tasbih');
+    await tester.enterText(find.byKey(const Key('count_field')), '33');
+    await _tapSave(tester);
+
+    final saved = harness.itemRepository.loadItems();
+    expect(saved, hasLength(1));
+    expect(saved.first.check, 0);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('rejects a check larger than half of count', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
@@ -203,6 +220,25 @@ void main() {
     expect(find.text('Repeat'), findsWidgets);
     expect(find.text('Once'), findsOneWidget);
     expect(find.text('Daily'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('clearing the reminder keeps it enabled', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await _pumpForm(tester, harness);
+    await _enableReminder(tester);
+
+    final switchFinder = find.byKey(const Key('reminder_enable_switch'));
+    expect(tester.widget<SwitchListTile>(switchFinder).value, isTrue);
+
+    await _scrollTo(tester, find.byKey(const Key('reminder_clear_button')));
+    await tester.tap(find.byKey(const Key('reminder_clear_button')));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<SwitchListTile>(switchFinder).value, isTrue);
 
     await tester.pumpWidget(const SizedBox());
   });

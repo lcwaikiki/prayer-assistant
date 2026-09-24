@@ -211,9 +211,8 @@ void main() {
       ]);
       final container = containerWith(repository, reminderService);
 
-      // ReorderableListView semantics: newIndex is the drop position in the
-      // list that still includes the dragged item.
-      container.read(itemsNotifierProvider.notifier).reorderItems(0, 3);
+      // onReorderItem semantics: newIndex is the final index after removal.
+      container.read(itemsNotifierProvider.notifier).reorderItems(0, 2);
 
       expect(container.read(itemsNotifierProvider).map((i) => i.id), [
         'b',
@@ -240,11 +239,75 @@ void main() {
       ]);
     });
 
+    test('is a no-op when the index does not change', () {
+      final repository = ItemRepository.memory([item('a'), item('b')]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).reorderItems(1, 1);
+
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), ['a', 'b']);
+    });
+
     test('ignores out-of-range indexes', () {
       final repository = ItemRepository.memory([item('a')]);
       final container = containerWith(repository, reminderService);
 
       container.read(itemsNotifierProvider.notifier).reorderItems(5, 0);
+
+      expect(container.read(itemsNotifierProvider), hasLength(1));
+      verifyNever(() => reminderService.scheduleReminder(any()));
+    });
+  });
+
+  group('ItemsNotifier.duplicateItem', () {
+    test('inserts a copy right after the source with fresh progress', () {
+      final repository = ItemRepository.memory([
+        item('a', title: 'A', currentProgress: 10, setCount: 2),
+        item('b', title: 'B'),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .duplicateItem(container.read(itemsNotifierProvider).first);
+
+      final items = container.read(itemsNotifierProvider);
+      expect(items.map((i) => i.title), ['A', 'A', 'B']);
+      final copy = items[1];
+      expect(copy.id, isNot('a'));
+      expect(copy.currentProgress, 0);
+      expect(copy.setCount, 0);
+      expect(repository.loadItems().map((i) => i.title), ['A', 'A', 'B']);
+      verify(() => reminderService.scheduleReminder(any())).called(1);
+    });
+
+    test('preserves group memberships and reminder settings on the copy', () {
+      final repository = ItemRepository.memory([
+        item('a', title: 'A').copyWith(
+          groupIds: const ['g1', 'g2'],
+          reminderEnabled: true,
+          reminderPrayerName: 'Imsak',
+        ),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .duplicateItem(container.read(itemsNotifierProvider).single);
+
+      final copy = container.read(itemsNotifierProvider).last;
+      expect(copy.groupIds, ['g1', 'g2']);
+      expect(copy.reminderEnabled, isTrue);
+      expect(copy.reminderPrayerName, 'Imsak');
+    });
+
+    test('is a no-op for an unknown id', () {
+      final repository = ItemRepository.memory([item('a')]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .duplicateItem(item('nope'));
 
       expect(container.read(itemsNotifierProvider), hasLength(1));
       verifyNever(() => reminderService.scheduleReminder(any()));

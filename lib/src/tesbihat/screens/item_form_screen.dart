@@ -55,7 +55,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final initialTitle = item?.title ?? '';
     final initialNotes = item?.notes ?? '';
     final initialCount = item != null ? item.count.toString() : '';
-    final initialCheck = item != null ? item.check.toString() : '';
+    // Empty and "0" both mean "no checkpoints", so normalize for comparison.
+    final initialCheck =
+        (item == null || item.check == 0) ? '' : item.check.toString();
     final initialVibration = _normalizeVibration(item?.vibrationIntensity);
     final initialReminder = item != null
         ? ReminderConfig.fromItem(item)
@@ -85,7 +87,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       text: item != null ? item.count.toString() : '',
     );
     _checkController = TextEditingController(
-      text: item != null ? item.check.toString() : '',
+      text: (item == null || item.check == 0) ? '' : item.check.toString(),
     );
     _setCountController = TextEditingController(
       text: item != null ? item.setCount.toString() : '0',
@@ -130,15 +132,18 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
   String? _checkValidator(String? value) {
     final l10n = context.tesbihatL10n;
-    final emptyError = _requiredValidator(value, l10n.check);
-    if (emptyError != null) return emptyError;
+    // Empty or 0 both mean "no checkpoints".
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
 
-    final check = int.tryParse(value!.trim());
+    final check = int.tryParse(value.trim());
     final count = int.tryParse(_countController.text.trim());
     if (check == null) {
       return l10n.fieldMustBeInteger(l10n.check);
     }
-    if (check <= 0) return l10n.checkGreaterThanZero;
+    if (check < 0) return l10n.checkGreaterThanZero;
+    if (check == 0) return null;
     if (count == null || count <= 0) return l10n.enterValidCountFirst;
     if (check * 2 > count) return l10n.checkHalfError;
     return null;
@@ -161,7 +166,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final title = _titleController.text.trim();
     final notes = _notesController.text.trim();
     final count = int.parse(_countController.text.trim());
-    final check = int.parse(_checkController.text.trim());
+    final check = int.tryParse(_checkController.text.trim()) ?? 0;
     final setCount = _isEditing ? widget.itemToEdit!.setCount : 0;
 
     var reminderAt = reminder.at;

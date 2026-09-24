@@ -41,7 +41,7 @@
   - [ ] Reminder details: Hide / show `[Not Started]`
   - [ ] Reminder checks `[Not Started]`
   - [ ] Share / import reminders, groups, and beads `[Not Started]`
-  - [ ] When sharing/copying Hadith or Surat of the day, include transliterations as well `[Not Started]`
+  - [x] When sharing/copying Hadith or Surat of the day, include transliterations as well `[Done]`
 - [x] **Notifications:** Notifications is in English, should be in current language `[Done]`
 - [x] **Settings & Haptics:** Make vibration intensity more sensitive and previewable `[Done]`
 - [x] **Navigation & Shortcuts:** When tapping widgets, open app at Today tab instead of Tracking tab `[Done]`

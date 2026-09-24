@@ -20,6 +20,17 @@ class DailyWisdomCard extends StatefulWidget {
 class _DailyWisdomCardState extends State<DailyWisdomCard> {
   bool _isExpanded = false;
 
+  String _composeText(String localizedText, {required bool includeAttribution}) {
+    final wisdom = widget.wisdom;
+    final body = [
+      if (wisdom.textAr.isNotEmpty) wisdom.textAr,
+      if (wisdom.transliteration.isNotEmpty) wisdom.transliteration,
+      localizedText,
+    ].join('\n\n');
+    final text = '$body\n— ${wisdom.reference}';
+    return includeAttribution ? '$text\n\nVia Prayer Assist' : text;
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -119,9 +130,11 @@ class _DailyWisdomCardState extends State<DailyWisdomCard> {
                     tooltip: context.l10n.copyText,
                     icon: const Icon(Icons.copy_rounded, size: 16),
                     onPressed: () {
-                      final shareString =
-                          '${widget.wisdom.textAr}\n\n$localizedText\n— ${widget.wisdom.reference}';
-                      Clipboard.setData(ClipboardData(text: shareString));
+                      final text = _composeText(
+                        localizedText,
+                        includeAttribution: false,
+                      );
+                      Clipboard.setData(ClipboardData(text: text));
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(context.l10n.copiedToClipboard),
@@ -138,9 +151,11 @@ class _DailyWisdomCardState extends State<DailyWisdomCard> {
                     tooltip: context.l10n.shareWisdom,
                     icon: const Icon(Icons.share_rounded, size: 16),
                     onPressed: () {
-                      final shareString =
-                          '${widget.wisdom.textAr}\n\n$localizedText\n— ${widget.wisdom.reference}\n\nVia Prayer Assist';
-                      SharePlus.instance.share(ShareParams(text: shareString));
+                      final text = _composeText(
+                        localizedText,
+                        includeAttribution: true,
+                      );
+                      SharePlus.instance.share(ShareParams(text: text));
                     },
                   ),
                 ],

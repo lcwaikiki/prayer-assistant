@@ -87,6 +87,7 @@
   "themeSystem": "Default sistem",
   "themeLight": "Terang",
   "themeDark": "Gelap",
+  "homeScreenSettingsSectionTitle": "Pengaturan layar utama",
   "appBarRemainingTitle": "Teks sisa waktu di app bar beranda",
   "showInTitle": "Tampilkan di judul",
   "showAtRight": "Tampilkan di kanan",

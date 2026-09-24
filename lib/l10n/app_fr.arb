@@ -87,6 +87,7 @@
   "themeSystem": "Par défaut système",
   "themeLight": "Clair",
   "themeDark": "Sombre",
+  "homeScreenSettingsSectionTitle": "Paramètres de l'écran d'accueil",
   "appBarRemainingTitle": "Texte restant dans la barre d'application",
   "showInTitle": "Afficher dans le titre",
   "showAtRight": "Afficher à droite",

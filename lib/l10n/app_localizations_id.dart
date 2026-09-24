@@ -278,6 +278,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get themeDark => 'Gelap';
 
   @override
+  String get homeScreenSettingsSectionTitle => 'Pengaturan layar utama';
+
+  @override
   String get appBarRemainingTitle => 'Teks sisa waktu di app bar beranda';
 
   @override

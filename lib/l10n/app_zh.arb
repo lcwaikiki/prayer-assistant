@@ -87,6 +87,7 @@
   "themeSystem": "跟随系统",
   "themeLight": "浅色",
   "themeDark": "深色",
+  "homeScreenSettingsSectionTitle": "主屏幕设置",
   "appBarRemainingTitle": "首页顶栏剩余时间显示",
   "showInTitle": "显示在标题",
   "showAtRight": "显示在右侧",

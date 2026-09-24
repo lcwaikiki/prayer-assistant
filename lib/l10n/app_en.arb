@@ -127,6 +127,7 @@
   "themeSystem": "System default",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "homeScreenSettingsSectionTitle": "Home screen settings",
   "appBarRemainingTitle": "Home app bar remaining text",
   "showInTitle": "Show in title",
   "showAtRight": "Show at right",

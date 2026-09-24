@@ -37,7 +37,7 @@
   - [x] Group beads: Drag to reorder beads inside a group `[Done]`
 - [ ] **Reminders:**
   - [ ] Tap button inside empty `[Not Started]`
-  - [ ] Preferences menu reorder `[Not Started]`
+  - [x] Preferences menu reorder `[Done]`
   - [ ] Reminder details: Hide / show `[Not Started]`
   - [ ] Reminder checks `[Not Started]`
   - [ ] Share / import reminders, groups, and beads `[Not Started]`

@@ -70,119 +70,284 @@ class PreferencesScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               _PreferenceSection(
-                title: context.l10n.languageTitle,
-                subtitle: controller.localePreference.nativeLabel(
-                  context.l10n.languageSystem,
-                ),
-                children: AppLocalePreference.values
-                    .map(
-                      (option) => RadioListTile<AppLocalePreference>(
+                title: context.l10n.homeScreenSettingsSectionTitle,
+                children: [
+                  _PreferenceSubSection(
+                    title: context.l10n.homeDashboardCardsSectionTitle,
+                    children: [
+                      SwitchListTile(
+                        key: const Key('show_card_moon_phase_switch'),
                         contentPadding: EdgeInsets.zero,
-                        title: Text(
-                          option.nativeLabel(context.l10n.languageSystem),
-                        ),
-                        value: option,
-                        groupValue: controller.localePreference,
+                        title: Text(context.l10n.showCardMoonPhaseTitle),
+                        subtitle: Text(context.l10n.showCardMoonPhaseSubtitle),
+                        value: controller.showCardMoonPhase,
+                        onChanged: controller.updateShowCardMoonPhase,
+                      ),
+                      SwitchListTile(
+                        key: const Key('show_card_iftar_suhoor_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showCardIftarSuhoorTitle),
+                        subtitle: Text(context.l10n.showCardIftarSuhoorSubtitle),
+                        value: controller.showCardIftarSuhoor,
+                        onChanged: controller.updateShowCardIftarSuhoor,
+                      ),
+                      SwitchListTile(
+                        key: const Key('show_card_daily_wisdom_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showCardDailyWisdomTitle),
+                        subtitle: Text(context.l10n.showCardDailyWisdomSubtitle),
+                        value: controller.showCardDailyWisdom,
+                        onChanged: controller.updateShowCardDailyWisdom,
+                      ),
+                      SwitchListTile(
+                        key: const Key('show_card_upcoming_reminders_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showCardUpcomingRemindersTitle),
+                        subtitle:
+                            Text(context.l10n.showCardUpcomingRemindersSubtitle),
+                        value: controller.showCardUpcomingReminders,
+                        onChanged: controller.updateShowCardUpcomingReminders,
+                      ),
+                    ],
+                  ),
+                  const Divider(height: 1),
+                  _PreferenceSubSection(
+                    title: context.l10n.appBarRemainingTitle,
+                    children: [
+                      RadioListTile<AppBarRemainingPlacement>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showInTitle),
+                        value: AppBarRemainingPlacement.title,
+                        groupValue: controller.appBarRemainingPlacement,
                         onChanged: (value) {
                           if (value != null) {
-                            controller.updateLocalePreference(value);
+                            controller.updateAppBarRemainingPlacement(value);
                           }
                         },
                       ),
-                    )
-                    .toList(growable: false),
-              ),
-              const SizedBox(height: 12),
-              _PreferenceSection(
-                title: context.l10n.themeModeTitle,
-                subtitle: _themeSubtitle(context, controller.themePreference),
-                children: [
-                  RadioListTile<AppThemePreference>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.themeSystem),
-                    value: AppThemePreference.system,
-                    groupValue: controller.themePreference,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateThemePreference(value);
-                      }
-                    },
+                      RadioListTile<AppBarRemainingPlacement>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showAtRight),
+                        value: AppBarRemainingPlacement.trailing,
+                        groupValue: controller.appBarRemainingPlacement,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateAppBarRemainingPlacement(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppBarRemainingPlacement>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.showAsSubtitle),
+                        value: AppBarRemainingPlacement.subtitle,
+                        groupValue: controller.appBarRemainingPlacement,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateAppBarRemainingPlacement(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppBarRemainingPlacement>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.hideRemainingText),
+                        value: AppBarRemainingPlacement.hidden,
+                        groupValue: controller.appBarRemainingPlacement,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateAppBarRemainingPlacement(value);
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  RadioListTile<AppThemePreference>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.themeLight),
-                    value: AppThemePreference.light,
-                    groupValue: controller.themePreference,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateThemePreference(value);
-                      }
-                    },
+                  const Divider(height: 1),
+                  _PreferenceSubSection(
+                    title: context.l10n.themeModeTitle,
+                    children: [
+                      RadioListTile<AppThemePreference>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.themeSystem),
+                        value: AppThemePreference.system,
+                        groupValue: controller.themePreference,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateThemePreference(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppThemePreference>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.themeLight),
+                        value: AppThemePreference.light,
+                        groupValue: controller.themePreference,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateThemePreference(value);
+                          }
+                        },
+                      ),
+                      RadioListTile<AppThemePreference>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.themeDark),
+                        value: AppThemePreference.dark,
+                        groupValue: controller.themePreference,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateThemePreference(value);
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                  RadioListTile<AppThemePreference>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.themeDark),
-                    value: AppThemePreference.dark,
-                    groupValue: controller.themePreference,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateThemePreference(value);
-                      }
-                    },
+                  const Divider(height: 1),
+                  _PreferenceSubSection(
+                    title: context.l10n.remindersOnOffTitle,
+                    children: [
+                      SwitchListTile(
+                        key: const Key('reminders_on_off_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.remindersOnOffTitle),
+                        subtitle: Text(context.l10n.remindersOnOffSubtitle),
+                        value: !controller.remindersSilenced,
+                        onChanged: (enabled) =>
+                            controller.updateRemindersSilenced(!enabled),
+                      ),
+                      SwitchListTile(
+                        key: const Key('reminder_vibration_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.reminderVibrationTitle),
+                        subtitle: Text(context.l10n.reminderVibrationSubtitle),
+                        value: controller.reminderVibrationEnabled,
+                        onChanged: controller.updateReminderVibrationEnabled,
+                      ),
+                      SwitchListTile(
+                        key: const Key('reminder_sound_switch'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.reminderSoundTitle),
+                        subtitle: Text(context.l10n.reminderSoundSubtitle),
+                        value: controller.reminderSoundEnabled,
+                        onChanged: controller.updateReminderSoundEnabled,
+                      ),
+                    ],
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
-                title: context.l10n.appBarRemainingTitle,
-                subtitle: _appBarRemainingSubtitle(
-                  context,
-                  controller.appBarRemainingPlacement,
-                ),
+                title: context.l10n.calendarSettingsSectionTitle,
                 children: [
-                  RadioListTile<AppBarRemainingPlacement>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showInTitle),
-                    value: AppBarRemainingPlacement.title,
-                    groupValue: controller.appBarRemainingPlacement,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateAppBarRemainingPlacement(value);
-                      }
-                    },
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.calendarWeekStartTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
-                  RadioListTile<AppBarRemainingPlacement>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showAtRight),
-                    value: AppBarRemainingPlacement.trailing,
-                    groupValue: controller.appBarRemainingPlacement,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateAppBarRemainingPlacement(value);
-                      }
-                    },
+                  const SizedBox(height: 8),
+                  SegmentedButton<CalendarWeekStart>(
+                    key: const Key('calendar_week_start_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: CalendarWeekStart.sunday,
+                        label: Text(context.l10n.calendarWeekStartSunday),
+                      ),
+                      ButtonSegment(
+                        value: CalendarWeekStart.monday,
+                        label: Text(context.l10n.calendarWeekStartMonday),
+                      ),
+                    ],
+                    selected: {controller.calendarWeekStart},
+                    onSelectionChanged: (selection) =>
+                        controller.updateCalendarWeekStart(selection.first),
                   ),
-                  RadioListTile<AppBarRemainingPlacement>(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showAsSubtitle),
-                    value: AppBarRemainingPlacement.subtitle,
-                    groupValue: controller.appBarRemainingPlacement,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateAppBarRemainingPlacement(value);
-                      }
-                    },
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.defaultCalendarDisplayTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
                   ),
-                  RadioListTile<AppBarRemainingPlacement>(
+                  const SizedBox(height: 2),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.defaultCalendarDisplaySubtitle,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<CalendarPrimaryDisplay>(
+                    key: const Key('default_calendar_display_segmented_button'),
+                    segments: [
+                      ButtonSegment(
+                        value: CalendarPrimaryDisplay.hijri,
+                        label: Text(context.l10n.calendarYearlyBasisHijri),
+                      ),
+                      ButtonSegment(
+                        value: CalendarPrimaryDisplay.gregorian,
+                        label: Text(context.l10n.calendarYearlyBasisGregorian),
+                      ),
+                    ],
+                    selected: {controller.defaultCalendarDisplay},
+                    onSelectionChanged: (selection) =>
+                        controller.updateDefaultCalendarDisplay(selection.first),
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.hijriDateOffsetTitle,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      context.l10n.hijriDateOffsetSubtitle,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SegmentedButton<int>(
+                    key: const Key('hijri_date_offset_segmented_button'),
+                    segments: const [
+                      ButtonSegment(value: -2, label: Text('-2d')),
+                      ButtonSegment(value: -1, label: Text('-1d')),
+                      ButtonSegment(value: 0, label: Text('0d')),
+                      ButtonSegment(value: 1, label: Text('+1d')),
+                      ButtonSegment(value: 2, label: Text('+2d')),
+                    ],
+                    selected: {controller.hijriDateOffset},
+                    onSelectionChanged: (selection) =>
+                        controller.updateHijriDateOffset(selection.first),
+                  ),
+                  const SizedBox(height: 12),
+                  const Divider(),
+                  SwitchListTile(
+                    key: const Key('show_islamic_holidays_switch'),
                     contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.hideRemainingText),
-                    value: AppBarRemainingPlacement.hidden,
-                    groupValue: controller.appBarRemainingPlacement,
-                    onChanged: (value) {
-                      if (value != null) {
-                        controller.updateAppBarRemainingPlacement(value);
-                      }
-                    },
+                    title: Text(context.l10n.showIslamicHolidaysTitle),
+                    subtitle: Text(context.l10n.showIslamicHolidaysSubtitle),
+                    value: controller.showIslamicHolidays,
+                    onChanged: controller.updateShowIslamicHolidays,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_fasting_badges_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showFastingBadgesTitle),
+                    subtitle: Text(context.l10n.showFastingBadgesSubtitle),
+                    value: controller.showFastingBadges,
+                    onChanged: controller.updateShowFastingBadges,
+                  ),
+                  SwitchListTile(
+                    key: const Key('show_calendar_reminder_dots_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.showCalendarReminderDotsTitle),
+                    subtitle: Text(context.l10n.showCalendarReminderDotsSubtitle),
+                    value: controller.showCalendarReminderDots,
+                    onChanged: controller.updateShowCalendarReminderDots,
                   ),
                 ],
               ),
@@ -341,191 +506,27 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
-                title: context.l10n.homeDashboardCardsSectionTitle,
-                children: [
-                  SwitchListTile(
-                    key: const Key('show_card_moon_phase_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showCardMoonPhaseTitle),
-                    subtitle: Text(context.l10n.showCardMoonPhaseSubtitle),
-                    value: controller.showCardMoonPhase,
-                    onChanged: controller.updateShowCardMoonPhase,
-                  ),
-                  SwitchListTile(
-                    key: const Key('show_card_iftar_suhoor_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showCardIftarSuhoorTitle),
-                    subtitle: Text(context.l10n.showCardIftarSuhoorSubtitle),
-                    value: controller.showCardIftarSuhoor,
-                    onChanged: controller.updateShowCardIftarSuhoor,
-                  ),
-                  SwitchListTile(
-                    key: const Key('show_card_daily_wisdom_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showCardDailyWisdomTitle),
-                    subtitle: Text(context.l10n.showCardDailyWisdomSubtitle),
-                    value: controller.showCardDailyWisdom,
-                    onChanged: controller.updateShowCardDailyWisdom,
-                  ),
-                  SwitchListTile(
-                    key: const Key('show_card_upcoming_reminders_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showCardUpcomingRemindersTitle),
-                    subtitle: Text(context.l10n.showCardUpcomingRemindersSubtitle),
-                    value: controller.showCardUpcomingReminders,
-                    onChanged: controller.updateShowCardUpcomingReminders,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _PreferenceSection(
-                title: context.l10n.calendarSettingsSectionTitle,
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.calendarWeekStartTitle,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<CalendarWeekStart>(
-                    key: const Key('calendar_week_start_segmented_button'),
-                    segments: [
-                      ButtonSegment(
-                        value: CalendarWeekStart.sunday,
-                        label: Text(context.l10n.calendarWeekStartSunday),
+                title: context.l10n.languageTitle,
+                subtitle: controller.localePreference.nativeLabel(
+                  context.l10n.languageSystem,
+                ),
+                children: AppLocalePreference.values
+                    .map(
+                      (option) => RadioListTile<AppLocalePreference>(
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(
+                          option.nativeLabel(context.l10n.languageSystem),
+                        ),
+                        value: option,
+                        groupValue: controller.localePreference,
+                        onChanged: (value) {
+                          if (value != null) {
+                            controller.updateLocalePreference(value);
+                          }
+                        },
                       ),
-                      ButtonSegment(
-                        value: CalendarWeekStart.monday,
-                        label: Text(context.l10n.calendarWeekStartMonday),
-                      ),
-                    ],
-                    selected: {controller.calendarWeekStart},
-                    onSelectionChanged: (selection) =>
-                        controller.updateCalendarWeekStart(selection.first),
-                  ),
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.defaultCalendarDisplayTitle,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.defaultCalendarDisplaySubtitle,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<CalendarPrimaryDisplay>(
-                    key: const Key('default_calendar_display_segmented_button'),
-                    segments: [
-                      ButtonSegment(
-                        value: CalendarPrimaryDisplay.hijri,
-                        label: Text(context.l10n.calendarYearlyBasisHijri),
-                      ),
-                      ButtonSegment(
-                        value: CalendarPrimaryDisplay.gregorian,
-                        label: Text(context.l10n.calendarYearlyBasisGregorian),
-                      ),
-                    ],
-                    selected: {controller.defaultCalendarDisplay},
-                    onSelectionChanged: (selection) =>
-                        controller.updateDefaultCalendarDisplay(selection.first),
-                  ),
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.hijriDateOffsetTitle,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      context.l10n.hijriDateOffsetSubtitle,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SegmentedButton<int>(
-                    key: const Key('hijri_date_offset_segmented_button'),
-                    segments: const [
-                      ButtonSegment(value: -2, label: Text('-2d')),
-                      ButtonSegment(value: -1, label: Text('-1d')),
-                      ButtonSegment(value: 0, label: Text('0d')),
-                      ButtonSegment(value: 1, label: Text('+1d')),
-                      ButtonSegment(value: 2, label: Text('+2d')),
-                    ],
-                    selected: {controller.hijriDateOffset},
-                    onSelectionChanged: (selection) =>
-                        controller.updateHijriDateOffset(selection.first),
-                  ),
-                  const SizedBox(height: 12),
-                  const Divider(),
-                  SwitchListTile(
-                    key: const Key('show_islamic_holidays_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showIslamicHolidaysTitle),
-                    subtitle: Text(context.l10n.showIslamicHolidaysSubtitle),
-                    value: controller.showIslamicHolidays,
-                    onChanged: controller.updateShowIslamicHolidays,
-                  ),
-                  SwitchListTile(
-                    key: const Key('show_fasting_badges_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showFastingBadgesTitle),
-                    subtitle: Text(context.l10n.showFastingBadgesSubtitle),
-                    value: controller.showFastingBadges,
-                    onChanged: controller.updateShowFastingBadges,
-                  ),
-                  SwitchListTile(
-                    key: const Key('show_calendar_reminder_dots_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.showCalendarReminderDotsTitle),
-                    subtitle: Text(context.l10n.showCalendarReminderDotsSubtitle),
-                    value: controller.showCalendarReminderDots,
-                    onChanged: controller.updateShowCalendarReminderDots,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _PreferenceSection(
-                title: context.l10n.remindersOnOffTitle,
-                subtitle: controller.remindersSilenced
-                    ? context.l10n.remindersOff
-                    : context.l10n.remindersOn,
-                children: [
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.remindersOnOffTitle),
-                    subtitle: Text(context.l10n.remindersOnOffSubtitle),
-                    value: !controller.remindersSilenced,
-                    onChanged: (enabled) =>
-                        controller.updateRemindersSilenced(!enabled),
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.reminderVibrationTitle),
-                    subtitle: Text(context.l10n.reminderVibrationSubtitle),
-                    value: controller.reminderVibrationEnabled,
-                    onChanged: controller.updateReminderVibrationEnabled,
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.reminderSoundTitle),
-                    subtitle: Text(context.l10n.reminderSoundSubtitle),
-                    value: controller.reminderSoundEnabled,
-                    onChanged: controller.updateReminderSoundEnabled,
-                  ),
-                ],
+                    )
+                    .toList(growable: false),
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
@@ -1181,26 +1182,29 @@ class _PreferenceSection extends StatelessWidget {
   }
 }
 
-String _themeSubtitle(BuildContext context, AppThemePreference preference) {
-  final l10n = context.l10n;
-  return switch (preference) {
-    AppThemePreference.system => l10n.themeSystem,
-    AppThemePreference.light => l10n.themeLight,
-    AppThemePreference.dark => l10n.themeDark,
-  };
-}
+/// A collapsible sub-group nested inside a [_PreferenceSection] (e.g. the
+/// groups under Home screen settings). No Card/background: it sits inside
+/// the parent section's card.
+class _PreferenceSubSection extends StatelessWidget {
+  const _PreferenceSubSection({required this.title, required this.children});
 
-String _appBarRemainingSubtitle(
-  BuildContext context,
-  AppBarRemainingPlacement placement,
-) {
-  final l10n = context.l10n;
-  return switch (placement) {
-    AppBarRemainingPlacement.title => l10n.showInTitle,
-    AppBarRemainingPlacement.trailing => l10n.showAtRight,
-    AppBarRemainingPlacement.subtitle => l10n.showAsSubtitle,
-    AppBarRemainingPlacement.hidden => l10n.hideRemainingText,
-  };
+  final String title;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      tilePadding: EdgeInsets.zero,
+      childrenPadding: const EdgeInsets.only(left: 8),
+      shape: const Border(),
+      collapsedShape: const Border(),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
+      children: children,
+    );
+  }
 }
 
 String _widgetTextSizeSubtitle(BuildContext context, WidgetTextSize size) {

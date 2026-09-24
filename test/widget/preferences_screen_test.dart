@@ -16,9 +16,12 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
+    await tester.tap(find.text('Home screen settings'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Theme mode'));
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('Dark'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Dark'));
     await tester.pumpAndSettle();
 
@@ -35,10 +38,13 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
+    await tester.ensureVisible(find.text('Language'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Language'));
     await tester.pumpAndSettle();
 
-    expect(find.text('System default'), findsNWidgets(2));
+    expect(find.text('System default'), findsAtLeastNWidgets(1));
+    await tester.ensureVisible(find.text('Türkçe'));
     expect(find.text('Türkçe'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
@@ -53,16 +59,14 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.scrollUntilVisible(
-      find.text('Reminders on/off'),
-      200,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('Reminders on/off'));
+    await tester.tap(find.text('Home screen settings'));
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(ListView), const Offset(0, -400));
+    await tester.tap(find.text('Reminders on/off').first);
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(Switch).first);
+    final onOffSwitch = find.byKey(const Key('reminders_on_off_switch'));
+    await tester.ensureVisible(onOffSwitch);
+    await tester.pumpAndSettle();
+    await tester.tap(onOffSwitch);
     await tester.pumpAndSettle();
 
     expect(harness.controller.remindersSilenced, isTrue);
@@ -114,11 +118,8 @@ void main() {
     final gregorianFinder = find.byWidgetPredicate(
       (widget) => widget is RadioListTile<WidgetCalendarDisplay> && widget.value == WidgetCalendarDisplay.gregorian,
     );
-    await tester.scrollUntilVisible(
-      gregorianFinder,
-      100,
-      scrollable: find.byType(Scrollable).first,
-    );
+    await tester.ensureVisible(gregorianFinder);
+    await tester.pumpAndSettle();
     await tester.tap(gregorianFinder);
     await tester.pumpAndSettle();
 
@@ -126,11 +127,8 @@ void main() {
     verify(() => harness.database.saveWidgetCalendarDisplay('gregorian')).called(1);
 
     final switchFinder = find.byKey(const Key('show_secondary_calendar_date_switch'));
-    await tester.scrollUntilVisible(
-      switchFinder,
-      100,
-      scrollable: find.byType(Scrollable).first,
-    );
+    await tester.ensureVisible(switchFinder);
+    await tester.pumpAndSettle();
     await tester.tap(switchFinder);
     await tester.pumpAndSettle();
 
@@ -149,16 +147,14 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.scrollUntilVisible(
-      find.text('Reminders on/off'),
-      200,
-      scrollable: find.byType(Scrollable).first,
-    );
-    await tester.tap(find.text('Reminders on/off'));
+    await tester.tap(find.text('Home screen settings'));
     await tester.pumpAndSettle();
-    await tester.drag(find.byType(ListView), const Offset(0, -400));
+    await tester.tap(find.text('Reminders on/off').first);
     await tester.pumpAndSettle();
-    await tester.tap(find.byType(Switch).at(1));
+    final vibrationSwitch = find.byKey(const Key('reminder_vibration_switch'));
+    await tester.ensureVisible(vibrationSwitch);
+    await tester.pumpAndSettle();
+    await tester.tap(vibrationSwitch);
     await tester.pumpAndSettle();
 
     expect(harness.controller.reminderVibrationEnabled, isFalse);

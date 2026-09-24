@@ -276,6 +276,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get themeDark => 'داكن';
 
   @override
+  String get homeScreenSettingsSectionTitle => 'إعدادات الشاشة الرئيسية';
+
+  @override
   String get appBarRemainingTitle => 'نص الوقت المتبقي في شريط التطبيق';
 
   @override

@@ -127,6 +127,7 @@
   "themeSystem": "Системная",
   "themeLight": "Светлая",
   "themeDark": "Тёмная",
+  "homeScreenSettingsSectionTitle": "Настройки главного экрана",
   "appBarRemainingTitle": "Текст оставшегося времени в заголовке",
   "showInTitle": "Показывать в заголовке",
   "showAtRight": "Показывать справа",

@@ -598,6 +598,12 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @homeScreenSettingsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home screen settings'**
+  String get homeScreenSettingsSectionTitle;
+
   /// No description provided for @appBarRemainingTitle.
   ///
   /// In en, this message translates to:

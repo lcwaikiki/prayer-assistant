@@ -279,6 +279,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get themeDark => 'تیره';
 
   @override
+  String get homeScreenSettingsSectionTitle => 'تنظیمات صفحه اصلی';
+
+  @override
   String get appBarRemainingTitle => 'متن زمان باقی‌مانده نوار بالا';
 
   @override

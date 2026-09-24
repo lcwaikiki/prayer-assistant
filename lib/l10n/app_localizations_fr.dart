@@ -278,6 +278,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get themeDark => 'Sombre';
 
   @override
+  String get homeScreenSettingsSectionTitle =>
+      'Paramètres de l\'écran d\'accueil';
+
+  @override
   String get appBarRemainingTitle =>
       'Texte restant dans la barre d\'application';
 

@@ -87,6 +87,7 @@
   "themeSystem": "Systemstandard",
   "themeLight": "Hell",
   "themeDark": "Dunkel",
+  "homeScreenSettingsSectionTitle": "Startbildschirm-Einstellungen",
   "appBarRemainingTitle": "Restzeit im App-Bar",
   "showInTitle": "Im Titel anzeigen",
   "showAtRight": "Rechts anzeigen",

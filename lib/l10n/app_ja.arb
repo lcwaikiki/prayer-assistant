@@ -87,6 +87,7 @@
   "themeSystem": "システム設定",
   "themeLight": "ライト",
   "themeDark": "ダーク",
+  "homeScreenSettingsSectionTitle": "ホーム画面の設定",
   "appBarRemainingTitle": "ホーム上部バーの残り時間表示",
   "showInTitle": "タイトルに表示",
   "showAtRight": "右側に表示",

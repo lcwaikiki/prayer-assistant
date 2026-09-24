@@ -87,6 +87,7 @@
   "themeSystem": "Sistem varsayılanı",
   "themeLight": "Açık",
   "themeDark": "Koyu",
+  "homeScreenSettingsSectionTitle": "Ana ekran ayarları",
   "appBarRemainingTitle": "Ana sayfa üst çubuk kalan süre",
   "showInTitle": "Başlıkta göster",
   "showAtRight": "Sağda göster",

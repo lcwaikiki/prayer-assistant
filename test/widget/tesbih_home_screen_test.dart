@@ -138,7 +138,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('TAP'), findsOneWidget);
-    expect(find.byType(FilledButton), findsWidgets);
+    expect(find.byKey(const Key('big_tap_button')), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

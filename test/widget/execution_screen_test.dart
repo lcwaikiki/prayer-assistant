@@ -85,6 +85,30 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('shows an outlined tap button while the counter is empty', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await _pumpExecution(tester, harness, item: _item());
+
+    expect(find.widgetWithText(OutlinedButton, 'TAP'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'TAP'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('keeps the outlined tap button once progress has started', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await _pumpExecution(tester, harness, item: _item(progress: 5));
+
+    expect(find.widgetWithText(OutlinedButton, 'TAP'), findsOneWidget);
+    expect(find.widgetWithText(FilledButton, 'TAP'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('tapping TAP increments progress and triggers a standard buzz',
       (tester) async {
     final harness = TestHarness.create();

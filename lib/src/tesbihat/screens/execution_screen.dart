@@ -275,11 +275,18 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
             const SizedBox(height: 20),
             Expanded(
               child: SizedBox.expand(
-                child: FilledButton(
+                child: OutlinedButton(
                   key: const Key('big_tap_button'),
                   onPressed: item.currentProgress >= item.count
                       ? null
                       : handleTap,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.primary,
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      width: 2,
+                    ),
+                  ),
                   child: Text(
                     l10n.tap,
                     style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),

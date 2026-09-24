@@ -205,6 +205,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get noResults => 'Tidak ada hasil';
 
   @override
+  String get noInternetTitle => 'Tidak ada koneksi internet';
+
+  @override
+  String get noInternetMessage =>
+      'Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi.';
+
+  @override
+  String get retry => 'Coba lagi';
+
+  @override
   String get saveLocation => 'Simpan lokasi';
 
   @override

@@ -196,6 +196,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noResults => '无结果';
 
   @override
+  String get noInternetTitle => '无网络连接';
+
+  @override
+  String get noInternetMessage => '无法连接到服务器。请检查网络后重试。';
+
+  @override
+  String get retry => '重试';
+
+  @override
   String get saveLocation => '保存位置';
 
   @override

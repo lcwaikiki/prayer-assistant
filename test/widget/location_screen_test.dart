@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/services/imsakiyem_api.dart';
 import 'package:prayer_assistant/src/services/location_resolver.dart';
 import 'package:prayer_assistant/src/ui/location_screen.dart';
 
@@ -216,6 +217,20 @@ void main() {
     expect(saveButton.onPressed, isNotNull);
 
     await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('reloadLocationOptions flags a connectivity error',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    when(() => harness.api.getCountries()).thenThrow(
+      const NetworkException('Failed host lookup'),
+    );
+
+    await harness.controller.reloadLocationOptions();
+
+    expect(harness.controller.hasNetworkError, isTrue);
+    expect(harness.controller.error, contains('Failed host lookup'));
   });
 
   testWidgets('country names are translated and sorted ascending',

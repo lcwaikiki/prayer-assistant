@@ -203,6 +203,16 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noResults => 'لا توجد نتائج';
 
   @override
+  String get noInternetTitle => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get noInternetMessage =>
+      'تعذّر الوصول إلى الخادم. تحقّق من اتصالك وحاول مجددًا.';
+
+  @override
+  String get retry => 'إعادة المحاولة';
+
+  @override
   String get saveLocation => 'حفظ الموقع';
 
   @override

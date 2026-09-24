@@ -90,6 +90,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
         final day = controller.today;
         if (day == null) {
+          if (controller.hasNetworkError) {
+            return _EmptyState(
+              icon: Icons.wifi_off_outlined,
+              title: context.l10n.noInternetTitle,
+              subtitle: context.l10n.noInternetMessage,
+              action: FilledButton.icon(
+                onPressed: controller.isBusy
+                    ? null
+                    : () => controller.refreshPrayerData(forceSync: true),
+                icon: const Icon(Icons.refresh),
+                label: Text(context.l10n.retry),
+              ),
+            );
+          }
           return _EmptyState(
             icon: Icons.schedule_outlined,
             title: context.l10n.homeNoPrayerTimesTitle,

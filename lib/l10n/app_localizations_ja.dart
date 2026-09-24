@@ -196,6 +196,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noResults => '結果なし';
 
   @override
+  String get noInternetTitle => 'インターネット接続がありません';
+
+  @override
+  String get noInternetMessage => 'サーバーに接続できませんでした。接続を確認して再試行してください。';
+
+  @override
+  String get retry => '再試行';
+
+  @override
   String get saveLocation => '場所を保存';
 
   @override

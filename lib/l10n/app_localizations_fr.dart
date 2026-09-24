@@ -205,6 +205,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noResults => 'Aucun résultat';
 
   @override
+  String get noInternetTitle => 'Pas de connexion Internet';
+
+  @override
+  String get noInternetMessage =>
+      'Impossible d\'atteindre le serveur. Vérifiez votre connexion et réessayez.';
+
+  @override
+  String get retry => 'Réessayer';
+
+  @override
   String get saveLocation => 'Enregistrer le lieu';
 
   @override

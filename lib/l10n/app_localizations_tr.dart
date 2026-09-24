@@ -205,6 +205,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noResults => 'Sonuç yok';
 
   @override
+  String get noInternetTitle => 'İnternet bağlantısı yok';
+
+  @override
+  String get noInternetMessage =>
+      'Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.';
+
+  @override
+  String get retry => 'Yeniden dene';
+
+  @override
   String get saveLocation => 'Konumu kaydet';
 
   @override

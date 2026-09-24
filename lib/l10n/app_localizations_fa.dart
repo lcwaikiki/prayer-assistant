@@ -206,6 +206,16 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noResults => 'نتیجه‌ای یافت نشد';
 
   @override
+  String get noInternetTitle => 'اتصال اینترنت نیست';
+
+  @override
+  String get noInternetMessage =>
+      'دسترسی به سرور ممکن نشد. اتصال خود را بررسی و دوباره تلاش کنید.';
+
+  @override
+  String get retry => 'تلاش مجدد';
+
+  @override
   String get saveLocation => 'ذخیره مکان';
 
   @override

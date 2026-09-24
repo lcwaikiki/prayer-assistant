@@ -460,6 +460,24 @@ abstract class AppLocalizations {
   /// **'No results'**
   String get noResults;
 
+  /// No description provided for @noInternetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No internet connection'**
+  String get noInternetTitle;
+
+  /// No description provided for @noInternetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the prayer server. Check your connection and try again.'**
+  String get noInternetMessage;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
   /// No description provided for @saveLocation.
   ///
   /// In en, this message translates to:

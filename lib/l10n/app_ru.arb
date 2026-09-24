@@ -99,6 +99,9 @@
   "district": "Район",
   "search": "Поиск",
   "noResults": "Нет результатов",
+  "noInternetTitle": "Нет подключения к интернету",
+  "noInternetMessage": "Не удалось подключиться к серверу. Проверьте соединение и повторите попытку.",
+  "retry": "Повторить",
   "saveLocation": "Сохранить местоположение",
   "selectedLocation": "Выбрано: {location}",
   "@selectedLocation": {

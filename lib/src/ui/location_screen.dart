@@ -17,7 +17,6 @@ class _LocationScreenState extends State<LocationScreen> {
   LocationNode? _country;
   LocationNode? _state;
   LocationNode? _district;
-  String? _lastShownError;
 
   static LocationNode? _findById(List<LocationNode> items, String id) {
     for (final item in items) {
@@ -71,20 +70,9 @@ class _LocationScreenState extends State<LocationScreen> {
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
         final error = controller.error;
-        // Show each distinct error once; a stale error must not re-pop
-        // on every rebuild (e.g. tapping the GPS button would otherwise
-        // surface an old startup failure).
-        if (error != null && error.isNotEmpty && error != _lastShownError) {
-          _lastShownError = error;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (!mounted) {
-              return;
-            }
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(error)));
-          });
-        }
+        final hasError = error != null && error.isNotEmpty;
+        final hasNetworkError = controller.hasNetworkError;
+        final errorMessage = error ?? '';
 
         // A GPS pick (or a save elsewhere) sets the controller's location
         // without touching this screen's local state; resolve the dropdowns
@@ -127,6 +115,18 @@ class _LocationScreenState extends State<LocationScreen> {
               context.l10n.locationHelp,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+            if (hasError) ...[
+              const SizedBox(height: 16),
+              _ConnectionErrorCard(
+                title: hasNetworkError
+                    ? context.l10n.noInternetTitle
+                    : null,
+                message: hasNetworkError ? context.l10n.noInternetMessage : errorMessage,
+                onRetry: controller.isBusy
+                    ? null
+                    : () => controller.reloadLocationOptions(),
+              ),
+            ],
             const SizedBox(height: 20),
             FilledButton.icon(
               onPressed: controller.isBusy
@@ -409,6 +409,72 @@ class _LocationPickerSheetState extends State<_LocationPickerSheet> {
                   ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Inline error banner shown when the location options fail to load. A
+/// connectivity failure (see [NetworkException]) gets a friendly
+/// "cannot connect" message plus a Retry button.
+class _ConnectionErrorCard extends StatelessWidget {
+  const _ConnectionErrorCard({
+    required this.message,
+    required this.onRetry,
+    this.title,
+  });
+
+  final String? title;
+  final String message;
+  final VoidCallback? onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Card(
+      color: colorScheme.errorContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.wifi_off_outlined, color: colorScheme.onErrorContainer),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    title ?? message,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: colorScheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            if (title != null) ...[
+              const SizedBox(height: 6),
+              Text(
+                message,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: colorScheme.onErrorContainer,
+                ),
+              ),
+            ],
+            if (onRetry != null) ...[
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: FilledButton.icon(
+                  key: const Key('connection_retry_button'),
+                  onPressed: onRetry,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(context.l10n.retry),
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

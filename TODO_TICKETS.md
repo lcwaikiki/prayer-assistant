@@ -29,6 +29,7 @@
 
 ## 🔵 Improvements (Imp / Impr)
 - [x] **General UI / Form:** Form screens bottom buttons are behind system navigation buttons `[Done]`
+- [x] **Connectivity:** Show a "cannot connect to internet" message with a Retry button on all internet connection errors (e.g. "Could not reach prayer server... Failed host lookup") `[Done]`
 - [ ] **Beads & Groups:**
   - [ ] Bulk delete feature `[Not Started]`
   - [ ] Delete this occurrence in calendar `[Not Started]`
@@ -65,8 +66,7 @@
   - [x] Bead check interval can be set to zero when it should be "none" `[Done]`
   - [x] Weekly reminder in beads turns to everyday after app restart (recheck, fix, and unit tests) `[Done]`
 - [x] **Notifications & Theme:**
-  - [x] Notifications and widgets cannot be read when the theme in light mode issue `[Done]`
-- [ ] **Tracking & Prayer Times:**
+  - [x] Notifications and widgets cannot be read when the theme in light mode issue `[Done]`- [ ] **Tracking & Prayer Times:**
   - [ ] Everyday reminders should not be marked in day? `[Not Started]`
   - [x] Checks at the beginning of 6 prayer times in Today tab stop working after some time `[Done]`
   - [x] Checking prayer times in the prayer times table does not reflect on checks in the Today tab `[Done]`

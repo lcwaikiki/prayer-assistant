@@ -204,6 +204,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noResults => 'No results';
 
   @override
+  String get noInternetTitle => 'No internet connection';
+
+  @override
+  String get noInternetMessage =>
+      'Couldn\'t reach the prayer server. Check your connection and try again.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
   String get saveLocation => 'Save Location';
 
   @override

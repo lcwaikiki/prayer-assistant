@@ -205,6 +205,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noResults => 'کوئی نتیجہ نہیں';
 
   @override
+  String get noInternetTitle => 'انٹرنیٹ کنکشن نہیں';
+
+  @override
+  String get noInternetMessage =>
+      'سرور تک رسائی نہیں ہو سکی۔ اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get retry => 'دوبارہ کوشش';
+
+  @override
   String get saveLocation => 'مقام محفوظ کریں';
 
   @override

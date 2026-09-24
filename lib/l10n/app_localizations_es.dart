@@ -206,6 +206,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get noResults => 'Sin resultados';
 
   @override
+  String get noInternetTitle => 'Sin conexión a internet';
+
+  @override
+  String get noInternetMessage =>
+      'No se pudo conectar al servidor. Revisa tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get retry => 'Reintentar';
+
+  @override
   String get saveLocation => 'Guardar ubicación';
 
   @override

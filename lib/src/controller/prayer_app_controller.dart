@@ -59,6 +59,7 @@ class PrayerAppController extends ChangeNotifier {
   bool _isInitializing = true;
   bool _isBusy = false;
   String? _error;
+  bool _hasNetworkError = false;
   List<LocationNode> _countries = const <LocationNode>[];
   List<LocationNode> _states = const <LocationNode>[];
   List<LocationNode> _districts = const <LocationNode>[];
@@ -108,6 +109,10 @@ class PrayerAppController extends ChangeNotifier {
   bool get isInitializing => _isInitializing;
   bool get isBusy => _isBusy;
   String? get error => _error;
+
+  /// True when the last failure was a connectivity/transport error (see
+  /// [NetworkException]); drives the "cannot connect" message + retry.
+  bool get hasNetworkError => _hasNetworkError;
   int get tabIndex => _tabIndex;
 
   List<LocationNode> get countries => _countries;
@@ -605,9 +610,9 @@ class PrayerAppController extends ChangeNotifier {
       _useDefaultDocumentsFolder = _offlineFolderUri == null
           ? await _offlineFolderService.documentsFolderAvailable()
           : false;
-      _error = null;
+      _clearError();
     } catch (e) {
-      _error = e.toString();
+      _recordError(e);
     } finally {
       _isInitializing = false;
       _setLoading(false);
@@ -629,6 +634,18 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Records a failure, flagging connectivity errors so the UI can show the
+  /// "cannot connect" message with a retry action.
+  void _recordError(Object e) {
+    _error = e.toString();
+    _hasNetworkError = e is NetworkException;
+  }
+
+  void _clearError() {
+    _error = null;
+    _hasNetworkError = false;
+  }
+
   /// Retries loading the location option lists after a failed startup fetch
   /// (a network hiccup during [initialize] left the lists empty and no
   /// subsequent retry existed). Also reloads the saved location's
@@ -644,10 +661,10 @@ class PrayerAppController extends ChangeNotifier {
         await _loadStates(selected.countryId);
         await _loadDistricts(selected.stateId);
       }
-      _error = null;
+      _clearError();
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
+      _recordError(e);
     }
   }
 
@@ -681,10 +698,10 @@ class PrayerAppController extends ChangeNotifier {
       _selectedLocation = selected;
       await refreshPrayerData(forceSync: true);
       _tabIndex = 2;
-      _error = null;
+      _clearError();
 
     } catch (e) {
-      _error = e.toString();
+      _recordError(e);
     } finally {
       _setLoading(false);
     }
@@ -735,7 +752,7 @@ class PrayerAppController extends ChangeNotifier {
       }
       return (country: country, state: state, district: district);
     } catch (e) {
-      _error = e.toString();
+      _recordError(e);
       return null;
     } finally {
       _setLoading(false);
@@ -758,9 +775,9 @@ class PrayerAppController extends ChangeNotifier {
       );
       await _loadVisibleData(selected.districtId);
       await _syncNotifications();
-      _error = null;
+      _clearError();
     } catch (e) {
-      _error = e.toString();
+      _recordError(e);
     } finally {
       _setLoading(false);
     }

@@ -7,6 +7,18 @@ import 'package:intl/intl.dart';
 
 import '../models/prayer_models.dart';
 
+/// Thrown when the prayer server cannot be reached or answers with a
+/// transport-level failure (no internet, DNS failure, timeout, HTTP error).
+/// Callers use this to show a "cannot connect" message with a retry action.
+class NetworkException implements Exception {
+  const NetworkException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}
+
 class ImsakiyemApi {
   static const _baseUrl = 'https://ezanvakti.imsakiyem.com/api';
 
@@ -64,20 +76,22 @@ class ImsakiyemApi {
           .get(uri, headers: {'Accept': 'application/json'})
           .timeout(const Duration(seconds: 15));
     } on SocketException catch (e) {
-      throw Exception(
+      throw NetworkException(
         'Could not reach prayer server. Check internet/DNS and try again. '
         'Details: ${e.message}',
       );
     } on HttpException catch (e) {
-      throw Exception('Network HTTP error: ${e.message}');
+      throw NetworkException('Network HTTP error: ${e.message}');
     } on FormatException {
       throw Exception('Server response format is invalid.');
     } on TimeoutException {
-      throw Exception('Request timed out. Please try again.');
+      throw NetworkException('Request timed out. Please try again.');
     }
 
     if (response.statusCode != 200) {
-      throw Exception('Request failed (${response.statusCode}) for $path');
+      throw NetworkException(
+        'Request failed (${response.statusCode}) for $path',
+      );
     }
 
     final Map<String, dynamic> payload;

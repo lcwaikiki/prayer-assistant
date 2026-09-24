@@ -99,6 +99,9 @@
   "district": "District",
   "search": "Search",
   "noResults": "No results",
+  "noInternetTitle": "No internet connection",
+  "noInternetMessage": "Couldn't reach the prayer server. Check your connection and try again.",
+  "retry": "Retry",
   "saveLocation": "Save Location",
   "selectedLocation": "Selected: {location}",
   "@selectedLocation": {

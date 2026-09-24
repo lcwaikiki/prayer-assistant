@@ -206,6 +206,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noResults => 'Нет результатов';
 
   @override
+  String get noInternetTitle => 'Нет подключения к интернету';
+
+  @override
+  String get noInternetMessage =>
+      'Не удалось подключиться к серверу. Проверьте соединение и повторите попытку.';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
   String get saveLocation => 'Сохранить местоположение';
 
   @override

@@ -62,6 +62,8 @@
   "country": "کشور",
   "stateCity": "استان / شهر",
   "district": "ناحیه",
+  "search": "جستجو",
+  "noResults": "نتیجه‌ای یافت نشد",
   "saveLocation": "ذخیره مکان",
   "selectedLocation": "انتخاب‌شده: {location}",
   "historySelectLocationFirst": "برای دیدن فهرست یک‌ساله نماز ابتدا یک مکان انتخاب کنید.",

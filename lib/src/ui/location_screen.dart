@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
+import '../l10n/country_names.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 
@@ -110,6 +111,10 @@ class _LocationScreenState extends State<LocationScreen> {
                           : null)
                 : _district;
 
+        final languageCode = Localizations.localeOf(context).languageCode;
+        String countryLabel(LocationNode node) =>
+            localizedCountryName(node.name, languageCode);
+
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -140,10 +145,11 @@ class _LocationScreenState extends State<LocationScreen> {
               label: Text(context.l10n.useCurrentLocation),
             ),
             const SizedBox(height: 24),
-            _LocationDropdown(
+            _SearchableLocationField(
               title: context.l10n.country,
               value: country,
               items: controller.countries,
+              labelBuilder: countryLabel,
               onChanged: controller.isBusy
                   ? null
                   : (value) async {
@@ -159,10 +165,11 @@ class _LocationScreenState extends State<LocationScreen> {
                     },
             ),
             const SizedBox(height: 16),
-            _LocationDropdown(
+            _SearchableLocationField(
               title: context.l10n.stateCity,
               value: state,
               items: controller.states,
+              labelBuilder: (node) => node.name,
               onChanged: controller.isBusy
                   ? null
                   : (value) async {
@@ -177,10 +184,11 @@ class _LocationScreenState extends State<LocationScreen> {
                     },
             ),
             const SizedBox(height: 16),
-            _LocationDropdown(
+            _SearchableLocationField(
               title: context.l10n.district,
               value: district,
               items: controller.districts,
+              labelBuilder: (node) => node.name,
               onChanged: controller.isBusy
                   ? null
                   : (value) {
@@ -228,47 +236,180 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 }
 
-class _LocationDropdown extends StatelessWidget {
-  const _LocationDropdown({
+/// A tappable field that opens a searchable bottom sheet for picking a
+/// [LocationNode]. Items are shown in ascending order by their display name.
+class _SearchableLocationField extends StatelessWidget {
+  const _SearchableLocationField({
     required this.title,
     required this.value,
     required this.items,
+    required this.labelBuilder,
     required this.onChanged,
   });
 
   final String title;
   final LocationNode? value;
   final List<LocationNode> items;
+  final String Function(LocationNode) labelBuilder;
   final ValueChanged<LocationNode?>? onChanged;
+
+  Future<void> _open(BuildContext context) async {
+    if (onChanged == null || items.isEmpty) {
+      return;
+    }
+    final selected = await showModalBottomSheet<LocationNode>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      builder: (sheetContext) => _LocationPickerSheet(
+        title: title,
+        items: items,
+        labelBuilder: labelBuilder,
+        selectedId: value?.id,
+      ),
+    );
+    if (selected != null) {
+      onChanged!(selected);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    LocationNode? resolvedValue;
-    if (value != null) {
-      final index = items.indexWhere((item) => item.id == value!.id);
-      if (index >= 0) {
-        resolvedValue = items[index];
-      }
-    }
-
-    return DropdownButtonFormField<LocationNode>(
-      key: ValueKey('${title}_${resolvedValue?.id ?? 'none'}_${items.length}'),
-      initialValue: resolvedValue,
-      decoration: InputDecoration(
-        labelText: title,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+    final enabled = onChanged != null && items.isNotEmpty;
+    return InkWell(
+      onTap: enabled ? () => _open(context) : null,
+      borderRadius: BorderRadius.circular(12),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: title,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          suffixIcon: const Icon(Icons.search),
+          enabled: enabled,
+        ),
+        child: Text(
+          value == null ? '' : labelBuilder(value!),
+          style: Theme.of(context).textTheme.bodyLarge,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
-      items: items
-          .map(
-            (item) => DropdownMenuItem<LocationNode>(
-              value: item,
-              child: Text(item.name),
-            ),
-          )
-          .toList(),
-      onChanged: onChanged,
-      isExpanded: true,
     );
   }
 }
 
+class _LocationPickerSheet extends StatefulWidget {
+  const _LocationPickerSheet({
+    required this.title,
+    required this.items,
+    required this.labelBuilder,
+    required this.selectedId,
+  });
+
+  final String title;
+  final List<LocationNode> items;
+  final String Function(LocationNode) labelBuilder;
+  final String? selectedId;
+
+  @override
+  State<_LocationPickerSheet> createState() => _LocationPickerSheetState();
+}
+
+class _LocationPickerSheetState extends State<_LocationPickerSheet> {
+  final TextEditingController _searchController = TextEditingController();
+  late List<LocationNode> _sorted;
+  String _query = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _sorted = [...widget.items]
+      ..sort(
+        (a, b) => widget
+            .labelBuilder(a)
+            .toLowerCase()
+            .compareTo(widget.labelBuilder(b).toLowerCase()),
+      );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<LocationNode> get _filtered {
+    if (_query.trim().isEmpty) {
+      return _sorted;
+    }
+    final q = _query.trim().toLowerCase();
+    return _sorted
+        .where((node) => widget.labelBuilder(node).toLowerCase().contains(q))
+        .toList(growable: false);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final filtered = _filtered;
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: 0.75,
+      maxChildSize: 0.95,
+      builder: (context, scrollController) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              key: const Key('location_search_field'),
+              controller: _searchController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: context.l10n.search,
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onChanged: (value) => setState(() => _query = value),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: filtered.isEmpty
+                ? Center(child: Text(context.l10n.noResults))
+                : ListView.builder(
+                    controller: scrollController,
+                    itemCount: filtered.length,
+                    itemBuilder: (context, index) {
+                      final node = filtered[index];
+                      final isSelected = node.id == widget.selectedId;
+                      return ListTile(
+                        title: Text(widget.labelBuilder(node)),
+                        trailing: isSelected
+                            ? const Icon(Icons.check)
+                            : null,
+                        onTap: () => Navigator.of(context).pop(node),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+}

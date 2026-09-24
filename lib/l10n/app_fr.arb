@@ -62,6 +62,8 @@
   "country": "Pays",
   "stateCity": "État / Ville",
   "district": "District",
+  "search": "Rechercher",
+  "noResults": "Aucun résultat",
   "saveLocation": "Enregistrer le lieu",
   "selectedLocation": "Sélectionné : {location}",
   "historySelectLocationFirst": "Sélectionnez d'abord un lieu pour voir la liste des prières sur 1 an.",

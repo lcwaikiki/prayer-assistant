@@ -200,6 +200,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get district => 'Distrito';
 
   @override
+  String get search => 'Buscar';
+
+  @override
+  String get noResults => 'Sin resultados';
+
+  @override
   String get saveLocation => 'Guardar ubicación';
 
   @override

@@ -190,6 +190,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get district => '地区';
 
   @override
+  String get search => '搜索';
+
+  @override
+  String get noResults => '无结果';
+
+  @override
   String get saveLocation => '保存位置';
 
   @override

@@ -199,6 +199,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get district => 'Distrik';
 
   @override
+  String get search => 'Cari';
+
+  @override
+  String get noResults => 'Tidak ada hasil';
+
+  @override
   String get saveLocation => 'Simpan lokasi';
 
   @override

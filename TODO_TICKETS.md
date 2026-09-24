@@ -20,6 +20,10 @@
   - [x] Moon card expanded moon calendar `[Done]`
   - [x] Show moon phases in Today tab or Qibla tab `[Done]`
   - [x] Special days in calendar `[Done]`
+- [ ] **Location:**
+  - [x] Translate country names to the current app language `[Done]`
+  - [x] Order country/state/city/district lists ascending `[Done]`
+  - [x] Search capability for country, state/city and district `[Done]`
 
 ---
 

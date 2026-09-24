@@ -97,6 +97,8 @@
   "country": "Страна",
   "stateCity": "Регион / Город",
   "district": "Район",
+  "search": "Поиск",
+  "noResults": "Нет результатов",
   "saveLocation": "Сохранить местоположение",
   "selectedLocation": "Выбрано: {location}",
   "@selectedLocation": {

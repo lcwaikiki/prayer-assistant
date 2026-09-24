@@ -62,6 +62,8 @@
   "country": "Negara",
   "stateCity": "Provinsi / Kota",
   "district": "Distrik",
+  "search": "Cari",
+  "noResults": "Tidak ada hasil",
   "saveLocation": "Simpan lokasi",
   "selectedLocation": "Dipilih: {location}",
   "historySelectLocationFirst": "Pilih lokasi terlebih dahulu untuk melihat daftar salat 1 tahun.",

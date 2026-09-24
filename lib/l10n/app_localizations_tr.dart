@@ -199,6 +199,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get district => 'İlçe';
 
   @override
+  String get search => 'Ara';
+
+  @override
+  String get noResults => 'Sonuç yok';
+
+  @override
   String get saveLocation => 'Konumu kaydet';
 
   @override

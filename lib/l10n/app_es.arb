@@ -62,6 +62,8 @@
   "country": "País",
   "stateCity": "Estado / Ciudad",
   "district": "Distrito",
+  "search": "Buscar",
+  "noResults": "Sin resultados",
   "saveLocation": "Guardar ubicación",
   "selectedLocation": "Seleccionado: {location}",
   "historySelectLocationFirst": "Selecciona primero una ubicación para ver la lista anual de oraciones.",

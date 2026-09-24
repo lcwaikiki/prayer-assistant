@@ -199,6 +199,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get district => 'ضلع';
 
   @override
+  String get search => 'تلاش';
+
+  @override
+  String get noResults => 'کوئی نتیجہ نہیں';
+
+  @override
   String get saveLocation => 'مقام محفوظ کریں';
 
   @override

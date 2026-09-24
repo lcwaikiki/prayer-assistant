@@ -190,6 +190,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get district => '地区';
 
   @override
+  String get search => '検索';
+
+  @override
+  String get noResults => '結果なし';
+
+  @override
   String get saveLocation => '場所を保存';
 
   @override

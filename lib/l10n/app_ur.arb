@@ -62,6 +62,8 @@
   "country": "ملک",
   "stateCity": "صوبہ / شہر",
   "district": "ضلع",
+  "search": "تلاش",
+  "noResults": "کوئی نتیجہ نہیں",
   "saveLocation": "مقام محفوظ کریں",
   "selectedLocation": "منتخب شدہ: {location}",
   "historySelectLocationFirst": "1 سالہ نماز فہرست دیکھنے کے لیے پہلے مقام منتخب کریں۔",

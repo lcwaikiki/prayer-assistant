@@ -200,6 +200,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get district => 'Район';
 
   @override
+  String get search => 'Поиск';
+
+  @override
+  String get noResults => 'Нет результатов';
+
+  @override
   String get saveLocation => 'Сохранить местоположение';
 
   @override

@@ -62,6 +62,8 @@
   "country": "Ülke",
   "stateCity": "İl / Şehir",
   "district": "İlçe",
+  "search": "Ara",
+  "noResults": "Sonuç yok",
   "saveLocation": "Konumu kaydet",
   "selectedLocation": "Seçilen: {location}",
   "historySelectLocationFirst": "1 yıllık namaz listesini görmek için önce konum seçin.",

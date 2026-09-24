@@ -62,6 +62,8 @@
   "country": "国家",
   "stateCity": "省/州 / 城市",
   "district": "地区",
+  "search": "搜索",
+  "noResults": "无结果",
   "saveLocation": "保存位置",
   "selectedLocation": "已选择：{location}",
   "historySelectLocationFirst": "请先选择位置以查看 1 年礼拜时间列表。",

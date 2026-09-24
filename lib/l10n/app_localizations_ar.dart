@@ -197,6 +197,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get district => 'المنطقة';
 
   @override
+  String get search => 'بحث';
+
+  @override
+  String get noResults => 'لا توجد نتائج';
+
+  @override
   String get saveLocation => 'حفظ الموقع';
 
   @override

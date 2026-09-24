@@ -198,6 +198,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get district => 'District';
 
   @override
+  String get search => 'Search';
+
+  @override
+  String get noResults => 'No results';
+
+  @override
   String get saveLocation => 'Save Location';
 
   @override

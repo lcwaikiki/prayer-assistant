@@ -217,6 +217,75 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('country names are translated and sorted ascending',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.api.getCountries()).thenAnswer(
+      (_) async => [
+        sampleLocationNode(id: 'de', name: 'ALMANYA'),
+        sampleLocationNode(id: 'eg', name: 'MISIR'),
+        sampleLocationNode(id: 'fr', name: 'FRANSA'),
+      ],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: LocationScreen()),
+      locale: const Locale('en'),
+    );
+
+    // Open the country picker sheet.
+    await tester.tap(find.text('Country'));
+    await tester.pumpAndSettle();
+
+    // Translated and sorted: Egypt, France, Germany.
+    final tiles = tester
+        .widgetList<ListTile>(find.byType(ListTile))
+        .map((tile) => (tile.title! as Text).data)
+        .toList();
+    expect(tiles, ['Egypt', 'France', 'Germany']);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('search filters the country list', (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.api.getCountries()).thenAnswer(
+      (_) async => [
+        sampleLocationNode(id: 'de', name: 'ALMANYA'),
+        sampleLocationNode(id: 'eg', name: 'MISIR'),
+        sampleLocationNode(id: 'fr', name: 'FRANSA'),
+      ],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: LocationScreen()),
+      locale: const Locale('en'),
+    );
+
+    await tester.tap(find.text('Country'));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+      find.byKey(const Key('location_search_field')),
+      'ger',
+    );
+    await tester.pumpAndSettle();
+
+    final tiles = tester
+        .widgetList<ListTile>(find.byType(ListTile))
+        .map((tile) => (tile.title! as Text).data)
+        .toList();
+    expect(tiles, ['Germany']);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
 
 Future<void> _pickDropdown(

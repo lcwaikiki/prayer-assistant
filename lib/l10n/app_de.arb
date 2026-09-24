@@ -62,6 +62,8 @@
   "country": "Land",
   "stateCity": "Bundesland / Stadt",
   "district": "Bezirk",
+  "search": "Suchen",
+  "noResults": "Keine Ergebnisse",
   "saveLocation": "Ort speichern",
   "selectedLocation": "Ausgewählt: {location}",
   "historySelectLocationFirst": "Wähle zuerst einen Ort, um die Gebetsliste für 1 Jahr zu sehen.",

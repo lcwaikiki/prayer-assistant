@@ -448,6 +448,18 @@ abstract class AppLocalizations {
   /// **'District'**
   String get district;
 
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get noResults;
+
   /// No description provided for @saveLocation.
   ///
   /// In en, this message translates to:

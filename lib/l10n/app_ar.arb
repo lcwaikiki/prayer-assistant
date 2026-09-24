@@ -62,6 +62,8 @@
   "country": "الدولة",
   "stateCity": "الولاية / المدينة",
   "district": "المنطقة",
+  "search": "بحث",
+  "noResults": "لا توجد نتائج",
   "saveLocation": "حفظ الموقع",
   "selectedLocation": "المحدد: {location}",
   "historySelectLocationFirst": "اختر موقعًا أولًا لعرض قائمة الصلاة لسنة كاملة.",

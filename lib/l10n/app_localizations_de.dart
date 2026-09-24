@@ -199,6 +199,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get district => 'Bezirk';
 
   @override
+  String get search => 'Suchen';
+
+  @override
+  String get noResults => 'Keine Ergebnisse';
+
+  @override
   String get saveLocation => 'Ort speichern';
 
   @override

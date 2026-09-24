@@ -62,6 +62,8 @@
   "country": "国",
   "stateCity": "州 / 市",
   "district": "地区",
+  "search": "検索",
+  "noResults": "結果なし",
   "saveLocation": "場所を保存",
   "selectedLocation": "選択中: {location}",
   "historySelectLocationFirst": "1年分の礼拝一覧を見るには先に場所を選択してください。",

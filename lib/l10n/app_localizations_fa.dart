@@ -200,6 +200,12 @@ class AppLocalizationsFa extends AppLocalizations {
   String get district => 'ناحیه';
 
   @override
+  String get search => 'جستجو';
+
+  @override
+  String get noResults => 'نتیجه‌ای یافت نشد';
+
+  @override
   String get saveLocation => 'ذخیره مکان';
 
   @override

@@ -97,6 +97,8 @@
   "country": "Country",
   "stateCity": "State / City",
   "district": "District",
+  "search": "Search",
+  "noResults": "No results",
   "saveLocation": "Save Location",
   "selectedLocation": "Selected: {location}",
   "@selectedLocation": {

@@ -1173,4 +1173,330 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'ایام بیض (13، 14، 15)';
+
+  @override
+  String get beadsAppTitle => 'تسبیح کاؤنٹر';
+
+  @override
+  String get beadsMilestones => 'تسبیح';
+
+  @override
+  String get beadsSwitchToLight => 'لائٹ موڈ پر جائیں';
+
+  @override
+  String get beadsSwitchToDark => 'ڈارک موڈ پر جائیں';
+
+  @override
+  String get beadsLanguage => 'زبان';
+
+  @override
+  String get beadsChooseLanguage => 'زبان منتخب کریں';
+
+  @override
+  String get beadsNoMilestones =>
+      'ابھی کوئی تسبیح نہیں۔ شامل کرنے کے لیے + دبائیں۔';
+
+  @override
+  String get beadsStatsTitle => 'تاریخ';
+
+  @override
+  String get beadsStatsToday => 'آج';
+
+  @override
+  String get beadsStatsLast7Days => '7 دن';
+
+  @override
+  String get beadsStatsTotal => 'کل';
+
+  @override
+  String get beadsDeleted => 'حذف ہوگیا';
+
+  @override
+  String get beadsUndo => 'واپس لائیں';
+
+  @override
+  String get beadsEdit => 'ترمیم';
+
+  @override
+  String get beadsDuplicate => 'نقل کریں';
+
+  @override
+  String get beadsClear => 'صاف کریں';
+
+  @override
+  String get beadsDelete => 'حذف';
+
+  @override
+  String get beadsCount => 'گنتی';
+
+  @override
+  String get beadsCheck => 'چیک';
+
+  @override
+  String get beadsSet => 'سیٹ';
+
+  @override
+  String get beadsProgress => 'پیش رفت';
+
+  @override
+  String get beadsCreateMilestone => 'نئی تسبیح بنائیں';
+
+  @override
+  String get beadsEditMilestone => 'تسبیح میں ترمیم';
+
+  @override
+  String get beadsTitle => 'عنوان';
+
+  @override
+  String get beadsNotes => 'نوٹس';
+
+  @override
+  String get beadsNotesHint => 'اس تسبیح کے لیے نوٹس لکھیں...';
+
+  @override
+  String get beadsCountField => 'گنتی';
+
+  @override
+  String get beadsCheckInterval => 'چیک وقفہ';
+
+  @override
+  String get beadsCheckHelper =>
+      'یہ گنتی کے نصف سے کم یا برابر ہونا چاہیے۔ بغیر چیک پوائنٹ کے لیے 0 درج کریں۔';
+
+  @override
+  String get beadsSetCount => 'سیٹ گنتی';
+
+  @override
+  String get beadsSetCountHelper => 'سیٹ گنتی، گنتی سے زیادہ نہیں ہونی چاہیے۔';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'سیٹ گنتی صرف پیش رفت اسکرین سے تبدیل ہو سکتی ہے۔';
+
+  @override
+  String get beadsVibrationIntensity => 'وائبریشن شدت';
+
+  @override
+  String get beadsReminderTitle => 'یاد دہانی';
+
+  @override
+  String get beadsReminderEnable => 'یاد دہانی فعال کریں';
+
+  @override
+  String get beadsReminderRepeatOnce => 'ایک بار';
+
+  @override
+  String get beadsReminderRepeatDaily => 'روزانہ';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'ہفتہ وار';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'ماہانہ';
+
+  @override
+  String get beadsReminderRepeatYearly => 'سالانہ';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'تکرار کی تعداد';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'یاد دہانی رکنے سے پہلے کتنی بار چلے گی (بند = ہمیشہ دہرائی جائے)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => '2 سے 100 تک نمبر درج کریں';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'دہرائیں';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'مہینے کا دن';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'مہینہ';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'دن';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'تکرار';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'ماہانہ بنیاد';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'سالانہ بنیاد';
+
+  @override
+  String get beadsReminderBasisGregorian => 'عیسوی';
+
+  @override
+  String get beadsReminderBasisHijri => 'ہجری';
+
+  @override
+  String get beadsReminderPickDateTime => 'تاریخ اور وقت منتخب کریں';
+
+  @override
+  String get beadsReminderPickDate => 'تاریخ منتخب کریں';
+
+  @override
+  String get beadsReminderPickTime => 'وقت منتخب کریں';
+
+  @override
+  String get beadsReminderNotSet => 'سیٹ نہیں ہے';
+
+  @override
+  String get beadsReminderAnchorTime => 'وقت';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'نماز کا وقت';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'وقت پر';
+
+  @override
+  String get beadsReminderOffsetBefore => 'پہلے';
+
+  @override
+  String get beadsReminderOffsetAfter => 'بعد';
+
+  @override
+  String get beadsReminderMinutesLabel => 'منٹ';
+
+  @override
+  String get beadsReminderSelectPrayer => 'نماز منتخب کریں';
+
+  @override
+  String get beadsSave => 'محفوظ کریں';
+
+  @override
+  String get beadsUpdate => 'اپ ڈیٹ';
+
+  @override
+  String get beadsRequiredSuffix => 'لازمی ہے';
+
+  @override
+  String get beadsMustBeInteger => 'عدد صحیح ہونا چاہیے';
+
+  @override
+  String get beadsCountPositive => 'گنتی مثبت عدد صحیح ہونی چاہیے';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'چیک 0 سے بڑا ہونا چاہیے';
+
+  @override
+  String get beadsCheckHalfError => 'چیک گنتی کے نصف سے زیادہ نہیں ہو سکتا';
+
+  @override
+  String get beadsEnterValidCountFirst => 'پہلے درست گنتی درج کریں';
+
+  @override
+  String get beadsSetCountNegative => 'سیٹ گنتی منفی نہیں ہو سکتی';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'سیٹ گنتی، گنتی سے زیادہ نہیں ہو سکتی';
+
+  @override
+  String get beadsSetCountValueRequired => 'سیٹ گنتی لازمی ہے';
+
+  @override
+  String get beadsItemNotFound => 'آئٹم نہیں ملا';
+
+  @override
+  String get beadsResetProgressTitle => 'پیش رفت ری سیٹ کریں؟';
+
+  @override
+  String get beadsResetProgressBody => 'اس سے موجودہ پیش رفت 0 ہو جائے گی۔';
+
+  @override
+  String get beadsCancel => 'منسوخ';
+
+  @override
+  String get beadsReset => 'ری سیٹ';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'پیش رفت اور سیٹ گنتی میں ترمیم';
+
+  @override
+  String get beadsProgressCount => 'پیش رفت گنتی';
+
+  @override
+  String get beadsSetCountCannotNegative => 'سیٹ گنتی منفی نہیں ہو سکتی';
+
+  @override
+  String get beadsValidProgressNumber => 'درست پیش رفت نمبر درج کریں';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'پیش رفت 0 اور $max کے درمیان ہونی چاہیے';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'باقی گنتی';
+
+  @override
+  String get beadsTap => 'ٹیپ';
+
+  @override
+  String get beadsGroups => 'گروہ';
+
+  @override
+  String get beadsNewGroup => 'نیا گروہ';
+
+  @override
+  String get beadsEditGroup => 'گروہ میں ترمیم';
+
+  @override
+  String get beadsGroupName => 'گروہ کا نام';
+
+  @override
+  String get beadsGroupMembers => 'ارکان';
+
+  @override
+  String get beadsNoBeadsInGroup => 'اس گروہ میں ابھی کوئی تسبیح نہیں۔';
+
+  @override
+  String get beadsAddBead => 'تسبیح شامل کریں';
+
+  @override
+  String get beadsAddBeads => 'تسبیحیں شامل کریں';
+
+  @override
+  String get beadsNewBead => 'نئی تسبیح';
+
+  @override
+  String get beadsDeleteGroup => 'گروہ حذف کریں';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'یہ گروہ حذف کریں؟ تسبیحیں محفوظ رہیں گی۔';
+
+  @override
+  String get beadsRemoveFromGroup => 'گروہ سے نکالیں';
+
+  @override
+  String get beadsNoNotesAdded => 'کوئی نوٹس شامل نہیں کیے گئے۔';
+
+  @override
+  String get beadsSelect => 'منتخب کریں';
+
+  @override
+  String get beadsSelectAll => 'سب منتخب کریں';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count منتخب';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'منتخب $count اشیاء حذف کریں؟';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count حذف ہوگئے';
+  }
 }

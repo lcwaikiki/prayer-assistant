@@ -1140,4 +1140,325 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => '白の日々（13, 14, 15日）';
+
+  @override
+  String get beadsAppTitle => 'ビーズカウンター';
+
+  @override
+  String get beadsMilestones => 'ビーズ';
+
+  @override
+  String get beadsSwitchToLight => 'ライトモードに切り替え';
+
+  @override
+  String get beadsSwitchToDark => 'ダークモードに切り替え';
+
+  @override
+  String get beadsLanguage => '言語';
+
+  @override
+  String get beadsChooseLanguage => '言語を選択';
+
+  @override
+  String get beadsNoMilestones => 'ビーズがありません。+ をタップして追加してください。';
+
+  @override
+  String get beadsStatsTitle => '履歴';
+
+  @override
+  String get beadsStatsToday => '今日';
+
+  @override
+  String get beadsStatsLast7Days => '7日間';
+
+  @override
+  String get beadsStatsTotal => '合計';
+
+  @override
+  String get beadsDeleted => 'を削除しました';
+
+  @override
+  String get beadsUndo => '元に戻す';
+
+  @override
+  String get beadsEdit => '編集';
+
+  @override
+  String get beadsDuplicate => '複製';
+
+  @override
+  String get beadsClear => 'クリア';
+
+  @override
+  String get beadsDelete => '削除';
+
+  @override
+  String get beadsCount => 'カウント';
+
+  @override
+  String get beadsCheck => 'チェック';
+
+  @override
+  String get beadsSet => 'セット';
+
+  @override
+  String get beadsProgress => '進捗';
+
+  @override
+  String get beadsCreateMilestone => 'ビーズを作成';
+
+  @override
+  String get beadsEditMilestone => 'ビーズを編集';
+
+  @override
+  String get beadsTitle => 'タイトル';
+
+  @override
+  String get beadsNotes => 'メモ';
+
+  @override
+  String get beadsNotesHint => 'このビーズのメモを入力...';
+
+  @override
+  String get beadsCountField => 'カウント';
+
+  @override
+  String get beadsCheckInterval => 'チェック間隔';
+
+  @override
+  String get beadsCheckHelper => 'カウントの半分以下である必要があります。0でチェックポイントなし。';
+
+  @override
+  String get beadsSetCount => 'セット数';
+
+  @override
+  String get beadsSetCountHelper => 'セット数はカウント以下である必要があります。';
+
+  @override
+  String get beadsSetCountReadonlyHelper => 'セット数は進捗画面でのみ変更できます。';
+
+  @override
+  String get beadsVibrationIntensity => 'バイブ強度';
+
+  @override
+  String get beadsReminderTitle => 'リマインダー';
+
+  @override
+  String get beadsReminderEnable => 'リマインダーを有効にする';
+
+  @override
+  String get beadsReminderRepeatOnce => '一回';
+
+  @override
+  String get beadsReminderRepeatDaily => '毎日';
+
+  @override
+  String get beadsReminderRepeatWeekly => '毎週';
+
+  @override
+  String get beadsReminderRepeatMonthly => '毎月';
+
+  @override
+  String get beadsReminderRepeatYearly => '毎年';
+
+  @override
+  String get beadsReminderRepeatCountLabel => '繰り返し回数';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'リマインダーが停止するまでの発火回数（オフ = 永久に繰り返す）';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => '2〜100の数字を入力してください';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => '繰り返す曜日';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => '月の日';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => '月';
+
+  @override
+  String get beadsReminderYearlyDayLabel => '日';
+
+  @override
+  String get beadsReminderRecurrenceLabel => '繰り返し';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => '毎月の基準';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => '毎年の基準';
+
+  @override
+  String get beadsReminderBasisGregorian => 'グレゴリオ暦';
+
+  @override
+  String get beadsReminderBasisHijri => 'ヒジュラ暦';
+
+  @override
+  String get beadsReminderPickDateTime => '日時を選択';
+
+  @override
+  String get beadsReminderPickDate => '日付を選択';
+
+  @override
+  String get beadsReminderPickTime => '時刻を選択';
+
+  @override
+  String get beadsReminderNotSet => '未設定';
+
+  @override
+  String get beadsReminderAnchorTime => '時刻';
+
+  @override
+  String get beadsReminderAnchorPrayer => '礼拝時間';
+
+  @override
+  String get beadsReminderOffsetOnTime => '時刻通り';
+
+  @override
+  String get beadsReminderOffsetBefore => '前';
+
+  @override
+  String get beadsReminderOffsetAfter => '後';
+
+  @override
+  String get beadsReminderMinutesLabel => '分';
+
+  @override
+  String get beadsReminderSelectPrayer => '礼拝を選択';
+
+  @override
+  String get beadsSave => '保存';
+
+  @override
+  String get beadsUpdate => '更新';
+
+  @override
+  String get beadsRequiredSuffix => 'は必須です';
+
+  @override
+  String get beadsMustBeInteger => 'は整数である必要があります';
+
+  @override
+  String get beadsCountPositive => 'カウントは正の整数である必要があります';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'チェックは0より大きい必要があります';
+
+  @override
+  String get beadsCheckHalfError => 'チェックはカウントの半分を超えられません';
+
+  @override
+  String get beadsEnterValidCountFirst => '先に有効なカウントを入力してください';
+
+  @override
+  String get beadsSetCountNegative => 'セット数は負にできません';
+
+  @override
+  String get beadsSetCountGreaterCount => 'セット数はカウントを超えられません';
+
+  @override
+  String get beadsSetCountValueRequired => 'セット数は必須です';
+
+  @override
+  String get beadsItemNotFound => '項目が見つかりません';
+
+  @override
+  String get beadsResetProgressTitle => '進捗をリセットしますか？';
+
+  @override
+  String get beadsResetProgressBody => '現在の進捗を0に戻します。';
+
+  @override
+  String get beadsCancel => 'キャンセル';
+
+  @override
+  String get beadsReset => 'リセット';
+
+  @override
+  String get beadsEditProgressAndSetCount => '進捗とセット数を編集';
+
+  @override
+  String get beadsProgressCount => '進捗カウント';
+
+  @override
+  String get beadsSetCountCannotNegative => 'セット数は負にできません';
+
+  @override
+  String get beadsValidProgressNumber => '有効な進捗値を入力してください';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return '進捗は0から$maxの間である必要があります';
+  }
+
+  @override
+  String get beadsMaxMinusCount => '残りカウント';
+
+  @override
+  String get beadsTap => 'タップ';
+
+  @override
+  String get beadsGroups => 'グループ';
+
+  @override
+  String get beadsNewGroup => '新しいグループ';
+
+  @override
+  String get beadsEditGroup => 'グループを編集';
+
+  @override
+  String get beadsGroupName => 'グループ名';
+
+  @override
+  String get beadsGroupMembers => 'メンバー';
+
+  @override
+  String get beadsNoBeadsInGroup => 'このグループにはまだ数珠がありません。';
+
+  @override
+  String get beadsAddBead => '数珠を追加';
+
+  @override
+  String get beadsAddBeads => '数珠を追加';
+
+  @override
+  String get beadsNewBead => '新しい数珠';
+
+  @override
+  String get beadsDeleteGroup => 'グループを削除';
+
+  @override
+  String get beadsDeleteGroupConfirm => 'このグループを削除しますか？数珠は保持されます。';
+
+  @override
+  String get beadsRemoveFromGroup => 'グループから削除';
+
+  @override
+  String get beadsNoNotesAdded => 'メモはありません。';
+
+  @override
+  String get beadsSelect => '選択';
+
+  @override
+  String get beadsSelectAll => 'すべて選択';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count 件選択中';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '選択した $count 件を削除しますか？';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count 件を削除しました';
+  }
 }

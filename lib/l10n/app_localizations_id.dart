@@ -1178,4 +1178,336 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Hari-hari Putih (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Penghitung Tasbih';
+
+  @override
+  String get beadsMilestones => 'Tasbih';
+
+  @override
+  String get beadsSwitchToLight => 'Beralih ke mode terang';
+
+  @override
+  String get beadsSwitchToDark => 'Beralih ke mode gelap';
+
+  @override
+  String get beadsLanguage => 'Bahasa';
+
+  @override
+  String get beadsChooseLanguage => 'Pilih bahasa';
+
+  @override
+  String get beadsNoMilestones =>
+      'Belum ada tasbih. Ketuk + untuk menambahkan.';
+
+  @override
+  String get beadsStatsTitle => 'Riwayat';
+
+  @override
+  String get beadsStatsToday => 'Hari ini';
+
+  @override
+  String get beadsStatsLast7Days => '7 hari';
+
+  @override
+  String get beadsStatsTotal => 'Total';
+
+  @override
+  String get beadsDeleted => 'dihapus';
+
+  @override
+  String get beadsUndo => 'Urungkan';
+
+  @override
+  String get beadsEdit => 'Edit';
+
+  @override
+  String get beadsDuplicate => 'Duplikat';
+
+  @override
+  String get beadsClear => 'Bersihkan';
+
+  @override
+  String get beadsDelete => 'Hapus';
+
+  @override
+  String get beadsCount => 'Hitungan';
+
+  @override
+  String get beadsCheck => 'Pemeriksaan';
+
+  @override
+  String get beadsSet => 'Set';
+
+  @override
+  String get beadsProgress => 'Kemajuan';
+
+  @override
+  String get beadsCreateMilestone => 'Buat Tasbih';
+
+  @override
+  String get beadsEditMilestone => 'Edit Tasbih';
+
+  @override
+  String get beadsTitle => 'Judul';
+
+  @override
+  String get beadsNotes => 'Catatan';
+
+  @override
+  String get beadsNotesHint => 'Tambahkan catatan untuk tasbih ini...';
+
+  @override
+  String get beadsCountField => 'Hitungan';
+
+  @override
+  String get beadsCheckInterval => 'Interval Pemeriksaan';
+
+  @override
+  String get beadsCheckHelper =>
+      'Kurang dari atau sama dengan setengah hitungan. Kosongkan atau 0 untuk tanpa titik pemeriksaan.';
+
+  @override
+  String get beadsSetCount => 'Hitungan Set';
+
+  @override
+  String get beadsSetCountHelper =>
+      'Hitungan set harus kurang dari atau sama dengan hitungan.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Hitungan set hanya dapat diubah dari layar kemajuan.';
+
+  @override
+  String get beadsVibrationIntensity => 'Intensitas Getaran';
+
+  @override
+  String get beadsReminderTitle => 'Pengingat';
+
+  @override
+  String get beadsReminderEnable => 'Aktifkan pengingat';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Sekali';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Harian';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Mingguan';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Bulanan';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Tahunan';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Jumlah pengulangan';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Berapa kali pengingat berbunyi sebelum berhenti (nonaktif = berulang selamanya)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      'Masukkan angka dari 2 hingga 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Ulangi pada';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Hari dalam sebulan';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Bulan';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Hari';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Ulangi';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Dasar bulanan';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Dasar tahunan';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Masehi';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hijriah';
+
+  @override
+  String get beadsReminderPickDateTime => 'Pilih tanggal & waktu';
+
+  @override
+  String get beadsReminderPickDate => 'Pilih tanggal';
+
+  @override
+  String get beadsReminderPickTime => 'Pilih waktu';
+
+  @override
+  String get beadsReminderNotSet => 'Belum diatur';
+
+  @override
+  String get beadsReminderAnchorTime => 'Waktu';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Waktu salat';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'Tepat waktu';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Sebelum';
+
+  @override
+  String get beadsReminderOffsetAfter => 'Sesudah';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Menit';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Pilih salat';
+
+  @override
+  String get beadsSave => 'Simpan';
+
+  @override
+  String get beadsUpdate => 'Perbarui';
+
+  @override
+  String get beadsRequiredSuffix => 'wajib diisi';
+
+  @override
+  String get beadsMustBeInteger => 'harus berupa bilangan bulat';
+
+  @override
+  String get beadsCountPositive => 'Hitungan harus bilangan bulat positif';
+
+  @override
+  String get beadsCheckGreaterThanZero =>
+      'Pemeriksaan harus lebih besar dari 0';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Pemeriksaan tidak boleh lebih besar dari setengah hitungan';
+
+  @override
+  String get beadsEnterValidCountFirst =>
+      'Masukkan hitungan yang valid terlebih dahulu';
+
+  @override
+  String get beadsSetCountNegative => 'Hitungan set tidak boleh negatif';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'Hitungan set tidak boleh lebih besar dari hitungan';
+
+  @override
+  String get beadsSetCountValueRequired => 'Hitungan set wajib diisi';
+
+  @override
+  String get beadsItemNotFound => 'Item tidak ditemukan';
+
+  @override
+  String get beadsResetProgressTitle => 'Atur ulang kemajuan?';
+
+  @override
+  String get beadsResetProgressBody =>
+      'Ini akan mengembalikan kemajuan saat ini ke 0.';
+
+  @override
+  String get beadsCancel => 'Batal';
+
+  @override
+  String get beadsReset => 'Atur Ulang';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'Edit kemajuan dan hitungan set';
+
+  @override
+  String get beadsProgressCount => 'Hitungan Kemajuan';
+
+  @override
+  String get beadsSetCountCannotNegative => 'Hitungan set tidak boleh negatif';
+
+  @override
+  String get beadsValidProgressNumber => 'Masukkan angka kemajuan yang valid';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'Kemajuan harus antara 0 dan $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Hitungan Tersisa';
+
+  @override
+  String get beadsTap => 'KETUK';
+
+  @override
+  String get beadsGroups => 'Grup';
+
+  @override
+  String get beadsNewGroup => 'Grup Baru';
+
+  @override
+  String get beadsEditGroup => 'Edit Grup';
+
+  @override
+  String get beadsGroupName => 'Nama grup';
+
+  @override
+  String get beadsGroupMembers => 'Anggota';
+
+  @override
+  String get beadsNoBeadsInGroup => 'Belum ada tasbih di grup ini.';
+
+  @override
+  String get beadsAddBead => 'Tambah tasbih';
+
+  @override
+  String get beadsAddBeads => 'Tambah tasbih';
+
+  @override
+  String get beadsNewBead => 'Tasbih Baru';
+
+  @override
+  String get beadsDeleteGroup => 'Hapus Grup';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'Hapus grup ini? Tasbih di dalamnya akan disimpan.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Hapus dari grup';
+
+  @override
+  String get beadsNoNotesAdded => 'Tidak ada catatan ditambahkan.';
+
+  @override
+  String get beadsSelect => 'Pilih';
+
+  @override
+  String get beadsSelectAll => 'Pilih semua';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count dipilih';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'Hapus $count item yang dipilih?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count dihapus';
+  }
 }

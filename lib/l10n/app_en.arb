@@ -528,5 +528,137 @@
   "showCardUpcomingRemindersSubtitle": "Display card listing your next 3 upcoming calendar reminders",
   "moonCalendarTitle": "Moon Phase Calendar",
   "calendarGoToDate": "Go to date",
-  "whiteDaysBannerPrefix": "White Days (13, 14, 15)"
+  "whiteDaysBannerPrefix": "White Days (13, 14, 15)",
+  "beadsAppTitle": "Beads Counter",
+  "beadsMilestones": "Beads",
+  "beadsSwitchToLight": "Switch to light mode",
+  "beadsSwitchToDark": "Switch to dark mode",
+  "beadsLanguage": "Language",
+  "beadsChooseLanguage": "Choose language",
+  "beadsNoMilestones": "No beads yet. Tap + to add one.",
+  "beadsStatsTitle": "History",
+  "beadsStatsToday": "Today",
+  "beadsStatsLast7Days": "7 days",
+  "beadsStatsTotal": "Total",
+  "beadsDeleted": "deleted",
+  "beadsUndo": "Undo",
+  "beadsEdit": "Edit",
+  "beadsDuplicate": "Duplicate",
+  "beadsClear": "Clear",
+  "beadsDelete": "Delete",
+  "beadsCount": "Count",
+  "beadsCheck": "Check",
+  "beadsSet": "Set",
+  "beadsProgress": "Progress",
+  "beadsCreateMilestone": "Create Beads",
+  "beadsEditMilestone": "Edit Beads",
+  "beadsTitle": "Title",
+  "beadsNotes": "Notes",
+  "beadsNotesHint": "Add notes for these beads...",
+  "beadsCountField": "Count",
+  "beadsCheckInterval": "Check Interval",
+  "beadsCheckHelper": "Less or equal to half of count. Leave empty or 0 for no checkpoints.",
+  "beadsSetCount": "Set Count",
+  "beadsSetCountHelper": "Set count must be less than or equal to count.",
+  "beadsSetCountReadonlyHelper": "Set count can only be changed from progress screen.",
+  "beadsVibrationIntensity": "Vibration Intensity",
+  "beadsReminderTitle": "Reminder",
+  "beadsReminderEnable": "Enable reminder",
+  "beadsReminderRepeatOnce": "Once",
+  "beadsReminderRepeatDaily": "Daily",
+  "beadsReminderRepeatWeekly": "Weekly",
+  "beadsReminderRepeatMonthly": "Monthly",
+  "beadsReminderRepeatYearly": "Yearly",
+  "beadsReminderRepeatCountLabel": "Repeat count",
+  "beadsReminderRepeatCountHelper": "Number of times the reminder fires before stopping (off = repeats forever)",
+  "beadsReminderRepeatCountRangeError": "Enter a number from 2 to 100",
+  "beadsReminderRepeatDaysLabel": "Repeat on",
+  "beadsReminderDayOfMonthLabel": "Day of month",
+  "beadsReminderYearlyMonthLabel": "Month",
+  "beadsReminderYearlyDayLabel": "Day",
+  "beadsReminderRecurrenceLabel": "Repeat",
+  "beadsReminderMonthlyBasisLabel": "Monthly basis",
+  "beadsReminderYearlyBasisLabel": "Yearly basis",
+  "beadsReminderBasisGregorian": "Gregorian",
+  "beadsReminderBasisHijri": "Hijri",
+  "beadsReminderPickDateTime": "Pick date & time",
+  "beadsReminderPickDate": "Pick date",
+  "beadsReminderPickTime": "Pick time",
+  "beadsReminderNotSet": "Not set",
+  "beadsReminderAnchorTime": "Time",
+  "beadsReminderAnchorPrayer": "Prayer time",
+  "beadsReminderOffsetOnTime": "On time",
+  "beadsReminderOffsetBefore": "Before",
+  "beadsReminderOffsetAfter": "After",
+  "beadsReminderMinutesLabel": "Minutes",
+  "beadsReminderSelectPrayer": "Select prayer",
+  "beadsSave": "Save",
+  "beadsUpdate": "Update",
+  "beadsRequiredSuffix": "is required",
+  "beadsMustBeInteger": "must be an integer",
+  "beadsCountPositive": "Count must be a positive integer",
+  "beadsCheckGreaterThanZero": "Check must be greater than 0",
+  "beadsCheckHalfError": "Check cannot be greater than half of count",
+  "beadsEnterValidCountFirst": "Enter a valid count first",
+  "beadsSetCountNegative": "Set count cannot be negative",
+  "beadsSetCountGreaterCount": "Set count cannot be greater than count",
+  "beadsSetCountValueRequired": "Set count is required",
+  "beadsItemNotFound": "Item not found",
+  "beadsResetProgressTitle": "Reset progress?",
+  "beadsResetProgressBody": "This will set current progress back to 0.",
+  "beadsCancel": "Cancel",
+  "beadsReset": "Reset",
+  "beadsEditProgressAndSetCount": "Edit progress and set count",
+  "beadsProgressCount": "Progress Count",
+  "beadsSetCountCannotNegative": "Set count cannot be negative",
+  "beadsValidProgressNumber": "Enter a valid progress number",
+  "beadsProgressBetween": "Progress must be between 0 and {max}",
+  "@beadsProgressBetween": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "beadsMaxMinusCount": "Left Count",
+  "beadsTap": "TAP",
+  "beadsGroups": "Groups",
+  "beadsNewGroup": "New Group",
+  "beadsEditGroup": "Edit Group",
+  "beadsGroupName": "Group name",
+  "beadsGroupMembers": "Members",
+  "beadsNoBeadsInGroup": "No beads in this group yet.",
+  "beadsAddBead": "Add bead",
+  "beadsAddBeads": "Add beads",
+  "beadsNewBead": "New Bead",
+  "beadsDeleteGroup": "Delete Group",
+  "beadsDeleteGroupConfirm": "Delete this group? Its beads are kept.",
+  "beadsRemoveFromGroup": "Remove from group",
+  "beadsNoNotesAdded": "No notes added.",
+  "beadsSelect": "Select",
+  "beadsSelectAll": "Select all",
+  "beadsSelectedCount": "{count} selected",
+  "@beadsSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "beadsDeleteSelectedConfirm": "Delete {count} selected items?",
+  "@beadsDeleteSelectedConfirm": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "beadsDeletedSelected": "{count} deleted",
+  "@beadsDeletedSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

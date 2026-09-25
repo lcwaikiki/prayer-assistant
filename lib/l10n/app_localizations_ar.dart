@@ -1170,4 +1170,329 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'الأيام البيض (13، 14، 15)';
+
+  @override
+  String get beadsAppTitle => 'عداد المسبحة';
+
+  @override
+  String get beadsMilestones => 'مِسْبَحَة';
+
+  @override
+  String get beadsSwitchToLight => 'التبديل إلى الوضع الفاتح';
+
+  @override
+  String get beadsSwitchToDark => 'التبديل إلى الوضع الداكن';
+
+  @override
+  String get beadsLanguage => 'اللغة';
+
+  @override
+  String get beadsChooseLanguage => 'اختر اللغة';
+
+  @override
+  String get beadsNoMilestones => 'لا توجد مسبحة بعد. اضغط + للإضافة.';
+
+  @override
+  String get beadsStatsTitle => 'السجل';
+
+  @override
+  String get beadsStatsToday => 'اليوم';
+
+  @override
+  String get beadsStatsLast7Days => '٧ أيام';
+
+  @override
+  String get beadsStatsTotal => 'الإجمالي';
+
+  @override
+  String get beadsDeleted => 'تم الحذف';
+
+  @override
+  String get beadsUndo => 'تراجع';
+
+  @override
+  String get beadsEdit => 'تعديل';
+
+  @override
+  String get beadsDuplicate => 'نسخ';
+
+  @override
+  String get beadsClear => 'مسح';
+
+  @override
+  String get beadsDelete => 'حذف';
+
+  @override
+  String get beadsCount => 'العدد';
+
+  @override
+  String get beadsCheck => 'الفاصل';
+
+  @override
+  String get beadsSet => 'الدفعة';
+
+  @override
+  String get beadsProgress => 'التقدم';
+
+  @override
+  String get beadsCreateMilestone => 'إنشاء مسبحة';
+
+  @override
+  String get beadsEditMilestone => 'تعديل المسبحة';
+
+  @override
+  String get beadsTitle => 'العنوان';
+
+  @override
+  String get beadsNotes => 'ملاحظات';
+
+  @override
+  String get beadsNotesHint => 'أضف ملاحظات لهذه المسبحة...';
+
+  @override
+  String get beadsCountField => 'العدد';
+
+  @override
+  String get beadsCheckInterval => 'فاصل التحقق';
+
+  @override
+  String get beadsCheckHelper =>
+      'يجب أن يكون أقل من أو يساوي نصف العدد. استخدم 0 لتعطيل نقاط التحقق.';
+
+  @override
+  String get beadsSetCount => 'عدد الدفعات';
+
+  @override
+  String get beadsSetCountHelper =>
+      'يجب أن يكون عدد الدفعات أقل من أو يساوي العدد.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'يمكن تغيير عدد الدفعات فقط من شاشة التقدم.';
+
+  @override
+  String get beadsVibrationIntensity => 'شدة الاهتزاز';
+
+  @override
+  String get beadsReminderTitle => 'تذكير';
+
+  @override
+  String get beadsReminderEnable => 'تفعيل التذكير';
+
+  @override
+  String get beadsReminderRepeatOnce => 'مرة واحدة';
+
+  @override
+  String get beadsReminderRepeatDaily => 'يوميًا';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'أسبوعي';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'شهري';
+
+  @override
+  String get beadsReminderRepeatYearly => 'سنوي';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'عدد التكرار';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'عدد مرات تشغيل التذكير قبل التوقف (إيقاف = يتكرر دائمًا)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => 'أدخل رقمًا من 2 إلى 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'التكرار في';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'يوم من الشهر';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'الشهر';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'اليوم';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'التكرار';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'الأساس الشهري';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'الأساس السنوي';
+
+  @override
+  String get beadsReminderBasisGregorian => 'ميلادي';
+
+  @override
+  String get beadsReminderBasisHijri => 'هجري';
+
+  @override
+  String get beadsReminderPickDateTime => 'اختر التاريخ والوقت';
+
+  @override
+  String get beadsReminderPickDate => 'اختر التاريخ';
+
+  @override
+  String get beadsReminderPickTime => 'اختر الوقت';
+
+  @override
+  String get beadsReminderNotSet => 'غير محدد';
+
+  @override
+  String get beadsReminderAnchorTime => 'الوقت';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'وقت الصلاة';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'في الوقت';
+
+  @override
+  String get beadsReminderOffsetBefore => 'قبل';
+
+  @override
+  String get beadsReminderOffsetAfter => 'بعد';
+
+  @override
+  String get beadsReminderMinutesLabel => 'الدقائق';
+
+  @override
+  String get beadsReminderSelectPrayer => 'اختر الصلاة';
+
+  @override
+  String get beadsSave => 'حفظ';
+
+  @override
+  String get beadsUpdate => 'تحديث';
+
+  @override
+  String get beadsRequiredSuffix => 'مطلوب';
+
+  @override
+  String get beadsMustBeInteger => 'يجب أن يكون رقمًا صحيحًا';
+
+  @override
+  String get beadsCountPositive => 'يجب أن يكون العدد رقمًا صحيحًا موجبًا';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'يجب أن يكون الفاصل أكبر من 0';
+
+  @override
+  String get beadsCheckHalfError => 'لا يمكن أن يكون الفاصل أكبر من نصف العدد';
+
+  @override
+  String get beadsEnterValidCountFirst => 'أدخل عددًا صالحًا أولاً';
+
+  @override
+  String get beadsSetCountNegative => 'لا يمكن أن يكون عدد الدفعات سالبًا';
+
+  @override
+  String get beadsSetCountGreaterCount => 'لا يمكن أن يتجاوز عدد الدفعات العدد';
+
+  @override
+  String get beadsSetCountValueRequired => 'عدد الدفعات مطلوب';
+
+  @override
+  String get beadsItemNotFound => 'العنصر غير موجود';
+
+  @override
+  String get beadsResetProgressTitle => 'إعادة تعيين التقدم؟';
+
+  @override
+  String get beadsResetProgressBody => 'سيتم إعادة التقدم الحالي إلى 0.';
+
+  @override
+  String get beadsCancel => 'إلغاء';
+
+  @override
+  String get beadsReset => 'إعادة تعيين';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'تعديل التقدم وعدد الدفعات';
+
+  @override
+  String get beadsProgressCount => 'عدد التقدم';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'لا يمكن أن يكون عدد الدفعات سالبًا';
+
+  @override
+  String get beadsValidProgressNumber => 'أدخل رقم تقدم صالحًا';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'يجب أن يكون التقدم بين 0 و $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'العدد المتبقي';
+
+  @override
+  String get beadsTap => 'اضغط';
+
+  @override
+  String get beadsGroups => 'المجموعات';
+
+  @override
+  String get beadsNewGroup => 'مجموعة جديدة';
+
+  @override
+  String get beadsEditGroup => 'تعديل المجموعة';
+
+  @override
+  String get beadsGroupName => 'اسم المجموعة';
+
+  @override
+  String get beadsGroupMembers => 'الأعضاء';
+
+  @override
+  String get beadsNoBeadsInGroup => 'لا توجد مسبحات في هذه المجموعة بعد.';
+
+  @override
+  String get beadsAddBead => 'إضافة مسبحة';
+
+  @override
+  String get beadsAddBeads => 'إضافة مسبحات';
+
+  @override
+  String get beadsNewBead => 'مسبحة جديدة';
+
+  @override
+  String get beadsDeleteGroup => 'حذف المجموعة';
+
+  @override
+  String get beadsDeleteGroupConfirm => 'حذف هذه المجموعة؟ ستبقى المسبحات.';
+
+  @override
+  String get beadsRemoveFromGroup => 'إزالة من المجموعة';
+
+  @override
+  String get beadsNoNotesAdded => 'لم يتم إضافة ملاحظات.';
+
+  @override
+  String get beadsSelect => 'تحديد';
+
+  @override
+  String get beadsSelectAll => 'تحديد الكل';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return 'تم تحديد $count';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'حذف $count من العناصر المحددة؟';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return 'تم حذف $count';
+  }
 }

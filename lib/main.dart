@@ -22,7 +22,6 @@ import 'src/services/widget_bridge_service.dart';
 import 'src/supplications/services/wisdom_service.dart';
 import 'src/tesbihat/data/item_history_repository.dart';
 import 'src/tesbihat/data/item_repository.dart';
-import 'src/tesbihat/l10n/tesbihat_localizations.dart';
 import 'src/tesbihat/services/item_reminder_service.dart';
 import 'src/tesbihat/services/midnight_reminder_scheduler.dart';
 import 'src/tesbihat/state/groups_notifier.dart';
@@ -126,7 +125,6 @@ class PrayerAssistantApp extends StatelessWidget {
           locale: controller.appLocale,
           localizationsDelegates: const [
             AppLocalizations.delegate,
-            ...TesbihatLocalizations.localizationsDelegates,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,

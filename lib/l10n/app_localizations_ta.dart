@@ -1192,4 +1192,342 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'அய்யாமுல் பீள் (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'தஸ்பீஹ் கவுண்டர்';
+
+  @override
+  String get beadsMilestones => 'மணிகள்';
+
+  @override
+  String get beadsSwitchToLight => 'லைட் மோடுக்கு மாற்றுக';
+
+  @override
+  String get beadsSwitchToDark => 'டார்க் மோடுக்கு மாற்றுக';
+
+  @override
+  String get beadsLanguage => 'மொழி';
+
+  @override
+  String get beadsChooseLanguage => 'மொழியைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get beadsNoMilestones =>
+      'மணிகள் எதுவும் இல்லை. சேர்க்க + ஐத் தட்டவும்.';
+
+  @override
+  String get beadsStatsTitle => 'வரலாறு';
+
+  @override
+  String get beadsStatsToday => 'இன்று';
+
+  @override
+  String get beadsStatsLast7Days => '7 நாட்கள்';
+
+  @override
+  String get beadsStatsTotal => 'மொத்தம்';
+
+  @override
+  String get beadsDeleted => 'நீக்கப்பட்டது';
+
+  @override
+  String get beadsUndo => 'செயல்தவிர்';
+
+  @override
+  String get beadsEdit => 'திருத்து';
+
+  @override
+  String get beadsDuplicate => 'நகல் எடு';
+
+  @override
+  String get beadsClear => 'அழி';
+
+  @override
+  String get beadsDelete => 'நீக்கு';
+
+  @override
+  String get beadsCount => 'எண்ணிக்கை';
+
+  @override
+  String get beadsCheck => 'சரிபார்';
+
+  @override
+  String get beadsSet => 'அமை';
+
+  @override
+  String get beadsProgress => 'முன்னேற்றம்';
+
+  @override
+  String get beadsCreateMilestone => 'மணி உருவாக்கு';
+
+  @override
+  String get beadsEditMilestone => 'மணி திருத்து';
+
+  @override
+  String get beadsTitle => 'தலைப்பு';
+
+  @override
+  String get beadsNotes => 'குறிப்புகள்';
+
+  @override
+  String get beadsNotesHint => 'இந்த மணிகளுக்கான குறிப்புகளைச் சேர்க்கவும்...';
+
+  @override
+  String get beadsCountField => 'எண்ணிக்கை';
+
+  @override
+  String get beadsCheckInterval => 'சரிபார்ப்பு இடைவெளி';
+
+  @override
+  String get beadsCheckHelper =>
+      'எண்ணிக்கையின் பாதியை விட குறைவாகவோ அல்லது சமமாகவோ இருக்க வேண்டும். சோதனை புள்ளிகள் தேவையில்லை எனில் காலியாக விடவும் அல்லது 0 வைக்கவும்.';
+
+  @override
+  String get beadsSetCount => 'செட் எண்ணிக்கை';
+
+  @override
+  String get beadsSetCountHelper =>
+      'செட் எண்ணிக்கை மொத்த எண்ணிக்கைக்கு சமமாகவோ குறைவாகவோ இருக்க வேண்டும்.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'செட் எண்ணிக்கையை முன்னேற்றத் திரையிலிருந்து மட்டுமே மாற்ற முடியும்.';
+
+  @override
+  String get beadsVibrationIntensity => 'அதிர்வு தீவிரம்';
+
+  @override
+  String get beadsReminderTitle => 'நினைவூட்டல்';
+
+  @override
+  String get beadsReminderEnable => 'நினைவூட்டலை இயக்கு';
+
+  @override
+  String get beadsReminderRepeatOnce => 'ஒரு முறை';
+
+  @override
+  String get beadsReminderRepeatDaily => 'தினசரி';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'வாராந்திர';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'மாதாந்திர';
+
+  @override
+  String get beadsReminderRepeatYearly => 'வருடாந்திர';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'மீண்டும் நிகழும் எண்ணிக்கை';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'நினைவூட்டல் நிறுத்தப்படுவதற்கு முன் ஒலிக்கும் முறைகளின் எண்ணிக்கை (ஆஃப் = எப்போதும் மீண்டும் நிகழும்)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      '2 முதல் 100 வரையிலான எண்ணை உள்ளிடவும்';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'மீண்டும் நிகழும் நாட்கள்';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'மாதத்தின் நாள்';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'மாதம்';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'நாள்';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'மீண்டும் செய்';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'மாதாந்திர அடிப்படை';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'வருடாந்திர அடிப்படை';
+
+  @override
+  String get beadsReminderBasisGregorian => 'கிரிகோரியன்';
+
+  @override
+  String get beadsReminderBasisHijri => 'ஹிஜ்ரி';
+
+  @override
+  String get beadsReminderPickDateTime => 'தேதி & நேரத்தைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get beadsReminderPickDate => 'தேதியைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get beadsReminderPickTime => 'நேரத்தைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get beadsReminderNotSet => 'அமைக்கப்படவில்லை';
+
+  @override
+  String get beadsReminderAnchorTime => 'நேரம்';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'தொழுகை நேரம்';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'சரியான நேரத்தில்';
+
+  @override
+  String get beadsReminderOffsetBefore => 'முன்பு';
+
+  @override
+  String get beadsReminderOffsetAfter => 'பின்பு';
+
+  @override
+  String get beadsReminderMinutesLabel => 'நிமிடங்கள்';
+
+  @override
+  String get beadsReminderSelectPrayer => 'தொழுகையைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get beadsSave => 'சேமி';
+
+  @override
+  String get beadsUpdate => 'புதுப்பி';
+
+  @override
+  String get beadsRequiredSuffix => 'தேவைப்படுகிறது';
+
+  @override
+  String get beadsMustBeInteger => 'முழு எண்ணாக இருக்க வேண்டும்';
+
+  @override
+  String get beadsCountPositive =>
+      'எண்ணிக்கை ஒரு நேர்மறை முழு எண்ணாக இருக்க வேண்டும்';
+
+  @override
+  String get beadsCheckGreaterThanZero =>
+      'சரிபார்ப்பு 0-ஐ விட அதிகமாக இருக்க வேண்டும்';
+
+  @override
+  String get beadsCheckHalfError =>
+      'சரிபார்ப்பு எண்ணிக்கையின் பாதியை விட அதிகமாக இருக்க முடியாது';
+
+  @override
+  String get beadsEnterValidCountFirst =>
+      'முதலில் செல்லுபடியாகும் எண்ணிக்கையை உள்ளிடவும்';
+
+  @override
+  String get beadsSetCountNegative =>
+      'செட் எண்ணிக்கை எதிர்மறையாக இருக்க முடியாது';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'செட் எண்ணிக்கை மொத்த எண்ணிக்கையை விட அதிகமாக இருக்க முடியாது';
+
+  @override
+  String get beadsSetCountValueRequired => 'செட் எண்ணிக்கை தேவை';
+
+  @override
+  String get beadsItemNotFound => 'பொருள் கிடைக்கவில்லை';
+
+  @override
+  String get beadsResetProgressTitle => 'முன்னேற்றத்தை மீட்டமைக்கவா?';
+
+  @override
+  String get beadsResetProgressBody =>
+      'இது தற்போதைய முன்னேற்றத்தை 0-க்கு மீட்டமைக்கும்.';
+
+  @override
+  String get beadsCancel => 'ரத்து';
+
+  @override
+  String get beadsReset => 'மீட்டமை';
+
+  @override
+  String get beadsEditProgressAndSetCount =>
+      'முன்னேற்றம் மற்றும் செட் எண்ணிக்கையைத் திருத்து';
+
+  @override
+  String get beadsProgressCount => 'முன்னேற்ற எண்ணிக்கை';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'செட் எண்ணிக்கை எதிர்மறையாக இருக்க முடியாது';
+
+  @override
+  String get beadsValidProgressNumber =>
+      'செல்லுபடியாகும் முன்னேற்ற எண்ணை உள்ளிடவும்';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'முன்னேற்றம் 0 மற்றும் $max இடையே இருக்க வேண்டும்';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'மீதமுள்ள எண்ணிக்கை';
+
+  @override
+  String get beadsTap => 'தட்டு';
+
+  @override
+  String get beadsGroups => 'குழுக்கள்';
+
+  @override
+  String get beadsNewGroup => 'புதிய குழு';
+
+  @override
+  String get beadsEditGroup => 'குழுவைத் திருத்து';
+
+  @override
+  String get beadsGroupName => 'குழு பெயர்';
+
+  @override
+  String get beadsGroupMembers => 'உறுப்பினர்கள்';
+
+  @override
+  String get beadsNoBeadsInGroup =>
+      'இந்த குழுவில் இதுவரை மணிகள் எதுவும் இல்லை.';
+
+  @override
+  String get beadsAddBead => 'மணி சேர்';
+
+  @override
+  String get beadsAddBeads => 'மணிகளைச் சேர்';
+
+  @override
+  String get beadsNewBead => 'புதிய மணி';
+
+  @override
+  String get beadsDeleteGroup => 'குழுவை நீக்கு';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'இந்த குழுவை நீக்கவா? அதன் மணிகள் பாதுகாக்கப்படும்.';
+
+  @override
+  String get beadsRemoveFromGroup => 'குழுவிலிருந்து அகற்று';
+
+  @override
+  String get beadsNoNotesAdded => 'குறிப்புகள் எதுவும் சேர்க்கப்படவில்லை.';
+
+  @override
+  String get beadsSelect => 'தேர்ந்தெடு';
+
+  @override
+  String get beadsSelectAll => 'அனைத்தையும் தேர்ந்தெடு';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count தேர்ந்தெடுக்கப்பட்டது';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'தேர்ந்தெடுக்கப்பட்ட $count உருப்படிகளை நீக்கவா?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count நீக்கப்பட்டது';
+  }
 }

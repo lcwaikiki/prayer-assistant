@@ -1178,4 +1178,329 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Eyyam-ı Biyd (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Tesbih Sayacı';
+
+  @override
+  String get beadsMilestones => 'Tesbih';
+
+  @override
+  String get beadsSwitchToLight => 'Açık moda geç';
+
+  @override
+  String get beadsSwitchToDark => 'Koyu moda geç';
+
+  @override
+  String get beadsLanguage => 'Dil';
+
+  @override
+  String get beadsChooseLanguage => 'Dil seçin';
+
+  @override
+  String get beadsNoMilestones => 'Henüz tesbih yok. Eklemek için + dokunun.';
+
+  @override
+  String get beadsStatsTitle => 'Geçmiş';
+
+  @override
+  String get beadsStatsToday => 'Bugün';
+
+  @override
+  String get beadsStatsLast7Days => '7 gün';
+
+  @override
+  String get beadsStatsTotal => 'Toplam';
+
+  @override
+  String get beadsDeleted => 'silindi';
+
+  @override
+  String get beadsUndo => 'Geri Al';
+
+  @override
+  String get beadsEdit => 'Düzenle';
+
+  @override
+  String get beadsDuplicate => 'Kopyala';
+
+  @override
+  String get beadsClear => 'Temizle';
+
+  @override
+  String get beadsDelete => 'Sil';
+
+  @override
+  String get beadsCount => 'Sayı';
+
+  @override
+  String get beadsCheck => 'Kontrol';
+
+  @override
+  String get beadsSet => 'Set';
+
+  @override
+  String get beadsProgress => 'İlerleme';
+
+  @override
+  String get beadsCreateMilestone => 'Tesbih Oluştur';
+
+  @override
+  String get beadsEditMilestone => 'Tesbihi Düzenle';
+
+  @override
+  String get beadsTitle => 'Başlık';
+
+  @override
+  String get beadsNotes => 'Notlar';
+
+  @override
+  String get beadsNotesHint => 'Bu tesbih için not ekleyin...';
+
+  @override
+  String get beadsCountField => 'Sayı';
+
+  @override
+  String get beadsCheckInterval => 'Kontrol Aralığı';
+
+  @override
+  String get beadsCheckHelper =>
+      'Sayı değerinin yarısından küçük/eşit olmalı. Kontrol noktası olmaması için 0 girin.';
+
+  @override
+  String get beadsSetCount => 'Set Sayısı';
+
+  @override
+  String get beadsSetCountHelper => 'Set sayısı sayıdan büyük olamaz.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Set sayısı sadece ilerleme ekranından değiştirilebilir.';
+
+  @override
+  String get beadsVibrationIntensity => 'Titreşim Şiddeti';
+
+  @override
+  String get beadsReminderTitle => 'Hatırlatıcı';
+
+  @override
+  String get beadsReminderEnable => 'Hatırlatıcıyı etkinleştir';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Bir kez';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Her gün';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Haftalık';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Aylık';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Yıllık';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Tekrar sayısı';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Hatırlatmanın durmadan önce kaç kez çalacağı (kapalı = her zaman tekrarlanır)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      '2 ile 100 arasında bir sayı girin';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Tekrarla';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Ayın günü';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Ay';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Gün';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Tekrarlama';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Aylık esas';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Yıllık esas';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Miladi';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hicri';
+
+  @override
+  String get beadsReminderPickDateTime => 'Tarih ve saat seç';
+
+  @override
+  String get beadsReminderPickDate => 'Tarih seç';
+
+  @override
+  String get beadsReminderPickTime => 'Saat seç';
+
+  @override
+  String get beadsReminderNotSet => 'Ayarlanmadı';
+
+  @override
+  String get beadsReminderAnchorTime => 'Saat';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Namaz vakti';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'Vaktinde';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Önce';
+
+  @override
+  String get beadsReminderOffsetAfter => 'Sonra';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Dakika';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Namaz seç';
+
+  @override
+  String get beadsSave => 'Kaydet';
+
+  @override
+  String get beadsUpdate => 'Güncelle';
+
+  @override
+  String get beadsRequiredSuffix => 'zorunludur';
+
+  @override
+  String get beadsMustBeInteger => 'tam sayı olmalıdır';
+
+  @override
+  String get beadsCountPositive => 'Sayı pozitif tam sayı olmalı';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'Kontrol 0’dan büyük olmalı';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Kontrol sayı değerinin yarısından büyük olamaz';
+
+  @override
+  String get beadsEnterValidCountFirst => 'Önce geçerli bir sayı girin';
+
+  @override
+  String get beadsSetCountNegative => 'Set sayısı negatif olamaz';
+
+  @override
+  String get beadsSetCountGreaterCount => 'Set sayısı sayıdan büyük olamaz';
+
+  @override
+  String get beadsSetCountValueRequired => 'Set sayısı zorunludur';
+
+  @override
+  String get beadsItemNotFound => 'Öğe bulunamadı';
+
+  @override
+  String get beadsResetProgressTitle => 'İlerleme sıfırlansın mı?';
+
+  @override
+  String get beadsResetProgressBody => 'Bu işlem mevcut ilerlemeyi 0 yapar.';
+
+  @override
+  String get beadsCancel => 'İptal';
+
+  @override
+  String get beadsReset => 'Sıfırla';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'İlerleme ve set sayısını düzenle';
+
+  @override
+  String get beadsProgressCount => 'İlerleme Sayısı';
+
+  @override
+  String get beadsSetCountCannotNegative => 'Set sayısı negatif olamaz';
+
+  @override
+  String get beadsValidProgressNumber => 'Geçerli bir ilerleme sayısı girin';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'İlerleme 0 ile $max arasında olmalı';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Kalan Sayı';
+
+  @override
+  String get beadsTap => 'DOKUN';
+
+  @override
+  String get beadsGroups => 'Gruplar';
+
+  @override
+  String get beadsNewGroup => 'Yeni Grup';
+
+  @override
+  String get beadsEditGroup => 'Grubu Düzenle';
+
+  @override
+  String get beadsGroupName => 'Grup adı';
+
+  @override
+  String get beadsGroupMembers => 'Üyeler';
+
+  @override
+  String get beadsNoBeadsInGroup => 'Bu grupta henüz tespih yok.';
+
+  @override
+  String get beadsAddBead => 'Tespih ekle';
+
+  @override
+  String get beadsAddBeads => 'Tespihler ekle';
+
+  @override
+  String get beadsNewBead => 'Yeni Tespih';
+
+  @override
+  String get beadsDeleteGroup => 'Grubu Sil';
+
+  @override
+  String get beadsDeleteGroupConfirm => 'Bu grup silinsin mi? Tespihler kalır.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Gruptan çıkar';
+
+  @override
+  String get beadsNoNotesAdded => 'Not eklenmedi.';
+
+  @override
+  String get beadsSelect => 'Seç';
+
+  @override
+  String get beadsSelectAll => 'Tümünü seç';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count seçili';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '$count seçili öğe silinsin mi?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count silindi';
+  }
 }

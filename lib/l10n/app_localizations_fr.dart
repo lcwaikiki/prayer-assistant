@@ -1189,4 +1189,339 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Jours Blancs (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Compteur de Perles';
+
+  @override
+  String get beadsMilestones => 'Perles';
+
+  @override
+  String get beadsSwitchToLight => 'Passer en mode clair';
+
+  @override
+  String get beadsSwitchToDark => 'Passer en mode sombre';
+
+  @override
+  String get beadsLanguage => 'Langue';
+
+  @override
+  String get beadsChooseLanguage => 'Choisir la langue';
+
+  @override
+  String get beadsNoMilestones =>
+      'Aucune perle. Appuyez sur + pour en ajouter.';
+
+  @override
+  String get beadsStatsTitle => 'Historique';
+
+  @override
+  String get beadsStatsToday => 'Aujourd\\\'hui';
+
+  @override
+  String get beadsStatsLast7Days => '7 jours';
+
+  @override
+  String get beadsStatsTotal => 'Total';
+
+  @override
+  String get beadsDeleted => 'supprimé';
+
+  @override
+  String get beadsUndo => 'Annuler';
+
+  @override
+  String get beadsEdit => 'Modifier';
+
+  @override
+  String get beadsDuplicate => 'Dupliquer';
+
+  @override
+  String get beadsClear => 'Effacer';
+
+  @override
+  String get beadsDelete => 'Supprimer';
+
+  @override
+  String get beadsCount => 'Compte';
+
+  @override
+  String get beadsCheck => 'Seuil';
+
+  @override
+  String get beadsSet => 'Série';
+
+  @override
+  String get beadsProgress => 'Progression';
+
+  @override
+  String get beadsCreateMilestone => 'Créer des perles';
+
+  @override
+  String get beadsEditMilestone => 'Modifier les perles';
+
+  @override
+  String get beadsTitle => 'Titre';
+
+  @override
+  String get beadsNotes => 'Notes';
+
+  @override
+  String get beadsNotesHint => 'Ajoutez des notes pour ces perles...';
+
+  @override
+  String get beadsCountField => 'Compte';
+
+  @override
+  String get beadsCheckInterval => 'Intervalle de seuil';
+
+  @override
+  String get beadsCheckHelper =>
+      'Doit être inférieur ou égal à la moitié du compte. Utilisez 0 pour aucun seuil.';
+
+  @override
+  String get beadsSetCount => 'Compte de série';
+
+  @override
+  String get beadsSetCountHelper =>
+      'Le compte de série doit être inférieur ou égal au compte.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Le compte de série ne peut être modifié que depuis l’écran de progression.';
+
+  @override
+  String get beadsVibrationIntensity => 'Intensité de vibration';
+
+  @override
+  String get beadsReminderTitle => 'Rappel';
+
+  @override
+  String get beadsReminderEnable => 'Activer le rappel';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Une fois';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Quotidien';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Hebdomadaire';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Mensuel';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Annuel';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Nombre de répétitions';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Nombre de fois où le rappel se déclenche avant de s\\\'arrêter (désactivé = répétition illimitée)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      'Entrez un nombre entre 2 et 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Répéter le';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Jour du mois';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Mois';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Jour';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Répétition';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Base mensuelle';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Base annuelle';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Grégorien';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hégire';
+
+  @override
+  String get beadsReminderPickDateTime => 'Choisir la date et l\'heure';
+
+  @override
+  String get beadsReminderPickDate => 'Choisir la date';
+
+  @override
+  String get beadsReminderPickTime => 'Choisir l\'heure';
+
+  @override
+  String get beadsReminderNotSet => 'Non défini';
+
+  @override
+  String get beadsReminderAnchorTime => 'Heure';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Heure de prière';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'À l\'heure';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Avant';
+
+  @override
+  String get beadsReminderOffsetAfter => 'Après';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Minutes';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Choisir la prière';
+
+  @override
+  String get beadsSave => 'Enregistrer';
+
+  @override
+  String get beadsUpdate => 'Mettre à jour';
+
+  @override
+  String get beadsRequiredSuffix => 'est requis';
+
+  @override
+  String get beadsMustBeInteger => 'doit être un entier';
+
+  @override
+  String get beadsCountPositive => 'Le compte doit être un entier positif';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'Le seuil doit être supérieur à 0';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Le seuil ne peut pas dépasser la moitié du compte';
+
+  @override
+  String get beadsEnterValidCountFirst => 'Saisissez d’abord un compte valide';
+
+  @override
+  String get beadsSetCountNegative =>
+      'Le compte de série ne peut pas être négatif';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'Le compte de série ne peut pas dépasser le compte';
+
+  @override
+  String get beadsSetCountValueRequired => 'Le compte de série est requis';
+
+  @override
+  String get beadsItemNotFound => 'Élément introuvable';
+
+  @override
+  String get beadsResetProgressTitle => 'Réinitialiser la progression ?';
+
+  @override
+  String get beadsResetProgressBody =>
+      'Cela remettra la progression actuelle à 0.';
+
+  @override
+  String get beadsCancel => 'Annuler';
+
+  @override
+  String get beadsReset => 'Réinitialiser';
+
+  @override
+  String get beadsEditProgressAndSetCount =>
+      'Modifier la progression et le compte de série';
+
+  @override
+  String get beadsProgressCount => 'Compte de progression';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'Le compte de série ne peut pas être négatif';
+
+  @override
+  String get beadsValidProgressNumber =>
+      'Saisissez un nombre de progression valide';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'La progression doit être entre 0 et $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Compte restant';
+
+  @override
+  String get beadsTap => 'TAP';
+
+  @override
+  String get beadsGroups => 'Groupes';
+
+  @override
+  String get beadsNewGroup => 'Nouveau groupe';
+
+  @override
+  String get beadsEditGroup => 'Modifier le groupe';
+
+  @override
+  String get beadsGroupName => 'Nom du groupe';
+
+  @override
+  String get beadsGroupMembers => 'Membres';
+
+  @override
+  String get beadsNoBeadsInGroup =>
+      'Aucune perle dans ce groupe pour l\\u2019instant.';
+
+  @override
+  String get beadsAddBead => 'Ajouter une perle';
+
+  @override
+  String get beadsAddBeads => 'Ajouter des perles';
+
+  @override
+  String get beadsNewBead => 'Nouvelle perle';
+
+  @override
+  String get beadsDeleteGroup => 'Supprimer le groupe';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'Supprimer ce groupe\\u00A0? Ses perles sont conserv\\u00E9es.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Retirer du groupe';
+
+  @override
+  String get beadsNoNotesAdded => 'Aucune note ajoutée.';
+
+  @override
+  String get beadsSelect => 'Sélectionner';
+
+  @override
+  String get beadsSelectAll => 'Tout sélectionner';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count sélectionnés';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'Supprimer $count éléments sélectionnés ?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count supprimés';
+  }
 }

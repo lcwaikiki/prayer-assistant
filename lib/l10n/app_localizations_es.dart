@@ -1185,4 +1185,336 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Días Blancos (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Contador de Cuentas';
+
+  @override
+  String get beadsMilestones => 'Cuentas';
+
+  @override
+  String get beadsSwitchToLight => 'Cambiar a modo claro';
+
+  @override
+  String get beadsSwitchToDark => 'Cambiar a modo oscuro';
+
+  @override
+  String get beadsLanguage => 'Idioma';
+
+  @override
+  String get beadsChooseLanguage => 'Elegir idioma';
+
+  @override
+  String get beadsNoMilestones =>
+      'Aun no hay cuentas. Toca + para agregar una.';
+
+  @override
+  String get beadsStatsTitle => 'Historial';
+
+  @override
+  String get beadsStatsToday => 'Hoy';
+
+  @override
+  String get beadsStatsLast7Days => '7 días';
+
+  @override
+  String get beadsStatsTotal => 'Total';
+
+  @override
+  String get beadsDeleted => 'eliminado';
+
+  @override
+  String get beadsUndo => 'Deshacer';
+
+  @override
+  String get beadsEdit => 'Editar';
+
+  @override
+  String get beadsDuplicate => 'Duplicar';
+
+  @override
+  String get beadsClear => 'Borrar';
+
+  @override
+  String get beadsDelete => 'Eliminar';
+
+  @override
+  String get beadsCount => 'Conteo';
+
+  @override
+  String get beadsCheck => 'Chequeo';
+
+  @override
+  String get beadsSet => 'Serie';
+
+  @override
+  String get beadsProgress => 'Progreso';
+
+  @override
+  String get beadsCreateMilestone => 'Crear Cuentas';
+
+  @override
+  String get beadsEditMilestone => 'Editar Cuentas';
+
+  @override
+  String get beadsTitle => 'Titulo';
+
+  @override
+  String get beadsNotes => 'Notas';
+
+  @override
+  String get beadsNotesHint => 'Agrega notas para estas cuentas...';
+
+  @override
+  String get beadsCountField => 'Conteo';
+
+  @override
+  String get beadsCheckInterval => 'Intervalo de chequeo';
+
+  @override
+  String get beadsCheckHelper =>
+      'Debe ser menor o igual a la mitad del conteo. Usa 0 para sin puntos de control.';
+
+  @override
+  String get beadsSetCount => 'Conteo de series';
+
+  @override
+  String get beadsSetCountHelper =>
+      'El conteo de series debe ser menor o igual al conteo.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'El conteo de series solo se puede cambiar desde la pantalla de progreso.';
+
+  @override
+  String get beadsVibrationIntensity => 'Intensidad de vibracion';
+
+  @override
+  String get beadsReminderTitle => 'Recordatorio';
+
+  @override
+  String get beadsReminderEnable => 'Activar recordatorio';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Una vez';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Diario';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Semanal';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Mensual';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Anual';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Número de repeticiones';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Cuántas veces se activa el recordatorio antes de detenerse (desactivado = se repite siempre)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      'Introduce un número del 2 al 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Repetir en';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Día del mes';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Mes';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Día';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Repetición';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Base mensual';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Base anual';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Gregoriano';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hégira';
+
+  @override
+  String get beadsReminderPickDateTime => 'Elegir fecha y hora';
+
+  @override
+  String get beadsReminderPickDate => 'Elegir fecha';
+
+  @override
+  String get beadsReminderPickTime => 'Elegir hora';
+
+  @override
+  String get beadsReminderNotSet => 'No establecido';
+
+  @override
+  String get beadsReminderAnchorTime => 'Hora';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Hora de oración';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'A la hora';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Antes';
+
+  @override
+  String get beadsReminderOffsetAfter => 'Después';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Minutos';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Seleccionar oración';
+
+  @override
+  String get beadsSave => 'Guardar';
+
+  @override
+  String get beadsUpdate => 'Actualizar';
+
+  @override
+  String get beadsRequiredSuffix => 'es obligatorio';
+
+  @override
+  String get beadsMustBeInteger => 'debe ser un numero entero';
+
+  @override
+  String get beadsCountPositive => 'El conteo debe ser un entero positivo';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'El chequeo debe ser mayor que 0';
+
+  @override
+  String get beadsCheckHalfError =>
+      'El chequeo no puede ser mayor que la mitad del conteo';
+
+  @override
+  String get beadsEnterValidCountFirst => 'Ingresa primero un conteo valido';
+
+  @override
+  String get beadsSetCountNegative =>
+      'El conteo de series no puede ser negativo';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'El conteo de series no puede ser mayor que el conteo';
+
+  @override
+  String get beadsSetCountValueRequired => 'El conteo de series es obligatorio';
+
+  @override
+  String get beadsItemNotFound => 'Elemento no encontrado';
+
+  @override
+  String get beadsResetProgressTitle => 'Reiniciar progreso?';
+
+  @override
+  String get beadsResetProgressBody => 'Esto pondra el progreso actual en 0.';
+
+  @override
+  String get beadsCancel => 'Cancelar';
+
+  @override
+  String get beadsReset => 'Reiniciar';
+
+  @override
+  String get beadsEditProgressAndSetCount =>
+      'Editar progreso y conteo de series';
+
+  @override
+  String get beadsProgressCount => 'Conteo de progreso';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'El conteo de series no puede ser negativo';
+
+  @override
+  String get beadsValidProgressNumber => 'Ingresa un numero de progreso valido';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'El progreso debe estar entre 0 y $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Conteo restante';
+
+  @override
+  String get beadsTap => 'TOCAR';
+
+  @override
+  String get beadsGroups => 'Grupos';
+
+  @override
+  String get beadsNewGroup => 'Nuevo grupo';
+
+  @override
+  String get beadsEditGroup => 'Editar grupo';
+
+  @override
+  String get beadsGroupName => 'Nombre del grupo';
+
+  @override
+  String get beadsGroupMembers => 'Miembros';
+
+  @override
+  String get beadsNoBeadsInGroup => 'No hay cuentas en este grupo todavía.';
+
+  @override
+  String get beadsAddBead => 'Añadir cuenta';
+
+  @override
+  String get beadsAddBeads => 'Añadir cuentas';
+
+  @override
+  String get beadsNewBead => 'Nueva cuenta';
+
+  @override
+  String get beadsDeleteGroup => 'Eliminar grupo';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      '¿Eliminar este grupo? Sus cuentas se conservan.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Quitar del grupo';
+
+  @override
+  String get beadsNoNotesAdded => 'No se agregaron notas.';
+
+  @override
+  String get beadsSelect => 'Seleccionar';
+
+  @override
+  String get beadsSelectAll => 'Seleccionar todo';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count seleccionados';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '¿Eliminar $count elementos seleccionados?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count eliminados';
+  }
 }

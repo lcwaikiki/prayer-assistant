@@ -1136,4 +1136,324 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => '白日（13、14、15日）';
+
+  @override
+  String get beadsAppTitle => '念珠计数器';
+
+  @override
+  String get beadsMilestones => '念珠';
+
+  @override
+  String get beadsSwitchToLight => '切换到浅色模式';
+
+  @override
+  String get beadsSwitchToDark => '切换到深色模式';
+
+  @override
+  String get beadsLanguage => '语言';
+
+  @override
+  String get beadsChooseLanguage => '选择语言';
+
+  @override
+  String get beadsNoMilestones => '还没有念珠。点击 + 添加。';
+
+  @override
+  String get beadsStatsTitle => '历史';
+
+  @override
+  String get beadsStatsToday => '今天';
+
+  @override
+  String get beadsStatsLast7Days => '7天';
+
+  @override
+  String get beadsStatsTotal => '总计';
+
+  @override
+  String get beadsDeleted => '已删除';
+
+  @override
+  String get beadsUndo => '撤销';
+
+  @override
+  String get beadsEdit => '编辑';
+
+  @override
+  String get beadsDuplicate => '复制';
+
+  @override
+  String get beadsClear => '清除';
+
+  @override
+  String get beadsDelete => '删除';
+
+  @override
+  String get beadsCount => '计数';
+
+  @override
+  String get beadsCheck => '检查点';
+
+  @override
+  String get beadsSet => '组数';
+
+  @override
+  String get beadsProgress => '进度';
+
+  @override
+  String get beadsCreateMilestone => '创建念珠';
+
+  @override
+  String get beadsEditMilestone => '编辑念珠';
+
+  @override
+  String get beadsTitle => '标题';
+
+  @override
+  String get beadsNotes => '备注';
+
+  @override
+  String get beadsNotesHint => '为此念珠添加备注...';
+
+  @override
+  String get beadsCountField => '计数';
+
+  @override
+  String get beadsCheckInterval => '检查间隔';
+
+  @override
+  String get beadsCheckHelper => '必须小于或等于计数的一半。使用 0 表示无检查点。';
+
+  @override
+  String get beadsSetCount => '组数计数';
+
+  @override
+  String get beadsSetCountHelper => '组数计数必须小于或等于计数。';
+
+  @override
+  String get beadsSetCountReadonlyHelper => '组数只能在进度页面修改。';
+
+  @override
+  String get beadsVibrationIntensity => '震动强度';
+
+  @override
+  String get beadsReminderTitle => '提醒';
+
+  @override
+  String get beadsReminderEnable => '启用提醒';
+
+  @override
+  String get beadsReminderRepeatOnce => '一次';
+
+  @override
+  String get beadsReminderRepeatDaily => '每天';
+
+  @override
+  String get beadsReminderRepeatWeekly => '每周';
+
+  @override
+  String get beadsReminderRepeatMonthly => '每月';
+
+  @override
+  String get beadsReminderRepeatYearly => '每年';
+
+  @override
+  String get beadsReminderRepeatCountLabel => '重复次数';
+
+  @override
+  String get beadsReminderRepeatCountHelper => '提醒停止前触发的次数（关闭 = 永远重复）';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => '请输入 2 到 100 之间的数字';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => '重复于';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => '每月几号';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => '月份';
+
+  @override
+  String get beadsReminderYearlyDayLabel => '日';
+
+  @override
+  String get beadsReminderRecurrenceLabel => '重复';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => '每月基准';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => '每年基准';
+
+  @override
+  String get beadsReminderBasisGregorian => '公历';
+
+  @override
+  String get beadsReminderBasisHijri => '回历';
+
+  @override
+  String get beadsReminderPickDateTime => '选择日期和时间';
+
+  @override
+  String get beadsReminderPickDate => '选择日期';
+
+  @override
+  String get beadsReminderPickTime => '选择时间';
+
+  @override
+  String get beadsReminderNotSet => '未设置';
+
+  @override
+  String get beadsReminderAnchorTime => '时间';
+
+  @override
+  String get beadsReminderAnchorPrayer => '礼拜时间';
+
+  @override
+  String get beadsReminderOffsetOnTime => '准时';
+
+  @override
+  String get beadsReminderOffsetBefore => '之前';
+
+  @override
+  String get beadsReminderOffsetAfter => '之后';
+
+  @override
+  String get beadsReminderMinutesLabel => '分钟';
+
+  @override
+  String get beadsReminderSelectPrayer => '选择礼拜';
+
+  @override
+  String get beadsSave => '保存';
+
+  @override
+  String get beadsUpdate => '更新';
+
+  @override
+  String get beadsRequiredSuffix => '为必填项';
+
+  @override
+  String get beadsMustBeInteger => '必须是整数';
+
+  @override
+  String get beadsCountPositive => '计数必须是正整数';
+
+  @override
+  String get beadsCheckGreaterThanZero => '检查点必须大于 0';
+
+  @override
+  String get beadsCheckHalfError => '检查点不能大于计数的一半';
+
+  @override
+  String get beadsEnterValidCountFirst => '请先输入有效计数';
+
+  @override
+  String get beadsSetCountNegative => '组数不能为负数';
+
+  @override
+  String get beadsSetCountGreaterCount => '组数不能大于计数';
+
+  @override
+  String get beadsSetCountValueRequired => '组数为必填项';
+
+  @override
+  String get beadsItemNotFound => '未找到项目';
+
+  @override
+  String get beadsResetProgressTitle => '重置进度？';
+
+  @override
+  String get beadsResetProgressBody => '这会将当前进度重置为 0。';
+
+  @override
+  String get beadsCancel => '取消';
+
+  @override
+  String get beadsReset => '重置';
+
+  @override
+  String get beadsEditProgressAndSetCount => '编辑进度与组数';
+
+  @override
+  String get beadsProgressCount => '进度计数';
+
+  @override
+  String get beadsSetCountCannotNegative => '组数不能为负数';
+
+  @override
+  String get beadsValidProgressNumber => '请输入有效进度数字';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return '进度必须在 0 到 $max 之间';
+  }
+
+  @override
+  String get beadsMaxMinusCount => '剩余计数';
+
+  @override
+  String get beadsTap => '点按';
+
+  @override
+  String get beadsGroups => '分组';
+
+  @override
+  String get beadsNewGroup => '新建分组';
+
+  @override
+  String get beadsEditGroup => '编辑分组';
+
+  @override
+  String get beadsGroupName => '分组名称';
+
+  @override
+  String get beadsGroupMembers => '成员';
+
+  @override
+  String get beadsNoBeadsInGroup => '该分组还没有念珠。';
+
+  @override
+  String get beadsAddBead => '添加念珠';
+
+  @override
+  String get beadsAddBeads => '添加念珠';
+
+  @override
+  String get beadsNewBead => '新建念珠';
+
+  @override
+  String get beadsDeleteGroup => '删除分组';
+
+  @override
+  String get beadsDeleteGroupConfirm => '删除此分组？念珠将保留。';
+
+  @override
+  String get beadsRemoveFromGroup => '从分组移除';
+
+  @override
+  String get beadsNoNotesAdded => '暂无备注。';
+
+  @override
+  String get beadsSelect => '选择';
+
+  @override
+  String get beadsSelectAll => '全选';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '已选择 $count 项';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '删除选中的 $count 项？';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '已删除 $count 项';
+  }
 }

@@ -2257,6 +2257,630 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'White Days (13, 14, 15)'**
   String get whiteDaysBannerPrefix;
+
+  /// No description provided for @beadsAppTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Beads Counter'**
+  String get beadsAppTitle;
+
+  /// No description provided for @beadsMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'Beads'**
+  String get beadsMilestones;
+
+  /// No description provided for @beadsSwitchToLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to light mode'**
+  String get beadsSwitchToLight;
+
+  /// No description provided for @beadsSwitchToDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch to dark mode'**
+  String get beadsSwitchToDark;
+
+  /// No description provided for @beadsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get beadsLanguage;
+
+  /// No description provided for @beadsChooseLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose language'**
+  String get beadsChooseLanguage;
+
+  /// No description provided for @beadsNoMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'No beads yet. Tap + to add one.'**
+  String get beadsNoMilestones;
+
+  /// No description provided for @beadsStatsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get beadsStatsTitle;
+
+  /// No description provided for @beadsStatsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get beadsStatsToday;
+
+  /// No description provided for @beadsStatsLast7Days.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get beadsStatsLast7Days;
+
+  /// No description provided for @beadsStatsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get beadsStatsTotal;
+
+  /// No description provided for @beadsDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted'**
+  String get beadsDeleted;
+
+  /// No description provided for @beadsUndo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get beadsUndo;
+
+  /// No description provided for @beadsEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get beadsEdit;
+
+  /// No description provided for @beadsDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get beadsDuplicate;
+
+  /// No description provided for @beadsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get beadsClear;
+
+  /// No description provided for @beadsDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get beadsDelete;
+
+  /// No description provided for @beadsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get beadsCount;
+
+  /// No description provided for @beadsCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get beadsCheck;
+
+  /// No description provided for @beadsSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set'**
+  String get beadsSet;
+
+  /// No description provided for @beadsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get beadsProgress;
+
+  /// No description provided for @beadsCreateMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Beads'**
+  String get beadsCreateMilestone;
+
+  /// No description provided for @beadsEditMilestone.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Beads'**
+  String get beadsEditMilestone;
+
+  /// No description provided for @beadsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get beadsTitle;
+
+  /// No description provided for @beadsNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get beadsNotes;
+
+  /// No description provided for @beadsNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add notes for these beads...'**
+  String get beadsNotesHint;
+
+  /// No description provided for @beadsCountField.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get beadsCountField;
+
+  /// No description provided for @beadsCheckInterval.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Interval'**
+  String get beadsCheckInterval;
+
+  /// No description provided for @beadsCheckHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Less or equal to half of count. Leave empty or 0 for no checkpoints.'**
+  String get beadsCheckHelper;
+
+  /// No description provided for @beadsSetCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Count'**
+  String get beadsSetCount;
+
+  /// No description provided for @beadsSetCountHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count must be less than or equal to count.'**
+  String get beadsSetCountHelper;
+
+  /// No description provided for @beadsSetCountReadonlyHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count can only be changed from progress screen.'**
+  String get beadsSetCountReadonlyHelper;
+
+  /// No description provided for @beadsVibrationIntensity.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration Intensity'**
+  String get beadsVibrationIntensity;
+
+  /// No description provided for @beadsReminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get beadsReminderTitle;
+
+  /// No description provided for @beadsReminderEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable reminder'**
+  String get beadsReminderEnable;
+
+  /// No description provided for @beadsReminderRepeatOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once'**
+  String get beadsReminderRepeatOnce;
+
+  /// No description provided for @beadsReminderRepeatDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get beadsReminderRepeatDaily;
+
+  /// No description provided for @beadsReminderRepeatWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get beadsReminderRepeatWeekly;
+
+  /// No description provided for @beadsReminderRepeatMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get beadsReminderRepeatMonthly;
+
+  /// No description provided for @beadsReminderRepeatYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get beadsReminderRepeatYearly;
+
+  /// No description provided for @beadsReminderRepeatCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat count'**
+  String get beadsReminderRepeatCountLabel;
+
+  /// No description provided for @beadsReminderRepeatCountHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of times the reminder fires before stopping (off = repeats forever)'**
+  String get beadsReminderRepeatCountHelper;
+
+  /// No description provided for @beadsReminderRepeatCountRangeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number from 2 to 100'**
+  String get beadsReminderRepeatCountRangeError;
+
+  /// No description provided for @beadsReminderRepeatDaysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat on'**
+  String get beadsReminderRepeatDaysLabel;
+
+  /// No description provided for @beadsReminderDayOfMonthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day of month'**
+  String get beadsReminderDayOfMonthLabel;
+
+  /// No description provided for @beadsReminderYearlyMonthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get beadsReminderYearlyMonthLabel;
+
+  /// No description provided for @beadsReminderYearlyDayLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get beadsReminderYearlyDayLabel;
+
+  /// No description provided for @beadsReminderRecurrenceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get beadsReminderRecurrenceLabel;
+
+  /// No description provided for @beadsReminderMonthlyBasisLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly basis'**
+  String get beadsReminderMonthlyBasisLabel;
+
+  /// No description provided for @beadsReminderYearlyBasisLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly basis'**
+  String get beadsReminderYearlyBasisLabel;
+
+  /// No description provided for @beadsReminderBasisGregorian.
+  ///
+  /// In en, this message translates to:
+  /// **'Gregorian'**
+  String get beadsReminderBasisGregorian;
+
+  /// No description provided for @beadsReminderBasisHijri.
+  ///
+  /// In en, this message translates to:
+  /// **'Hijri'**
+  String get beadsReminderBasisHijri;
+
+  /// No description provided for @beadsReminderPickDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick date & time'**
+  String get beadsReminderPickDateTime;
+
+  /// No description provided for @beadsReminderPickDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick date'**
+  String get beadsReminderPickDate;
+
+  /// No description provided for @beadsReminderPickTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick time'**
+  String get beadsReminderPickTime;
+
+  /// No description provided for @beadsReminderNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get beadsReminderNotSet;
+
+  /// No description provided for @beadsReminderAnchorTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get beadsReminderAnchorTime;
+
+  /// No description provided for @beadsReminderAnchorPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer time'**
+  String get beadsReminderAnchorPrayer;
+
+  /// No description provided for @beadsReminderOffsetOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'On time'**
+  String get beadsReminderOffsetOnTime;
+
+  /// No description provided for @beadsReminderOffsetBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get beadsReminderOffsetBefore;
+
+  /// No description provided for @beadsReminderOffsetAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get beadsReminderOffsetAfter;
+
+  /// No description provided for @beadsReminderMinutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes'**
+  String get beadsReminderMinutesLabel;
+
+  /// No description provided for @beadsReminderSelectPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select prayer'**
+  String get beadsReminderSelectPrayer;
+
+  /// No description provided for @beadsSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get beadsSave;
+
+  /// No description provided for @beadsUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get beadsUpdate;
+
+  /// No description provided for @beadsRequiredSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'is required'**
+  String get beadsRequiredSuffix;
+
+  /// No description provided for @beadsMustBeInteger.
+  ///
+  /// In en, this message translates to:
+  /// **'must be an integer'**
+  String get beadsMustBeInteger;
+
+  /// No description provided for @beadsCountPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Count must be a positive integer'**
+  String get beadsCountPositive;
+
+  /// No description provided for @beadsCheckGreaterThanZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Check must be greater than 0'**
+  String get beadsCheckGreaterThanZero;
+
+  /// No description provided for @beadsCheckHalfError.
+  ///
+  /// In en, this message translates to:
+  /// **'Check cannot be greater than half of count'**
+  String get beadsCheckHalfError;
+
+  /// No description provided for @beadsEnterValidCountFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid count first'**
+  String get beadsEnterValidCountFirst;
+
+  /// No description provided for @beadsSetCountNegative.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count cannot be negative'**
+  String get beadsSetCountNegative;
+
+  /// No description provided for @beadsSetCountGreaterCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count cannot be greater than count'**
+  String get beadsSetCountGreaterCount;
+
+  /// No description provided for @beadsSetCountValueRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count is required'**
+  String get beadsSetCountValueRequired;
+
+  /// No description provided for @beadsItemNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Item not found'**
+  String get beadsItemNotFound;
+
+  /// No description provided for @beadsResetProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset progress?'**
+  String get beadsResetProgressTitle;
+
+  /// No description provided for @beadsResetProgressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will set current progress back to 0.'**
+  String get beadsResetProgressBody;
+
+  /// No description provided for @beadsCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get beadsCancel;
+
+  /// No description provided for @beadsReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get beadsReset;
+
+  /// No description provided for @beadsEditProgressAndSetCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit progress and set count'**
+  String get beadsEditProgressAndSetCount;
+
+  /// No description provided for @beadsProgressCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress Count'**
+  String get beadsProgressCount;
+
+  /// No description provided for @beadsSetCountCannotNegative.
+  ///
+  /// In en, this message translates to:
+  /// **'Set count cannot be negative'**
+  String get beadsSetCountCannotNegative;
+
+  /// No description provided for @beadsValidProgressNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid progress number'**
+  String get beadsValidProgressNumber;
+
+  /// No description provided for @beadsProgressBetween.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress must be between 0 and {max}'**
+  String beadsProgressBetween(int max);
+
+  /// No description provided for @beadsMaxMinusCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Left Count'**
+  String get beadsMaxMinusCount;
+
+  /// No description provided for @beadsTap.
+  ///
+  /// In en, this message translates to:
+  /// **'TAP'**
+  String get beadsTap;
+
+  /// No description provided for @beadsGroups.
+  ///
+  /// In en, this message translates to:
+  /// **'Groups'**
+  String get beadsGroups;
+
+  /// No description provided for @beadsNewGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'New Group'**
+  String get beadsNewGroup;
+
+  /// No description provided for @beadsEditGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Group'**
+  String get beadsEditGroup;
+
+  /// No description provided for @beadsGroupName.
+  ///
+  /// In en, this message translates to:
+  /// **'Group name'**
+  String get beadsGroupName;
+
+  /// No description provided for @beadsGroupMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get beadsGroupMembers;
+
+  /// No description provided for @beadsNoBeadsInGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'No beads in this group yet.'**
+  String get beadsNoBeadsInGroup;
+
+  /// No description provided for @beadsAddBead.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bead'**
+  String get beadsAddBead;
+
+  /// No description provided for @beadsAddBeads.
+  ///
+  /// In en, this message translates to:
+  /// **'Add beads'**
+  String get beadsAddBeads;
+
+  /// No description provided for @beadsNewBead.
+  ///
+  /// In en, this message translates to:
+  /// **'New Bead'**
+  String get beadsNewBead;
+
+  /// No description provided for @beadsDeleteGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Group'**
+  String get beadsDeleteGroup;
+
+  /// No description provided for @beadsDeleteGroupConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this group? Its beads are kept.'**
+  String get beadsDeleteGroupConfirm;
+
+  /// No description provided for @beadsRemoveFromGroup.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from group'**
+  String get beadsRemoveFromGroup;
+
+  /// No description provided for @beadsNoNotesAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'No notes added.'**
+  String get beadsNoNotesAdded;
+
+  /// No description provided for @beadsSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get beadsSelect;
+
+  /// No description provided for @beadsSelectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get beadsSelectAll;
+
+  /// No description provided for @beadsSelectedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String beadsSelectedCount(int count);
+
+  /// No description provided for @beadsDeleteSelectedConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} selected items?'**
+  String beadsDeleteSelectedConfirm(int count);
+
+  /// No description provided for @beadsDeletedSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} deleted'**
+  String beadsDeletedSelected(int count);
 }
 
 class _AppLocalizationsDelegate

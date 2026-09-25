@@ -48,7 +48,7 @@ calendar work fully offline after the yearly schedule is cached.
 - **Networking**: `http` client (`ImsakiyemApi`), `geolocator` + `geocoding`
   for GPS auto-pick.
 - **Localization**: `flutter gen-l10n` — 14 locales (en, tr, es, fr, de, ur,
-  fa, ar, zh, ja, id, ru, bn, ta) plus a separate `TesbihatLocalizations` delegate.
+  fa, ar, zh, ja, id, ru, bn, ta) unifying app and Beads localizations.
 
 ## Project layout
 

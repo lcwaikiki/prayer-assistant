@@ -1181,4 +1181,337 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Weiße Tage (13., 14., 15.)';
+
+  @override
+  String get beadsAppTitle => 'Perlen-Zähler';
+
+  @override
+  String get beadsMilestones => 'Perlen';
+
+  @override
+  String get beadsSwitchToLight => 'Zu hellem Modus wechseln';
+
+  @override
+  String get beadsSwitchToDark => 'Zu dunklem Modus wechseln';
+
+  @override
+  String get beadsLanguage => 'Sprache';
+
+  @override
+  String get beadsChooseLanguage => 'Sprache wählen';
+
+  @override
+  String get beadsNoMilestones => 'Noch keine Perlen. Mit + hinzufügen.';
+
+  @override
+  String get beadsStatsTitle => 'Verlauf';
+
+  @override
+  String get beadsStatsToday => 'Heute';
+
+  @override
+  String get beadsStatsLast7Days => '7 Tage';
+
+  @override
+  String get beadsStatsTotal => 'Gesamt';
+
+  @override
+  String get beadsDeleted => 'gelöscht';
+
+  @override
+  String get beadsUndo => 'Rückgängig';
+
+  @override
+  String get beadsEdit => 'Bearbeiten';
+
+  @override
+  String get beadsDuplicate => 'Duplizieren';
+
+  @override
+  String get beadsClear => 'Löschen';
+
+  @override
+  String get beadsDelete => 'Löschen';
+
+  @override
+  String get beadsCount => 'Zähler';
+
+  @override
+  String get beadsCheck => 'Intervall';
+
+  @override
+  String get beadsSet => 'Satz';
+
+  @override
+  String get beadsProgress => 'Fortschritt';
+
+  @override
+  String get beadsCreateMilestone => 'Perlen erstellen';
+
+  @override
+  String get beadsEditMilestone => 'Perlen bearbeiten';
+
+  @override
+  String get beadsTitle => 'Titel';
+
+  @override
+  String get beadsNotes => 'Notizen';
+
+  @override
+  String get beadsNotesHint => 'Notizen für diese Perlen hinzufügen...';
+
+  @override
+  String get beadsCountField => 'Zähler';
+
+  @override
+  String get beadsCheckInterval => 'Intervallprüfung';
+
+  @override
+  String get beadsCheckHelper =>
+      'Muss kleiner oder gleich der Hälfte des Zählers sein. 0 bedeutet keine Prüfpunkte.';
+
+  @override
+  String get beadsSetCount => 'Satz-Zähler';
+
+  @override
+  String get beadsSetCountHelper =>
+      'Der Satz-Zähler muss kleiner/gleich dem Zähler sein.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Der Satz-Zähler kann nur im Fortschrittsbildschirm geändert werden.';
+
+  @override
+  String get beadsVibrationIntensity => 'Vibrationsintensität';
+
+  @override
+  String get beadsReminderTitle => 'Erinnerung';
+
+  @override
+  String get beadsReminderEnable => 'Erinnerung aktivieren';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Einmalig';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Täglich';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Wöchentlich';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Monatlich';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Jährlich';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Wiederholungsanzahl';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Wie oft der Reminder ausgelöst wird, bevor er stoppt (aus = unbegrenzt)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      'Geben Sie eine Zahl von 2 bis 100 ein';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Wiederholen am';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Tag des Monats';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Monat';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Tag';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Wiederholung';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Monatliche Basis';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Jährliche Basis';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Gregorianisch';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hidschri';
+
+  @override
+  String get beadsReminderPickDateTime => 'Datum & Uhrzeit wählen';
+
+  @override
+  String get beadsReminderPickDate => 'Datum wählen';
+
+  @override
+  String get beadsReminderPickTime => 'Uhrzeit wählen';
+
+  @override
+  String get beadsReminderNotSet => 'Nicht festgelegt';
+
+  @override
+  String get beadsReminderAnchorTime => 'Uhrzeit';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Gebetszeit';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'Pünktlich';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Vorher';
+
+  @override
+  String get beadsReminderOffsetAfter => 'Nachher';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Minuten';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Gebet auswählen';
+
+  @override
+  String get beadsSave => 'Speichern';
+
+  @override
+  String get beadsUpdate => 'Aktualisieren';
+
+  @override
+  String get beadsRequiredSuffix => 'ist erforderlich';
+
+  @override
+  String get beadsMustBeInteger => 'muss eine Ganzzahl sein';
+
+  @override
+  String get beadsCountPositive => 'Der Zähler muss positiv sein';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'Intervall muss größer als 0 sein';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Intervall darf nicht größer als die Hälfte des Zählers sein';
+
+  @override
+  String get beadsEnterValidCountFirst =>
+      'Bitte zuerst einen gültigen Zähler eingeben';
+
+  @override
+  String get beadsSetCountNegative => 'Satz-Zähler darf nicht negativ sein';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'Satz-Zähler darf nicht größer als der Zähler sein';
+
+  @override
+  String get beadsSetCountValueRequired => 'Satz-Zähler ist erforderlich';
+
+  @override
+  String get beadsItemNotFound => 'Eintrag nicht gefunden';
+
+  @override
+  String get beadsResetProgressTitle => 'Fortschritt zurücksetzen?';
+
+  @override
+  String get beadsResetProgressBody =>
+      'Dies setzt den aktuellen Fortschritt auf 0 zurück.';
+
+  @override
+  String get beadsCancel => 'Abbrechen';
+
+  @override
+  String get beadsReset => 'Zurücksetzen';
+
+  @override
+  String get beadsEditProgressAndSetCount =>
+      'Fortschritt und Satz-Zähler bearbeiten';
+
+  @override
+  String get beadsProgressCount => 'Fortschrittszähler';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'Satz-Zähler darf nicht negativ sein';
+
+  @override
+  String get beadsValidProgressNumber =>
+      'Bitte eine gültige Fortschrittszahl eingeben';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'Fortschritt muss zwischen 0 und $max liegen';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Verbleibende Anzahl';
+
+  @override
+  String get beadsTap => 'TAP';
+
+  @override
+  String get beadsGroups => 'Gruppen';
+
+  @override
+  String get beadsNewGroup => 'Neue Gruppe';
+
+  @override
+  String get beadsEditGroup => 'Gruppe bearbeiten';
+
+  @override
+  String get beadsGroupName => 'Gruppenname';
+
+  @override
+  String get beadsGroupMembers => 'Mitglieder';
+
+  @override
+  String get beadsNoBeadsInGroup => 'Noch keine Perlen in dieser Gruppe.';
+
+  @override
+  String get beadsAddBead => 'Perle hinzufügen';
+
+  @override
+  String get beadsAddBeads => 'Perlen hinzufügen';
+
+  @override
+  String get beadsNewBead => 'Neue Perle';
+
+  @override
+  String get beadsDeleteGroup => 'Gruppe löschen';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'Diese Gruppe löschen? Die Perlen bleiben erhalten.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Aus Gruppe entfernen';
+
+  @override
+  String get beadsNoNotesAdded => 'Keine Notizen hinzugefügt.';
+
+  @override
+  String get beadsSelect => 'Auswählen';
+
+  @override
+  String get beadsSelectAll => 'Alle auswählen';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count ausgewählt';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '$count ausgewählte Elemente löschen?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count gelöscht';
+  }
 }

@@ -6,7 +6,6 @@ import 'package:prayer_assistant/l10n/app_localizations.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import 'package:prayer_assistant/src/l10n/locale_options.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
-import 'package:prayer_assistant/src/tesbihat/l10n/tesbihat_localizations.dart';
 import 'package:provider/provider.dart';
 
 /// A complete [PrayerDay] for a fixed date, useful across model, service,
@@ -66,7 +65,6 @@ Widget testLocalizedApp({
     locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,
-      ...TesbihatLocalizations.localizationsDelegates,
       GlobalMaterialLocalizations.delegate,
       GlobalWidgetsLocalizations.delegate,
       GlobalCupertinoLocalizations.delegate,

@@ -1182,4 +1182,331 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'আইয়ামে বিজ (১৩, ১৪, ১৫)';
+
+  @override
+  String get beadsAppTitle => 'তসবীহ গণক';
+
+  @override
+  String get beadsMilestones => 'তসবীহ';
+
+  @override
+  String get beadsSwitchToLight => 'লাইট মোডে যান';
+
+  @override
+  String get beadsSwitchToDark => 'ডার্ক মোডে যান';
+
+  @override
+  String get beadsLanguage => 'ভাষা';
+
+  @override
+  String get beadsChooseLanguage => 'ভাষা নির্বাচন করুন';
+
+  @override
+  String get beadsNoMilestones => 'কোন তসবীহ নেই। যোগ করতে + চাপুন।';
+
+  @override
+  String get beadsStatsTitle => 'ইতিহাস';
+
+  @override
+  String get beadsStatsToday => 'আজ';
+
+  @override
+  String get beadsStatsLast7Days => '৭ দিন';
+
+  @override
+  String get beadsStatsTotal => 'মোট';
+
+  @override
+  String get beadsDeleted => 'মুছে ফেলা হয়েছে';
+
+  @override
+  String get beadsUndo => 'পূর্বাবস্থায় ফেরান';
+
+  @override
+  String get beadsEdit => 'সম্পাদনা';
+
+  @override
+  String get beadsDuplicate => 'অনুলিপি';
+
+  @override
+  String get beadsClear => 'সাফ করুন';
+
+  @override
+  String get beadsDelete => 'মুছুন';
+
+  @override
+  String get beadsCount => 'গণনা';
+
+  @override
+  String get beadsCheck => 'চেক';
+
+  @override
+  String get beadsSet => 'সেট';
+
+  @override
+  String get beadsProgress => 'অগ্রগতি';
+
+  @override
+  String get beadsCreateMilestone => 'তসবীহ তৈরি করুন';
+
+  @override
+  String get beadsEditMilestone => 'তসবীহ সম্পাদনা করুন';
+
+  @override
+  String get beadsTitle => 'শিরোনাম';
+
+  @override
+  String get beadsNotes => 'নোট';
+
+  @override
+  String get beadsNotesHint => 'এই তসবীহের জন্য নোট যোগ করুন...';
+
+  @override
+  String get beadsCountField => 'গণনা';
+
+  @override
+  String get beadsCheckInterval => 'চেক ব্যবধান';
+
+  @override
+  String get beadsCheckHelper =>
+      'মোট গণনার অর্ধেকের সমান বা কম। চেকপয়েন্ট না চাইলে খালি রাখুন বা ০ দিন।';
+
+  @override
+  String get beadsSetCount => 'সেট সংখ্যা';
+
+  @override
+  String get beadsSetCountHelper => 'সেট সংখ্যা মোট গণনার সমান বা কম হতে হবে।';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'সেট সংখ্যা কেবল অগ্রগতি স্ক্রিন থেকে পরিবর্তন করা যাবে।';
+
+  @override
+  String get beadsVibrationIntensity => 'কম্পনের মাত্রা';
+
+  @override
+  String get beadsReminderTitle => 'অনুস্মারক';
+
+  @override
+  String get beadsReminderEnable => 'অনুস্মারক চালু করুন';
+
+  @override
+  String get beadsReminderRepeatOnce => 'একবার';
+
+  @override
+  String get beadsReminderRepeatDaily => 'প্রতিদিন';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'সাপ্তাহিক';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'মাসিক';
+
+  @override
+  String get beadsReminderRepeatYearly => 'বার্ষিক';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'পুনরাবৃত্তির সংখ্যা';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'থামার আগে অনুস্মারকটি যতবার বাজবে (বন্ধ = চিরতরে পুনরাবৃত্তি)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      '২ থেকে ১০০ এর মধ্যে একটি সংখ্যা লিখুন';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'পুনরাবৃত্তির দিন';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'মাসের দিন';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'মাস';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'দিন';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'পুনরাবৃত্তি';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'মাসিক ভিত্তি';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'বার্ষিক ভিত্তি';
+
+  @override
+  String get beadsReminderBasisGregorian => 'গ্রেগরিয়ান';
+
+  @override
+  String get beadsReminderBasisHijri => 'হিজরি';
+
+  @override
+  String get beadsReminderPickDateTime => 'তারিখ ও সময় নির্বাচন করুন';
+
+  @override
+  String get beadsReminderPickDate => 'তারিখ নির্বাচন করুন';
+
+  @override
+  String get beadsReminderPickTime => 'সময় নির্বাচন করুন';
+
+  @override
+  String get beadsReminderNotSet => 'সেট করা হয়নি';
+
+  @override
+  String get beadsReminderAnchorTime => 'সময়';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'নামাজের সময়';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'সঠিক সময়ে';
+
+  @override
+  String get beadsReminderOffsetBefore => 'আগে';
+
+  @override
+  String get beadsReminderOffsetAfter => 'পরে';
+
+  @override
+  String get beadsReminderMinutesLabel => 'মিনিট';
+
+  @override
+  String get beadsReminderSelectPrayer => 'নামাজ নির্বাচন করুন';
+
+  @override
+  String get beadsSave => 'সংরক্ষণ';
+
+  @override
+  String get beadsUpdate => 'আপডেট';
+
+  @override
+  String get beadsRequiredSuffix => 'প্রয়োজন';
+
+  @override
+  String get beadsMustBeInteger => 'একটি পূর্ণসংখ্যা হতে হবে';
+
+  @override
+  String get beadsCountPositive => 'গণনা একটি ধনাত্মক পূর্ণসংখ্যা হতে হবে';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'চেক ০ এর বেশি হতে হবে';
+
+  @override
+  String get beadsCheckHalfError => 'চেক গণনার অর্ধেকের বেশি হতে পারে না';
+
+  @override
+  String get beadsEnterValidCountFirst => 'প্রথমে একটি বৈধ গণনা লিখুন';
+
+  @override
+  String get beadsSetCountNegative => 'সেট সংখ্যা ঋণাত্মক হতে পারে না';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'সেট সংখ্যা গণনার চেয়ে বেশি হতে পারে না';
+
+  @override
+  String get beadsSetCountValueRequired => 'সেট সংখ্যা আবশ্যক';
+
+  @override
+  String get beadsItemNotFound => 'আইটেম পাওয়া যায়নি';
+
+  @override
+  String get beadsResetProgressTitle => 'অগ্রগতি রিসেট করবেন?';
+
+  @override
+  String get beadsResetProgressBody => 'এটি বর্তমান অগ্রগতি ০-তে ফিরিয়ে দেবে।';
+
+  @override
+  String get beadsCancel => 'বাতিল';
+
+  @override
+  String get beadsReset => 'রিসেট';
+
+  @override
+  String get beadsEditProgressAndSetCount =>
+      'অগ্রগতি ও সেট সংখ্যা সম্পাদনা করুন';
+
+  @override
+  String get beadsProgressCount => 'অগ্রগতি গণনা';
+
+  @override
+  String get beadsSetCountCannotNegative => 'সেট সংখ্যা ঋণাত্মক হতে পারে না';
+
+  @override
+  String get beadsValidProgressNumber => 'একটি বৈধ অগ্রগতি সংখ্যা লিখুন';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'অগ্রগতি ০ এবং $max-এর মধ্যে হতে হবে';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'অবশিষ্ট গণনা';
+
+  @override
+  String get beadsTap => 'ট্যাপ';
+
+  @override
+  String get beadsGroups => 'গ্রুপসমূহ';
+
+  @override
+  String get beadsNewGroup => 'নতুন গ্রুপ';
+
+  @override
+  String get beadsEditGroup => 'গ্রুপ সম্পাদনা';
+
+  @override
+  String get beadsGroupName => 'গ্রুপের নাম';
+
+  @override
+  String get beadsGroupMembers => 'সদস্যগণ';
+
+  @override
+  String get beadsNoBeadsInGroup => 'এই গ্রুপে এখনও কোনও তসবীহ নেই।';
+
+  @override
+  String get beadsAddBead => 'তসবীহ যোগ করুন';
+
+  @override
+  String get beadsAddBeads => 'তসবীহসমূহ যোগ করুন';
+
+  @override
+  String get beadsNewBead => 'নতুন তসবীহ';
+
+  @override
+  String get beadsDeleteGroup => 'গ্রুপ মুছুন';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'এই গ্রুপটি মুছবেন? এর তসবীহগুলি সংরক্ষিত থাকবে।';
+
+  @override
+  String get beadsRemoveFromGroup => 'গ্রুপ থেকে সরান';
+
+  @override
+  String get beadsNoNotesAdded => 'কোন নোট যোগ করা হয়নি।';
+
+  @override
+  String get beadsSelect => 'নির্বাচন করুন';
+
+  @override
+  String get beadsSelectAll => 'সব নির্বাচন করুন';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$countটি নির্বাচিত';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '$countটি নির্বাচিত আইটেম মুছবেন?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$countটি মুছে ফেলা হয়েছে';
+  }
 }

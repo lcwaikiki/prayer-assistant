@@ -1171,4 +1171,332 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'ایام البیض (۱۳، ۱۴، ۱۵)';
+
+  @override
+  String get beadsAppTitle => 'شمارنده تسبیح';
+
+  @override
+  String get beadsMilestones => 'تسبیح';
+
+  @override
+  String get beadsSwitchToLight => 'تغییر به حالت روشن';
+
+  @override
+  String get beadsSwitchToDark => 'تغییر به حالت تیره';
+
+  @override
+  String get beadsLanguage => 'زبان';
+
+  @override
+  String get beadsChooseLanguage => 'انتخاب زبان';
+
+  @override
+  String get beadsNoMilestones =>
+      'هنوز تسبیحی وجود ندارد. برای افزودن + را بزنید.';
+
+  @override
+  String get beadsStatsTitle => 'تاریخچه';
+
+  @override
+  String get beadsStatsToday => 'امروز';
+
+  @override
+  String get beadsStatsLast7Days => '۷ روز';
+
+  @override
+  String get beadsStatsTotal => 'مجموع';
+
+  @override
+  String get beadsDeleted => 'حذف شد';
+
+  @override
+  String get beadsUndo => 'بازگردانی';
+
+  @override
+  String get beadsEdit => 'ویرایش';
+
+  @override
+  String get beadsDuplicate => 'تکثیر';
+
+  @override
+  String get beadsClear => 'پاک کردن';
+
+  @override
+  String get beadsDelete => 'حذف';
+
+  @override
+  String get beadsCount => 'شمارش';
+
+  @override
+  String get beadsCheck => 'بررسی';
+
+  @override
+  String get beadsSet => 'دور';
+
+  @override
+  String get beadsProgress => 'پیشرفت';
+
+  @override
+  String get beadsCreateMilestone => 'ایجاد تسبیح';
+
+  @override
+  String get beadsEditMilestone => 'ویرایش تسبیح';
+
+  @override
+  String get beadsTitle => 'عنوان';
+
+  @override
+  String get beadsNotes => 'یادداشت‌ها';
+
+  @override
+  String get beadsNotesHint => 'برای این تسبیح یادداشت بنویسید...';
+
+  @override
+  String get beadsCountField => 'شمارش';
+
+  @override
+  String get beadsCheckInterval => 'فاصله بررسی';
+
+  @override
+  String get beadsCheckHelper =>
+      'باید کمتر یا مساوی نصف شمارش باشد. برای بدون نقطه کنترل ۰ وارد کنید.';
+
+  @override
+  String get beadsSetCount => 'تعداد دور';
+
+  @override
+  String get beadsSetCountHelper => 'تعداد دور باید کمتر یا مساوی شمارش باشد.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'تعداد دور فقط از صفحه پیشرفت قابل تغییر است.';
+
+  @override
+  String get beadsVibrationIntensity => 'شدت ویبره';
+
+  @override
+  String get beadsReminderTitle => 'یادآور';
+
+  @override
+  String get beadsReminderEnable => 'فعال‌سازی یادآور';
+
+  @override
+  String get beadsReminderRepeatOnce => 'یک‌بار';
+
+  @override
+  String get beadsReminderRepeatDaily => 'روزانه';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'هفتگی';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'ماهانه';
+
+  @override
+  String get beadsReminderRepeatYearly => 'سالانه';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'تعداد تکرار';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'تعداد دفعاتی که یادآوری قبل از توقف اجرا می‌شود (خاموش = همیشه تکرار می‌شود)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => 'عددی از ۲ تا ۱۰۰ وارد کنید';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'تکرار در';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'روز ماه';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'ماه';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'روز';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'تکرار';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'مبنای ماهانه';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'مبنای سالانه';
+
+  @override
+  String get beadsReminderBasisGregorian => 'میلادی';
+
+  @override
+  String get beadsReminderBasisHijri => 'هجری';
+
+  @override
+  String get beadsReminderPickDateTime => 'انتخاب تاریخ و ساعت';
+
+  @override
+  String get beadsReminderPickDate => 'انتخاب تاریخ';
+
+  @override
+  String get beadsReminderPickTime => 'انتخاب ساعت';
+
+  @override
+  String get beadsReminderNotSet => 'تنظیم نشده';
+
+  @override
+  String get beadsReminderAnchorTime => 'ساعت';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'وقت نماز';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'در زمان';
+
+  @override
+  String get beadsReminderOffsetBefore => 'قبل';
+
+  @override
+  String get beadsReminderOffsetAfter => 'بعد';
+
+  @override
+  String get beadsReminderMinutesLabel => 'دقیقه';
+
+  @override
+  String get beadsReminderSelectPrayer => 'انتخاب نماز';
+
+  @override
+  String get beadsSave => 'ذخیره';
+
+  @override
+  String get beadsUpdate => 'به‌روزرسانی';
+
+  @override
+  String get beadsRequiredSuffix => 'الزامی است';
+
+  @override
+  String get beadsMustBeInteger => 'باید عدد صحیح باشد';
+
+  @override
+  String get beadsCountPositive => 'شمارش باید عدد صحیح مثبت باشد';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'مقدار بررسی باید بیشتر از 0 باشد';
+
+  @override
+  String get beadsCheckHalfError =>
+      'مقدار بررسی نمی‌تواند بیشتر از نصف شمارش باشد';
+
+  @override
+  String get beadsEnterValidCountFirst => 'ابتدا یک شمارش معتبر وارد کنید';
+
+  @override
+  String get beadsSetCountNegative => 'تعداد دور نمی‌تواند منفی باشد';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'تعداد دور نمی‌تواند بیشتر از شمارش باشد';
+
+  @override
+  String get beadsSetCountValueRequired => 'تعداد دور الزامی است';
+
+  @override
+  String get beadsItemNotFound => 'مورد پیدا نشد';
+
+  @override
+  String get beadsResetProgressTitle => 'پیشرفت بازنشانی شود؟';
+
+  @override
+  String get beadsResetProgressBody =>
+      'این کار پیشرفت فعلی را به 0 برمی‌گرداند.';
+
+  @override
+  String get beadsCancel => 'لغو';
+
+  @override
+  String get beadsReset => 'بازنشانی';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'ویرایش پیشرفت و تعداد دور';
+
+  @override
+  String get beadsProgressCount => 'شمارش پیشرفت';
+
+  @override
+  String get beadsSetCountCannotNegative => 'تعداد دور نمی‌تواند منفی باشد';
+
+  @override
+  String get beadsValidProgressNumber => 'یک عدد پیشرفت معتبر وارد کنید';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'پیشرفت باید بین 0 و $max باشد';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'شمارش باقی‌مانده';
+
+  @override
+  String get beadsTap => 'ضربه';
+
+  @override
+  String get beadsGroups => 'گروه‌ها';
+
+  @override
+  String get beadsNewGroup => 'گروه جدید';
+
+  @override
+  String get beadsEditGroup => 'ویرایش گروه';
+
+  @override
+  String get beadsGroupName => 'نام گروه';
+
+  @override
+  String get beadsGroupMembers => 'اعضا';
+
+  @override
+  String get beadsNoBeadsInGroup => 'هنوز تسبیحی در این گروه نیست.';
+
+  @override
+  String get beadsAddBead => 'افزودن تسبیح';
+
+  @override
+  String get beadsAddBeads => 'افزودن تسبیح‌ها';
+
+  @override
+  String get beadsNewBead => 'تسبیح جدید';
+
+  @override
+  String get beadsDeleteGroup => 'حذف گروه';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'این گروه حذف شود؟ تسبیح‌ها حفظ می‌شوند.';
+
+  @override
+  String get beadsRemoveFromGroup => 'حذف از گروه';
+
+  @override
+  String get beadsNoNotesAdded => 'یادداشتی اضافه نشده است.';
+
+  @override
+  String get beadsSelect => 'انتخاب';
+
+  @override
+  String get beadsSelectAll => 'انتخاب همه';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count انتخاب شده';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return '$count مورد انتخاب‌شده حذف شود؟';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count حذف شد';
+  }
 }

@@ -1181,4 +1181,333 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'Белые дни (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Счётчик тасбиха';
+
+  @override
+  String get beadsMilestones => 'Тасбих';
+
+  @override
+  String get beadsSwitchToLight => 'Переключить на светлую тему';
+
+  @override
+  String get beadsSwitchToDark => 'Переключить на тёмную тему';
+
+  @override
+  String get beadsLanguage => 'Язык';
+
+  @override
+  String get beadsChooseLanguage => 'Выбрать язык';
+
+  @override
+  String get beadsNoMilestones =>
+      'Пока нет тасбиха. Нажмите +, чтобы добавить.';
+
+  @override
+  String get beadsStatsTitle => 'История';
+
+  @override
+  String get beadsStatsToday => 'Сегодня';
+
+  @override
+  String get beadsStatsLast7Days => '7 дней';
+
+  @override
+  String get beadsStatsTotal => 'Итого';
+
+  @override
+  String get beadsDeleted => 'удалено';
+
+  @override
+  String get beadsUndo => 'Отменить';
+
+  @override
+  String get beadsEdit => 'Изменить';
+
+  @override
+  String get beadsDuplicate => 'Дублировать';
+
+  @override
+  String get beadsClear => 'Очистить';
+
+  @override
+  String get beadsDelete => 'Удалить';
+
+  @override
+  String get beadsCount => 'Счёт';
+
+  @override
+  String get beadsCheck => 'Отметка';
+
+  @override
+  String get beadsSet => 'Сет';
+
+  @override
+  String get beadsProgress => 'Прогресс';
+
+  @override
+  String get beadsCreateMilestone => 'Создать тасбих';
+
+  @override
+  String get beadsEditMilestone => 'Изменить тасбих';
+
+  @override
+  String get beadsTitle => 'Название';
+
+  @override
+  String get beadsNotes => 'Заметки';
+
+  @override
+  String get beadsNotesHint => 'Добавьте заметки для этого тасбиха...';
+
+  @override
+  String get beadsCountField => 'Счёт';
+
+  @override
+  String get beadsCheckInterval => 'Интервал отметки';
+
+  @override
+  String get beadsCheckHelper =>
+      'Должно быть меньше или равно половине счёта. 0 отключает контрольные точки.';
+
+  @override
+  String get beadsSetCount => 'Счёт сета';
+
+  @override
+  String get beadsSetCountHelper =>
+      'Счёт сета должен быть меньше или равен счёту.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Счёт сета можно изменить только с экрана прогресса.';
+
+  @override
+  String get beadsVibrationIntensity => 'Интенсивность вибрации';
+
+  @override
+  String get beadsReminderTitle => 'Напоминание';
+
+  @override
+  String get beadsReminderEnable => 'Включить напоминание';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Один раз';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Ежедневно';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Еженедельно';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Ежемесячно';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Ежегодно';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Количество повторений';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Сколько раз напоминание сработает перед остановкой (выкл = повторять бесконечно)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError => 'Введите число от 2 до 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Повторять в';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'День месяца';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Месяц';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'День';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Повтор';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Основа месяца';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Основа года';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Григорианский';
+
+  @override
+  String get beadsReminderBasisHijri => 'Хиджра';
+
+  @override
+  String get beadsReminderPickDateTime => 'Выбрать дату и время';
+
+  @override
+  String get beadsReminderPickDate => 'Выбрать дату';
+
+  @override
+  String get beadsReminderPickTime => 'Выбрать время';
+
+  @override
+  String get beadsReminderNotSet => 'Не задано';
+
+  @override
+  String get beadsReminderAnchorTime => 'Время';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Время намаза';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'Вовремя';
+
+  @override
+  String get beadsReminderOffsetBefore => 'До';
+
+  @override
+  String get beadsReminderOffsetAfter => 'После';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Минуты';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Выбрать намаз';
+
+  @override
+  String get beadsSave => 'Сохранить';
+
+  @override
+  String get beadsUpdate => 'Обновить';
+
+  @override
+  String get beadsRequiredSuffix => 'обязательно';
+
+  @override
+  String get beadsMustBeInteger => 'должно быть целым числом';
+
+  @override
+  String get beadsCountPositive =>
+      'Счёт должен быть положительным целым числом';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'Отметка должна быть больше 0';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Отметка не может быть больше половины счёта';
+
+  @override
+  String get beadsEnterValidCountFirst => 'Сначала введите корректный счёт';
+
+  @override
+  String get beadsSetCountNegative => 'Счёт сета не может быть отрицательным';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'Счёт сета не может быть больше счёта';
+
+  @override
+  String get beadsSetCountValueRequired => 'Счёт сета обязателен';
+
+  @override
+  String get beadsItemNotFound => 'Элемент не найден';
+
+  @override
+  String get beadsResetProgressTitle => 'Сбросить прогресс?';
+
+  @override
+  String get beadsResetProgressBody => 'Это вернёт текущий прогресс к 0.';
+
+  @override
+  String get beadsCancel => 'Отмена';
+
+  @override
+  String get beadsReset => 'Сбросить';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'Изменить прогресс и счёт сета';
+
+  @override
+  String get beadsProgressCount => 'Счёт прогресса';
+
+  @override
+  String get beadsSetCountCannotNegative =>
+      'Счёт сета не может быть отрицательным';
+
+  @override
+  String get beadsValidProgressNumber => 'Введите корректный номер прогресса';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'Прогресс должен быть между 0 и $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Осталось';
+
+  @override
+  String get beadsTap => 'ТАП';
+
+  @override
+  String get beadsGroups => 'Группы';
+
+  @override
+  String get beadsNewGroup => 'Новая группа';
+
+  @override
+  String get beadsEditGroup => 'Изменить группу';
+
+  @override
+  String get beadsGroupName => 'Название группы';
+
+  @override
+  String get beadsGroupMembers => 'Участники';
+
+  @override
+  String get beadsNoBeadsInGroup => 'В этой группе пока нет чёток.';
+
+  @override
+  String get beadsAddBead => 'Добавить чётки';
+
+  @override
+  String get beadsAddBeads => 'Добавить чётки';
+
+  @override
+  String get beadsNewBead => 'Новые чётки';
+
+  @override
+  String get beadsDeleteGroup => 'Удалить группу';
+
+  @override
+  String get beadsDeleteGroupConfirm => 'Удалить эту группу? Чётки сохранятся.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Убрать из группы';
+
+  @override
+  String get beadsNoNotesAdded => 'Заметки не добавлены.';
+
+  @override
+  String get beadsSelect => 'Выбрать';
+
+  @override
+  String get beadsSelectAll => 'Выбрать все';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return 'Выбрано: $count';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'Удалить выбранные элементы ($count)?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return 'Удалено: $count';
+  }
 }

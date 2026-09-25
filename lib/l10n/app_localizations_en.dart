@@ -1174,4 +1174,333 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get whiteDaysBannerPrefix => 'White Days (13, 14, 15)';
+
+  @override
+  String get beadsAppTitle => 'Beads Counter';
+
+  @override
+  String get beadsMilestones => 'Beads';
+
+  @override
+  String get beadsSwitchToLight => 'Switch to light mode';
+
+  @override
+  String get beadsSwitchToDark => 'Switch to dark mode';
+
+  @override
+  String get beadsLanguage => 'Language';
+
+  @override
+  String get beadsChooseLanguage => 'Choose language';
+
+  @override
+  String get beadsNoMilestones => 'No beads yet. Tap + to add one.';
+
+  @override
+  String get beadsStatsTitle => 'History';
+
+  @override
+  String get beadsStatsToday => 'Today';
+
+  @override
+  String get beadsStatsLast7Days => '7 days';
+
+  @override
+  String get beadsStatsTotal => 'Total';
+
+  @override
+  String get beadsDeleted => 'deleted';
+
+  @override
+  String get beadsUndo => 'Undo';
+
+  @override
+  String get beadsEdit => 'Edit';
+
+  @override
+  String get beadsDuplicate => 'Duplicate';
+
+  @override
+  String get beadsClear => 'Clear';
+
+  @override
+  String get beadsDelete => 'Delete';
+
+  @override
+  String get beadsCount => 'Count';
+
+  @override
+  String get beadsCheck => 'Check';
+
+  @override
+  String get beadsSet => 'Set';
+
+  @override
+  String get beadsProgress => 'Progress';
+
+  @override
+  String get beadsCreateMilestone => 'Create Beads';
+
+  @override
+  String get beadsEditMilestone => 'Edit Beads';
+
+  @override
+  String get beadsTitle => 'Title';
+
+  @override
+  String get beadsNotes => 'Notes';
+
+  @override
+  String get beadsNotesHint => 'Add notes for these beads...';
+
+  @override
+  String get beadsCountField => 'Count';
+
+  @override
+  String get beadsCheckInterval => 'Check Interval';
+
+  @override
+  String get beadsCheckHelper =>
+      'Less or equal to half of count. Leave empty or 0 for no checkpoints.';
+
+  @override
+  String get beadsSetCount => 'Set Count';
+
+  @override
+  String get beadsSetCountHelper =>
+      'Set count must be less than or equal to count.';
+
+  @override
+  String get beadsSetCountReadonlyHelper =>
+      'Set count can only be changed from progress screen.';
+
+  @override
+  String get beadsVibrationIntensity => 'Vibration Intensity';
+
+  @override
+  String get beadsReminderTitle => 'Reminder';
+
+  @override
+  String get beadsReminderEnable => 'Enable reminder';
+
+  @override
+  String get beadsReminderRepeatOnce => 'Once';
+
+  @override
+  String get beadsReminderRepeatDaily => 'Daily';
+
+  @override
+  String get beadsReminderRepeatWeekly => 'Weekly';
+
+  @override
+  String get beadsReminderRepeatMonthly => 'Monthly';
+
+  @override
+  String get beadsReminderRepeatYearly => 'Yearly';
+
+  @override
+  String get beadsReminderRepeatCountLabel => 'Repeat count';
+
+  @override
+  String get beadsReminderRepeatCountHelper =>
+      'Number of times the reminder fires before stopping (off = repeats forever)';
+
+  @override
+  String get beadsReminderRepeatCountRangeError =>
+      'Enter a number from 2 to 100';
+
+  @override
+  String get beadsReminderRepeatDaysLabel => 'Repeat on';
+
+  @override
+  String get beadsReminderDayOfMonthLabel => 'Day of month';
+
+  @override
+  String get beadsReminderYearlyMonthLabel => 'Month';
+
+  @override
+  String get beadsReminderYearlyDayLabel => 'Day';
+
+  @override
+  String get beadsReminderRecurrenceLabel => 'Repeat';
+
+  @override
+  String get beadsReminderMonthlyBasisLabel => 'Monthly basis';
+
+  @override
+  String get beadsReminderYearlyBasisLabel => 'Yearly basis';
+
+  @override
+  String get beadsReminderBasisGregorian => 'Gregorian';
+
+  @override
+  String get beadsReminderBasisHijri => 'Hijri';
+
+  @override
+  String get beadsReminderPickDateTime => 'Pick date & time';
+
+  @override
+  String get beadsReminderPickDate => 'Pick date';
+
+  @override
+  String get beadsReminderPickTime => 'Pick time';
+
+  @override
+  String get beadsReminderNotSet => 'Not set';
+
+  @override
+  String get beadsReminderAnchorTime => 'Time';
+
+  @override
+  String get beadsReminderAnchorPrayer => 'Prayer time';
+
+  @override
+  String get beadsReminderOffsetOnTime => 'On time';
+
+  @override
+  String get beadsReminderOffsetBefore => 'Before';
+
+  @override
+  String get beadsReminderOffsetAfter => 'After';
+
+  @override
+  String get beadsReminderMinutesLabel => 'Minutes';
+
+  @override
+  String get beadsReminderSelectPrayer => 'Select prayer';
+
+  @override
+  String get beadsSave => 'Save';
+
+  @override
+  String get beadsUpdate => 'Update';
+
+  @override
+  String get beadsRequiredSuffix => 'is required';
+
+  @override
+  String get beadsMustBeInteger => 'must be an integer';
+
+  @override
+  String get beadsCountPositive => 'Count must be a positive integer';
+
+  @override
+  String get beadsCheckGreaterThanZero => 'Check must be greater than 0';
+
+  @override
+  String get beadsCheckHalfError =>
+      'Check cannot be greater than half of count';
+
+  @override
+  String get beadsEnterValidCountFirst => 'Enter a valid count first';
+
+  @override
+  String get beadsSetCountNegative => 'Set count cannot be negative';
+
+  @override
+  String get beadsSetCountGreaterCount =>
+      'Set count cannot be greater than count';
+
+  @override
+  String get beadsSetCountValueRequired => 'Set count is required';
+
+  @override
+  String get beadsItemNotFound => 'Item not found';
+
+  @override
+  String get beadsResetProgressTitle => 'Reset progress?';
+
+  @override
+  String get beadsResetProgressBody =>
+      'This will set current progress back to 0.';
+
+  @override
+  String get beadsCancel => 'Cancel';
+
+  @override
+  String get beadsReset => 'Reset';
+
+  @override
+  String get beadsEditProgressAndSetCount => 'Edit progress and set count';
+
+  @override
+  String get beadsProgressCount => 'Progress Count';
+
+  @override
+  String get beadsSetCountCannotNegative => 'Set count cannot be negative';
+
+  @override
+  String get beadsValidProgressNumber => 'Enter a valid progress number';
+
+  @override
+  String beadsProgressBetween(int max) {
+    return 'Progress must be between 0 and $max';
+  }
+
+  @override
+  String get beadsMaxMinusCount => 'Left Count';
+
+  @override
+  String get beadsTap => 'TAP';
+
+  @override
+  String get beadsGroups => 'Groups';
+
+  @override
+  String get beadsNewGroup => 'New Group';
+
+  @override
+  String get beadsEditGroup => 'Edit Group';
+
+  @override
+  String get beadsGroupName => 'Group name';
+
+  @override
+  String get beadsGroupMembers => 'Members';
+
+  @override
+  String get beadsNoBeadsInGroup => 'No beads in this group yet.';
+
+  @override
+  String get beadsAddBead => 'Add bead';
+
+  @override
+  String get beadsAddBeads => 'Add beads';
+
+  @override
+  String get beadsNewBead => 'New Bead';
+
+  @override
+  String get beadsDeleteGroup => 'Delete Group';
+
+  @override
+  String get beadsDeleteGroupConfirm =>
+      'Delete this group? Its beads are kept.';
+
+  @override
+  String get beadsRemoveFromGroup => 'Remove from group';
+
+  @override
+  String get beadsNoNotesAdded => 'No notes added.';
+
+  @override
+  String get beadsSelect => 'Select';
+
+  @override
+  String get beadsSelectAll => 'Select all';
+
+  @override
+  String beadsSelectedCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String beadsDeleteSelectedConfirm(int count) {
+    return 'Delete $count selected items?';
+  }
+
+  @override
+  String beadsDeletedSelected(int count) {
+    return '$count deleted';
+  }
 }

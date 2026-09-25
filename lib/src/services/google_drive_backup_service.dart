@@ -77,7 +77,11 @@ class GoogleDriveBackupService {
   /// is gone the optimistic state is kept and the next Drive operation will
   /// request authorization itself.
   Future<void> restoreSession() async {
-    await _ensureInitialized();
+    try {
+      await _ensureInitialized();
+    } catch (_) {
+      return;
+    }
     final prefs = await SharedPreferences.getInstance();
     _accountEmail = prefs.getString(_emailPrefsKey);
     _signedIn = _accountEmail != null;

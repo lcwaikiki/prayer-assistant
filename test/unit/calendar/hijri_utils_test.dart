@@ -13,6 +13,8 @@ void main() {
     final month = HijriMonth.fromDate(DateTime(2026, 8, 17));
     expect(month.longMonthName('en'), "Rabi' Al-Awwal");
     expect(month.longMonthName('tr'), "REBİÜLEVVEL");
+    expect(month.longMonthName('bn'), "রবিউল আউয়াল");
+    expect(month.longMonthName('ta'), "ரபீஉல் அவ்வல்");
   });
 
 

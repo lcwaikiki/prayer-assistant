@@ -117,6 +117,22 @@ class _HijriPickerStrings {
       cancel: '取消',
       go: '前往',
     ),
+    'bn': _HijriPickerStrings(
+      title: 'হিজরি তারিখে যান',
+      yearLabel: 'বছর',
+      monthLabel: 'মাস',
+      dayLabel: 'দিন',
+      cancel: 'বাতিল',
+      go: 'যান',
+    ),
+    'ta': _HijriPickerStrings(
+      title: 'ஹிஜ்ரி தேதிக்குச் செல்',
+      yearLabel: 'ஆண்டு',
+      monthLabel: 'மாதம்',
+      dayLabel: 'நாள்',
+      cancel: 'ரத்து',
+      go: 'செல்',
+    ),
   };
 
   static _HijriPickerStrings of(String languageCode) {

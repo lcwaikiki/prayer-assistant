@@ -19,7 +19,7 @@ home-screen widgets plus a persistent status-bar countdown notification.
 | Notifications | `flutter_local_notifications` (three independent producers) |
 | Background (Android) | `android_alarm_manager_plus` daily midnight jobs + native `AlarmManager` exact alarms |
 | Networking | `http` client; `geolocator` + `geocoding` for GPS auto-pick |
-| Localization | `flutter gen-l10n`, 12 locales + separate `TesbihatLocalizations` delegate |
+| Localization | `flutter gen-l10n`, 14 locales + separate `TesbihatLocalizations` delegate |
 | Other | `intl`, `timezone`, `flutter_timezone`, `hijri`, `share_plus`, `flutter_compass`, `vibration`, `wakelock_plus`, `hive_flutter` |
 | Version | 1.0.0+1 |
 
@@ -212,7 +212,7 @@ Expansion-tile sections:
 - **Location** → opens `LocationScreen` (GPS auto-pick or country → state →
   district dropdowns; fuzzy matching with Turkish-diacritic-insensitive
   normalization; save persists and syncs prayer data).
-- **Language** — system default + 12 locales (radio list).
+- **Language** — system default + 14 locales (radio list).
 - **Theme** — system / light / dark.
 - **App-bar remaining placement** — title / trailing chip / subtitle / hidden.
 - **Widget text size** — extra small / small / medium / large (pushed to
@@ -429,10 +429,10 @@ now, mmssThresholdMinutes)`:
 
 ## 10. Localization
 
-- 12 locales: en, es, fr, de, tr, ur, fa, ar, zh, ja, id, ru (+ system
+- 14 locales: en, es, fr, de, tr, ur, fa, ar, zh, ja, id, ru, bn, ta (+ system
   default). ARB sources in `lib/l10n/`, generated `AppLocalizations`.
 - Separate `TesbihatLocalizations` delegate for the Beads module.
-- English and Turkish fully translated; all 11 non-English locales verified
+- English and Turkish fully translated; all 13 non-English locales verified
   at 0 missing keys vs the English template.
 - Prayer names localized via `prayerNameLabel` (`Imsak/Gunes/Ogle/Ikindi/
   Aksam/Yatsi` map).

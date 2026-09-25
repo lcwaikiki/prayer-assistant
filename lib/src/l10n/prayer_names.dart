@@ -28,38 +28,52 @@ IconData iconForPrayer(String nameOrKey) {
   if (lower.contains('imsak') ||
       lower.contains('fajr') ||
       lower.contains('فجر') ||
+      lower.contains('ফজর') ||
+      lower.contains('ஃபஜ்ர்') ||
       lower.contains('sabah')) {
     return Icons.wb_twilight;
   }
   if (lower.contains('gunes') ||
       lower.contains('sunrise') ||
-      lower.contains('شروق')) {
+      lower.contains('شروق') ||
+      lower.contains('সূর্যোদয়') ||
+      lower.contains('சூரியோதயம்')) {
     return Icons.wb_sunny_outlined;
   }
   if (lower.contains('ogle') ||
       lower.contains('dhuhr') ||
       lower.contains('zuhr') ||
-      lower.contains('ظهر')) {
+      lower.contains('ظهر') ||
+      lower.contains('যোহর') ||
+      lower.contains('ளுஹர்')) {
     return Icons.wb_sunny;
   }
   if (lower.contains('ikindi') ||
       lower.contains('asr') ||
-      lower.contains('عصر')) {
+      lower.contains('عصر') ||
+      lower.contains('আসর') ||
+      lower.contains('அஸ்ர்')) {
     return Icons.wb_twilight_outlined;
   }
   if (lower.contains('aksam') ||
       lower.contains('maghrib') ||
-      lower.contains('مغرب')) {
+      lower.contains('مغرب') ||
+      lower.contains('মাগরিব') ||
+      lower.contains('மஃக்ரிப்')) {
     return Icons.nights_stay_outlined;
   }
   if (lower.contains('yatsi') ||
       lower.contains('isha') ||
-      lower.contains('عشاء')) {
+      lower.contains('عشاء') ||
+      lower.contains('ইশা') ||
+      lower.contains('இஷா')) {
     return Icons.nights_stay;
   }
   if (lower.contains('witr') ||
       lower.contains('vitir') ||
-      lower.contains('وتر')) {
+      lower.contains('وتر') ||
+      lower.contains('বিতর') ||
+      lower.contains('வித்ர்')) {
     return Icons.star_outline;
   }
   return Icons.access_time;

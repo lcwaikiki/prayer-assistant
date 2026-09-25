@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 /// Localized string templates for prayer reminder notifications and beads
-/// (tasbih/dhikr) reminder notifications across all 12 supported app languages.
+/// (tasbih/dhikr) reminder notifications across all 14 supported app languages.
 class NotificationStrings {
   const NotificationStrings({
     required this.onTimeTitle,
@@ -185,6 +185,32 @@ class NotificationStrings {
       testTitle: 'Prayer Assist テスト',
       testBody: 'この端末で通知システムが正常に動作しています。',
       dhikrBody: _jaDhikrBody,
+    ),
+    'bn': NotificationStrings(
+      onTimeTitle: _bnOnTimeTitle,
+      onTimeBody: _bnOnTimeBody,
+      beforeTitle: _bnBeforeTitle,
+      beforeBody: _bnBeforeBody,
+      soonTitle: _bnSoonTitle,
+      soonBody: _bnSoonBody,
+      afterTitle: _bnAfterTitle,
+      afterBody: _bnAfterBody,
+      testTitle: 'Prayer Assist পরীক্ষা',
+      testBody: 'এই ডিভাইসে বিজ্ঞপ্তি ব্যবস্থা সঠিকভাবে কাজ করছে।',
+      dhikrBody: _bnDhikrBody,
+    ),
+    'ta': NotificationStrings(
+      onTimeTitle: _taOnTimeTitle,
+      onTimeBody: _taOnTimeBody,
+      beforeTitle: _taBeforeTitle,
+      beforeBody: _taBeforeBody,
+      soonTitle: _taSoonTitle,
+      soonBody: _taSoonBody,
+      afterTitle: _taAfterTitle,
+      afterBody: _taAfterBody,
+      testTitle: 'Prayer Assist சோதனை',
+      testBody: 'இந்த சாதனத்தில் அறிவிப்பு அமைப்பு சரியாக இயங்குகிறது.',
+      dhikrBody: _taDhikrBody,
     ),
   };
 
@@ -396,4 +422,38 @@ class NotificationStrings {
   static String _jaAfterBody(String location, String prayer, int minutes) =>
       '$location - ${prayer}から${minutes}分が経過しました。';
   static String _jaDhikrBody(String title) => '$titleのズィクルの時間です。';
+
+  // --- BN ---
+  static String _bnOnTimeTitle(String prayer) => '$prayer-এর সময়';
+  static String _bnOnTimeBody(String location, String prayer) =>
+      '$location - $prayer নামাজের সময় হয়েছে।';
+  static String _bnBeforeTitle(String prayer, int minutes) =>
+      '$minutes মিনিট পর $prayer';
+  static String _bnBeforeBody(String location, String prayer, String time) =>
+      '$location - $prayer ওয়াক্ত শুরু হবে $time-এ।';
+  static String _bnSoonTitle(String prayer) => 'শীঘ্রই $prayer';
+  static String _bnSoonBody(String location, String prayer, String time) =>
+      '$location - $prayer ওয়াক্ত শুরু হবে $time-এ।';
+  static String _bnAfterTitle(String prayer, int minutes) =>
+      '$prayer +$minutes মিনিট';
+  static String _bnAfterBody(String location, String prayer, int minutes) =>
+      '$location - $prayer শুরু হওয়ার পর $minutes মিনিট অতিবাহিত হয়েছে।';
+  static String _bnDhikrBody(String title) => 'আপনার $title জিকিরের সময় হয়েছে।';
+
+  // --- TA ---
+  static String _taOnTimeTitle(String prayer) => '$prayer நேரம்';
+  static String _taOnTimeBody(String location, String prayer) =>
+      '$location - $prayer தொழுகைக்கான நேரம் வந்துவிட்டது.';
+  static String _taBeforeTitle(String prayer, int minutes) =>
+      '$minutes நிமிடத்தில் $prayer';
+  static String _taBeforeBody(String location, String prayer, String time) =>
+      '$location - $prayer நேரம்: $time.';
+  static String _taSoonTitle(String prayer) => '$prayer விரைவில்';
+  static String _taSoonBody(String location, String prayer, String time) =>
+      '$location - $prayer நேரம்: $time.';
+  static String _taAfterTitle(String prayer, int minutes) =>
+      '$prayer +$minutes நிமி';
+  static String _taAfterBody(String location, String prayer, int minutes) =>
+      '$location - $prayer தொழுகை நேரத்திலிருந்து $minutes நிமிடங்கள் கடந்துவிட்டன.';
+  static String _taDhikrBody(String title) => 'உங்கள் $title திக்ருக்கான நேரம்.';
 }

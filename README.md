@@ -47,8 +47,8 @@ calendar work fully offline after the yearly schedule is cached.
   these refresh on next app open.
 - **Networking**: `http` client (`ImsakiyemApi`), `geolocator` + `geocoding`
   for GPS auto-pick.
-- **Localization**: `flutter gen-l10n` — 11 locales (en, tr, es, fr, de, ur,
-  fa, ar, zh, ja, id) plus a separate `TesbihatLocalizations` delegate.
+- **Localization**: `flutter gen-l10n` — 14 locales (en, tr, es, fr, de, ur,
+  fa, ar, zh, ja, id, ru, bn, ta) plus a separate `TesbihatLocalizations` delegate.
 
 ## Project layout
 

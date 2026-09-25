@@ -1,0 +1,532 @@
+{
+  "@@locale": "ta",
+  "appTitle": "தொழுகை உதவியாளர்",
+  "tabLocation": "இடம்",
+  "tabToday": "இன்று",
+  "tabDates": "தேதிகள்",
+  "tabTesbih": "மணிகள்",
+  "tooltipToggleLightDark": "லைட்/டார்க் மாற்றுக",
+  "tooltipRemindersOn": "நினைவூட்டல்களை இயக்கு",
+  "tooltipRemindersOff": "நினைவூட்டல்களை அணை",
+  "tooltipPreferences": "விருப்பத்தேர்வுகள்",
+  "remainingMinutesValue": "{minutes} நிமி",
+  "@remainingMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remainingMinutesUnknown": "-- நிமி",
+  "homeNoLocationTitle": "இடம் தேர்ந்தெடுக்கப்படவில்லை",
+  "homeNoLocationSubtitle": "இடம் பகுதிக்குச் சென்று முதலில் உங்கள் மாவட்டத்தைச் சேமிக்கவும்.",
+  "homeNoPrayerTimesTitle": "தொழுகை நேரங்கள் இல்லை",
+  "homeNoPrayerTimesSubtitle": "வருடாந்திர தரவை ஒத்திசைக்க புதுப்பிக்கவும்.",
+  "refresh": "புதுப்பி",
+  "qiblaTitle": "கிப்லா",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "கிப்லா: {degrees}°",
+  "qiblaLocationUnavailable": "உங்கள் இருப்பிடத்தைக் கண்டறிய முடியவில்லை. GPS-ஐ இயக்கி மீண்டும் முயற்சிக்கவும்.",
+  "qiblaHeadingUnavailable": "திசைகாட்டி கிடைக்கவில்லை - நிலையான திசை காட்டப்படுகிறது.",
+  "qiblaPointDevice": "முள் மேலே சுட்டிக்காட்டும் வரை சாதனத்தைச் சுழற்றுங்கள்.",
+  "qiblaKaabaShort": "கிப்லா",
+  "shareTodayTimes": "இன்றைய தொழுகை நேரங்களைப் பகிர்க",
+  "calendarPreviousDay": "முந்தைய நாள்",
+  "calendarNextDay": "அடுத்த நாள்",
+  "todayWithDate": "இன்று • {date}",
+  "@todayWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "hijriUnknown": "ஹிஜ்ரி: -",
+  "hijriWithDate": "ஹிஜ்ரி: {date}",
+  "@hijriWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "reminderSettingsTitle": "நினைவூட்டல் அமைப்புகள்",
+  "reminderSettingsSubtitle": "நினைவூட்டல் மற்றும் எத்தனை நிமிடங்களுக்கு முன் என்பதை உள்ளமைக்க மேலே உள்ள தொழுகை நேரத்தைத் தட்டவும்.",
+  "tooltipScheduledDebug": "திட்டமிடப்பட்ட நினைவூட்டல்கள் பிழைத்திருத்தம்",
+  "scheduledRemindersDebugTitle": "திட்டமிடப்பட்ட நினைவூட்டல்கள் (பிழைத்திருத்தம்)",
+  "pendingNotificationsCount": "நிலுவையிலுள்ள அறிவிப்புகள்: {count}",
+  "@pendingNotificationsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendTestNotificationNow": "சோதனை அறிவிப்பை இப்போது அனுப்புக",
+  "testNotificationSent": "சோதனை அறிவிப்பு அனுப்பப்பட்டது.",
+  "statusBarMinutesTitle": "ஸ்டேட்டஸ் பார் நிமிடங்கள்",
+  "statusBarMinutesSubtitle": "ஸ்டேட்டஸ் பாரில் மீதமுள்ள நிமிடங்களின் அறிவிப்பைக் காட்டவும்.",
+  "statusAutoRestoreTitle": "நீக்கப்பட்டால் தானியங்கி மீட்பு",
+  "statusAutoRestoreSubtitle": "பயனர் அறிவிப்பை ஸ்வைப் செய்தால் அதை மீண்டும் உருவாக்கவும்.",
+  "noPendingReminders": "நிலுவையில் உள்ள நினைவூட்டல் அறிவிப்புகள் இல்லை.",
+  "unknownFireTime": "தெரியாத நேரம்",
+  "pastPrefix": "[கடந்த] ",
+  "reminderOnTimeAndBefore": "ஆன் • சரியான நேரத்தில் + {minutes} நிமி முன்பு",
+  "@reminderOnTimeAndBefore": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOnTimeOnly": "ஆன் • சரியான நேரத்தில்",
+  "reminderBeforeOnly": "ஆன் • {minutes} நிமி முன்பு",
+  "@reminderBeforeOnly": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOff": "நினைவூட்டல் ஆஃப்",
+  "nextPrayerTitle": "அடுத்த தொழுகை",
+  "homeUpcomingRemindersTitle": "வரவிருக்கும் நினைவூட்டல்கள்",
+  "startsIn": "{remaining}-ல் தொடங்குகிறது",
+  "@startsIn": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "selectYourLocation": "உங்கள் இருப்பிடத்தைத் தேர்ந்தெடுக்கவும்",
+  "locationHelp": "விரைவான அமைப்பிற்கு GPS ஐப் பயன்படுத்தவும் அல்லது நாடு/நகரத்தை கைமுறையாகத் தேர்ந்தெடுக்கவும்.",
+  "useCurrentLocation": "தற்போதைய இருப்பிடத்தைப் பயன்படுத்து",
+  "country": "நாடு",
+  "stateCity": "மாநிலம் / நகரம்",
+  "district": "மாவட்டம்",
+  "search": "தேடு",
+  "noResults": "முடிவுகள் இல்லை",
+  "noInternetTitle": "இணைய இணைப்பு இல்லை",
+  "noInternetMessage": "சர்வரை அடைய முடியவில்லை. உங்கள் இணைப்பைச் சரிபார்த்து மீண்டும் முயற்சிக்கவும்.",
+  "retry": "மீண்டும் முயற்சி செய்",
+  "saveLocation": "இருப்பிடத்தைச் சேமி",
+  "selectedLocation": "தேர்ந்தெடுக்கப்பட்டது: {location}",
+  "@selectedLocation": {
+    "placeholders": {
+      "location": {}
+    }
+  },
+  "historySelectLocationFirst": "1 வருட தொழுகைப் பட்டியலைக் காண முதலில் ஒரு இடத்தைத் தேர்ந்தெடுக்கவும்.",
+  "historyTableTitle": "தொழுகை நேர அட்டவணை (முழு ஆண்டு)",
+  "todayShort": "இன்று",
+  "dateHeader": "தேதி",
+  "imsak": "ஃபஜ்ர்",
+  "gunes": "சூரியோதயம்",
+  "ogle": "ளுஹர்",
+  "ikindi": "அஸ்ர்",
+  "aksam": "மஃக்ரிப்",
+  "yatsi": "இஷா",
+  "hijriHeader": "ஹிஜ்ரி",
+  "preferencesTitle": "விருப்பத்தேர்வுகள்",
+  "languageTitle": "மொழி",
+  "languageSystem": "கணினி இயல்புநிலை",
+  "themeModeTitle": "தீம் முறை",
+  "themeSystem": "கணினி இயல்புநிலை",
+  "themeLight": "லைட்",
+  "themeDark": "டார்க்",
+  "homeScreenSettingsSectionTitle": "முகப்புத் திரை அமைப்புகள்",
+  "appBarRemainingTitle": "முகப்பு ஆப் பார் மீதமுள்ள நேரம்",
+  "showInTitle": "தலைப்பில் காட்டு",
+  "showAtRight": "வலதுபுறத்தில் காட்டு",
+  "showAsSubtitle": "துணைத்தலைப்பாகக் காட்டு",
+  "hideRemainingText": "மீதமுள்ள உரையை மறை",
+  "notificationMessageTitle": "அறிவிப்பு செய்தி",
+  "notificationMessageShown": "காட்டப்பட்டது",
+  "notificationMessageHidden": "மறைக்கப்பட்டது",
+  "widgetSettingsSectionTitle": "விட்ஜெட் அமைப்புகள்",
+  "widgetTextSizeTitle": "எழுத்துரு அளவு",
+  "widgetTextSizeSubtitle": "முகப்புத் திரை விட்ஜெட்களில் பயன்படுத்தப்படும் எழுத்து அளவு.",
+  "widgetTextSizeExtraSmall": "மிகச் சிறியது",
+  "widgetTextSizeSmall": "சிறியது",
+  "widgetTextSizeMedium": "நடுத்தர",
+  "widgetTextSizeLarge": "பெரியது",
+  "widgetTextSizePreview": "முன்னோட்டம் {size}",
+  "@widgetTextSizePreview": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "widgetMmssThresholdTitle": "வினாடிகள் கவுண்டவுன்",
+  "widgetThemeTitle": "பின்னணி தீம்",
+  "widgetThemeSystem": "கணினி",
+  "widgetThemeLight": "லைட்",
+  "widgetThemeDark": "டார்க்",
+  "widgetThemeTransparent": "வெளிப்படையானது",
+  "widgetCalendarDisplayTitle": "நாட்காட்டி தேதி காட்சி",
+  "widgetCalendarDisplayBoth": "இரண்டும் (ஹிஜ்ரி மற்றும் கிரிகோரியன்)",
+  "widgetCalendarDisplayHijri": "ஹிஜ்ரி மட்டும்",
+  "widgetCalendarDisplayGregorian": "கிரிகோரியன் மட்டும்",
+  "widgetMmssThresholdNever": "எப்போதும் HH:MM காட்டு",
+  "widgetMmssThresholdValue": "{minutes} நிமிடத்திற்கு கீழ் MM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remindersOnOffTitle": "நினைவூட்டல்கள் ஆன்/ஆஃப்",
+  "remindersOnOffSubtitle": "தொழுகை நினைவூட்டல் அறிவிப்புகளை இயக்கவும் அல்லது அணைக்கவும். தனிப்பட்ட அமைப்புகள் பாதுகாக்கப்படும்.",
+  "reminderVibrationTitle": "நினைவூட்டலில் அதிர்வு",
+  "reminderVibrationSubtitle": "நினைவூட்டல் ஒலிக்கும்போது சுமார் 10 விநாடிகள் அதிரும்.",
+  "reminderSoundTitle": "நினைவூட்டலில் ஒலி எழுப்பு",
+  "reminderSoundSubtitle": "நினைவூட்டல் ஒலிக்கும்போது அறிவிப்பு ஒலியை இயக்கவும்.",
+  "remindersOn": "ஆன்",
+  "remindersOff": "ஆஃப்",
+  "reminderScreenTitle": "{prayer} நினைவூட்டல்",
+  "@reminderScreenTitle": {
+    "placeholders": {
+      "prayer": {}
+    }
+  },
+  "reminderTypeTitle": "நினைவூட்டல் வகை (இரண்டையும் தேர்ந்தெடுக்கலாம்)",
+  "onTime": "சரியான நேரத்தில்",
+  "before": "முன்பு",
+  "after": "பின்பு",
+  "reminderAlertTitle": "எச்சரிக்கை",
+  "reminderAlertSubtitle": "எச்சரிக்கையை செயல்படுத்த விருப்பத்தேர்வுகளில் தொடர்புடைய சுவிட்ச் ஆன் செய்யப்பட வேண்டும்.",
+  "vibrateChip": "அதிர்வு",
+  "soundChip": "ஒலி",
+  "adhanChip": "பாங்கு",
+  "prayersCompleted": "{completed}/{total} தொழுகைகள் முடிந்தன",
+  "holiday_islamic_new_year": "இஸ்லாமிய புத்தாண்டு",
+  "holiday_ashura": "ஆஷூரா",
+  "holiday_mawlid": "மீலாதுன் நபி",
+  "holiday_isra_miraj": "இஸ்ரா மற்றும் மிஃராஜ்",
+  "holiday_laylat_barat": "ஷபே பராத்",
+  "holiday_ramadan_first": "ரமலான் முதல் நாள்",
+  "holiday_laylat_qadr": "லைலத்துல் கத்ர்",
+  "holiday_eid_fitr": "ஈகைத் திருநாள் (ஈதுல் ஃபித்ர்)",
+  "holiday_arafah": "அரஃபா நாள்",
+  "holiday_eid_adha": "ஹஜ்ஜுப் பெருநாள் (ஈதுல் அழ்ஹா)",
+  "remindBeforePrayerTitle": "தொழுகைக்கு முன் நினைவூட்டு",
+  "remindAfterPrayerTitle": "தொழுகைக்கு பின் நினைவூட்டு",
+  "minutesValue": "{minutes} நிமி",
+  "@minutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "custom": "விருப்பப்படி",
+  "customMinutes": "தனிப்பயன் நிமிடங்கள்",
+  "customMinutesHint": "எ.கா. 12",
+  "save": "சேமி",
+  "enableBeforeToSelectMinutes": "நிமிடங்களைத் தேர்ந்தெடுக்க \"முன்பு\" என்பதை இயக்கவும்.",
+  "enableAfterToSelectMinutes": "நிமிடங்களைத் தேர்ந்தெடுக்க \"பின்பு\" என்பதை இயக்கவும்.",
+  "enterValidPositiveNumber": "செல்லுபடியாகும் நேர்மறை எண்ணை உள்ளிடவும்.",
+  "useValueUpTo240": "240 நிமிடங்கள் வரை மதிப்பை உள்ளிடவும்.",
+  "customMinutesSaved": "தனிப்பயன் நிமிடங்கள் சேமிக்கப்பட்டன.",
+  "cancel": "ரத்து",
+  "calendarTabTooltip": "ஹிஜ்ரி நாட்காட்டி",
+  "calendarPreviousMonth": "முந்தைய மாதம்",
+  "calendarNextMonth": "அடுத்த மாதம்",
+  "calendarSwapPrimary": "ஹிஜ்ரி/கிரிகோரியன் மாற்றுக",
+  "calendarShowSecondary": "இரண்டாம் நிலை தேதியைக் காட்டு",
+  "calendarHideSecondary": "இரண்டாம் நிலை தேதியை மறை",
+  "calendarNoRemindersOnDay": "இந்த நாளில் நினைவூட்டல்கள் இல்லை",
+  "calendarAddReminder": "நினைவூட்டலைச் சேர்",
+  "calendarEditReminder": "திருத்து",
+  "calendarDeleteReminder": "நீக்கு",
+  "calendarDeleteOccurrence": "இந்த நிகழ்வை நீக்கு",
+  "calendarDeleteOccurrenceConfirm": "தொடரிலிருந்து இந்த நாளை மட்டும் நீக்கவா?",
+  "calendarOccurrenceDeleted": "நிகழ்வு நீக்கப்பட்டது",
+  "calendarExcludedOccurrencesLabel": "நீக்கப்பட்ட நிகழ்வுகள்",
+  "calendarRestoreOccurrence": "மீட்டமை",
+  "calendarRestoreAllOccurrences": "அனைத்தையும் மீட்டமை",
+  "calendarReminderFormTitleNew": "புதிய நினைவூட்டல்",
+  "calendarReminderFormTitleEdit": "நினைவூட்டலைத் திருத்து",
+  "calendarReminderTitleLabel": "தலைப்பு",
+  "calendarReminderTitleHint": "எ.கா. ரமலான் தொடங்குகிறது",
+  "calendarReminderNotesLabel": "குறிப்புகள் (விருப்பத்தேர்வு)",
+  "calendarReminderDateTimeLabel": "தேதி & நேரம்",
+  "calendarReminderRecurrenceLabel": "மீண்டும் செய்",
+  "calendarRecurrenceOnce": "ஒரு முறை",
+  "calendarRecurrenceDaily": "தினசரி",
+  "calendarRecurrenceWeekly": "வாராந்திர",
+  "calendarRecurrenceMonthly": "மாதாந்திர",
+  "calendarRecurrenceYearly": "வருடாந்திர",
+  "calendarRepeatCountLabel": "மீண்டும் நிகழும் எண்ணிக்கை",
+  "calendarRepeatCountHelper": "நினைவூட்டல் நிறுத்தப்படுவதற்கு முன் ஒலிக்கும் முறைகளின் எண்ணிக்கை (ஆஃப் = எப்போதும் மீண்டும் நிகழும்)",
+  "calendarRepeatCountError": "2 முதல் 100 வரையிலான எண்ணை உள்ளிடவும்",
+  "calendarRepeatDaysLabel": "மீண்டும் நிகழும் நாட்கள்",
+  "calendarDayOfMonthLabel": "மாதத்தின் நாள்",
+  "calendarYearlyMonthLabel": "மாதம்",
+  "calendarYearlyDayLabel": "நாள்",
+  "calendarMonthlyBasisLabel": "மாதாந்திர அடிப்படை",
+  "calendarYearlyBasisLabel": "வருடாந்திர அடிப்படை",
+  "calendarYearlyBasisGregorian": "கிரிகோரியன்",
+  "calendarYearlyBasisHijri": "ஹிஜ்ரி",
+  "calendarReminderTitleRequired": "ஒரு தலைப்பை உள்ளிடவும்",
+  "calendarAnchorClockTime": "நாட்காட்டி தேதி",
+  "calendarAnchorPrayerTime": "தொழுகை நேரம்",
+  "calendarSelectPrayer": "தொழுகையைத் தேர்ந்தெடுக்கவும்",
+  "calendarOffsetOnTime": "சரியான நேரத்தில்",
+  "calendarOffsetBefore": "முன்பு",
+  "calendarOffsetAfter": "பின்பு",
+  "calendarPickAnchorDate": "தேதியைத் தேர்ந்தெடுக்கவும்",
+  "datesPrayerTimesTab": "தொழுகை நேரங்கள்",
+  "datesCalendarTab": "நாட்காட்டி",
+  "datesMoonPhaseTab": "சந்திர நிலை",
+  "undo": "செயல்தவிர்",
+  "calendarReminderDeleted": "\"{title}\" நீக்கப்பட்டது",
+  "@calendarReminderDeleted": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "verseOfTheDay": "இன்றைய வசனம்",
+  "hadithOfTheDay": "இன்றைய ஹதீஸ்",
+  "hisnAlMuslimTitle": "ஹிஸ்னுல் முஸ்லிம்",
+  "morningAdhkar": "காலை திக்ருகள்",
+  "eveningAdhkar": "மாலை திக்ருகள்",
+  "afterPrayerAdhkar": "தொழுகைக்குப் பின்",
+  "sleepingAdhkar": "தூங்குவதற்கு முன்",
+  "dailyLifeDuas": "தினசரி துஆக்கள்",
+  "shareWisdom": "பகிர்",
+  "copyText": "நகலெடு",
+  "copiedToClipboard": "கிளிப்போர்டுக்கு நகலெடுக்கப்பட்டது",
+  "searchSupplicationsHint": "துஆக்களைத் தேடுங்கள்...",
+  "noSupplicationsFound": "துஆக்கள் எதுவும் கிடைக்கவில்லை",
+  "completed": "முடிந்தது",
+  "tapToCount": "எண்ணத் தட்டவும்",
+  "tabAll": "அனைத்தும்",
+  "kazaTitle": "களா",
+  "kazaSubtitle": "விடுபட்ட முந்தைய தொழுகைகளைக் கண்காணித்து நிறைவேற்றுங்கள்",
+  "kazaCalculatorWizard": "கால்குலேட்டர்",
+  "kazaBatchLogDay": "+1 முழு நாள்",
+  "kazaBatchLogDayTooltip": "அனைத்து 6 தொழுகைகளுக்கும் தலா 1 எண்ணிக்கையை அதிகரிக்கவும்",
+  "kazaTotalRemaining": "மொத்தம் மீதமுள்ளது",
+  "kazaCompletedProgress": "{completed} / {target} முடிந்தது",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "மதிப்பிடப்பட்ட முடிவு: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "விடுபட்ட அனைத்து தொழுகைகளும் நிறைவேற்றப்பட்டன! 🎉",
+  "kazaDailyPaceLabel": "தினசரி வேகம்",
+  "kazaDailyPaceValue": "{count} தொழுகைகள் / நாள்",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "தினசரி வேகத்தை அமைக்கவும்",
+  "kazaSetPaceDialogSubtitle": "ஒவ்வொரு நாளும் எத்தனை களா தொழுகைகளை நிறைவேற்றுகிறீர்கள்?",
+  "kazaCalculatorTitle": "விடுபட்ட தொழுகைகள் கால்குலேட்டர்",
+  "kazaCalculateByYears": "விடுபட்ட காலம்",
+  "kazaCalculateManual": "கைமுறை இலக்குகள்",
+  "kazaYearsMissed": "விடுபட்ட ஆண்டுகள்",
+  "kazaMonthsMissed": "கூடுதல் மாதங்கள்",
+  "kazaCalculateButton": "இலக்குகளை அமை",
+  "kazaWitrLabel": "வித்ர்",
+  "kazaRemainingCount": "{count} மீதமுள்ளது",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} முடிந்த எண்ணிக்கை",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= ஒரு தொழுகைக்கு {days} நாட்கள் (மொத்தம் {total} தொழுகைகள்)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  },
+  "backupExportTitle": "காப்புப்பிரதி & ஏற்றுமதி",
+  "backupExportSubtitle": "ஆப் தரவை காப்புப் பிரதி எடுக்கவும் அல்லது ஏற்றுமதி செய்யவும்",
+  "exportBackupJson": "காப்புப் பிரதி தரவை ஏற்றுமதி செய் (JSON)",
+  "restoreBackupJson": "காப்புப் பிரதியிலிருந்து மீட்டமை",
+  "exportPrayerScheduleIcs": "தொழுகை அட்டவணையை ஏற்றுமதி செய் (.ics)",
+  "exportHolidaysIcs": "இஸ்லாமிய விடுமுறை நாட்களை ஏற்றுமதி செய் (.ics)",
+  "restoreConfirmTitle": "ஆப் தரவை மீட்டமைக்கவா?",
+  "restoreConfirmBody": "இது உங்கள் களா இலக்குகள், தொழுகை வரலாறு, நினைவூட்டல்கள் மற்றும் தஸ்பீஹ் தரவை மீட்டமைக்கும். தொடரவா?",
+  "restoreSuccess": "தரவு வெற்றிகரமாக மீட்டமைக்கப்பட்டது!",
+  "restoreNewerVersionError": "இந்த காப்புப்பிரதி புதிய ஆப் பதிப்பால் உருவாக்கப்பட்டது. பயன்பாட்டைப் புதுப்பித்து மீண்டும் முயற்சிக்கவும்.",
+  "restoreError": "தவறான காப்புப்பிரதி கோப்பு வடிவம்",
+  "shareOrSave": "பகிர் / சேமி",
+  "@shareOrSave": {
+    "description": "Button label to share or save exported file"
+  },
+  "googleDriveSignIn": "Google Drive-ல் உள்நுழைக",
+  "googleDriveSignOut": "Google Drive-லிருந்து வெளியேறு",
+  "googleDriveBackup": "காப்புப்பிரதியை Google Drive-ல் சேமி",
+  "googleDriveRestore": "Google Drive-லிருந்து மீட்டமை",
+  "googleDriveBackupSuccess": "காப்புப்பிரதி Google Drive-ல் சேமிக்கப்பட்டது",
+  "googleDriveBackupError": "Google Drive-ல் சேமிக்க முடியவில்லை",
+  "googleDriveWorking": "செயல்பாட்டில் உள்ளது...",
+  "googleDriveRestoreConfirm": "இது உங்கள் Google Drive காப்புப்பிரதியிலிருந்து தரவை மீட்டமைக்கும். தொடரவா?",
+  "googleDriveLastBackup": "கடைசி காப்புப்பிரதி: {date}",
+  "@googleDriveLastBackup": {
+    "description": "Shows when the last Google Drive backup was made",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveNotSignedIn": "Google Drive காப்புப்பிரதியைப் பயன்படுத்த உள்நுழையவும்",
+  "googleDriveSignInError": "Google Drive-ல் உள்நுழைய முடியவில்லை",
+  "googleDriveConfigError": "Google Drive உள்நுழைவு உள்ளமைக்கப்படவில்லை.",
+  "googleDriveSignOutConfirmTitle": "Google Drive-லிருந்து வெளியேறவா?",
+  "googleDriveSignOutConfirmBody": "{email} கணக்கிலிருந்து வெளியேறவா? பிறகு மீண்டும் உள்நுழையலாம்.",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Confirmation message when signing out of Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Google Drive-ல் காப்புப்பிரதிகள் எதுவும் கிடைக்கவில்லை.",
+  "driveRestorePromptBody": "இந்த சாதனத்தில் தரவு எதுவும் இல்லை. Google Drive-லிருந்து மீட்டெடுக்க விரும்புகிறீர்களா?",
+  "offlineFolderChoose": "காப்புப்பிரதி கோப்புறையைத் தேர்வுசெய்க",
+  "offlineFolderChange": "கோப்புறையை மாற்றுக",
+  "offlineFolderNone": "கோப்புறை தேர்வு செய்யப்படவில்லை. காப்புப்பிரதிகள் ஆஃப்லைனில் சேமிக்கப்படாது.",
+  "offlineFolderSaved": "காப்புப்பிரதி கோப்புறையில் சேமிக்கப்பட்டது.",
+  "offlineFolderRestore": "கோப்புறையிலிருந்து மீட்டமை",
+  "offlineFolderRestoreEmpty": "தேர்ந்தெடுக்கப்பட்ட கோப்புறையில் காப்புப்பிரதி கோப்பு எதுவும் இல்லை.",
+  "offlineFolderRemove": "காப்புப்பிரதி கோப்புறையை நீக்கு",
+  "restoreOptionsTitle": "எதை மீட்டமைக்க வேண்டும்?",
+  "restoreOptionsData": "ஆப் தரவு",
+  "restoreOptionsPreferences": "விருப்பத்தேர்வுகள்",
+  "googleDriveBackupItemCount": "{count} உருப்படிகள்",
+  "@googleDriveBackupItemCount": {
+    "description": "Number of items in a backup",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "காப்புப்பிரதி வரலாற்று நீளம்",
+  "googleDriveHistoryLimitAll": "அனைத்தும்",
+  "analyticsTab": "பகுப்பாய்வு",
+  "currentStreak": "தற்போதைய தொடர்ச்சி",
+  "longestStreak": "நீண்ட தொடர்ச்சி",
+  "daysUnit": "நாட்கள்",
+  "monthlyHeatmapTitle": "மாதாந்திர நிறைவு",
+  "completionBreakdownTitle": "தொழுகை விவரம்",
+  "overallConsistency": "ஒட்டுமொத்த நிலைத்தன்மை",
+  "totalPrayersCompleted": "பதிவு செய்யப்பட்ட மொத்த தொழுகைகள்",
+  "last30Days": "கடந்த 30 நாட்கள்",
+  "allTime": "எல்லாக் காலமும்",
+  "fastingTitle": "நோன்பு",
+  "suhoorCountdownTitle": "சஹருக்கான நேரம்",
+  "iftarCountdownTitle": "இஃப்தாருக்கான நேரம்",
+  "fastingTypeRamadan": "ரமலான் நோன்பு",
+  "fastingTypeSunnah": "சுன்னத் நோன்பு",
+  "fastingTypeQadaa": "களா நோன்பு",
+  "whiteDaysTitle": "அய்யாமுல் பீள் (13, 14, 15)",
+  "mondayThursdayTitle": "திங்கள் & வியாழன் சுன்னத்",
+  "logFastAction": "நோன்பைப் பதிவு செய்",
+  "totalFastsLogged": "பதிவு செய்யப்பட்ட மொத்த நோன்புகள்",
+  "suhoorEndsIn": "சஹர் முடிவடைய இன்னும்",
+  "iftarIn": "இஃப்தாருக்கு இன்னும்",
+  "fastingTab": "நோன்பு",
+  "trackTabTitle": "கண்காணிப்பு",
+  "prayerAnalyticsTitle": "தொழுகை பகுப்பாய்வு",
+  "prayerQadaaTitle": "தொழுகை களா",
+  "iftarTimeLabel": "இஃப்தார் நேரம்",
+  "fastingProgressFasted": "{percent}% நோன்பு முடிந்தது",
+  "@fastingProgressFasted": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "suhoorTickerTitle": "சஹர் தகவல்",
+  "fastingProgressElapsed": "{percent}% கழிந்தது",
+  "@fastingProgressElapsed": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "suhoorWithTime": "சஹர் ({time})",
+  "@suhoorWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "iftarWithTime": "இஃப்தார் ({time})",
+  "@iftarWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "upcomingSunnahDays": "வரவிருக்கும் சுன்னத் நாட்கள்",
+  "fastingCalendarLogger": "நோன்பு நாட்காட்டி பதிவேடு",
+  "removeFastLog": "நோன்பு பதிவை நீக்கு",
+  "calendarWeekStartTitle": "நாட்காட்டி வாரம் தொடங்கும் நாள்",
+  "calendarWeekStartSunday": "ஞாயிறு",
+  "calendarWeekStartMonday": "திங்கள்",
+  "hijriDateOffsetTitle": "ஹிஜ்ரி தேதி சரிசெய்தல்",
+  "hijriDateOffsetSubtitle": "பிறை தெரிவதை அடிப்படையாகக் கொண்டு ஹிஜ்ரி தேதியை சரிசெய்யவும்",
+  "showIslamicHolidaysTitle": "இஸ்லாமிய விடுமுறை நாட்களை முன்னிலைப்படுத்துக",
+  "showIslamicHolidaysSubtitle": "புனித நாட்களுக்கான சிறப்பு பேட்ஜ்களைக் காட்டு",
+  "showFastingBadgesTitle": "நாட்காட்டியில் நோன்புப் பதிவுகளைக் காட்டு",
+  "showFastingBadgesSubtitle": "நோன்பு நோற்ற தேதிகளில் பேட்ஜ்களைக் காட்டு",
+  "defaultCalendarDisplayTitle": "இயல்புநிலை நாட்காட்டி பார்வை",
+  "defaultCalendarDisplaySubtitle": "நாட்காட்டியைத் திறக்கும்போது தொடக்கக் காட்சி",
+  "showCalendarReminderDotsTitle": "நினைவூட்டல் புள்ளிகளைக் காட்டு",
+  "showCalendarReminderDotsSubtitle": "திட்டமிடப்பட்ட நினைவூட்டல்கள் உள்ள நாட்களில் புள்ளிகளைக் காட்டு",
+  "calendarSettingsSectionTitle": "நாட்காட்டி அமைப்புகள்",
+  "moonPhaseTitle": "சந்திர நிலை",
+  "moonIllumination": "{percent}% ஒளிர்கிறது",
+  "@moonIllumination": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "moonAgeDays": "சுழற்சியின் நாள் {days}",
+  "@moonAgeDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "moonPhaseNewMoon": "அமாவாசை (ஹிலால்)",
+  "moonPhaseWaxingCrescent": "வளர்பிறை",
+  "moonPhaseFirstQuarter": "முதல் கால் பகுதி",
+  "moonPhaseWaxingGibbous": "வளரும் கிப்பஸ்",
+  "moonPhaseFullMoon": "பௌர்ணமி (பத்ர்)",
+  "moonPhaseWaningGibbous": "தேயும் கிப்பஸ்",
+  "moonPhaseLastQuarter": "கடைசி கால் பகுதி",
+  "moonPhaseWaningCrescent": "தேய்பிறை",
+  "whiteDaysSubtitle": "சுன்னத் நோன்பு நாட்கள் (13, 14, 15 ஹிஜ்ரி)",
+  "homeDashboardCardsSectionTitle": "முகப்பு பலகை அட்டைகள்",
+  "showCardMoonPhaseTitle": "சந்திர நிலை அட்டையைக் காட்டு",
+  "showCardMoonPhaseSubtitle": "சந்திர நிலை மற்றும் அய்யாமுல் பீள் அட்டையைக் காட்டு",
+  "showCardIftarSuhoorTitle": "சஹர் & இஃப்தார் அட்டையைக் காட்டு",
+  "showCardIftarSuhoorSubtitle": "நேரலை சஹர் மற்றும் இஃப்தார் கவுண்டவுன் அட்டையைக் காட்டு",
+  "showCardDailyWisdomTitle": "தினசரி ஞான அட்டையைக் காட்டு",
+  "showCardDailyWisdomSubtitle": "தினசரி உத்வேகம் தரும் ஹதீஸ் அல்லது வசன அட்டையைக் காட்டு",
+  "showCardUpcomingRemindersTitle": "வரவிருக்கும் நினைவூட்டல்கள் அட்டையைக் காட்டு",
+  "showCardUpcomingRemindersSubtitle": "அடுத்த 3 நினைவூட்டல்களின் அட்டையைக் காட்டு",
+  "moonCalendarTitle": "சந்திர நாட்காட்டி",
+  "calendarGoToDate": "குறிப்பிட்ட தேதிக்குச் செல்",
+  "whiteDaysBannerPrefix": "அய்யாமுல் பீள் (13, 14, 15)"
+}

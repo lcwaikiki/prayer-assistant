@@ -176,10 +176,10 @@ threshold) are stored in SQLite on the Flutter side and mirrored to native.
 
 ### 2.9 Localization
 
-- `flutter gen-l10n` (`AppLocalizations`), 12 locales + "follow system":
-  en, tr, es, fr, de, ur, fa, ar, zh, ja, id, ru.
+- `flutter gen-l10n` (`AppLocalizations`), 14 locales + "follow system":
+  en, tr, es, fr, de, ur, fa, ar, zh, ja, id, ru, bn, ta.
 - Separate `TesbihatLocalizations` delegate for the Beads module.
-- All 11 non-English locales have 0 missing keys vs. the English template.
+- All 13 non-English locales have 0 missing keys vs. the English template.
 - Hijri month names: custom locale maps registered for languages the `hijri`
   package doesn't natively support (`hijri_utils.dart`); Arabic numerals for
   `ar`.

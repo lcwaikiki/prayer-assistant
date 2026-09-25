@@ -403,4 +403,6 @@ enum AppLocalePreference {
   ja,
   id,
   ru,
+  bn,
+  ta,
 }

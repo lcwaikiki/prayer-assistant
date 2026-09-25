@@ -66,7 +66,39 @@ void main() {
       expect(strings.dhikrBody('سبحان الله'), 'حان وقت ذكر سبحان الله.');
     });
 
-    test('supports all 12 languages without throwing', () {
+    test('provides Bengali strings when locale is bn', () {
+      final strings = NotificationStrings.of(const Locale('bn'));
+      expect(strings.onTimeTitle('ফজর'), 'ফজর-এর সময়');
+      expect(
+        strings.onTimeBody('ঢাকা', 'ফজর'),
+        'ঢাকা - ফজর নামাজের সময় হয়েছে।',
+      );
+      expect(strings.beforeTitle('যোহর', 15), '15 মিনিট পর যোহর');
+      expect(
+        strings.beforeBody('ঢাকা', 'যোহর', '12:30'),
+        'ঢাকা - যোহর ওয়াক্ত শুরু হবে 12:30-এ।',
+      );
+      expect(strings.testTitle, 'Prayer Assist পরীক্ষা');
+      expect(strings.dhikrBody('সুবহানাল্লাহ'), 'আপনার সুবহানাল্লাহ জিকিরের সময় হয়েছে।');
+    });
+
+    test('provides Tamil strings when locale is ta', () {
+      final strings = NotificationStrings.of(const Locale('ta'));
+      expect(strings.onTimeTitle('ஃபஜ்ர்'), 'ஃபஜ்ர் நேரம்');
+      expect(
+        strings.onTimeBody('சென்னை', 'ஃபஜ்ர்'),
+        'சென்னை - ஃபஜ்ர் தொழுகைக்கான நேரம் வந்துவிட்டது.',
+      );
+      expect(strings.beforeTitle('ளுஹர்', 15), '15 நிமிடத்தில் ளுஹர்');
+      expect(
+        strings.beforeBody('சென்னை', 'ளுஹர்', '12:30'),
+        'சென்னை - ளுஹர் நேரம்: 12:30.',
+      );
+      expect(strings.testTitle, 'Prayer Assist சோதனை');
+      expect(strings.dhikrBody('சுப்ஹானல்லாஹ்'), 'உங்கள் சுப்ஹானல்லாஹ் திக்ருக்கான நேரம்.');
+    });
+
+    test('supports all 14 languages without throwing', () {
       const languages = [
         'tr',
         'en',
@@ -80,6 +112,8 @@ void main() {
         'id',
         'zh',
         'ja',
+        'bn',
+        'ta',
       ];
       for (final lang in languages) {
         final strings = NotificationStrings.of(Locale(lang));

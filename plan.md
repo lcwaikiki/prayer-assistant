@@ -26,9 +26,8 @@ comes in.
   `CalendarMidnightScheduler` (calendar, alarm id `5002`). iOS has no
   background-alarm equivalent, so these refresh on next app open instead.
 - **Localization**: `flutter gen-l10n` (`AppLocalizations`) covers the main
-  app across 11 locales; Tesbihat has its own `TesbihatLocalizations`
-  delegate. English and Turkish are fully translated; other locales fall
-  back to English for newer strings.
+  app across 14 locales; Tesbihat has its own `TesbihatLocalizations`
+  delegate.
 
 ## Features
 
@@ -74,7 +73,7 @@ Two sub-tabs:
   item's counter screen.
 
 ### Preferences
-- Language (system default + 11 locales), theme mode (system/light/dark),
+- Language (system default + 14 locales), theme mode (system/light/dark),
   home app-bar remaining-time placement, widget text size, reminders
   on/off, reminder vibration/sound toggles.
 

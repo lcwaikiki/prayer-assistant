@@ -96,6 +96,20 @@ class _DiscardDialogStrings {
       cancel: '继续编辑',
       discard: '放弃',
     ),
+    'bn': _DiscardDialogStrings(
+      title: 'পরিবর্তনগুলি বাতিল করবেন?',
+      content:
+          'আপনার কিছু অসংরক্ষিত পরিবর্তন রয়েছে। আপনি কি নিশ্চিত যে এগুলি বাতিল করতে চান?',
+      cancel: 'সম্পাদনা চালিয়ে যান',
+      discard: 'বাতিল করুন',
+    ),
+    'ta': _DiscardDialogStrings(
+      title: 'மாற்றங்களை நிராகரிக்கவா?',
+      content:
+          'சேமிக்கப்படாத மாற்றங்கள் உள்ளன. அவற்றை நிச்சயமாக நிராகரிக்க விரும்புகிறீர்களா?',
+      cancel: 'தொடர்ந்து திருத்துக',
+      discard: 'நிராகரி',
+    ),
   };
 
   static _DiscardDialogStrings of(String languageCode) {

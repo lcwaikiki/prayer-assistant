@@ -1,0 +1,532 @@
+{
+  "@@locale": "bn",
+  "appTitle": "নামাজ সহায়ক",
+  "tabLocation": "অবস্থান",
+  "tabToday": "আজ",
+  "tabDates": "তারিখ",
+  "tabTesbih": "তসবীহ",
+  "tooltipToggleLightDark": "লাইট/ডার্ক পরিবর্তন করুন",
+  "tooltipRemindersOn": "অনুস্মারক চালু করুন",
+  "tooltipRemindersOff": "অনুস্মারক বন্ধ করুন",
+  "tooltipPreferences": "পছন্দসমূহ",
+  "remainingMinutesValue": "{minutes} মিনিট",
+  "@remainingMinutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remainingMinutesUnknown": "-- মিনিট",
+  "homeNoLocationTitle": "কোন অবস্থান নির্বাচিত হয়নি",
+  "homeNoLocationSubtitle": "অবস্থান ট্যাবে যান এবং প্রথমে আপনার জেলা সংরক্ষণ করুন।",
+  "homeNoPrayerTimesTitle": "ক্যাশে নামাজের সময় নেই",
+  "homeNoPrayerTimesSubtitle": "বার্ষিক ডেটা সিঙ্ক করতে রিফ্রেশ চাপুন।",
+  "refresh": "রিফ্রেশ",
+  "qiblaTitle": "কিবলা",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "int"
+      }
+    }
+  },
+  "qiblaBearing": "কিবলা: {degrees}°",
+  "qiblaLocationUnavailable": "আপনার অবস্থান নির্ধারণ করা যায়নি। GPS চালু করে আবার চেষ্টা করুন।",
+  "qiblaHeadingUnavailable": "কম্পাস অনুপলব্ধ - নির্দিষ্ট দিক দেখানো হচ্ছে।",
+  "qiblaPointDevice": "তীরটি উপরের দিকে নির্দেশ না করা পর্যন্ত আপনার ডিভাইসটি ঘোরান।",
+  "qiblaKaabaShort": "কিবলা",
+  "shareTodayTimes": "আজকের নামাজের সময় শেয়ার করুন",
+  "calendarPreviousDay": "আগের দিন",
+  "calendarNextDay": "পরের দিন",
+  "todayWithDate": "আজ • {date}",
+  "@todayWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "hijriUnknown": "হিজরি: -",
+  "hijriWithDate": "হিজরি: {date}",
+  "@hijriWithDate": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "reminderSettingsTitle": "অনুস্মারক সেটিংস",
+  "reminderSettingsSubtitle": "অনুস্মারক এবং কত মিনিট পূর্বে তা কনফিগার করতে উপরে যেকোনো নামাজের সময়ে ট্যাপ করুন।",
+  "tooltipScheduledDebug": "নির্ধারিত অনুস্মারক ডিবাগ",
+  "scheduledRemindersDebugTitle": "নির্ধারিত অনুস্মারক (ডিবাগ)",
+  "pendingNotificationsCount": "মুলতবি বিজ্ঞপ্তি: {count}",
+  "@pendingNotificationsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sendTestNotificationNow": "এখনই পরীক্ষামূলক বিজ্ঞপ্তি পাঠান",
+  "testNotificationSent": "পরীক্ষামূলক বিজ্ঞপ্তি পাঠানো হয়েছে।",
+  "statusBarMinutesTitle": "স্ট্যাটাস বার মিনিট",
+  "statusBarMinutesSubtitle": "স্ট্যাটাস বারে চলমান অবশিষ্ট মিনিটের বিজ্ঞপ্তি দেখান।",
+  "statusAutoRestoreTitle": "মুছে ফেলা হলে স্বয়ংক্রিয় পুনরুদ্ধার",
+  "statusAutoRestoreSubtitle": "ব্যবহারকারী সোয়াইপ করে সরিয়ে দিলে স্ট্যাটাস আইটেমটি পুনরায় তৈরি করুন।",
+  "noPendingReminders": "কোন মুলতবি অনুস্মারক বিজ্ঞপ্তি নেই।",
+  "unknownFireTime": "অজানা সময়",
+  "pastPrefix": "[অতীত] ",
+  "reminderOnTimeAndBefore": "চালু • সঠিক সময়ে + {minutes} মিনিট আগে",
+  "@reminderOnTimeAndBefore": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOnTimeOnly": "চালু • সঠিক সময়ে",
+  "reminderBeforeOnly": "চালু • {minutes} মিনিট আগে",
+  "@reminderBeforeOnly": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "reminderOff": "অনুস্মারক বন্ধ",
+  "nextPrayerTitle": "পরবর্তী নামাজ",
+  "homeUpcomingRemindersTitle": "আসন্ন অনুস্মারক",
+  "startsIn": "{remaining}-এ শুরু হবে",
+  "@startsIn": {
+    "placeholders": {
+      "remaining": {}
+    }
+  },
+  "selectYourLocation": "আপনার অবস্থান নির্বাচন করুন",
+  "locationHelp": "দ্রুত সেটআপের জন্য GPS ব্যবহার করুন অথবা দেশ/শহর নির্বাচন করুন।",
+  "useCurrentLocation": "বর্তমান অবস্থান ব্যবহার করুন",
+  "country": "দেশ",
+  "stateCity": "বিভাগ / শহর",
+  "district": "জেলা",
+  "search": "অনুসন্ধান",
+  "noResults": "কোন ফলাফল পাওয়া যায়নি",
+  "noInternetTitle": "ইন্টারনেট সংযোগ নেই",
+  "noInternetMessage": "সার্ভারে পৌঁছানো সম্ভব হয়নি। আপনার ইন্টারনেট পরীক্ষা করে আবার চেষ্টা করুন।",
+  "retry": "পুনরায় চেষ্টা করুন",
+  "saveLocation": "অবস্থান সংরক্ষণ করুন",
+  "selectedLocation": "নির্বাচিত: {location}",
+  "@selectedLocation": {
+    "placeholders": {
+      "location": {}
+    }
+  },
+  "historySelectLocationFirst": "১ বছরের নামাজের তালিকা দেখতে প্রথমে একটি অবস্থান নির্বাচন করুন।",
+  "historyTableTitle": "নামাজের সময় সারণী (সম্পূর্ণ বছর)",
+  "todayShort": "আজ",
+  "dateHeader": "তারিখ",
+  "imsak": "ফজর",
+  "gunes": "সূর্যোদয়",
+  "ogle": "যোহর",
+  "ikindi": "আসর",
+  "aksam": "মাগরিব",
+  "yatsi": "ইশা",
+  "hijriHeader": "হিজরি",
+  "preferencesTitle": "পছন্দসমূহ",
+  "languageTitle": "ভাষা",
+  "languageSystem": "সিস্টেম ডিফল্ট",
+  "themeModeTitle": "থিম মোড",
+  "themeSystem": "সিস্টেম ডিফল্ট",
+  "themeLight": "লাইট",
+  "themeDark": "ডার্ক",
+  "homeScreenSettingsSectionTitle": "হোম স্ক্রিন সেটিংস",
+  "appBarRemainingTitle": "হোম অ্যাপ বার অবশিষ্ট সময়",
+  "showInTitle": "শিরোনামে দেখান",
+  "showAtRight": "ডানপাশে দেখান",
+  "showAsSubtitle": "উপশিরোনাম হিসেবে দেখান",
+  "hideRemainingText": "অবশিষ্ট সময় লুকান",
+  "notificationMessageTitle": "বিজ্ঞপ্তি বার্তা",
+  "notificationMessageShown": "দৃশ্যমান",
+  "notificationMessageHidden": "লুকানো",
+  "widgetSettingsSectionTitle": "উইজেট সেটিংস",
+  "widgetTextSizeTitle": "ফন্ট সাইজ",
+  "widgetTextSizeSubtitle": "হোম স্ক্রিন উইজেটে ব্যবহৃত লেখার আকার।",
+  "widgetTextSizeExtraSmall": "অতিরিক্ত ছোট",
+  "widgetTextSizeSmall": "ছোট",
+  "widgetTextSizeMedium": "মাঝারি",
+  "widgetTextSizeLarge": "বড়",
+  "widgetTextSizePreview": "প্রিভিউ {size}",
+  "@widgetTextSizePreview": {
+    "placeholders": {
+      "size": {}
+    }
+  },
+  "widgetMmssThresholdTitle": "সেকেন্ড কাউন্টডাউন",
+  "widgetThemeTitle": "পটভূমি থিম",
+  "widgetThemeSystem": "সিস্টেম",
+  "widgetThemeLight": "লাইট",
+  "widgetThemeDark": "ডার্ক",
+  "widgetThemeTransparent": "স্বচ্ছ",
+  "widgetCalendarDisplayTitle": "ক্যালেন্ডার তারিখ প্রদর্শন",
+  "widgetCalendarDisplayBoth": "উভয় (হিজরি ও গ্রেগরিয়ান)",
+  "widgetCalendarDisplayHijri": "শুধুমাত্র হিজরি",
+  "widgetCalendarDisplayGregorian": "শুধুমাত্র গ্রেগরিয়ান",
+  "widgetMmssThresholdNever": "সবসময় HH:MM দেখান",
+  "widgetMmssThresholdValue": "{minutes} মিনিটের নিচে MM:SS",
+  "@widgetMmssThresholdValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "remindersOnOffTitle": "অনুস্মারক চালু/বন্ধ",
+  "remindersOnOffSubtitle": "নামাজের অনুস্মারক বিজ্ঞপ্তি চালু বা বন্ধ করুন। প্রতিটি নামাজের সেটিংস সংরক্ষিত থাকবে।",
+  "reminderVibrationTitle": "অনুস্মারকে কম্পন",
+  "reminderVibrationSubtitle": "অনুস্মারক সক্রিয় হলে প্রায় ১০ সেকেন্ড স্পন্দিত হবে।",
+  "reminderSoundTitle": "অনুস্মারকে শব্দ বাজান",
+  "reminderSoundSubtitle": "অনুস্মারক সক্রিয় হলে বিজ্ঞপ্তি শব্দ বাজান।",
+  "remindersOn": "চালু",
+  "remindersOff": "বন্ধ",
+  "reminderScreenTitle": "{prayer} অনুস্মারক",
+  "@reminderScreenTitle": {
+    "placeholders": {
+      "prayer": {}
+    }
+  },
+  "reminderTypeTitle": "অনুস্মারকের ধরন (উভয়টি নির্বাচন করা যেতে পারে)",
+  "onTime": "সঠিক সময়ে",
+  "before": "আগে",
+  "after": "পরে",
+  "reminderAlertTitle": "সতর্কতা",
+  "reminderAlertSubtitle": "সতর্কতা কার্যকর হতে পছন্দসমূহে সংশ্লিষ্ট সুইচ চালু থাকতে হবে।",
+  "vibrateChip": "কম্পন",
+  "soundChip": "শব্দ",
+  "adhanChip": "আজান",
+  "prayersCompleted": "{completed}/{total} নামাজ সম্পন্ন",
+  "holiday_islamic_new_year": "ইসলামি নববর্ষ",
+  "holiday_ashura": "আশুরা",
+  "holiday_mawlid": "ঈদে মিলাদুন্নবী",
+  "holiday_isra_miraj": "শবে মেরাজ",
+  "holiday_laylat_barat": "শবে বরাত",
+  "holiday_ramadan_first": "পহেলা রমজান",
+  "holiday_laylat_qadr": "শবে কদর",
+  "holiday_eid_fitr": "ঈদুল ফিতর",
+  "holiday_arafah": "আরাফার দিন",
+  "holiday_eid_adha": "ঈদুল আজহা",
+  "remindBeforePrayerTitle": "নামাজের আগে মনে করিয়ে দিন",
+  "remindAfterPrayerTitle": "নামাজের পরে মনে করিয়ে দিন",
+  "minutesValue": "{minutes} মিনিট",
+  "@minutesValue": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "custom": "কাস্টম",
+  "customMinutes": "কাস্টম মিনিট",
+  "customMinutesHint": "যেমন: ১২",
+  "save": "সংরক্ষণ",
+  "enableBeforeToSelectMinutes": "মিনিট নির্বাচন করতে \"আগে\" সক্রিয় করুন।",
+  "enableAfterToSelectMinutes": "মিনিট নির্বাচন করতে \"পরে\" সক্রিয় করুন।",
+  "enterValidPositiveNumber": "একটি বৈধ ধনাত্মক সংখ্যা লিখুন।",
+  "useValueUpTo240": "২৪০ মিনিট পর্যন্ত মান ব্যবহার করুন।",
+  "customMinutesSaved": "কাস্টম মিনিট সংরক্ষিত হয়েছে।",
+  "cancel": "বাতিল",
+  "calendarTabTooltip": "হিজরি ক্যালেন্ডার",
+  "calendarPreviousMonth": "আগের মাস",
+  "calendarNextMonth": "পরের মাস",
+  "calendarSwapPrimary": "হিজরি/গ্রেগরিয়ান পরিবর্তন করুন",
+  "calendarShowSecondary": "গৌণ তারিখ দেখান",
+  "calendarHideSecondary": "গৌণ তারিখ লুকান",
+  "calendarNoRemindersOnDay": "এই দিনে কোন অনুস্মারক নেই",
+  "calendarAddReminder": "অনুস্মারক যোগ করুন",
+  "calendarEditReminder": "সম্পাদনা",
+  "calendarDeleteReminder": "মুছুন",
+  "calendarDeleteOccurrence": "এই পুনরাবৃত্তি মুছুন",
+  "calendarDeleteOccurrenceConfirm": "সিরিজ থেকে শুধু এই দিনটি বাদ দেবেন?",
+  "calendarOccurrenceDeleted": "পুনরাবৃত্তি মুছে ফেলা হয়েছে",
+  "calendarExcludedOccurrencesLabel": "মুছে ফেলা পুনরাবৃত্তিসমূহ",
+  "calendarRestoreOccurrence": "পুনরুদ্ধার",
+  "calendarRestoreAllOccurrences": "সব পুনরুদ্ধার করুন",
+  "calendarReminderFormTitleNew": "নতুন অনুস্মারক",
+  "calendarReminderFormTitleEdit": "অনুস্মারক সম্পাদনা",
+  "calendarReminderTitleLabel": "শিরোনাম",
+  "calendarReminderTitleHint": "যেমন: রমজান শুরু",
+  "calendarReminderNotesLabel": "নোট (ঐচ্ছিক)",
+  "calendarReminderDateTimeLabel": "তারিখ ও সময়",
+  "calendarReminderRecurrenceLabel": "পুনরাবৃত্তি",
+  "calendarRecurrenceOnce": "একবার",
+  "calendarRecurrenceDaily": "প্রতিদিন",
+  "calendarRecurrenceWeekly": "সাপ্তাহিক",
+  "calendarRecurrenceMonthly": "মাসিক",
+  "calendarRecurrenceYearly": "বার্ষিক",
+  "calendarRepeatCountLabel": "পুনরাবৃত্তির সংখ্যা",
+  "calendarRepeatCountHelper": "থামার আগে অনুস্মারক যতবার বাজবে (বন্ধ = চিরতরে পুনরাবৃত্তি)",
+  "calendarRepeatCountError": "২ থেকে ১০০ এর মধ্যে একটি সংখ্যা লিখুন",
+  "calendarRepeatDaysLabel": "পুনরাবৃত্তির দিন",
+  "calendarDayOfMonthLabel": "মাসের দিন",
+  "calendarYearlyMonthLabel": "মাস",
+  "calendarYearlyDayLabel": "দিন",
+  "calendarMonthlyBasisLabel": "মাসিক ভিত্তি",
+  "calendarYearlyBasisLabel": "বার্ষিক ভিত্তি",
+  "calendarYearlyBasisGregorian": "গ্রেগরিয়ান",
+  "calendarYearlyBasisHijri": "হিজরি",
+  "calendarReminderTitleRequired": "একটি শিরোনাম লিখুন",
+  "calendarAnchorClockTime": "ক্যালেন্ডার তারিখ",
+  "calendarAnchorPrayerTime": "নামাজের সময়",
+  "calendarSelectPrayer": "নামাজ নির্বাচন করুন",
+  "calendarOffsetOnTime": "সঠিক সময়ে",
+  "calendarOffsetBefore": "আগে",
+  "calendarOffsetAfter": "পরে",
+  "calendarPickAnchorDate": "তারিখ নির্বাচন করুন",
+  "datesPrayerTimesTab": "নামাজের সময়",
+  "datesCalendarTab": "ক্যালেন্ডার",
+  "datesMoonPhaseTab": "চাঁদের দশা",
+  "undo": "পূর্বাবস্থায় ফেরান",
+  "calendarReminderDeleted": "\"{title}\" মুছে ফেলা হয়েছে",
+  "@calendarReminderDeleted": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "verseOfTheDay": "আজকের আয়াত",
+  "hadithOfTheDay": "আজকের হাদিস",
+  "hisnAlMuslimTitle": "হিসনুল মুসলিম",
+  "morningAdhkar": "সকালের আজকার",
+  "eveningAdhkar": "সন্ধ্যার আজকার",
+  "afterPrayerAdhkar": "নামাজের পরের আজকার",
+  "sleepingAdhkar": "ঘুমানোর আগের আজকার",
+  "dailyLifeDuas": "দৈনন্দিন জীবনের দোয়া",
+  "shareWisdom": "শেয়ার করুন",
+  "copyText": "কপি করুন",
+  "copiedToClipboard": "ক্লিপবোর্ডে কপি করা হয়েছে",
+  "searchSupplicationsHint": "দোয়া অনুসন্ধান করুন...",
+  "noSupplicationsFound": "কোন দোয়া পাওয়া যায়নি",
+  "completed": "সম্পন্ন",
+  "tapToCount": "গণনা করতে ট্যাপ করুন",
+  "tabAll": "সব",
+  "kazaTitle": "কাজা",
+  "kazaSubtitle": "ছুটে যাওয়া অতীতের নামাজ ট্র্যাক ও আদায় করুন",
+  "kazaCalculatorWizard": "ক্যালকুলেটর",
+  "kazaBatchLogDay": "+১ পূর্ণ দিন",
+  "kazaBatchLogDayTooltip": "সব ৬টি নামাজের জন্য ১টি করে সম্পন্ন গণনা বৃদ্ধি করুন",
+  "kazaTotalRemaining": "মোট অবশিষ্ট",
+  "kazaCompletedProgress": "{completed} / {target} সম্পন্ন",
+  "@kazaCompletedProgress": {
+    "placeholders": {
+      "completed": {},
+      "target": {}
+    }
+  },
+  "kazaEstimatedCompletion": "আনুমানিক সমাপ্তি: {date}",
+  "@kazaEstimatedCompletion": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "kazaEstimatedCompletionFinished": "সমস্ত কাজা নামাজ সম্পন্ন হয়েছে! 🎉",
+  "kazaDailyPaceLabel": "দৈনিক গতি",
+  "kazaDailyPaceValue": "{count} নামাজ / দিন",
+  "@kazaDailyPaceValue": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaSetPaceDialogTitle": "দৈনিক গতি নির্ধারণ করুন",
+  "kazaSetPaceDialogSubtitle": "আপনি প্রতিদিন কতটি কাজা নামাজ আদায় করেন?",
+  "kazaCalculatorTitle": "কাজা নামাজ ক্যালকুলেটর",
+  "kazaCalculateByYears": "ছুটে যাওয়া সময়",
+  "kazaCalculateManual": "ম্যানুয়াল লক্ষ্য",
+  "kazaYearsMissed": "ছুটে যাওয়া বছর",
+  "kazaMonthsMissed": "অতিরিক্ত মাস",
+  "kazaCalculateButton": "লক্ষ্য সেট করুন",
+  "kazaWitrLabel": "বিতর",
+  "kazaRemainingCount": "{count}টি অবশিষ্ট",
+  "@kazaRemainingCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "kazaEditCompletedTitle": "{name} সম্পন্ন গণনা",
+  "@kazaEditCompletedTitle": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kazaCalculatedDaysPerPrayer": "= প্রতি নামাজে {days} দিন (মোট {total}টি নামাজ)",
+  "@kazaCalculatedDaysPerPrayer": {
+    "placeholders": {
+      "days": {},
+      "total": {}
+    }
+  },
+  "backupExportTitle": "ব্যাকআপ ও এক্সপোর্ট",
+  "backupExportSubtitle": "অ্যাপ ডেটা ব্যাকআপ করুন বা সময়সূচী এক্সপোর্ট করুন",
+  "exportBackupJson": "ব্যাকআপ ডেটা এক্সপোর্ট করুন (JSON)",
+  "restoreBackupJson": "ব্যাকআপ থেকে ডেটা পুনরুদ্ধার করুন",
+  "exportPrayerScheduleIcs": "নামাজের সময়সূচী এক্সপোর্ট করুন (.ics)",
+  "exportHolidaysIcs": "ইসলামিক ছুটির দিন এক্সপোর্ট করুন (.ics)",
+  "restoreConfirmTitle": "অ্যাপ ডেটা পুনরুদ্ধার করবেন?",
+  "restoreConfirmBody": "এটি আপনার কাজা লক্ষ্য, নামাজের ইতিহাস, অনুস্মারক এবং তসবীহ ডেটা পুনরুদ্ধার করবে। চালিয়ে যাবেন?",
+  "restoreSuccess": "ডেটা সফলভাবে পুনরুদ্ধার করা হয়েছে!",
+  "restoreNewerVersionError": "এই ব্যাকআপটি একটি নতুন অ্যাপ সংস্করণ দ্বারা তৈরি করা হয়েছে। অনুগ্রহ করে অ্যাপ আপডেট করুন এবং পুনরায় চেষ্টা করুন।",
+  "restoreError": "অবৈধ ব্যাকআপ ফাইল ফরম্যাট",
+  "shareOrSave": "শেয়ার / সংরক্ষণ",
+  "@shareOrSave": {
+    "description": "Button label to share or save exported file"
+  },
+  "googleDriveSignIn": "Google Drive-এ সাইন ইন করুন",
+  "googleDriveSignOut": "Google Drive থেকে সাইন আউট করুন",
+  "googleDriveBackup": "Google Drive-এ ব্যাকআপ সংরক্ষণ করুন",
+  "googleDriveRestore": "Google Drive থেকে পুনরুদ্ধার করুন",
+  "googleDriveBackupSuccess": "ব্যাকআপ Google Drive-এ সংরক্ষিত হয়েছে",
+  "googleDriveBackupError": "Google Drive-এ ব্যাকআপ সংরক্ষণ করতে ব্যর্থ হয়েছে",
+  "googleDriveWorking": "কাজ চলছে...",
+  "googleDriveRestoreConfirm": "এটি আপনার Google Drive ব্যাকআপ থেকে ডেটা পুনরুদ্ধার করবে। চালিয়ে যাবেন?",
+  "googleDriveLastBackup": "সর্বশেষ ব্যাকআপ: {date}",
+  "@googleDriveLastBackup": {
+    "description": "Shows when the last Google Drive backup was made",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveNotSignedIn": "Google Drive ব্যাকআপ ব্যবহার করতে সাইন ইন করুন",
+  "googleDriveSignInError": "Google Drive-এ সাইন ইন করতে ব্যর্থ হয়েছে",
+  "googleDriveConfigError": "Google Drive সাইন-ইন কনফিগার করা হয়নি।",
+  "googleDriveSignOutConfirmTitle": "Google Drive থেকে সাইন আউট করবেন?",
+  "googleDriveSignOutConfirmBody": "{email} দিয়ে সাইন আউট করবেন? আপনি পরে আবার সাইন ইন করতে পারেন।",
+  "@googleDriveSignOutConfirmBody": {
+    "description": "Confirmation message when signing out of Google Drive",
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "googleDriveRestoreEmpty": "Google Drive-এ কোন ব্যাকআপ পাওয়া যায়নি।",
+  "driveRestorePromptBody": "এই ডিভাইসে কোন ডেটা পাওয়া যায়নি। Google Drive থেকে ডেটা পুনরুদ্ধার করবেন?",
+  "offlineFolderChoose": "ব্যাকআপ ফোল্ডার চয়ন করুন",
+  "offlineFolderChange": "ব্যাকআপ ফোল্ডার পরিবর্তন করুন",
+  "offlineFolderNone": "কোন ফোল্ডার চয়ন করা হয়নি। ব্যাকআপ অফলাইনে সংরক্ষিত হবে না।",
+  "offlineFolderSaved": "ব্যাকআপ ফোল্ডারে সংরক্ষিত হয়েছে।",
+  "offlineFolderRestore": "ব্যাকআপ ফোল্ডার থেকে পুনরুদ্ধার করুন",
+  "offlineFolderRestoreEmpty": "নির্বাচিত ফোল্ডারে কোন ব্যাকআপ ফাইল পাওয়া যায়নি।",
+  "offlineFolderRemove": "ব্যাকআপ ফোল্ডার সরান",
+  "restoreOptionsTitle": "কী পুনরুদ্ধার করবেন?",
+  "restoreOptionsData": "অ্যাপ ডেটা",
+  "restoreOptionsPreferences": "পছন্দসমূহ",
+  "googleDriveBackupItemCount": "{count}টি আইটেম",
+  "@googleDriveBackupItemCount": {
+    "description": "Number of items in a backup",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "googleDriveHistoryLimitTitle": "ব্যাকআপ ইতিহাসের দৈর্ঘ্য",
+  "googleDriveHistoryLimitAll": "সব",
+  "analyticsTab": "অ্যানালিটিক্স",
+  "currentStreak": "বর্তমান ধারাবাহিকতা",
+  "longestStreak": "দীর্ঘতম ধারাবাহিকতা",
+  "daysUnit": "দিন",
+  "monthlyHeatmapTitle": "মাসিক সমাপ্তি",
+  "completionBreakdownTitle": "নামাজের বিশ্লেষণ",
+  "overallConsistency": "সামগ্রিক ধারাবাহিকতা",
+  "totalPrayersCompleted": "মোট সংরক্ষিত নামাজ",
+  "last30Days": "গত ৩০ দিন",
+  "allTime": "সর্বকাল",
+  "fastingTitle": "রোজা",
+  "suhoorCountdownTitle": "সাহরির বাকি সময়",
+  "iftarCountdownTitle": "ইফতারের বাকি সময়",
+  "fastingTypeRamadan": "রমজানের রোজা",
+  "fastingTypeSunnah": "সুন্নত রোজা",
+  "fastingTypeQadaa": "কাজা রোজা",
+  "whiteDaysTitle": "আইয়ামে বিজ (১৩, ১৪, ১৫)",
+  "mondayThursdayTitle": "সোম ও বৃহস্পতিবারের সুন্নত",
+  "logFastAction": "রোজা সংরক্ষণ করুন",
+  "totalFastsLogged": "মোট সংরক্ষিত রোজা",
+  "suhoorEndsIn": "সাহরি শেষ হতে বাকি",
+  "iftarIn": "ইফতারের বাকি",
+  "fastingTab": "রোজা",
+  "trackTabTitle": "ট্র্যাক",
+  "prayerAnalyticsTitle": "নামাজ অ্যানালিটিক্স",
+  "prayerQadaaTitle": "নামাজ কাজা",
+  "iftarTimeLabel": "ইফতারের সময়",
+  "fastingProgressFasted": "{percent}% রোজা সম্পন্ন",
+  "@fastingProgressFasted": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "suhoorTickerTitle": "সাহরি সারণী",
+  "fastingProgressElapsed": "{percent}% অতিবাহিত",
+  "@fastingProgressElapsed": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "suhoorWithTime": "সাহরি ({time})",
+  "@suhoorWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "iftarWithTime": "ইফতার ({time})",
+  "@iftarWithTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "upcomingSunnahDays": "আসন্ন সুন্নত দিনসমূহ",
+  "fastingCalendarLogger": "রোজা ক্যালেন্ডার লগার",
+  "removeFastLog": "রোজার লগ মুছুন",
+  "calendarWeekStartTitle": "সপ্তাহ শুরু হয়",
+  "calendarWeekStartSunday": "রবিবার",
+  "calendarWeekStartMonday": "সোমবার",
+  "hijriDateOffsetTitle": "হিজরি তারিখ সমন্বয়",
+  "hijriDateOffsetSubtitle": "স্থানীয় চাঁদ দেখার ভিত্তিতে হিজরি তারিখ সমন্বয় করুন",
+  "showIslamicHolidaysTitle": "ইসলামিক ছুটির দিনসমূহ হাইলাইট করুন",
+  "showIslamicHolidaysSubtitle": "বিশেষ ইসলামিক দিনগুলির জন্য ব্যাজ দেখান",
+  "showFastingBadgesTitle": "ক্যালেন্ডারে রোজার ব্যাজ দেখান",
+  "showFastingBadgesSubtitle": "রোজা রাখা তারিখগুলিতে ব্যাজ দেখান",
+  "defaultCalendarDisplayTitle": "ডিফল্ট ক্যালেন্ডার ভিউ",
+  "defaultCalendarDisplaySubtitle": "ক্যালেন্ডার খোলার সময় প্রাথমিক দৃশ্য",
+  "showCalendarReminderDotsTitle": "অনুস্মারক ডট দেখান",
+  "showCalendarReminderDotsSubtitle": "নির্ধারিত অনুস্মারক থাকা দিনে ডট প্রদর্শন করুন",
+  "calendarSettingsSectionTitle": "ক্যালেন্ডার সেটিংস",
+  "moonPhaseTitle": "চাঁদের দশা",
+  "moonIllumination": "{percent}% আলোকিত",
+  "@moonIllumination": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "moonAgeDays": "চক্রের {days}তম দিন",
+  "@moonAgeDays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "moonPhaseNewMoon": "নতুন চাঁদ (হেলাল)",
+  "moonPhaseWaxingCrescent": "বর্ধমান অর্ধচন্দ্র",
+  "moonPhaseFirstQuarter": "প্রথম চতুর্থাংশ",
+  "moonPhaseWaxingGibbous": "বর্ধমান গিব্বাস",
+  "moonPhaseFullMoon": "পূর্ণিমা (বদর)",
+  "moonPhaseWaningGibbous": "ক্ষীয়মাণ গিব্বাস",
+  "moonPhaseLastQuarter": "শেষ চতুর্থাংশ",
+  "moonPhaseWaningCrescent": "ক্ষীয়মাণ অর্ধচন্দ্র",
+  "whiteDaysSubtitle": "সুন্নত রোজার দিন (১৩, ১৪, ১৫ হিজরি)",
+  "homeDashboardCardsSectionTitle": "হোম ড্যাশবোর্ড কার্ড",
+  "showCardMoonPhaseTitle": "চাঁদের দশা কার্ড দেখান",
+  "showCardMoonPhaseSubtitle": "চাঁদের দশা এবং আইয়ামে বিজের কার্ড প্রদর্শন করুন",
+  "showCardIftarSuhoorTitle": "সাহরি ও ইফতার কার্ড দেখান",
+  "showCardIftarSuhoorSubtitle": "সরাসরি সাহরি এবং ইফতারের কাউন্টডাউন কার্ড প্রদর্শন করুন",
+  "showCardDailyWisdomTitle": "দৈনিক প্রজ্ঞা কার্ড দেখান",
+  "showCardDailyWisdomSubtitle": "দৈনিক অনুপ্রেরণামূলক হাদিস বা আয়াত কার্ড প্রদর্শন করুন",
+  "showCardUpcomingRemindersTitle": "আসন্ন অনুস্মারক কার্ড দেখান",
+  "showCardUpcomingRemindersSubtitle": "আপনার পরবর্তী ৩টি আসন্ন অনুস্মারকের কার্ড প্রদর্শন করুন",
+  "moonCalendarTitle": "চন্দ্রকলা ক্যালেন্ডার",
+  "calendarGoToDate": "নির্দিষ্ট তারিখে যান",
+  "whiteDaysBannerPrefix": "আইয়ামে বিজ (১৩, ১৪, ১৫)"
+}

@@ -605,11 +605,13 @@ class PrayerAppController extends ChangeNotifier {
         await notificationService.cancelAllPrayerNotifications();
         await _updateWidgetBridgeData();
       }
-      await _driveService.restoreSession();
-      _offlineFolderUri = await _offlineFolderService.currentFolder();
-      _useDefaultDocumentsFolder = _offlineFolderUri == null
-          ? await _offlineFolderService.documentsFolderAvailable()
-          : false;
+      try {
+        await _driveService.restoreSession();
+        _offlineFolderUri = await _offlineFolderService.currentFolder();
+        _useDefaultDocumentsFolder = _offlineFolderUri == null
+            ? await _offlineFolderService.documentsFolderAvailable()
+            : false;
+      } catch (_) {}
       _clearError();
     } catch (e) {
       _recordError(e);

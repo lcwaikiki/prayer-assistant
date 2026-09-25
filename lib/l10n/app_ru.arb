@@ -573,5 +573,14 @@
   "beadsSelectAll": "Выбрать все",
   "beadsSelectedCount": "Выбрано: {count}",
   "beadsDeleteSelectedConfirm": "Удалить выбранные элементы ({count})?",
-  "beadsDeletedSelected": "Удалено: {count}"
+  "beadsDeletedSelected": "Удалено: {count}",
+  "widgetTextSizePreview": "Предпросмотр {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

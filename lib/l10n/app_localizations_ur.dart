@@ -328,7 +328,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String widgetTextSizePreview(Object size) {
-    return 'Preview $size';
+    return 'پیش نظارہ $size';
   }
 
   @override

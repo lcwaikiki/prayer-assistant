@@ -518,5 +518,14 @@
   "beadsSelectAll": "すべて選択",
   "beadsSelectedCount": "{count} 件選択中",
   "beadsDeleteSelectedConfirm": "選択した {count} 件を削除しますか？",
-  "beadsDeletedSelected": "{count} 件を削除しました"
+  "beadsDeletedSelected": "{count} 件を削除しました",
+  "widgetTextSizePreview": "プレビュー {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

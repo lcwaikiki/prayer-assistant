@@ -316,7 +316,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String widgetTextSizePreview(Object size) {
-    return 'Preview $size';
+    return '预览 $size';
   }
 
   @override

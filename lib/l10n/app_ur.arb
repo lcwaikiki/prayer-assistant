@@ -518,5 +518,14 @@
   "beadsSelectAll": "سب منتخب کریں",
   "beadsSelectedCount": "{count} منتخب",
   "beadsDeleteSelectedConfirm": "منتخب {count} اشیاء حذف کریں؟",
-  "beadsDeletedSelected": "{count} حذف ہوگئے"
+  "beadsDeletedSelected": "{count} حذف ہوگئے",
+  "widgetTextSizePreview": "پیش نظارہ {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

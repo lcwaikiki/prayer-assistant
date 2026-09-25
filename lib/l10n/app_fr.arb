@@ -518,5 +518,14 @@
   "beadsSelectAll": "Tout sélectionner",
   "beadsSelectedCount": "{count} sélectionnés",
   "beadsDeleteSelectedConfirm": "Supprimer {count} éléments sélectionnés ?",
-  "beadsDeletedSelected": "{count} supprimés"
+  "beadsDeletedSelected": "{count} supprimés",
+  "widgetTextSizePreview": "Aperçu {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

@@ -329,7 +329,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String widgetTextSizePreview(Object size) {
-    return 'Preview $size';
+    return 'Vista previa $size';
   }
 
   @override

@@ -518,5 +518,14 @@
   "beadsSelectAll": "Pilih semua",
   "beadsSelectedCount": "{count} dipilih",
   "beadsDeleteSelectedConfirm": "Hapus {count} item yang dipilih?",
-  "beadsDeletedSelected": "{count} dihapus"
+  "beadsDeletedSelected": "{count} dihapus",
+  "widgetTextSizePreview": "Pratinjau {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

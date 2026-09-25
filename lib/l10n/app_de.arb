@@ -518,5 +518,14 @@
   "beadsSelectAll": "Alle auswählen",
   "beadsSelectedCount": "{count} ausgewählt",
   "beadsDeleteSelectedConfirm": "{count} ausgewählte Elemente löschen?",
-  "beadsDeletedSelected": "{count} gelöscht"
+  "beadsDeletedSelected": "{count} gelöscht",
+  "widgetTextSizePreview": "Vorschau {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

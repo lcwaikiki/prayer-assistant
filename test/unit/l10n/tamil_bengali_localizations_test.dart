@@ -114,7 +114,7 @@ void main() {
     test('daily_wisdom.json contains bn and ta for all items', () async {
       final raw = await rootBundle.loadString('assets/data/daily_wisdom.json');
       final list = jsonDecode(raw) as List<dynamic>;
-      expect(list.length, 30);
+      expect(list.length, 300);
       for (final item in list) {
         final map = item as Map<String, dynamic>;
         final trans = map['translations'] as Map<String, dynamic>;
@@ -128,7 +128,7 @@ void main() {
     test('supplications.json contains bn and ta for all items', () async {
       final raw = await rootBundle.loadString('assets/data/supplications.json');
       final list = jsonDecode(raw) as List<dynamic>;
-      expect(list.length, 5);
+      expect(list.length, 300);
       for (final item in list) {
         final map = item as Map<String, dynamic>;
         final trans = map['translations'] as Map<String, dynamic>;

@@ -518,5 +518,14 @@
   "beadsSelectAll": "全选",
   "beadsSelectedCount": "已选择 {count} 项",
   "beadsDeleteSelectedConfirm": "删除选中的 {count} 项？",
-  "beadsDeletedSelected": "已删除 {count} 项"
+  "beadsDeletedSelected": "已删除 {count} 项",
+  "widgetTextSizePreview": "预览 {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

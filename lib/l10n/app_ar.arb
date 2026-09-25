@@ -518,5 +518,14 @@
   "beadsSelectAll": "تحديد الكل",
   "beadsSelectedCount": "تم تحديد {count}",
   "beadsDeleteSelectedConfirm": "حذف {count} من العناصر المحددة؟",
-  "beadsDeletedSelected": "تم حذف {count}"
+  "beadsDeletedSelected": "تم حذف {count}",
+  "widgetTextSizePreview": "معاينة {size}",
+  "@widgetTextSizePreview": {
+    "description": "Preview text with size indicator",
+    "placeholders": {
+      "size": {
+        "type": "Object"
+      }
+    }
+  }
 }

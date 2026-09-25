@@ -18,6 +18,10 @@ void main() {
       expect(localizedCountryName('ALMANYA', 'zh'), '德国');
       expect(localizedCountryName('ALMANYA', 'ja'), 'ドイツ');
       expect(localizedCountryName('ALMANYA', 'fa'), 'آلمان');
+      expect(localizedCountryName('ALMANYA', 'bn'), 'জার্মানি');
+      expect(localizedCountryName('TURKIYE', 'bn'), 'তুরস্ক');
+      expect(localizedCountryName('ALMANYA', 'ta'), 'ஜெர்மனி');
+      expect(localizedCountryName('TURKIYE', 'ta'), 'துருக்கியே');
     });
 
     test('is case-insensitive on the API name', () {

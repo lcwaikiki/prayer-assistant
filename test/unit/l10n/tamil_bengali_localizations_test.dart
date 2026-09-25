@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/l10n/app_localizations.dart';
 import 'package:prayer_assistant/src/calendar/hijri_utils.dart';
+import 'package:prayer_assistant/src/l10n/country_names.dart';
 import 'package:prayer_assistant/src/l10n/locale_options.dart';
 import 'package:prayer_assistant/src/l10n/prayer_names.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
@@ -136,6 +137,13 @@ void main() {
         expect(trans['ta'], isNotNull, reason: 'Missing ta in ${map['id']}');
         expect(trans['ta'], isNotEmpty, reason: 'Empty ta in ${map['id']}');
       }
+    });
+
+    test('localizedCountryName supports bn and ta', () {
+      expect(localizedCountryName('TURKIYE', 'bn'), 'তুরস্ক');
+      expect(localizedCountryName('BANGLADES', 'bn'), 'বাংলাদেশ');
+      expect(localizedCountryName('TURKIYE', 'ta'), 'துருக்கியே');
+      expect(localizedCountryName('HINDISTAN', 'ta'), 'இந்தியா');
     });
   });
 }

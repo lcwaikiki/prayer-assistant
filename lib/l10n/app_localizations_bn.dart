@@ -1509,4 +1509,24 @@ class AppLocalizationsBn extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$countটি মুছে ফেলা হয়েছে';
   }
+
+  @override
+  String get notificationActionSnooze => 'স্নুজ';
+
+  @override
+  String get notificationActionDismiss => 'খারিজ';
+
+  @override
+  String get notificationActionDone => 'সম্পন্ন';
+
+  @override
+  String get snoozeDurationTitle => 'স্নুজ সময়কাল';
+
+  @override
+  String get snoozeDurationSubtitle => 'আবার মনে করিয়ে দেওয়ার আগের সময়';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes মিনিট';
+  }
 }

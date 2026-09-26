@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart'
@@ -8,6 +10,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../services/native_reminder_service.dart';
 import '../../services/notification_strings.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
@@ -56,15 +59,16 @@ class ItemReminderService {
     // isolate, where timezone state doesn't exist until initialized.
     await initializeLocalTimezone();
 
-    const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
+    final initSettings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        notificationCategories: darwinReminderCategories,
+      ),
     );
     await _plugin.initialize(
       settings: initSettings,
-      onDidReceiveNotificationResponse: (response) {
-        handleNotificationTap(response.payload);
-      },
+      onDidReceiveNotificationResponse: handleNotificationResponse,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
   }
 
@@ -81,7 +85,10 @@ class ItemReminderService {
   Future<void> cancelReminder(String itemId) {
     final base = _notificationId(itemId);
     return Future.wait([
-      for (var i = 0; i < _maxOccurrences; i++) _plugin.cancel(id: base + i),
+      for (var i = 0; i < _maxOccurrences; i++) ...[
+        _plugin.cancel(id: base + i),
+        NativeReminderService.cancel(base + i),
+      ],
     ]);
   }
 
@@ -99,7 +106,22 @@ class ItemReminderService {
     required NotificationDetails notificationDetails,
     required String payload,
     DateTimeComponents? matchDateTimeComponents,
+    NotificationStrings? strings,
   }) async {
+    if (NativeReminderService.isAndroid) {
+      final s = strings ?? NotificationStrings.of(null);
+      await NativeReminderService.schedule(
+        id: id,
+        triggerAt: scheduledDate,
+        title: title,
+        body: body,
+        payload: payload,
+        snoozeLabel: s.snooze,
+        dismissLabel: s.dismiss,
+        doneLabel: s.done,
+      );
+      return true;
+    }
     try {
       await _plugin.zonedSchedule(
         id: id,
@@ -185,27 +207,51 @@ class ItemReminderService {
     // count would otherwise leave stale notifications behind.
     for (var i = 0; i < _maxOccurrences; i++) {
       await _plugin.cancel(id: id + i);
+      await NativeReminderService.cancel(id + i);
     }
 
     if (!subject.reminderEnabled) {
       return;
     }
 
-    const details = NotificationDetails(
+    final effectiveLocale = await _resolveLocale(locale);
+    final strings = NotificationStrings.of(effectiveLocale);
+    final body = strings.dhikrBody(subject.title);
+    final details = NotificationDetails(
       android: AndroidNotificationDetails(
         _channelId,
         _channelName,
         channelDescription: 'Reminders for tasbih/dhikr items',
         importance: Importance.high,
         priority: Priority.high,
+        autoCancel: false,
+        ongoing: true,
+        additionalFlags: Int32List.fromList(const <int>[32]),
         sound: const RawResourceAndroidNotificationSound('reminder_chime'),
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            notificationActionSnooze,
+            strings.snooze,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDismiss,
+            strings.dismiss,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDone,
+            strings.done,
+            cancelNotification: true,
+          ),
+        ],
       ),
-      iOS: DarwinNotificationDetails(),
+      iOS: const DarwinNotificationDetails(
+        categoryIdentifier: notificationCategoryReminder,
+      ),
     );
-    final effectiveLocale = await _resolveLocale(locale);
-    final strings = NotificationStrings.of(effectiveLocale);
-    final body = strings.dhikrBody(subject.title);
-    final payload = '$payloadPrefix${subject.id}';
+    final payload =
+        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body})}';
 
     final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {
@@ -217,6 +263,7 @@ class ItemReminderService {
         body,
         payload,
         catchUp: catchUp,
+        strings: strings,
       );
       return;
     }
@@ -240,6 +287,7 @@ class ItemReminderService {
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
         payload: payload,
+        strings: strings,
       );
       return;
     }
@@ -261,6 +309,7 @@ class ItemReminderService {
           scheduledDate: tz.TZDateTime.from(reminderAt, tz.local),
           notificationDetails: details,
           payload: payload,
+          strings: strings,
         );
       case ReminderRecurrence.daily:
         await _zonedSchedule(
@@ -273,6 +322,7 @@ class ItemReminderService {
           matchDateTimeComponents: _usesOsRepeats
               ? DateTimeComponents.time
               : null,
+          strings: strings,
         );
       case ReminderRecurrence.weekly:
         if (subject.reminderWeekdays.isEmpty) {
@@ -286,6 +336,7 @@ class ItemReminderService {
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dayOfWeekAndTime
                 : null,
+            strings: strings,
           );
         } else if (_usesOsRepeats) {
           // One OS-level weekly repeat per selected weekday.
@@ -299,6 +350,7 @@ class ItemReminderService {
               notificationDetails: details,
               payload: payload,
               matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+              strings: strings,
             );
             if (!scheduled) {
               break;
@@ -318,6 +370,7 @@ class ItemReminderService {
             ),
             notificationDetails: details,
             payload: payload,
+            strings: strings,
           );
         }
       case ReminderRecurrence.monthly:
@@ -339,6 +392,7 @@ class ItemReminderService {
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dayOfMonthAndTime
                 : null,
+            strings: strings,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
@@ -352,6 +406,7 @@ class ItemReminderService {
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
             payload: payload,
+            strings: strings,
           );
         }
       case ReminderRecurrence.yearly:
@@ -370,6 +425,7 @@ class ItemReminderService {
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dateAndTime
                 : null,
+            strings: strings,
           );
         } else {
           final next = _nextHijriAnniversary(
@@ -383,6 +439,7 @@ class ItemReminderService {
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
             payload: payload,
+            strings: strings,
           );
         }
     }
@@ -402,6 +459,7 @@ class ItemReminderService {
     String body,
     String payload, {
     bool catchUp = true,
+    NotificationStrings? strings,
   }) async {
     final occurrences =
         subject.reminderAnchor == ItemReminderAnchor.prayerTime
@@ -420,6 +478,7 @@ class ItemReminderService {
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
         payload: payload,
+        strings: strings,
       );
       if (!scheduled) {
         // Android caps scheduled notifications; stop instead of throwing.

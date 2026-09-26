@@ -1499,4 +1499,24 @@ class AppLocalizationsUr extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count حذف ہوگئے';
   }
+
+  @override
+  String get notificationActionSnooze => 'بعد میں';
+
+  @override
+  String get notificationActionDismiss => 'مسترد';
+
+  @override
+  String get notificationActionDone => 'مکمل';
+
+  @override
+  String get snoozeDurationTitle => 'التوا کا دورانیہ';
+
+  @override
+  String get snoozeDurationSubtitle => 'دوبارہ یاد دہانی سے پہلے کا وقت';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes منٹ';
+  }
 }

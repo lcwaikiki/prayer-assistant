@@ -660,5 +660,18 @@
         "type": "int"
       }
     }
+  },
+  "notificationActionSnooze": "Snooze",
+  "notificationActionDismiss": "Dismiss",
+  "notificationActionDone": "Done",
+  "snoozeDurationTitle": "Snooze Duration",
+  "snoozeDurationSubtitle": "Duration before reminding again",
+  "snoozeMinutesOption": "{minutes} minutes",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

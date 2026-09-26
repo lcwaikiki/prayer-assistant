@@ -1499,4 +1499,24 @@ class AppLocalizationsFa extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count حذف شد';
   }
+
+  @override
+  String get notificationActionSnooze => 'تعویق';
+
+  @override
+  String get notificationActionDismiss => 'بستن';
+
+  @override
+  String get notificationActionDone => 'انجام شد';
+
+  @override
+  String get snoozeDurationTitle => 'مدت زمان تعویق';
+
+  @override
+  String get snoozeDurationSubtitle => 'مدت زمان تا یادآوری مجدد';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes دقیقه';
+  }
 }

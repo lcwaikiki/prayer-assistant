@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "Tunda",
+  "notificationActionDismiss": "Tutup",
+  "notificationActionDone": "Selesai",
+  "snoozeDurationTitle": "Durasi Tunda",
+  "snoozeDurationSubtitle": "Waktu sebelum mengingatkan kembali",
+  "snoozeMinutesOption": "{minutes} menit",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

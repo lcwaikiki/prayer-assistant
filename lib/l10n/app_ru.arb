@@ -582,5 +582,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "Отложить",
+  "notificationActionDismiss": "Закрыть",
+  "notificationActionDone": "Выполнено",
+  "snoozeDurationTitle": "Длительность отсрочки",
+  "snoozeDurationSubtitle": "Время до повторного напоминания",
+  "snoozeMinutesOption": "{minutes} мин",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

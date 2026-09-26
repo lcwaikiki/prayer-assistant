@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform, visibleForTesting;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -6,6 +10,8 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../services/native_reminder_service.dart';
+import '../../services/notification_strings.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
@@ -48,16 +54,35 @@ class CalendarReminderService {
     // isolate, where timezone state doesn't exist until initialized.
     await initializeLocalTimezone();
 
-    const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
+    final initSettings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        notificationCategories: darwinReminderCategories,
+      ),
     );
     await _plugin.initialize(
       settings: initSettings,
-      onDidReceiveNotificationResponse: (response) {
-        handleNotificationTap(response.payload);
-      },
+      onDidReceiveNotificationResponse: handleNotificationResponse,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
+  }
+
+  Locale? currentLocale;
+
+  Future<Locale> _resolveLocale(Locale? override) async {
+    if (override != null) {
+      return override;
+    }
+    if (currentLocale != null) {
+      return currentLocale!;
+    }
+    try {
+      final saved = await LocalDatabase().loadLocalePreference();
+      if (saved != null && saved.isNotEmpty && saved != 'system') {
+        return Locale(saved);
+      }
+    } catch (_) {}
+    return PlatformDispatcher.instance.locale;
   }
 
   /// Derives a stable notification id from a reminder's string id, in a
@@ -74,7 +99,10 @@ class CalendarReminderService {
   Future<void> cancelReminder(String reminderId) {
     final base = _notificationId(reminderId);
     return Future.wait([
-      for (var i = 0; i < _maxOccurrences; i++) _plugin.cancel(id: base + i),
+      for (var i = 0; i < _maxOccurrences; i++) ...[
+        _plugin.cancel(id: base + i),
+        NativeReminderService.cancel(base + i),
+      ],
     ]);
   }
 
@@ -92,7 +120,22 @@ class CalendarReminderService {
     required NotificationDetails notificationDetails,
     required String payload,
     DateTimeComponents? matchDateTimeComponents,
+    NotificationStrings? strings,
   }) async {
+    if (NativeReminderService.isAndroid) {
+      final s = strings ?? NotificationStrings.of(null);
+      await NativeReminderService.schedule(
+        id: id,
+        triggerAt: scheduledDate,
+        title: title,
+        body: body,
+        payload: payload,
+        snoozeLabel: s.snooze,
+        dismissLabel: s.dismiss,
+        doneLabel: s.done,
+      );
+      return true;
+    }
     try {
       await _plugin.zonedSchedule(
         id: id,
@@ -134,24 +177,51 @@ class CalendarReminderService {
     // count would otherwise leave stale notifications behind.
     for (var i = 0; i < _maxOccurrences; i++) {
       await _plugin.cancel(id: id + i);
+      await NativeReminderService.cancel(id + i);
     }
 
     if (!reminder.enabled) {
       return;
     }
 
-    const details = NotificationDetails(
+    final effectiveLocale = await _resolveLocale(null);
+    final strings = NotificationStrings.of(effectiveLocale);
+    final details = NotificationDetails(
       android: AndroidNotificationDetails(
         _channelId,
         _channelName,
         channelDescription: 'Reminders scheduled from the calendar',
         importance: Importance.high,
         priority: Priority.high,
+        autoCancel: false,
+        ongoing: true,
+        additionalFlags: Int32List.fromList(const <int>[32]),
         sound: const RawResourceAndroidNotificationSound('reminder_chime'),
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            notificationActionSnooze,
+            strings.snooze,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDismiss,
+            strings.dismiss,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDone,
+            strings.done,
+            cancelNotification: true,
+          ),
+        ],
       ),
-      iOS: DarwinNotificationDetails(),
+      iOS: const DarwinNotificationDetails(
+        categoryIdentifier: notificationCategoryReminder,
+      ),
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
+    final payload =
+        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body})}';
 
     final repeatCount = reminder.repeatCount;
     if (repeatCount != null) {
@@ -162,6 +232,7 @@ class CalendarReminderService {
         details,
         body,
         catchUp: catchUp,
+        strings: strings,
       );
       return;
     }
@@ -185,7 +256,8 @@ class CalendarReminderService {
         body: body,
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
-        payload: '$calendarReminderPayloadPrefix${reminder.id}',
+        payload: payload,
+        strings: strings,
       );
       return;
     }
@@ -201,7 +273,8 @@ class CalendarReminderService {
           body: body,
           scheduledDate: tz.TZDateTime.from(reminder.anchorAt, tz.local),
           notificationDetails: details,
-          payload: '$calendarReminderPayloadPrefix${reminder.id}',
+          payload: payload,
+          strings: strings,
         );
       case ReminderRecurrence.daily:
         await _zonedSchedule(
@@ -210,10 +283,11 @@ class CalendarReminderService {
           body: body,
           scheduledDate: _nextTimeOfDay(reminder.anchorAt),
           notificationDetails: details,
-          payload: '$calendarReminderPayloadPrefix${reminder.id}',
+          payload: payload,
           matchDateTimeComponents: _usesOsRepeats
               ? DateTimeComponents.time
               : null,
+          strings: strings,
         );
       case ReminderRecurrence.weekly:
         if (reminder.weekdays.isEmpty) {
@@ -223,10 +297,11 @@ class CalendarReminderService {
             body: body,
             scheduledDate: _nextWeekday(reminder.anchorAt),
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dayOfWeekAndTime
                 : null,
+            strings: strings,
           );
         } else if (_usesOsRepeats) {
           // One OS-level weekly repeat per selected weekday.
@@ -238,8 +313,9 @@ class CalendarReminderService {
               body: body,
               scheduledDate: _nextWeekday(reminder.anchorAt, weekday),
               notificationDetails: details,
-              payload: '$calendarReminderPayloadPrefix${reminder.id}',
+              payload: payload,
               matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+              strings: strings,
             );
             if (!scheduled) {
               break;
@@ -258,7 +334,8 @@ class CalendarReminderService {
               reminder.weekdays,
             ),
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
+            strings: strings,
           );
         }
       case ReminderRecurrence.monthly:
@@ -276,10 +353,11 @@ class CalendarReminderService {
             body: body,
             scheduledDate: next,
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dayOfMonthAndTime
                 : null,
+            strings: strings,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
@@ -292,7 +370,8 @@ class CalendarReminderService {
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
+            strings: strings,
           );
         }
       case ReminderRecurrence.yearly:
@@ -307,10 +386,11 @@ class CalendarReminderService {
               day: reminder.yearlyDate?.day,
             ),
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
             matchDateTimeComponents: _usesOsRepeats
                 ? DateTimeComponents.dateAndTime
                 : null,
+            strings: strings,
           );
         } else {
           final next = _nextHijriAnniversary(
@@ -323,7 +403,8 @@ class CalendarReminderService {
             body: body,
             scheduledDate: tz.TZDateTime.from(next, tz.local),
             notificationDetails: details,
-            payload: '$calendarReminderPayloadPrefix${reminder.id}',
+            payload: payload,
+            strings: strings,
           );
         }
     }
@@ -342,6 +423,7 @@ class CalendarReminderService {
     NotificationDetails details,
     String body, {
     bool catchUp = true,
+    NotificationStrings? strings,
   }) async {
     final occurrences = reminder.anchor == CalendarReminderAnchor.prayerTime
         ? await _resolveNextPrayerFireTimes(
@@ -350,7 +432,8 @@ class CalendarReminderService {
             catchUp: catchUp,
           )
         : _nextClockTimeOccurrences(reminder, count);
-    final payload = '$calendarReminderPayloadPrefix${reminder.id}';
+    final payload =
+        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body})}';
     var index = 0;
     for (final fireAt in occurrences) {
       final scheduled = await _zonedSchedule(
@@ -360,6 +443,7 @@ class CalendarReminderService {
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
         payload: payload,
+        strings: strings,
       );
       if (!scheduled) {
         // Android caps scheduled notifications; stop instead of throwing.

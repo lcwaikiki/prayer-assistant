@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "تعویق",
+  "notificationActionDismiss": "بستن",
+  "notificationActionDone": "انجام شد",
+  "snoozeDurationTitle": "مدت زمان تعویق",
+  "snoozeDurationSubtitle": "مدت زمان تا یادآوری مجدد",
+  "snoozeMinutesOption": "{minutes} دقیقه",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

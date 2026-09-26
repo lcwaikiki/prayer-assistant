@@ -199,6 +199,15 @@ class WidgetBridgeService {
     );
   }
 
+  Future<void> updateSnoozeDurationMinutes(int minutes) async {
+    try {
+      await _channel.invokeMethod<void>(
+        'updateSnoozeDurationMinutes',
+        <String, Object>{'minutes': minutes},
+      );
+    } catch (_) {}
+  }
+
   Future<void> updateStatusBarConfig({
     required bool enabled,
     required bool autoRestore,

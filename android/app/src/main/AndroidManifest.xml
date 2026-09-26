@@ -53,6 +53,9 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <receiver
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"
+            android:exported="false" />
+        <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
             android:exported="false" />
         <receiver
@@ -174,6 +177,30 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="com.pirci.prayer_assistant.ACTION_STATUS_DISMISSED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ReminderDismissReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pirci.prayer_assistant.ACTION_REMINDER_DISMISSED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ReminderAlarmReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pirci.prayer_assistant.ACTION_REMINDER_ALARM" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".ReminderActionReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.pirci.prayer_assistant.ACTION_REMINDER_ACTION" />
             </intent-filter>
         </receiver>
         <service

@@ -2881,6 +2881,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} deleted'**
   String beadsDeletedSelected(int count);
+
+  /// No description provided for @notificationActionSnooze.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get notificationActionSnooze;
+
+  /// No description provided for @notificationActionDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get notificationActionDismiss;
+
+  /// No description provided for @notificationActionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get notificationActionDone;
+
+  /// No description provided for @snoozeDurationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze Duration'**
+  String get snoozeDurationTitle;
+
+  /// No description provided for @snoozeDurationSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration before reminding again'**
+  String get snoozeDurationSubtitle;
+
+  /// No description provided for @snoozeMinutesOption.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes'**
+  String snoozeMinutesOption(int minutes);
 }
 
 class _AppLocalizationsDelegate

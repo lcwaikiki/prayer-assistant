@@ -1510,4 +1510,24 @@ class AppLocalizationsId extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count dihapus';
   }
+
+  @override
+  String get notificationActionSnooze => 'Tunda';
+
+  @override
+  String get notificationActionDismiss => 'Tutup';
+
+  @override
+  String get notificationActionDone => 'Selesai';
+
+  @override
+  String get snoozeDurationTitle => 'Durasi Tunda';
+
+  @override
+  String get snoozeDurationSubtitle => 'Waktu sebelum mengingatkan kembali';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes menit';
+  }
 }

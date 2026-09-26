@@ -1510,4 +1510,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return 'Удалено: $count';
   }
+
+  @override
+  String get notificationActionSnooze => 'Отложить';
+
+  @override
+  String get notificationActionDismiss => 'Закрыть';
+
+  @override
+  String get notificationActionDone => 'Выполнено';
+
+  @override
+  String get snoozeDurationTitle => 'Длительность отсрочки';
+
+  @override
+  String get snoozeDurationSubtitle => 'Время до повторного напоминания';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes мин';
+  }
 }

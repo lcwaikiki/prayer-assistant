@@ -341,6 +341,11 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }
+                "updateSnoozeDurationMinutes" -> {
+                    val minutes = call.argument<Int>("minutes") ?: 10
+                    PrayerWidgetStorage.saveSnoozeDurationMinutes(this, minutes)
+                    result.success(null)
+                }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
                     PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)
@@ -447,6 +452,66 @@ class MainActivity : FlutterActivity() {
                     val name = call.argument<String>("fileName")
                         ?: "prayer_assistant_backup.json"
                     result.success(readDocumentsBackup(name))
+                }
+                else -> result.notImplemented()
+            }
+        }
+        val reminderChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "prayer_assistant/native_reminders"
+        )
+        reminderChannel.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "show" -> {
+                    val id = call.argument<Int>("id") ?: 0
+                    val title = call.argument<String>("title") ?: ""
+                    val body = call.argument<String>("body") ?: ""
+                    val payload = call.argument<String>("payload")
+                    val snoozeLabel = call.argument<String>("snoozeLabel") ?: "Snooze"
+                    val dismissLabel = call.argument<String>("dismissLabel") ?: "Dismiss"
+                    val doneLabel = call.argument<String>("doneLabel") ?: "Done"
+                    val soundResource = call.argument<String>("soundResource")
+                    ReminderNotificationManager.show(
+                        context = this,
+                        id = id,
+                        title = title,
+                        body = body,
+                        payload = payload,
+                        snoozeLabel = snoozeLabel,
+                        dismissLabel = dismissLabel,
+                        doneLabel = doneLabel,
+                        soundResource = soundResource
+                    )
+                    result.success(null)
+                }
+                "schedule" -> {
+                    val id = call.argument<Int>("id") ?: 0
+                    val triggerAtMillis = call.argument<Number>("triggerAtMillis")?.toLong() ?: System.currentTimeMillis()
+                    val title = call.argument<String>("title") ?: ""
+                    val body = call.argument<String>("body") ?: ""
+                    val payload = call.argument<String>("payload")
+                    val snoozeLabel = call.argument<String>("snoozeLabel") ?: "Snooze"
+                    val dismissLabel = call.argument<String>("dismissLabel") ?: "Dismiss"
+                    val doneLabel = call.argument<String>("doneLabel") ?: "Done"
+                    val soundResource = call.argument<String>("soundResource")
+                    ReminderNotificationManager.schedule(
+                        context = this,
+                        id = id,
+                        triggerAtMillis = triggerAtMillis,
+                        title = title,
+                        body = body,
+                        payload = payload,
+                        snoozeLabel = snoozeLabel,
+                        dismissLabel = dismissLabel,
+                        doneLabel = doneLabel,
+                        soundResource = soundResource
+                    )
+                    result.success(null)
+                }
+                "cancel" -> {
+                    val id = call.argument<Int>("id") ?: 0
+                    ReminderNotificationManager.cancel(this, id)
+                    result.success(null)
                 }
                 else -> result.notImplemented()
             }

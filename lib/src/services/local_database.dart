@@ -38,6 +38,7 @@ class LocalDatabase {
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
+  static const _snoozeDurationMinutesKey = 'snooze_duration_minutes';
 
   Database? _db;
 
@@ -381,6 +382,29 @@ class LocalDatabase {
     }
     final raw = rows.first['setting_value'] as String?;
     return int.tryParse(raw ?? '')?.clamp(0, 60) ?? 60;
+  }
+
+  Future<void> saveSnoozeDurationMinutes(int minutes) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _snoozeDurationMinutesKey,
+      'setting_value': minutes.toString(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<int> loadSnoozeDurationMinutes() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_snoozeDurationMinutesKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return 10;
+    }
+    final raw = rows.first['setting_value'] as String?;
+    return int.tryParse(raw ?? '')?.clamp(1, 120) ?? 10;
   }
 
   Future<void> saveStatusBarRemainingEnabled(bool enabled) async {

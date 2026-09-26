@@ -96,6 +96,7 @@ class PrayerAppController extends ChangeNotifier {
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
+  int _snoozeDurationMinutes = 10;
   Future<void> Function(Locale? locale)? onLocaleChanged;
 
   /// Invoked after a backup restore so externally held state (such as the
@@ -249,6 +250,15 @@ class PrayerAppController extends ChangeNotifier {
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
   KazaTracker get kazaTracker => _kazaTracker;
+  int get snoozeDurationMinutes => _snoozeDurationMinutes;
+
+  Future<void> updateSnoozeDurationMinutes(int minutes) async {
+    if (_snoozeDurationMinutes == minutes) return;
+    _snoozeDurationMinutes = minutes;
+    await database.saveSnoozeDurationMinutes(minutes);
+    await widgetBridgeService.updateSnoozeDurationMinutes(minutes);
+    notifyListeners();
+  }
 
   void updateKazaTracker(KazaTracker tracker) {
     _kazaTracker = tracker;
@@ -396,6 +406,27 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void markPrayerCompleted(String prayerName) {
+    final targetDate = today?.date ?? DateTime.now();
+    markPrayerCompletedForDate(prayerName, targetDate);
+  }
+
+  void markPrayerCompletedForDate(String prayerName, DateTime date) {
+    final key = _toDateKey(date);
+    final next = Map<String, List<String>>.from(_prayerCompletions);
+    final current = List<String>.from(next[key] ?? []);
+    final lowerName = prayerName.toLowerCase();
+    final existingIndex =
+        current.indexWhere((item) => item.toLowerCase() == lowerName);
+    if (existingIndex == -1) {
+      current.add(prayerName);
+      next[key] = current;
+      _prayerCompletions = next;
+      database.savePrayerCompletions(next);
+      notifyListeners();
+    }
+  }
+
 
   String _toDateKey(DateTime date) {
     final safe = DateTime(date.year, date.month, date.day);
@@ -454,6 +485,7 @@ class PrayerAppController extends ChangeNotifier {
       _reminderVibrationEnabled =
           await database.loadReminderVibrationEnabled() ?? true;
       _reminderSoundEnabled = await database.loadReminderSoundEnabled() ?? true;
+      _snoozeDurationMinutes = await database.loadSnoozeDurationMinutes();
       final rawThemePreference = await database.loadThemePreference();
       var themePreference = AppThemePreference.system;
       for (final item in AppThemePreference.values) {
@@ -552,6 +584,9 @@ class PrayerAppController extends ChangeNotifier {
       );
       await widgetBridgeService.updateWidgetMmssThreshold(
         _widgetMmssThresholdMinutes,
+      );
+      await widgetBridgeService.updateSnoozeDurationMinutes(
+        _snoozeDurationMinutes,
       );
       try {
         await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);

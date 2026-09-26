@@ -228,6 +228,35 @@ class PreferencesScreen extends StatelessWidget {
                         value: controller.reminderSoundEnabled,
                         onChanged: controller.updateReminderSoundEnabled,
                       ),
+                      ListTile(
+                        key: const Key('snooze_duration_tile'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(context.l10n.snoozeDurationTitle),
+                        subtitle: Text(context.l10n.snoozeDurationSubtitle),
+                        trailing: DropdownButtonHideUnderline(
+                          child: DropdownButton<int>(
+                            key: const Key('snooze_duration_dropdown'),
+                            value: const [5, 10, 15, 20].contains(
+                              controller.snoozeDurationMinutes,
+                            )
+                                ? controller.snoozeDurationMinutes
+                                : 10,
+                            items: const [5, 10, 15, 20].map((int minutes) {
+                              return DropdownMenuItem<int>(
+                                value: minutes,
+                                child: Text(
+                                  context.l10n.snoozeMinutesOption(minutes),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (int? minutes) {
+                              if (minutes != null) {
+                                controller.updateSnoozeDurationMinutes(minutes);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],

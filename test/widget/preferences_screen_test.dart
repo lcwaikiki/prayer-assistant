@@ -184,4 +184,32 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('snooze duration dropdown updates preference', (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.saveSnoozeDurationMinutes(any()))
+        .thenAnswer((_) async {});
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const PreferencesScreen());
+
+    await tester.tap(find.text('Home screen settings'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Reminders on/off').first);
+    await tester.pumpAndSettle();
+
+    final dropdownFinder = find.byKey(const Key('snooze_duration_dropdown'));
+    await tester.ensureVisible(dropdownFinder);
+    await tester.pumpAndSettle();
+    await tester.tap(dropdownFinder);
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('15 minutes').last);
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.snoozeDurationMinutes, 15);
+    verify(() => harness.database.saveSnoozeDurationMinutes(15)).called(1);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

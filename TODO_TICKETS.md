@@ -2,7 +2,7 @@
 
 ## 🟢 Features (Feat)
 - [ ] **Hisnal Muslim:** Favorites tab at the beginning (left of All or end) `[Not Started]`
-- [ ] **Notifications / Alarms:** Snoozable notifications/alarms (Snooze, dismiss, done) `[Not Started]`
+- [x] **Notifications / Alarms:** Snoozable notifications/alarms (Snooze, dismiss, done) `[Done]`
 - [ ] **Prayer Times:** Silent during prayer times feature `[Not Started]`
 - [ ] **Tracking:** Kaza prayer logs dates `[Not Started]`
 - [ ] **Beads:**

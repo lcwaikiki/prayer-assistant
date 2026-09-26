@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "Posponer",
+  "notificationActionDismiss": "Descartar",
+  "notificationActionDone": "Hecho",
+  "snoozeDurationTitle": "Duración de posposición",
+  "snoozeDurationSubtitle": "Tiempo antes de volver a recordar",
+  "snoozeMinutesOption": "{minutes} minutos",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

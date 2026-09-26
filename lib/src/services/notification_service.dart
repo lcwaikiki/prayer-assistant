@@ -7,6 +7,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 import '../models/prayer_models.dart';
 import '../utils/time_utils.dart';
+import 'native_reminder_service.dart';
 import 'notification_strings.dart';
 import 'notification_tap_handler.dart';
 import 'timezone_setup.dart';
@@ -25,20 +26,21 @@ class NotificationService {
     }
     await initializeLocalTimezone();
 
-    const initSettings = InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: DarwinInitializationSettings(),
+    final initSettings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        notificationCategories: darwinReminderCategories,
+      ),
     );
 
     // All notification producers share one platform channel, so every
-    // initialize() must register the same shared tap router — otherwise
+    // initialize() must register the same shared response router — otherwise
     // the last one to run would silently win and misroute the others'
-    // taps. Prayer payloads are JSON and don't deep-link.
+    // actions and taps.
     await _plugin.initialize(
       settings: initSettings,
-      onDidReceiveNotificationResponse: (response) {
-        handleNotificationTap(response.payload);
-      },
+      onDidReceiveNotificationResponse: handleNotificationResponse,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
     _useExactAlarms = await _requestPermissions();
     final android = _plugin
@@ -101,7 +103,9 @@ class NotificationService {
     required bool vibrationEnabled,
     required bool soundEnabled,
     required bool adhanEnabled,
+    NotificationStrings? strings,
   }) {
+    final s = strings ?? NotificationStrings.of(null);
     final String channelId;
     final String channelName;
     final String? soundResource;
@@ -142,20 +146,44 @@ class NotificationService {
         channelDescription: 'Prayer reminder notifications',
         importance: Importance.high,
         priority: Priority.high,
+        autoCancel: false,
+        ongoing: true,
+        additionalFlags: Int32List.fromList(const <int>[32]),
         playSound: soundEnabled,
         sound: soundEnabled && soundResource != null
             ? RawResourceAndroidNotificationSound(soundResource)
             : null,
         enableVibration: vibrationEnabled,
         vibrationPattern: vibrationEnabled ? _reminderVibrationPattern() : null,
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            notificationActionSnooze,
+            s.snooze,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDismiss,
+            s.dismiss,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDone,
+            s.done,
+            cancelNotification: true,
+          ),
+        ],
       ),
-      iOS: DarwinNotificationDetails(presentSound: soundEnabled),
+      iOS: DarwinNotificationDetails(
+        categoryIdentifier: notificationCategoryReminder,
+        presentSound: soundEnabled,
+      ),
     );
   }
 
   Future<void> cancelAllPrayerNotifications() async {
     for (var id = 1; id <= _maxScheduledReminders; id++) {
       await _plugin.cancel(id: id);
+      await NativeReminderService.cancel(id);
     }
   }
 
@@ -205,24 +233,96 @@ class NotificationService {
 
   Future<void> showTestNotificationNow({Locale? locale}) async {
     final strings = NotificationStrings.of(locale);
-    await _plugin.show(
-      id: 900001,
-      title: strings.testTitle,
-      body: strings.testBody,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'prayer_reminders_chime_vibrate_sound',
-          'Prayer Reminders (vibrate + sound)',
-          channelDescription: 'Prayer reminder notifications',
-          importance: Importance.high,
-          priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound(
-            reminderChimeResourceName,
-          ),
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'prayer_reminders_chime_vibrate_sound',
+        'Prayer Reminders (vibrate + sound)',
+        channelDescription: 'Prayer reminder notifications',
+        importance: Importance.high,
+        priority: Priority.high,
+        autoCancel: false,
+        ongoing: true,
+        additionalFlags: Int32List.fromList(const <int>[32]),
+        sound: const RawResourceAndroidNotificationSound(
+          reminderChimeResourceName,
         ),
-        iOS: DarwinNotificationDetails(),
+        actions: <AndroidNotificationAction>[
+          AndroidNotificationAction(
+            notificationActionSnooze,
+            strings.snooze,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDismiss,
+            strings.dismiss,
+            cancelNotification: true,
+          ),
+          AndroidNotificationAction(
+            notificationActionDone,
+            strings.done,
+            cancelNotification: true,
+          ),
+        ],
+      ),
+      iOS: const DarwinNotificationDetails(
+        categoryIdentifier: notificationCategoryReminder,
       ),
     );
+
+    final payload = jsonEncode({
+      'type': 'prayer',
+      'prayerKey': 'test',
+      'title': strings.testTitle,
+      'body': strings.testBody,
+      'id': 900001,
+    });
+
+    if (NativeReminderService.isAndroid) {
+      await NativeReminderService.show(
+        id: 900001,
+        title: strings.testTitle,
+        body: strings.testBody,
+        payload: payload,
+        snoozeLabel: strings.snooze,
+        dismissLabel: strings.dismiss,
+        doneLabel: strings.done,
+      );
+      return;
+    }
+
+    try {
+      final now = tz.TZDateTime.now(tz.local);
+      await _plugin.zonedSchedule(
+        id: 900001,
+        title: strings.testTitle,
+        body: strings.testBody,
+        scheduledDate: now.add(const Duration(milliseconds: 100)),
+        notificationDetails: details,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: payload,
+      );
+    } catch (_) {
+      try {
+        final now = tz.TZDateTime.now(tz.local);
+        await _plugin.zonedSchedule(
+          id: 900001,
+          title: strings.testTitle,
+          body: strings.testBody,
+          scheduledDate: now.add(const Duration(milliseconds: 100)),
+          notificationDetails: details,
+          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+          payload: payload,
+        );
+      } catch (_) {
+        await _plugin.show(
+          id: 900001,
+          title: strings.testTitle,
+          body: strings.testBody,
+          notificationDetails: details,
+          payload: payload,
+        );
+      }
+    }
   }
 
   Future<void> reschedulePrayerNotifications({
@@ -278,6 +378,7 @@ class NotificationService {
           notifications.add(
             _ReminderNotification(
               fireAt: prayerTime,
+              prayerKey: prayerName,
               title: strings.onTimeTitle(displayName),
               body: strings.onTimeBody(locationName, displayName),
               vibrationEnabled: effectiveVibration,
@@ -295,6 +396,7 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: beforeTime,
+                prayerKey: prayerName,
                 title: strings.beforeTitle(displayName, setting.minutesBefore),
                 body: strings.beforeBody(
                   locationName,
@@ -310,6 +412,7 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: now.add(const Duration(seconds: 5)),
+                prayerKey: prayerName,
                 title: strings.soonTitle(displayName),
                 body: strings.soonBody(
                   locationName,
@@ -332,6 +435,7 @@ class NotificationService {
             notifications.add(
               _ReminderNotification(
                 fireAt: afterTime,
+                prayerKey: prayerName,
                 title: strings.afterTitle(displayName, setting.minutesAfter),
                 body: strings.afterBody(
                   locationName,
@@ -358,41 +462,58 @@ class NotificationService {
         vibrationEnabled: item.vibrationEnabled,
         soundEnabled: item.soundEnabled,
         adhanEnabled: item.adhanEnabled,
+        strings: strings,
       );
 
       final payload = jsonEncode({
+        'type': 'prayer',
+        'prayerKey': item.prayerKey,
         'fireAt': item.fireAt.toIso8601String(),
         'title': item.title,
+        'body': item.body,
+        'id': i + 1,
       });
 
-      // Exact alarms keep prayer times precise, but on Android 12+ they
-      // require the user to grant the exact-alarm permission (or the app to
-      // fall back when the call is rejected). Prefer exact when granted,
-      // otherwise schedule inexactly so reminders still fire at all.
-      try {
-        await _plugin.zonedSchedule(
+      if (NativeReminderService.isAndroid) {
+        await NativeReminderService.schedule(
           id: i + 1,
+          triggerAt: item.fireAt,
           title: item.title,
           body: item.body,
-          scheduledDate: date,
-          notificationDetails: notificationDetails,
-          androidScheduleMode: _useExactAlarms
-              ? AndroidScheduleMode.exactAllowWhileIdle
-              : AndroidScheduleMode.inexactAllowWhileIdle,
           payload: payload,
+          snoozeLabel: strings.snooze,
+          dismissLabel: strings.dismiss,
+          doneLabel: strings.done,
+          soundResource: item.adhanEnabled
+              ? NotificationService.adhanResourceName
+              : (item.soundEnabled
+                  ? NotificationService.reminderChimeResourceName
+                  : null),
         );
-      } catch (_) {
-        // Permission state can change after initialization; never let a
-        // rejected exact-alarm request silently drop the reminder.
-        await _plugin.zonedSchedule(
-          id: i + 1,
-          title: item.title,
-          body: item.body,
-          scheduledDate: date,
-          notificationDetails: notificationDetails,
-          androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
-          payload: payload,
-        );
+      } else {
+        try {
+          await _plugin.zonedSchedule(
+            id: i + 1,
+            title: item.title,
+            body: item.body,
+            scheduledDate: date,
+            notificationDetails: notificationDetails,
+            androidScheduleMode: _useExactAlarms
+                ? AndroidScheduleMode.exactAllowWhileIdle
+                : AndroidScheduleMode.inexactAllowWhileIdle,
+            payload: payload,
+          );
+        } catch (_) {
+          await _plugin.zonedSchedule(
+            id: i + 1,
+            title: item.title,
+            body: item.body,
+            scheduledDate: date,
+            notificationDetails: notificationDetails,
+            androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+            payload: payload,
+          );
+        }
       }
     }
   }
@@ -424,6 +545,7 @@ class NotificationService {
 class _ReminderNotification {
   _ReminderNotification({
     required this.fireAt,
+    required this.prayerKey,
     required this.title,
     required this.body,
     required this.vibrationEnabled,
@@ -432,6 +554,7 @@ class _ReminderNotification {
   });
 
   final DateTime fireAt;
+  final String prayerKey;
   final String title;
   final String body;
   final bool vibrationEnabled;

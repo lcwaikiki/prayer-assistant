@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "بعد میں",
+  "notificationActionDismiss": "مسترد",
+  "notificationActionDone": "مکمل",
+  "snoozeDurationTitle": "التوا کا دورانیہ",
+  "snoozeDurationSubtitle": "دوبارہ یاد دہانی سے پہلے کا وقت",
+  "snoozeMinutesOption": "{minutes} منٹ",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

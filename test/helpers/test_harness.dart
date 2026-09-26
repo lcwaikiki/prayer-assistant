@@ -112,6 +112,9 @@ class TestHarness {
       () => widgetBridge.updateWidgetMmssThreshold(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateSnoozeDurationMinutes(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateFromPrayerDays(
         days: any(named: 'days'),
         now: any(named: 'now'),
@@ -154,6 +157,8 @@ class TestHarness {
     when(
       () => database.loadReminderSoundEnabled(),
     ).thenAnswer((_) async => null);
+    when(() => database.loadSnoozeDurationMinutes()).thenAnswer((_) async => 10);
+    when(() => database.saveSnoozeDurationMinutes(any())).thenAnswer((_) async {});
     when(() => database.loadThemePreference()).thenAnswer((_) async => null);
     when(() => database.loadLocalePreference()).thenAnswer((_) async => null);
     when(

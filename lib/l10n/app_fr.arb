@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "Répéter",
+  "notificationActionDismiss": "Ignorer",
+  "notificationActionDone": "Fait",
+  "snoozeDurationTitle": "Durée de répétition",
+  "snoozeDurationSubtitle": "Délai avant le prochain rappel",
+  "snoozeMinutesOption": "{minutes} minutes",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

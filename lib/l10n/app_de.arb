@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "Schlummern",
+  "notificationActionDismiss": "Verwerfen",
+  "notificationActionDone": "Erledigt",
+  "snoozeDurationTitle": "Schlummerdauer",
+  "snoozeDurationSubtitle": "Dauer bis zur erneuten Erinnerung",
+  "snoozeMinutesOption": "{minutes} Minuten",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

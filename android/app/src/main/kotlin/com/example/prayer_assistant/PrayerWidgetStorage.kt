@@ -348,5 +348,19 @@ object PrayerWidgetStorage {
             whiteDayBadgeText = prefs.getString(MOON_WHITE_DAY_TEXT_KEY, "White Days") ?: "White Days"
         )
     }
+
+    private const val SNOOZE_DURATION_MINUTES_KEY = "snooze_duration_minutes"
+
+    fun saveSnoozeDurationMinutes(context: Context, minutes: Int) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(SNOOZE_DURATION_MINUTES_KEY, minutes)
+            .apply()
+    }
+
+    fun readSnoozeDurationMinutes(context: Context): Int {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getInt(SNOOZE_DURATION_MINUTES_KEY, 10)
+    }
 }
 

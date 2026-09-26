@@ -1503,4 +1503,25 @@ class AppLocalizationsTr extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count silindi';
   }
+
+  @override
+  String get notificationActionSnooze => 'Ertele';
+
+  @override
+  String get notificationActionDismiss => 'Kapat';
+
+  @override
+  String get notificationActionDone => 'Yapıldı';
+
+  @override
+  String get snoozeDurationTitle => 'Erteleme Süresi';
+
+  @override
+  String get snoozeDurationSubtitle =>
+      'Tekrar hatırlatmadan önceki bekleme süresi';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes dakika';
+  }
 }

@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "スヌーズ",
+  "notificationActionDismiss": "閉じる",
+  "notificationActionDone": "完了",
+  "snoozeDurationTitle": "スヌーズ時間",
+  "snoozeDurationSubtitle": "再度通知するまでの時間",
+  "snoozeMinutesOption": "{minutes}分",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

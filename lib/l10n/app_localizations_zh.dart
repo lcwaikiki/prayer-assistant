@@ -1456,4 +1456,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '已删除 $count 项';
   }
+
+  @override
+  String get notificationActionSnooze => '稍后提醒';
+
+  @override
+  String get notificationActionDismiss => '忽略';
+
+  @override
+  String get notificationActionDone => '完成';
+
+  @override
+  String get snoozeDurationTitle => '稍后提醒时长';
+
+  @override
+  String get snoozeDurationSubtitle => '再次提醒前的等待时间';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes 分钟';
+  }
 }

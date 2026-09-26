@@ -1517,4 +1517,24 @@ class AppLocalizationsEs extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count eliminados';
   }
+
+  @override
+  String get notificationActionSnooze => 'Posponer';
+
+  @override
+  String get notificationActionDismiss => 'Descartar';
+
+  @override
+  String get notificationActionDone => 'Hecho';
+
+  @override
+  String get snoozeDurationTitle => 'Duración de posposición';
+
+  @override
+  String get snoozeDurationSubtitle => 'Tiempo antes de volver a recordar';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes minutos';
+  }
 }

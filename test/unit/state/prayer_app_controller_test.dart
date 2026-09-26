@@ -84,6 +84,9 @@ void main() {
       () => widgetBridge.updateWidgetMmssThreshold(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateSnoozeDurationMinutes(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateFromPrayerDays(
         days: any(named: 'days'),
         now: any(named: 'now'),
@@ -122,6 +125,9 @@ void main() {
     when(
       () => database.loadReminderSoundEnabled(),
     ).thenAnswer((_) async => null);
+    when(() => database.loadSnoozeDurationMinutes()).thenAnswer((_) async => 10);
+    when(() => database.saveSnoozeDurationMinutes(any())).thenAnswer((_) async {});
+    when(() => database.savePrayerCompletions(any())).thenAnswer((_) async {});
     when(
       () => database.loadThemePreference(),
     ).thenAnswer((_) async => null);
@@ -899,6 +905,32 @@ void main() {
 
       expect(controller.calendarPrimaryDisplay, CalendarPrimaryDisplay.gregorian);
       expect(controller.showSecondaryCalendarDate, isFalse);
+    });
+
+    test('updateSnoozeDurationMinutes persists and notifies', () async {
+      when(
+        () => database.saveSnoozeDurationMinutes(any()),
+      ).thenAnswer((_) async {});
+      final controller = buildController();
+
+      await controller.updateSnoozeDurationMinutes(15);
+
+      expect(controller.snoozeDurationMinutes, 15);
+      verify(() => database.saveSnoozeDurationMinutes(15)).called(1);
+    });
+
+    test('markPrayerCompleted records completion for today', () async {
+      when(
+        () => database.savePrayerCompletions(any()),
+      ).thenAnswer((_) async {});
+      final controller = buildController();
+
+      controller.markPrayerCompleted('Fajr');
+
+      final now = DateTime.now();
+      final todayKey = '${now.year.toString().padLeft(4, '0')}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      expect(controller.prayerCompletions[todayKey], contains('Fajr'));
+      verify(() => database.savePrayerCompletions(any())).called(1);
     });
   });
 

@@ -15,6 +15,9 @@ class NotificationStrings {
     required this.testTitle,
     required this.testBody,
     required this.dhikrBody,
+    required this.snooze,
+    required this.dismiss,
+    required this.done,
   });
 
   final String Function(String prayer) onTimeTitle;
@@ -28,6 +31,9 @@ class NotificationStrings {
   final String testTitle;
   final String testBody;
   final String Function(String title) dhikrBody;
+  final String snooze;
+  final String dismiss;
+  final String done;
 
   static const Map<String, NotificationStrings> _byLang = {
     'tr': NotificationStrings(
@@ -42,6 +48,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist testi',
       testBody: 'Bildirim sistemi bu cihazda çalışıyor.',
       dhikrBody: _trDhikrBody,
+      snooze: 'Ertele',
+      dismiss: 'Kapat',
+      done: 'Yapıldı',
     ),
     'en': NotificationStrings(
       onTimeTitle: _enOnTimeTitle,
@@ -55,6 +64,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist test',
       testBody: 'Notification pipeline is working on this device.',
       dhikrBody: _enDhikrBody,
+      snooze: 'Snooze',
+      dismiss: 'Dismiss',
+      done: 'Done',
     ),
     'ar': NotificationStrings(
       onTimeTitle: _arOnTimeTitle,
@@ -68,6 +80,9 @@ class NotificationStrings {
       testTitle: 'اختبار مساعد الصلاة',
       testBody: 'نظام الإشعارات يعمل بنجاح على هذا الجهاز.',
       dhikrBody: _arDhikrBody,
+      snooze: 'غفوة',
+      dismiss: 'تجاهل',
+      done: 'تم',
     ),
     'de': NotificationStrings(
       onTimeTitle: _deOnTimeTitle,
@@ -81,6 +96,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist Test',
       testBody: 'Das Benachrichtigungssystem funktioniert auf diesem Gerät.',
       dhikrBody: _deDhikrBody,
+      snooze: 'Schlummern',
+      dismiss: 'Verwerfen',
+      done: 'Erledigt',
     ),
     'es': NotificationStrings(
       onTimeTitle: _esOnTimeTitle,
@@ -94,6 +112,9 @@ class NotificationStrings {
       testTitle: 'Prueba de Prayer Assist',
       testBody: 'El sistema de notificaciones funciona en este dispositivo.',
       dhikrBody: _esDhikrBody,
+      snooze: 'Posponer',
+      dismiss: 'Descartar',
+      done: 'Hecho',
     ),
     'fr': NotificationStrings(
       onTimeTitle: _frOnTimeTitle,
@@ -107,6 +128,9 @@ class NotificationStrings {
       testTitle: 'Test Prayer Assist',
       testBody: 'Le système de notifications fonctionne sur cet appareil.',
       dhikrBody: _frDhikrBody,
+      snooze: 'Répéter',
+      dismiss: 'Ignorer',
+      done: 'Fait',
     ),
     'ru': NotificationStrings(
       onTimeTitle: _ruOnTimeTitle,
@@ -120,6 +144,9 @@ class NotificationStrings {
       testTitle: 'Тест Prayer Assist',
       testBody: 'Система уведомлений работает на этом устройстве.',
       dhikrBody: _ruDhikrBody,
+      snooze: 'Отложить',
+      dismiss: 'Закрыть',
+      done: 'Выполнено',
     ),
     'fa': NotificationStrings(
       onTimeTitle: _faOnTimeTitle,
@@ -133,6 +160,9 @@ class NotificationStrings {
       testTitle: 'آزمایش دستیار نماز',
       testBody: 'سیستم اعلان‌ها در این دستگاه به درستی کار می‌کند.',
       dhikrBody: _faDhikrBody,
+      snooze: 'تعویق',
+      dismiss: 'بستن',
+      done: 'انجام شد',
     ),
     'ur': NotificationStrings(
       onTimeTitle: _urOnTimeTitle,
@@ -146,6 +176,9 @@ class NotificationStrings {
       testTitle: 'نماز اسسٹ ٹیسٹ',
       testBody: 'اس ڈیوائس پر نوٹیفکیشن سسٹم کام کر رہا ہے۔',
       dhikrBody: _urDhikrBody,
+      snooze: 'بعد میں',
+      dismiss: 'مسترد',
+      done: 'مکمل',
     ),
     'id': NotificationStrings(
       onTimeTitle: _idOnTimeTitle,
@@ -159,6 +192,9 @@ class NotificationStrings {
       testTitle: 'Uji coba Prayer Assist',
       testBody: 'Sistem notifikasi berfungsi di perangkat ini.',
       dhikrBody: _idDhikrBody,
+      snooze: 'Tunda',
+      dismiss: 'Tutup',
+      done: 'Selesai',
     ),
     'zh': NotificationStrings(
       onTimeTitle: _zhOnTimeTitle,
@@ -172,6 +208,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist 测试',
       testBody: '该设备上的通知系统正常运行。',
       dhikrBody: _zhDhikrBody,
+      snooze: '稍后提醒',
+      dismiss: '忽略',
+      done: '完成',
     ),
     'ja': NotificationStrings(
       onTimeTitle: _jaOnTimeTitle,
@@ -185,6 +224,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist テスト',
       testBody: 'この端末で通知システムが正常に動作しています。',
       dhikrBody: _jaDhikrBody,
+      snooze: 'スヌーズ',
+      dismiss: '閉じる',
+      done: '完了',
     ),
     'bn': NotificationStrings(
       onTimeTitle: _bnOnTimeTitle,
@@ -198,6 +240,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist পরীক্ষা',
       testBody: 'এই ডিভাইসে বিজ্ঞপ্তি ব্যবস্থা সঠিকভাবে কাজ করছে।',
       dhikrBody: _bnDhikrBody,
+      snooze: 'স্নুজ',
+      dismiss: 'খারিজ',
+      done: 'সম্পন্ন',
     ),
     'ta': NotificationStrings(
       onTimeTitle: _taOnTimeTitle,
@@ -211,6 +256,9 @@ class NotificationStrings {
       testTitle: 'Prayer Assist சோதனை',
       testBody: 'இந்த சாதனத்தில் அறிவிப்பு அமைப்பு சரியாக இயங்குகிறது.',
       dhikrBody: _taDhikrBody,
+      snooze: 'உறக்கநிலை',
+      dismiss: 'நிராகரி',
+      done: 'முடிந்தது',
     ),
   };
 

@@ -524,5 +524,18 @@
   "beadsSelectAll": "Tümünü seç",
   "beadsSelectedCount": "{count} seçili",
   "beadsDeleteSelectedConfirm": "{count} seçili öğe silinsin mi?",
-  "beadsDeletedSelected": "{count} silindi"
+  "beadsDeletedSelected": "{count} silindi",
+  "notificationActionSnooze": "Ertele",
+  "notificationActionDismiss": "Kapat",
+  "notificationActionDone": "Yapıldı",
+  "snoozeDurationTitle": "Erteleme Süresi",
+  "snoozeDurationSubtitle": "Tekrar hatırlatmadan önceki bekleme süresi",
+  "snoozeMinutesOption": "{minutes} dakika",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

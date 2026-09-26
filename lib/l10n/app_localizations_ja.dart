@@ -1461,4 +1461,24 @@ class AppLocalizationsJa extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count 件を削除しました';
   }
+
+  @override
+  String get notificationActionSnooze => 'スヌーズ';
+
+  @override
+  String get notificationActionDismiss => '閉じる';
+
+  @override
+  String get notificationActionDone => '完了';
+
+  @override
+  String get snoozeDurationTitle => 'スヌーズ時間';
+
+  @override
+  String get snoozeDurationSubtitle => '再度通知するまでの時間';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes分';
+  }
 }

@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "غفوة",
+  "notificationActionDismiss": "تجاهل",
+  "notificationActionDone": "تم",
+  "snoozeDurationTitle": "مدة الغفوة",
+  "snoozeDurationSubtitle": "المدة قبل التذكير مرة أخرى",
+  "snoozeMinutesOption": "{minutes} دقيقة",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

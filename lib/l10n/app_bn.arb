@@ -632,5 +632,18 @@
   "beadsSelectAll": "সব নির্বাচন করুন",
   "beadsSelectedCount": "{count}টি নির্বাচিত",
   "beadsDeleteSelectedConfirm": "{count}টি নির্বাচিত আইটেম মুছবেন?",
-  "beadsDeletedSelected": "{count}টি মুছে ফেলা হয়েছে"
+  "beadsDeletedSelected": "{count}টি মুছে ফেলা হয়েছে",
+  "notificationActionSnooze": "স্নুজ",
+  "notificationActionDismiss": "খারিজ",
+  "notificationActionDone": "সম্পন্ন",
+  "snoozeDurationTitle": "স্নুজ সময়কাল",
+  "snoozeDurationSubtitle": "আবার মনে করিয়ে দেওয়ার আগের সময়",
+  "snoozeMinutesOption": "{minutes} মিনিট",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  }
 }

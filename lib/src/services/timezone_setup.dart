@@ -12,7 +12,9 @@ import 'package:timezone/timezone.dart' as tz;
 Future<void> initializeLocalTimezone() async {
   tz.initializeTimeZones();
   try {
-    final timezoneInfo = await FlutterTimezone.getLocalTimezone();
+    final timezoneInfo = await FlutterTimezone.getLocalTimezone().timeout(
+      const Duration(milliseconds: 500),
+    );
     tz.setLocalLocation(tz.getLocation(timezoneInfo.identifier));
   } catch (_) {
     tz.setLocalLocation(tz.getLocation('UTC'));

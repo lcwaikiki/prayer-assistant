@@ -566,6 +566,24 @@ void main() {
       );
     });
   });
+
+  group('snooze duration', () {
+    test('defaults to 10 minutes when unset', () async {
+      expect(await database.loadSnoozeDurationMinutes(), 10);
+    });
+
+    test('round-trips a saved snooze duration', () async {
+      await database.saveSnoozeDurationMinutes(15);
+      expect(await database.loadSnoozeDurationMinutes(), 15);
+    });
+
+    test('clamps duration within 1 to 120 minutes', () async {
+      await database.saveSnoozeDurationMinutes(0);
+      expect(await database.loadSnoozeDurationMinutes(), 1);
+      await database.saveSnoozeDurationMinutes(200);
+      expect(await database.loadSnoozeDurationMinutes(), 120);
+    });
+  });
 }
 
 PrayerDay _day(DateTime date, {String imsak = '05:10', String hijri = 'x'}) {

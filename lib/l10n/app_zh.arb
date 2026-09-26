@@ -527,5 +527,18 @@
         "type": "Object"
       }
     }
+  },
+  "notificationActionSnooze": "稍后提醒",
+  "notificationActionDismiss": "忽略",
+  "notificationActionDone": "完成",
+  "snoozeDurationTitle": "稍后提醒时长",
+  "snoozeDurationSubtitle": "再次提醒前的等待时间",
+  "snoozeMinutesOption": "{minutes} 分钟",
+  "@snoozeMinutesOption": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
   }
 }

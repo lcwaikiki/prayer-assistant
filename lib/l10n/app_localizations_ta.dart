@@ -1530,4 +1530,25 @@ class AppLocalizationsTa extends AppLocalizations {
   String beadsDeletedSelected(int count) {
     return '$count நீக்கப்பட்டது';
   }
+
+  @override
+  String get notificationActionSnooze => 'உறக்கநிலை';
+
+  @override
+  String get notificationActionDismiss => 'நிராகரி';
+
+  @override
+  String get notificationActionDone => 'முடிந்தது';
+
+  @override
+  String get snoozeDurationTitle => 'உறக்கநிலை கால அளவு';
+
+  @override
+  String get snoozeDurationSubtitle =>
+      'மீண்டும் நினைவூட்டுவதற்கு முந்தைய நேரம்';
+
+  @override
+  String snoozeMinutesOption(int minutes) {
+    return '$minutes நிமிடங்கள்';
+  }
 }

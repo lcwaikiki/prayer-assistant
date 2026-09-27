@@ -24,27 +24,25 @@ class ReminderActionReceiver : BroadcastReceiver() {
         val doneLabel = intent.getStringExtra("doneLabel") ?: "Done"
         val soundResource = intent.getStringExtra("soundResource")
 
-        // Mark action as handled so ReminderDismissReceiver will ignore any deleteIntent callback
-        ReminderNotificationManager.markActionHandled(id)
-
-        // Cancel the deletePendingIntent so ReminderDismissReceiver does not fire
-        val dismissIntent = Intent(context, ReminderDismissReceiver::class.java).apply {
-            action = ReminderNotificationManager.ACTION_REMINDER_DISMISSED
-        }
-        val deletePendingIntent = PendingIntent.getBroadcast(
-            context,
-            id * 10 + 9,
-            dismissIntent,
-            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
-        )
-        deletePendingIntent?.cancel()
-
-        // Cancel the active notification
-        NotificationManagerCompat.from(context).cancel(id)
-
         when (actionId) {
             "action_snooze" -> {
-                val snoozeMinutes = PrayerWidgetStorage.readSnoozeDurationMinutes(context).let {
+                ReminderNotificationManager.showSnoozeOptions(
+                    context = context,
+                    id = id,
+                    title = title,
+                    body = body,
+                    payload = payload,
+                    snoozeLabel = snoozeLabel,
+                    dismissLabel = dismissLabel,
+                    doneLabel = doneLabel,
+                    soundResource = soundResource
+                )
+            }
+            "action_snooze_pick" -> {
+                ReminderNotificationManager.markActionHandled(id)
+                NotificationManagerCompat.from(context).cancel(id)
+
+                val snoozeMinutes = intent.getIntExtra("snoozeMinutes", 10).let {
                     if (it <= 0) 10 else it
                 }
                 val triggerAtMillis = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
@@ -62,9 +60,13 @@ class ReminderActionReceiver : BroadcastReceiver() {
                 )
             }
             "action_dismiss" -> {
+                ReminderNotificationManager.markActionHandled(id)
+                NotificationManagerCompat.from(context).cancel(id)
                 ReminderNotificationManager.cancel(context, id)
             }
             "action_done" -> {
+                ReminderNotificationManager.markActionHandled(id)
+                NotificationManagerCompat.from(context).cancel(id)
                 ReminderNotificationManager.cancel(context, id)
                 val flutterIntent = Intent(context, ActionBroadcastReceiver::class.java).apply {
                     action = ActionBroadcastReceiver.ACTION_TAPPED

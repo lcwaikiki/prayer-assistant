@@ -9,6 +9,7 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver
@@ -71,6 +72,8 @@ object ReminderNotificationManager {
             }
         }
 
+        handledActions.remove(id)
+
         val contentIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("notification_id", id)
@@ -87,6 +90,7 @@ object ReminderNotificationManager {
         // Causes ReminderDismissReceiver to immediately reopen the notification.
         val dismissIntent = Intent(context, ReminderDismissReceiver::class.java).apply {
             action = ACTION_REMINDER_DISMISSED
+            data = Uri.parse("reminder://dismiss/$id/${System.currentTimeMillis()}")
             putExtra("id", id)
             putExtra("title", title)
             putExtra("body", body)
@@ -134,6 +138,18 @@ object ReminderNotificationManager {
         val dismissActionPendingIntent = buildActionPendingIntent("action_dismiss")
         val donePendingIntent = buildActionPendingIntent("action_done")
 
+        val remoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
+            setTextViewText(R.id.reminderTitle, title)
+            setTextViewText(R.id.reminderBody, body)
+            setTextViewText(R.id.btnReminderSnooze, snoozeLabel)
+            setTextViewText(R.id.btnReminderDismiss, dismissLabel)
+            setTextViewText(R.id.btnReminderDone, doneLabel)
+
+            setOnClickPendingIntent(R.id.btnReminderSnooze, snoozePendingIntent)
+            setOnClickPendingIntent(R.id.btnReminderDismiss, dismissActionPendingIntent)
+            setOnClickPendingIntent(R.id.btnReminderDone, donePendingIntent)
+        }
+
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
@@ -144,13 +160,117 @@ object ReminderNotificationManager {
             .setOngoing(true)
             .setContentIntent(contentPendingIntent)
             .setDeleteIntent(deletePendingIntent)
-            .addAction(0, snoozeLabel, snoozePendingIntent)
-            .addAction(0, dismissLabel, dismissActionPendingIntent)
-            .addAction(0, doneLabel, donePendingIntent)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(remoteViews)
+            .setCustomBigContentView(remoteViews)
 
         val notification = builder.build()
         notification.flags = notification.flags or 32 // FLAG_NO_CLEAR
 
+        NotificationManagerCompat.from(context).notify(id, notification)
+    }
+
+    fun showSnoozeOptions(
+        context: Context,
+        id: Int,
+        title: String,
+        body: String,
+        payload: String? = null,
+        snoozeLabel: String = "Snooze",
+        dismissLabel: String = "Dismiss",
+        doneLabel: String = "Done",
+        soundResource: String? = "reminder_chime"
+    ) {
+        handledActions.remove(id)
+
+        val contentIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("notification_id", id)
+            putExtra("payload", payload)
+        }
+        val contentPendingIntent = PendingIntent.getActivity(
+            context,
+            id * 10,
+            contentIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // If swiped away while showing options, re-show original notification
+        val dismissIntent = Intent(context, ReminderDismissReceiver::class.java).apply {
+            action = ACTION_REMINDER_DISMISSED
+            data = Uri.parse("reminder://dismiss/$id/${System.currentTimeMillis()}")
+            putExtra("id", id)
+            putExtra("title", title)
+            putExtra("body", body)
+            putExtra("payload", payload)
+            putExtra("snoozeLabel", snoozeLabel)
+            putExtra("dismissLabel", dismissLabel)
+            putExtra("doneLabel", doneLabel)
+            putExtra("soundResource", soundResource)
+        }
+        val deletePendingIntent = PendingIntent.getBroadcast(
+            context,
+            id * 10 + 9,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val isTr = snoozeLabel.equals("Ertele", ignoreCase = true)
+        val promptText = if (isTr) "Erteleme süresini seçin:" else "Choose snooze duration:"
+
+        fun buildSnoozeChoicePendingIntent(minutes: Int, offset: Int): PendingIntent {
+            val intent = Intent(context, ReminderActionReceiver::class.java).apply {
+                action = ReminderActionReceiver.ACTION_REMINDER_ACTION
+                putExtra("actionId", "action_snooze_pick")
+                putExtra("snoozeMinutes", minutes)
+                putExtra("id", id)
+                putExtra("title", title)
+                putExtra("body", body)
+                putExtra("payload", payload)
+                putExtra("snoozeLabel", snoozeLabel)
+                putExtra("dismissLabel", dismissLabel)
+                putExtra("doneLabel", doneLabel)
+                putExtra("soundResource", soundResource)
+            }
+            return PendingIntent.getBroadcast(
+                context,
+                id * 100 + offset,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        val remoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
+            setTextViewText(R.id.snoozeTitle, title)
+            setTextViewText(R.id.snoozePrompt, promptText)
+            setTextViewText(R.id.btnSnooze5, if (isTr) "5 dk" else "5m")
+            setTextViewText(R.id.btnSnooze10, if (isTr) "10 dk" else "10m")
+            setTextViewText(R.id.btnSnooze15, if (isTr) "15 dk" else "15m")
+            setTextViewText(R.id.btnSnooze30, if (isTr) "30 dk" else "30m")
+            setTextViewText(R.id.btnSnooze60, if (isTr) "60 dk" else "60m")
+
+            setOnClickPendingIntent(R.id.btnSnooze5, buildSnoozeChoicePendingIntent(5, 51))
+            setOnClickPendingIntent(R.id.btnSnooze10, buildSnoozeChoicePendingIntent(10, 52))
+            setOnClickPendingIntent(R.id.btnSnooze15, buildSnoozeChoicePendingIntent(15, 53))
+            setOnClickPendingIntent(R.id.btnSnooze30, buildSnoozeChoicePendingIntent(30, 54))
+            setOnClickPendingIntent(R.id.btnSnooze60, buildSnoozeChoicePendingIntent(60, 55))
+        }
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(contentPendingIntent)
+            .setDeleteIntent(deletePendingIntent)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(remoteViews)
+            .setCustomBigContentView(remoteViews)
+
+        val notification = builder.build()
+        notification.flags = notification.flags or 32 // FLAG_NO_CLEAR
         NotificationManagerCompat.from(context).notify(id, notification)
     }
 

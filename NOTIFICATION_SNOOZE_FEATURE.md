@@ -12,16 +12,19 @@ Implements snoozable, non-dismissible notifications for prayer reminders, calend
    - Options: 5 min, 10 min, 15 min, 20 min (default: 10 min).
    - Persisted in local database (`snooze_duration_minutes`) and synced to native preferences (`PrayerWidgetStorage`).
 
-2. **Action Buttons**:
-   - **Snooze**: Cancels the current notification and schedules a re-alert after the configured snooze duration (handled natively via `ReminderActionReceiver` in <5ms without requiring background Flutter engine).
-   - **Dismiss**: Cancels and closes the notification without rescheduling.
-   - **Done**: Marks the item/prayer as completed in the database and closes the notification (e.g. "Yapıldı" in Turkish).
+2. **Action Buttons & Seamless In-Place Snooze Flip**:
+   - Built with custom `RemoteViews` layouts (`notification_reminder_initial.xml` and `notification_snooze_options.xml`) wrapped in `DecoratedCustomViewStyle`.
+   - **Initial View**: Renders `[Ertele]`, `[Kapat]`, and `[Yapıldı]` chip buttons at the bottom.
+   - **Snooze ("Ertele")**: Tapping "Ertele" does **not** close or collapse the notification. The action buttons instantly flip in-place to `5 dk`, `10 dk`, `15 dk`, `30 dk`, `60 dk` (or `5m`, `10m`, `15m`, `30m`, `60m`).
+   - Tapping any duration button schedules the alarm for that duration.
+   - **Dismiss ("Kapat")**: Cancels and closes the notification without rescheduling.
+   - **Done ("Yapıldı")**: Marks the item/prayer as completed in the database and closes the notification.
    - Localized across all 14 supported languages in the application.
 
-3. **Re-open on Swipe (Android `deleteIntent`)**:
-   - Notifications are marked ongoing (`setOngoing(true)`).
-   - If a user swipes or clears the notification on Android, an attached `deleteIntent` triggers `ReminderDismissReceiver`, which immediately re-displays the notification.
-   - Only tapping an explicit action button (Snooze, Dismiss, Done) programmatically cancels the notification and marks the action handled so it won't be re-opened.
+3. **Persistent Re-open on Swipe (Android `deleteIntent`)**:
+   - Notifications attach a `deleteIntent` with a unique timestamp data URI (`reminder://dismiss/$id/$timestamp`) to ensure every notification instance registers a distinct, active PendingIntent with Android's `PendingIntentController`.
+   - Swiping the notification away repeatedly (1st, 2nd, Nth time) reliably triggers `ReminderDismissReceiver` to re-display the reminder every time.
+   - Only tapping an explicit action button (`Kapat`, `Yapıldı`, or a snooze duration chip) cancels the reminder permanently.
 
 ---
 

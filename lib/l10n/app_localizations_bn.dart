@@ -1529,4 +1529,57 @@ class AppLocalizationsBn extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes মিনিট';
   }
+
+  @override
+  String get calendarTasksToDos => 'কাজ / করণীয়';
+
+  @override
+  String get calendarTasksFilterDay => 'দিন';
+
+  @override
+  String get calendarTasksFilterWeek => 'সপ্তাহ';
+
+  @override
+  String get calendarNoTasksOnDay => 'এই দিনের জন্য কোন কাজ নির্ধারিত নেই';
+
+  @override
+  String get calendarNoTasksOnWeek => 'এই সপ্তাহের জন্য কোন কাজ নির্ধারিত নেই';
+
+  @override
+  String get calendarTaskUncheckTitle => 'অসম্পূর্ণ হিসেবে চিহ্নিত করবেন?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'আপনি কি নিশ্চিত যে আপনি এই দিনের জন্য \"$title\" অসম্পূর্ণ হিসেবে চিহ্নিত করতে চান?';
+  }
+
+  @override
+  String get confirm => 'নিশ্চিত করুন';
+
+  @override
+  String get today => 'আজ';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'তসবিহ লক্ষ্য: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'গ্রুপ অনুস্মারক';
+
+  @override
+  String get calendarTaskCalendarReminder => 'ক্যালেন্ডার অনুস্মারক';
+
+  @override
+  String get calendarMarkAsTask => 'কাজ / করণীয় হিসেবে চিহ্নিত করুন';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'ক্যালেন্ডার এবং দৈনিক লক্ষ্যে সমাপ্তি ট্র্যাক করুন';
+
+  @override
+  String get beadsPreviewVibration => 'কম্পন প্রাকদর্শন';
+
+  @override
+  String get beadsExecute => 'চালান';
 }

@@ -9,6 +9,7 @@
   - [ ] Beads PIP (Picture-in-Picture) mode `[Not Started]`
   - [x] Option to select one or multiple days of the week in weekly options `[Done]`
   - [x] Create Groups for beads `[Done]`
+- [/] **Tasks / To-Do Tracking:** Mark beads and calendar items with reminders as tasks, track in day/week and monthly calendar grid with completion checkboxes `[Ongoing]`
 - [ ] **Reminders:** Read aloud reminders `[Not Started]`
 - [ ] **Widgets:**
   - [/] Widget settings background color / change `[Ongoing]`

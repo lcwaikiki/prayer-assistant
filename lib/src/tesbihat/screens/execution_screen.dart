@@ -9,6 +9,7 @@ import '../../navigation.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../services/haptic_service.dart';
 import '../state/items_notifier.dart';
+import 'item_form_screen.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
   const ExecutionScreen({super.key, required this.itemId});
@@ -227,7 +228,24 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
     final setCountValue = item.setCount;
 
     return Scaffold(
-      appBar: AppBar(title: Text(item.title)),
+      appBar: AppBar(
+        title: Text(item.title),
+        actions: [
+          IconButton(
+            key: const Key('edit_item_button'),
+            tooltip: l10n.edit,
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => ItemFormScreen(itemToEdit: item),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
         padding: const EdgeInsets.all(16),

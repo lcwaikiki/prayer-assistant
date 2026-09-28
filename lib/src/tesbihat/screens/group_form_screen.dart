@@ -10,11 +10,17 @@ import '../models/item_group.dart';
 import '../services/prayer_anchor_resolver.dart';
 import '../state/groups_notifier.dart';
 import '../widgets/reminder_section.dart';
+import 'group_screen.dart';
 
 class GroupFormScreen extends ConsumerStatefulWidget {
-  const GroupFormScreen({super.key, this.groupToEdit});
+  const GroupFormScreen({
+    super.key,
+    this.groupToEdit,
+    this.readOnly = false,
+  });
 
   final ItemGroup? groupToEdit;
+  final bool readOnly;
 
   @override
   ConsumerState<GroupFormScreen> createState() => _GroupFormScreenState();
@@ -22,6 +28,7 @@ class GroupFormScreen extends ConsumerStatefulWidget {
 
 class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  late bool _readOnly = widget.readOnly;
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
   late ReminderConfig _reminderConfig;
@@ -173,57 +180,129 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
+          actions: [
+            if (_readOnly) ...[
+              IconButton(
+                key: const Key('edit_group_button'),
+                tooltip: l10n.edit,
+                icon: const Icon(Icons.edit),
+                onPressed: () => setState(() => _readOnly = false),
+              ),
+              if (widget.groupToEdit != null)
+                IconButton(
+                  key: const Key('view_group_beads_button'),
+                  tooltip: l10n.groupMembers,
+                  icon: const Icon(Icons.format_list_bulleted),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => GroupScreen(
+                          groupId: widget.groupToEdit!.id,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ],
         ),
         body: SafeArea(
           child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              TextFormField(
-                key: const Key('group_title_field'),
-                controller: _titleController,
-                decoration: InputDecoration(labelText: l10n.groupName),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return l10n.requiredField(l10n.groupName);
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                key: const Key('group_notes_field'),
-                controller: _notesController,
-                minLines: 3,
-                maxLines: 6,
-                decoration: InputDecoration(
-                  labelText: l10n.notes,
-                  alignLabelWithHint: true,
-                  hintText: l10n.notesHint,
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                IgnorePointer(
+                  ignoring: _readOnly,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        key: const Key('group_title_field'),
+                        controller: _titleController,
+                        readOnly: _readOnly,
+                        decoration: InputDecoration(labelText: l10n.groupName),
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return l10n.requiredField(l10n.groupName);
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        key: const Key('group_notes_field'),
+                        controller: _notesController,
+                        readOnly: _readOnly,
+                        minLines: 3,
+                        maxLines: 6,
+                        decoration: InputDecoration(
+                          labelText: l10n.notes,
+                          alignLabelWithHint: true,
+                          hintText: l10n.notesHint,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ReminderSection(
+                        readOnly: _readOnly,
+                        initial: _isEditing
+                            ? ReminderConfig.fromGroup(widget.groupToEdit!)
+                            : null,
+                        onChanged: (config) =>
+                            setState(() => _reminderConfig = config),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ReminderSection(
-                initial: _isEditing
-                    ? ReminderConfig.fromGroup(widget.groupToEdit!)
-                    : null,
-                onChanged: (config) => setState(() => _reminderConfig = config),
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: _saving ? null : _save,
-                child: _saving
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(_isEditing ? l10n.update : l10n.save),
-              ),
-            ],
+                const SizedBox(height: 24),
+                if (!_readOnly)
+                  FilledButton(
+                    onPressed: _saving ? null : _save,
+                    child: _saving
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(_isEditing ? l10n.update : l10n.save),
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          key: const Key('edit_group_button_bottom'),
+                          icon: const Icon(Icons.edit),
+                          label: Text(l10n.edit),
+                          onPressed: () => setState(() => _readOnly = false),
+                        ),
+                      ),
+                      if (widget.groupToEdit != null) ...[
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton.icon(
+                            key: const Key('view_group_beads_button_bottom'),
+                            icon: const Icon(Icons.format_list_bulleted),
+                            label: Text(l10n.groupMembers),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (_) => GroupScreen(
+                                    groupId: widget.groupToEdit!.id,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

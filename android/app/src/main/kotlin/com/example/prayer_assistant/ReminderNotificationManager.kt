@@ -78,6 +78,12 @@ object ReminderNotificationManager {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("notification_id", id)
             putExtra("payload", payload)
+            putExtra("title", title)
+            putExtra("body", body)
+            putExtra("snoozeLabel", snoozeLabel)
+            putExtra("dismissLabel", dismissLabel)
+            putExtra("doneLabel", doneLabel)
+            putExtra("soundResource", soundResource)
         }
         val contentPendingIntent = PendingIntent.getActivity(
             context,
@@ -158,6 +164,7 @@ object ReminderNotificationManager {
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setAutoCancel(false)
             .setOngoing(true)
+            .setOnlyAlertOnce(true)
             .setContentIntent(contentPendingIntent)
             .setDeleteIntent(deletePendingIntent)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
@@ -165,7 +172,7 @@ object ReminderNotificationManager {
             .setCustomBigContentView(remoteViews)
 
         val notification = builder.build()
-        notification.flags = notification.flags or 32 // FLAG_NO_CLEAR
+        notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
 
         NotificationManagerCompat.from(context).notify(id, notification)
     }
@@ -187,6 +194,12 @@ object ReminderNotificationManager {
             flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             putExtra("notification_id", id)
             putExtra("payload", payload)
+            putExtra("title", title)
+            putExtra("body", body)
+            putExtra("snoozeLabel", snoozeLabel)
+            putExtra("dismissLabel", dismissLabel)
+            putExtra("doneLabel", doneLabel)
+            putExtra("soundResource", soundResource)
         }
         val contentPendingIntent = PendingIntent.getActivity(
             context,
@@ -270,7 +283,7 @@ object ReminderNotificationManager {
             .setCustomBigContentView(remoteViews)
 
         val notification = builder.build()
-        notification.flags = notification.flags or 32 // FLAG_NO_CLEAR
+        notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
         NotificationManagerCompat.from(context).notify(id, notification)
     }
 

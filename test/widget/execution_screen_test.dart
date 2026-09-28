@@ -159,4 +159,17 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('AppBar edit button opens ItemFormScreen', (tester) async {
+    final harness = TestHarness.create();
+    await _pumpExecution(tester, harness, item: _item());
+
+    expect(find.byKey(const Key('edit_item_button')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('edit_item_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit Beads'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "کام / کرنے والے کام",
+  "calendarTasksFilterDay": "دن",
+  "calendarTasksFilterWeek": "ہفتہ",
+  "calendarNoTasksOnDay": "اس دن کے لیے کوئی کام طے نہیں ہے",
+  "calendarNoTasksOnWeek": "اس ہفتے کے لیے کوئی کام طے نہیں ہے",
+  "calendarTaskUncheckTitle": "کیا غیر مکمل نشان زد کریں؟",
+  "calendarTaskUncheckConfirm": "کیا آپ واقعی اس دن کے لیے \"{title}\" کو غیر مکمل نشان زد کرنا چاہتے ہیں؟",
+  "confirm": "تصدیق کریں",
+  "today": "آج",
+  "calendarTaskBeadTarget": "تسبیح کا ہدف: {count}",
+  "calendarTaskGroupReminder": "گروپ یاد دہانی",
+  "calendarTaskCalendarReminder": "کیلنڈر یاد دہانی",
+  "calendarMarkAsTask": "کام / کرنے والے کام کے طور پر نشان زد کریں",
+  "calendarMarkAsTaskSubtitle": "کیلنڈر اور روزانہ کے اہداف میں تکمیل کا سراغ لگائیں",
+  "beadsPreviewVibration": "تھرتھراہٹ کا پیش نظارہ",
+  "beadsExecute": "شروع کریں"
 }

@@ -6,6 +6,7 @@ import 'package:prayer_assistant/l10n/app_localizations.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import 'package:prayer_assistant/src/l10n/locale_options.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
+import 'package:prayer_assistant/src/navigation.dart';
 import 'package:provider/provider.dart';
 
 /// A complete [PrayerDay] for a fixed date, useful across model, service,
@@ -61,7 +62,7 @@ Widget testLocalizedApp({
 }) {
   return MaterialApp(
     debugShowCheckedModeBanner: false,
-    navigatorKey: navigatorKey,
+    navigatorKey: navigatorKey ?? rootNavigatorKey,
     locale: locale,
     localizationsDelegates: const [
       AppLocalizations.delegate,

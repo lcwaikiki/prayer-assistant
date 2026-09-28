@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
@@ -197,6 +198,18 @@ class TestHarness {
       () => database.loadShowCalendarReminderDots(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadShowCardMoonPhase(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowCardIftarSuhoor(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowCardDailyWisdom(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.loadShowCardUpcomingReminders(),
+    ).thenAnswer((_) async => null);
+    when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});
     when(
@@ -216,6 +229,12 @@ class TestHarness {
     ).thenAnswer((_) async => const {});
     when(
       () => database.saveFastingLogs(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadTaskCompletions(),
+    ).thenAnswer((_) async => const <String, List<String>>{});
+    when(
+      () => database.saveTaskCompletions(any()),
     ).thenAnswer((_) async {});
 
 
@@ -291,6 +310,18 @@ class TestHarness {
     ).thenAnswer((_) async {});
     when(
       () => database.saveShowCalendarReminderDots(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowCardMoonPhase(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowCardIftarSuhoor(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowCardDailyWisdom(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.saveShowCardUpcomingReminders(any()),
     ).thenAnswer((_) async {});
     when(() => database.saveCalendarReminder(any())).thenAnswer((_) async {});
     when(() => database.deleteCalendarReminder(any())).thenAnswer((_) async {});
@@ -378,6 +409,7 @@ Future<void> pumpWithHarness(
       child: testLocalizedApp(child: child, locale: locale),
     ),
   );
+  await initializeDateFormatting('en', null);
   await tester.pumpWidget(app);
   if (settle) {
     await tester.pumpAndSettle();

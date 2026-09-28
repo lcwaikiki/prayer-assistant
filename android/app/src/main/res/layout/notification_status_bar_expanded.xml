@@ -19,23 +19,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameImsak"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeImsak"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -46,23 +51,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameGunes"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeGunes"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -73,23 +83,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameOgle"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeOgle"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -100,23 +115,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameIkindi"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeIkindi"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -127,23 +147,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameAksam"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeAksam"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -154,23 +179,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp">
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp">
 
             <TextView
                 android:id="@+id/nameYatsi"
+                style="@style/TextAppearance.Compat.Notification.Line2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
-                android:textSize="10sp"
+                android:textSize="9.5sp"
+                android:gravity="center"
                 android:maxLines="1" />
 
             <TextView
                 android:id="@+id/timeYatsi"
+                style="@style/TextAppearance.Compat.Notification.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFFFF"
                 android:textSize="12sp"
+                android:textStyle="bold"
+                android:gravity="center"
                 android:maxLines="1" />
         </LinearLayout>
 
@@ -179,34 +209,34 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/expandedTimeLeftLabel"
+            style="@style/TextAppearance.Compat.Notification.Line2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Time Left:"
-            android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
 
         <Chronometer
             android:id="@+id/expandedCountdown"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="#FFFFFFFF"
+            android:layout_marginStart="6dp"
             android:textSize="13sp"
             android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/expandedLocationLabel"
+        style="@style/TextAppearance.Compat.Notification.Line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:textColor="#B3FFFFFF"
         android:textSize="12sp"
         android:maxLines="1" />
 

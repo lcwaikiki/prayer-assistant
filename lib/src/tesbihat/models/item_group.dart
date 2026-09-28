@@ -24,9 +24,12 @@ class ItemGroup implements ReminderSchedulable {
     this.reminderWeekdays = const [],
     this.reminderDayOfMonth,
     this.reminderYearlyDate,
+    this.isTask = false,
   });
 
   final String id;
+  @override
+  final bool isTask;
   final String title;
   final String notes;
   final bool reminderEnabled;
@@ -60,11 +63,13 @@ class ItemGroup implements ReminderSchedulable {
     List<int>? reminderWeekdays,
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
+    bool? isTask,
   }) {
     return ItemGroup(
       id: id ?? this.id,
       title: title ?? this.title,
       notes: notes ?? this.notes,
+      isTask: isTask ?? this.isTask,
       reminderEnabled: reminderEnabled ?? this.reminderEnabled,
       reminderRecurrence: reminderRecurrence ?? this.reminderRecurrence,
       reminderMonthlyBasis:
@@ -88,6 +93,7 @@ class ItemGroup implements ReminderSchedulable {
       'id': id,
       'title': title,
       'notes': notes,
+      'isTask': isTask,
       'reminderEnabled': reminderEnabled,
       'reminderRecurrence': reminderRecurrence.name,
       'reminderMonthlyBasis': reminderMonthlyBasis.name,
@@ -148,6 +154,7 @@ class ItemGroup implements ReminderSchedulable {
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
       notes: (map['notes'] ?? '').toString(),
+      isTask: (map['isTask'] as bool?) ?? false,
       reminderEnabled: (map['reminderEnabled'] as bool?) ?? false,
       reminderRecurrence: recurrence,
       reminderMonthlyBasis: CalendarBasis.fromName(

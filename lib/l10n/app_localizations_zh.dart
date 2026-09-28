@@ -1476,4 +1476,56 @@ class AppLocalizationsZh extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes 分钟';
   }
+
+  @override
+  String get calendarTasksToDos => '任务 / 待办事项';
+
+  @override
+  String get calendarTasksFilterDay => '日';
+
+  @override
+  String get calendarTasksFilterWeek => '周';
+
+  @override
+  String get calendarNoTasksOnDay => '今天没有安排任务';
+
+  @override
+  String get calendarNoTasksOnWeek => '本周没有安排任务';
+
+  @override
+  String get calendarTaskUncheckTitle => '标记为未完成？';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return '确定要将此日期的“$title”标记为未完成吗？';
+  }
+
+  @override
+  String get confirm => '确认';
+
+  @override
+  String get today => '今天';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return '念珠目标: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => '分组提醒';
+
+  @override
+  String get calendarTaskCalendarReminder => '日历提醒';
+
+  @override
+  String get calendarMarkAsTask => '标记为任务 / 待办事项';
+
+  @override
+  String get calendarMarkAsTaskSubtitle => '在日历和每日目标中跟踪完成情况';
+
+  @override
+  String get beadsPreviewVibration => '预览震动';
+
+  @override
+  String get beadsExecute => '执行';
 }

@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "وظایف / کارهای انجام‌دادنی",
+  "calendarTasksFilterDay": "روز",
+  "calendarTasksFilterWeek": "هفته",
+  "calendarNoTasksOnDay": "هیچ وظیفه‌ای برای این روز زمان‌بندی نشده است",
+  "calendarNoTasksOnWeek": "هیچ وظیفه‌ای برای این هفته زمان‌بندی نشده است",
+  "calendarTaskUncheckTitle": "علامت‌گذاری به عنوان تکمیل‌نشده؟",
+  "calendarTaskUncheckConfirm": "آیا مطمئن هستید که می‌خواهید «{title}» را برای این روز به عنوان تکمیل‌نشده علامت بزنید؟",
+  "confirm": "تأیید",
+  "today": "امروز",
+  "calendarTaskBeadTarget": "هدف تسبیح: {count}",
+  "calendarTaskGroupReminder": "یادآور گروه",
+  "calendarTaskCalendarReminder": "یادآور تقویم",
+  "calendarMarkAsTask": "علامت‌گذاری به عنوان وظیفه / کار انجام‌دادنی",
+  "calendarMarkAsTaskSubtitle": "پیگیری تکمیل در تقویم و اهداف روزانه",
+  "beadsPreviewVibration": "پیش‌نمایش لرزش",
+  "beadsExecute": "اجرا"
 }

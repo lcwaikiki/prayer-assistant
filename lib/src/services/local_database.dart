@@ -39,6 +39,7 @@ class LocalDatabase {
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
   static const _snoozeDurationMinutesKey = 'snooze_duration_minutes';
+  static const _taskCompletionsKey = 'task_completions';
 
   Database? _db;
 
@@ -190,6 +191,11 @@ class LocalDatabase {
         "ALTER TABLE calendar_reminders ADD COLUMN excluded_dates TEXT NOT NULL DEFAULT ''",
       );
     }
+    if (!names.contains('is_task')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN is_task INTEGER NOT NULL DEFAULT 0',
+      );
+    }
   }
 
   static const _createCalendarRemindersTableSql = '''
@@ -210,7 +216,8 @@ class LocalDatabase {
       weekdays TEXT NOT NULL DEFAULT '',
       day_of_month INTEGER,
       yearly_date TEXT,
-      excluded_dates TEXT NOT NULL DEFAULT ''
+      excluded_dates TEXT NOT NULL DEFAULT '',
+      is_task INTEGER NOT NULL DEFAULT 0
     )
   ''';
 
@@ -933,6 +940,40 @@ class LocalDatabase {
     final db = await instance;
     await db.insert('app_settings', {
       'setting_key': _prayerCompletionsKey,
+      'setting_value': jsonEncode(completions),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<Map<String, List<String>>> loadTaskCompletions() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_taskCompletionsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return <String, List<String>>{};
+    }
+    try {
+      final raw =
+          jsonDecode(rows.first['setting_value'] as String)
+              as Map<String, dynamic>;
+      return raw.map(
+        (key, value) =>
+            MapEntry(key, List<String>.from(value as List)),
+      );
+    } catch (_) {
+      return <String, List<String>>{};
+    }
+  }
+
+  Future<void> saveTaskCompletions(
+    Map<String, List<String>> completions,
+  ) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _taskCompletionsKey,
       'setting_value': jsonEncode(completions),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }

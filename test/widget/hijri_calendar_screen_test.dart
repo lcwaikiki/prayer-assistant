@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:intl/intl.dart';
@@ -8,11 +9,23 @@ import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
 import 'package:prayer_assistant/src/models/calendar_week_start.dart';
 import 'package:prayer_assistant/src/models/fasting_models.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
 
 import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('wakelock_plus'),
+      (call) async => true,
+    );
+  });
   Future<void> switchToGregorian(WidgetTester tester) async {
     await tester.tap(find.text('Gregorian'));
     await tester.pumpAndSettle();
@@ -24,8 +37,6 @@ void main() {
   }
 
   Future<void> openDayDetail(WidgetTester tester) async {
-    await tester.drag(find.byType(GridView), const Offset(0, -150));
-    await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(InkWell, '17'));
     await tester.pumpAndSettle();
   }
@@ -438,10 +449,8 @@ void main() {
     expect(find.text('Aug 17, 2026'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField).first, 'New Reminder');
-    for (var i = 0; i < 6 && tester.any(find.text('Save')) == false; i++) {
-      await tester.drag(find.byType(ListView), const Offset(0, -150));
-      await tester.pumpAndSettle();
-    }
+    await tester.ensureVisible(find.widgetWithText(FilledButton, 'Save'));
+    await tester.pumpAndSettle();
     await tester.tap(find.widgetWithText(FilledButton, 'Save'));
     await tester.pumpAndSettle();
 
@@ -624,5 +633,111 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
+
+  testWidgets(
+    'group reminders with isTask enabled appear in Events & Reminders dropdown',
+    (tester) async {
+      final harness = TestHarness.create();
+      harness.itemRepository.saveGroups([
+        const ItemGroup(
+          id: 'group-1',
+          title: 'Morning Adhkar Group',
+          reminderEnabled: true,
+          isTask: true,
+        ),
+      ]);
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      expect(find.text('All Events & Reminders'), findsOneWidget);
+
+      await tester.tap(find.text('All Events & Reminders'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Morning Adhkar Group (Group)'), findsWidgets);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'tapping a bead task in day detail navigates to ExecutionScreen',
+    (tester) async {
+      final harness = TestHarness.create();
+      harness.itemRepository.saveItems([
+        const Item(
+          id: 'bead-1',
+          title: 'Daily Astaghfirullah',
+          count: 100,
+          check: 33,
+          setCount: 1,
+          vibrationIntensity: 1,
+          reminderEnabled: true,
+          isTask: true,
+          reminderRecurrence: ReminderRecurrence.daily,
+        ),
+      ]);
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(
+          initialDate: DateTime(2026, 8, 17),
+          openDetailOnLaunch: true,
+        ),
+      );
+
+      expect(find.text('Daily Astaghfirullah'), findsOneWidget);
+
+      await tester.tap(find.text('Daily Astaghfirullah'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ExecutionScreen), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'tapping a group task in day detail navigates to GroupScreen',
+    (tester) async {
+      final harness = TestHarness.create();
+      harness.itemRepository.saveGroups([
+        const ItemGroup(
+          id: 'group-1',
+          title: 'Evening Adhkar Group',
+          reminderEnabled: true,
+          isTask: true,
+          reminderRecurrence: ReminderRecurrence.daily,
+        ),
+      ]);
+      await harness.initialize();
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(
+          initialDate: DateTime(2026, 8, 17),
+          openDetailOnLaunch: true,
+        ),
+      );
+
+      expect(find.text('Evening Adhkar Group'), findsOneWidget);
+
+      await tester.tap(find.text('Evening Adhkar Group'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(GroupScreen), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }
+
 

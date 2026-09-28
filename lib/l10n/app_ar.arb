@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "المهام / الواجبات",
+  "calendarTasksFilterDay": "يوم",
+  "calendarTasksFilterWeek": "أسبوع",
+  "calendarNoTasksOnDay": "لا توجد مهام مجدولة لهذا اليوم",
+  "calendarNoTasksOnWeek": "لا توجد مهام مجدولة لهذا الأسبوع",
+  "calendarTaskUncheckTitle": "تحديد كغير مكتمل؟",
+  "calendarTaskUncheckConfirm": "هل أنت متأكد من رغبتك في تحديد \"{title}\" كغير مكتمل لهذا اليوم؟",
+  "confirm": "تأكيد",
+  "today": "اليوم",
+  "calendarTaskBeadTarget": "هدف التسبيح: {count}",
+  "calendarTaskGroupReminder": "تذكير المجموعة",
+  "calendarTaskCalendarReminder": "تذكير التقويم",
+  "calendarMarkAsTask": "تحديد كمهمة / واجب",
+  "calendarMarkAsTaskSubtitle": "تتبع الإنجاز في التقويم والأهداف اليومية",
+  "beadsPreviewVibration": "معاينة الاهتزاز",
+  "beadsExecute": "بدء"
 }

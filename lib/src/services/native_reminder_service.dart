@@ -66,4 +66,39 @@ class NativeReminderService {
       await _channel.invokeMethod('cancel', {'id': id});
     } catch (_) {}
   }
+
+  static void initializeNotificationTapHandler(
+    void Function(String? payload) onNotificationTap,
+  ) {
+    if (!isAndroid) return;
+    _channel.setMethodCallHandler((call) async {
+      if (call.method == 'onNotificationTap') {
+        final dynamic args = call.arguments;
+        String? payload;
+        if (args is Map) {
+          payload = args['payload'] as String?;
+        } else if (args is String) {
+          payload = args;
+        }
+        if (payload != null && payload.isNotEmpty) {
+          onNotificationTap(payload);
+        }
+      }
+    });
+  }
+
+  static Future<String?> getInitialPayload() async {
+    if (!isAndroid) return null;
+    try {
+      final dynamic res = await _channel.invokeMethod<dynamic>('getInitialPayload');
+      if (res is Map) {
+        return res['payload'] as String?;
+      } else if (res is String) {
+        return res;
+      }
+      return null;
+    } catch (_) {
+      return null;
+    }
+  }
 }

@@ -143,6 +143,10 @@ class TesbihatLocalizations {
   String deleteSelectedConfirm(int count) =>
       _appL10n.beadsDeleteSelectedConfirm(count);
   String deletedSelected(int count) => _appL10n.beadsDeletedSelected(count);
+  String get markAsTask => _appL10n.calendarMarkAsTask;
+  String get markAsTaskSubtitle => _appL10n.calendarMarkAsTaskSubtitle;
+  String get previewVibration => _appL10n.beadsPreviewVibration;
+  String get execute => _appL10n.beadsExecute;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

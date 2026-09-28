@@ -16,6 +16,7 @@ import 'src/services/auto_backup_observer.dart';
 import 'src/services/imsakiyem_api.dart';
 import 'src/services/local_database.dart';
 import 'src/services/location_resolver.dart';
+import 'src/services/native_reminder_service.dart';
 import 'src/services/notification_service.dart';
 import 'src/services/notification_tap_handler.dart';
 import 'src/services/widget_bridge_service.dart';
@@ -31,6 +32,8 @@ import 'src/ui/app_shell.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
+
+  NativeReminderService.initializeNotificationTapHandler(handleNotificationTap);
 
   await WisdomService.instance.init();
 

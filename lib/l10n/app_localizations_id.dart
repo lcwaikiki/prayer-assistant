@@ -1530,4 +1530,59 @@ class AppLocalizationsId extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes menit';
   }
+
+  @override
+  String get calendarTasksToDos => 'Tugas / Daftar Tugas';
+
+  @override
+  String get calendarTasksFilterDay => 'Hari';
+
+  @override
+  String get calendarTasksFilterWeek => 'Minggu';
+
+  @override
+  String get calendarNoTasksOnDay =>
+      'Tidak ada tugas yang dijadwalkan untuk hari ini';
+
+  @override
+  String get calendarNoTasksOnWeek =>
+      'Tidak ada tugas yang dijadwalkan untuk minggu ini';
+
+  @override
+  String get calendarTaskUncheckTitle => 'Tandai sebagai belum selesai?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'Apakah Anda yakin ingin menandai \"$title\" sebagai belum selesai untuk hari ini?';
+  }
+
+  @override
+  String get confirm => 'Konfirmasi';
+
+  @override
+  String get today => 'Hari ini';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'Target Tasbih: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'Pengingat Grup';
+
+  @override
+  String get calendarTaskCalendarReminder => 'Pengingat Kalender';
+
+  @override
+  String get calendarMarkAsTask => 'Tandai sebagai tugas / daftar tugas';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'Lacak penyelesaian di kalender dan target harian';
+
+  @override
+  String get beadsPreviewVibration => 'Pratinjau getaran';
+
+  @override
+  String get beadsExecute => 'Mulai';
 }

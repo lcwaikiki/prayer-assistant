@@ -13,15 +13,21 @@ import 'item_form_screen.dart';
 enum _MemberAction { edit, duplicate, remove, delete }
 
 class GroupScreen extends ConsumerStatefulWidget {
-  const GroupScreen({super.key, required this.groupId});
+  const GroupScreen({
+    super.key,
+    required this.groupId,
+    this.readOnly = false,
+  });
 
   final String groupId;
+  final bool readOnly;
 
   @override
   ConsumerState<GroupScreen> createState() => _GroupScreenState();
 }
 
 class _GroupScreenState extends ConsumerState<GroupScreen> {
+  late bool _readOnly = widget.readOnly;
   bool _selecting = false;
   final Set<String> _selected = <String>{};
 
@@ -288,31 +294,40 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                       : () => _bulkDeleteMembers(context, members),
                 ),
               ]
-            : [
-                IconButton(
-                  key: const Key('select_members_button'),
-                  tooltip: l10n.select,
-                  icon: const Icon(Icons.checklist),
-                  onPressed: () => setState(() => _selecting = true),
-                ),
-                IconButton(
-                  key: const Key('edit_group_button'),
-                  tooltip: l10n.editGroup,
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => GroupFormScreen(groupToEdit: group),
+            : _readOnly
+                ? [
+                    IconButton(
+                      key: const Key('edit_group_screen_button'),
+                      tooltip: l10n.edit,
+                      icon: const Icon(Icons.edit),
+                      onPressed: () => setState(() => _readOnly = false),
                     ),
-                  ),
-                ),
-                IconButton(
-                  key: const Key('delete_group_button'),
-                  tooltip: l10n.deleteGroup,
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: () => _deleteGroup(context, ref),
-                ),
-              ],
+                  ]
+                : [
+                    IconButton(
+                      key: const Key('select_members_button'),
+                      tooltip: l10n.select,
+                      icon: const Icon(Icons.checklist),
+                      onPressed: () => setState(() => _selecting = true),
+                    ),
+                    IconButton(
+                      key: const Key('edit_group_button'),
+                      tooltip: l10n.editGroup,
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => GroupFormScreen(groupToEdit: group),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      key: const Key('delete_group_button'),
+                      tooltip: l10n.deleteGroup,
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () => _deleteGroup(context, ref),
+                    ),
+                  ],
       ),
       body: Column(
         children: [
@@ -338,7 +353,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                     buildDefaultDragHandles: false,
                     itemCount: members.length,
                     onReorderItem: (oldIndex, newIndex) {
-                      if (_selecting) {
+                      if (_selecting || _readOnly) {
                         return;
                       }
                       final allItems = ref.read(itemsNotifierProvider);
@@ -381,7 +396,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                             '${l10n.progress}: ${item.currentProgress} / ${item.count}',
                           ),
                     isThreeLine: true,
-                    trailing: _selecting
+                    trailing: (_selecting || _readOnly)
                         ? null
                         : Row(
                             mainAxisSize: MainAxisSize.min,
@@ -442,7 +457,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                         : () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              MaterialPageRoute<void>(
                                 builder: (_) =>
                                     ExecutionScreen(itemId: item.id),
                               ),
@@ -455,7 +470,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
           ),
         ],
       ),
-      floatingActionButton: _selecting
+      floatingActionButton: (_selecting || _readOnly)
           ? null
           : FloatingActionButton.extended(
         key: const Key('add_bead_fab'),

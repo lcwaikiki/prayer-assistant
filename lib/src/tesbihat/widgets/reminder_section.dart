@@ -21,6 +21,7 @@ enum _OffsetDirection { onTime, before, after }
 class ReminderConfig {
   const ReminderConfig({
     this.enabled = false,
+    this.isTask = false,
     this.anchor = ItemReminderAnchor.clockTime,
     this.recurrence = ReminderRecurrence.once,
     this.monthlyBasis = CalendarBasis.gregorian,
@@ -38,6 +39,7 @@ class ReminderConfig {
   factory ReminderConfig.fromItem(Item item) {
     return ReminderConfig(
       enabled: item.reminderEnabled,
+      isTask: item.isTask,
       anchor: item.reminderAnchor,
       recurrence: item.reminderRecurrence,
       monthlyBasis: item.reminderMonthlyBasis,
@@ -56,6 +58,7 @@ class ReminderConfig {
   factory ReminderConfig.fromGroup(ItemGroup group) {
     return ReminderConfig(
       enabled: group.reminderEnabled,
+      isTask: group.isTask,
       anchor: group.reminderAnchor,
       recurrence: group.reminderRecurrence,
       monthlyBasis: group.reminderMonthlyBasis,
@@ -72,6 +75,7 @@ class ReminderConfig {
   }
 
   final bool enabled;
+  final bool isTask;
   final ItemReminderAnchor anchor;
   final ReminderRecurrence recurrence;
   final CalendarBasis monthlyBasis;
@@ -90,6 +94,7 @@ class ReminderConfig {
     if (identical(this, other)) return true;
     return other is ReminderConfig &&
         other.enabled == enabled &&
+        other.isTask == isTask &&
         other.anchor == anchor &&
         other.recurrence == recurrence &&
         other.monthlyBasis == monthlyBasis &&
@@ -107,6 +112,7 @@ class ReminderConfig {
   @override
   int get hashCode => Object.hash(
         enabled,
+        isTask,
         anchor,
         recurrence,
         monthlyBasis,
@@ -131,10 +137,12 @@ class ReminderSection extends ConsumerStatefulWidget {
     super.key,
     required this.onChanged,
     this.initial,
+    this.readOnly = false,
   });
 
   final ValueChanged<ReminderConfig> onChanged;
   final ReminderConfig? initial;
+  final bool readOnly;
 
   @override
   ConsumerState<ReminderSection> createState() => _ReminderSectionState();
@@ -144,6 +152,7 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
   static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
 
   late bool _enabled;
+  late bool _isTask;
   late ItemReminderAnchor _anchor;
   late ReminderRecurrence _recurrence;
   late CalendarBasis _monthlyBasis;
@@ -165,6 +174,7 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
     super.initState();
     final initial = widget.initial;
     _enabled = initial?.enabled ?? false;
+    _isTask = initial?.isTask ?? false;
     _anchor = initial?.anchor ?? ItemReminderAnchor.clockTime;
     _recurrence = initial?.recurrence ?? ReminderRecurrence.once;
     _monthlyBasis = initial?.monthlyBasis ?? CalendarBasis.gregorian;
@@ -207,6 +217,7 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
     widget.onChanged(
       ReminderConfig(
         enabled: _enabled,
+        isTask: _enabled && _isTask,
         anchor: _anchor,
         recurrence: _recurrence,
         monthlyBasis: _monthlyBasis,
@@ -237,6 +248,7 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
   /// untouched so a cleared reminder stays on.
   void _resetToDefaults() {
     setState(() {
+      _isTask = false;
       _anchor = ItemReminderAnchor.clockTime;
       _recurrence = ReminderRecurrence.once;
       _monthlyBasis = CalendarBasis.gregorian;
@@ -619,8 +631,10 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
         offsetMagnitude == null ||
         !_minuteOptions.contains(offsetMagnitude) ||
         _offsetMinutesFocus.hasFocus;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return IgnorePointer(
+      ignoring: widget.readOnly,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -648,6 +662,14 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
           ],
         ),
         if (_enabled) ...[
+          SwitchListTile(
+            key: const Key('reminder_is_task_switch'),
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.markAsTask),
+            subtitle: Text(l10n.markAsTaskSubtitle),
+            value: _isTask,
+            onChanged: (value) => _mutate(() => _isTask = value),
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -869,6 +891,7 @@ class _ReminderSectionState extends ConsumerState<ReminderSection> {
           ],
         ],
       ],
-    );
-  }
+    ),
+  );
+}
 }

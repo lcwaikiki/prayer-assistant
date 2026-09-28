@@ -43,6 +43,7 @@ class Item implements ReminderSchedulable {
     this.reminderDayOfMonth,
     this.reminderYearlyDate,
     this.groupIds = const [],
+    this.isTask = false,
   }) : assert(count > 0, 'count must be positive'),
        assert(check >= 0, 'check cannot be negative'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -65,6 +66,8 @@ class Item implements ReminderSchedulable {
   final int vibrationIntensity;
   final int currentProgress;
   final bool reminderEnabled;
+  @override
+  final bool isTask;
 
   /// Recurrence for both anchors. Mirrors [ReminderRecurrence]: once,
   /// daily, weekly, monthly, yearly. For
@@ -154,6 +157,7 @@ class Item implements ReminderSchedulable {
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
     List<String>? groupIds,
+    bool? isTask,
   }) {
     return Item(
       id: id ?? this.id,
@@ -180,6 +184,7 @@ class Item implements ReminderSchedulable {
       reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
       reminderYearlyDate: reminderYearlyDate ?? this.reminderYearlyDate,
       groupIds: groupIds ?? this.groupIds,
+      isTask: isTask ?? this.isTask,
     );
   }
 
@@ -207,6 +212,7 @@ class Item implements ReminderSchedulable {
       'reminderDayOfMonth': reminderDayOfMonth,
       'reminderYearlyDate': reminderYearlyDate?.toIso8601String(),
       'groupIds': groupIds.join(','),
+      'isTask': isTask,
     };
   }
 
@@ -284,6 +290,7 @@ class Item implements ReminderSchedulable {
       reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),
       reminderYearlyDate: reminderYearlyDate,
       groupIds: groupIds,
+      isTask: (map['isTask'] as bool?) ?? false,
     );
   }
 

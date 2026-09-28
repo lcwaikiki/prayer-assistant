@@ -12,16 +12,23 @@ import '../services/haptic_service.dart';
 import '../services/prayer_anchor_resolver.dart';
 import '../state/groups_notifier.dart';
 import '../state/items_notifier.dart';
+import 'execution_screen.dart';
 import '../widgets/reminder_section.dart';
 
 class ItemFormScreen extends ConsumerStatefulWidget {
-  const ItemFormScreen({super.key, this.itemToEdit, this.initialGroupIds});
+  const ItemFormScreen({
+    super.key,
+    this.itemToEdit,
+    this.initialGroupIds,
+    this.readOnly = false,
+  });
 
   final Item? itemToEdit;
 
   /// Groups pre-selected for a newly created bead (e.g. when creating a
   /// bead from inside a group).
   final List<String>? initialGroupIds;
+  final bool readOnly;
 
   @override
   ConsumerState<ItemFormScreen> createState() => _ItemFormScreenState();
@@ -29,6 +36,7 @@ class ItemFormScreen extends ConsumerStatefulWidget {
 
 class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  late bool _readOnly = widget.readOnly;
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
   late final TextEditingController _countController;
@@ -215,6 +223,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             ? reminder.yearlyDate
             : null,
         groupIds: _selectedGroupIds.toList(growable: false),
+        isTask: reminder.isTask,
       );
       notifier.updateItem(edited);
     } else {
@@ -244,6 +253,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             ? reminder.yearlyDate
             : null,
         groupIds: _selectedGroupIds.toList(growable: false),
+        isTask: reminder.isTask,
       );
     }
 
@@ -275,127 +285,205 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
+          actions: [
+            if (_readOnly) ...[
+              IconButton(
+                tooltip: l10n.edit,
+                icon: const Icon(Icons.edit),
+                onPressed: () => setState(() => _readOnly = false),
+              ),
+              if (widget.itemToEdit != null)
+                IconButton(
+                  tooltip: 'Execute',
+                  icon: const Icon(Icons.play_arrow),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => ExecutionScreen(
+                          itemId: widget.itemToEdit!.id,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+            ],
+          ],
         ),
         body: SafeArea(
           child: Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              TextFormField(
-                key: const Key('title_field'),
-                controller: _titleController,
-                decoration: InputDecoration(labelText: l10n.title),
-                validator: (value) => _requiredValidator(value, l10n.title),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                key: const Key('notes_field'),
-                controller: _notesController,
-                minLines: 3,
-                maxLines: 6,
-                decoration: InputDecoration(
-                  labelText: l10n.notes,
-                  alignLabelWithHint: true,
-                  hintText: l10n.notesHint,
-                ),
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                key: const Key('count_field'),
-                controller: _countController,
-                decoration: InputDecoration(labelText: l10n.countField),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: _countValidator,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                key: const Key('check_field'),
-                controller: _checkController,
-                decoration: InputDecoration(
-                  labelText: l10n.checkInterval,
-                  helperText: l10n.checkHelper,
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                validator: _checkValidator,
-              ),
-              const SizedBox(height: 12),
-              InputDecorator(
-                decoration: InputDecoration(
-                  labelText: l10n.setCount,
-                  helperText: l10n.setCountReadonlyHelper,
-                ),
-                child: Text(
-                  _setCountController.text,
-                  key: const Key('set_count_readonly_value'),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '${l10n.vibrationIntensity}: $_vibrationIntensity',
-                    style: Theme.of(context).textTheme.titleMedium,
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                IgnorePointer(
+                  ignoring: _readOnly,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFormField(
+                        key: const Key('title_field'),
+                        controller: _titleController,
+                        readOnly: _readOnly,
+                        decoration: InputDecoration(labelText: l10n.title),
+                        validator: (value) =>
+                            _requiredValidator(value, l10n.title),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        key: const Key('notes_field'),
+                        controller: _notesController,
+                        readOnly: _readOnly,
+                        minLines: 3,
+                        maxLines: 6,
+                        decoration: InputDecoration(
+                          labelText: l10n.notes,
+                          alignLabelWithHint: true,
+                          hintText: l10n.notesHint,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        key: const Key('count_field'),
+                        controller: _countController,
+                        readOnly: _readOnly,
+                        decoration: InputDecoration(labelText: l10n.countField),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        validator: _countValidator,
+                      ),
+                      const SizedBox(height: 12),
+                      TextFormField(
+                        key: const Key('check_field'),
+                        controller: _checkController,
+                        readOnly: _readOnly,
+                        decoration: InputDecoration(
+                          labelText: l10n.checkInterval,
+                          helperText: l10n.checkHelper,
+                        ),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        validator: _checkValidator,
+                      ),
+                      const SizedBox(height: 12),
+                      InputDecorator(
+                        decoration: InputDecoration(
+                          labelText: l10n.setCount,
+                          helperText: l10n.setCountReadonlyHelper,
+                        ),
+                        child: Text(
+                          _setCountController.text,
+                          key: const Key('set_count_readonly_value'),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '${l10n.vibrationIntensity}: $_vibrationIntensity',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          IconButton(
+                            key: const Key('vibration_preview_button'),
+                            icon: const Icon(Icons.vibration),
+                            tooltip: l10n.previewVibration,
+                            onPressed: () {
+                              ref.read(hapticServiceProvider).standard(
+                                intensity: _vibrationIntensity,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      Slider(
+                        key: const Key('intensity_slider'),
+                        value: _vibrationIntensity.clamp(1, 8).toDouble(),
+                        min: 1,
+                        max: 8,
+                        divisions: 7,
+                        label: _vibrationIntensity.toString(),
+                        onChanged: _readOnly
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  _vibrationIntensity = value.round();
+                                });
+                              },
+                        onChangeEnd: (value) {
+                          ref.read(hapticServiceProvider).standard(
+                            intensity: value.round(),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ReminderSection(
+                        readOnly: _readOnly,
+                        initial: _isEditing
+                            ? ReminderConfig.fromItem(widget.itemToEdit!)
+                            : null,
+                        onChanged: (config) =>
+                            setState(() => _reminderConfig = config),
+                      ),
+                      const SizedBox(height: 20),
+                      _GroupSelector(
+                        selectedIds: _selectedGroupIds,
+                        onChanged: (ids) =>
+                            setState(() => _selectedGroupIds = ids),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    key: const Key('vibration_preview_button'),
-                    icon: const Icon(Icons.vibration),
-                    tooltip: 'Preview vibration',
-                    onPressed: () {
-                      ref.read(hapticServiceProvider).standard(
-                        intensity: _vibrationIntensity,
-                      );
-                    },
+                ),
+                const SizedBox(height: 24),
+                if (!_readOnly)
+                  FilledButton(
+                    onPressed: _saving ? null : _save,
+                    child: _saving
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Text(_isEditing ? l10n.update : l10n.save),
+                  )
+                else
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          icon: const Icon(Icons.edit),
+                          label: Text(l10n.edit),
+                          onPressed: () => setState(() => _readOnly = false),
+                        ),
+                      ),
+                      if (widget.itemToEdit != null) ...[
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: FilledButton.icon(
+                            icon: const Icon(Icons.play_arrow),
+                            label: Text(l10n.execute),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute<void>(
+                                  builder: (_) => ExecutionScreen(
+                                    itemId: widget.itemToEdit!.id,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
-                ],
-              ),
-              Slider(
-                key: const Key('intensity_slider'),
-                value: _vibrationIntensity.clamp(1, 8).toDouble(),
-                min: 1,
-                max: 8,
-                divisions: 7,
-                label: _vibrationIntensity.toString(),
-                onChanged: (value) {
-                  setState(() {
-                    _vibrationIntensity = value.round();
-                  });
-                },
-                onChangeEnd: (value) {
-                  ref.read(hapticServiceProvider).standard(
-                    intensity: value.round(),
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              ReminderSection(
-                initial: _isEditing
-                    ? ReminderConfig.fromItem(widget.itemToEdit!)
-                    : null,
-                onChanged: (config) => setState(() => _reminderConfig = config),
-              ),
-              const SizedBox(height: 20),
-              _GroupSelector(
-                selectedIds: _selectedGroupIds,
-                onChanged: (ids) => setState(() => _selectedGroupIds = ids),
-              ),
-              const SizedBox(height: 24),
-              FilledButton(
-                onPressed: _saving ? null : _save,
-                child: _saving
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : Text(_isEditing ? l10n.update : l10n.save),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

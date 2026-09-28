@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
+import '../../services/local_database.dart';
 import '../data/item_history_repository.dart';
 import '../data/item_repository.dart';
 import '../models/daily_item_stat.dart';
@@ -60,6 +61,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
     List<String> groupIds = const [],
+    bool isTask = false,
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -84,6 +86,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
       reminderDayOfMonth: reminderDayOfMonth,
       reminderYearlyDate: reminderYearlyDate,
       groupIds: groupIds,
+      isTask: isTask,
     );
     state = [...state, newItem];
     _repository.saveItems(state);
@@ -302,6 +305,10 @@ class ItemsNotifier extends Notifier<List<Item>> {
     _repository.saveItems(state);
     _historyRepository.addCount(id, _dayKey(DateTime.now()), 1);
 
+    if (reachedMax && updated.reminderEnabled && updated.isTask) {
+      _recordTaskCompletion('bead_${updated.id}', DateTime.now());
+    }
+
     if (Item.isCheckpointProgress(
       currentProgress: updated.currentProgress,
       check: updated.check,
@@ -309,6 +316,19 @@ class ItemsNotifier extends Notifier<List<Item>> {
       return TapFeedback.checkpoint;
     }
     return TapFeedback.standard;
+  }
+
+  void _recordTaskCompletion(String taskId, DateTime date) {
+    final db = LocalDatabase();
+    final dayStr = _dayKey(date);
+    db.loadTaskCompletions().then((completions) {
+      final current = List<String>.from(completions[dayStr] ?? []);
+      if (!current.contains(taskId)) {
+        current.add(taskId);
+        final next = Map<String, List<String>>.from(completions)..[dayStr] = current;
+        db.saveTaskCompletions(next);
+      }
+    });
   }
 
   void resetProgress(String id) {

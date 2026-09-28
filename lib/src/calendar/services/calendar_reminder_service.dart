@@ -65,6 +65,7 @@ class CalendarReminderService {
       onDidReceiveNotificationResponse: handleNotificationResponse,
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
+    NativeReminderService.initializeNotificationTapHandler(handleNotificationTap);
   }
 
   Locale? currentLocale;
@@ -221,7 +222,7 @@ class CalendarReminderService {
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
     final payload =
-        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body})}';
+        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': reminder.anchorAt.toIso8601String()})}';
 
     final repeatCount = reminder.repeatCount;
     if (repeatCount != null) {
@@ -432,17 +433,17 @@ class CalendarReminderService {
             catchUp: catchUp,
           )
         : _nextClockTimeOccurrences(reminder, count);
-    final payload =
-        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body})}';
     var index = 0;
     for (final fireAt in occurrences) {
+      final occPayload =
+          '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': fireAt.toIso8601String()})}';
       final scheduled = await _zonedSchedule(
         id: baseId + index,
         title: reminder.title,
         body: body,
         scheduledDate: tz.TZDateTime.from(fireAt, tz.local),
         notificationDetails: details,
-        payload: payload,
+        payload: occPayload,
         strings: strings,
       );
       if (!scheduled) {

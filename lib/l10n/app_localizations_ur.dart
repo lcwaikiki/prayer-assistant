@@ -1519,4 +1519,57 @@ class AppLocalizationsUr extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes منٹ';
   }
+
+  @override
+  String get calendarTasksToDos => 'کام / کرنے والے کام';
+
+  @override
+  String get calendarTasksFilterDay => 'دن';
+
+  @override
+  String get calendarTasksFilterWeek => 'ہفتہ';
+
+  @override
+  String get calendarNoTasksOnDay => 'اس دن کے لیے کوئی کام طے نہیں ہے';
+
+  @override
+  String get calendarNoTasksOnWeek => 'اس ہفتے کے لیے کوئی کام طے نہیں ہے';
+
+  @override
+  String get calendarTaskUncheckTitle => 'کیا غیر مکمل نشان زد کریں؟';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'کیا آپ واقعی اس دن کے لیے \"$title\" کو غیر مکمل نشان زد کرنا چاہتے ہیں؟';
+  }
+
+  @override
+  String get confirm => 'تصدیق کریں';
+
+  @override
+  String get today => 'آج';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'تسبیح کا ہدف: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'گروپ یاد دہانی';
+
+  @override
+  String get calendarTaskCalendarReminder => 'کیلنڈر یاد دہانی';
+
+  @override
+  String get calendarMarkAsTask => 'کام / کرنے والے کام کے طور پر نشان زد کریں';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'کیلنڈر اور روزانہ کے اہداف میں تکمیل کا سراغ لگائیں';
+
+  @override
+  String get beadsPreviewVibration => 'تھرتھراہٹ کا پیش نظارہ';
+
+  @override
+  String get beadsExecute => 'شروع کریں';
 }

@@ -1530,4 +1530,57 @@ class AppLocalizationsRu extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes мин';
   }
+
+  @override
+  String get calendarTasksToDos => 'Задачи / Списки дел';
+
+  @override
+  String get calendarTasksFilterDay => 'День';
+
+  @override
+  String get calendarTasksFilterWeek => 'Неделя';
+
+  @override
+  String get calendarNoTasksOnDay => 'На этот день задач не запланировано';
+
+  @override
+  String get calendarNoTasksOnWeek => 'На эту неделю задач не запланировано';
+
+  @override
+  String get calendarTaskUncheckTitle => 'Отметить как невыполненное?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'Вы уверены, что хотите отметить «$title» как невыполненное на этот день?';
+  }
+
+  @override
+  String get confirm => 'Подтвердить';
+
+  @override
+  String get today => 'Сегодня';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'Цель чёток: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'Напоминание группы';
+
+  @override
+  String get calendarTaskCalendarReminder => 'Напоминание календаря';
+
+  @override
+  String get calendarMarkAsTask => 'Отметить как задачу / список дел';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'Отслеживайте выполнение в календаре и ежедневных целях';
+
+  @override
+  String get beadsPreviewVibration => 'Проверка вибрации';
+
+  @override
+  String get beadsExecute => 'Запустить';
 }

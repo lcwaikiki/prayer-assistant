@@ -537,5 +537,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "Görevler / Yapılacaklar",
+  "calendarTasksFilterDay": "Gün",
+  "calendarTasksFilterWeek": "Hafta",
+  "calendarNoTasksOnDay": "Bu gün için planlanmış görev yok",
+  "calendarNoTasksOnWeek": "Bu hafta için planlanmış görev yok",
+  "calendarTaskUncheckTitle": "Tamamlanmadı olarak işaretlensin mi?",
+  "calendarTaskUncheckConfirm": "\"{title}\" görevini bu gün için tamamlanmadı olarak işaretlemek istediğinizden emin misiniz?",
+  "confirm": "Onayla",
+  "today": "Bugün",
+  "calendarTaskBeadTarget": "Tesbih Hedefi: {count}",
+  "calendarTaskGroupReminder": "Grup Hatırlatıcısı",
+  "calendarTaskCalendarReminder": "Takvim Hatırlatıcısı",
+  "calendarMarkAsTask": "Görev / yapılacak olarak işaretle",
+  "calendarMarkAsTaskSubtitle": "Tamamlanmayı takvimde ve günlük hedeflerde takip edin",
+  "beadsPreviewVibration": "Titreşimi önizle",
+  "beadsExecute": "Başlat"
 }

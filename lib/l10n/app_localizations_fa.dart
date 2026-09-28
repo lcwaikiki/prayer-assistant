@@ -1519,4 +1519,60 @@ class AppLocalizationsFa extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes دقیقه';
   }
+
+  @override
+  String get calendarTasksToDos => 'وظایف / کارهای انجام‌دادنی';
+
+  @override
+  String get calendarTasksFilterDay => 'روز';
+
+  @override
+  String get calendarTasksFilterWeek => 'هفته';
+
+  @override
+  String get calendarNoTasksOnDay =>
+      'هیچ وظیفه‌ای برای این روز زمان‌بندی نشده است';
+
+  @override
+  String get calendarNoTasksOnWeek =>
+      'هیچ وظیفه‌ای برای این هفته زمان‌بندی نشده است';
+
+  @override
+  String get calendarTaskUncheckTitle => 'علامت‌گذاری به عنوان تکمیل‌نشده؟';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'آیا مطمئن هستید که می‌خواهید «$title» را برای این روز به عنوان تکمیل‌نشده علامت بزنید؟';
+  }
+
+  @override
+  String get confirm => 'تأیید';
+
+  @override
+  String get today => 'امروز';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'هدف تسبیح: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'یادآور گروه';
+
+  @override
+  String get calendarTaskCalendarReminder => 'یادآور تقویم';
+
+  @override
+  String get calendarMarkAsTask =>
+      'علامت‌گذاری به عنوان وظیفه / کار انجام‌دادنی';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'پیگیری تکمیل در تقویم و اهداف روزانه';
+
+  @override
+  String get beadsPreviewVibration => 'پیش‌نمایش لرزش';
+
+  @override
+  String get beadsExecute => 'اجرا';
 }

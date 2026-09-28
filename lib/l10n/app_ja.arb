@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "タスク / To-Do",
+  "calendarTasksFilterDay": "日",
+  "calendarTasksFilterWeek": "週",
+  "calendarNoTasksOnDay": "この日にスケジュールされたタスクはありません",
+  "calendarNoTasksOnWeek": "今週にスケジュールされたタスクはありません",
+  "calendarTaskUncheckTitle": "未完了としてマークしますか？",
+  "calendarTaskUncheckConfirm": "この日の「{title}」を未完了としてマークしてもよろしいですか？",
+  "confirm": "確認",
+  "today": "今日",
+  "calendarTaskBeadTarget": "数珠目標: {count}",
+  "calendarTaskGroupReminder": "グループのリマインダー",
+  "calendarTaskCalendarReminder": "カレンダーのリマインダー",
+  "calendarMarkAsTask": "タスク / To-Doとしてマーク",
+  "calendarMarkAsTaskSubtitle": "カレンダーと毎日の目標で完了状況を追跡",
+  "beadsPreviewVibration": "振動プレビュー",
+  "beadsExecute": "実行"
 }

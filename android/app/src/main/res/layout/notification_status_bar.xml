@@ -9,17 +9,17 @@
 
     <TextView
         android:id="@+id/statusPrayerLabel"
+        style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFFFF"
         android:textSize="14sp" />
 
     <Chronometer
         android:id="@+id/statusCountdown"
+        style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
-        android:textColor="#FFFFFFFF"
         android:textSize="14sp"
         android:textStyle="bold" />
 

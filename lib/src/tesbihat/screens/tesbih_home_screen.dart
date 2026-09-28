@@ -330,7 +330,7 @@ class _UngroupedItemCard extends StatelessWidget {
             : () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
+                  MaterialPageRoute<void>(
                     builder: (_) => ExecutionScreen(itemId: item.id),
                   ),
                 );
@@ -383,7 +383,7 @@ class _GroupCardList extends ConsumerWidget {
                     ? () => toggle(group.id)
                     : () => Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        MaterialPageRoute<void>(
                           builder: (_) => GroupScreen(groupId: group.id),
                         ),
                       ),

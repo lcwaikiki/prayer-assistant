@@ -645,5 +645,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "কাজ / করণীয়",
+  "calendarTasksFilterDay": "দিন",
+  "calendarTasksFilterWeek": "সপ্তাহ",
+  "calendarNoTasksOnDay": "এই দিনের জন্য কোন কাজ নির্ধারিত নেই",
+  "calendarNoTasksOnWeek": "এই সপ্তাহের জন্য কোন কাজ নির্ধারিত নেই",
+  "calendarTaskUncheckTitle": "অসম্পূর্ণ হিসেবে চিহ্নিত করবেন?",
+  "calendarTaskUncheckConfirm": "আপনি কি নিশ্চিত যে আপনি এই দিনের জন্য \"{title}\" অসম্পূর্ণ হিসেবে চিহ্নিত করতে চান?",
+  "confirm": "নিশ্চিত করুন",
+  "today": "আজ",
+  "calendarTaskBeadTarget": "তসবিহ লক্ষ্য: {count}",
+  "calendarTaskGroupReminder": "গ্রুপ অনুস্মারক",
+  "calendarTaskCalendarReminder": "ক্যালেন্ডার অনুস্মারক",
+  "calendarMarkAsTask": "কাজ / করণীয় হিসেবে চিহ্নিত করুন",
+  "calendarMarkAsTaskSubtitle": "ক্যালেন্ডার এবং দৈনিক লক্ষ্যে সমাপ্তি ট্র্যাক করুন",
+  "beadsPreviewVibration": "কম্পন প্রাকদর্শন",
+  "beadsExecute": "চালান"
 }

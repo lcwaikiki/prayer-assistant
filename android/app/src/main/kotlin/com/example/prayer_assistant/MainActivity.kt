@@ -21,6 +21,9 @@ import java.io.File
 class MainActivity : FlutterActivity() {
     private lateinit var widgetChannel: MethodChannel
     private lateinit var backupFolderChannel: MethodChannel
+    private var reminderChannel: MethodChannel? = null
+    private var pendingReminderPayload: String? = null
+    private var pendingReminderId: Int? = null
     private var pendingOpenHome: Boolean = false
     private var pendingFolderResult: MethodChannel.Result? = null
     private val pickFolderRequest = 4097
@@ -456,12 +459,20 @@ class MainActivity : FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
-        val reminderChannel = MethodChannel(
+        val reminderChannelInstance = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "prayer_assistant/native_reminders"
         )
-        reminderChannel.setMethodCallHandler { call, result ->
+        reminderChannel = reminderChannelInstance
+        reminderChannelInstance.setMethodCallHandler { call, result ->
             when (call.method) {
+                "getInitialPayload" -> {
+                    val p = pendingReminderPayload
+                    pendingReminderPayload = null
+                    val id = pendingReminderId
+                    pendingReminderId = null
+                    result.success(if (p != null) mapOf("payload" to p, "id" to id) else null)
+                }
                 "show" -> {
                     val id = call.argument<Int>("id") ?: 0
                     val title = call.argument<String>("title") ?: ""
@@ -517,6 +528,7 @@ class MainActivity : FlutterActivity() {
             }
         }
         maybeNotifyOpenHome(intent)
+        maybeNotifyReminderTap(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -547,6 +559,7 @@ class MainActivity : FlutterActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         maybeNotifyOpenHome(intent)
+        maybeNotifyReminderTap(intent)
     }
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -591,5 +604,55 @@ class MainActivity : FlutterActivity() {
             pendingOpenHome = false
             widgetChannel.invokeMethod("openHomeTab", null)
         }
+    }
+
+    private fun maybeNotifyReminderTap(intent: Intent?) {
+        val payload = intent?.getStringExtra("payload")
+        val id = intent?.getIntExtra("notification_id", -1) ?: -1
+        val title = intent?.getStringExtra("title")
+        val body = intent?.getStringExtra("body")
+        val snoozeLabel = intent?.getStringExtra("snoozeLabel") ?: "Snooze"
+        val dismissLabel = intent?.getStringExtra("dismissLabel") ?: "Dismiss"
+        val doneLabel = intent?.getStringExtra("doneLabel") ?: "Done"
+        val soundResource = intent?.getStringExtra("soundResource")
+
+        if (id != -1 && title != null && body != null) {
+            ReminderNotificationManager.show(
+                context = this,
+                id = id,
+                title = title,
+                body = body,
+                payload = payload,
+                snoozeLabel = snoozeLabel,
+                dismissLabel = dismissLabel,
+                doneLabel = doneLabel,
+                soundResource = soundResource
+            )
+        }
+
+        if (payload != null && payload.isNotEmpty()) {
+            pendingReminderPayload = payload
+            pendingReminderId = if (id != -1) id else null
+            intent.removeExtra("payload")
+            intent.removeExtra("notification_id")
+            intent.removeExtra("title")
+            intent.removeExtra("body")
+            intent.removeExtra("snoozeLabel")
+            intent.removeExtra("dismissLabel")
+            intent.removeExtra("doneLabel")
+            intent.removeExtra("soundResource")
+        }
+        val ch = reminderChannel ?: return
+        val currentPayload = pendingReminderPayload ?: return
+        val currentId = pendingReminderId
+        pendingReminderPayload = null
+        pendingReminderId = null
+        ch.invokeMethod(
+            "onNotificationTap",
+            mapOf(
+                "payload" to currentPayload,
+                "id" to currentId
+            )
+        )
     }
 }

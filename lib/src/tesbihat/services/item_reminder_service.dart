@@ -70,6 +70,7 @@ class ItemReminderService {
       onDidReceiveNotificationResponse: handleNotificationResponse,
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
+    NativeReminderService.initializeNotificationTapHandler(handleNotificationTap);
   }
 
   /// Derives a stable notification id from an item's string id, in a
@@ -251,7 +252,7 @@ class ItemReminderService {
       ),
     );
     final payload =
-        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body})}';
+        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body, 'type': subject is Item ? 'tesbih_item' : 'tesbih_group'})}';
 
     final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {

@@ -673,5 +673,35 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "Tasks / To-Dos",
+  "calendarTasksFilterDay": "Day",
+  "calendarTasksFilterWeek": "Week",
+  "calendarNoTasksOnDay": "No tasks scheduled for this day",
+  "calendarNoTasksOnWeek": "No tasks scheduled for this week",
+  "calendarTaskUncheckTitle": "Mark as not completed?",
+  "calendarTaskUncheckConfirm": "Are you sure you want to mark \"{title}\" as not completed for this day?",
+  "@calendarTaskUncheckConfirm": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm": "Confirm",
+  "today": "Today",
+  "calendarTaskBeadTarget": "Bead Target: {count}",
+  "@calendarTaskBeadTarget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarTaskGroupReminder": "Group Reminder",
+  "calendarTaskCalendarReminder": "Calendar Reminder",
+  "calendarMarkAsTask": "Mark as task / to-do",
+  "calendarMarkAsTaskSubtitle": "Track completion in calendar and daily goals",
+  "beadsPreviewVibration": "Preview vibration",
+  "beadsExecute": "Execute"
 }

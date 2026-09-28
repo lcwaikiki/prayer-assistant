@@ -10,22 +10,22 @@
 
     <TextView
         android:id="@+id/snoozeTitle"
+        style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:textColor="?android:attr/textColorPrimary"
         android:ellipsize="end"
         android:maxLines="1" />
 
     <TextView
         android:id="@+id/snoozePrompt"
+        style="@style/TextAppearance.Compat.Notification.Line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="8dp"
         android:textSize="12sp"
-        android:textColor="?android:attr/textColorSecondary"
         android:text="Erteleme süresini seçin:"
         android:ellipsize="end"
         android:maxLines="1" />
@@ -38,64 +38,64 @@
 
         <TextView
             android:id="@+id/btnSnooze5"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:text="5 dk" />
 
         <TextView
             android:id="@+id/btnSnooze10"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:text="10 dk" />
 
         <TextView
             android:id="@+id/btnSnooze15"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:text="15 dk" />
 
         <TextView
             android:id="@+id/btnSnooze30"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:text="30 dk" />
 
         <TextView
             android:id="@+id/btnSnooze60"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="11sp"
             android:textStyle="bold"
             android:text="60 dk" />

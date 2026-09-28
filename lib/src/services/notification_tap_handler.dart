@@ -7,7 +7,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
-import '../calendar/screens/hijri_calendar_screen.dart';
+import '../calendar/models/calendar_reminder.dart';
+import '../calendar/screens/calendar_reminder_form_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../navigation.dart';
 import '../tesbihat/screens/execution_screen.dart';
@@ -113,10 +114,56 @@ Future<void> handleNotificationResponse(NotificationResponse response) async {
     final payload = response.payload;
     if (payload != null && payload.isNotEmpty) {
       try {
-        final map = jsonDecode(payload) as Map<String, dynamic>;
-        final prayerKey = map['prayerKey'] as String?;
-        if (prayerKey != null && prayerKey.isNotEmpty) {
-          await _markPrayerCompleted(prayerKey);
+        var raw = payload;
+        String? prefix;
+        if (raw.startsWith(calendarReminderPayloadPrefix)) {
+          prefix = calendarReminderPayloadPrefix;
+          raw = raw.substring(calendarReminderPayloadPrefix.length);
+        } else if (raw.startsWith(tesbihItemPayloadPrefix)) {
+          prefix = tesbihItemPayloadPrefix;
+          raw = raw.substring(tesbihItemPayloadPrefix.length);
+        } else if (raw.startsWith(tesbihGroupPayloadPrefix)) {
+          prefix = tesbihGroupPayloadPrefix;
+          raw = raw.substring(tesbihGroupPayloadPrefix.length);
+        }
+
+        if (raw.startsWith('{')) {
+          final map = jsonDecode(raw) as Map<String, dynamic>;
+          final prayerKey = map['prayerKey'] as String?;
+          if (prayerKey != null && prayerKey.isNotEmpty) {
+            await _markPrayerCompleted(prayerKey);
+            return;
+          }
+
+          final type = map['type'] as String?;
+          final id = map['id']?.toString() ?? '';
+          final dateStr = map['date'] as String? ?? map['fireAt'] as String?;
+          final date = dateStr != null
+              ? DateTime.tryParse(dateStr) ?? DateTime.now()
+              : DateTime.now();
+
+          if (type == 'calendar' || prefix == calendarReminderPayloadPrefix) {
+            if (id.isNotEmpty) {
+              await _markTaskCompleted('cal_$id', date);
+            }
+          } else if (type == 'tesbih_item' || prefix == tesbihItemPayloadPrefix) {
+            if (id.isNotEmpty) {
+              await _markTaskCompleted('bead_$id', date);
+            }
+          } else if (type == 'tesbih_group' || prefix == tesbihGroupPayloadPrefix) {
+            if (id.isNotEmpty) {
+              await _markTaskCompleted('group_$id', date);
+            }
+          }
+        } else if (prefix != null && raw.isNotEmpty) {
+          final date = DateTime.now();
+          if (prefix == calendarReminderPayloadPrefix) {
+            await _markTaskCompleted('cal_$raw', date);
+          } else if (prefix == tesbihItemPayloadPrefix) {
+            await _markTaskCompleted('bead_$raw', date);
+          } else if (prefix == tesbihGroupPayloadPrefix) {
+            await _markTaskCompleted('group_$raw', date);
+          }
         }
       } catch (_) {}
     }
@@ -150,6 +197,29 @@ Future<void> _markPrayerCompleted(String prayerKey) async {
     current.add(prayerKey);
     next[dateKey] = current;
     await db.savePrayerCompletions(next);
+  }
+}
+
+Future<void> _markTaskCompleted(String taskId, DateTime date) async {
+  final context = rootNavigatorKey.currentContext;
+  if (context != null) {
+    try {
+      context.read<PrayerAppController>().setTaskCompletion(taskId, date, true);
+      return;
+    } catch (_) {}
+  }
+
+  final db = LocalDatabase();
+  final completions = await db.loadTaskCompletions();
+  final dateKey = '${date.year.toString().padLeft(4, '0')}-'
+      '${date.month.toString().padLeft(2, '0')}-'
+      '${date.day.toString().padLeft(2, '0')}';
+  final next = Map<String, List<String>>.from(completions);
+  final current = List<String>.from(next[dateKey] ?? []);
+  if (!current.contains(taskId)) {
+    current.add(taskId);
+    next[dateKey] = current;
+    await db.saveTaskCompletions(next);
   }
 }
 
@@ -345,16 +415,15 @@ void handleNotificationTap(String? payload) {
     try {
       final map = jsonDecode(payload) as Map<String, dynamic>;
       final type = map['type'] as String?;
-      final id = map['id'] as String? ?? '';
-      if (type == 'calendar') {
-        rootNavigatorKey.currentState?.push(
-          MaterialPageRoute<void>(
-            builder: (_) => HijriCalendarScreen(
-              initialDate: DateTime.now(),
-              openDetailOnLaunch: true,
-            ),
-          ),
-        );
+      final id = map['id']?.toString() ?? '';
+      final dateStr = map['date'] as String? ?? map['fireAt'] as String?;
+      final targetDate = dateStr != null ? DateTime.tryParse(dateStr) : null;
+
+      if (type == 'prayer' || map.containsKey('prayerKey')) {
+        _navigateToPrayerHome();
+        return;
+      } else if (type == 'calendar') {
+        _navigateToCalendarReminder(reminderId: id, initialDate: targetDate);
         return;
       } else if (type == 'tesbih_item') {
         if (id.isEmpty) return;
@@ -374,14 +443,20 @@ void handleNotificationTap(String? payload) {
     if (payload.length == calendarReminderPayloadPrefix.length) {
       return;
     }
-    rootNavigatorKey.currentState?.push(
-      MaterialPageRoute<void>(
-        builder: (_) => HijriCalendarScreen(
-          initialDate: DateTime.now(),
-          openDetailOnLaunch: true,
-        ),
-      ),
-    );
+    var raw = payload.substring(calendarReminderPayloadPrefix.length);
+    DateTime? targetDate;
+    String? reminderId;
+    if (raw.startsWith('{')) {
+      try {
+        final map = jsonDecode(raw) as Map<String, dynamic>;
+        final dateStr = map['date'] as String? ?? map['fireAt'] as String?;
+        targetDate = dateStr != null ? DateTime.tryParse(dateStr) : null;
+        reminderId = map['id']?.toString();
+      } catch (_) {}
+    } else {
+      reminderId = raw;
+    }
+    _navigateToCalendarReminder(reminderId: reminderId, initialDate: targetDate);
   } else if (payload.startsWith(tesbihItemPayloadPrefix)) {
     var itemId = payload.substring(tesbihItemPayloadPrefix.length);
     if (itemId.isEmpty) {
@@ -390,7 +465,7 @@ void handleNotificationTap(String? payload) {
     if (itemId.startsWith('{')) {
       try {
         final map = jsonDecode(itemId) as Map<String, dynamic>;
-        itemId = map['id'] as String? ?? itemId;
+        itemId = map['id']?.toString() ?? itemId;
       } catch (_) {}
     }
     _navigateToTesbihItem(itemId);
@@ -402,49 +477,125 @@ void handleNotificationTap(String? payload) {
     if (groupId.startsWith('{')) {
       try {
         final map = jsonDecode(groupId) as Map<String, dynamic>;
-        groupId = map['id'] as String? ?? groupId;
+        groupId = map['id']?.toString() ?? groupId;
       } catch (_) {}
     }
     _navigateToTesbihGroup(groupId);
   }
 }
 
-void _navigateToTesbihItem(String itemId) {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  final context = rootNavigatorKey.currentContext;
-  if (context != null) {
-    try {
-      context.read<PrayerAppController>().setTab(4);
-    } catch (_) {}
+void _postOrRunNavigation(VoidCallback navigate) {
+  if (rootNavigatorKey.currentState != null) {
+    navigate();
+  } else {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      navigate();
+    });
   }
-  rootNavigatorKey.currentState?.push(
-    MaterialPageRoute<void>(builder: (_) => ExecutionScreen(itemId: itemId)),
-  );
+}
+
+void _navigateToPrayerHome() {
+  _postOrRunNavigation(() {
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      try {
+        context.read<PrayerAppController>().setTab(0);
+      } catch (_) {}
+    }
+  });
+}
+
+void _navigateToCalendarReminder({String? reminderId, DateTime? initialDate}) {
+  _postOrRunNavigation(() async {
+    final context = rootNavigatorKey.currentContext;
+    CalendarReminder? reminder;
+    if (context != null) {
+      try {
+        final controller = context.read<PrayerAppController>();
+        controller.setTab(3);
+        if (reminderId != null && reminderId.isNotEmpty) {
+          for (final r in controller.calendarReminders) {
+            if (r.id == reminderId) {
+              reminder = r;
+              break;
+            }
+          }
+        }
+      } catch (_) {}
+    }
+    if (reminder == null && reminderId != null && reminderId.isNotEmpty) {
+      try {
+        final dbReminders = await LocalDatabase().loadCalendarReminders();
+        for (final r in dbReminders) {
+          if (r.id == reminderId) {
+            reminder = r;
+            break;
+          }
+        }
+      } catch (_) {}
+    }
+    rootNavigatorKey.currentState?.push(
+      MaterialPageRoute<void>(
+        builder: (_) => CalendarReminderFormScreen(
+          reminder: reminder,
+          reminderId: reminderId,
+          initialDate: initialDate ?? (reminder?.anchorAt ?? DateTime.now()),
+          readOnly: true,
+        ),
+      ),
+    );
+  });
+}
+
+void _navigateToTesbihItem(String itemId) {
+  _postOrRunNavigation(() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      try {
+        context.read<PrayerAppController>().setTab(4);
+      } catch (_) {}
+    }
+    rootNavigatorKey.currentState?.push(
+      MaterialPageRoute<void>(builder: (_) => ExecutionScreen(itemId: itemId)),
+    );
+  });
 }
 
 void _navigateToTesbihGroup(String groupId) {
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  final context = rootNavigatorKey.currentContext;
-  if (context != null) {
-    try {
-      context.read<PrayerAppController>().setTab(4);
-    } catch (_) {}
-  }
-  rootNavigatorKey.currentState?.push(
-    MaterialPageRoute<void>(builder: (_) => GroupScreen(groupId: groupId)),
-  );
+  _postOrRunNavigation(() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      try {
+        context.read<PrayerAppController>().setTab(4);
+      } catch (_) {}
+    }
+    rootNavigatorKey.currentState?.push(
+      MaterialPageRoute<void>(
+        builder: (_) => GroupScreen(groupId: groupId, readOnly: true),
+      ),
+    );
+  });
 }
 
 /// Handles the case where tapping a notification is what launched the app
 /// from fully killed. Call once after the first frame so the root
 /// navigator exists to push onto.
 Future<void> handleAppLaunchFromNotification() async {
+  // Check native Android launch payload first
+  final nativePayload = await NativeReminderService.getInitialPayload();
+  if (nativePayload != null && nativePayload.isNotEmpty) {
+    handleNotificationTap(nativePayload);
+    return;
+  }
+
   final details = await FlutterLocalNotificationsPlugin()
       .getNotificationAppLaunchDetails();
   if (details?.didNotificationLaunchApp == true &&

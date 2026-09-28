@@ -94,10 +94,13 @@ class PrayerAppController extends ChangeNotifier {
   bool _showCardDailyWisdom = true;
   bool _showCardUpcomingReminders = true;
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
+  Map<String, List<String>> _taskCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
   int _snoozeDurationMinutes = 10;
   Future<void> Function(Locale? locale)? onLocaleChanged;
+
+  Map<String, List<String>> get taskCompletions => _taskCompletions;
 
   /// Invoked after a backup restore so externally held state (such as the
   /// Riverpod tesbihat items/groups/stats) can reload from storage.
@@ -427,6 +430,35 @@ class PrayerAppController extends ChangeNotifier {
     }
   }
 
+  bool isTaskCompleted(String taskId, DateTime date) {
+    final key = _toDateKey(date);
+    final list = _taskCompletions[key];
+    if (list == null) return false;
+    return list.contains(taskId);
+  }
+
+  void setTaskCompletion(String taskId, DateTime date, bool completed) {
+    final key = _toDateKey(date);
+    final next = Map<String, List<String>>.from(_taskCompletions);
+    final current = List<String>.from(next[key] ?? []);
+    if (completed) {
+      if (!current.contains(taskId)) {
+        current.add(taskId);
+      }
+    } else {
+      current.remove(taskId);
+    }
+    next[key] = current;
+    _taskCompletions = next;
+    database.saveTaskCompletions(next);
+    notifyListeners();
+  }
+
+  Future<void> reloadTaskCompletions() async {
+    _taskCompletions = await database.loadTaskCompletions();
+    notifyListeners();
+  }
+
 
   String _toDateKey(DateTime date) {
     final safe = DateTime(date.year, date.month, date.day);
@@ -471,6 +503,7 @@ class PrayerAppController extends ChangeNotifier {
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
       _prayerCompletions = await database.loadPrayerCompletions();
+      _taskCompletions = await database.loadTaskCompletions();
       _kazaTracker = await database.loadKazaTracker();
       _fastingLogs = await database.loadFastingLogs();
 

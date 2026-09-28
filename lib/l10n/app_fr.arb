@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "Tâches / À faire",
+  "calendarTasksFilterDay": "Jour",
+  "calendarTasksFilterWeek": "Semaine",
+  "calendarNoTasksOnDay": "Aucune tâche planifiée pour ce jour",
+  "calendarNoTasksOnWeek": "Aucune tâche planifiée pour cette semaine",
+  "calendarTaskUncheckTitle": "Marquer comme non terminé ?",
+  "calendarTaskUncheckConfirm": "Voulez-vous vraiment marquer « {title} » comme non terminé pour ce jour ?",
+  "confirm": "Confirmer",
+  "today": "Aujourd'hui",
+  "calendarTaskBeadTarget": "Objectif chapelet : {count}",
+  "calendarTaskGroupReminder": "Rappel de groupe",
+  "calendarTaskCalendarReminder": "Rappel de calendrier",
+  "calendarMarkAsTask": "Marquer comme tâche / à faire",
+  "calendarMarkAsTaskSubtitle": "Suivre la complétion dans le calendrier et les objectifs quotidiens",
+  "beadsPreviewVibration": "Aperçu de la vibration",
+  "beadsExecute": "Exécuter"
 }

@@ -1515,4 +1515,57 @@ class AppLocalizationsAr extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes دقيقة';
   }
+
+  @override
+  String get calendarTasksToDos => 'المهام / الواجبات';
+
+  @override
+  String get calendarTasksFilterDay => 'يوم';
+
+  @override
+  String get calendarTasksFilterWeek => 'أسبوع';
+
+  @override
+  String get calendarNoTasksOnDay => 'لا توجد مهام مجدولة لهذا اليوم';
+
+  @override
+  String get calendarNoTasksOnWeek => 'لا توجد مهام مجدولة لهذا الأسبوع';
+
+  @override
+  String get calendarTaskUncheckTitle => 'تحديد كغير مكتمل؟';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'هل أنت متأكد من رغبتك في تحديد \"$title\" كغير مكتمل لهذا اليوم؟';
+  }
+
+  @override
+  String get confirm => 'تأكيد';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'هدف التسبيح: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'تذكير المجموعة';
+
+  @override
+  String get calendarTaskCalendarReminder => 'تذكير التقويم';
+
+  @override
+  String get calendarMarkAsTask => 'تحديد كمهمة / واجب';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'تتبع الإنجاز في التقويم والأهداف اليومية';
+
+  @override
+  String get beadsPreviewVibration => 'معاينة الاهتزاز';
+
+  @override
+  String get beadsExecute => 'بدء';
 }

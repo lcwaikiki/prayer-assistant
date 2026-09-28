@@ -1537,4 +1537,58 @@ class AppLocalizationsEs extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes minutos';
   }
+
+  @override
+  String get calendarTasksToDos => 'Tareas / Pendientes';
+
+  @override
+  String get calendarTasksFilterDay => 'Día';
+
+  @override
+  String get calendarTasksFilterWeek => 'Semana';
+
+  @override
+  String get calendarNoTasksOnDay => 'No hay tareas programadas para este día';
+
+  @override
+  String get calendarNoTasksOnWeek =>
+      'No hay tareas programadas para esta semana';
+
+  @override
+  String get calendarTaskUncheckTitle => '¿Marcar como no completada?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return '¿Seguro que deseas marcar \"$title\" como no completada para este día?';
+  }
+
+  @override
+  String get confirm => 'Confirmar';
+
+  @override
+  String get today => 'Hoy';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'Objetivo de cuenta: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'Recordatorio de grupo';
+
+  @override
+  String get calendarTaskCalendarReminder => 'Recordatorio de calendario';
+
+  @override
+  String get calendarMarkAsTask => 'Marcar como tarea / pendiente';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'Seguimiento de finalización en calendario y metas diarias';
+
+  @override
+  String get beadsPreviewVibration => 'Vista previa de vibración';
+
+  @override
+  String get beadsExecute => 'Ejecutar';
 }

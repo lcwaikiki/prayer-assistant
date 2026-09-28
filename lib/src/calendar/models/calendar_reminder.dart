@@ -65,6 +65,7 @@ class CalendarReminder {
     this.dayOfMonth,
     this.yearlyDate,
     this.excludedDates = const [],
+    this.isTask = false,
   });
 
   final String id;
@@ -133,6 +134,9 @@ class CalendarReminder {
   /// the recurrence pattern would otherwise match it.
   final List<DateTime> excludedDates;
 
+  /// Whether this reminder is designated as a Task / To-Do item.
+  final bool isTask;
+
   CalendarReminder copyWith({
     String? title,
     String? notes,
@@ -150,6 +154,7 @@ class CalendarReminder {
     int? dayOfMonth,
     DateTime? yearlyDate,
     List<DateTime>? excludedDates,
+    bool? isTask,
   }) {
     return CalendarReminder(
       id: id,
@@ -169,6 +174,7 @@ class CalendarReminder {
       dayOfMonth: dayOfMonth ?? this.dayOfMonth,
       yearlyDate: yearlyDate ?? this.yearlyDate,
       excludedDates: excludedDates ?? this.excludedDates,
+      isTask: isTask ?? this.isTask,
     );
   }
 
@@ -466,6 +472,7 @@ class CalendarReminder {
       'excluded_dates': excludedDates
           .map((d) => DateTime(d.year, d.month, d.day).toIso8601String())
           .join(','),
+      'is_task': isTask ? 1 : 0,
     };
   }
 
@@ -527,6 +534,7 @@ class CalendarReminder {
       dayOfMonth: (map['day_of_month'] as num?)?.toInt(),
       yearlyDate: yearlyDate,
       excludedDates: excludedDates,
+      isTask: (map['is_task'] as int? ?? 0) == 1,
     );
   }
 }

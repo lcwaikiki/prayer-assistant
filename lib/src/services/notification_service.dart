@@ -42,6 +42,7 @@ class NotificationService {
       onDidReceiveNotificationResponse: handleNotificationResponse,
       onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
     );
+    NativeReminderService.initializeNotificationTapHandler(handleNotificationTap);
     _useExactAlarms = await _requestPermissions();
     final android = _plugin
         .resolvePlatformSpecificImplementation<

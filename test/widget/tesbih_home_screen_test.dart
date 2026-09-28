@@ -127,7 +127,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('tapping an item opens the execution screen', (tester) async {
+  testWidgets('tapping an item opens the edit screen read only with execution button', (tester) async {
     final harness = TestHarness.create();
     harness.itemRepository = ItemRepository.memory([_item()]);
     await harness.initialize();
@@ -135,6 +135,12 @@ void main() {
     await pumpWithHarness(tester, harness, const TesbihHomeScreen());
 
     await tester.tap(find.text('Tasbih'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit Beads'), findsOneWidget);
+    expect(find.text('Execute'), findsOneWidget);
+
+    await tester.tap(find.text('Execute'));
     await tester.pumpAndSettle();
 
     expect(find.text('TAP'), findsOneWidget);

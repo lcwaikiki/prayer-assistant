@@ -1524,4 +1524,57 @@ class AppLocalizationsTr extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes dakika';
   }
+
+  @override
+  String get calendarTasksToDos => 'Görevler / Yapılacaklar';
+
+  @override
+  String get calendarTasksFilterDay => 'Gün';
+
+  @override
+  String get calendarTasksFilterWeek => 'Hafta';
+
+  @override
+  String get calendarNoTasksOnDay => 'Bu gün için planlanmış görev yok';
+
+  @override
+  String get calendarNoTasksOnWeek => 'Bu hafta için planlanmış görev yok';
+
+  @override
+  String get calendarTaskUncheckTitle => 'Tamamlanmadı olarak işaretlensin mi?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return '\"$title\" görevini bu gün için tamamlanmadı olarak işaretlemek istediğinizden emin misiniz?';
+  }
+
+  @override
+  String get confirm => 'Onayla';
+
+  @override
+  String get today => 'Bugün';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'Tesbih Hedefi: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'Grup Hatırlatıcısı';
+
+  @override
+  String get calendarTaskCalendarReminder => 'Takvim Hatırlatıcısı';
+
+  @override
+  String get calendarMarkAsTask => 'Görev / yapılacak olarak işaretle';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'Tamamlanmayı takvimde ve günlük hedeflerde takip edin';
+
+  @override
+  String get beadsPreviewVibration => 'Titreşimi önizle';
+
+  @override
+  String get beadsExecute => 'Başlat';
 }

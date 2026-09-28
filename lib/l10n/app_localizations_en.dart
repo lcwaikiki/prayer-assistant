@@ -1523,4 +1523,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String snoozeMinutesOption(int minutes) {
     return '$minutes minutes';
   }
+
+  @override
+  String get calendarTasksToDos => 'Tasks / To-Dos';
+
+  @override
+  String get calendarTasksFilterDay => 'Day';
+
+  @override
+  String get calendarTasksFilterWeek => 'Week';
+
+  @override
+  String get calendarNoTasksOnDay => 'No tasks scheduled for this day';
+
+  @override
+  String get calendarNoTasksOnWeek => 'No tasks scheduled for this week';
+
+  @override
+  String get calendarTaskUncheckTitle => 'Mark as not completed?';
+
+  @override
+  String calendarTaskUncheckConfirm(String title) {
+    return 'Are you sure you want to mark \"$title\" as not completed for this day?';
+  }
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String calendarTaskBeadTarget(int count) {
+    return 'Bead Target: $count';
+  }
+
+  @override
+  String get calendarTaskGroupReminder => 'Group Reminder';
+
+  @override
+  String get calendarTaskCalendarReminder => 'Calendar Reminder';
+
+  @override
+  String get calendarMarkAsTask => 'Mark as task / to-do';
+
+  @override
+  String get calendarMarkAsTaskSubtitle =>
+      'Track completion in calendar and daily goals';
+
+  @override
+  String get beadsPreviewVibration => 'Preview vibration';
+
+  @override
+  String get beadsExecute => 'Execute';
 }

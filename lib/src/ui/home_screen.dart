@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    hide ChangeNotifierProvider, Consumer;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,6 +20,9 @@ import '../utils/time_utils.dart';
 import '../supplications/screens/supplications_screen.dart';
 import '../supplications/services/wisdom_service.dart';
 import '../supplications/widgets/daily_wisdom_card.dart';
+import '../tesbihat/models/reminder_schedulable.dart';
+import '../tesbihat/state/groups_notifier.dart';
+import '../tesbihat/state/items_notifier.dart';
 import 'location_screen.dart';
 import 'reminder_settings_screen.dart';
 import 'widgets/iftar_suhoor_countdown_card.dart';
@@ -25,7 +30,7 @@ import 'widgets/moon_phase_widget.dart';
 import 'widgets/upcoming_reminders_card.dart';
 import '../calendar/moon_phase_utils.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key, this.onShare});
 
   /// Injectable share action so tests can capture the shared text without
@@ -33,10 +38,10 @@ class HomeScreen extends StatefulWidget {
   final void Function(String text)? onShare;
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   Timer? _timer;
   DateTime _now = DateTime.now();
 
@@ -62,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final dailyWisdom = WisdomService.instance.getWisdomForDate(_now);
+    final beads = ref.watch(itemsNotifierProvider);
+    final groups = ref.watch(groupsNotifierProvider);
 
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
@@ -124,7 +131,35 @@ class _HomeScreenState extends State<HomeScreen> {
           for (final reminder in controller.calendarReminders)
             if (reminder.enabled)
               if (reminder.nextOccurrenceFrom(_now) case final next?)
-                (reminder: reminder, next: next),
+                UpcomingReminder(
+                  id: reminder.id,
+                  title: reminder.title,
+                  next: next,
+                  type: UpcomingReminderType.calendar,
+                  calendarReminder: reminder,
+                ),
+          for (final bead in beads)
+            if (bead.reminderEnabled)
+              if (bead.toCalendarReminder().nextOccurrenceFrom(_now)
+                  case final next?)
+                UpcomingReminder(
+                  id: bead.id,
+                  title: bead.title,
+                  next: next,
+                  type: UpcomingReminderType.bead,
+                  bead: bead,
+                ),
+          for (final group in groups)
+            if (group.reminderEnabled)
+              if (group.toCalendarReminder().nextOccurrenceFrom(_now)
+                  case final next?)
+                UpcomingReminder(
+                  id: group.id,
+                  title: group.title,
+                  next: next,
+                  type: UpcomingReminderType.group,
+                  group: group,
+                ),
         ]..sort((a, b) => a.next.compareTo(b.next));
         final upcoming = upcomingReminders.take(3).toList(growable: false);
 

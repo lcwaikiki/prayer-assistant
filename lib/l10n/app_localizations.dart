@@ -2917,6 +2917,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{minutes} minutes'**
   String snoozeMinutesOption(int minutes);
+
+  /// No description provided for @calendarTasksToDos.
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks / To-Dos'**
+  String get calendarTasksToDos;
+
+  /// No description provided for @calendarTasksFilterDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get calendarTasksFilterDay;
+
+  /// No description provided for @calendarTasksFilterWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get calendarTasksFilterWeek;
+
+  /// No description provided for @calendarNoTasksOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks scheduled for this day'**
+  String get calendarNoTasksOnDay;
+
+  /// No description provided for @calendarNoTasksOnWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks scheduled for this week'**
+  String get calendarNoTasksOnWeek;
+
+  /// No description provided for @calendarTaskUncheckTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as not completed?'**
+  String get calendarTaskUncheckTitle;
+
+  /// No description provided for @calendarTaskUncheckConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to mark \"{title}\" as not completed for this day?'**
+  String calendarTaskUncheckConfirm(String title);
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @calendarTaskBeadTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Bead Target: {count}'**
+  String calendarTaskBeadTarget(int count);
+
+  /// No description provided for @calendarTaskGroupReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Group Reminder'**
+  String get calendarTaskGroupReminder;
+
+  /// No description provided for @calendarTaskCalendarReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar Reminder'**
+  String get calendarTaskCalendarReminder;
+
+  /// No description provided for @calendarMarkAsTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as task / to-do'**
+  String get calendarMarkAsTask;
+
+  /// No description provided for @calendarMarkAsTaskSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track completion in calendar and daily goals'**
+  String get calendarMarkAsTaskSubtitle;
+
+  /// No description provided for @beadsPreviewVibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview vibration'**
+  String get beadsPreviewVibration;
+
+  /// No description provided for @beadsExecute.
+  ///
+  /// In en, this message translates to:
+  /// **'Execute'**
+  String get beadsExecute;
 }
 
 class _AppLocalizationsDelegate

@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "Tugas / Daftar Tugas",
+  "calendarTasksFilterDay": "Hari",
+  "calendarTasksFilterWeek": "Minggu",
+  "calendarNoTasksOnDay": "Tidak ada tugas yang dijadwalkan untuk hari ini",
+  "calendarNoTasksOnWeek": "Tidak ada tugas yang dijadwalkan untuk minggu ini",
+  "calendarTaskUncheckTitle": "Tandai sebagai belum selesai?",
+  "calendarTaskUncheckConfirm": "Apakah Anda yakin ingin menandai \"{title}\" sebagai belum selesai untuk hari ini?",
+  "confirm": "Konfirmasi",
+  "today": "Hari ini",
+  "calendarTaskBeadTarget": "Target Tasbih: {count}",
+  "calendarTaskGroupReminder": "Pengingat Grup",
+  "calendarTaskCalendarReminder": "Pengingat Kalender",
+  "calendarMarkAsTask": "Tandai sebagai tugas / daftar tugas",
+  "calendarMarkAsTaskSubtitle": "Lacak penyelesaian di kalender dan target harian",
+  "beadsPreviewVibration": "Pratinjau getaran",
+  "beadsExecute": "Mulai"
 }

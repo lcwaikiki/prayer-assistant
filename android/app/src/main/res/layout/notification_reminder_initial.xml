@@ -10,22 +10,22 @@
 
     <TextView
         android:id="@+id/reminderTitle"
+        style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="14sp"
-        android:textColor="?android:attr/textColorPrimary"
         android:ellipsize="end"
         android:maxLines="1" />
 
     <TextView
         android:id="@+id/reminderBody"
+        style="@style/TextAppearance.Compat.Notification.Line2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="8dp"
         android:textSize="12sp"
-        android:textColor="?android:attr/textColorSecondary"
         android:ellipsize="end"
         android:maxLines="2" />
 
@@ -37,38 +37,38 @@
 
         <TextView
             android:id="@+id/btnReminderSnooze"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:text="Ertele" />
 
         <TextView
             android:id="@+id/btnReminderDismiss"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:text="Kapat" />
 
         <TextView
             android:id="@+id/btnReminderDone"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:gravity="center"
             android:background="@drawable/snooze_chip_bg"
-            android:textColor="?android:attr/textColorPrimary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:text="Yapıldı" />

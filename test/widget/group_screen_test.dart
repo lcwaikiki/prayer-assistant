@@ -395,4 +395,62 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('read-only mode shows edit button and tapping it enables editing', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item('a', groupIds: ['g1']),
+    ]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Morning Adhkar'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const GroupScreen(groupId: 'g1', readOnly: true),
+    );
+
+    expect(find.byKey(const Key('edit_group_screen_button')), findsOneWidget);
+    expect(find.byKey(const Key('add_bead_fab')), findsNothing);
+    expect(find.byIcon(Icons.drag_indicator), findsNothing);
+
+    await tester.tap(find.byKey(const Key('edit_group_screen_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('edit_group_screen_button')), findsNothing);
+    expect(find.byKey(const Key('add_bead_fab')), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('tapping a bead opens ItemFormScreen in read-only mode with Execute button', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item('a', groupIds: ['g1']),
+    ]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Morning Adhkar'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const GroupScreen(groupId: 'g1'),
+    );
+
+    await tester.tap(find.text('Bead a'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit Beads'), findsOneWidget);
+    expect(find.text('Execute'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

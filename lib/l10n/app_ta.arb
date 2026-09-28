@@ -645,5 +645,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "பணிகள் / செய்ய வேண்டியவை",
+  "calendarTasksFilterDay": "நாள்",
+  "calendarTasksFilterWeek": "வாரம்",
+  "calendarNoTasksOnDay": "இந்த நாளுக்கு எந்தப் பணிகளும் திட்டமிடப்படவில்லை",
+  "calendarNoTasksOnWeek": "இந்த வாரத்திற்கு எந்தப் பணிகளும் திட்டமிடப்படவில்லை",
+  "calendarTaskUncheckTitle": "முடிக்கப்படவில்லை எனக் குறிக்கவா?",
+  "calendarTaskUncheckConfirm": "இந்த நாளுக்கான \"{title}\" என்பதை முடிக்கப்படவில்லை எனக் குறிக்க விரும்புகிறீர்களா?",
+  "confirm": "உறுதிப்படுத்து",
+  "today": "இன்று",
+  "calendarTaskBeadTarget": "தஸ்பீஹ் இலக்கு: {count}",
+  "calendarTaskGroupReminder": "குழு நினைவூட்டல்",
+  "calendarTaskCalendarReminder": "நாள்காட்டி நினைவூட்டல்",
+  "calendarMarkAsTask": "பணி / செய்ய வேண்டியவை எனக் குறிக்கவும்",
+  "calendarMarkAsTaskSubtitle": "நாள்காட்டி மற்றும் தினசரி இலக்குகளில் நிறைவைக் கண்காணிக்கவும்",
+  "beadsPreviewVibration": "அதிர்வு முன்னோட்டம்",
+  "beadsExecute": "இயக்கு"
 }

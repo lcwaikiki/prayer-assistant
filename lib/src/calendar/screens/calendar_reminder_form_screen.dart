@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../l10n/l10n.dart';
-import '../../l10n/prayer_names.dart';
 import '../../services/local_database.dart';
 import '../../widgets/discard_confirmation_dialog.dart';
 
@@ -19,13 +18,21 @@ import 'calendar_anchor_date_picker.dart';
 enum _OffsetDirection { onTime, before, after }
 
 class CalendarReminderFormScreen extends StatefulWidget {
-  const CalendarReminderFormScreen({super.key, this.reminder, this.initialDate});
+  const CalendarReminderFormScreen({
+    super.key,
+    this.reminder,
+    this.reminderId,
+    this.initialDate,
+    this.readOnly = false,
+  });
 
   /// Non-null when editing an existing reminder.
   final CalendarReminder? reminder;
+  final String? reminderId;
 
   /// Pre-fills the date when creating a new reminder from a tapped day.
   final DateTime? initialDate;
+  final bool readOnly;
 
   @override
   State<CalendarReminderFormScreen> createState() =>
@@ -36,6 +43,8 @@ class _CalendarReminderFormScreenState
     extends State<CalendarReminderFormScreen> {
   static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
 
+  late bool _readOnly = widget.readOnly;
+  CalendarReminder? _reminder;
   late final TextEditingController _titleController;
   late final TextEditingController _notesController;
   late DateTime _anchorAt;
@@ -56,16 +65,17 @@ class _CalendarReminderFormScreenState
   late int _dayOfMonth;
   late DateTime _yearlyDate;
   late List<DateTime> _excludedDates;
+  late bool _isTask;
   bool _saving = false;
   bool _allowPop = false;
 
-  late final DateTime _initialAnchorAt;
-  late final List<int> _initialWeekdays;
-  late final int _initialDayOfMonth;
-  late final DateTime _initialYearlyDate;
-  late final List<DateTime> _initialExcludedDates;
+  late DateTime _initialAnchorAt;
+  late List<int> _initialWeekdays;
+  late int _initialDayOfMonth;
+  late DateTime _initialYearlyDate;
+  late List<DateTime> _initialExcludedDates;
 
-  bool get _isEditing => widget.reminder != null;
+  bool get _isEditing => _reminder != null || widget.reminder != null;
 
   static bool _sameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
@@ -79,7 +89,7 @@ class _CalendarReminderFormScreenState
       a.every((date) => b.any((other) => _sameDay(date, other)));
 
   bool get _isDirty {
-    final reminder = widget.reminder;
+    final reminder = _reminder ?? widget.reminder;
     final initialTitle = reminder?.title ?? '';
     final initialNotes = reminder?.notes ?? '';
     final initialRepeatCount = reminder?.repeatCount;
@@ -98,9 +108,12 @@ class _CalendarReminderFormScreenState
 
     if (_titleController.text.trim() != initialTitle) return true;
     if (_notesController.text.trim() != initialNotes) return true;
+    if (_isTask != (reminder?.isTask ?? false)) return true;
     if (_repeatCount != initialRepeatCount) return true;
     if (_repeatCountController.text.trim() !=
-        (initialRepeatCount?.toString() ?? '')) return true;
+        (initialRepeatCount?.toString() ?? '')) {
+      return true;
+    }
     if (_anchorAt != _initialAnchorAt) return true;
     if (_recurrence != initialRecurrence) return true;
     if (_monthlyBasis != initialMonthlyBasis) return true;
@@ -122,16 +135,12 @@ class _CalendarReminderFormScreenState
     return false;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    final reminder = widget.reminder;
-    _titleController = TextEditingController(text: reminder?.title ?? '');
-    _notesController = TextEditingController(text: reminder?.notes ?? '');
+  void _populateFromReminder(CalendarReminder? reminder) {
+    _titleController.text = reminder?.title ?? '';
+    _notesController.text = reminder?.notes ?? '';
+    _isTask = reminder?.isTask ?? false;
     _repeatCount = reminder?.repeatCount;
-    _repeatCountController = TextEditingController(
-      text: reminder?.repeatCount?.toString() ?? '',
-    );
+    _repeatCountController.text = reminder?.repeatCount?.toString() ?? '';
     final baseDate =
         reminder?.anchorAt ?? widget.initialDate ?? DateTime.now();
     final now = TimeOfDay.now();
@@ -147,10 +156,8 @@ class _CalendarReminderFormScreenState
     _offsetDirection = initialOffset == 0
         ? _OffsetDirection.onTime
         : (initialOffset < 0 ? _OffsetDirection.before : _OffsetDirection.after);
-    _offsetMinutesController = TextEditingController(
-      text: initialOffset == 0 ? '10' : initialOffset.abs().toString(),
-    );
-    _offsetMinutesFocus.addListener(() => setState(() {}));
+    _offsetMinutesController.text =
+        initialOffset == 0 ? '10' : initialOffset.abs().toString();
     final anchorDay = _anchorDate ?? _anchorAt;
     final storedWeekdays = reminder?.weekdays ?? const <int>[];
     _weekdays = storedWeekdays.isEmpty
@@ -166,6 +173,53 @@ class _CalendarReminderFormScreenState
     _initialDayOfMonth = _dayOfMonth;
     _initialYearlyDate = _yearlyDate;
     _initialExcludedDates = List<DateTime>.from(_excludedDates);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController();
+    _notesController = TextEditingController();
+    _repeatCountController = TextEditingController();
+    _offsetMinutesController = TextEditingController();
+    _offsetMinutesFocus.addListener(() => setState(() {}));
+
+    _reminder = widget.reminder;
+    _populateFromReminder(_reminder);
+
+    final targetId = widget.reminder?.id ?? widget.reminderId;
+    if (_reminder == null && targetId != null && targetId.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        CalendarReminder? found;
+        try {
+          final controller = context.read<PrayerAppController>();
+          for (final r in controller.calendarReminders) {
+            if (r.id == targetId) {
+              found = r;
+              break;
+            }
+          }
+        } catch (_) {}
+        if (found == null) {
+          try {
+            final dbReminders = await LocalDatabase().loadCalendarReminders();
+            for (final r in dbReminders) {
+              if (r.id == targetId) {
+                found = r;
+                break;
+              }
+            }
+          } catch (_) {}
+        }
+        if (found != null && mounted) {
+          setState(() {
+            _reminder = found;
+            _populateFromReminder(found);
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -582,7 +636,9 @@ class _CalendarReminderFormScreenState
 
     final controller = context.read<PrayerAppController>();
     final reminder = CalendarReminder(
-      id: widget.reminder?.id ??
+      id: _reminder?.id ??
+          widget.reminder?.id ??
+          widget.reminderId ??
           DateTime.now().microsecondsSinceEpoch.toString(),
       title: title,
       notes: _notesController.text.trim(),
@@ -594,7 +650,7 @@ class _CalendarReminderFormScreenState
       anchorPrayerName: _anchorPrayerName,
       anchorOffsetMinutes: offsetMinutes,
       anchorDate: _anchorDate,
-      enabled: widget.reminder?.enabled ?? true,
+      enabled: _reminder?.enabled ?? widget.reminder?.enabled ?? true,
       repeatCount: _recurrence == ReminderRecurrence.once
           ? null
           : repeatCount,
@@ -608,6 +664,7 @@ class _CalendarReminderFormScreenState
           ? _yearlyDate
           : null,
       excludedDates: _excludedDates,
+      isTask: _isTask,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);
@@ -658,11 +715,24 @@ class _CalendarReminderFormScreenState
                 ? l10n.calendarReminderFormTitleEdit
                 : l10n.calendarReminderFormTitleNew,
           ),
+          actions: [
+            if (_readOnly)
+              IconButton(
+                tooltip: l10n.calendarEditReminder,
+                icon: const Icon(Icons.edit),
+                onPressed: () => setState(() => _readOnly = false),
+              ),
+          ],
         ),
         body: SafeArea(
           child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
+            padding: const EdgeInsets.all(16),
+            children: [
+              IgnorePointer(
+                ignoring: _readOnly,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -684,7 +754,16 @@ class _CalendarReminderFormScreenState
               ),
               maxLines: 2,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
+            SwitchListTile(
+              key: const Key('calendar_reminder_is_task_switch'),
+              contentPadding: EdgeInsets.zero,
+              title: Text(l10n.calendarMarkAsTask),
+              subtitle: Text(l10n.calendarMarkAsTaskSubtitle),
+              value: _isTask,
+              onChanged: (value) => setState(() => _isTask = value),
+            ),
+            const SizedBox(height: 16),
             SegmentedButton<CalendarReminderAnchor>(
               segments: [
                 ButtonSegment(
@@ -970,19 +1049,29 @@ class _CalendarReminderFormScreenState
               ],
             ],
             _buildExcludedDatesSection(l10n, locale),
-            const SizedBox(height: 28),
-            FilledButton(
-              onPressed: _saving ? null : _save,
-              child: _saving
-                  ? const SizedBox(
-                      height: 16,
-                      width: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : Text(l10n.save),
-            ),
-          ],
-        ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
+              if (!_readOnly)
+                FilledButton(
+                  onPressed: _saving ? null : _save,
+                  child: _saving
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Text(l10n.save),
+                )
+              else
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.edit),
+                  label: Text(l10n.calendarEditReminder),
+                  onPressed: () => setState(() => _readOnly = false),
+                ),
+            ],
+          ),
         ),
       ),
     );

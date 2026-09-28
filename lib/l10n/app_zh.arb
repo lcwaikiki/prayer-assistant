@@ -540,5 +540,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "任务 / 待办事项",
+  "calendarTasksFilterDay": "日",
+  "calendarTasksFilterWeek": "周",
+  "calendarNoTasksOnDay": "今天没有安排任务",
+  "calendarNoTasksOnWeek": "本周没有安排任务",
+  "calendarTaskUncheckTitle": "标记为未完成？",
+  "calendarTaskUncheckConfirm": "确定要将此日期的“{title}”标记为未完成吗？",
+  "confirm": "确认",
+  "today": "今天",
+  "calendarTaskBeadTarget": "念珠目标: {count}",
+  "calendarTaskGroupReminder": "分组提醒",
+  "calendarTaskCalendarReminder": "日历提醒",
+  "calendarMarkAsTask": "标记为任务 / 待办事项",
+  "calendarMarkAsTaskSubtitle": "在日历和每日目标中跟踪完成情况",
+  "beadsPreviewVibration": "预览震动",
+  "beadsExecute": "执行"
 }

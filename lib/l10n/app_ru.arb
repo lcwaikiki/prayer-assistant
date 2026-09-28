@@ -595,5 +595,21 @@
         "type": "int"
       }
     }
-  }
+  },
+  "calendarTasksToDos": "Задачи / Списки дел",
+  "calendarTasksFilterDay": "День",
+  "calendarTasksFilterWeek": "Неделя",
+  "calendarNoTasksOnDay": "На этот день задач не запланировано",
+  "calendarNoTasksOnWeek": "На эту неделю задач не запланировано",
+  "calendarTaskUncheckTitle": "Отметить как невыполненное?",
+  "calendarTaskUncheckConfirm": "Вы уверены, что хотите отметить «{title}» как невыполненное на этот день?",
+  "confirm": "Подтвердить",
+  "today": "Сегодня",
+  "calendarTaskBeadTarget": "Цель чёток: {count}",
+  "calendarTaskGroupReminder": "Напоминание группы",
+  "calendarTaskCalendarReminder": "Напоминание календаря",
+  "calendarMarkAsTask": "Отметить как задачу / список дел",
+  "calendarMarkAsTaskSubtitle": "Отслеживайте выполнение в календаре и ежедневных целях",
+  "beadsPreviewVibration": "Проверка вибрации",
+  "beadsExecute": "Запустить"
 }

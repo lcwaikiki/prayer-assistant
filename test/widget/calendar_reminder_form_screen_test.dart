@@ -34,19 +34,24 @@ Future<void> _pumpForm(
 }
 
 Future<void> _scrollToSave(WidgetTester tester) async {
-  for (var i = 0; i < 6 && tester.any(find.text('Save')) == false; i++) {
-    await tester.drag(find.byType(ListView), const Offset(0, -150));
-    await tester.pumpAndSettle();
-  }
-  await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+  final saveButton = find.widgetWithText(FilledButton, 'Save');
+  await tester.scrollUntilVisible(
+    saveButton,
+    100.0,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.pumpAndSettle();
+  await tester.tap(saveButton);
   await tester.pumpAndSettle();
 }
 
 Future<void> _scrollTo(WidgetTester tester, Finder finder) async {
-  for (var i = 0; i < 8 && tester.any(finder) == false; i++) {
-    await tester.drag(find.byType(ListView), const Offset(0, -150));
-    await tester.pumpAndSettle();
-  }
+  await tester.scrollUntilVisible(
+    finder,
+    100.0,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.pumpAndSettle();
 }
 
 void main() {
@@ -342,13 +347,13 @@ void main() {
 
     await _pumpForm(tester, harness, reminder: reminder);
 
+    await _scrollTo(tester, find.text('Deleted occurrences'));
     expect(find.text('Deleted occurrences'), findsOneWidget);
 
     final restoreButton = find.byKey(
       const Key('restore_excluded_date_2026-8-24'),
     );
-    await tester.ensureVisible(restoreButton);
-    await tester.pumpAndSettle();
+    await _scrollTo(tester, restoreButton);
     await tester.tap(restoreButton);
     await tester.pumpAndSettle();
 
@@ -375,8 +380,7 @@ void main() {
     await _pumpForm(tester, harness, reminder: reminder);
 
     final restoreAll = find.byKey(const Key('restore_all_excluded_dates'));
-    await tester.ensureVisible(restoreAll);
-    await tester.pumpAndSettle();
+    await _scrollTo(tester, restoreAll);
     await tester.tap(restoreAll);
     await tester.pumpAndSettle();
 

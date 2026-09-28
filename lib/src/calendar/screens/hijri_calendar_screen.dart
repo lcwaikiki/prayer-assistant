@@ -1,23 +1,123 @@
 import 'package:flutter/material.dart';
-import 'package:hijri/hijri_calendar.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'
+    hide ChangeNotifierProvider, Consumer;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
-import '../../l10n/prayer_names.dart';
 import '../../models/calendar_week_start.dart';
 import '../../models/prayer_models.dart';
+import '../../tesbihat/models/item.dart';
+import '../../tesbihat/models/item_group.dart';
+import '../../tesbihat/models/reminder_schedulable.dart';
+import '../../tesbihat/state/groups_notifier.dart';
+import '../../tesbihat/state/items_notifier.dart';
 
+import '../../tesbihat/screens/execution_screen.dart';
+import '../../tesbihat/screens/group_form_screen.dart';
+import '../../tesbihat/screens/group_screen.dart';
+import '../../tesbihat/screens/item_form_screen.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
-import '../moon_phase_utils.dart';
 import '../models/calendar_reminder.dart';
 import '../../ui/widgets/moon_phase_widget.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
-import 'moon_calendar_screen.dart';
 
+List<TaskItem> _getAllTasks(
+  PrayerAppController controller,
+  List<Item> beads,
+  List<ItemGroup> groups,
+) {
+  final tasks = <TaskItem>[];
+  for (final reminder in controller.calendarReminders) {
+    if (reminder.enabled || reminder.isTask) {
+      tasks.add(
+        TaskItem(
+          id: 'cal_${reminder.id}',
+          targetId: reminder.id,
+          title: reminder.title,
+          type: TaskItemType.calendarReminder,
+          reminder: reminder,
+          occursOnDate: (d) => reminder.occursOn(d),
+        ),
+      );
+    }
+  }
+  for (final bead in beads) {
+    if (bead.reminderEnabled || bead.isTask) {
+      tasks.add(
+        TaskItem(
+          id: 'bead_${bead.id}',
+          targetId: bead.id,
+          title: bead.title,
+          type: TaskItemType.bead,
+          bead: bead,
+          targetCount: bead.count,
+          occursOnDate: (d) => bead.occursOn(d),
+        ),
+      );
+    }
+  }
+  for (final group in groups) {
+    if (group.reminderEnabled || group.isTask) {
+      tasks.add(
+        TaskItem(
+          id: 'group_${group.id}',
+          targetId: group.id,
+          title: group.title,
+          type: TaskItemType.group,
+          group: group,
+          occursOnDate: (d) => group.occursOn(d),
+        ),
+      );
+    }
+  }
+  return tasks;
+}
+
+Future<bool?> showTaskUncheckConfirmation(
+  BuildContext context,
+  String taskTitle,
+) {
+  final l10n = context.l10n;
+  return showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text(l10n.calendarTaskUncheckTitle),
+      content: Text(
+        l10n.calendarTaskUncheckConfirm(taskTitle),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(ctx).pop(false),
+          child: Text(l10n.cancel),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(ctx).pop(true),
+          child: Text(l10n.confirm),
+        ),
+      ],
+    ),
+  );
+}
+
+List<DateTime> _getWeekDays(DateTime centerDate, CalendarWeekStart weekStart) {
+  final currentWeekday = centerDate.weekday; // 1 (Mon) .. 7 (Sun)
+  int diff;
+  if (weekStart == CalendarWeekStart.sunday) {
+    diff = currentWeekday % 7;
+  } else {
+    diff = currentWeekday - 1;
+  }
+  final weekStartDate = centerDate.subtract(Duration(days: diff));
+  return List.generate(
+    7,
+    (i) => DateTime(weekStartDate.year, weekStartDate.month, weekStartDate.day + i),
+  );
+}
 
 String _shortHijriMonth(DateTime date, String languageCode, {int offset = 0}) {
   final month = HijriMonth.fromDate(date, offset: offset);
@@ -53,7 +153,7 @@ class HijriCalendarScreen extends StatelessWidget {
 /// The Hijri/Gregorian monthly calendar body: month navigation, the
 /// primary/secondary calendar controls, and the day grid. Embeddable
 /// directly (e.g. as a tab) or wrapped by [HijriCalendarScreen].
-class HijriCalendarView extends StatefulWidget {
+class HijriCalendarView extends ConsumerStatefulWidget {
   const HijriCalendarView({
     super.key,
     this.initialDate,
@@ -68,12 +168,13 @@ class HijriCalendarView extends StatefulWidget {
   final bool openDetailOnLaunch;
 
   @override
-  State<HijriCalendarView> createState() => _HijriCalendarViewState();
+  ConsumerState<HijriCalendarView> createState() => _HijriCalendarViewState();
 }
 
-class _HijriCalendarViewState extends State<HijriCalendarView> {
+class _HijriCalendarViewState extends ConsumerState<HijriCalendarView> {
   late DateTime _focusedDate;
   bool _autoOpenTriggered = false;
+  String? _selectedTaskId;
 
   @override
   void initState() {
@@ -155,11 +256,12 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
       builder: (sheetContext) =>
           DayDetailSheet(date: date, primary: primary),
     );
-
   }
 
   @override
   Widget build(BuildContext context) {
+    final beads = ref.watch(itemsNotifierProvider);
+    final groups = ref.watch(groupsNotifierProvider);
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
         final primary = controller.calendarPrimaryDisplay;
@@ -169,6 +271,11 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
         final int leadingBlanks = weekStart.leadingBlanks(monthDays.first);
         final today = DateTime.now();
         final locale = Localizations.localeOf(context).toString();
+        final allTasks = _getAllTasks(controller, beads, groups);
+        final selectedTask = allTasks.cast<TaskItem?>().firstWhere(
+              (t) => t?.id == _selectedTaskId,
+              orElse: () => null,
+            );
 
         if (widget.openDetailOnLaunch && !_autoOpenTriggered) {
           _autoOpenTriggered = true;
@@ -264,6 +371,53 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                 ],
               ),
             ),
+            if (allTasks.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.checklist,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String?>(
+                          isExpanded: true,
+                          value: selectedTask?.id,
+                          hint: const Text('Track Task in Month: All'),
+                          items: [
+                            const DropdownMenuItem<String?>(
+                              value: null,
+                              child: Text('All Events & Reminders'),
+                            ),
+                            for (final task in allTasks)
+                              DropdownMenuItem<String?>(
+                                value: task.id,
+                                child: Text(
+                                  '${task.title} (${task.type == TaskItemType.bead ? "Bead" : (task.type == TaskItemType.group ? "Group" : "Reminder")})',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                          ],
+                          onChanged: (val) =>
+                              setState(() => _selectedTaskId = val),
+                        ),
+                      ),
+                    ),
+                    if (_selectedTaskId != null)
+                      IconButton(
+                        icon: const Icon(Icons.clear, size: 16),
+                        tooltip: 'Clear Task Filter',
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () =>
+                            setState(() => _selectedTaskId = null),
+                      ),
+                  ],
+                ),
+              ),
             // On wide screens (tablets) a full-width 7-column grid makes each
             // day cell enormous and the month require scrolling. Cap the grid
             // (and its weekday header) at a phone-sized width and center it so
@@ -330,6 +484,9 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                             date,
                             controller.hijriDateOffset,
                           );
+                          final taskOccurs = selectedTask?.occursOn(date) ?? false;
+                          final isTaskCompleted = selectedTask != null &&
+                              controller.isTaskCompleted(selectedTask.id, date);
                           return _DayCell(
                             primaryLabel:
                                 primary == CalendarPrimaryDisplay.hijri
@@ -344,6 +501,32 @@ class _HijriCalendarViewState extends State<HijriCalendarView> {
                             hasReminder: hasReminder,
                             isHoliday: isHoliday,
                             hasFastingLog: hasFastingLog,
+                            taskOccurs: taskOccurs,
+                            isTaskCompleted: isTaskCompleted,
+                            onToggleTask: selectedTask == null || !taskOccurs
+                                ? null
+                                : () async {
+                                    if (isTaskCompleted) {
+                                      final confirm =
+                                          await showTaskUncheckConfirmation(
+                                        context,
+                                        selectedTask.title,
+                                      );
+                                      if (confirm == true) {
+                                        controller.setTaskCompletion(
+                                          selectedTask.id,
+                                          date,
+                                          false,
+                                        );
+                                      }
+                                    } else {
+                                      controller.setTaskCompletion(
+                                        selectedTask.id,
+                                        date,
+                                        true,
+                                      );
+                                    }
+                                  },
                             onTap: () => _openDayDetail(date, primary),
                           );
                         },
@@ -398,6 +581,9 @@ class _DayCell extends StatelessWidget {
     required this.isHoliday,
     required this.hasFastingLog,
     required this.onTap,
+    this.taskOccurs = false,
+    this.isTaskCompleted = false,
+    this.onToggleTask,
   });
 
   final String primaryLabel;
@@ -407,6 +593,9 @@ class _DayCell extends StatelessWidget {
   final bool isHoliday;
   final bool hasFastingLog;
   final VoidCallback onTap;
+  final bool taskOccurs;
+  final bool isTaskCompleted;
+  final VoidCallback? onToggleTask;
 
   @override
   Widget build(BuildContext context) {
@@ -459,7 +648,25 @@ class _DayCell extends StatelessWidget {
                         fontSize: 9,
                       ),
                     ),
-                  if (hasReminder || hasFastingLog)
+                  if (taskOccurs)
+                    GestureDetector(
+                      onTap: onToggleTask,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Icon(
+                          isTaskCompleted
+                              ? Icons.check_box
+                              : Icons.check_box_outline_blank,
+                          size: 16,
+                          color: isTaskCompleted
+                              ? (isToday
+                                  ? colors.onPrimaryContainer
+                                  : colors.primary)
+                              : colors.onSurfaceVariant,
+                        ),
+                      ),
+                    )
+                  else if (hasReminder || hasFastingLog)
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -494,23 +701,258 @@ class _DayCell extends StatelessWidget {
   }
 }
 
-class DayDetailSheet extends StatefulWidget {
+class DayDetailSheet extends ConsumerStatefulWidget {
   const DayDetailSheet({super.key, required this.date, required this.primary});
 
   final DateTime date;
   final CalendarPrimaryDisplay primary;
 
   @override
-  State<DayDetailSheet> createState() => _DayDetailSheetState();
+  ConsumerState<DayDetailSheet> createState() => _DayDetailSheetState();
 }
 
-class _DayDetailSheetState extends State<DayDetailSheet> {
+class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
   late DateTime _date = widget.date;
+  bool _showWeekTasks = false;
+  bool _tasksExpanded = true;
 
   void _shiftDay(int delta) {
     setState(() {
       _date = DateTime(_date.year, _date.month, _date.day + delta);
     });
+  }
+
+  static String _dateKey(DateTime date) =>
+      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+
+  void _openTaskTarget(
+    BuildContext context,
+    TaskItem task,
+    PrayerAppController controller,
+    List<Item> beads,
+    List<ItemGroup> groups, {
+    DateTime? taskDate,
+  }) {
+    switch (task.type) {
+      case TaskItemType.bead:
+        final item = task.bead ??
+            beads.where((b) => b.id == task.targetId).firstOrNull;
+        if (item != null) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+          try {
+            context.read<PrayerAppController>().setTab(4);
+          } catch (_) {}
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (_) => ItemFormScreen(
+                itemToEdit: item,
+                readOnly: true,
+              ),
+            ),
+          );
+        }
+      case TaskItemType.group:
+        final group = task.group ??
+            groups.where((g) => g.id == task.targetId).firstOrNull;
+        if (group != null) {
+          SystemChrome.setPreferredOrientations([
+            DeviceOrientation.portraitUp,
+            DeviceOrientation.portraitDown,
+          ]);
+          try {
+            context.read<PrayerAppController>().setTab(4);
+          } catch (_) {}
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (_) => GroupFormScreen(
+                groupToEdit: group,
+                readOnly: true,
+              ),
+            ),
+          );
+        }
+      case TaskItemType.calendarReminder:
+        final reminder = task.reminder ??
+            controller.calendarReminders
+                .where((r) => r.id == task.targetId)
+                .firstOrNull;
+        if (reminder != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (_) => CalendarReminderFormScreen(
+                reminder: reminder,
+                readOnly: true,
+              ),
+            ),
+          );
+        } else if (taskDate != null &&
+            (_date.year != taskDate.year ||
+                _date.month != taskDate.month ||
+                _date.day != taskDate.day)) {
+          setState(() {
+            _date = taskDate;
+            _showWeekTasks = false;
+          });
+        }
+    }
+  }
+
+  Widget _buildTaskItemWidget(
+    BuildContext context,
+    PrayerAppController controller,
+    List<Item> beads,
+    List<ItemGroup> groups,
+    TaskItem task,
+    DateTime date, {
+    required String keyPrefix,
+  }) {
+    final isCompleted = controller.isTaskCompleted(task.id, date);
+    return ListTile(
+      key: Key('${keyPrefix}_task_${task.id}_${_dateKey(date)}'),
+      contentPadding: EdgeInsets.zero,
+      dense: true,
+      leading: Checkbox(
+        value: isCompleted,
+        onChanged: (_) async {
+          if (isCompleted) {
+            final confirm = await showTaskUncheckConfirmation(
+              context,
+              task.title,
+            );
+            if (confirm == true) {
+              controller.setTaskCompletion(task.id, date, false);
+            }
+          } else {
+            controller.setTaskCompletion(task.id, date, true);
+          }
+        },
+      ),
+      title: Text(
+        task.title,
+        style: TextStyle(
+          decoration: isCompleted ? TextDecoration.lineThrough : null,
+        ),
+      ),
+      subtitle: Text(
+        task.type == TaskItemType.bead
+            ? (task.targetCount != null
+                ? context.l10n.calendarTaskBeadTarget(task.targetCount!)
+                : context.l10n.calendarTaskGroupReminder)
+            : (task.type == TaskItemType.group
+                ? context.l10n.calendarTaskGroupReminder
+                : context.l10n.calendarTaskCalendarReminder),
+      ),
+      onTap: () => _openTaskTarget(
+        context,
+        task,
+        controller,
+        beads,
+        groups,
+      ),
+    );
+  }
+
+  List<Widget> _buildDayTasksList(
+    BuildContext context,
+    PrayerAppController controller,
+    List<Item> beads,
+    List<ItemGroup> groups,
+    List<TaskItem> allTasks,
+    DateTime date,
+  ) {
+    final dayTasks =
+        allTasks.where((t) => t.occursOn(date)).toList(growable: false);
+    if (dayTasks.isEmpty) {
+      return [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            context.l10n.calendarNoTasksOnDay,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ),
+      ];
+    }
+    return dayTasks.map((task) {
+      return _buildTaskItemWidget(
+        context,
+        controller,
+        beads,
+        groups,
+        task,
+        date,
+        keyPrefix: 'day',
+      );
+    }).toList(growable: false);
+  }
+
+  List<Widget> _buildWeekTasksList(
+    BuildContext context,
+    PrayerAppController controller,
+    List<Item> beads,
+    List<ItemGroup> groups,
+    List<TaskItem> allTasks,
+    DateTime centerDate,
+    String locale,
+  ) {
+    final weekDays = _getWeekDays(centerDate, controller.calendarWeekStart);
+    final widgets = <Widget>[];
+    for (final day in weekDays) {
+      final dayTasks =
+          allTasks.where((t) => t.occursOn(day)).toList(growable: false);
+      if (dayTasks.isEmpty) continue;
+      final dayLabel = DateFormat.MMMEd(locale).format(day);
+      final isToday = day.year == DateTime.now().year &&
+          day.month == DateTime.now().month &&
+          day.day == DateTime.now().day;
+      widgets.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 4),
+          child: Text(
+            isToday ? '$dayLabel (${context.l10n.today})' : dayLabel,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: isToday ? Theme.of(context).colorScheme.primary : null,
+                ),
+          ),
+        ),
+      );
+      for (final task in dayTasks) {
+        widgets.add(
+          _buildTaskItemWidget(
+            context,
+            controller,
+            beads,
+            groups,
+            task,
+            day,
+            keyPrefix: 'week',
+          ),
+        );
+      }
+    }
+    if (widgets.isEmpty) {
+      return [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            context.l10n.calendarNoTasksOnWeek,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ),
+      ];
+    }
+    return widgets;
   }
 
   String _hijriDateLabel(BuildContext context, DateTime date, String languageCode) {
@@ -653,7 +1095,10 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final beads = ref.watch(itemsNotifierProvider);
+    final groups = ref.watch(groupsNotifierProvider);
     final controller = context.watch<PrayerAppController>();
+    final allTasks = _getAllTasks(controller, beads, groups);
     final reminders = controller.calendarReminders
         .where((reminder) => reminder.occursOn(_date))
         .toList(growable: false);
@@ -801,6 +1246,7 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
               ),
             ],
             const SizedBox(height: 8),
+            const SizedBox(height: 8),
             if (reminders.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -810,6 +1256,18 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
               ...reminders.map(
                 (reminder) => ListTile(
                   contentPadding: EdgeInsets.zero,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => CalendarReminderFormScreen(
+                          reminder: reminder,
+                          readOnly: true,
+                        ),
+                      ),
+                    );
+                  },
                   title: Text(reminder.title),
                   subtitle: Text(_recurrenceLabel(context, reminder)),
                   leading: Switch(
@@ -867,6 +1325,110 @@ class _DayDetailSheetState extends State<DayDetailSheet> {
               },
               icon: const Icon(Icons.add),
               label: Text(l10n.calendarAddReminder),
+            ),
+            const SizedBox(height: 12),
+            Card(
+              margin: EdgeInsets.zero,
+              clipBehavior: Clip.antiAlias,
+              child: Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  key: const Key('tasks_expansion_tile'),
+                  initiallyExpanded: _tasksExpanded,
+                  onExpansionChanged: (expanded) =>
+                      setState(() => _tasksExpanded = expanded),
+                  tilePadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  childrenPadding:
+                      const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                  leading: Icon(
+                    Icons.task_alt,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Row(
+                    children: [
+                      Text(
+                        l10n.calendarTasksToDos,
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${_showWeekTasks ? allTasks.where((t) => _getWeekDays(_date, controller.calendarWeekStart).any((d) => t.occursOn(d))).length : allTasks.where((t) => t.occursOn(_date)).length}',
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        SegmentedButton<bool>(
+                          segments: [
+                            ButtonSegment(
+                              value: false,
+                              label: Text(l10n.calendarTasksFilterDay),
+                            ),
+                            ButtonSegment(
+                              value: true,
+                              label: Text(l10n.calendarTasksFilterWeek),
+                            ),
+                          ],
+                          selected: {_showWeekTasks},
+                          onSelectionChanged: (selection) => setState(
+                            () => _showWeekTasks = selection.first,
+                          ),
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.compact,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    if (!_showWeekTasks) ...[
+                      ..._buildDayTasksList(
+                        context,
+                        controller,
+                        beads,
+                        groups,
+                        allTasks,
+                        _date,
+                      ),
+                    ] else ...[
+                      ..._buildWeekTasksList(
+                        context,
+                        controller,
+                        beads,
+                        groups,
+                        allTasks,
+                        _date,
+                        locale,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ],
         ),

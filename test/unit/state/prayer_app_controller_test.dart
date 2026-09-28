@@ -213,6 +213,12 @@ void main() {
       () => database.savePrayerCompletions(any()),
     ).thenAnswer((_) async {});
     when(
+      () => database.loadTaskCompletions(),
+    ).thenAnswer((_) async => const <String, List<String>>{});
+    when(
+      () => database.saveTaskCompletions(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadCalendarReminders(),
     ).thenAnswer((_) async => const []);
     when(

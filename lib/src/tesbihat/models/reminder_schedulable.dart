@@ -81,5 +81,18 @@ class TaskItem {
   final CalendarReminder? reminder;
   CalendarReminder? get calendarReminder => reminder;
 
+  int? get timeMinutes {
+    if (reminder != null) {
+      return reminder!.anchorAt.hour * 60 + reminder!.anchorAt.minute;
+    }
+    if (bead?.reminderAt != null) {
+      return bead!.reminderAt!.hour * 60 + bead!.reminderAt!.minute;
+    }
+    if (group?.reminderAt != null) {
+      return group!.reminderAt!.hour * 60 + group!.reminderAt!.minute;
+    }
+    return null;
+  }
+
   bool occursOn(DateTime date) => occursOnDate(date);
 }

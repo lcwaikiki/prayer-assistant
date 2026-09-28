@@ -702,6 +702,20 @@
   "calendarTaskCalendarReminder": "Calendar Reminder",
   "calendarMarkAsTask": "Mark as task / to-do",
   "calendarMarkAsTaskSubtitle": "Track completion in calendar and daily goals",
+  "calendarTasksCompletedCount": "{completed}/{total} done",
+  "@calendarTasksCompletedCount": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "beadsPreviewVibration": "Preview vibration",
-  "beadsExecute": "Execute"
+  "beadsExecute": "Execute",
+  "calendarSortByName": "Name",
+  "calendarSortByTime": "Time",
+  "calendarSortOption": "Sort by"
 }

@@ -129,6 +129,9 @@ void main() {
 
       await database.saveCalendarPrimaryDisplay('gregorian');
       expect(await database.loadCalendarPrimaryDisplay(), 'gregorian');
+
+      await database.saveCalendarSortOption(CalendarSortOption.time);
+      expect(await database.loadCalendarSortOption(), CalendarSortOption.time);
     });
 
     test('loaders return null when unset', () async {
@@ -137,6 +140,7 @@ void main() {
       expect(await database.loadThemePreference(), isNull);
       expect(await database.loadLocalePreference(), isNull);
       expect(await database.loadCalendarPrimaryDisplay(), isNull);
+      expect(await database.loadCalendarSortOption(), isNull);
     });
   });
 

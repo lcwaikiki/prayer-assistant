@@ -1583,8 +1583,22 @@ class AppLocalizationsDe extends AppLocalizations {
       'Erledigung im Kalender und in Tageszielen verfolgen';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total erledigt';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Vibration testen';
 
   @override
   String get beadsExecute => 'Ausführen';
+
+  @override
+  String get calendarSortByName => 'Name';
+
+  @override
+  String get calendarSortByTime => 'Zeit';
+
+  @override
+  String get calendarSortOption => 'Sortieren nach';
 }

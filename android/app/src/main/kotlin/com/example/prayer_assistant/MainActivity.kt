@@ -19,6 +19,23 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 class MainActivity : FlutterActivity() {
+    companion object {
+        private var instance: MainActivity? = null
+
+        fun onNotificationAction(actionId: String, id: Int, payload: String?) {
+            instance?.runOnUiThread {
+                instance?.reminderChannel?.invokeMethod(
+                    "onNotificationAction",
+                    mapOf(
+                        "actionId" to actionId,
+                        "id" to id,
+                        "payload" to payload
+                    )
+                )
+            }
+        }
+    }
+
     private lateinit var widgetChannel: MethodChannel
     private lateinit var backupFolderChannel: MethodChannel
     private var reminderChannel: MethodChannel? = null
@@ -564,6 +581,7 @@ class MainActivity : FlutterActivity() {
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
+        instance = this
         if (!screenReceiverRegistered) {
             val filter = IntentFilter().apply {
                 addAction(Intent.ACTION_SCREEN_ON)
@@ -575,6 +593,9 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun onDestroy() {
+        if (instance == this) {
+            instance = null
+        }
         if (screenReceiverRegistered) {
             unregisterReceiver(screenReceiver)
             screenReceiverRegistered = false

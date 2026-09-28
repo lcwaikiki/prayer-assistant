@@ -1564,8 +1564,22 @@ class AppLocalizationsAr extends AppLocalizations {
       'تتبع الإنجاز في التقويم والأهداف اليومية';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total مكتمل';
+  }
+
+  @override
   String get beadsPreviewVibration => 'معاينة الاهتزاز';
 
   @override
   String get beadsExecute => 'بدء';
+
+  @override
+  String get calendarSortByName => 'الاسم';
+
+  @override
+  String get calendarSortByTime => 'الوقت';
+
+  @override
+  String get calendarSortOption => 'ترتيب حسب';
 }

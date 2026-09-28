@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "日历提醒",
   "calendarMarkAsTask": "标记为任务 / 待办事项",
   "calendarMarkAsTaskSubtitle": "在日历和每日目标中跟踪完成情况",
+  "calendarTasksCompletedCount": "{completed}/{total} 已完成",
   "beadsPreviewVibration": "预览震动",
-  "beadsExecute": "执行"
+  "beadsExecute": "执行",
+  "calendarSortByName": "名称",
+  "calendarSortByTime": "时间",
+  "calendarSortOption": "排序"
 }

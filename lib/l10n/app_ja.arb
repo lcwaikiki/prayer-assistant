@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "カレンダーのリマインダー",
   "calendarMarkAsTask": "タスク / To-Doとしてマーク",
   "calendarMarkAsTaskSubtitle": "カレンダーと毎日の目標で完了状況を追跡",
+  "calendarTasksCompletedCount": "{completed}/{total} 完了",
   "beadsPreviewVibration": "振動プレビュー",
-  "beadsExecute": "実行"
+  "beadsExecute": "実行",
+  "calendarSortByName": "名前",
+  "calendarSortByTime": "時間",
+  "calendarSortOption": "並び替え"
 }

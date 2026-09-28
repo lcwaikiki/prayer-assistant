@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'notification_tap_handler.dart';
 
 class NativeReminderService {
   static const MethodChannel _channel =
@@ -68,8 +71,9 @@ class NativeReminderService {
   }
 
   static void initializeNotificationTapHandler(
-    void Function(String? payload) onNotificationTap,
-  ) {
+    void Function(String? payload) onNotificationTap, {
+    void Function(NotificationResponse response)? onNotificationResponse,
+  }) {
     if (!isAndroid) return;
     _channel.setMethodCallHandler((call) async {
       if (call.method == 'onNotificationTap') {
@@ -82,6 +86,25 @@ class NativeReminderService {
         }
         if (payload != null && payload.isNotEmpty) {
           onNotificationTap(payload);
+        }
+      } else if (call.method == 'onNotificationAction') {
+        final dynamic args = call.arguments;
+        if (args is Map) {
+          final actionId = args['actionId'] as String?;
+          final payload = args['payload'] as String?;
+          final id = args['id'] as int?;
+          final response = NotificationResponse(
+            notificationResponseType:
+                NotificationResponseType.selectedNotificationAction,
+            actionId: actionId,
+            payload: payload,
+            id: id,
+          );
+          if (onNotificationResponse != null) {
+            onNotificationResponse(response);
+          } else {
+            await handleNotificationResponse(response);
+          }
         }
       }
     });

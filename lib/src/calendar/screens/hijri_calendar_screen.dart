@@ -26,6 +26,33 @@ import '../../ui/widgets/moon_phase_widget.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
 
+String _formatReminderTime(BuildContext context, CalendarReminder reminder) {
+  if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
+    final offset = reminder.anchorOffsetMinutes;
+    final prayerKey = reminder.anchorPrayerName ?? '';
+    final prayerLabel = context.l10n.prayerNameLabel(prayerKey);
+    final offsetStr =
+        offset != 0 ? (offset > 0 ? ' (+$offset m)' : ' ($offset m)') : '';
+    return '$prayerLabel$offsetStr';
+  }
+  final h = reminder.anchorAt.hour.toString().padLeft(2, '0');
+  final m = reminder.anchorAt.minute.toString().padLeft(2, '0');
+  return '$h:$m';
+}
+
+String? _formatTaskTime(BuildContext context, TaskItem task) {
+  if (task.reminder != null) {
+    return _formatReminderTime(context, task.reminder!);
+  }
+  final reminderAt = task.bead?.reminderAt ?? task.group?.reminderAt;
+  if (reminderAt != null) {
+    final h = reminderAt.hour.toString().padLeft(2, '0');
+    final m = reminderAt.minute.toString().padLeft(2, '0');
+    return '$h:$m';
+  }
+  return null;
+}
+
 List<TaskItem> _getAllTasks(
   PrayerAppController controller,
   List<Item> beads,
@@ -75,6 +102,22 @@ List<TaskItem> _getAllTasks(
       );
     }
   }
+  final sortOption = controller.calendarSortOption;
+  tasks.sort((a, b) {
+    if (sortOption == CalendarSortOption.time) {
+      final timeA = a.timeMinutes ?? 9999;
+      final timeB = b.timeMinutes ?? 9999;
+      final timeComp = timeA.compareTo(timeB);
+      if (timeComp != 0) return timeComp;
+      return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+    } else {
+      final titleComp = a.title.toLowerCase().compareTo(b.title.toLowerCase());
+      if (titleComp != 0) return titleComp;
+      final timeA = a.timeMinutes ?? 9999;
+      final timeB = b.timeMinutes ?? 9999;
+      return timeA.compareTo(timeB);
+    }
+  });
   return tasks;
 }
 
@@ -396,9 +439,26 @@ class _HijriCalendarViewState extends ConsumerState<HijriCalendarView> {
                             for (final task in allTasks)
                               DropdownMenuItem<String?>(
                                 value: task.id,
-                                child: Text(
-                                  '${task.title} (${task.type == TaskItemType.bead ? "Bead" : (task.type == TaskItemType.group ? "Group" : "Reminder")})',
-                                  overflow: TextOverflow.ellipsis,
+                                child: Builder(
+                                  builder: (context) {
+                                    final showTime = controller.calendarSortOption ==
+                                        CalendarSortOption.time;
+                                    final timeStr = showTime
+                                        ? _formatTaskTime(context, task)
+                                        : null;
+                                    final typeStr = task.type == TaskItemType.bead
+                                        ? "Bead"
+                                        : (task.type == TaskItemType.group
+                                            ? "Group"
+                                            : "Reminder");
+                                    final label = timeStr != null
+                                        ? '$timeStr • ${task.title} ($typeStr)'
+                                        : '${task.title} ($typeStr)';
+                                    return Text(
+                                      label,
+                                      overflow: TextOverflow.ellipsis,
+                                    );
+                                  },
                                 ),
                               ),
                           ],
@@ -415,6 +475,42 @@ class _HijriCalendarViewState extends ConsumerState<HijriCalendarView> {
                         onPressed: () =>
                             setState(() => _selectedTaskId = null),
                       ),
+                    PopupMenuButton<CalendarSortOption>(
+                      key: const Key('month_calendar_sort_menu_button'),
+                      tooltip: context.l10n.calendarSortOption,
+                      icon: Icon(
+                        controller.calendarSortOption == CalendarSortOption.time
+                            ? Icons.access_time
+                            : Icons.sort_by_alpha,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      initialValue: controller.calendarSortOption,
+                      onSelected: (option) =>
+                          controller.updateCalendarSortOption(option),
+                      itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: CalendarSortOption.alphabetical,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.sort_by_alpha, size: 18),
+                              const SizedBox(width: 8),
+                              Text(context.l10n.calendarSortByName),
+                            ],
+                          ),
+                        ),
+                        PopupMenuItem(
+                          value: CalendarSortOption.time,
+                          child: Row(
+                            children: [
+                              const Icon(Icons.access_time, size: 18),
+                              const SizedBox(width: 8),
+                              Text(context.l10n.calendarSortByTime),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -839,14 +935,22 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
           decoration: isCompleted ? TextDecoration.lineThrough : null,
         ),
       ),
-      subtitle: Text(
-        task.type == TaskItemType.bead
-            ? (task.targetCount != null
-                ? context.l10n.calendarTaskBeadTarget(task.targetCount!)
-                : context.l10n.calendarTaskGroupReminder)
-            : (task.type == TaskItemType.group
-                ? context.l10n.calendarTaskGroupReminder
-                : context.l10n.calendarTaskCalendarReminder),
+      subtitle: Builder(
+        builder: (context) {
+          final showTime =
+              controller.calendarSortOption == CalendarSortOption.time;
+          final timeStr = showTime ? _formatTaskTime(context, task) : null;
+          final baseSubtitle = task.type == TaskItemType.bead
+              ? (task.targetCount != null
+                  ? context.l10n.calendarTaskBeadTarget(task.targetCount!)
+                  : context.l10n.calendarTaskGroupReminder)
+              : (task.type == TaskItemType.group
+                  ? context.l10n.calendarTaskGroupReminder
+                  : context.l10n.calendarTaskCalendarReminder);
+          return Text(
+            timeStr != null ? '$timeStr • $baseSubtitle' : baseSubtitle,
+          );
+        },
       ),
       onTap: () => _openTaskTarget(
         context,
@@ -1099,9 +1203,24 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
     final groups = ref.watch(groupsNotifierProvider);
     final controller = context.watch<PrayerAppController>();
     final allTasks = _getAllTasks(controller, beads, groups);
+    final sortOption = controller.calendarSortOption;
     final reminders = controller.calendarReminders
         .where((reminder) => reminder.occursOn(_date))
-        .toList(growable: false);
+        .toList(growable: true)
+      ..sort((a, b) {
+        if (sortOption == CalendarSortOption.time) {
+          final timeA = a.timeMinutes;
+          final timeB = b.timeMinutes;
+          final timeComp = timeA.compareTo(timeB);
+          if (timeComp != 0) return timeComp;
+          return a.title.toLowerCase().compareTo(b.title.toLowerCase());
+        } else {
+          final titleComp =
+              a.title.toLowerCase().compareTo(b.title.toLowerCase());
+          if (titleComp != 0) return titleComp;
+          return a.timeMinutes.compareTo(b.timeMinutes);
+        }
+      });
     final locale = Localizations.localeOf(context).toString();
     final String? holiday = controller.showIslamicHolidays
         ? islamicHolidayForDate(
@@ -1122,6 +1241,27 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
             offset: controller.hijriDateOffset,
           )
         : null;
+    final weekDays = _getWeekDays(_date, controller.calendarWeekStart);
+    final totalTasks = _showWeekTasks
+        ? weekDays.fold<int>(
+            0,
+            (sum, d) => sum + allTasks.where((t) => t.occursOn(d)).length,
+          )
+        : allTasks.where((t) => t.occursOn(_date)).length;
+    final completedTasks = _showWeekTasks
+        ? weekDays.fold<int>(
+            0,
+            (sum, d) =>
+                sum +
+                allTasks
+                    .where((t) =>
+                        t.occursOn(d) && controller.isTaskCompleted(t.id, d))
+                    .length,
+          )
+        : allTasks
+            .where((t) =>
+                t.occursOn(_date) && controller.isTaskCompleted(t.id, _date))
+            .length;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -1254,62 +1394,72 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
               )
             else
               ...reminders.map(
-                (reminder) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => CalendarReminderFormScreen(
-                          reminder: reminder,
-                          readOnly: true,
+                (reminder) {
+                  final showTime =
+                      controller.calendarSortOption == CalendarSortOption.time;
+                  final timeStr =
+                      showTime ? _formatReminderTime(context, reminder) : null;
+                  final recurrenceText = _recurrenceLabel(context, reminder);
+                  final subtitleText = timeStr != null
+                      ? '$timeStr • $recurrenceText'
+                      : recurrenceText;
+                  return ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (_) => CalendarReminderFormScreen(
+                            reminder: reminder,
+                            readOnly: true,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  title: Text(reminder.title),
-                  subtitle: Text(_recurrenceLabel(context, reminder)),
-                  leading: Switch(
-                    value: reminder.enabled,
-                    onChanged: (_) =>
-                        controller.toggleCalendarReminderEnabled(reminder.id),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        tooltip: l10n.calendarEditReminder,
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<void>(
-                              builder: (_) => CalendarReminderFormScreen(
-                                reminder: reminder,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      if (reminder.recurrence != ReminderRecurrence.once)
+                      );
+                    },
+                    title: Text(reminder.title),
+                    subtitle: Text(subtitleText),
+                    leading: Switch(
+                      value: reminder.enabled,
+                      onChanged: (_) =>
+                          controller.toggleCalendarReminderEnabled(reminder.id),
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                         IconButton(
-                          key: Key('delete_occurrence_${reminder.id}'),
-                          tooltip: l10n.calendarDeleteOccurrence,
-                          icon: const Icon(Icons.event_busy),
-                          onPressed: () =>
-                              _deleteOccurrence(context, controller, reminder),
+                          tooltip: l10n.calendarEditReminder,
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute<void>(
+                                builder: (_) => CalendarReminderFormScreen(
+                                  reminder: reminder,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      IconButton(
-                        tooltip: l10n.calendarDeleteReminder,
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () =>
-                            _deleteWithUndo(context, controller, reminder),
-                      ),
-                    ],
-                  ),
-                ),
+                        if (reminder.recurrence != ReminderRecurrence.once)
+                          IconButton(
+                            key: Key('delete_occurrence_${reminder.id}'),
+                            tooltip: l10n.calendarDeleteOccurrence,
+                            icon: const Icon(Icons.event_busy),
+                            onPressed: () =>
+                                _deleteOccurrence(context, controller, reminder),
+                          ),
+                        IconButton(
+                          tooltip: l10n.calendarDeleteReminder,
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () =>
+                              _deleteWithUndo(context, controller, reminder),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             const SizedBox(height: 8),
             FilledButton.icon(
@@ -1348,12 +1498,15 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                   ),
                   title: Row(
                     children: [
-                      Text(
-                        l10n.calendarTasksToDos,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                      Expanded(
+                        child: Text(
+                          l10n.calendarTasksToDos,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Container(
@@ -1367,7 +1520,10 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
-                          '${_showWeekTasks ? allTasks.where((t) => _getWeekDays(_date, controller.calendarWeekStart).any((d) => t.occursOn(d))).length : allTasks.where((t) => t.occursOn(_date)).length}',
+                          l10n.calendarTasksCompletedCount(
+                            completedTasks,
+                            totalTasks,
+                          ),
                           style:
                               Theme.of(context).textTheme.labelSmall?.copyWith(
                                     color: Theme.of(context)
@@ -1380,9 +1536,81 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                     ],
                   ),
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 8,
+                      runSpacing: 6,
                       children: [
+                        PopupMenuButton<CalendarSortOption>(
+                          key: const Key('calendar_sort_menu_button'),
+                          tooltip: l10n.calendarSortOption,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 4,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  controller.calendarSortOption ==
+                                          CalendarSortOption.time
+                                      ? Icons.access_time
+                                      : Icons.sort_by_alpha,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  controller.calendarSortOption ==
+                                          CalendarSortOption.time
+                                      ? l10n.calendarSortByTime
+                                      : l10n.calendarSortByName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium
+                                      ?.copyWith(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
+                                Icon(
+                                  Icons.arrow_drop_down,
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                          ),
+                          initialValue: controller.calendarSortOption,
+                          onSelected: (option) =>
+                              controller.updateCalendarSortOption(option),
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: CalendarSortOption.alphabetical,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.sort_by_alpha, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(l10n.calendarSortByName),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem(
+                              value: CalendarSortOption.time,
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.access_time, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(l10n.calendarSortByTime),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         SegmentedButton<bool>(
                           segments: [
                             ButtonSegment(

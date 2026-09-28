@@ -1572,8 +1572,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Track completion in calendar and daily goals';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total done';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Preview vibration';
 
   @override
   String get beadsExecute => 'Execute';
+
+  @override
+  String get calendarSortByName => 'Name';
+
+  @override
+  String get calendarSortByTime => 'Time';
+
+  @override
+  String get calendarSortOption => 'Sort by';
 }

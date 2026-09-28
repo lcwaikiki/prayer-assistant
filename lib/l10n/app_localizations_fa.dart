@@ -1571,8 +1571,22 @@ class AppLocalizationsFa extends AppLocalizations {
       'پیگیری تکمیل در تقویم و اهداف روزانه';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total انجام شد';
+  }
+
+  @override
   String get beadsPreviewVibration => 'پیش‌نمایش لرزش';
 
   @override
   String get beadsExecute => 'اجرا';
+
+  @override
+  String get calendarSortByName => 'نام';
+
+  @override
+  String get calendarSortByTime => 'زمان';
+
+  @override
+  String get calendarSortOption => 'مرتب‌سازی';
 }

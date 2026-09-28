@@ -660,6 +660,10 @@
   "calendarTaskCalendarReminder": "நாள்காட்டி நினைவூட்டல்",
   "calendarMarkAsTask": "பணி / செய்ய வேண்டியவை எனக் குறிக்கவும்",
   "calendarMarkAsTaskSubtitle": "நாள்காட்டி மற்றும் தினசரி இலக்குகளில் நிறைவைக் கண்காணிக்கவும்",
+  "calendarTasksCompletedCount": "{completed}/{total} முடிந்தது",
   "beadsPreviewVibration": "அதிர்வு முன்னோட்டம்",
-  "beadsExecute": "இயக்கு"
+  "beadsExecute": "இயக்கு",
+  "calendarSortByName": "பெயர்",
+  "calendarSortByTime": "நேரம்",
+  "calendarSortOption": "வரிசைப்படுத்து"
 }

@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "Pengingat Kalender",
   "calendarMarkAsTask": "Tandai sebagai tugas / daftar tugas",
   "calendarMarkAsTaskSubtitle": "Lacak penyelesaian di kalender dan target harian",
+  "calendarTasksCompletedCount": "{completed}/{total} selesai",
   "beadsPreviewVibration": "Pratinjau getaran",
-  "beadsExecute": "Mulai"
+  "beadsExecute": "Mulai",
+  "calendarSortByName": "Nama",
+  "calendarSortByTime": "Waktu",
+  "calendarSortOption": "Urutkan"
 }

@@ -3002,6 +3002,12 @@ abstract class AppLocalizations {
   /// **'Track completion in calendar and daily goals'**
   String get calendarMarkAsTaskSubtitle;
 
+  /// No description provided for @calendarTasksCompletedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed}/{total} done'**
+  String calendarTasksCompletedCount(int completed, int total);
+
   /// No description provided for @beadsPreviewVibration.
   ///
   /// In en, this message translates to:
@@ -3013,6 +3019,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Execute'**
   String get beadsExecute;
+
+  /// No description provided for @calendarSortByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get calendarSortByName;
+
+  /// No description provided for @calendarSortByTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get calendarSortByTime;
+
+  /// No description provided for @calendarSortOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get calendarSortOption;
 }
 
 class _AppLocalizationsDelegate

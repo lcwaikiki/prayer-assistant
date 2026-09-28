@@ -1578,8 +1578,22 @@ class AppLocalizationsBn extends AppLocalizations {
       'ক্যালেন্ডার এবং দৈনিক লক্ষ্যে সমাপ্তি ট্র্যাক করুন';
 
   @override
-  String get beadsPreviewVibration => 'কম্পন প্রাকদর্শন';
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total সম্পন্ন';
+  }
+
+  @override
+  String get beadsPreviewVibration => 'কম্পন পূর্বরূপ';
 
   @override
   String get beadsExecute => 'চালান';
+
+  @override
+  String get calendarSortByName => 'নাম';
+
+  @override
+  String get calendarSortByTime => 'সময়';
+
+  @override
+  String get calendarSortOption => 'সাজান';
 }

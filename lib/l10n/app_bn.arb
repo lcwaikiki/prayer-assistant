@@ -660,6 +660,10 @@
   "calendarTaskCalendarReminder": "ক্যালেন্ডার অনুস্মারক",
   "calendarMarkAsTask": "কাজ / করণীয় হিসেবে চিহ্নিত করুন",
   "calendarMarkAsTaskSubtitle": "ক্যালেন্ডার এবং দৈনিক লক্ষ্যে সমাপ্তি ট্র্যাক করুন",
-  "beadsPreviewVibration": "কম্পন প্রাকদর্শন",
-  "beadsExecute": "চালান"
+  "calendarTasksCompletedCount": "{completed}/{total} সম্পন্ন",
+  "beadsPreviewVibration": "কম্পন পূর্বরূপ",
+  "beadsExecute": "চালান",
+  "calendarSortByName": "নাম",
+  "calendarSortByTime": "সময়",
+  "calendarSortOption": "সাজান"
 }

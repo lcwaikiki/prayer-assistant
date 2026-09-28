@@ -9,6 +9,7 @@ import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
 import 'package:prayer_assistant/src/models/calendar_week_start.dart';
 import 'package:prayer_assistant/src/models/fasting_models.dart';
+import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
@@ -734,6 +735,191 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(GroupScreen), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'displays completed and total tasks badge format in DayDetailSheet',
+    (tester) async {
+      final harness = TestHarness.create();
+      final date = DateTime(2026, 8, 17);
+      await harness.initialize();
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-1',
+          title: 'Morning Reminder',
+          anchorAt: date,
+          recurrence: ReminderRecurrence.daily,
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-2',
+          title: 'Night Reminder',
+          anchorAt: date,
+          recurrence: ReminderRecurrence.daily,
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      harness.controller.setTaskCompletion('cal_rem-1', date, true);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        Scaffold(
+          body: DayDetailSheet(
+            date: date,
+            primary: CalendarPrimaryDisplay.gregorian,
+          ),
+        ),
+        settle: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Verify the badge displays "1/2 done"
+      expect(find.text('1/2 done'), findsOneWidget);
+
+      // Check the second task as completed
+      await tester.tap(find.byType(Checkbox).last);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Verify the badge updates to "2/2 done"
+      expect(find.text('2/2 done'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'reminders and tasks in DayDetailSheet are sorted alphabetically and by time',
+    (tester) async {
+      final harness = TestHarness.create();
+      final date = DateTime(2026, 8, 17);
+      await harness.initialize();
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-z',
+          title: 'Zebra Reminder',
+          anchorAt: DateTime(2026, 8, 17, 10, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-a-late',
+          title: 'Alpha Reminder',
+          anchorAt: DateTime(2026, 8, 17, 14, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-a-early',
+          title: 'Alpha Reminder',
+          anchorAt: DateTime(2026, 8, 17, 9, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        Scaffold(
+          body: DayDetailSheet(
+            date: date,
+            primary: CalendarPrimaryDisplay.gregorian,
+          ),
+        ),
+        settle: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      final textWidgets = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data)
+          .whereType<String>()
+          .toList();
+
+      // In the reminders list, Alpha Reminder should appear before Zebra Reminder
+      final alphaIndex = textWidgets.indexOf('Alpha Reminder');
+      final zebraIndex = textWidgets.indexOf('Zebra Reminder');
+      expect(alphaIndex != -1 && zebraIndex != -1, isTrue);
+      expect(alphaIndex < zebraIndex, isTrue);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'sorting by time shows item times and sorts by time in DayDetailSheet',
+    (tester) async {
+      final harness = TestHarness.create();
+      final date = DateTime(2026, 8, 17);
+      await harness.initialize();
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-z',
+          title: 'Zebra Reminder',
+          anchorAt: DateTime(2026, 8, 17, 10, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-a',
+          title: 'Alpha Reminder',
+          anchorAt: DateTime(2026, 8, 17, 14, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+
+      // Switch sort option to time
+      harness.controller.updateCalendarSortOption(CalendarSortOption.time);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        Scaffold(
+          body: DayDetailSheet(
+            date: date,
+            primary: CalendarPrimaryDisplay.gregorian,
+          ),
+        ),
+        settle: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // With time sort, Zebra Reminder (10:00) should come before Alpha Reminder (14:00)
+      final textWidgets = tester
+          .widgetList<Text>(find.byType(Text))
+          .map((t) => t.data)
+          .whereType<String>()
+          .toList();
+
+      final zebraIndex = textWidgets.indexOf('Zebra Reminder');
+      final alphaIndex = textWidgets.indexOf('Alpha Reminder');
+      expect(zebraIndex != -1 && alphaIndex != -1, isTrue);
+      expect(zebraIndex < alphaIndex, isTrue);
+
+      // Item times should be shown in subtitles
+      expect(
+        find.textContaining('10:00 •'),
+        findsWidgets,
+      );
+      expect(
+        find.textContaining('14:00 •'),
+        findsWidgets,
+      );
 
       await tester.pumpWidget(const SizedBox());
     },

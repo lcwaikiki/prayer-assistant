@@ -552,6 +552,10 @@
   "calendarTaskCalendarReminder": "Takvim Hatırlatıcısı",
   "calendarMarkAsTask": "Görev / yapılacak olarak işaretle",
   "calendarMarkAsTaskSubtitle": "Tamamlanmayı takvimde ve günlük hedeflerde takip edin",
+  "calendarTasksCompletedCount": "{completed}/{total} tamamlandı",
   "beadsPreviewVibration": "Titreşimi önizle",
-  "beadsExecute": "Başlat"
+  "beadsExecute": "Başlat",
+  "calendarSortByName": "İsim",
+  "calendarSortByTime": "Zaman",
+  "calendarSortOption": "Sırala"
 }

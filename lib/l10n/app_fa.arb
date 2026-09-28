@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "یادآور تقویم",
   "calendarMarkAsTask": "علامت‌گذاری به عنوان وظیفه / کار انجام‌دادنی",
   "calendarMarkAsTaskSubtitle": "پیگیری تکمیل در تقویم و اهداف روزانه",
+  "calendarTasksCompletedCount": "{completed}/{total} انجام شد",
   "beadsPreviewVibration": "پیش‌نمایش لرزش",
-  "beadsExecute": "اجرا"
+  "beadsExecute": "اجرا",
+  "calendarSortByName": "نام",
+  "calendarSortByTime": "زمان",
+  "calendarSortOption": "مرتب‌سازی"
 }

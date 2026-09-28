@@ -1529,8 +1529,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarMarkAsTaskSubtitle => 'カレンダーと毎日の目標で完了状況を追跡';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total 完了';
+  }
+
+  @override
   String get beadsPreviewVibration => '振動プレビュー';
 
   @override
   String get beadsExecute => '実行';
+
+  @override
+  String get calendarSortByName => '名前';
+
+  @override
+  String get calendarSortByTime => '時間';
+
+  @override
+  String get calendarSortOption => '並び替え';
 }

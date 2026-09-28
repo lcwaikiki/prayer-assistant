@@ -1568,8 +1568,22 @@ class AppLocalizationsUr extends AppLocalizations {
       'کیلنڈر اور روزانہ کے اہداف میں تکمیل کا سراغ لگائیں';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total مکمل';
+  }
+
+  @override
   String get beadsPreviewVibration => 'تھرتھراہٹ کا پیش نظارہ';
 
   @override
   String get beadsExecute => 'شروع کریں';
+
+  @override
+  String get calendarSortByName => 'نام';
+
+  @override
+  String get calendarSortByTime => 'وقت';
+
+  @override
+  String get calendarSortOption => 'ترتیب';
 }

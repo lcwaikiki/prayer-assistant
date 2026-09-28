@@ -137,10 +137,7 @@ Future<void> handleNotificationResponse(NotificationResponse response) async {
 
           final type = map['type'] as String?;
           final id = map['id']?.toString() ?? '';
-          final dateStr = map['date'] as String? ?? map['fireAt'] as String?;
-          final date = dateStr != null
-              ? DateTime.tryParse(dateStr) ?? DateTime.now()
-              : DateTime.now();
+          final date = DateTime.now();
 
           if (type == 'calendar' || prefix == calendarReminderPayloadPrefix) {
             if (id.isNotEmpty) {
@@ -181,7 +178,6 @@ Future<void> _markPrayerCompleted(String prayerKey) async {
   if (context != null) {
     try {
       context.read<PrayerAppController>().markPrayerCompleted(prayerKey);
-      return;
     } catch (_) {}
   }
 
@@ -205,7 +201,6 @@ Future<void> _markTaskCompleted(String taskId, DateTime date) async {
   if (context != null) {
     try {
       context.read<PrayerAppController>().setTaskCompletion(taskId, date, true);
-      return;
     } catch (_) {}
   }
 

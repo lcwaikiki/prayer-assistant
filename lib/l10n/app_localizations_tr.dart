@@ -1573,8 +1573,22 @@ class AppLocalizationsTr extends AppLocalizations {
       'Tamamlanmayı takvimde ve günlük hedeflerde takip edin';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total tamamlandı';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Titreşimi önizle';
 
   @override
   String get beadsExecute => 'Başlat';
+
+  @override
+  String get calendarSortByName => 'İsim';
+
+  @override
+  String get calendarSortByTime => 'Zaman';
+
+  @override
+  String get calendarSortOption => 'Sırala';
 }

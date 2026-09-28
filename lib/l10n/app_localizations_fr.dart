@@ -1594,8 +1594,22 @@ class AppLocalizationsFr extends AppLocalizations {
       'Suivre la complétion dans le calendrier et les objectifs quotidiens';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total fait';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Aperçu de la vibration';
 
   @override
   String get beadsExecute => 'Exécuter';
+
+  @override
+  String get calendarSortByName => 'Nom';
+
+  @override
+  String get calendarSortByTime => 'Heure';
+
+  @override
+  String get calendarSortOption => 'Trier par';
 }

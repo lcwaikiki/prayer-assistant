@@ -406,3 +406,15 @@ enum AppLocalePreference {
   bn,
   ta,
 }
+
+enum CalendarSortOption {
+  alphabetical,
+  time;
+
+  static CalendarSortOption fromName(String? name) {
+    return CalendarSortOption.values.firstWhere(
+      (v) => v.name == name,
+      orElse: () => CalendarSortOption.alphabetical,
+    );
+  }
+}

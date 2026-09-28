@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "کیلنڈر یاد دہانی",
   "calendarMarkAsTask": "کام / کرنے والے کام کے طور پر نشان زد کریں",
   "calendarMarkAsTaskSubtitle": "کیلنڈر اور روزانہ کے اہداف میں تکمیل کا سراغ لگائیں",
+  "calendarTasksCompletedCount": "{completed}/{total} مکمل",
   "beadsPreviewVibration": "تھرتھراہٹ کا پیش نظارہ",
-  "beadsExecute": "شروع کریں"
+  "beadsExecute": "شروع کریں",
+  "calendarSortByName": "نام",
+  "calendarSortByTime": "وقت",
+  "calendarSortOption": "ترتیب"
 }

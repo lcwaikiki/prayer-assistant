@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "Recordatorio de calendario",
   "calendarMarkAsTask": "Marcar como tarea / pendiente",
   "calendarMarkAsTaskSubtitle": "Seguimiento de finalización en calendario y metas diarias",
+  "calendarTasksCompletedCount": "{completed}/{total} completado",
   "beadsPreviewVibration": "Vista previa de vibración",
-  "beadsExecute": "Ejecutar"
+  "beadsExecute": "Ejecutar",
+  "calendarSortByName": "Nombre",
+  "calendarSortByTime": "Hora",
+  "calendarSortOption": "Ordenar por"
 }

@@ -610,6 +610,10 @@
   "calendarTaskCalendarReminder": "Напоминание календаря",
   "calendarMarkAsTask": "Отметить как задачу / список дел",
   "calendarMarkAsTaskSubtitle": "Отслеживайте выполнение в календаре и ежедневных целях",
+  "calendarTasksCompletedCount": "{completed}/{total} выполнено",
   "beadsPreviewVibration": "Проверка вибрации",
-  "beadsExecute": "Запустить"
+  "beadsExecute": "Запустить",
+  "calendarSortByName": "Имя",
+  "calendarSortByTime": "Время",
+  "calendarSortOption": "Сортировка"
 }

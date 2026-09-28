@@ -68,6 +68,7 @@ class ReminderActionReceiver : BroadcastReceiver() {
                 ReminderNotificationManager.markActionHandled(id)
                 NotificationManagerCompat.from(context).cancel(id)
                 ReminderNotificationManager.cancel(context, id)
+                MainActivity.onNotificationAction("action_done", id, payload)
                 val flutterIntent = Intent(context, ActionBroadcastReceiver::class.java).apply {
                     action = ActionBroadcastReceiver.ACTION_TAPPED
                     putExtra("notificationId", id)

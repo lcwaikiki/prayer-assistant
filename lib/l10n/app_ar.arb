@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "تذكير التقويم",
   "calendarMarkAsTask": "تحديد كمهمة / واجب",
   "calendarMarkAsTaskSubtitle": "تتبع الإنجاز في التقويم والأهداف اليومية",
+  "calendarTasksCompletedCount": "{completed}/{total} مكتمل",
   "beadsPreviewVibration": "معاينة الاهتزاز",
-  "beadsExecute": "بدء"
+  "beadsExecute": "بدء",
+  "calendarSortByName": "الاسم",
+  "calendarSortByTime": "الوقت",
+  "calendarSortOption": "ترتيب حسب"
 }

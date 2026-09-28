@@ -1579,8 +1579,22 @@ class AppLocalizationsRu extends AppLocalizations {
       'Отслеживайте выполнение в календаре и ежедневных целях';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total выполнено';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Проверка вибрации';
 
   @override
   String get beadsExecute => 'Запустить';
+
+  @override
+  String get calendarSortByName => 'Имя';
+
+  @override
+  String get calendarSortByTime => 'Время';
+
+  @override
+  String get calendarSortOption => 'Сортировка';
 }

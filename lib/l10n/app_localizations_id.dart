@@ -1581,8 +1581,22 @@ class AppLocalizationsId extends AppLocalizations {
       'Lacak penyelesaian di kalender dan target harian';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total selesai';
+  }
+
+  @override
   String get beadsPreviewVibration => 'Pratinjau getaran';
 
   @override
   String get beadsExecute => 'Mulai';
+
+  @override
+  String get calendarSortByName => 'Nama';
+
+  @override
+  String get calendarSortByTime => 'Waktu';
+
+  @override
+  String get calendarSortOption => 'Urutkan';
 }

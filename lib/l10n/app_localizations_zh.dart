@@ -1524,8 +1524,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarMarkAsTaskSubtitle => '在日历和每日目标中跟踪完成情况';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total 已完成';
+  }
+
+  @override
   String get beadsPreviewVibration => '预览震动';
 
   @override
   String get beadsExecute => '执行';
+
+  @override
+  String get calendarSortByName => '名称';
+
+  @override
+  String get calendarSortByTime => '时间';
+
+  @override
+  String get calendarSortOption => '排序';
 }

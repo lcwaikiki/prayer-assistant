@@ -16,6 +16,9 @@ class AutoBackupObserver extends WidgetsBindingObserver {
         state == AppLifecycleState.hidden) {
       _controller.autoBackupToGoogleDrive();
       _controller.autoBackupToFolder();
+    } else if (state == AppLifecycleState.resumed) {
+      _controller.reloadTaskCompletions();
+      _controller.reloadPrayerCompletions();
     }
   }
 }

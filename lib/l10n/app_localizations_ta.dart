@@ -1602,8 +1602,22 @@ class AppLocalizationsTa extends AppLocalizations {
       'நாள்காட்டி மற்றும் தினசரி இலக்குகளில் நிறைவைக் கண்காணிக்கவும்';
 
   @override
+  String calendarTasksCompletedCount(int completed, int total) {
+    return '$completed/$total முடிந்தது';
+  }
+
+  @override
   String get beadsPreviewVibration => 'அதிர்வு முன்னோட்டம்';
 
   @override
   String get beadsExecute => 'இயக்கு';
+
+  @override
+  String get calendarSortByName => 'பெயர்';
+
+  @override
+  String get calendarSortByTime => 'நேரம்';
+
+  @override
+  String get calendarSortOption => 'வரிசைப்படுத்து';
 }

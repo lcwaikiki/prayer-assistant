@@ -137,6 +137,8 @@ class CalendarReminder {
   /// Whether this reminder is designated as a Task / To-Do item.
   final bool isTask;
 
+  int get timeMinutes => anchorAt.hour * 60 + anchorAt.minute;
+
   CalendarReminder copyWith({
     String? title,
     String? notes,

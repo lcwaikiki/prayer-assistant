@@ -47,6 +47,7 @@ class TestHarness {
 
     registerFallbackValue(CalendarWeekStart.sunday);
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
+    registerFallbackValue(CalendarSortOption.alphabetical);
     registerFallbackValue(WidgetTheme.system);
     registerFallbackValue(WidgetCalendarDisplay.hijri);
     registerFallbackValue(
@@ -194,6 +195,12 @@ class TestHarness {
     when(
       () => database.loadDefaultCalendarDisplay(),
     ).thenAnswer((_) async => null);
+    when(
+      () => database.loadCalendarSortOption(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveCalendarSortOption(any()),
+    ).thenAnswer((_) async {});
     when(
       () => database.loadShowCalendarReminderDots(),
     ).thenAnswer((_) async => null);

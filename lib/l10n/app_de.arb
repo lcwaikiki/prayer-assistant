@@ -555,6 +555,10 @@
   "calendarTaskCalendarReminder": "Kalender-Erinnerung",
   "calendarMarkAsTask": "Als Aufgabe / To-Do markieren",
   "calendarMarkAsTaskSubtitle": "Erledigung im Kalender und in Tageszielen verfolgen",
+  "calendarTasksCompletedCount": "{completed}/{total} erledigt",
   "beadsPreviewVibration": "Vibration testen",
-  "beadsExecute": "Ausführen"
+  "beadsExecute": "Ausführen",
+  "calendarSortByName": "Name",
+  "calendarSortByTime": "Zeit",
+  "calendarSortOption": "Sortieren nach"
 }

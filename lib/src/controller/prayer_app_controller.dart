@@ -88,6 +88,7 @@ class PrayerAppController extends ChangeNotifier {
   bool _showIslamicHolidays = true;
   bool _showFastingBadges = true;
   CalendarPrimaryDisplay _defaultCalendarDisplay = CalendarPrimaryDisplay.hijri;
+  CalendarSortOption _calendarSortOption = CalendarSortOption.alphabetical;
   bool _showCalendarReminderDots = true;
   bool _showCardMoonPhase = true;
   bool _showCardIftarSuhoor = true;
@@ -184,6 +185,7 @@ class PrayerAppController extends ChangeNotifier {
   bool get showIslamicHolidays => _showIslamicHolidays;
   bool get showFastingBadges => _showFastingBadges;
   CalendarPrimaryDisplay get defaultCalendarDisplay => _defaultCalendarDisplay;
+  CalendarSortOption get calendarSortOption => _calendarSortOption;
   bool get showCalendarReminderDots => _showCalendarReminderDots;
   bool get showCardMoonPhase => _showCardMoonPhase;
   bool get showCardIftarSuhoor => _showCardIftarSuhoor;
@@ -218,6 +220,12 @@ class PrayerAppController extends ChangeNotifier {
   void updateDefaultCalendarDisplay(CalendarPrimaryDisplay display) {
     _defaultCalendarDisplay = display;
     database.saveDefaultCalendarDisplay(display);
+    notifyListeners();
+  }
+
+  void updateCalendarSortOption(CalendarSortOption option) {
+    _calendarSortOption = option;
+    database.saveCalendarSortOption(option);
     notifyListeners();
   }
 
@@ -459,6 +467,11 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> reloadPrayerCompletions() async {
+    _prayerCompletions = await database.loadPrayerCompletions();
+    notifyListeners();
+  }
+
 
   String _toDateKey(DateTime date) {
     final safe = DateTime(date.year, date.month, date.day);
@@ -645,6 +658,9 @@ class PrayerAppController extends ChangeNotifier {
       _defaultCalendarDisplay =
           await database.loadDefaultCalendarDisplay() ??
           CalendarPrimaryDisplay.hijri;
+      _calendarSortOption =
+          await database.loadCalendarSortOption() ??
+          CalendarSortOption.alphabetical;
       _showCalendarReminderDots =
           await database.loadShowCalendarReminderDots() ?? true;
       _showCardMoonPhase = await database.loadShowCardMoonPhase() ?? true;

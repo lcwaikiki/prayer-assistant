@@ -40,11 +40,13 @@ class _AppShellState extends State<AppShell> {
   Timer? _timer;
   DateTime _now = DateTime.now();
   late final PrayerAppController _controller;
+  int _lastTabIndex = -1;
 
   @override
   void initState() {
     super.initState();
     _controller = context.read<PrayerAppController>();
+    _lastTabIndex = _controller.tabIndex;
     _controller.addListener(_onTabChange);
     _updateOrientation(_controller.tabIndex);
     _timer = Timer.periodic(const Duration(seconds: 30), (_) {
@@ -80,7 +82,10 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _onTabChange() {
-    _updateOrientation(_controller.tabIndex);
+    if (_controller.tabIndex != _lastTabIndex) {
+      _lastTabIndex = _controller.tabIndex;
+      _updateOrientation(_lastTabIndex);
+    }
   }
 
   void _updateOrientation(int tabIndex) {

@@ -54,6 +54,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       final controller = context?.read<PrayerAppController>();
       if (controller == null || controller.tabIndex != 4) {
         SystemChrome.setPreferredOrientations([]);
+      } else {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
       }
     } catch (_) {
       SystemChrome.setPreferredOrientations([]);

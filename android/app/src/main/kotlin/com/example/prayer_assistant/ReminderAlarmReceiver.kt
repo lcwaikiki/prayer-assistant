@@ -14,6 +14,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
         val snoozeLabel = intent.getStringExtra("snoozeLabel") ?: "Snooze"
         val dismissLabel = intent.getStringExtra("dismissLabel") ?: "Dismiss"
         val doneLabel = intent.getStringExtra("doneLabel") ?: "Done"
+        val showDone = intent.getBooleanExtra("showDone", false)
         val soundResource = intent.getStringExtra("soundResource")
 
         ReminderNotificationManager.show(
@@ -25,6 +26,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
             snoozeLabel = snoozeLabel,
             dismissLabel = dismissLabel,
             doneLabel = doneLabel,
+            showDone = showDone,
             soundResource = soundResource
         )
     }

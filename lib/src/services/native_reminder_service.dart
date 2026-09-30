@@ -19,6 +19,7 @@ class NativeReminderService {
     String snoozeLabel = 'Snooze',
     String dismissLabel = 'Dismiss',
     String doneLabel = 'Done',
+    bool showDone = false,
     String? soundResource = 'reminder_chime',
   }) async {
     if (!isAndroid) return;
@@ -31,6 +32,7 @@ class NativeReminderService {
         'snoozeLabel': snoozeLabel,
         'dismissLabel': dismissLabel,
         'doneLabel': doneLabel,
+        'showDone': showDone,
         'soundResource': soundResource,
       });
     } catch (_) {}
@@ -45,6 +47,7 @@ class NativeReminderService {
     String snoozeLabel = 'Snooze',
     String dismissLabel = 'Dismiss',
     String doneLabel = 'Done',
+    bool showDone = false,
     String? soundResource = 'reminder_chime',
   }) async {
     if (!isAndroid) return;
@@ -58,6 +61,7 @@ class NativeReminderService {
         'snoozeLabel': snoozeLabel,
         'dismissLabel': dismissLabel,
         'doneLabel': doneLabel,
+        'showDone': showDone,
         'soundResource': soundResource,
       });
     } catch (_) {}

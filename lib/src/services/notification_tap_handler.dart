@@ -259,6 +259,7 @@ Future<void> _handleSnooze(
   String channelId = 'prayer_reminders_chime_vibrate_sound';
   String channelName = 'Prayer Reminders (vibrate + sound)';
   String? soundResource = 'reminder_chime';
+  bool isTask = false;
 
   final payload = response.payload;
   if (payload != null && payload.isNotEmpty) {
@@ -284,6 +285,7 @@ Future<void> _handleSnooze(
       channelId = map['channelId'] as String? ?? channelId;
       channelName = map['channelName'] as String? ?? channelName;
       soundResource = map['soundResource'] as String? ?? soundResource;
+      isTask = map['isTask'] == true;
       if (map['type'] == 'calendar') {
         channelId = 'calendar_reminders_chime';
         channelName = 'Calendar Reminders';
@@ -328,11 +330,12 @@ Future<void> _handleSnooze(
           strings.dismiss,
           cancelNotification: true,
         ),
-        AndroidNotificationAction(
-          notificationActionDone,
-          strings.done,
-          cancelNotification: true,
-        ),
+        if (isTask)
+          AndroidNotificationAction(
+            notificationActionDone,
+            strings.done,
+            cancelNotification: true,
+          ),
       ],
     ),
     iOS: const DarwinNotificationDetails(
@@ -370,6 +373,7 @@ Future<void> _handleSnooze(
       snoozeLabel: strings.snooze,
       dismissLabel: strings.dismiss,
       doneLabel: strings.done,
+      showDone: isTask,
       soundResource: soundResource,
     );
     return;

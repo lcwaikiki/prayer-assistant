@@ -108,6 +108,7 @@ class ItemReminderService {
     required String payload,
     DateTimeComponents? matchDateTimeComponents,
     NotificationStrings? strings,
+    bool showDone = false,
   }) async {
     if (NativeReminderService.isAndroid) {
       final s = strings ?? NotificationStrings.of(null);
@@ -120,6 +121,7 @@ class ItemReminderService {
         snoozeLabel: s.snooze,
         dismissLabel: s.dismiss,
         doneLabel: s.done,
+        showDone: showDone,
       );
       return true;
     }
@@ -240,11 +242,12 @@ class ItemReminderService {
             strings.dismiss,
             cancelNotification: true,
           ),
-          AndroidNotificationAction(
-            notificationActionDone,
-            strings.done,
-            cancelNotification: true,
-          ),
+          if (subject.isTask)
+            AndroidNotificationAction(
+              notificationActionDone,
+              strings.done,
+              cancelNotification: true,
+            ),
         ],
       ),
       iOS: const DarwinNotificationDetails(
@@ -252,7 +255,7 @@ class ItemReminderService {
       ),
     );
     final payload =
-        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body, 'type': subject is Item ? 'tesbih_item' : 'tesbih_group'})}';
+        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body, 'type': subject is Item ? 'tesbih_item' : 'tesbih_group', 'isTask': subject.isTask})}';
 
     final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {
@@ -289,6 +292,7 @@ class ItemReminderService {
         notificationDetails: details,
         payload: payload,
         strings: strings,
+        showDone: subject.isTask,
       );
       return;
     }
@@ -311,6 +315,7 @@ class ItemReminderService {
           notificationDetails: details,
           payload: payload,
           strings: strings,
+          showDone: subject.isTask,
         );
       case ReminderRecurrence.daily:
         await _zonedSchedule(
@@ -324,6 +329,7 @@ class ItemReminderService {
               ? DateTimeComponents.time
               : null,
           strings: strings,
+          showDone: subject.isTask,
         );
       case ReminderRecurrence.weekly:
         if (subject.reminderWeekdays.isEmpty) {
@@ -338,6 +344,7 @@ class ItemReminderService {
                 ? DateTimeComponents.dayOfWeekAndTime
                 : null,
             strings: strings,
+            showDone: subject.isTask,
           );
         } else if (_usesOsRepeats) {
           // One OS-level weekly repeat per selected weekday.
@@ -352,6 +359,7 @@ class ItemReminderService {
               payload: payload,
               matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
               strings: strings,
+              showDone: subject.isTask,
             );
             if (!scheduled) {
               break;
@@ -372,6 +380,7 @@ class ItemReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: subject.isTask,
           );
         }
       case ReminderRecurrence.monthly:
@@ -394,6 +403,7 @@ class ItemReminderService {
                 ? DateTimeComponents.dayOfMonthAndTime
                 : null,
             strings: strings,
+            showDone: subject.isTask,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
@@ -408,6 +418,7 @@ class ItemReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: subject.isTask,
           );
         }
       case ReminderRecurrence.yearly:
@@ -427,6 +438,7 @@ class ItemReminderService {
                 ? DateTimeComponents.dateAndTime
                 : null,
             strings: strings,
+            showDone: subject.isTask,
           );
         } else {
           final next = _nextHijriAnniversary(
@@ -441,6 +453,7 @@ class ItemReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: subject.isTask,
           );
         }
     }
@@ -480,6 +493,7 @@ class ItemReminderService {
         notificationDetails: details,
         payload: payload,
         strings: strings,
+        showDone: subject.isTask,
       );
       if (!scheduled) {
         // Android caps scheduled notifications; stop instead of throwing.

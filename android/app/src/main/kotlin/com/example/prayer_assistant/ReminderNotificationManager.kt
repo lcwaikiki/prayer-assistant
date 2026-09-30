@@ -44,6 +44,7 @@ object ReminderNotificationManager {
         snoozeLabel: String = "Snooze",
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
+        showDone: Boolean = false,
         soundResource: String? = "reminder_chime"
     ) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -83,6 +84,7 @@ object ReminderNotificationManager {
             putExtra("snoozeLabel", snoozeLabel)
             putExtra("dismissLabel", dismissLabel)
             putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
         }
         val contentPendingIntent = PendingIntent.getActivity(
@@ -104,6 +106,7 @@ object ReminderNotificationManager {
             putExtra("snoozeLabel", snoozeLabel)
             putExtra("dismissLabel", dismissLabel)
             putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
         }
         val deletePendingIntent = PendingIntent.getBroadcast(
@@ -124,6 +127,7 @@ object ReminderNotificationManager {
                 putExtra("snoozeLabel", snoozeLabel)
                 putExtra("dismissLabel", dismissLabel)
                 putExtra("doneLabel", doneLabel)
+                putExtra("showDone", showDone)
                 putExtra("soundResource", soundResource)
             }
             val actionOffset = when (actionId) {
@@ -144,16 +148,27 @@ object ReminderNotificationManager {
         val dismissActionPendingIntent = buildActionPendingIntent("action_dismiss")
         val donePendingIntent = buildActionPendingIntent("action_done")
 
-        val remoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
+        val collapsedRemoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
+            setTextViewText(R.id.reminderTitle, title)
+            setTextViewText(R.id.reminderBody, body)
+            setViewVisibility(R.id.reminderActionsContainer, android.view.View.GONE)
+        }
+
+        val expandedRemoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
             setTextViewText(R.id.reminderTitle, title)
             setTextViewText(R.id.reminderBody, body)
             setTextViewText(R.id.btnReminderSnooze, snoozeLabel)
             setTextViewText(R.id.btnReminderDismiss, dismissLabel)
             setTextViewText(R.id.btnReminderDone, doneLabel)
 
+            setViewVisibility(R.id.reminderActionsContainer, android.view.View.VISIBLE)
+            setViewVisibility(R.id.btnReminderDone, if (showDone) android.view.View.VISIBLE else android.view.View.GONE)
+
             setOnClickPendingIntent(R.id.btnReminderSnooze, snoozePendingIntent)
             setOnClickPendingIntent(R.id.btnReminderDismiss, dismissActionPendingIntent)
-            setOnClickPendingIntent(R.id.btnReminderDone, donePendingIntent)
+            if (showDone) {
+                setOnClickPendingIntent(R.id.btnReminderDone, donePendingIntent)
+            }
         }
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
@@ -168,8 +183,8 @@ object ReminderNotificationManager {
             .setContentIntent(contentPendingIntent)
             .setDeleteIntent(deletePendingIntent)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(remoteViews)
-            .setCustomBigContentView(remoteViews)
+            .setCustomContentView(collapsedRemoteViews)
+            .setCustomBigContentView(expandedRemoteViews)
 
         val notification = builder.build()
         notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
@@ -186,6 +201,7 @@ object ReminderNotificationManager {
         snoozeLabel: String = "Snooze",
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
+        showDone: Boolean = false,
         soundResource: String? = "reminder_chime"
     ) {
         handledActions.remove(id)
@@ -199,6 +215,7 @@ object ReminderNotificationManager {
             putExtra("snoozeLabel", snoozeLabel)
             putExtra("dismissLabel", dismissLabel)
             putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
         }
         val contentPendingIntent = PendingIntent.getActivity(
@@ -219,6 +236,7 @@ object ReminderNotificationManager {
             putExtra("snoozeLabel", snoozeLabel)
             putExtra("dismissLabel", dismissLabel)
             putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
         }
         val deletePendingIntent = PendingIntent.getBroadcast(
@@ -243,6 +261,7 @@ object ReminderNotificationManager {
                 putExtra("snoozeLabel", snoozeLabel)
                 putExtra("dismissLabel", dismissLabel)
                 putExtra("doneLabel", doneLabel)
+                putExtra("showDone", showDone)
                 putExtra("soundResource", soundResource)
             }
             return PendingIntent.getBroadcast(
@@ -253,7 +272,13 @@ object ReminderNotificationManager {
             )
         }
 
-        val remoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
+        val collapsedRemoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
+            setTextViewText(R.id.snoozeTitle, title)
+            setTextViewText(R.id.snoozePrompt, promptText)
+            setViewVisibility(R.id.snoozeOptionsContainer, android.view.View.GONE)
+        }
+
+        val expandedRemoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
             setTextViewText(R.id.snoozeTitle, title)
             setTextViewText(R.id.snoozePrompt, promptText)
             setTextViewText(R.id.btnSnooze5, if (isTr) "5 dk" else "5m")
@@ -261,6 +286,8 @@ object ReminderNotificationManager {
             setTextViewText(R.id.btnSnooze15, if (isTr) "15 dk" else "15m")
             setTextViewText(R.id.btnSnooze30, if (isTr) "30 dk" else "30m")
             setTextViewText(R.id.btnSnooze60, if (isTr) "60 dk" else "60m")
+
+            setViewVisibility(R.id.snoozeOptionsContainer, android.view.View.VISIBLE)
 
             setOnClickPendingIntent(R.id.btnSnooze5, buildSnoozeChoicePendingIntent(5, 51))
             setOnClickPendingIntent(R.id.btnSnooze10, buildSnoozeChoicePendingIntent(10, 52))
@@ -279,8 +306,8 @@ object ReminderNotificationManager {
             .setContentIntent(contentPendingIntent)
             .setDeleteIntent(deletePendingIntent)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(remoteViews)
-            .setCustomBigContentView(remoteViews)
+            .setCustomContentView(collapsedRemoteViews)
+            .setCustomBigContentView(expandedRemoteViews)
 
         val notification = builder.build()
         notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
@@ -297,6 +324,7 @@ object ReminderNotificationManager {
         snoozeLabel: String = "Snooze",
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
+        showDone: Boolean = false,
         soundResource: String? = "reminder_chime"
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -309,6 +337,7 @@ object ReminderNotificationManager {
             putExtra("snoozeLabel", snoozeLabel)
             putExtra("dismissLabel", dismissLabel)
             putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
         }
         val pendingIntent = PendingIntent.getBroadcast(

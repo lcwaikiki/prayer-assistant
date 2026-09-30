@@ -498,6 +498,7 @@ class MainActivity : FlutterActivity() {
                     val snoozeLabel = call.argument<String>("snoozeLabel") ?: "Snooze"
                     val dismissLabel = call.argument<String>("dismissLabel") ?: "Dismiss"
                     val doneLabel = call.argument<String>("doneLabel") ?: "Done"
+                    val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
                     ReminderNotificationManager.show(
                         context = this,
@@ -508,6 +509,7 @@ class MainActivity : FlutterActivity() {
                         snoozeLabel = snoozeLabel,
                         dismissLabel = dismissLabel,
                         doneLabel = doneLabel,
+                        showDone = showDone,
                         soundResource = soundResource
                     )
                     result.success(null)
@@ -521,6 +523,7 @@ class MainActivity : FlutterActivity() {
                     val snoozeLabel = call.argument<String>("snoozeLabel") ?: "Snooze"
                     val dismissLabel = call.argument<String>("dismissLabel") ?: "Dismiss"
                     val doneLabel = call.argument<String>("doneLabel") ?: "Done"
+                    val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
                     ReminderNotificationManager.schedule(
                         context = this,
@@ -532,6 +535,7 @@ class MainActivity : FlutterActivity() {
                         snoozeLabel = snoozeLabel,
                         dismissLabel = dismissLabel,
                         doneLabel = doneLabel,
+                        showDone = showDone,
                         soundResource = soundResource
                     )
                     result.success(null)
@@ -635,6 +639,7 @@ class MainActivity : FlutterActivity() {
         val snoozeLabel = intent?.getStringExtra("snoozeLabel") ?: "Snooze"
         val dismissLabel = intent?.getStringExtra("dismissLabel") ?: "Dismiss"
         val doneLabel = intent?.getStringExtra("doneLabel") ?: "Done"
+        val showDone = intent?.getBooleanExtra("showDone", false) ?: false
         val soundResource = intent?.getStringExtra("soundResource")
 
         if (id != -1 && title != null && body != null) {
@@ -647,6 +652,7 @@ class MainActivity : FlutterActivity() {
                 snoozeLabel = snoozeLabel,
                 dismissLabel = dismissLabel,
                 doneLabel = doneLabel,
+                showDone = showDone,
                 soundResource = soundResource
             )
         }
@@ -661,6 +667,7 @@ class MainActivity : FlutterActivity() {
             intent.removeExtra("snoozeLabel")
             intent.removeExtra("dismissLabel")
             intent.removeExtra("doneLabel")
+            intent.removeExtra("showDone")
             intent.removeExtra("soundResource")
         }
         val ch = reminderChannel ?: return

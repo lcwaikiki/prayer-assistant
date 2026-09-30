@@ -167,11 +167,6 @@ class NotificationService {
             s.dismiss,
             cancelNotification: true,
           ),
-          AndroidNotificationAction(
-            notificationActionDone,
-            s.done,
-            cancelNotification: true,
-          ),
         ],
       ),
       iOS: DarwinNotificationDetails(
@@ -258,11 +253,6 @@ class NotificationService {
             strings.dismiss,
             cancelNotification: true,
           ),
-          AndroidNotificationAction(
-            notificationActionDone,
-            strings.done,
-            cancelNotification: true,
-          ),
         ],
       ),
       iOS: const DarwinNotificationDetails(
@@ -276,6 +266,7 @@ class NotificationService {
       'title': strings.testTitle,
       'body': strings.testBody,
       'id': 900001,
+      'isTask': false,
     });
 
     if (NativeReminderService.isAndroid) {
@@ -287,6 +278,7 @@ class NotificationService {
         snoozeLabel: strings.snooze,
         dismissLabel: strings.dismiss,
         doneLabel: strings.done,
+        showDone: false,
       );
       return;
     }

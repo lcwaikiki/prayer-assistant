@@ -122,6 +122,7 @@ class CalendarReminderService {
     required String payload,
     DateTimeComponents? matchDateTimeComponents,
     NotificationStrings? strings,
+    bool showDone = false,
   }) async {
     if (NativeReminderService.isAndroid) {
       final s = strings ?? NotificationStrings.of(null);
@@ -134,6 +135,7 @@ class CalendarReminderService {
         snoozeLabel: s.snooze,
         dismissLabel: s.dismiss,
         doneLabel: s.done,
+        showDone: showDone,
       );
       return true;
     }
@@ -209,11 +211,12 @@ class CalendarReminderService {
             strings.dismiss,
             cancelNotification: true,
           ),
-          AndroidNotificationAction(
-            notificationActionDone,
-            strings.done,
-            cancelNotification: true,
-          ),
+          if (reminder.isTask)
+            AndroidNotificationAction(
+              notificationActionDone,
+              strings.done,
+              cancelNotification: true,
+            ),
         ],
       ),
       iOS: const DarwinNotificationDetails(
@@ -222,7 +225,7 @@ class CalendarReminderService {
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
     final payload =
-        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': reminder.anchorAt.toIso8601String()})}';
+        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': reminder.anchorAt.toIso8601String(), 'isTask': reminder.isTask})}';
 
     final repeatCount = reminder.repeatCount;
     if (repeatCount != null) {
@@ -259,6 +262,7 @@ class CalendarReminderService {
         notificationDetails: details,
         payload: payload,
         strings: strings,
+        showDone: reminder.isTask,
       );
       return;
     }
@@ -276,6 +280,7 @@ class CalendarReminderService {
           notificationDetails: details,
           payload: payload,
           strings: strings,
+          showDone: reminder.isTask,
         );
       case ReminderRecurrence.daily:
         await _zonedSchedule(
@@ -289,6 +294,7 @@ class CalendarReminderService {
               ? DateTimeComponents.time
               : null,
           strings: strings,
+          showDone: reminder.isTask,
         );
       case ReminderRecurrence.weekly:
         if (reminder.weekdays.isEmpty) {
@@ -303,6 +309,7 @@ class CalendarReminderService {
                 ? DateTimeComponents.dayOfWeekAndTime
                 : null,
             strings: strings,
+            showDone: reminder.isTask,
           );
         } else if (_usesOsRepeats) {
           // One OS-level weekly repeat per selected weekday.
@@ -317,6 +324,7 @@ class CalendarReminderService {
               payload: payload,
               matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
               strings: strings,
+              showDone: reminder.isTask,
             );
             if (!scheduled) {
               break;
@@ -337,6 +345,7 @@ class CalendarReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: reminder.isTask,
           );
         }
       case ReminderRecurrence.monthly:
@@ -359,6 +368,7 @@ class CalendarReminderService {
                 ? DateTimeComponents.dayOfMonthAndTime
                 : null,
             strings: strings,
+            showDone: reminder.isTask,
           );
         } else {
           final next = _nextHijriMonthlyOccurrence(
@@ -373,6 +383,7 @@ class CalendarReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: reminder.isTask,
           );
         }
       case ReminderRecurrence.yearly:
@@ -392,6 +403,7 @@ class CalendarReminderService {
                 ? DateTimeComponents.dateAndTime
                 : null,
             strings: strings,
+            showDone: reminder.isTask,
           );
         } else {
           final next = _nextHijriAnniversary(
@@ -406,6 +418,7 @@ class CalendarReminderService {
             notificationDetails: details,
             payload: payload,
             strings: strings,
+            showDone: reminder.isTask,
           );
         }
     }
@@ -436,7 +449,7 @@ class CalendarReminderService {
     var index = 0;
     for (final fireAt in occurrences) {
       final occPayload =
-          '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': fireAt.toIso8601String()})}';
+          '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': fireAt.toIso8601String(), 'isTask': reminder.isTask})}';
       final scheduled = await _zonedSchedule(
         id: baseId + index,
         title: reminder.title,
@@ -445,6 +458,7 @@ class CalendarReminderService {
         notificationDetails: details,
         payload: occPayload,
         strings: strings,
+        showDone: reminder.isTask,
       );
       if (!scheduled) {
         // Android caps scheduled notifications; stop instead of throwing.

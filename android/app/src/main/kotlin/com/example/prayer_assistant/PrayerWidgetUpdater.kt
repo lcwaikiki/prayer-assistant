@@ -1110,11 +1110,7 @@ object PrayerWidgetUpdater {
             return
         }
 
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            nextTransition + 1_000L,
-            pendingIntent
-        )
+        setExactAlarmSafely(alarmManager, nextTransition + 1_000L, pendingIntent)
     }
 
     /**
@@ -1155,7 +1151,7 @@ object PrayerWidgetUpdater {
             ((now / 60_000L) + 1L) * 60_000L
         }
 
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+        setExactAlarmSafely(alarmManager, triggerAt, pendingIntent)
     }
 
     /**
@@ -1187,7 +1183,33 @@ object PrayerWidgetUpdater {
         }
 
         val triggerAt = ((now / 60_000L) + 1L) * 60_000L
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+        setExactAlarmSafely(alarmManager, triggerAt, pendingIntent)
+    }
+
+    private fun setExactAlarmSafely(
+        alarmManager: AlarmManager,
+        triggerAtMillis: Long,
+        pendingIntent: PendingIntent
+    ) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                } else {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            }
+        } catch (_: SecurityException) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            }
+        }
     }
 
     /**

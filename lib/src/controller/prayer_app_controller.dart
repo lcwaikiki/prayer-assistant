@@ -41,9 +41,14 @@ class PrayerAppController extends ChangeNotifier {
     required this.notificationService,
     required this.widgetBridgeService,
     required this.calendarReminderService,
+    GoogleDriveBackupService? driveService,
+    OfflineFolderBackupService? offlineFolderService,
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
-  })  : _itemRepo = itemRepo,
+  })  : _driveService = driveService ?? GoogleDriveBackupService(),
+        _offlineFolderService =
+            offlineFolderService ?? OfflineFolderBackupService(),
+        _itemRepo = itemRepo,
         _historyRepo = historyRepo;
 
   final ImsakiyemApi api;
@@ -52,6 +57,8 @@ class PrayerAppController extends ChangeNotifier {
   final NotificationService notificationService;
   final WidgetBridgeService widgetBridgeService;
   final CalendarReminderService calendarReminderService;
+  final GoogleDriveBackupService _driveService;
+  final OfflineFolderBackupService _offlineFolderService;
   final ItemRepository? _itemRepo;
   final ItemHistoryRepository? _historyRepo;
 
@@ -1898,11 +1905,9 @@ class PrayerAppController extends ChangeNotifier {
     );
   }
 
-  final _driveService = GoogleDriveBackupService();
   BackupActivity _backupActivity = BackupActivity.idle;
   bool _autoBackupInProgress = false;
   int? _lastAutoBackupFingerprint;
-  final _offlineFolderService = OfflineFolderBackupService();
   String? _offlineFolderUri;
   bool _useDefaultDocumentsFolder = false;
   bool _folderBackupInProgress = false;

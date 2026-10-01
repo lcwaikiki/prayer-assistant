@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:flutter/services.dart';
 import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/ui/history_screen.dart';
 
@@ -8,6 +9,15 @@ import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('wakelock_plus'),
+      (call) async => true,
+    );
+  });
+
   testWidgets('prompts for a location when none is selected in prayer times tab', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();

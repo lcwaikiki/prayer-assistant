@@ -44,6 +44,15 @@ class TestHarness {
     final widgetBridge = MockWidgetBridgeService();
     final calendarReminderService = MockCalendarReminderService();
     final itemReminderService = MockItemReminderService();
+    final driveService = MockGoogleDriveBackupService();
+    final offlineFolderService = MockOfflineFolderBackupService();
+
+    when(() => driveService.restoreSession()).thenAnswer((_) async => false);
+    when(() => driveService.isSignedIn).thenReturn(false);
+    when(() => offlineFolderService.currentFolder())
+        .thenAnswer((_) async => null);
+    when(() => offlineFolderService.documentsFolderAvailable())
+        .thenAnswer((_) async => false);
 
     registerFallbackValue(CalendarWeekStart.sunday);
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
@@ -364,6 +373,8 @@ class TestHarness {
       notificationService: notificationService,
       widgetBridgeService: widgetBridge,
       calendarReminderService: calendarReminderService,
+      driveService: driveService,
+      offlineFolderService: offlineFolderService,
     );
 
     return TestHarness._(

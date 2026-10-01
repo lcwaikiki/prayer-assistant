@@ -44,12 +44,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
-  late final TabController _tabController = TabController(
-    length: 3,
-    initialIndex: 1,
-    vsync: this,
-  );
-
+  late final TabController _tabController;
 
   final ScrollController _verticalController = ScrollController();
   final ScrollController _headerHorizontalController = ScrollController();
@@ -64,6 +59,11 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(
+      length: 3,
+      initialIndex: 1,
+      vsync: this,
+    );
     _tabController.addListener(_handleTabChanged);
   }
 
@@ -166,13 +166,11 @@ class _HistoryScreenState extends State<HistoryScreen>
         if (_lastTabIndex != controller.tabIndex) {
           _lastTabIndex = controller.tabIndex;
           if (controller.tabIndex == 3) {
-            if (_tabController.index != 1) {
-              _tabController.index = 1;
-            }
-            _scheduleScrollToToday(
-              controller.yearRange,
-              locale: Localizations.localeOf(context).toString(),
-            );
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _tabController.index != 1) {
+                _tabController.index = 1;
+              }
+            });
           }
         }
 

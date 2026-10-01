@@ -1,4 +1,6 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/services/google_drive_backup_service.dart';
+import 'package:prayer_assistant/src/services/offline_folder_backup_service.dart';
 import 'package:prayer_assistant/src/calendar/services/calendar_reminder_service.dart';
 import 'package:prayer_assistant/src/services/imsakiyem_api.dart';
 import 'package:prayer_assistant/src/services/local_database.dart';
@@ -24,3 +26,9 @@ class MockCalendarReminderService extends Mock
 class MockItemReminderService extends Mock implements ItemReminderService {}
 
 class MockHapticService extends Mock implements HapticService {}
+
+class MockGoogleDriveBackupService extends Mock
+    implements GoogleDriveBackupService {}
+
+class MockOfflineFolderBackupService extends Mock
+    implements OfflineFolderBackupService {}

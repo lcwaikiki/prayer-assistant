@@ -344,6 +344,66 @@ abstract class AppLocalizations {
   /// **'Show ongoing remaining-minutes notification in status bar.'**
   String get statusBarMinutesSubtitle;
 
+  /// No description provided for @statusBarShowTimeLeftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show remaining time'**
+  String get statusBarShowTimeLeftTitle;
+
+  /// No description provided for @statusBarShowTimeLeftSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display the time remaining in the status bar notification.'**
+  String get statusBarShowTimeLeftSubtitle;
+
+  /// No description provided for @statusBarShowPrayerTimesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show daily prayer times'**
+  String get statusBarShowPrayerTimesTitle;
+
+  /// No description provided for @statusBarShowPrayerTimesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display all prayer times when expanding the status bar notification.'**
+  String get statusBarShowPrayerTimesSubtitle;
+
+  /// No description provided for @notificationShowTimeLeftTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show remaining time in notifications'**
+  String get notificationShowTimeLeftTitle;
+
+  /// No description provided for @notificationShowTimeLeftSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include remaining time countdown in reminder notifications.'**
+  String get notificationShowTimeLeftSubtitle;
+
+  /// No description provided for @notificationShowPrayerTimesMessageTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show prayer times message'**
+  String get notificationShowPrayerTimesMessageTitle;
+
+  /// No description provided for @notificationShowPrayerTimesMessageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Include the prayer time details in reminder notification body.'**
+  String get notificationShowPrayerTimesMessageSubtitle;
+
+  /// No description provided for @notificationDismissConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask confirmation on dismiss'**
+  String get notificationDismissConfirmTitle;
+
+  /// No description provided for @notificationDismissConfirmSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask for confirmation inside the notification when Dismiss is tapped.'**
+  String get notificationDismissConfirmSubtitle;
+
   /// No description provided for @statusAutoRestoreTitle.
   ///
   /// In en, this message translates to:

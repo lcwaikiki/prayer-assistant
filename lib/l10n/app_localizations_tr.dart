@@ -137,6 +137,42 @@ class AppLocalizationsTr extends AppLocalizations {
       'Durum çubuğunda kalan dakika bildirimini göster.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Kalan süreyi göster';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Durum çubuğu bildiriminde kalan süreyi gösterir.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'Günlük vakitleri göster';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Durum çubuğu bildirimi genişletildiğinde günlük vakit tablosunu gösterir.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Bildirimlerde kalan süreyi göster';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Hatırlatıcı bildirimlerinde kalan süre bilgisini gösterir.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle => 'Vakit mesajını göster';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Hatırlatıcı bildiriminin gövdesinde vakit detay mesajını gösterir.';
+
+  @override
+  String get notificationDismissConfirmTitle => 'Kapatırken onay sor';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Bildirimde Kapat\'a dokunulduğunda bildirim içinde onay isteyin.';
+
+  @override
   String get statusAutoRestoreTitle => 'Silinince geri yükle';
 
   @override

@@ -34,6 +34,7 @@ void main() {
     registerFallbackValue(const KazaTracker());
     registerFallbackValue(CalendarPrimaryDisplay.hijri);
     registerFallbackValue(CalendarWeekStart.monday);
+    registerFallbackValue(CalendarSortOption.time);
     registerFallbackValue(WidgetTheme.system);
     registerFallbackValue(WidgetCalendarDisplay.hijri);
   });
@@ -59,6 +60,8 @@ void main() {
         prayerNameLabel: any(named: 'prayerNameLabel'),
         vibrationEnabled: any(named: 'vibrationEnabled'),
         soundEnabled: any(named: 'soundEnabled'),
+        showTimeLeft: any(named: 'showTimeLeft'),
+        showPrayerTimesMessage: any(named: 'showPrayerTimesMessage'),
         locale: any(named: 'locale'),
       ),
     ).thenAnswer((_) async {});
@@ -75,6 +78,8 @@ void main() {
       () => widgetBridge.updateStatusBarConfig(
         enabled: any(named: 'enabled'),
         autoRestore: any(named: 'autoRestore'),
+        showTimeLeft: any(named: 'showTimeLeft'),
+        showPrayerTimes: any(named: 'showPrayerTimes'),
       ),
     ).thenAnswer((_) async {});
     when(
@@ -116,6 +121,39 @@ void main() {
     when(
       () => database.loadStatusBarRemainingEnabled(),
     ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarRemainingEnabled(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadStatusBarShowTimeLeft(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarShowTimeLeft(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadStatusBarShowPrayerTimes(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarShowPrayerTimes(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationShowTimeLeft(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationShowTimeLeft(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationShowPrayerTimesMessage(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationShowPrayerTimesMessage(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationDismissConfirm(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationDismissConfirm(any()),
+    ).thenAnswer((_) async {});
     when(
       () => database.loadRemindersSilenced(),
     ).thenAnswer((_) async => null);
@@ -190,6 +228,12 @@ void main() {
     ).thenAnswer((_) async => null);
     when(
       () => database.saveDefaultCalendarDisplay(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadCalendarSortOption(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveCalendarSortOption(any()),
     ).thenAnswer((_) async {});
     when(
       () => database.loadShowCalendarReminderDots(),
@@ -1090,6 +1134,79 @@ void main() {
         () => notificationService.showTestNotificationNow(
           locale: any(named: 'locale'),
         ),
+      ).called(1);
+    });
+
+    test('updateStatusBarShowTimeLeft persists and syncs status bar', () async {
+      final controller = buildController();
+      expect(controller.statusBarShowTimeLeft, isTrue);
+
+      await controller.updateStatusBarShowTimeLeft(false);
+
+      expect(controller.statusBarShowTimeLeft, isFalse);
+      verify(() => database.saveStatusBarShowTimeLeft(false)).called(1);
+      verify(
+        () => widgetBridge.updateStatusBarConfig(
+          enabled: true,
+          autoRestore: true,
+          showTimeLeft: false,
+          showPrayerTimes: true,
+        ),
+      ).called(1);
+    });
+
+    test('updateStatusBarShowPrayerTimes persists and syncs status bar', () async {
+      final controller = buildController();
+      expect(controller.statusBarShowPrayerTimes, isTrue);
+
+      await controller.updateStatusBarShowPrayerTimes(false);
+
+      expect(controller.statusBarShowPrayerTimes, isFalse);
+      verify(() => database.saveStatusBarShowPrayerTimes(false)).called(1);
+      verify(
+        () => widgetBridge.updateStatusBarConfig(
+          enabled: true,
+          autoRestore: true,
+          showTimeLeft: true,
+          showPrayerTimes: false,
+        ),
+      ).called(1);
+    });
+
+    test('updateNotificationShowTimeLeft persists and reschedules notifications',
+        () async {
+      final controller = buildController();
+      expect(controller.notificationShowTimeLeft, isTrue);
+
+      await controller.updateNotificationShowTimeLeft(false);
+
+      expect(controller.notificationShowTimeLeft, isFalse);
+      verify(() => database.saveNotificationShowTimeLeft(false)).called(1);
+    });
+
+    test('updateNotificationShowPrayerTimesMessage persists and reschedules notifications',
+        () async {
+      final controller = buildController();
+      expect(controller.notificationShowPrayerTimesMessage, isTrue);
+
+      await controller.updateNotificationShowPrayerTimesMessage(false);
+
+      expect(controller.notificationShowPrayerTimesMessage, isFalse);
+      verify(
+        () => database.saveNotificationShowPrayerTimesMessage(false),
+      ).called(1);
+    });
+
+    test('updateNotificationDismissConfirm persists and reschedules notifications',
+        () async {
+      final controller = buildController();
+      expect(controller.notificationDismissConfirm, isTrue);
+
+      await controller.updateNotificationDismissConfirm(false);
+
+      expect(controller.notificationDismissConfirm, isFalse);
+      verify(
+        () => database.saveNotificationDismissConfirm(false),
       ).called(1);
     });
   });

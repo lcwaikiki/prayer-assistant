@@ -49,6 +49,8 @@ class TestHarness {
 
     when(() => driveService.restoreSession()).thenAnswer((_) async => false);
     when(() => driveService.isSignedIn).thenReturn(false);
+    when(() => driveService.listLimit).thenReturn(10);
+    when(() => driveService.accountEmail).thenReturn(null);
     when(() => offlineFolderService.currentFolder())
         .thenAnswer((_) async => null);
     when(() => offlineFolderService.documentsFolderAvailable())
@@ -92,6 +94,8 @@ class TestHarness {
         prayerNameLabel: any(named: 'prayerNameLabel'),
         vibrationEnabled: any(named: 'vibrationEnabled'),
         soundEnabled: any(named: 'soundEnabled'),
+        showTimeLeft: any(named: 'showTimeLeft'),
+        showPrayerTimesMessage: any(named: 'showPrayerTimesMessage'),
         locale: any(named: 'locale'),
       ),
     ).thenAnswer((_) async {});
@@ -108,6 +112,8 @@ class TestHarness {
       () => widgetBridge.updateStatusBarConfig(
         enabled: any(named: 'enabled'),
         autoRestore: any(named: 'autoRestore'),
+        showTimeLeft: any(named: 'showTimeLeft'),
+        showPrayerTimes: any(named: 'showPrayerTimes'),
       ),
     ).thenAnswer((_) async {});
     when(
@@ -161,6 +167,39 @@ class TestHarness {
     when(
       () => database.loadStatusBarRemainingEnabled(),
     ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarRemainingEnabled(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadStatusBarShowTimeLeft(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarShowTimeLeft(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadStatusBarShowPrayerTimes(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveStatusBarShowPrayerTimes(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationShowTimeLeft(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationShowTimeLeft(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationShowPrayerTimesMessage(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationShowPrayerTimesMessage(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadNotificationDismissConfirm(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveNotificationDismissConfirm(any()),
+    ).thenAnswer((_) async {});
     when(() => database.loadRemindersSilenced()).thenAnswer((_) async => null);
     when(
       () => database.loadReminderVibrationEnabled(),

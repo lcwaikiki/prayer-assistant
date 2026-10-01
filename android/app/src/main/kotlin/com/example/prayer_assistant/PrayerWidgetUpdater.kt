@@ -1375,10 +1375,12 @@ object PrayerWidgetUpdater {
      */
     private fun buildStatusContentView(context: Context, next: Pair<String, Long>?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar)
+        val showTimeLeft = PrayerWidgetStorage.isStatusShowTimeLeft(context)
         if (next == null) {
             views.setTextViewText(R.id.statusPrayerLabel, "--")
             views.setChronometer(R.id.statusCountdown, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(R.id.statusCountdown, "--:--")
+            views.setViewVisibility(R.id.statusCountdown, if (showTimeLeft) android.view.View.VISIBLE else android.view.View.GONE)
             return views
         }
         val locale = PrayerWidgetStorage.readAppLocale(context).lowercase()
@@ -1397,14 +1399,20 @@ object PrayerWidgetUpdater {
         }
         val connector = if (atWord.isEmpty()) "" else " $atWord"
         val displayName = getLocalizedPrayerName(next.first, locale)
+        val labelSuffix = if (showTimeLeft) " ->" else ""
         views.setTextViewText(
             R.id.statusPrayerLabel,
-            "$displayName$connector ${formatClock(next.second)} ->".trim()
+            "$displayName$connector ${formatClock(next.second)}$labelSuffix".trim()
         )
-        val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
-        views.setChronometer(R.id.statusCountdown, base, null, true)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            views.setChronometerCountDown(R.id.statusCountdown, true)
+        if (showTimeLeft) {
+            views.setViewVisibility(R.id.statusCountdown, android.view.View.VISIBLE)
+            val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
+            views.setChronometer(R.id.statusCountdown, base, null, true)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                views.setChronometerCountDown(R.id.statusCountdown, true)
+            }
+        } else {
+            views.setViewVisibility(R.id.statusCountdown, android.view.View.GONE)
         }
         return views
     }
@@ -1419,6 +1427,14 @@ object PrayerWidgetUpdater {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar_expanded)
         val locale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
+        val showPrayerTimes = PrayerWidgetStorage.isStatusShowPrayerTimes(context)
+        val showTimeLeft = PrayerWidgetStorage.isStatusShowTimeLeft(context)
+
+        views.setViewVisibility(
+            R.id.statusPrayerColumnsContainer,
+            if (showPrayerTimes) android.view.View.VISIBLE else android.view.View.GONE
+        )
+
         val columnIds = intArrayOf(
             R.id.columnImsak,
             R.id.columnGunes,
@@ -1459,21 +1475,29 @@ object PrayerWidgetUpdater {
             }
         }
 
-        if (next == null) {
-            views.setChronometer(R.id.expandedCountdown, SystemClock.elapsedRealtime(), null, false)
-            views.setTextViewText(R.id.expandedCountdown, "--:--")
-        } else {
-            val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
-            views.setChronometer(R.id.expandedCountdown, base, null, true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                views.setChronometerCountDown(R.id.expandedCountdown, true)
+        views.setViewVisibility(
+            R.id.expandedTimeLeftContainer,
+            if (showTimeLeft) android.view.View.VISIBLE else android.view.View.GONE
+        )
+
+        if (showTimeLeft) {
+            if (next == null) {
+                views.setChronometer(R.id.expandedCountdown, SystemClock.elapsedRealtime(), null, false)
+                views.setTextViewText(R.id.expandedCountdown, "--:--")
+            } else {
+                val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
+                views.setChronometer(R.id.expandedCountdown, base, null, true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    views.setChronometerCountDown(R.id.expandedCountdown, true)
+                }
             }
+
+            views.setTextViewText(
+                R.id.expandedTimeLeftLabel,
+                getWidgetStrings(locale).timeLeft
+            )
         }
 
-        views.setTextViewText(
-            R.id.expandedTimeLeftLabel,
-            getWidgetStrings(locale).timeLeft
-        )
         views.setTextViewText(
             R.id.expandedLocationLabel,
             PrayerWidgetStorage.readLocationLabel(context)

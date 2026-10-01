@@ -137,6 +137,44 @@ class AppLocalizationsDe extends AppLocalizations {
       'Zeige laufende Restminuten-Benachrichtigung in der Statusleiste.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Verbleibende Zeit anzeigen';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Verbleibende Zeit in der Statusleisten-Benachrichtigung anzeigen.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'Tägliche Gebetszeiten anzeigen';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Alle Gebetszeiten beim Erweitern der Statusleiste anzeigen.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Verbleibende Zeit in Benachrichtigungen';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Countdown der verbleibenden Zeit in Erinnerungsbenachrichtigungen einbinden.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Gebetszeit-Nachricht anzeigen';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Details zur Gebetszeit im Text der Erinnerungsbenachrichtigung einbinden.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'Bestätigung beim Schließen in Benachrichtigung';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Vor dem Schließen in der Benachrichtigung um Bestätigung bitten.';
+
+  @override
   String get statusAutoRestoreTitle => 'Automatisch wiederherstellen';
 
   @override

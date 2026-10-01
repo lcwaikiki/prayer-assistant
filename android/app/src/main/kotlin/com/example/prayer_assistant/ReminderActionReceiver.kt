@@ -25,6 +25,9 @@ class ReminderActionReceiver : BroadcastReceiver() {
         val showDone = intent.getBooleanExtra("showDone", false)
         val soundResource = intent.getStringExtra("soundResource")
 
+        val originalTime = intent.getStringExtra("originalTime")
+        val dismissConfirm = intent.getBooleanExtra("dismissConfirm", true)
+
         when (actionId) {
             "action_snooze" -> {
                 ReminderNotificationManager.showSnoozeOptions(
@@ -37,7 +40,9 @@ class ReminderActionReceiver : BroadcastReceiver() {
                     dismissLabel = dismissLabel,
                     doneLabel = doneLabel,
                     showDone = showDone,
-                    soundResource = soundResource
+                    soundResource = soundResource,
+                    originalTime = originalTime,
+                    dismissConfirm = dismissConfirm
                 )
             }
             "action_snooze_pick" -> {
@@ -48,6 +53,12 @@ class ReminderActionReceiver : BroadcastReceiver() {
                     if (it <= 0) 10 else it
                 }
                 val triggerAtMillis = System.currentTimeMillis() + (snoozeMinutes * 60 * 1000L)
+                val effectiveOriginalTime = if (!originalTime.isNullOrEmpty()) {
+                    originalTime
+                } else {
+                    java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
+                }
+
                 ReminderNotificationManager.schedule(
                     context = context,
                     id = id,
@@ -59,13 +70,53 @@ class ReminderActionReceiver : BroadcastReceiver() {
                     dismissLabel = dismissLabel,
                     doneLabel = doneLabel,
                     showDone = showDone,
-                    soundResource = soundResource
+                    soundResource = soundResource,
+                    originalTime = effectiveOriginalTime,
+                    dismissConfirm = dismissConfirm
                 )
             }
             "action_dismiss" -> {
+                if (dismissConfirm) {
+                    ReminderNotificationManager.showDismissConfirmation(
+                        context = context,
+                        id = id,
+                        title = title,
+                        body = body,
+                        payload = payload,
+                        snoozeLabel = snoozeLabel,
+                        dismissLabel = dismissLabel,
+                        doneLabel = doneLabel,
+                        showDone = showDone,
+                        soundResource = soundResource,
+                        originalTime = originalTime,
+                        dismissConfirm = dismissConfirm
+                    )
+                } else {
+                    ReminderNotificationManager.markActionHandled(id)
+                    NotificationManagerCompat.from(context).cancel(id)
+                    ReminderNotificationManager.cancel(context, id)
+                }
+            }
+            "action_dismiss_confirm" -> {
                 ReminderNotificationManager.markActionHandled(id)
                 NotificationManagerCompat.from(context).cancel(id)
                 ReminderNotificationManager.cancel(context, id)
+            }
+            "action_dismiss_cancel" -> {
+                ReminderNotificationManager.show(
+                    context = context,
+                    id = id,
+                    title = title,
+                    body = body,
+                    payload = payload,
+                    snoozeLabel = snoozeLabel,
+                    dismissLabel = dismissLabel,
+                    doneLabel = doneLabel,
+                    showDone = showDone,
+                    soundResource = soundResource,
+                    originalTime = originalTime,
+                    dismissConfirm = dismissConfirm
+                )
             }
             "action_done" -> {
                 ReminderNotificationManager.markActionHandled(id)

@@ -136,6 +136,43 @@ class AppLocalizationsEn extends AppLocalizations {
       'Show ongoing remaining-minutes notification in status bar.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Show remaining time';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Display the time remaining in the status bar notification.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'Show daily prayer times';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Display all prayer times when expanding the status bar notification.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Show remaining time in notifications';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Include remaining time countdown in reminder notifications.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Show prayer times message';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Include the prayer time details in reminder notification body.';
+
+  @override
+  String get notificationDismissConfirmTitle => 'Ask confirmation on dismiss';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Ask for confirmation inside the notification when Dismiss is tapped.';
+
+  @override
   String get statusAutoRestoreTitle => 'Auto-restore if dismissed';
 
   @override

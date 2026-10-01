@@ -227,7 +227,10 @@ class NotificationService {
     return entries;
   }
 
-  Future<void> showTestNotificationNow({Locale? locale}) async {
+  Future<void> showTestNotificationNow({
+    Locale? locale,
+    bool dismissConfirm = true,
+  }) async {
     final strings = NotificationStrings.of(locale);
     final details = NotificationDetails(
       android: AndroidNotificationDetails(
@@ -279,6 +282,7 @@ class NotificationService {
         dismissLabel: strings.dismiss,
         doneLabel: strings.done,
         showDone: false,
+        dismissConfirm: dismissConfirm,
       );
       return;
     }
@@ -325,6 +329,9 @@ class NotificationService {
     required String Function(String prayerKey) prayerNameLabel,
     required bool vibrationEnabled,
     required bool soundEnabled,
+    bool showTimeLeft = true,
+    bool showPrayerTimesMessage = true,
+    bool dismissConfirm = true,
     Locale? locale,
   }) async {
     await cancelAllPrayerNotifications();
@@ -373,7 +380,9 @@ class NotificationService {
               fireAt: prayerTime,
               prayerKey: prayerName,
               title: strings.onTimeTitle(displayName),
-              body: strings.onTimeBody(locationName, displayName),
+              body: showPrayerTimesMessage
+                  ? strings.onTimeBody(locationName, displayName)
+                  : locationName,
               vibrationEnabled: effectiveVibration,
               soundEnabled: effectiveSound,
               adhanEnabled: setting.adhanEnabled && effectiveSound,
@@ -390,12 +399,16 @@ class NotificationService {
               _ReminderNotification(
                 fireAt: beforeTime,
                 prayerKey: prayerName,
-                title: strings.beforeTitle(displayName, setting.minutesBefore),
-                body: strings.beforeBody(
-                  locationName,
-                  displayName,
-                  prayerTimes[prayerName] ?? '',
-                ),
+                title: showTimeLeft
+                    ? strings.beforeTitle(displayName, setting.minutesBefore)
+                    : strings.onTimeTitle(displayName),
+                body: showPrayerTimesMessage
+                    ? strings.beforeBody(
+                        locationName,
+                        displayName,
+                        prayerTimes[prayerName] ?? '',
+                      )
+                    : locationName,
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,
@@ -406,12 +419,16 @@ class NotificationService {
               _ReminderNotification(
                 fireAt: now.add(const Duration(seconds: 5)),
                 prayerKey: prayerName,
-                title: strings.soonTitle(displayName),
-                body: strings.soonBody(
-                  locationName,
-                  displayName,
-                  prayerTimes[prayerName] ?? '',
-                ),
+                title: showTimeLeft
+                    ? strings.soonTitle(displayName)
+                    : strings.onTimeTitle(displayName),
+                body: showPrayerTimesMessage
+                    ? strings.soonBody(
+                        locationName,
+                        displayName,
+                        prayerTimes[prayerName] ?? '',
+                      )
+                    : locationName,
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,
@@ -429,12 +446,16 @@ class NotificationService {
               _ReminderNotification(
                 fireAt: afterTime,
                 prayerKey: prayerName,
-                title: strings.afterTitle(displayName, setting.minutesAfter),
-                body: strings.afterBody(
-                  locationName,
-                  displayName,
-                  setting.minutesAfter,
-                ),
+                title: showTimeLeft
+                    ? strings.afterTitle(displayName, setting.minutesAfter)
+                    : strings.onTimeTitle(displayName),
+                body: showPrayerTimesMessage
+                    ? strings.afterBody(
+                        locationName,
+                        displayName,
+                        setting.minutesAfter,
+                      )
+                    : locationName,
                 vibrationEnabled: effectiveVibration,
                 soundEnabled: effectiveSound,
                 adhanEnabled: false,
@@ -482,6 +503,7 @@ class NotificationService {
               : (item.soundEnabled
                   ? NotificationService.reminderChimeResourceName
                   : null),
+          dismissConfirm: dismissConfirm,
         );
       } else {
         try {

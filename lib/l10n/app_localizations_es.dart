@@ -138,6 +138,45 @@ class AppLocalizationsEs extends AppLocalizations {
       'Mostrar notificación persistente de minutos restantes en la barra de estado.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Mostrar tiempo restante';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Mostrar el tiempo restante en la notificación de la barra de estado.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle =>
+      'Mostrar horarios de oración diarios';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Mostrar todos los horarios al expandir la notificación de la barra de estado.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Mostrar tiempo restante en notificaciones';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Incluir cuenta regresiva en las notificaciones de recordatorio.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Mostrar mensaje de horarios de oración';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Incluir detalles del horario en el cuerpo de la notificación de recordatorio.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'Confirmación de descarte en la notificación';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Solicitar confirmación dentro de la notificación antes de descartar.';
+
+  @override
   String get statusAutoRestoreTitle => 'Restaurar al descartarse';
 
   @override

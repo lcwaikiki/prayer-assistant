@@ -139,6 +139,44 @@ class AppLocalizationsTa extends AppLocalizations {
       'ஸ்டேட்டஸ் பாரில் மீதமுள்ள நிமிடங்களின் அறிவிப்பைக் காட்டவும்.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'மீதமுள்ள நேரத்தைக் காட்டு';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'ஸ்டேட்டஸ் பார் அறிவிப்பில் மீதமுள்ள நேரத்தைக் காட்டுங்கள்.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'தினசரி தொழுகை நேரங்களைக் காட்டு';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'ஸ்டேட்டஸ் பார் அறிவிப்பை விரிவாக்கும்போது அனைத்து தொழுகை நேரங்களையும் காட்டுங்கள்.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'அறிவிப்புகளில் மீதமுள்ள நேரத்தைக் காட்டு';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'நினைவூட்டல் அறிவிப்புகளில் மீதமுள்ள நேரக் கவுண்டவுனைச் சேர்க்கவும்.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'தொழுகை நேர செய்தியைக் காட்டு';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'நினைவூட்டல் அறிவிப்பில் தொழுகை நேர விவரங்களைச் சேர்க்கவும்.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'அறிவிப்பில் நிராகரிப்பு உறுதிப்படுத்தல்';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'நிராகரிக்கும் முன் அறிவிப்பில் உறுதிப்படுத்தல் கேளுங்கள்.';
+
+  @override
   String get statusAutoRestoreTitle => 'நீக்கப்பட்டால் தானியங்கி மீட்பு';
 
   @override

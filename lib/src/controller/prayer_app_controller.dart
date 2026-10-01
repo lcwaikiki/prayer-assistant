@@ -77,6 +77,11 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement _appBarRemainingPlacement =
       AppBarRemainingPlacement.title;
   bool _statusBarRemainingEnabled = true;
+  bool _statusBarShowTimeLeft = true;
+  bool _statusBarShowPrayerTimes = true;
+  bool _notificationShowTimeLeft = true;
+  bool _notificationShowPrayerTimesMessage = true;
+  bool _notificationDismissConfirm = true;
   WidgetTextSize _widgetTextSize = WidgetTextSize.medium;
   int _widgetTextSizeValue = 14;
   WidgetTheme _widgetTheme = WidgetTheme.system;
@@ -166,6 +171,12 @@ class PrayerAppController extends ChangeNotifier {
   AppBarRemainingPlacement get appBarRemainingPlacement =>
       _appBarRemainingPlacement;
   bool get statusBarRemainingEnabled => _statusBarRemainingEnabled;
+  bool get statusBarShowTimeLeft => _statusBarShowTimeLeft;
+  bool get statusBarShowPrayerTimes => _statusBarShowPrayerTimes;
+  bool get notificationShowTimeLeft => _notificationShowTimeLeft;
+  bool get notificationShowPrayerTimesMessage =>
+      _notificationShowPrayerTimesMessage;
+  bool get notificationDismissConfirm => _notificationDismissConfirm;
   WidgetTextSize get widgetTextSize => _widgetTextSize;
   int get widgetTextSizeValue => _widgetTextSizeValue;
   WidgetTheme get widgetTheme => _widgetTheme;
@@ -542,6 +553,16 @@ class PrayerAppController extends ChangeNotifier {
       };
       _statusBarRemainingEnabled =
           await database.loadStatusBarRemainingEnabled() ?? true;
+      _statusBarShowTimeLeft =
+          await database.loadStatusBarShowTimeLeft() ?? true;
+      _statusBarShowPrayerTimes =
+          await database.loadStatusBarShowPrayerTimes() ?? true;
+      _notificationShowTimeLeft =
+          await database.loadNotificationShowTimeLeft() ?? true;
+      _notificationShowPrayerTimesMessage =
+          await database.loadNotificationShowPrayerTimesMessage() ?? true;
+      _notificationDismissConfirm =
+          await database.loadNotificationDismissConfirm() ?? true;
       _remindersSilenced = await database.loadRemindersSilenced() ?? false;
       _reminderVibrationEnabled =
           await database.loadReminderVibrationEnabled() ?? true;
@@ -1261,6 +1282,68 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateStatusBarShowTimeLeft(bool show) async {
+    if (_statusBarShowTimeLeft == show) {
+      return;
+    }
+    _statusBarShowTimeLeft = show;
+    await database.saveStatusBarShowTimeLeft(show);
+    await _syncStatusBarConfig();
+    notifyListeners();
+  }
+
+  Future<void> updateStatusBarShowPrayerTimes(bool show) async {
+    if (_statusBarShowPrayerTimes == show) {
+      return;
+    }
+    _statusBarShowPrayerTimes = show;
+    await database.saveStatusBarShowPrayerTimes(show);
+    await _syncStatusBarConfig();
+    notifyListeners();
+  }
+
+  Future<void> updateNotificationShowTimeLeft(bool show) async {
+    if (_notificationShowTimeLeft == show) {
+      return;
+    }
+    _notificationShowTimeLeft = show;
+    await database.saveNotificationShowTimeLeft(show);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateNotificationShowPrayerTimesMessage(bool show) async {
+    if (_notificationShowPrayerTimesMessage == show) {
+      return;
+    }
+    _notificationShowPrayerTimesMessage = show;
+    await database.saveNotificationShowPrayerTimesMessage(show);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateNotificationDismissConfirm(bool enabled) async {
+    if (_notificationDismissConfirm == enabled) {
+      return;
+    }
+    _notificationDismissConfirm = enabled;
+    await database.saveNotificationDismissConfirm(enabled);
+    try {
+      await _syncNotifications();
+    } catch (_) {
+      // Preference is saved; notification sync can fail without blocking UI.
+    }
+    notifyListeners();
+  }
+
   Future<void> updateRemindersSilenced(bool silenced) async {
     if (_remindersSilenced == silenced) {
       return;
@@ -1406,6 +1489,9 @@ class PrayerAppController extends ChangeNotifier {
       prayerNameLabel: (key) => localizedPrayerName(resolvedLocale, key),
       vibrationEnabled: _reminderVibrationEnabled,
       soundEnabled: _reminderSoundEnabled,
+      showTimeLeft: _notificationShowTimeLeft,
+      showPrayerTimesMessage: _notificationShowPrayerTimesMessage,
+      dismissConfirm: _notificationDismissConfirm,
       locale: resolvedLocale,
     );
   }
@@ -1415,13 +1501,18 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   Future<void> sendTestNotificationNow() {
-    return notificationService.showTestNotificationNow(locale: resolvedLocale);
+    return notificationService.showTestNotificationNow(
+      locale: resolvedLocale,
+      dismissConfirm: _notificationDismissConfirm,
+    );
   }
 
   Future<void> _syncStatusBarConfig() {
     return widgetBridgeService.updateStatusBarConfig(
       enabled: _statusBarRemainingEnabled,
       autoRestore: _statusBarRemainingEnabled,
+      showTimeLeft: _statusBarShowTimeLeft,
+      showPrayerTimes: _statusBarShowPrayerTimes,
     );
   }
 
@@ -1504,6 +1595,11 @@ class PrayerAppController extends ChangeNotifier {
       'widgetCalendarDisplay': _widgetCalendarDisplay.name,
       'widgetMmssThreshold': _widgetMmssThresholdMinutes,
       'statusBarRemainingEnabled': _statusBarRemainingEnabled,
+      'statusBarShowTimeLeft': _statusBarShowTimeLeft,
+      'statusBarShowPrayerTimes': _statusBarShowPrayerTimes,
+      'notificationShowTimeLeft': _notificationShowTimeLeft,
+      'notificationShowPrayerTimesMessage': _notificationShowPrayerTimesMessage,
+      'notificationDismissConfirm': _notificationDismissConfirm,
       'reminderVibrationEnabled': _reminderVibrationEnabled,
       'reminderSoundEnabled': _reminderSoundEnabled,
       'calendarPrimaryDisplay': _calendarPrimaryDisplay.name,
@@ -1682,6 +1778,36 @@ class PrayerAppController extends ChangeNotifier {
         _statusBarRemainingEnabled,
       );
     }
+    if (prefs.containsKey('statusBarShowTimeLeft')) {
+      _statusBarShowTimeLeft = asBool(
+        prefs['statusBarShowTimeLeft'],
+        _statusBarShowTimeLeft,
+      );
+    }
+    if (prefs.containsKey('statusBarShowPrayerTimes')) {
+      _statusBarShowPrayerTimes = asBool(
+        prefs['statusBarShowPrayerTimes'],
+        _statusBarShowPrayerTimes,
+      );
+    }
+    if (prefs.containsKey('notificationShowTimeLeft')) {
+      _notificationShowTimeLeft = asBool(
+        prefs['notificationShowTimeLeft'],
+        _notificationShowTimeLeft,
+      );
+    }
+    if (prefs.containsKey('notificationShowPrayerTimesMessage')) {
+      _notificationShowPrayerTimesMessage = asBool(
+        prefs['notificationShowPrayerTimesMessage'],
+        _notificationShowPrayerTimesMessage,
+      );
+    }
+    if (prefs.containsKey('notificationDismissConfirm')) {
+      _notificationDismissConfirm = asBool(
+        prefs['notificationDismissConfirm'],
+        _notificationDismissConfirm,
+      );
+    }
     if (prefs.containsKey('showSecondaryCalendarDate')) {
       _showSecondaryCalendarDate = asBool(
         prefs['showSecondaryCalendarDate'],
@@ -1813,6 +1939,13 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveReminderVibrationEnabled(_reminderVibrationEnabled);
     await database.saveReminderSoundEnabled(_reminderSoundEnabled);
     await database.saveStatusBarRemainingEnabled(_statusBarRemainingEnabled);
+    await database.saveStatusBarShowTimeLeft(_statusBarShowTimeLeft);
+    await database.saveStatusBarShowPrayerTimes(_statusBarShowPrayerTimes);
+    await database.saveNotificationShowTimeLeft(_notificationShowTimeLeft);
+    await database.saveNotificationShowPrayerTimesMessage(
+      _notificationShowPrayerTimesMessage,
+    );
+    await database.saveNotificationDismissConfirm(_notificationDismissConfirm);
     await database.saveShowSecondaryCalendarDate(_showSecondaryCalendarDate);
     await database.saveShowIslamicHolidays(_showIslamicHolidays);
     await database.saveShowFastingBadges(_showFastingBadges);

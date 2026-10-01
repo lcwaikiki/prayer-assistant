@@ -130,6 +130,38 @@ class AppLocalizationsJa extends AppLocalizations {
   String get statusBarMinutesSubtitle => 'ステータスバーに残り分の継続通知を表示します。';
 
   @override
+  String get statusBarShowTimeLeftTitle => '残り時間を表示';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle => 'ステータスバー通知に残り時間を表示します。';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => '毎日の礼拝時間を表示';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'ステータスバー通知を展開したときに全礼拝時間を表示します。';
+
+  @override
+  String get notificationShowTimeLeftTitle => '通知に残り時間を表示';
+
+  @override
+  String get notificationShowTimeLeftSubtitle => 'リマインダー通知に残り時間のカウントダウンを含めます。';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle => '礼拝時間メッセージを表示';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'リマインダー通知の本文に礼拝時間の詳細を含めます。';
+
+  @override
+  String get notificationDismissConfirmTitle => '通知内での閉じる確認';
+
+  @override
+  String get notificationDismissConfirmSubtitle => '閉じる前に通知内で確認を求めます。';
+
+  @override
   String get statusAutoRestoreTitle => '削除時に自動復元';
 
   @override

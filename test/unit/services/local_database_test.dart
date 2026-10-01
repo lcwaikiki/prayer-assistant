@@ -107,6 +107,21 @@ void main() {
       await database.saveStatusBarRemainingEnabled(true);
       expect(await database.loadStatusBarRemainingEnabled(), isTrue);
 
+      await database.saveStatusBarShowTimeLeft(false);
+      expect(await database.loadStatusBarShowTimeLeft(), isFalse);
+
+      await database.saveStatusBarShowPrayerTimes(false);
+      expect(await database.loadStatusBarShowPrayerTimes(), isFalse);
+
+      await database.saveNotificationShowTimeLeft(false);
+      expect(await database.loadNotificationShowTimeLeft(), isFalse);
+
+      await database.saveNotificationShowPrayerTimesMessage(false);
+      expect(await database.loadNotificationShowPrayerTimesMessage(), isFalse);
+
+      await database.saveNotificationDismissConfirm(false);
+      expect(await database.loadNotificationDismissConfirm(), isFalse);
+
       await database.saveRemindersSilenced(true);
       expect(await database.loadRemindersSilenced(), isTrue);
 
@@ -140,6 +155,11 @@ void main() {
     test('loaders return null when unset', () async {
       expect(await database.loadAppBarRemainingPlacement(), isNull);
       expect(await database.loadStatusBarRemainingEnabled(), isNull);
+      expect(await database.loadStatusBarShowTimeLeft(), isNull);
+      expect(await database.loadStatusBarShowPrayerTimes(), isNull);
+      expect(await database.loadNotificationShowTimeLeft(), isNull);
+      expect(await database.loadNotificationShowPrayerTimesMessage(), isNull);
+      expect(await database.loadNotificationDismissConfirm(), isNull);
       expect(await database.loadThemePreference(), isNull);
       expect(await database.loadLocalePreference(), isNull);
       expect(await database.loadCalendarPrimaryDisplay(), isNull);

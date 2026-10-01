@@ -59,9 +59,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Home screen settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Reminders on/off').first);
+    await tester.tap(find.text('Reminders on/off'));
     await tester.pumpAndSettle();
     final onOffSwitch = find.byKey(const Key('reminders_on_off_switch'));
     await tester.ensureVisible(onOffSwitch);
@@ -147,9 +145,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Home screen settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Reminders on/off').first);
+    await tester.tap(find.text('Reminders on/off'));
     await tester.pumpAndSettle();
     final vibrationSwitch = find.byKey(const Key('reminder_vibration_switch'));
     await tester.ensureVisible(vibrationSwitch);
@@ -158,6 +154,17 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(harness.controller.reminderVibrationEnabled, isFalse);
+
+    final dismissConfirmSwitch =
+        find.byKey(const Key('notification_dismiss_confirm_switch'));
+    await tester.ensureVisible(dismissConfirmSwitch);
+    await tester.pumpAndSettle();
+    expect(harness.controller.notificationDismissConfirm, isTrue);
+    await tester.tap(dismissConfirmSwitch);
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.notificationDismissConfirm, isFalse);
+    verify(() => harness.database.saveNotificationDismissConfirm(false)).called(1);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -181,34 +188,6 @@ void main() {
     expect(find.text('Restore Data from Backup'), findsOneWidget);
     expect(find.text('Export Islamic Holidays (.ics)'), findsOneWidget);
 
-
-    await tester.pumpWidget(const SizedBox());
-  });
-
-  testWidgets('snooze duration dropdown updates preference', (tester) async {
-    final harness = TestHarness.create();
-    when(() => harness.database.saveSnoozeDurationMinutes(any()))
-        .thenAnswer((_) async {});
-    await harness.initialize();
-
-    await pumpWithHarness(tester, harness, const PreferencesScreen());
-
-    await tester.tap(find.text('Home screen settings'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Reminders on/off').first);
-    await tester.pumpAndSettle();
-
-    final dropdownFinder = find.byKey(const Key('snooze_duration_dropdown'));
-    await tester.ensureVisible(dropdownFinder);
-    await tester.pumpAndSettle();
-    await tester.tap(dropdownFinder);
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('15 minutes').last);
-    await tester.pumpAndSettle();
-
-    expect(harness.controller.snoozeDurationMinutes, 15);
-    verify(() => harness.database.saveSnoozeDurationMinutes(15)).called(1);
 
     await tester.pumpWidget(const SizedBox());
   });

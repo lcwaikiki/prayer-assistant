@@ -138,6 +138,45 @@ class AppLocalizationsRu extends AppLocalizations {
       'Показывать постоянное уведомление об оставшихся минутах в строке состояния.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Показывать оставшееся время';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Отображать оставшееся время в уведомлении строки состояния.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle =>
+      'Показывать время намазов на день';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Отображать расписание намазов при разворачивании уведомления строки состояния.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Показывать оставшееся время в уведомлениях';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Включать обратный отсчет в напоминания.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Показывать текст времени намаза';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Включать подробности о времени намаза в текст напоминания.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'Подтверждение закрытия в уведомлении';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Запрашивать подтверждение внутри уведомления перед закрытием.';
+
+  @override
   String get statusAutoRestoreTitle => 'Автовосстановление при закрытии';
 
   @override

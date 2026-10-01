@@ -368,7 +368,9 @@ class MainActivity : FlutterActivity() {
                 }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
-                    PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled)
+                    val showTimeLeft = call.argument<Boolean>("showTimeLeft") ?: true
+                    val showPrayerTimes = call.argument<Boolean>("showPrayerTimes") ?: true
+                    PrayerWidgetStorage.saveStatusConfig(this, enabled, enabled, showTimeLeft, showPrayerTimes)
                     PrayerWidgetUpdater.updateAll(this)
                     PrayerWidgetUpdater.scheduleNextUpdate(this)
                     PrayerWidgetUpdater.scheduleIconRefresh(this)
@@ -500,6 +502,8 @@ class MainActivity : FlutterActivity() {
                     val doneLabel = call.argument<String>("doneLabel") ?: "Done"
                     val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
+                    val originalTime = call.argument<String>("originalTime")
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
                     ReminderNotificationManager.show(
                         context = this,
                         id = id,
@@ -510,7 +514,9 @@ class MainActivity : FlutterActivity() {
                         dismissLabel = dismissLabel,
                         doneLabel = doneLabel,
                         showDone = showDone,
-                        soundResource = soundResource
+                        soundResource = soundResource,
+                        originalTime = originalTime,
+                        dismissConfirm = dismissConfirm
                     )
                     result.success(null)
                 }
@@ -525,6 +531,8 @@ class MainActivity : FlutterActivity() {
                     val doneLabel = call.argument<String>("doneLabel") ?: "Done"
                     val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
+                    val originalTime = call.argument<String>("originalTime")
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
                     ReminderNotificationManager.schedule(
                         context = this,
                         id = id,
@@ -536,7 +544,9 @@ class MainActivity : FlutterActivity() {
                         dismissLabel = dismissLabel,
                         doneLabel = doneLabel,
                         showDone = showDone,
-                        soundResource = soundResource
+                        soundResource = soundResource,
+                        originalTime = originalTime,
+                        dismissConfirm = dismissConfirm
                     )
                     result.success(null)
                 }

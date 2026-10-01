@@ -19,6 +19,8 @@ class ReminderDismissReceiver : BroadcastReceiver() {
         val doneLabel = intent.getStringExtra("doneLabel") ?: "Done"
         val showDone = intent.getBooleanExtra("showDone", false)
         val soundResource = intent.getStringExtra("soundResource")
+        val originalTime = intent.getStringExtra("originalTime")
+        val dismissConfirm = intent.getBooleanExtra("dismissConfirm", true)
 
         val pendingResult = goAsync()
         Handler(Looper.getMainLooper()).postDelayed({
@@ -33,7 +35,9 @@ class ReminderDismissReceiver : BroadcastReceiver() {
                     dismissLabel = dismissLabel,
                     doneLabel = doneLabel,
                     showDone = showDone,
-                    soundResource = soundResource
+                    soundResource = soundResource,
+                    originalTime = originalTime,
+                    dismissConfirm = dismissConfirm
                 )
             } finally {
                 pendingResult.finish()

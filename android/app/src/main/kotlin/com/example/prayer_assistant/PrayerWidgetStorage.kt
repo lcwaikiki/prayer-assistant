@@ -275,21 +275,38 @@ object PrayerWidgetStorage {
     }
 
 
+    private const val STATUS_SHOW_TIME_LEFT_KEY = "status_show_time_left"
+    private const val STATUS_SHOW_PRAYER_TIMES_KEY = "status_show_prayer_times"
+
     fun saveStatusConfig(
         context: Context,
         enabled: Boolean,
-        autoRestore: Boolean
+        autoRestore: Boolean,
+        showTimeLeft: Boolean = true,
+        showPrayerTimes: Boolean = true
     ) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .edit()
             .putBoolean(STATUS_ENABLED_KEY, enabled)
             .putBoolean(STATUS_AUTO_RESTORE_KEY, autoRestore)
+            .putBoolean(STATUS_SHOW_TIME_LEFT_KEY, showTimeLeft)
+            .putBoolean(STATUS_SHOW_PRAYER_TIMES_KEY, showPrayerTimes)
             .apply()
     }
 
     fun isStatusEnabled(context: Context): Boolean {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getBoolean(STATUS_ENABLED_KEY, true)
+    }
+
+    fun isStatusShowTimeLeft(context: Context): Boolean {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(STATUS_SHOW_TIME_LEFT_KEY, true)
+    }
+
+    fun isStatusShowPrayerTimes(context: Context): Boolean {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(STATUS_SHOW_PRAYER_TIMES_KEY, true)
     }
 
     fun isStatusAutoRestore(context: Context): Boolean {

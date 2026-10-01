@@ -137,6 +137,45 @@ class AppLocalizationsFr extends AppLocalizations {
       'Afficher une notification continue des minutes restantes dans la barre d\'état.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Afficher le temps restant';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Afficher le temps restant dans la notification de la barre d\'état.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle =>
+      'Afficher les heures de prière quotidiennes';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Afficher toutes les heures de prière lors du développement de la notification.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Afficher le temps restant dans les notifications';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Inclure le compte à rebours dans les notifications de rappel.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Afficher le message des heures de prière';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Inclure les détails de l\'heure de prière dans le corps de la notification.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'Confirmation de fermeture dans la notification';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Demander confirmation dans la notification avant de fermer.';
+
+  @override
   String get statusAutoRestoreTitle => 'Restaurer si supprimé';
 
   @override

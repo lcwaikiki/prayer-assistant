@@ -21,6 +21,8 @@ class NativeReminderService {
     String doneLabel = 'Done',
     bool showDone = false,
     String? soundResource = 'reminder_chime',
+    String? originalTime,
+    bool dismissConfirm = true,
   }) async {
     if (!isAndroid) return;
     try {
@@ -34,6 +36,8 @@ class NativeReminderService {
         'doneLabel': doneLabel,
         'showDone': showDone,
         'soundResource': soundResource,
+        'originalTime': originalTime,
+        'dismissConfirm': dismissConfirm,
       });
     } catch (_) {}
   }
@@ -49,6 +53,8 @@ class NativeReminderService {
     String doneLabel = 'Done',
     bool showDone = false,
     String? soundResource = 'reminder_chime',
+    String? originalTime,
+    bool dismissConfirm = true,
   }) async {
     if (!isAndroid) return;
     try {
@@ -63,6 +69,8 @@ class NativeReminderService {
         'doneLabel': doneLabel,
         'showDone': showDone,
         'soundResource': soundResource,
+        'originalTime': originalTime,
+        'dismissConfirm': dismissConfirm,
       });
     } catch (_) {}
   }

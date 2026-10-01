@@ -42,6 +42,12 @@ class LocalDatabase {
   static const _taskCompletionsKey = 'task_completions';
   static const _calendarSortOptionKey = 'calendar_sort_option';
   static const _showBeadsInCalendarKey = 'show_beads_in_calendar';
+  static const _statusBarShowTimeLeftKey = 'status_bar_show_time_left';
+  static const _statusBarShowPrayerTimesKey = 'status_bar_show_prayer_times';
+  static const _notificationShowTimeLeftKey = 'notification_show_time_left';
+  static const _notificationShowPrayerTimesMessageKey =
+      'notification_show_prayer_times_message';
+  static const _notificationDismissConfirmKey = 'notification_dismiss_confirm';
 
   Database? _db;
 
@@ -430,6 +436,116 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_statusBarRemainingEnabledKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveStatusBarShowTimeLeft(bool show) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _statusBarShowTimeLeftKey,
+      'setting_value': show ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadStatusBarShowTimeLeft() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_statusBarShowTimeLeftKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveStatusBarShowPrayerTimes(bool show) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _statusBarShowPrayerTimesKey,
+      'setting_value': show ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadStatusBarShowPrayerTimes() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_statusBarShowPrayerTimesKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveNotificationShowTimeLeft(bool show) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _notificationShowTimeLeftKey,
+      'setting_value': show ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadNotificationShowTimeLeft() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_notificationShowTimeLeftKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveNotificationShowPrayerTimesMessage(bool show) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _notificationShowPrayerTimesMessageKey,
+      'setting_value': show ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadNotificationShowPrayerTimesMessage() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_notificationShowPrayerTimesMessageKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveNotificationDismissConfirm(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _notificationDismissConfirmKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadNotificationDismissConfirm() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_notificationDismissConfirmKey],
       limit: 1,
     );
     if (rows.isEmpty) {

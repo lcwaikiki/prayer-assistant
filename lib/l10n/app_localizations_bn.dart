@@ -137,6 +137,43 @@ class AppLocalizationsBn extends AppLocalizations {
       'স্ট্যাটাস বারে চলমান অবশিষ্ট মিনিটের বিজ্ঞপ্তি দেখান।';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'অবশিষ্ট সময় প্রদর্শন করুন';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'স্ট্যাটাস বার বিজ্ঞপ্তিতে অবশিষ্ট সময় প্রদর্শন করুন।';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'দৈনিক নামাজের সময়সূচী দেখান';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'স্ট্যাটাস বার বিজ্ঞপ্তি প্রসারিত করার সময় সমস্ত নামাজের সময় দেখান।';
+
+  @override
+  String get notificationShowTimeLeftTitle => 'বিজ্ঞপ্তিতে অবশিষ্ট সময় দেখান';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'স্মারক বিজ্ঞপ্তিতে অবশিষ্ট সময়ের কাউন্টডাউন অন্তর্ভুক্ত করুন।';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'নামাজের সময়ের বার্তা দেখান';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'স্মারক বিজ্ঞপ্তির বডিতে নামাজের সময়ের বিবরণ অন্তর্ভুক্ত করুন।';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'বিজ্ঞপ্তির মধ্যে খারিজ নিশ্চিতকরণ';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'খারিজ করার আগে বিজ্ঞপ্তির ভেতরে নিশ্চিতকরণ চান।';
+
+  @override
   String get statusAutoRestoreTitle => 'মুছে ফেলা হলে স্বয়ংক্রিয় পুনরুদ্ধার';
 
   @override

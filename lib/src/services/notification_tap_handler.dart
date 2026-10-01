@@ -261,6 +261,8 @@ Future<void> _handleSnooze(
   String? soundResource = 'reminder_chime';
   bool isTask = false;
 
+  String? originalTime;
+
   final payload = response.payload;
   if (payload != null && payload.isNotEmpty) {
     try {
@@ -282,6 +284,7 @@ Future<void> _handleSnooze(
       final map = jsonDecode(jsonStr) as Map<String, dynamic>;
       title = map['title'] as String? ?? title;
       body = map['body'] as String? ?? body;
+      originalTime = map['originalTime'] as String?;
       channelId = map['channelId'] as String? ?? channelId;
       channelName = map['channelName'] as String? ?? channelName;
       soundResource = map['soundResource'] as String? ?? soundResource;
@@ -304,6 +307,13 @@ Future<void> _handleSnooze(
       }
     }
   }
+
+  if (originalTime == null || originalTime.isEmpty) {
+    final now = DateTime.now();
+    originalTime =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+  }
+
   final strings = NotificationStrings.of(locale);
 
   final details = NotificationDetails(
@@ -375,6 +385,7 @@ Future<void> _handleSnooze(
       doneLabel: strings.done,
       showDone: isTask,
       soundResource: soundResource,
+      originalTime: originalTime,
     );
     return;
   }

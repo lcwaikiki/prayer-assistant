@@ -137,6 +137,44 @@ class AppLocalizationsId extends AppLocalizations {
       'Tampilkan notifikasi berjalan menit tersisa di status bar.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'Tampilkan sisa waktu';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'Tampilkan sisa waktu di notifikasi bilah status.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'Tampilkan waktu sholat harian';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'Tampilkan seluruh waktu sholat saat memperluas notifikasi bilah status.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'Tampilkan sisa waktu di notifikasi';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'Sertakan hitungan mundur sisa waktu di notifikasi pengingat.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'Tampilkan pesan waktu sholat';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'Sertakan detail waktu sholat di isi notifikasi pengingat.';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'Konfirmasi tutup di dalam notifikasi';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'Minta konfirmasi di dalam notifikasi sebelum menutup.';
+
+  @override
   String get statusAutoRestoreTitle => 'Pulihkan otomatis jika ditutup';
 
   @override

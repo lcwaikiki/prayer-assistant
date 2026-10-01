@@ -199,65 +199,76 @@ class PreferencesScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Divider(height: 1),
-                  _PreferenceSubSection(
-                    title: context.l10n.remindersOnOffTitle,
-                    children: [
-                      SwitchListTile(
-                        key: const Key('reminders_on_off_switch'),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(context.l10n.remindersOnOffTitle),
-                        subtitle: Text(context.l10n.remindersOnOffSubtitle),
-                        value: !controller.remindersSilenced,
-                        onChanged: (enabled) =>
-                            controller.updateRemindersSilenced(!enabled),
-                      ),
-                      SwitchListTile(
-                        key: const Key('reminder_vibration_switch'),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(context.l10n.reminderVibrationTitle),
-                        subtitle: Text(context.l10n.reminderVibrationSubtitle),
-                        value: controller.reminderVibrationEnabled,
-                        onChanged: controller.updateReminderVibrationEnabled,
-                      ),
-                      SwitchListTile(
-                        key: const Key('reminder_sound_switch'),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(context.l10n.reminderSoundTitle),
-                        subtitle: Text(context.l10n.reminderSoundSubtitle),
-                        value: controller.reminderSoundEnabled,
-                        onChanged: controller.updateReminderSoundEnabled,
-                      ),
-                      ListTile(
-                        key: const Key('snooze_duration_tile'),
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(context.l10n.snoozeDurationTitle),
-                        subtitle: Text(context.l10n.snoozeDurationSubtitle),
-                        trailing: DropdownButtonHideUnderline(
-                          child: DropdownButton<int>(
-                            key: const Key('snooze_duration_dropdown'),
-                            value: const [5, 10, 15, 20].contains(
-                              controller.snoozeDurationMinutes,
-                            )
-                                ? controller.snoozeDurationMinutes
-                                : 10,
-                            items: const [5, 10, 15, 20].map((int minutes) {
-                              return DropdownMenuItem<int>(
-                                value: minutes,
-                                child: Text(
-                                  context.l10n.snoozeMinutesOption(minutes),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (int? minutes) {
-                              if (minutes != null) {
-                                controller.updateSnoozeDurationMinutes(minutes);
-                              }
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.remindersOnOffTitle,
+                children: [
+                  SwitchListTile(
+                    key: const Key('reminders_on_off_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.remindersOnOffTitle),
+                    subtitle: Text(context.l10n.remindersOnOffSubtitle),
+                    value: !controller.remindersSilenced,
+                    onChanged: (enabled) =>
+                        controller.updateRemindersSilenced(!enabled),
+                  ),
+                  SwitchListTile(
+                    key: const Key('reminder_vibration_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.reminderVibrationTitle),
+                    subtitle: Text(context.l10n.reminderVibrationSubtitle),
+                    value: controller.reminderVibrationEnabled,
+                    onChanged: controller.updateReminderVibrationEnabled,
+                  ),
+                  SwitchListTile(
+                    key: const Key('reminder_sound_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.reminderSoundTitle),
+                    subtitle: Text(context.l10n.reminderSoundSubtitle),
+                    value: controller.reminderSoundEnabled,
+                    onChanged: controller.updateReminderSoundEnabled,
+                  ),
+                  SwitchListTile(
+                    key: const Key('notification_show_time_left_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.notificationShowTimeLeftTitle),
+                    subtitle:
+                        Text(context.l10n.notificationShowTimeLeftSubtitle),
+                    value: controller.notificationShowTimeLeft,
+                    onChanged: controller.updateNotificationShowTimeLeft,
+                  ),
+                  SwitchListTile(
+                    key: const Key(
+                      'notification_show_prayer_times_message_switch',
+                    ),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      context.l10n.notificationShowPrayerTimesMessageTitle,
+                    ),
+                    subtitle: Text(
+                      context
+                          .l10n
+                          .notificationShowPrayerTimesMessageSubtitle,
+                    ),
+                    value: controller.notificationShowPrayerTimesMessage,
+                    onChanged:
+                        controller
+                            .updateNotificationShowPrayerTimesMessage,
+                  ),
+                  SwitchListTile(
+                    key: const Key('notification_dismiss_confirm_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(
+                      context.l10n.notificationDismissConfirmTitle,
+                    ),
+                    subtitle: Text(
+                      context.l10n.notificationDismissConfirmSubtitle,
+                    ),
+                    value: controller.notificationDismissConfirm,
+                    onChanged:
+                        controller.updateNotificationDismissConfirm,
                   ),
                 ],
               ),
@@ -539,6 +550,39 @@ class PreferencesScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.statusBarMinutesTitle,
+                subtitle: context.l10n.statusBarMinutesSubtitle,
+                children: [
+                  SwitchListTile(
+                    key: const Key('status_bar_remaining_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.statusBarMinutesTitle),
+                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
+                    value: controller.statusBarRemainingEnabled,
+                    onChanged: controller.updateStatusBarRemainingEnabled,
+                  ),
+                  if (controller.statusBarRemainingEnabled) ...[
+                    SwitchListTile(
+                      key: const Key('status_bar_show_time_left_switch'),
+                      contentPadding: const EdgeInsets.only(left: 16),
+                      title: Text(context.l10n.statusBarShowTimeLeftTitle),
+                      subtitle: Text(context.l10n.statusBarShowTimeLeftSubtitle),
+                      value: controller.statusBarShowTimeLeft,
+                      onChanged: controller.updateStatusBarShowTimeLeft,
+                    ),
+                    SwitchListTile(
+                      key: const Key('status_bar_show_prayer_times_switch'),
+                      contentPadding: const EdgeInsets.only(left: 16),
+                      title: Text(context.l10n.statusBarShowPrayerTimesTitle),
+                      subtitle: Text(context.l10n.statusBarShowPrayerTimesSubtitle),
+                      value: controller.statusBarShowPrayerTimes,
+                      onChanged: controller.updateStatusBarShowPrayerTimes,
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 12),

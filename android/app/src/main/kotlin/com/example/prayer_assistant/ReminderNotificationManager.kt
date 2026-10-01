@@ -35,6 +35,51 @@ object ReminderNotificationManager {
         return false
     }
 
+    private fun getOriginalTimeLabel(snoozeLabel: String): String {
+        return when (snoozeLabel.lowercase(java.util.Locale.ROOT)) {
+            "ertele" -> "Asıl saat"
+            "غفوة" -> "الوقت الأصلي"
+            "schlummern" -> "Ursprüngliche Zeit"
+            "posponer" -> "Hora original"
+            "rappeler" -> "Heure d'origine"
+            "به تعویق انداختن" -> "زمان اصلی"
+            "توقف" -> "اصل وقت"
+            "tunda" -> "Waktu asli"
+            "отложить" -> "Исходное время"
+            else -> "Original time"
+        }
+    }
+
+    private fun getDismissPrompt(snoozeLabel: String): String {
+        return when (snoozeLabel.lowercase(java.util.Locale.ROOT)) {
+            "ertele" -> "Kapatmak istediğinizden emin misiniz?"
+            "غفوة" -> "هل أنت متأكد أنك تريد الإغلاق؟"
+            "schlummern" -> "Möchten Sie wirklich schließen?"
+            "posponer" -> "¿Seguro que desea descartar?"
+            "rappeler" -> "Voulez-vous vraiment fermer ?"
+            "به تعویق انداختن" -> "آیا مطمئن هستید که می‌خواهید ببندید؟"
+            "توقف" -> "کیا آپ واقعی بند کرنا چاہتے ہیں؟"
+            "tunda" -> "Apakah Anda yakin ingin menutup?"
+            "отложить" -> "Вы уверены, что хотите закрыть?"
+            else -> "Are you sure you want to dismiss?"
+        }
+    }
+
+    private fun getCancelLabel(snoozeLabel: String): String {
+        return when (snoozeLabel.lowercase(java.util.Locale.ROOT)) {
+            "ertele" -> "İptal"
+            "غفوة" -> "إلغاء"
+            "schlummern" -> "Abbrechen"
+            "posponer" -> "Cancelar"
+            "rappeler" -> "Annuler"
+            "به تعویق انداختن" -> "انصراف"
+            "توقف" -> "منسوخ"
+            "tunda" -> "Batal"
+            "отложить" -> "Отмена"
+            else -> "Cancel"
+        }
+    }
+
     fun show(
         context: Context,
         id: Int,
@@ -45,7 +90,9 @@ object ReminderNotificationManager {
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
         showDone: Boolean = false,
-        soundResource: String? = "reminder_chime"
+        soundResource: String? = "reminder_chime",
+        originalTime: String? = null,
+        dismissConfirm: Boolean = true
     ) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -86,6 +133,8 @@ object ReminderNotificationManager {
             putExtra("doneLabel", doneLabel)
             putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
         }
         val contentPendingIntent = PendingIntent.getActivity(
             context,
@@ -108,6 +157,8 @@ object ReminderNotificationManager {
             putExtra("doneLabel", doneLabel)
             putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
         }
         val deletePendingIntent = PendingIntent.getBroadcast(
             context,
@@ -129,6 +180,8 @@ object ReminderNotificationManager {
                 putExtra("doneLabel", doneLabel)
                 putExtra("showDone", showDone)
                 putExtra("soundResource", soundResource)
+                putExtra("originalTime", originalTime)
+                putExtra("dismissConfirm", dismissConfirm)
             }
             val actionOffset = when (actionId) {
                 "action_snooze" -> 1
@@ -148,15 +201,30 @@ object ReminderNotificationManager {
         val dismissActionPendingIntent = buildActionPendingIntent("action_dismiss")
         val donePendingIntent = buildActionPendingIntent("action_done")
 
+        val origLabel = getOriginalTimeLabel(snoozeLabel)
+        val origText = if (!originalTime.isNullOrEmpty()) "$origLabel: $originalTime" else null
+
         val collapsedRemoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
             setTextViewText(R.id.reminderTitle, title)
             setTextViewText(R.id.reminderBody, body)
+            if (origText != null) {
+                setTextViewText(R.id.reminderOriginalTime, origText)
+                setViewVisibility(R.id.reminderOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.reminderOriginalTime, android.view.View.GONE)
+            }
             setViewVisibility(R.id.reminderActionsContainer, android.view.View.GONE)
         }
 
         val expandedRemoteViews = RemoteViews(context.packageName, R.layout.notification_reminder_initial).apply {
             setTextViewText(R.id.reminderTitle, title)
             setTextViewText(R.id.reminderBody, body)
+            if (origText != null) {
+                setTextViewText(R.id.reminderOriginalTime, origText)
+                setViewVisibility(R.id.reminderOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.reminderOriginalTime, android.view.View.GONE)
+            }
             setTextViewText(R.id.btnReminderSnooze, snoozeLabel)
             setTextViewText(R.id.btnReminderDismiss, dismissLabel)
             setTextViewText(R.id.btnReminderDone, doneLabel)
@@ -202,7 +270,9 @@ object ReminderNotificationManager {
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
         showDone: Boolean = false,
-        soundResource: String? = "reminder_chime"
+        soundResource: String? = "reminder_chime",
+        originalTime: String? = null,
+        dismissConfirm: Boolean = true
     ) {
         handledActions.remove(id)
 
@@ -217,6 +287,8 @@ object ReminderNotificationManager {
             putExtra("doneLabel", doneLabel)
             putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
         }
         val contentPendingIntent = PendingIntent.getActivity(
             context,
@@ -238,6 +310,8 @@ object ReminderNotificationManager {
             putExtra("doneLabel", doneLabel)
             putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
         }
         val deletePendingIntent = PendingIntent.getBroadcast(
             context,
@@ -263,6 +337,8 @@ object ReminderNotificationManager {
                 putExtra("doneLabel", doneLabel)
                 putExtra("showDone", showDone)
                 putExtra("soundResource", soundResource)
+                putExtra("originalTime", originalTime)
+                putExtra("dismissConfirm", dismissConfirm)
             }
             return PendingIntent.getBroadcast(
                 context,
@@ -272,15 +348,30 @@ object ReminderNotificationManager {
             )
         }
 
+        val origLabel = getOriginalTimeLabel(snoozeLabel)
+        val origText = if (!originalTime.isNullOrEmpty()) "$origLabel: $originalTime" else null
+
         val collapsedRemoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
             setTextViewText(R.id.snoozeTitle, title)
             setTextViewText(R.id.snoozePrompt, promptText)
+            if (origText != null) {
+                setTextViewText(R.id.snoozeOriginalTime, origText)
+                setViewVisibility(R.id.snoozeOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.snoozeOriginalTime, android.view.View.GONE)
+            }
             setViewVisibility(R.id.snoozeOptionsContainer, android.view.View.GONE)
         }
 
         val expandedRemoteViews = RemoteViews(context.packageName, R.layout.notification_snooze_options).apply {
             setTextViewText(R.id.snoozeTitle, title)
             setTextViewText(R.id.snoozePrompt, promptText)
+            if (origText != null) {
+                setTextViewText(R.id.snoozeOriginalTime, origText)
+                setViewVisibility(R.id.snoozeOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.snoozeOriginalTime, android.view.View.GONE)
+            }
             setTextViewText(R.id.btnSnooze5, if (isTr) "5 dk" else "5m")
             setTextViewText(R.id.btnSnooze10, if (isTr) "10 dk" else "10m")
             setTextViewText(R.id.btnSnooze15, if (isTr) "15 dk" else "15m")
@@ -314,6 +405,147 @@ object ReminderNotificationManager {
         NotificationManagerCompat.from(context).notify(id, notification)
     }
 
+    fun showDismissConfirmation(
+        context: Context,
+        id: Int,
+        title: String,
+        body: String,
+        payload: String? = null,
+        snoozeLabel: String = "Snooze",
+        dismissLabel: String = "Dismiss",
+        doneLabel: String = "Done",
+        showDone: Boolean = false,
+        soundResource: String? = "reminder_chime",
+        originalTime: String? = null,
+        dismissConfirm: Boolean = true
+    ) {
+        handledActions.remove(id)
+
+        val contentIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("notification_id", id)
+            putExtra("payload", payload)
+            putExtra("title", title)
+            putExtra("body", body)
+            putExtra("snoozeLabel", snoozeLabel)
+            putExtra("dismissLabel", dismissLabel)
+            putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
+            putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
+        }
+        val contentPendingIntent = PendingIntent.getActivity(
+            context,
+            id * 10,
+            contentIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // If swiped away while showing confirmation, re-show original notification
+        val dismissIntent = Intent(context, ReminderDismissReceiver::class.java).apply {
+            action = ACTION_REMINDER_DISMISSED
+            data = Uri.parse("reminder://dismiss/$id/${System.currentTimeMillis()}")
+            putExtra("id", id)
+            putExtra("title", title)
+            putExtra("body", body)
+            putExtra("payload", payload)
+            putExtra("snoozeLabel", snoozeLabel)
+            putExtra("dismissLabel", dismissLabel)
+            putExtra("doneLabel", doneLabel)
+            putExtra("showDone", showDone)
+            putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
+        }
+        val deletePendingIntent = PendingIntent.getBroadcast(
+            context,
+            id * 10 + 9,
+            dismissIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val promptText = getDismissPrompt(snoozeLabel)
+        val cancelText = getCancelLabel(snoozeLabel)
+
+        fun buildDismissActionPendingIntent(actionId: String, offset: Int): PendingIntent {
+            val intent = Intent(context, ReminderActionReceiver::class.java).apply {
+                action = ReminderActionReceiver.ACTION_REMINDER_ACTION
+                putExtra("actionId", actionId)
+                putExtra("id", id)
+                putExtra("title", title)
+                putExtra("body", body)
+                putExtra("payload", payload)
+                putExtra("snoozeLabel", snoozeLabel)
+                putExtra("dismissLabel", dismissLabel)
+                putExtra("doneLabel", doneLabel)
+                putExtra("showDone", showDone)
+                putExtra("soundResource", soundResource)
+                putExtra("originalTime", originalTime)
+                putExtra("dismissConfirm", dismissConfirm)
+            }
+            return PendingIntent.getBroadcast(
+                context,
+                id * 100 + offset,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
+        val confirmPendingIntent = buildDismissActionPendingIntent("action_dismiss_confirm", 71)
+        val cancelPendingIntent = buildDismissActionPendingIntent("action_dismiss_cancel", 72)
+
+        val origLabel = getOriginalTimeLabel(snoozeLabel)
+        val origText = if (!originalTime.isNullOrEmpty()) "$origLabel: $originalTime" else null
+
+        val collapsedRemoteViews = RemoteViews(context.packageName, R.layout.notification_dismiss_confirm).apply {
+            setTextViewText(R.id.dismissConfirmTitle, title)
+            setTextViewText(R.id.dismissConfirmPrompt, promptText)
+            if (origText != null) {
+                setTextViewText(R.id.dismissConfirmOriginalTime, origText)
+                setViewVisibility(R.id.dismissConfirmOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.dismissConfirmOriginalTime, android.view.View.GONE)
+            }
+            setViewVisibility(R.id.dismissConfirmActionsContainer, android.view.View.GONE)
+        }
+
+        val expandedRemoteViews = RemoteViews(context.packageName, R.layout.notification_dismiss_confirm).apply {
+            setTextViewText(R.id.dismissConfirmTitle, title)
+            setTextViewText(R.id.dismissConfirmPrompt, promptText)
+            if (origText != null) {
+                setTextViewText(R.id.dismissConfirmOriginalTime, origText)
+                setViewVisibility(R.id.dismissConfirmOriginalTime, android.view.View.VISIBLE)
+            } else {
+                setViewVisibility(R.id.dismissConfirmOriginalTime, android.view.View.GONE)
+            }
+            setTextViewText(R.id.btnDismissConfirm, dismissLabel)
+            setTextViewText(R.id.btnDismissCancel, cancelText)
+
+            setViewVisibility(R.id.dismissConfirmActionsContainer, android.view.View.VISIBLE)
+
+            setOnClickPendingIntent(R.id.btnDismissConfirm, confirmPendingIntent)
+            setOnClickPendingIntent(R.id.btnDismissCancel, cancelPendingIntent)
+        }
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setAutoCancel(false)
+            .setOngoing(true)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(contentPendingIntent)
+            .setDeleteIntent(deletePendingIntent)
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(collapsedRemoteViews)
+            .setCustomBigContentView(expandedRemoteViews)
+
+        val notification = builder.build()
+        notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
+        NotificationManagerCompat.from(context).notify(id, notification)
+    }
+
     fun schedule(
         context: Context,
         id: Int,
@@ -325,7 +557,9 @@ object ReminderNotificationManager {
         dismissLabel: String = "Dismiss",
         doneLabel: String = "Done",
         showDone: Boolean = false,
-        soundResource: String? = "reminder_chime"
+        soundResource: String? = "reminder_chime",
+        originalTime: String? = null,
+        dismissConfirm: Boolean = true
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderAlarmReceiver::class.java).apply {
@@ -339,6 +573,8 @@ object ReminderNotificationManager {
             putExtra("doneLabel", doneLabel)
             putExtra("showDone", showDone)
             putExtra("soundResource", soundResource)
+            putExtra("originalTime", originalTime)
+            putExtra("dismissConfirm", dismissConfirm)
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,

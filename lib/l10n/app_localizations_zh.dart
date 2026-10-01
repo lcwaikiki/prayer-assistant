@@ -130,6 +130,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get statusBarMinutesSubtitle => '在状态栏显示持续的剩余分钟通知。';
 
   @override
+  String get statusBarShowTimeLeftTitle => '显示剩余时间';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle => '在状态栏通知中显示剩余时间。';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => '显示每日礼拜时间';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle => '展开状态栏通知时显示全天礼拜时间表。';
+
+  @override
+  String get notificationShowTimeLeftTitle => '在通知中显示剩余时间';
+
+  @override
+  String get notificationShowTimeLeftSubtitle => '在提醒通知中包含剩余时间倒计时。';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle => '显示礼拜时间消息';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle => '在提醒通知正文中包含礼拜时间详情。';
+
+  @override
+  String get notificationDismissConfirmTitle => '通知内关闭确认';
+
+  @override
+  String get notificationDismissConfirmSubtitle => '在关闭前于通知内请求确认。';
+
+  @override
   String get statusAutoRestoreTitle => '被划掉后自动恢复';
 
   @override

@@ -137,6 +137,43 @@ class AppLocalizationsUr extends AppLocalizations {
       'اسٹیٹس بار میں باقی منٹس کی مسلسل اطلاع دکھائیں۔';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'باقی وقت دکھائیں';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'اسٹیٹس بار نوٹیفکیشن میں باقی وقت دکھائیں۔';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'روزانہ نماز کے اوقات دکھائیں';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'اسٹیٹس بار نوٹیفکیشن کو بڑا کرنے پر تمام اوقات دکھائیں۔';
+
+  @override
+  String get notificationShowTimeLeftTitle => 'اطلاعات میں باقی وقت دکھائیں';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'یاد دہانی کے نوٹیفکیشنز میں باقی وقت شامل کریں۔';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'نماز کے اوقات کا پیغام دکھائیں';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'یاد دہانی کے متن میں نماز کے وقت کی تفصیلات شامل کریں۔';
+
+  @override
+  String get notificationDismissConfirmTitle =>
+      'اطلاع کے اندر مسترد کرنے کی تصدیق';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'مسترد کرنے سے پہلے اطلاع کے اندر تصدیق طلب کریں۔';
+
+  @override
   String get statusAutoRestoreTitle => 'ہٹانے پر بحال کریں';
 
   @override

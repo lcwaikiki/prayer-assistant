@@ -135,6 +135,43 @@ class AppLocalizationsAr extends AppLocalizations {
       'إظهار إشعار مستمر للدقائق المتبقية في شريط الحالة.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'إظهار الوقت المتبقي';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'عرض الوقت المتبقي في إشعار شريط الحالة.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'إظهار مواقيت الصلاة اليومية';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'عرض جميع مواقيت الصلاة عند توسيع إشعار شريط الحالة.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'إظهار الوقت المتبقي في الإشعارات';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'تضمين العد التنازلي للوقت المتبقي في إشعارات التذكير.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle =>
+      'إظهار رسالة مواقيت الصلاة';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'تضمين تفاصيل وقت الصلاة في نص إشعار التذكير.';
+
+  @override
+  String get notificationDismissConfirmTitle => 'تأكيد الإغلاق داخل الإشعار';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'طلب التأكيد داخل الإشعار قبل إغلاقه.';
+
+  @override
   String get statusAutoRestoreTitle => 'إعادة تلقائية عند الإزالة';
 
   @override

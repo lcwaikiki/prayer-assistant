@@ -211,10 +211,14 @@ class WidgetBridgeService {
   Future<void> updateStatusBarConfig({
     required bool enabled,
     required bool autoRestore,
+    bool showTimeLeft = true,
+    bool showPrayerTimes = true,
   }) async {
     await _channel.invokeMethod<void>('updateStatusBarConfig', <String, Object>{
       'enabled': enabled,
       'autoRestore': autoRestore,
+      'showTimeLeft': showTimeLeft,
+      'showPrayerTimes': showPrayerTimes,
     });
   }
 

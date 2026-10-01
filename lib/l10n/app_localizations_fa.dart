@@ -138,6 +138,42 @@ class AppLocalizationsFa extends AppLocalizations {
       'نمایش اعلان دائمی دقایق باقی‌مانده در نوار وضعیت.';
 
   @override
+  String get statusBarShowTimeLeftTitle => 'نمایش زمان باقی‌مانده';
+
+  @override
+  String get statusBarShowTimeLeftSubtitle =>
+      'نمایش زمان باقی‌مانده در اعلان نوار وضعیت.';
+
+  @override
+  String get statusBarShowPrayerTimesTitle => 'نمایش اوقات شرعی روزانه';
+
+  @override
+  String get statusBarShowPrayerTimesSubtitle =>
+      'نمایش همه اوقات شرعی هنگام باز کردن اعلان نوار وضعیت.';
+
+  @override
+  String get notificationShowTimeLeftTitle =>
+      'نمایش زمان باقی‌مانده در اعلان‌ها';
+
+  @override
+  String get notificationShowTimeLeftSubtitle =>
+      'افزودن شمارش معکوس به اعلان‌های یادآوری.';
+
+  @override
+  String get notificationShowPrayerTimesMessageTitle => 'نمایش پیام اوقات نماز';
+
+  @override
+  String get notificationShowPrayerTimesMessageSubtitle =>
+      'افزودن جزئیات اوقات شرعی به متن اعلان یادآوری.';
+
+  @override
+  String get notificationDismissConfirmTitle => 'تأیید بستن درون اعلان';
+
+  @override
+  String get notificationDismissConfirmSubtitle =>
+      'قبل از بستن، داخل اعلان تأیید بخواهید.';
+
+  @override
   String get statusAutoRestoreTitle => 'بازیابی خودکار در صورت حذف';
 
   @override

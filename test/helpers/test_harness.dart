@@ -205,6 +205,15 @@ class TestHarness {
       () => database.loadShowCalendarReminderDots(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.saveShowCalendarReminderDots(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => database.loadShowBeadsInCalendar(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveShowBeadsInCalendar(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadShowCardMoonPhase(),
     ).thenAnswer((_) async => null);
     when(

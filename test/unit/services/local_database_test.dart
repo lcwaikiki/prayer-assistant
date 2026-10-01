@@ -132,6 +132,9 @@ void main() {
 
       await database.saveCalendarSortOption(CalendarSortOption.time);
       expect(await database.loadCalendarSortOption(), CalendarSortOption.time);
+
+      await database.saveCalendarSortOption(CalendarSortOption.alphabetical);
+      expect(await database.loadCalendarSortOption(), CalendarSortOption.alphabetical);
     });
 
     test('loaders return null when unset', () async {

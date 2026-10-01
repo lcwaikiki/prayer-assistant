@@ -41,6 +41,7 @@ class LocalDatabase {
   static const _snoozeDurationMinutesKey = 'snooze_duration_minutes';
   static const _taskCompletionsKey = 'task_completions';
   static const _calendarSortOptionKey = 'calendar_sort_option';
+  static const _showBeadsInCalendarKey = 'show_beads_in_calendar';
 
   Database? _db;
 
@@ -748,6 +749,28 @@ class LocalDatabase {
     }
     final raw = rows.first['setting_value'] as String?;
     return raw != null ? CalendarSortOption.fromName(raw) : null;
+  }
+
+  Future<void> saveShowBeadsInCalendar(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _showBeadsInCalendarKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool?> loadShowBeadsInCalendar() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_showBeadsInCalendarKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
   }
 
   Future<void> saveShowCardMoonPhase(bool enabled) async {

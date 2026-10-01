@@ -717,5 +717,9 @@
   "beadsExecute": "Execute",
   "calendarSortByName": "Name",
   "calendarSortByTime": "Time",
-  "calendarSortOption": "Sort by"
+  "calendarSortOption": "Sort by",
+  "calendarHideBeads": "Hide beads reminders",
+  "calendarShowBeads": "Show beads reminders",
+  "showBeadsInCalendarTitle": "Show Beads in Calendar",
+  "showBeadsInCalendarSubtitle": "Display beads and group reminders in calendar views"
 }

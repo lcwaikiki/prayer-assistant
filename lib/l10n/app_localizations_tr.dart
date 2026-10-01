@@ -1591,4 +1591,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get calendarSortOption => 'Sırala';
+
+  @override
+  String get calendarHideBeads => 'Tesbihat hatırlatıcılarını gizle';
+
+  @override
+  String get calendarShowBeads => 'Tesbihat hatırlatıcılarını göster';
+
+  @override
+  String get showBeadsInCalendarTitle => 'Takvimde Tesbihatı Göster';
+
+  @override
+  String get showBeadsInCalendarSubtitle =>
+      'Takvim görünümlerinde tesbih ve grup hatırlatıcılarını göster';
 }

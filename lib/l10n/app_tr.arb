@@ -557,5 +557,9 @@
   "beadsExecute": "Başlat",
   "calendarSortByName": "İsim",
   "calendarSortByTime": "Zaman",
-  "calendarSortOption": "Sırala"
+  "calendarSortOption": "Sırala",
+  "calendarHideBeads": "Tesbihat hatırlatıcılarını gizle",
+  "calendarShowBeads": "Tesbihat hatırlatıcılarını göster",
+  "showBeadsInCalendarTitle": "Takvimde Tesbihatı Göster",
+  "showBeadsInCalendarSubtitle": "Takvim görünümlerinde tesbih ve grup hatırlatıcılarını göster"
 }

@@ -1599,4 +1599,17 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get calendarSortOption => 'Urutkan';
+
+  @override
+  String get calendarHideBeads => 'Sembunyikan pengingat tasbih';
+
+  @override
+  String get calendarShowBeads => 'Tampilkan pengingat tasbih';
+
+  @override
+  String get showBeadsInCalendarTitle => 'Tampilkan Tasbih di Kalender';
+
+  @override
+  String get showBeadsInCalendarSubtitle =>
+      'Tampilkan pengingat tasbih dan grup di tampilan kalender';
 }

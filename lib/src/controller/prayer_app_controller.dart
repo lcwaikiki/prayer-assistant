@@ -88,8 +88,9 @@ class PrayerAppController extends ChangeNotifier {
   bool _showIslamicHolidays = true;
   bool _showFastingBadges = true;
   CalendarPrimaryDisplay _defaultCalendarDisplay = CalendarPrimaryDisplay.hijri;
-  CalendarSortOption _calendarSortOption = CalendarSortOption.alphabetical;
+  CalendarSortOption _calendarSortOption = CalendarSortOption.time;
   bool _showCalendarReminderDots = true;
+  bool _showBeadsInCalendar = true;
   bool _showCardMoonPhase = true;
   bool _showCardIftarSuhoor = true;
   bool _showCardDailyWisdom = true;
@@ -187,6 +188,7 @@ class PrayerAppController extends ChangeNotifier {
   CalendarPrimaryDisplay get defaultCalendarDisplay => _defaultCalendarDisplay;
   CalendarSortOption get calendarSortOption => _calendarSortOption;
   bool get showCalendarReminderDots => _showCalendarReminderDots;
+  bool get showBeadsInCalendar => _showBeadsInCalendar;
   bool get showCardMoonPhase => _showCardMoonPhase;
   bool get showCardIftarSuhoor => _showCardIftarSuhoor;
   bool get showCardDailyWisdom => _showCardDailyWisdom;
@@ -232,6 +234,12 @@ class PrayerAppController extends ChangeNotifier {
   void updateShowCalendarReminderDots(bool show) {
     _showCalendarReminderDots = show;
     database.saveShowCalendarReminderDots(show);
+    notifyListeners();
+  }
+
+  void updateShowBeadsInCalendar(bool show) {
+    _showBeadsInCalendar = show;
+    database.saveShowBeadsInCalendar(show);
     notifyListeners();
   }
 
@@ -660,9 +668,11 @@ class PrayerAppController extends ChangeNotifier {
           CalendarPrimaryDisplay.hijri;
       _calendarSortOption =
           await database.loadCalendarSortOption() ??
-          CalendarSortOption.alphabetical;
+          CalendarSortOption.time;
       _showCalendarReminderDots =
           await database.loadShowCalendarReminderDots() ?? true;
+      _showBeadsInCalendar =
+          await database.loadShowBeadsInCalendar() ?? true;
       _showCardMoonPhase = await database.loadShowCardMoonPhase() ?? true;
       _showCardIftarSuhoor = await database.loadShowCardIftarSuhoor() ?? true;
       _showCardDailyWisdom = await database.loadShowCardDailyWisdom() ?? true;
@@ -1497,6 +1507,7 @@ class PrayerAppController extends ChangeNotifier {
       'showIslamicHolidays': _showIslamicHolidays,
       'showFastingBadges': _showFastingBadges,
       'showCalendarReminderDots': _showCalendarReminderDots,
+      'showBeadsInCalendar': _showBeadsInCalendar,
       'showCardMoonPhase': _showCardMoonPhase,
       'showCardIftarSuhoor': _showCardIftarSuhoor,
       'showCardDailyWisdom': _showCardDailyWisdom,
@@ -1688,6 +1699,12 @@ class PrayerAppController extends ChangeNotifier {
         _showCalendarReminderDots,
       );
     }
+    if (prefs.containsKey('showBeadsInCalendar')) {
+      _showBeadsInCalendar = asBool(
+        prefs['showBeadsInCalendar'],
+        _showBeadsInCalendar,
+      );
+    }
     if (prefs.containsKey('showCardMoonPhase')) {
       _showCardMoonPhase = asBool(
         prefs['showCardMoonPhase'],
@@ -1793,6 +1810,7 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveShowIslamicHolidays(_showIslamicHolidays);
     await database.saveShowFastingBadges(_showFastingBadges);
     await database.saveShowCalendarReminderDots(_showCalendarReminderDots);
+    await database.saveShowBeadsInCalendar(_showBeadsInCalendar);
     await database.saveShowCardMoonPhase(_showCardMoonPhase);
     await database.saveShowCardIftarSuhoor(_showCardIftarSuhoor);
     await database.saveShowCardDailyWisdom(_showCardDailyWisdom);

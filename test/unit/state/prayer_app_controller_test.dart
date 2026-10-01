@@ -197,6 +197,12 @@ void main() {
     when(
       () => database.saveShowCalendarReminderDots(any()),
     ).thenAnswer((_) async {});
+    when(
+      () => database.loadShowBeadsInCalendar(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveShowBeadsInCalendar(any()),
+    ).thenAnswer((_) async {});
     when(() => database.loadShowCardMoonPhase()).thenAnswer((_) async => null);
     when(() => database.loadShowCardIftarSuhoor()).thenAnswer((_) async => null);
     when(() => database.loadShowCardDailyWisdom()).thenAnswer((_) async => null);
@@ -911,6 +917,20 @@ void main() {
 
       expect(controller.calendarPrimaryDisplay, CalendarPrimaryDisplay.gregorian);
       expect(controller.showSecondaryCalendarDate, isFalse);
+    });
+
+    test('calendarSortOption defaults to time and updateCalendarSortOption persists', () async {
+      when(
+        () => database.saveCalendarSortOption(any()),
+      ).thenAnswer((_) async {});
+      final controller = buildController();
+
+      expect(controller.calendarSortOption, CalendarSortOption.time);
+
+      controller.updateCalendarSortOption(CalendarSortOption.alphabetical);
+
+      expect(controller.calendarSortOption, CalendarSortOption.alphabetical);
+      verify(() => database.saveCalendarSortOption(CalendarSortOption.alphabetical)).called(1);
     });
 
     test('updateSnoozeDurationMinutes persists and notifies', () async {

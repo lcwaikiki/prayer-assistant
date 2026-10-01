@@ -796,11 +796,12 @@ void main() {
   );
 
   testWidgets(
-    'reminders and tasks in DayDetailSheet are sorted alphabetically and by time',
+    'sorting alphabetically sorts items alphabetically in DayDetailSheet',
     (tester) async {
       final harness = TestHarness.create();
       final date = DateTime(2026, 8, 17);
       await harness.initialize();
+      harness.controller.updateCalendarSortOption(CalendarSortOption.alphabetical);
       await harness.controller.addCalendarReminder(
         CalendarReminder(
           id: 'rem-z',
@@ -859,7 +860,7 @@ void main() {
   );
 
   testWidgets(
-    'sorting by time shows item times and sorts by time in DayDetailSheet',
+    'sorting by time is default and shows item times and sorts by time in DayDetailSheet',
     (tester) async {
       final harness = TestHarness.create();
       final date = DateTime(2026, 8, 17);
@@ -882,9 +883,6 @@ void main() {
           isTask: true,
         ),
       );
-
-      // Switch sort option to time
-      harness.controller.updateCalendarSortOption(CalendarSortOption.time);
 
       await pumpWithHarness(
         tester,
@@ -920,6 +918,54 @@ void main() {
         find.textContaining('14:00 •'),
         findsWidgets,
       );
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'month view does not show recurring reminders or toggle beads filter chip',
+    (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+      // Add recurring reminder (daily)
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'daily-rem',
+          title: 'Daily Recurring Reminder',
+          anchorAt: DateTime(2026, 8, 17, 10, 0),
+          enabled: true,
+          isTask: true,
+          recurrence: ReminderRecurrence.daily,
+        ),
+      );
+      // Add once reminder
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'once-rem',
+          title: 'One-Time Reminder',
+          anchorAt: DateTime(2026, 8, 17, 11, 0),
+          enabled: true,
+          isTask: true,
+          recurrence: ReminderRecurrence.once,
+        ),
+      );
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        HijriCalendarScreen(initialDate: DateTime(2026, 8, 17)),
+      );
+
+      // Verify toggle beads filter chip is not present in Month view
+      expect(
+        find.byKey(const Key('month_calendar_toggle_beads_button')),
+        findsNothing,
+      );
+
+      // Verify Month view task dropdown only contains the one-time reminder
+      expect(find.textContaining('One-Time Reminder'), findsOneWidget);
+      expect(find.textContaining('Daily Recurring Reminder'), findsNothing);
 
       await tester.pumpWidget(const SizedBox());
     },

@@ -408,13 +408,13 @@ enum AppLocalePreference {
 }
 
 enum CalendarSortOption {
-  alphabetical,
-  time;
+  time,
+  alphabetical;
 
   static CalendarSortOption fromName(String? name) {
     return CalendarSortOption.values.firstWhere(
       (v) => v.name == name,
-      orElse: () => CalendarSortOption.alphabetical,
+      orElse: () => CalendarSortOption.time,
     );
   }
 }

@@ -46,6 +46,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController = TabController(
     length: 3,
+    initialIndex: 1,
     vsync: this,
   );
 
@@ -61,7 +62,28 @@ class _HistoryScreenState extends State<HistoryScreen>
   int? _lastTabIndex;
 
   @override
+  void initState() {
+    super.initState();
+    _tabController.addListener(_handleTabChanged);
+  }
+
+  void _handleTabChanged() {
+    if (_tabController.index == 0 && !_tabController.indexIsChanging) {
+      _scrollToToday();
+    }
+  }
+
+  void _scrollToToday() {
+    final controller = context.read<PrayerAppController>();
+    _scheduleScrollToToday(
+      controller.yearRange,
+      locale: Localizations.localeOf(context).toString(),
+    );
+  }
+
+  @override
   void dispose() {
+    _tabController.removeListener(_handleTabChanged);
     _tabController.dispose();
     _verticalController.dispose();
     _headerHorizontalController.dispose();
@@ -144,6 +166,9 @@ class _HistoryScreenState extends State<HistoryScreen>
         if (_lastTabIndex != controller.tabIndex) {
           _lastTabIndex = controller.tabIndex;
           if (controller.tabIndex == 3) {
+            if (_tabController.index != 1) {
+              _tabController.index = 1;
+            }
             _scheduleScrollToToday(
               controller.yearRange,
               locale: Localizations.localeOf(context).toString(),
@@ -155,6 +180,11 @@ class _HistoryScreenState extends State<HistoryScreen>
           children: [
             TabBar(
               controller: _tabController,
+              onTap: (index) {
+                if (index == 0) {
+                  _scrollToToday();
+                }
+              },
               tabs: [
                 Tab(
                   text: context.l10n.datesPrayerTimesTab,

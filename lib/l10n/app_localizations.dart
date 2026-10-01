@@ -3037,6 +3037,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sort by'**
   String get calendarSortOption;
+
+  /// No description provided for @calendarHideBeads.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide beads reminders'**
+  String get calendarHideBeads;
+
+  /// No description provided for @calendarShowBeads.
+  ///
+  /// In en, this message translates to:
+  /// **'Show beads reminders'**
+  String get calendarShowBeads;
+
+  /// No description provided for @showBeadsInCalendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Beads in Calendar'**
+  String get showBeadsInCalendarTitle;
+
+  /// No description provided for @showBeadsInCalendarSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Display beads and group reminders in calendar views'**
+  String get showBeadsInCalendarSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -1582,4 +1582,17 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get calendarSortOption => 'ترتيب حسب';
+
+  @override
+  String get calendarHideBeads => 'Hide beads reminders';
+
+  @override
+  String get calendarShowBeads => 'Show beads reminders';
+
+  @override
+  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+
+  @override
+  String get showBeadsInCalendarSubtitle =>
+      'Display beads and group reminders in calendar views';
 }

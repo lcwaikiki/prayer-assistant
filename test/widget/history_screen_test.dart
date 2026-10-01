@@ -8,7 +8,7 @@ import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
-  testWidgets('prompts for a location when none is selected', (tester) async {
+  testWidgets('prompts for a location when none is selected in prayer times tab', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -20,6 +20,11 @@ void main() {
       settle: false,
     );
     await tester.pump();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    // Tap prayer times tab
+    await tester.tap(find.byIcon(Icons.schedule));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
 
@@ -65,6 +70,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pump(const Duration(milliseconds: 500));
 
+    // Calendar is active by default
+    expect(find.bySubtype<SegmentedButton>(), findsOneWidget);
+
+    // Switch to prayer times
+    await tester.tap(find.byIcon(Icons.schedule));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
     expect(find.byIcon(Icons.schedule), findsWidgets);
     expect(find.text('Calendar'), findsOneWidget);
     expect(find.text('Moon Phase'), findsOneWidget);
@@ -72,7 +85,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('calendar tab shows the hijri calendar view', (tester) async {
+  testWidgets('calendar tab is active by default and shows the hijri calendar view', (tester) async {
     final harness = TestHarness.create();
     when(() => harness.database.loadSelectedLocation()).thenAnswer(
       (_) async => sampleSelectedLocation(),
@@ -103,10 +116,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 500));
 
-    await tester.tap(find.text('Calendar'));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 500));
-
+    // Calendar tab is active by default
     expect(find.bySubtype<SegmentedButton>(), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());

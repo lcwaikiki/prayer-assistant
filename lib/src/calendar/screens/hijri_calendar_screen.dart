@@ -56,10 +56,14 @@ String? _formatTaskTime(BuildContext context, TaskItem task) {
 List<TaskItem> _getAllTasks(
   PrayerAppController controller,
   List<Item> beads,
-  List<ItemGroup> groups,
-) {
+  List<ItemGroup> groups, {
+  bool includeRecurring = true,
+}) {
   final tasks = <TaskItem>[];
   for (final reminder in controller.calendarReminders) {
+    if (!includeRecurring && reminder.recurrence != ReminderRecurrence.once) {
+      continue;
+    }
     if (reminder.enabled || reminder.isTask) {
       tasks.add(
         TaskItem(
@@ -73,33 +77,43 @@ List<TaskItem> _getAllTasks(
       );
     }
   }
-  for (final bead in beads) {
-    if (bead.reminderEnabled || bead.isTask) {
-      tasks.add(
-        TaskItem(
-          id: 'bead_${bead.id}',
-          targetId: bead.id,
-          title: bead.title,
-          type: TaskItemType.bead,
-          bead: bead,
-          targetCount: bead.count,
-          occursOnDate: (d) => bead.occursOn(d),
-        ),
-      );
+  if (controller.showBeadsInCalendar) {
+    for (final bead in beads) {
+      if (!includeRecurring &&
+          bead.reminderRecurrence != ReminderRecurrence.once) {
+        continue;
+      }
+      if (bead.reminderEnabled || bead.isTask) {
+        tasks.add(
+          TaskItem(
+            id: 'bead_${bead.id}',
+            targetId: bead.id,
+            title: bead.title,
+            type: TaskItemType.bead,
+            bead: bead,
+            targetCount: bead.count,
+            occursOnDate: (d) => bead.occursOn(d),
+          ),
+        );
+      }
     }
-  }
-  for (final group in groups) {
-    if (group.reminderEnabled || group.isTask) {
-      tasks.add(
-        TaskItem(
-          id: 'group_${group.id}',
-          targetId: group.id,
-          title: group.title,
-          type: TaskItemType.group,
-          group: group,
-          occursOnDate: (d) => group.occursOn(d),
-        ),
-      );
+    for (final group in groups) {
+      if (!includeRecurring &&
+          group.reminderRecurrence != ReminderRecurrence.once) {
+        continue;
+      }
+      if (group.reminderEnabled || group.isTask) {
+        tasks.add(
+          TaskItem(
+            id: 'group_${group.id}',
+            targetId: group.id,
+            title: group.title,
+            type: TaskItemType.group,
+            group: group,
+            occursOnDate: (d) => group.occursOn(d),
+          ),
+        );
+      }
     }
   }
   final sortOption = controller.calendarSortOption;
@@ -314,7 +328,12 @@ class _HijriCalendarViewState extends ConsumerState<HijriCalendarView> {
         final int leadingBlanks = weekStart.leadingBlanks(monthDays.first);
         final today = DateTime.now();
         final locale = Localizations.localeOf(context).toString();
-        final allTasks = _getAllTasks(controller, beads, groups);
+        final allTasks = _getAllTasks(
+          controller,
+          beads,
+          groups,
+          includeRecurring: false,
+        );
         final selectedTask = allTasks.cast<TaskItem?>().firstWhere(
               (t) => t?.id == _selectedTaskId,
               orElse: () => null,
@@ -564,7 +583,9 @@ class _HijriCalendarViewState extends ConsumerState<HijriCalendarView> {
                           final hasReminder = controller.showCalendarReminderDots &&
                               controller.calendarReminders.any(
                                 (reminder) =>
-                                    reminder.enabled && reminder.occursOn(date),
+                                    reminder.enabled &&
+                                    reminder.recurrence == ReminderRecurrence.once &&
+                                    reminder.occursOn(date),
                               );
                           final isHoliday = controller.showIslamicHolidays &&
                               islamicHolidayKey(date, offset: controller.hijriDateOffset) != null;
@@ -1630,6 +1651,33 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                             visualDensity: VisualDensity.compact,
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
+                        ),
+                        FilterChip(
+                          key: const Key('day_detail_toggle_beads_button'),
+                          tooltip: controller.showBeadsInCalendar
+                              ? l10n.calendarHideBeads
+                              : l10n.calendarShowBeads,
+                          avatar: Icon(
+                            controller.showBeadsInCalendar
+                                ? Icons.check
+                                : Icons.circle_outlined,
+                            size: 14,
+                            color: controller.showBeadsInCalendar
+                                ? Theme.of(context).colorScheme.onPrimaryContainer
+                                : Theme.of(context).colorScheme.onSurfaceVariant,
+                          ),
+                          label: Text(
+                            l10n.tabTesbih,
+                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                          selected: controller.showBeadsInCalendar,
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          onSelected: (selected) =>
+                              controller.updateShowBeadsInCalendar(selected),
                         ),
                       ],
                     ),

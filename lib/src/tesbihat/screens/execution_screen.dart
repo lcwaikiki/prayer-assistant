@@ -8,6 +8,7 @@ import '../../controller/prayer_app_controller.dart';
 import '../../navigation.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../services/haptic_service.dart';
+import '../services/tap_pace_tracker.dart';
 import '../state/items_notifier.dart';
 import 'item_form_screen.dart';
 
@@ -21,6 +22,12 @@ class ExecutionScreen extends ConsumerStatefulWidget {
 }
 
 class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
+  final _paceTracker = TapPaceTracker();
+
+  void _resetTapTiming() {
+    _paceTracker.reset();
+  }
+
   void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
       // Ignore platform channel errors in unsupported environments.
@@ -81,7 +88,15 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
     }
 
+    String computeTimeLeft() {
+      final remaining =
+          (item.count - item.currentProgress).clamp(0, item.count);
+      return _paceTracker.formatRemaining(remaining);
+    }
+
     Future<void> handleTap() async {
+      setState(_paceTracker.recordTap);
+
       final feedback = ref
           .read(itemsNotifierProvider.notifier)
           .incrementProgress(widget.itemId);
@@ -118,6 +133,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
 
       if (shouldReset == true) {
+        setState(_resetTapTiming);
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
     }
@@ -210,6 +226,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
 
       if (result != null) {
+        setState(_resetTapTiming);
         final error = ref
             .read(itemsNotifierProvider.notifier)
             .updateProgressAndSetCount(
@@ -261,14 +278,22 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
                 Expanded(
                   child: _TopStatCard(label: l10n.count, value: '$countValue'),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
                 Expanded(
                   child: _TopStatCard(
                     label: l10n.maxMinusCount,
                     value: '$maxMinusCount',
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: _TopStatCard(
+                    label: l10n.timeLeft,
+                    value: computeTimeLeft(),
+                    valueKey: const Key('time_left_value_text'),
+                  ),
+                ),
+                const SizedBox(width: 6),
                 Expanded(
                   child: _TopStatCard(
                     label: l10n.setCount,
@@ -368,17 +393,26 @@ class _TopStatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         child: Column(
           children: [
-            Text(label, style: Theme.of(context).textTheme.labelMedium),
-            const SizedBox(height: 4),
             Text(
-              value,
-              key: valueKey,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+              label,
+              style: Theme.of(context).textTheme.labelSmall,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                value,
+                key: valueKey,
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),

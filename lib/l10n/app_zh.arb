@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "请输入有效进度数字",
   "beadsProgressBetween": "进度必须在 0 到 {max} 之间",
   "beadsMaxMinusCount": "剩余计数",
+  "beadsTimeLeft": "剩余时间",
   "beadsTap": "点按",
   "beadsGroups": "分组",
   "beadsNewGroup": "新建分组",

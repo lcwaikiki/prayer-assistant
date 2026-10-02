@@ -1486,6 +1486,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get beadsMaxMinusCount => 'Hitungan Tersisa';
 
   @override
+  String get beadsTimeLeft => 'Sisa Waktu';
+
+  @override
   String get beadsTap => 'KETUK';
 
   @override

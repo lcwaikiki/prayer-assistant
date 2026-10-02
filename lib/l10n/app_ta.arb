@@ -624,6 +624,7 @@
   "beadsValidProgressNumber": "செல்லுபடியாகும் முன்னேற்ற எண்ணை உள்ளிடவும்",
   "beadsProgressBetween": "முன்னேற்றம் 0 மற்றும் {max} இடையே இருக்க வேண்டும்",
   "beadsMaxMinusCount": "மீதமுள்ள எண்ணிக்கை",
+  "beadsTimeLeft": "மீதமுள்ள நேரம்",
   "beadsTap": "தட்டு",
   "beadsGroups": "குழுக்கள்",
   "beadsNewGroup": "புதிய குழு",

@@ -1478,6 +1478,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get beadsMaxMinusCount => 'Kalan Sayı';
 
   @override
+  String get beadsTimeLeft => 'Kalan Süre';
+
+  @override
   String get beadsTap => 'DOKUN';
 
   @override

@@ -96,6 +96,7 @@ class TestHarness {
         soundEnabled: any(named: 'soundEnabled'),
         showTimeLeft: any(named: 'showTimeLeft'),
         showPrayerTimesMessage: any(named: 'showPrayerTimesMessage'),
+        dismissConfirm: any(named: 'dismissConfirm'),
         locale: any(named: 'locale'),
       ),
     ).thenAnswer((_) async {});
@@ -105,6 +106,7 @@ class TestHarness {
     when(
       () => notificationService.showTestNotificationNow(
         locale: any(named: 'locale'),
+        dismissConfirm: any(named: 'dismissConfirm'),
       ),
     ).thenAnswer((_) async {});
 

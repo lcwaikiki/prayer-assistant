@@ -516,6 +516,7 @@
   "beadsValidProgressNumber": "Geçerli bir ilerleme sayısı girin",
   "beadsProgressBetween": "İlerleme 0 ile {max} arasında olmalı",
   "beadsMaxMinusCount": "Kalan Sayı",
+  "beadsTimeLeft": "Kalan Süre",
   "beadsTap": "DOKUN",
   "beadsGroups": "Gruplar",
   "beadsNewGroup": "Yeni Grup",

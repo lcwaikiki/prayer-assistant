@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "یک عدد پیشرفت معتبر وارد کنید",
   "beadsProgressBetween": "پیشرفت باید بین 0 و {max} باشد",
   "beadsMaxMinusCount": "شمارش باقی‌مانده",
+  "beadsTimeLeft": "زمان باقی‌مانده",
   "beadsTap": "ضربه",
   "beadsGroups": "گروه‌ها",
   "beadsNewGroup": "گروه جدید",

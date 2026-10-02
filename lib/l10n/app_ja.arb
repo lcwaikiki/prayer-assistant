@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "有効な進捗値を入力してください",
   "beadsProgressBetween": "進捗は0から{max}の間である必要があります",
   "beadsMaxMinusCount": "残りカウント",
+  "beadsTimeLeft": "残り時間",
   "beadsTap": "タップ",
   "beadsGroups": "グループ",
   "beadsNewGroup": "新しいグループ",

@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "أدخل رقم تقدم صالحًا",
   "beadsProgressBetween": "يجب أن يكون التقدم بين 0 و {max}",
   "beadsMaxMinusCount": "العدد المتبقي",
+  "beadsTimeLeft": "الوقت المتبقي",
   "beadsTap": "اضغط",
   "beadsGroups": "المجموعات",
   "beadsNewGroup": "مجموعة جديدة",

@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "Masukkan angka kemajuan yang valid",
   "beadsProgressBetween": "Kemajuan harus antara 0 dan {max}",
   "beadsMaxMinusCount": "Hitungan Tersisa",
+  "beadsTimeLeft": "Sisa Waktu",
   "beadsTap": "KETUK",
   "beadsGroups": "Grup",
   "beadsNewGroup": "Grup Baru",

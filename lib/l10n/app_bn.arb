@@ -624,6 +624,7 @@
   "beadsValidProgressNumber": "একটি বৈধ অগ্রগতি সংখ্যা লিখুন",
   "beadsProgressBetween": "অগ্রগতি ০ এবং {max}-এর মধ্যে হতে হবে",
   "beadsMaxMinusCount": "অবশিষ্ট গণনা",
+  "beadsTimeLeft": "অবশিষ্ট সময়",
   "beadsTap": "ট্যাপ",
   "beadsGroups": "গ্রুপসমূহ",
   "beadsNewGroup": "নতুন গ্রুপ",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
@@ -43,17 +44,34 @@ Future<MockHapticService> _pumpExecution(
     tester,
     harness,
     ExecutionScreen(itemId: 'a'),
+    settle: false,
     extraOverrides: [hapticServiceProvider.overrideWithValue(haptic)],
   );
+  await tester.pump();
   return haptic;
 }
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('wakelock_plus'),
+      (call) async => true,
+    );
+  });
+
   testWidgets('shows item not found for an unknown id', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
-    await pumpWithHarness(tester, harness, const ExecutionScreen(itemId: 'x'));
+    await pumpWithHarness(
+      tester,
+      harness,
+      const ExecutionScreen(itemId: 'x'),
+      settle: false,
+    );
+    await tester.pump();
 
     expect(find.text('Item not found'), findsOneWidget);
 
@@ -169,6 +187,23 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Edit Beads'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('displays time left stat card initialized to --:--', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    await _pumpExecution(tester, harness, item: _item(progress: 0));
+
+    expect(find.text('Time Left'), findsOneWidget);
+    expect(
+      tester
+          .widget<Text>(find.byKey(const Key('time_left_value_text')))
+          .data,
+      '--:--',
+    );
 
     await tester.pumpWidget(const SizedBox());
   });

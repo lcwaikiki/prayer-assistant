@@ -1425,6 +1425,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get beadsMaxMinusCount => '剩余计数';
 
   @override
+  String get beadsTimeLeft => '剩余时间';
+
+  @override
   String get beadsTap => '点按';
 
   @override

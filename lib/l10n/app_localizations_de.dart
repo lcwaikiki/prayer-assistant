@@ -1490,6 +1490,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get beadsMaxMinusCount => 'Verbleibende Anzahl';
 
   @override
+  String get beadsTimeLeft => 'Verbleibende Zeit';
+
+  @override
   String get beadsTap => 'TAP';
 
   @override

@@ -1488,6 +1488,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get beadsMaxMinusCount => 'Осталось';
 
   @override
+  String get beadsTimeLeft => 'Осталось времени';
+
+  @override
   String get beadsTap => 'ТАП';
 
   @override

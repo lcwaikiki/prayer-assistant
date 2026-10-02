@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "درست پیش رفت نمبر درج کریں",
   "beadsProgressBetween": "پیش رفت 0 اور {max} کے درمیان ہونی چاہیے",
   "beadsMaxMinusCount": "باقی گنتی",
+  "beadsTimeLeft": "باقی وقت",
   "beadsTap": "ٹیپ",
   "beadsGroups": "گروہ",
   "beadsNewGroup": "نیا گروہ",

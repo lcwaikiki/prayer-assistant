@@ -2828,6 +2828,12 @@ abstract class AppLocalizations {
   /// **'Left Count'**
   String get beadsMaxMinusCount;
 
+  /// No description provided for @beadsTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Left'**
+  String get beadsTimeLeft;
+
   /// No description provided for @beadsTap.
   ///
   /// In en, this message translates to:

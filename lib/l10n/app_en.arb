@@ -631,6 +631,7 @@
     }
   },
   "beadsMaxMinusCount": "Left Count",
+  "beadsTimeLeft": "Time Left",
   "beadsTap": "TAP",
   "beadsGroups": "Groups",
   "beadsNewGroup": "New Group",

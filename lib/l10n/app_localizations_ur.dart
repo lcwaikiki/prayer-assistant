@@ -1474,6 +1474,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get beadsMaxMinusCount => 'باقی گنتی';
 
   @override
+  String get beadsTimeLeft => 'باقی وقت';
+
+  @override
   String get beadsTap => 'ٹیپ';
 
   @override

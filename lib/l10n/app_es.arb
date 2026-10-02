@@ -510,6 +510,7 @@
   "beadsValidProgressNumber": "Ingresa un numero de progreso valido",
   "beadsProgressBetween": "El progreso debe estar entre 0 y {max}",
   "beadsMaxMinusCount": "Conteo restante",
+  "beadsTimeLeft": "Tiempo restante",
   "beadsTap": "TOCAR",
   "beadsGroups": "Grupos",
   "beadsNewGroup": "Nuevo grupo",

@@ -123,6 +123,7 @@ class TesbihatLocalizations {
   String get validProgressNumber => _appL10n.beadsValidProgressNumber;
   String progressBetween(int max) => _appL10n.beadsProgressBetween(max);
   String get maxMinusCount => _appL10n.beadsMaxMinusCount;
+  String get timeLeft => _appL10n.beadsTimeLeft;
   String get tap => _appL10n.beadsTap;
   String get noNotesAdded => _appL10n.beadsNoNotesAdded;
   String get groups => _appL10n.beadsGroups;

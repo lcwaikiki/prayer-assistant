@@ -1505,6 +1505,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get beadsMaxMinusCount => 'மீதமுள்ள எண்ணிக்கை';
 
   @override
+  String get beadsTimeLeft => 'மீதமுள்ள நேரம்';
+
+  @override
   String get beadsTap => 'தட்டு';
 
   @override

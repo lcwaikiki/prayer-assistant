@@ -1484,6 +1484,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get beadsMaxMinusCount => 'অবশিষ্ট গণনা';
 
   @override
+  String get beadsTimeLeft => 'অবশিষ্ট সময়';
+
+  @override
   String get beadsTap => 'ট্যাপ';
 
   @override

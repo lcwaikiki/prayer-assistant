@@ -132,6 +132,9 @@ class TestHarness {
       () => widgetBridge.updateSnoozeDurationMinutes(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateDismissConfirm(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateFromPrayerDays(
         days: any(named: 'days'),
         now: any(named: 'now'),

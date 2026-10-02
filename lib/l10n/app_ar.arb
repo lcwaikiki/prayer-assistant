@@ -570,5 +570,7 @@
   "beadsExecute": "بدء",
   "calendarSortByName": "الاسم",
   "calendarSortByTime": "الوقت",
-  "calendarSortOption": "ترتيب حسب"
+  "calendarSortOption": "ترتيب حسب",
+  "remindersTitle": "التذكيرات",
+  "statusBarTitle": "شريط الحالة"
 }

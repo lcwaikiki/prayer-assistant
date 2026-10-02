@@ -675,5 +675,7 @@
   "beadsExecute": "இயக்கு",
   "calendarSortByName": "பெயர்",
   "calendarSortByTime": "நேரம்",
-  "calendarSortOption": "வரிசைப்படுத்து"
+  "calendarSortOption": "வரிசைப்படுத்து",
+  "remindersTitle": "நினைவூட்டல்கள்",
+  "statusBarTitle": "நிலைப்பட்டி"
 }

@@ -3121,6 +3121,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Display beads and group reminders in calendar views'**
   String get showBeadsInCalendarSubtitle;
+
+  /// No description provided for @remindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get remindersTitle;
+
+  /// No description provided for @statusBarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Status bar'**
+  String get statusBarTitle;
 }
 
 class _AppLocalizationsDelegate

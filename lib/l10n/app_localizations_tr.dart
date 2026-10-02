@@ -1640,4 +1640,10 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get showBeadsInCalendarSubtitle =>
       'Takvim görünümlerinde tesbih ve grup hatırlatıcılarını göster';
+
+  @override
+  String get remindersTitle => 'Hatırlatıcılar';
+
+  @override
+  String get statusBarTitle => 'Durum çubuğu';
 }

@@ -17,7 +17,7 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
         val showDone = intent.getBooleanExtra("showDone", false)
         val soundResource = intent.getStringExtra("soundResource")
         val originalTime = intent.getStringExtra("originalTime")
-        val dismissConfirm = intent.getBooleanExtra("dismissConfirm", true)
+        val dismissConfirm = PrayerWidgetStorage.readDismissConfirm(context) && intent.getBooleanExtra("dismissConfirm", true)
 
         ReminderNotificationManager.show(
             context = context,

@@ -23,6 +23,7 @@ import '../services/offline_folder_backup_service.dart';
 import '../services/imsakiyem_api.dart';
 import '../services/local_database.dart';
 import '../services/location_resolver.dart';
+import '../services/native_reminder_service.dart';
 import '../services/notification_service.dart';
 import '../services/widget_bridge_service.dart';
 import '../tesbihat/data/item_history_repository.dart';
@@ -669,6 +670,12 @@ class PrayerAppController extends ChangeNotifier {
       );
       await widgetBridgeService.updateSnoozeDurationMinutes(
         _snoozeDurationMinutes,
+      );
+      await widgetBridgeService.updateDismissConfirm(
+        _notificationDismissConfirm,
+      );
+      await NativeReminderService.updateDismissConfirm(
+        _notificationDismissConfirm,
       );
       try {
         await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
@@ -1336,6 +1343,8 @@ class PrayerAppController extends ChangeNotifier {
     }
     _notificationDismissConfirm = enabled;
     await database.saveNotificationDismissConfirm(enabled);
+    await widgetBridgeService.updateDismissConfirm(enabled);
+    await NativeReminderService.updateDismissConfirm(enabled);
     try {
       await _syncNotifications();
     } catch (_) {
@@ -1805,6 +1814,12 @@ class PrayerAppController extends ChangeNotifier {
     if (prefs.containsKey('notificationDismissConfirm')) {
       _notificationDismissConfirm = asBool(
         prefs['notificationDismissConfirm'],
+        _notificationDismissConfirm,
+      );
+      await widgetBridgeService.updateDismissConfirm(
+        _notificationDismissConfirm,
+      );
+      await NativeReminderService.updateDismissConfirm(
         _notificationDismissConfirm,
       );
     }

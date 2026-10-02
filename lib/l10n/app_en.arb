@@ -731,5 +731,7 @@
   "calendarHideBeads": "Hide beads reminders",
   "calendarShowBeads": "Show beads reminders",
   "showBeadsInCalendarTitle": "Show Beads in Calendar",
-  "showBeadsInCalendarSubtitle": "Display beads and group reminders in calendar views"
+  "showBeadsInCalendarSubtitle": "Display beads and group reminders in calendar views",
+  "remindersTitle": "Reminders",
+  "statusBarTitle": "Status bar"
 }

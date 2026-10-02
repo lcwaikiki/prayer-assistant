@@ -1650,4 +1650,10 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get showBeadsInCalendarSubtitle =>
       'Tampilkan pengingat tasbih dan grup di tampilan kalender';
+
+  @override
+  String get remindersTitle => 'Pengingat';
+
+  @override
+  String get statusBarTitle => 'Bilah status';
 }

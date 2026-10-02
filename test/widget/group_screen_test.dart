@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/item_form_screen.dart';
 
@@ -427,7 +428,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('tapping a bead opens ItemFormScreen in read-only mode with Execute button', (
+  testWidgets('tapping a bead opens ExecutionScreen', (
     tester,
   ) async {
     final harness = TestHarness.create();
@@ -448,8 +449,7 @@ void main() {
     await tester.tap(find.text('Bead a'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Edit Beads'), findsOneWidget);
-    expect(find.text('Execute'), findsOneWidget);
+    expect(find.byType(ExecutionScreen), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

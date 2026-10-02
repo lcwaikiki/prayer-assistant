@@ -571,5 +571,7 @@
   "calendarHideBeads": "Tesbihat hatırlatıcılarını gizle",
   "calendarShowBeads": "Tesbihat hatırlatıcılarını göster",
   "showBeadsInCalendarTitle": "Takvimde Tesbihatı Göster",
-  "showBeadsInCalendarSubtitle": "Takvim görünümlerinde tesbih ve grup hatırlatıcılarını göster"
+  "showBeadsInCalendarSubtitle": "Takvim görünümlerinde tesbih ve grup hatırlatıcılarını göster",
+  "remindersTitle": "Hatırlatıcılar",
+  "statusBarTitle": "Durum çubuğu"
 }

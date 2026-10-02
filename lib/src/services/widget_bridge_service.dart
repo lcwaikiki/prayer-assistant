@@ -208,6 +208,15 @@ class WidgetBridgeService {
     } catch (_) {}
   }
 
+  Future<void> updateDismissConfirm(bool enabled) async {
+    try {
+      await _channel.invokeMethod<void>(
+        'updateDismissConfirm',
+        <String, Object>{'dismissConfirm': enabled},
+      );
+    } catch (_) {}
+  }
+
   Future<void> updateStatusBarConfig({
     required bool enabled,
     required bool autoRestore,

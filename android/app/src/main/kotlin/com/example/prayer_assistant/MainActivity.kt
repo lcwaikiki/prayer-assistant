@@ -366,6 +366,11 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetStorage.saveSnoozeDurationMinutes(this, minutes)
                     result.success(null)
                 }
+                "updateDismissConfirm" -> {
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
+                    PrayerWidgetStorage.saveDismissConfirm(this, dismissConfirm)
+                    result.success(null)
+                }
                 "updateStatusBarConfig" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: true
                     val showTimeLeft = call.argument<Boolean>("showTimeLeft") ?: true
@@ -492,6 +497,11 @@ class MainActivity : FlutterActivity() {
                     pendingReminderId = null
                     result.success(if (p != null) mapOf("payload" to p, "id" to id) else null)
                 }
+                "updateDismissConfirm" -> {
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
+                    PrayerWidgetStorage.saveDismissConfirm(this, dismissConfirm)
+                    result.success(null)
+                }
                 "show" -> {
                     val id = call.argument<Int>("id") ?: 0
                     val title = call.argument<String>("title") ?: ""
@@ -503,7 +513,9 @@ class MainActivity : FlutterActivity() {
                     val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
                     val originalTime = call.argument<String>("originalTime")
-                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm")
+                        ?: PrayerWidgetStorage.readDismissConfirm(this)
+                    PrayerWidgetStorage.saveDismissConfirm(this, dismissConfirm)
                     ReminderNotificationManager.show(
                         context = this,
                         id = id,
@@ -532,7 +544,9 @@ class MainActivity : FlutterActivity() {
                     val showDone = call.argument<Boolean>("showDone") ?: false
                     val soundResource = call.argument<String>("soundResource")
                     val originalTime = call.argument<String>("originalTime")
-                    val dismissConfirm = call.argument<Boolean>("dismissConfirm") ?: true
+                    val dismissConfirm = call.argument<Boolean>("dismissConfirm")
+                        ?: PrayerWidgetStorage.readDismissConfirm(this)
+                    PrayerWidgetStorage.saveDismissConfirm(this, dismissConfirm)
                     ReminderNotificationManager.schedule(
                         context = this,
                         id = id,

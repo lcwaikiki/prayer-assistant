@@ -570,5 +570,7 @@
   "beadsExecute": "شروع کریں",
   "calendarSortByName": "نام",
   "calendarSortByTime": "وقت",
-  "calendarSortOption": "ترتیب"
+  "calendarSortOption": "ترتیب",
+  "remindersTitle": "یاد دہانیاں",
+  "statusBarTitle": "اسٹیٹس بار"
 }

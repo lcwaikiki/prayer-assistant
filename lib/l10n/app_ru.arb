@@ -625,5 +625,7 @@
   "beadsExecute": "Запустить",
   "calendarSortByName": "Имя",
   "calendarSortByTime": "Время",
-  "calendarSortOption": "Сортировка"
+  "calendarSortOption": "Сортировка",
+  "remindersTitle": "Напоминания",
+  "statusBarTitle": "Строка состояния"
 }

@@ -203,7 +203,7 @@ class PreferencesScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _PreferenceSection(
-                title: context.l10n.remindersOnOffTitle,
+                title: context.l10n.remindersTitle,
                 children: [
                   SwitchListTile(
                     key: const Key('reminders_on_off_switch'),
@@ -270,6 +270,39 @@ class PreferencesScreen extends StatelessWidget {
                     onChanged:
                         controller.updateNotificationDismissConfirm,
                   ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              _PreferenceSection(
+                title: context.l10n.statusBarTitle,
+                subtitle: context.l10n.statusBarMinutesSubtitle,
+                children: [
+                  SwitchListTile(
+                    key: const Key('status_bar_remaining_switch'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(context.l10n.statusBarMinutesTitle),
+                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
+                    value: controller.statusBarRemainingEnabled,
+                    onChanged: controller.updateStatusBarRemainingEnabled,
+                  ),
+                  if (controller.statusBarRemainingEnabled) ...[
+                    SwitchListTile(
+                      key: const Key('status_bar_show_time_left_switch'),
+                      contentPadding: const EdgeInsets.only(left: 16),
+                      title: Text(context.l10n.statusBarShowTimeLeftTitle),
+                      subtitle: Text(context.l10n.statusBarShowTimeLeftSubtitle),
+                      value: controller.statusBarShowTimeLeft,
+                      onChanged: controller.updateStatusBarShowTimeLeft,
+                    ),
+                    SwitchListTile(
+                      key: const Key('status_bar_show_prayer_times_switch'),
+                      contentPadding: const EdgeInsets.only(left: 16),
+                      title: Text(context.l10n.statusBarShowPrayerTimesTitle),
+                      subtitle: Text(context.l10n.statusBarShowPrayerTimesSubtitle),
+                      value: controller.statusBarShowPrayerTimes,
+                      onChanged: controller.updateStatusBarShowPrayerTimes,
+                    ),
+                  ],
                 ],
               ),
               const SizedBox(height: 12),
@@ -550,39 +583,6 @@ class PreferencesScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _PreferenceSection(
-                title: context.l10n.statusBarMinutesTitle,
-                subtitle: context.l10n.statusBarMinutesSubtitle,
-                children: [
-                  SwitchListTile(
-                    key: const Key('status_bar_remaining_switch'),
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(context.l10n.statusBarMinutesTitle),
-                    subtitle: Text(context.l10n.statusBarMinutesSubtitle),
-                    value: controller.statusBarRemainingEnabled,
-                    onChanged: controller.updateStatusBarRemainingEnabled,
-                  ),
-                  if (controller.statusBarRemainingEnabled) ...[
-                    SwitchListTile(
-                      key: const Key('status_bar_show_time_left_switch'),
-                      contentPadding: const EdgeInsets.only(left: 16),
-                      title: Text(context.l10n.statusBarShowTimeLeftTitle),
-                      subtitle: Text(context.l10n.statusBarShowTimeLeftSubtitle),
-                      value: controller.statusBarShowTimeLeft,
-                      onChanged: controller.updateStatusBarShowTimeLeft,
-                    ),
-                    SwitchListTile(
-                      key: const Key('status_bar_show_prayer_times_switch'),
-                      contentPadding: const EdgeInsets.only(left: 16),
-                      title: Text(context.l10n.statusBarShowPrayerTimesTitle),
-                      subtitle: Text(context.l10n.statusBarShowPrayerTimesSubtitle),
-                      value: controller.statusBarShowPrayerTimes,
-                      onChanged: controller.updateStatusBarShowPrayerTimes,
-                    ),
-                  ],
                 ],
               ),
               const SizedBox(height: 12),

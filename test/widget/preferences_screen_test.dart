@@ -59,7 +59,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Reminders on/off'));
+    await tester.tap(find.text('Reminders'));
     await tester.pumpAndSettle();
     final onOffSwitch = find.byKey(const Key('reminders_on_off_switch'));
     await tester.ensureVisible(onOffSwitch);
@@ -145,7 +145,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Reminders on/off'));
+    await tester.tap(find.text('Reminders'));
     await tester.pumpAndSettle();
     final vibrationSwitch = find.byKey(const Key('reminder_vibration_switch'));
     await tester.ensureVisible(vibrationSwitch);
@@ -188,6 +188,28 @@ void main() {
     expect(find.text('Restore Data from Backup'), findsOneWidget);
     expect(find.text('Export Islamic Holidays (.ics)'), findsOneWidget);
 
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('status bar section expands and toggles status bar remaining switch',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.saveStatusBarRemainingEnabled(any()))
+        .thenAnswer((_) async {});
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const PreferencesScreen());
+
+    await tester.tap(find.text('Status bar'));
+    await tester.pumpAndSettle();
+    final switchFinder = find.byKey(const Key('status_bar_remaining_switch'));
+    await tester.ensureVisible(switchFinder);
+    await tester.pumpAndSettle();
+    await tester.tap(switchFinder);
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.statusBarRemainingEnabled, isFalse);
+    verify(() => harness.database.saveStatusBarRemainingEnabled(false)).called(1);
 
     await tester.pumpWidget(const SizedBox());
   });

@@ -82,6 +82,15 @@ class NativeReminderService {
     } catch (_) {}
   }
 
+  static Future<void> updateDismissConfirm(bool enabled) async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('updateDismissConfirm', {
+        'dismissConfirm': enabled,
+      });
+    } catch (_) {}
+  }
+
   static void initializeNotificationTapHandler(
     void Function(String? payload) onNotificationTap, {
     void Function(NotificationResponse response)? onNotificationResponse,

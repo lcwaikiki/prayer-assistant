@@ -1664,4 +1664,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get showBeadsInCalendarSubtitle =>
       'Display beads and group reminders in calendar views';
+
+  @override
+  String get remindersTitle => 'Rappels';
+
+  @override
+  String get statusBarTitle => 'Barre d\'état';
 }

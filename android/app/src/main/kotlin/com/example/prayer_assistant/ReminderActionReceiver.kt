@@ -26,7 +26,7 @@ class ReminderActionReceiver : BroadcastReceiver() {
         val soundResource = intent.getStringExtra("soundResource")
 
         val originalTime = intent.getStringExtra("originalTime")
-        val dismissConfirm = intent.getBooleanExtra("dismissConfirm", true)
+        val dismissConfirm = PrayerWidgetStorage.readDismissConfirm(context) && intent.getBooleanExtra("dismissConfirm", true)
 
         when (actionId) {
             "action_snooze" -> {

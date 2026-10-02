@@ -570,5 +570,7 @@
   "beadsExecute": "执行",
   "calendarSortByName": "名称",
   "calendarSortByTime": "时间",
-  "calendarSortOption": "排序"
+  "calendarSortOption": "排序",
+  "remindersTitle": "提醒",
+  "statusBarTitle": "状态栏"
 }

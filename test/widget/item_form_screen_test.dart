@@ -53,26 +53,14 @@ Future<void> _pumpForm(
 }
 
 Future<void> _tapSave(WidgetTester tester) async {
-  for (var i = 0; i < 8 && tester.any(find.text('Save')) == false; i++) {
-    await tester.drag(find.byType(ListView), const Offset(0, -150));
-    await tester.pumpAndSettle();
-  }
-  // _scrollTo stops once the button is built in the cache extent, which can
-  // still be below the fold; one more drag guarantees it is tappable.
-  await tester.drag(find.byType(ListView), const Offset(0, -150));
-  await tester.pumpAndSettle();
-  await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+  final saveButton = find.byKey(const Key('save_item_button'));
+  await tester.tap(saveButton);
   await tester.pumpAndSettle();
 }
 
 Future<void> _tapUpdate(WidgetTester tester) async {
-  for (var i = 0; i < 8 && tester.any(find.text('Update')) == false; i++) {
-    await tester.drag(find.byType(ListView), const Offset(0, -150));
-    await tester.pumpAndSettle();
-  }
-  await tester.drag(find.byType(ListView), const Offset(0, -150));
-  await tester.pumpAndSettle();
-  await tester.tap(find.widgetWithText(FilledButton, 'Update'));
+  final saveButton = find.byKey(const Key('save_item_button'));
+  await tester.tap(saveButton);
   await tester.pumpAndSettle();
 }
 

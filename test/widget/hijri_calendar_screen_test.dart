@@ -450,9 +450,7 @@ void main() {
     expect(find.text('Aug 17, 2026'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField).first, 'New Reminder');
-    await tester.ensureVisible(find.widgetWithText(FilledButton, 'Save'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await tester.tap(find.byKey(const Key('save_reminder_button')));
     await tester.pumpAndSettle();
 
     expect(harness.controller.calendarReminders, hasLength(1));

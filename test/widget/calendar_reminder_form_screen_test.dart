@@ -34,13 +34,7 @@ Future<void> _pumpForm(
 }
 
 Future<void> _scrollToSave(WidgetTester tester) async {
-  final saveButton = find.widgetWithText(FilledButton, 'Save');
-  await tester.scrollUntilVisible(
-    saveButton,
-    100.0,
-    scrollable: find.byType(Scrollable).first,
-  );
-  await tester.pumpAndSettle();
+  final saveButton = find.byKey(const Key('save_reminder_button'));
   await tester.tap(saveButton);
   await tester.pumpAndSettle();
 }

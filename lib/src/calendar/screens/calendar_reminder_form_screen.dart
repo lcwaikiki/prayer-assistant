@@ -721,6 +721,19 @@ class _CalendarReminderFormScreenState
                 tooltip: l10n.calendarEditReminder,
                 icon: const Icon(Icons.edit),
                 onPressed: () => setState(() => _readOnly = false),
+              )
+            else
+              IconButton(
+                key: const Key('save_reminder_button'),
+                tooltip: l10n.save,
+                icon: _saving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.save_outlined),
+                onPressed: _saving ? null : _save,
               ),
           ],
         ),
@@ -1052,24 +1065,14 @@ class _CalendarReminderFormScreenState
                   ],
                 ),
               ),
-              const SizedBox(height: 28),
-              if (!_readOnly)
-                FilledButton(
-                  onPressed: _saving ? null : _save,
-                  child: _saving
-                      ? const SizedBox(
-                          height: 16,
-                          width: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(l10n.save),
-                )
-              else
+              if (_readOnly) ...[
+                const SizedBox(height: 28),
                 OutlinedButton.icon(
                   icon: const Icon(Icons.edit),
                   label: Text(l10n.calendarEditReminder),
                   onPressed: () => setState(() => _readOnly = false),
                 ),
+              ],
             ],
           ),
         ),

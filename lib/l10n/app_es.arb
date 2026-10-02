@@ -570,5 +570,7 @@
   "beadsExecute": "Ejecutar",
   "calendarSortByName": "Nombre",
   "calendarSortByTime": "Hora",
-  "calendarSortOption": "Ordenar por"
+  "calendarSortOption": "Ordenar por",
+  "remindersTitle": "Recordatorios",
+  "statusBarTitle": "Barra de estado"
 }

@@ -239,23 +239,29 @@ object ReminderNotificationManager {
             }
         }
 
+        val effectiveDismissConfirm = dismissConfirm && PrayerWidgetStorage.readDismissConfirm(context)
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(title)
             .setContentText(body)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setAutoCancel(!effectiveDismissConfirm)
+            .setOngoing(effectiveDismissConfirm)
             .setOnlyAlertOnce(true)
             .setContentIntent(contentPendingIntent)
-            .setDeleteIntent(deletePendingIntent)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(collapsedRemoteViews)
             .setCustomBigContentView(expandedRemoteViews)
 
+        if (effectiveDismissConfirm) {
+            builder.setDeleteIntent(deletePendingIntent)
+        }
+
         val notification = builder.build()
-        notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
+        if (effectiveDismissConfirm) {
+            notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
+        }
 
         NotificationManagerCompat.from(context).notify(id, notification)
     }
@@ -387,21 +393,27 @@ object ReminderNotificationManager {
             setOnClickPendingIntent(R.id.btnSnooze60, buildSnoozeChoicePendingIntent(60, 55))
         }
 
+        val effectiveDismissConfirm = dismissConfirm && PrayerWidgetStorage.readDismissConfirm(context)
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
-            .setAutoCancel(false)
-            .setOngoing(true)
+            .setAutoCancel(!effectiveDismissConfirm)
+            .setOngoing(effectiveDismissConfirm)
             .setOnlyAlertOnce(true)
             .setContentIntent(contentPendingIntent)
-            .setDeleteIntent(deletePendingIntent)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(collapsedRemoteViews)
             .setCustomBigContentView(expandedRemoteViews)
 
+        if (effectiveDismissConfirm) {
+            builder.setDeleteIntent(deletePendingIntent)
+        }
+
         val notification = builder.build()
-        notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
+        if (effectiveDismissConfirm) {
+            notification.flags = notification.flags or 34 // FLAG_ONGOING_EVENT (2) or FLAG_NO_CLEAR (32)
+        }
         NotificationManagerCompat.from(context).notify(id, notification)
     }
 

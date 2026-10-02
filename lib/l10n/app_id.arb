@@ -574,5 +574,7 @@
   "calendarHideBeads": "Sembunyikan pengingat tasbih",
   "calendarShowBeads": "Tampilkan pengingat tasbih",
   "showBeadsInCalendarTitle": "Tampilkan Tasbih di Kalender",
-  "showBeadsInCalendarSubtitle": "Tampilkan pengingat tasbih dan grup di tampilan kalender"
+  "showBeadsInCalendarSubtitle": "Tampilkan pengingat tasbih dan grup di tampilan kalender",
+  "remindersTitle": "Pengingat",
+  "statusBarTitle": "Bilah status"
 }

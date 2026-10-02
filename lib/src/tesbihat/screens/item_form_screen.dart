@@ -307,6 +307,19 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                     );
                   },
                 ),
+            ] else ...[
+              IconButton(
+                key: const Key('save_item_button'),
+                tooltip: _isEditing ? l10n.update : l10n.save,
+                icon: _saving
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.save_outlined),
+                onPressed: _saving ? null : _save,
+              ),
             ],
           ],
         ),
@@ -438,19 +451,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                if (!_readOnly)
-                  FilledButton(
-                    onPressed: _saving ? null : _save,
-                    child: _saving
-                        ? const SizedBox(
-                            height: 16,
-                            width: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(_isEditing ? l10n.update : l10n.save),
-                  )
-                else
+                if (_readOnly) ...[
+                  const SizedBox(height: 24),
                   Row(
                     children: [
                       Expanded(
@@ -481,6 +483,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                       ],
                     ],
                   ),
+                ],
               ],
             ),
           ),

@@ -675,5 +675,7 @@
   "beadsExecute": "চালান",
   "calendarSortByName": "নাম",
   "calendarSortByTime": "সময়",
-  "calendarSortOption": "সাজান"
+  "calendarSortOption": "সাজান",
+  "remindersTitle": "অনুস্মারক",
+  "statusBarTitle": "স্ট্যাটাস বার"
 }

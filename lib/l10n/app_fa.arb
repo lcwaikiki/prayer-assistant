@@ -570,5 +570,7 @@
   "beadsExecute": "اجرا",
   "calendarSortByName": "نام",
   "calendarSortByTime": "زمان",
-  "calendarSortOption": "مرتب‌سازی"
+  "calendarSortOption": "مرتب‌سازی",
+  "remindersTitle": "یادآورها",
+  "statusBarTitle": "نوار وضعیت"
 }

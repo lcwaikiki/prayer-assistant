@@ -379,5 +379,19 @@ object PrayerWidgetStorage {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             .getInt(SNOOZE_DURATION_MINUTES_KEY, 10)
     }
+
+    private const val DISMISS_CONFIRM_KEY = "dismiss_confirm"
+
+    fun saveDismissConfirm(context: Context, enabled: Boolean) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putBoolean(DISMISS_CONFIRM_KEY, enabled)
+            .apply()
+    }
+
+    fun readDismissConfirm(context: Context): Boolean {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(DISMISS_CONFIRM_KEY, true)
+    }
 }
 

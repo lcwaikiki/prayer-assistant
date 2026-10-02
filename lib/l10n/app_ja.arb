@@ -570,5 +570,7 @@
   "beadsExecute": "実行",
   "calendarSortByName": "名前",
   "calendarSortByTime": "時間",
-  "calendarSortOption": "並び替え"
+  "calendarSortOption": "並び替え",
+  "remindersTitle": "リマインダー",
+  "statusBarTitle": "ステータスバー"
 }

@@ -87,6 +87,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get qiblaKaabaShort => 'Kiblat';
 
   @override
+  String get qiblaHeading => 'Arah';
+
+  @override
+  String get qiblaKaaba => 'Kakbah';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance km';
+  }
+
+  @override
   String get shareTodayTimes => 'Bagikan waktu hari ini';
 
   @override

@@ -260,6 +260,24 @@ abstract class AppLocalizations {
   /// **'Qibla'**
   String get qiblaKaabaShort;
 
+  /// No description provided for @qiblaHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Heading'**
+  String get qiblaHeading;
+
+  /// No description provided for @qiblaKaaba.
+  ///
+  /// In en, this message translates to:
+  /// **'Kaaba'**
+  String get qiblaKaaba;
+
+  /// No description provided for @qiblaDistanceKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{distance} km'**
+  String qiblaDistanceKm(String distance);
+
   /// No description provided for @shareTodayTimes.
   ///
   /// In en, this message translates to:

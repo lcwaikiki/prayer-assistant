@@ -85,6 +85,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get qiblaKaabaShort => 'القبلة';
 
   @override
+  String get qiblaHeading => 'الاتجاه';
+
+  @override
+  String get qiblaKaaba => 'الكعبة';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance كم';
+  }
+
+  @override
   String get shareTodayTimes => 'مشاركة أوقات اليوم';
 
   @override

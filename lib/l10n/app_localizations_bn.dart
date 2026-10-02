@@ -87,6 +87,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get qiblaKaabaShort => 'কিবলা';
 
   @override
+  String get qiblaHeading => 'দিক';
+
+  @override
+  String get qiblaKaaba => 'কাবা';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance কিমি';
+  }
+
+  @override
   String get shareTodayTimes => 'আজকের নামাজের সময় শেয়ার করুন';
 
   @override

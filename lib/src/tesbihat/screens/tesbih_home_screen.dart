@@ -512,20 +512,89 @@ class _GroupItemCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      color: theme.colorScheme.surfaceContainerHigh,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+          width: 1,
+        ),
+      ),
       child: ListTile(
         leading: selectionActive
             ? Checkbox(value: selected, onChanged: (_) => onToggle())
-            : Icon(
-                group.reminderEnabled
-                    ? Icons.notifications_active
-                    : Icons.folder_outlined,
-                color: theme.colorScheme.primary,
+            : Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer.withValues(alpha: 0.7),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(
+                      Icons.folder_rounded,
+                      color: theme.colorScheme.primary,
+                      size: 24,
+                    ),
+                    if (group.reminderEnabled)
+                      Positioned(
+                        right: 2,
+                        top: 2,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.error,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.notifications_active,
+                            size: 9,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-        title: Text(group.title),
+        title: Row(
+          children: [
+            Flexible(
+              child: Text(
+                group.title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                l10n.groups,
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ),
+          ],
+        ),
         subtitle: Text(
           group.notes.isNotEmpty
               ? '${l10n.groupMembers}: $memberCount • ${group.notes}'
               : '${l10n.groupMembers}: $memberCount',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
         ),
         trailing: selectionActive
             ? null
@@ -556,6 +625,12 @@ class _GroupItemCard extends StatelessWidget {
                   ReorderableDelayedDragStartListener(
                     index: index,
                     child: const Icon(Icons.drag_indicator),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    Icons.chevron_right,
+                    size: 20,
+                    color: theme.colorScheme.outline,
                   ),
                 ],
               ),
@@ -595,18 +670,63 @@ class _UngroupedItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
+    final theme = Theme.of(context);
+    final progressFraction = item.count > 0
+        ? (item.currentProgress / item.count).clamp(0.0, 1.0)
+        : 0.0;
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      color: theme.colorScheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: ListTile(
         leading: selectionActive
             ? Checkbox(value: selected, onChanged: (_) => onToggle())
-            : item.reminderEnabled
-                ? Icon(
-                    Icons.notifications_active,
-                    color: Theme.of(context).colorScheme.primary,
-                  )
-                : null,
-        title: Text(item.title),
+            : SizedBox(
+                width: 44,
+                height: 44,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: progressFraction,
+                      strokeWidth: 3,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      color: theme.colorScheme.primary,
+                    ),
+                    Icon(
+                      Icons.touch_app_outlined,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    if (item.reminderEnabled)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.error,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.notifications_active,
+                            size: 9,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+        title: Text(
+          item.title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         subtitle: Text(
           '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
           '${l10n.progress}: ${item.currentProgress} / ${item.count}',

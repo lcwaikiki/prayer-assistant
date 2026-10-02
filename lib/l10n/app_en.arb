@@ -35,6 +35,16 @@
   "qiblaHeadingUnavailable": "Compass unavailable - showing fixed bearing.",
   "qiblaPointDevice": "Rotate your device until the needle points up.",
   "qiblaKaabaShort": "Qibla",
+  "qiblaHeading": "Heading",
+  "qiblaKaaba": "Kaaba",
+  "qiblaDistanceKm": "{distance} km",
+  "@qiblaDistanceKm": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
   "shareTodayTimes": "Share today's times",
   "calendarPreviousDay": "Previous day",
   "calendarNextDay": "Next day",

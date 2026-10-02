@@ -86,6 +86,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get qiblaKaabaShort => 'Kıble';
 
   @override
+  String get qiblaHeading => 'Yön';
+
+  @override
+  String get qiblaKaaba => 'Kabe';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance km';
+  }
+
+  @override
   String get shareTodayTimes => 'Bugünün vakitlerini paylaş';
 
   @override

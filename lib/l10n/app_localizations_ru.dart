@@ -87,6 +87,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get qiblaKaabaShort => 'Кибла';
 
   @override
+  String get qiblaHeading => 'Направление';
+
+  @override
+  String get qiblaKaaba => 'Кааба';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance км';
+  }
+
+  @override
   String get shareTodayTimes => 'Поделиться временем на сегодня';
 
   @override

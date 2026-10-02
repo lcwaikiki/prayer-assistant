@@ -14,3 +14,18 @@ double qiblaBearing(double lat, double lon) {
   final bearing = atan2(y, x) * 180 / pi;
   return (bearing + 360) % 360;
 }
+
+/// Great-circle distance from [lat]/[lon] to Mecca in kilometers.
+double distanceToMeccaKm(double lat, double lon) {
+  const earthRadiusKm = 6371.0;
+  final dLat = (meccaLatitude - lat) * pi / 180;
+  final dLon = (meccaLongitude - lon) * pi / 180;
+  final a = sin(dLat / 2) * sin(dLat / 2) +
+      cos(lat * pi / 180) *
+          cos(meccaLatitude * pi / 180) *
+          sin(dLon / 2) *
+          sin(dLon / 2);
+  final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  return earthRadiusKm * c;
+}
+

@@ -17,6 +17,12 @@ void main() {
     expect(qiblaBearing(meccaLatitude, meccaLongitude), 0);
   });
 
+  test('distanceToMeccaKm calculates distance to Mecca accurately', () {
+    expect(distanceToMeccaKm(meccaLatitude, meccaLongitude), 0.0);
+    final distIstanbul = distanceToMeccaKm(41.0082, 28.9784);
+    expect(distIstanbul, closeTo(2430, 50));
+  });
+
   testWidgets('renders the bearing and position with injected streams', (
     tester,
   ) async {

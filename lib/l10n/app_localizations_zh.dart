@@ -82,6 +82,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get qiblaKaabaShort => '朝拜';
 
   @override
+  String get qiblaHeading => '朝向';
+
+  @override
+  String get qiblaKaaba => '克尔白';
+
+  @override
+  String qiblaDistanceKm(String distance) {
+    return '$distance 公里';
+  }
+
+  @override
   String get shareTodayTimes => '分享今日时间';
 
   @override

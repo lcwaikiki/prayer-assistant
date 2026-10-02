@@ -61,6 +61,11 @@ void main() {
       const MethodChannel('wakelock_plus'),
       (call) async => true,
     );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async => null,
+    );
   });
 
   testWidgets('shows item not found for an unknown id', (tester) async {

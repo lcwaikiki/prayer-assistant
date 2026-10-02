@@ -96,6 +96,24 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'باتجاه القبلة';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'استدر يميناً $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'استدر يساراً $degrees°';
+  }
+
+  @override
+  String qiblaMakkahTime(String time) {
+    return 'مكة $time';
+  }
+
+  @override
   String get shareTodayTimes => 'مشاركة أوقات اليوم';
 
   @override

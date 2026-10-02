@@ -98,6 +98,24 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'Sejajar dengan Kiblat';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'Putar ke kanan $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'Putar ke kiri $degrees°';
+  }
+
+  @override
+  String qiblaMakkahTime(String time) {
+    return 'Makkah $time';
+  }
+
+  @override
   String get shareTodayTimes => 'Bagikan waktu hari ini';
 
   @override

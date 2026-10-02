@@ -98,6 +98,24 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'কিবলামুখী হয়েছে';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'ডানে ঘুরুন $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'বামে ঘুরুন $degrees°';
+  }
+
+  @override
+  String qiblaMakkahTime(String time) {
+    return 'মক্কা $time';
+  }
+
+  @override
   String get shareTodayTimes => 'আজকের নামাজের সময় শেয়ার করুন';
 
   @override

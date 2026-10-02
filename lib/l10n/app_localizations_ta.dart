@@ -98,6 +98,24 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'கிப்லா நேர்கோடு';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'வலதுபுறம் திருப்பவும் $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'இடதுபுறம் திருப்பவும் $degrees°';
+  }
+
+  @override
+  String qiblaMakkahTime(String time) {
+    return 'மக்கா $time';
+  }
+
+  @override
   String get shareTodayTimes => 'இன்றைய தொழுகை நேரங்களைப் பகிர்க';
 
   @override

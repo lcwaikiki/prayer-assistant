@@ -14,6 +14,7 @@ import 'group_screen.dart';
 import 'item_form_screen.dart';
 
 enum _ItemAction { edit, duplicate, delete }
+enum _GroupAction { edit, delete }
 
 String _dayKey(DateTime date) {
   final month = date.month.toString().padLeft(2, '0');
@@ -53,6 +54,7 @@ class TesbihHomeScreen extends ConsumerStatefulWidget {
 class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  bool _isSearchOpen = false;
 
   @override
   void dispose() {
@@ -92,6 +94,38 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
     );
   }
 
+  void _deleteGroupWithUndo(
+    BuildContext context,
+    WidgetRef ref,
+    ItemGroup group, {
+    required int index,
+  }) {
+    final l10n = context.tesbihatL10n;
+    final notifier = ref.read(groupsNotifierProvider.notifier);
+    notifier.deleteGroup(group.id);
+
+    final messenger = ScaffoldMessenger.of(context);
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(child: Text(l10n.deletedItem(group.title))),
+            TextButton(
+              onPressed: () {
+                notifier.restoreGroup(group, index: index);
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _handleAction(
     BuildContext context,
     WidgetRef ref,
@@ -111,6 +145,28 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
         break;
       case _ItemAction.delete:
         _deleteWithUndo(context, ref, item, index: index);
+        break;
+    }
+  }
+
+  Future<void> _handleGroupAction(
+    BuildContext context,
+    WidgetRef ref,
+    ItemGroup group,
+    int index,
+    _GroupAction action,
+  ) async {
+    switch (action) {
+      case _GroupAction.edit:
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => GroupFormScreen(groupToEdit: group),
+          ),
+        );
+        break;
+      case _GroupAction.delete:
+        _deleteGroupWithUndo(context, ref, group, index: index);
         break;
     }
   }
@@ -152,127 +208,176 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
                 item.notes.toLowerCase().contains(q))
             .toList(growable: false);
 
-    final noSearchResults = isSearching &&
-        filteredGroups.isEmpty &&
-        filteredUngrouped.isEmpty;
+    final totalCount = filteredGroups.length + filteredUngrouped.length;
+    final noSearchResults = isSearching && totalCount == 0;
 
-    return Scaffold(
-      body: isEmpty
-          ? Center(child: Text(l10n.noMilestones))
-          : Column(
-              children: [
-                _StatsCard(
-                  stats: _aggregateStats(
-                    ref.watch(itemsNotifierProvider.notifier).dailyStats,
-                    DateTime.now(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-                  child: TextField(
-                    key: const Key('tesbih_search_field'),
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      hintText: '${l10n.search}...',
-                      prefixIcon: const Icon(Icons.search, size: 20),
-                      suffixIcon: isSearching
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, size: 18),
-                              onPressed: () {
-                                _searchController.clear();
-                                setState(() => _searchQuery = '');
-                              },
-                            )
-                          : null,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onChanged: (value) =>
-                        setState(() => _searchQuery = value),
-                  ),
-                ),
-                if (noSearchResults)
-                  Expanded(
-                    child: Center(
-                      child: Text(l10n.noResults),
-                    ),
-                  )
-                else ...[
-                  if (filteredGroups.isNotEmpty) ...[
+    return PopScope(
+      canPop: !_isSearchOpen && !isSearching,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && (_isSearchOpen || isSearching)) {
+          setState(() {
+            _isSearchOpen = false;
+            _searchQuery = '';
+            _searchController.clear();
+          });
+        }
+      },
+      child: Scaffold(
+        body: isEmpty
+            ? Center(child: Text(l10n.noMilestones))
+            : Column(
+                children: [
+                  if (_isSearchOpen || isSearching)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          l10n.groups,
-                          style: Theme.of(context).textTheme.labelLarge,
+                      padding: const EdgeInsets.fromLTRB(12, 6, 12, 4),
+                      child: TextField(
+                        key: const Key('tesbih_search_field'),
+                        controller: _searchController,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          hintText: '${l10n.search}...',
+                          prefixIcon: const Icon(Icons.search, size: 20),
+                          suffixIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isSearching)
+                                IconButton(
+                                  icon: const Icon(Icons.clear, size: 18),
+                                  visualDensity: VisualDensity.compact,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    setState(() => _searchQuery = '');
+                                  },
+                                ),
+                              IconButton(
+                                key: const Key('tesbih_search_close_button'),
+                                icon: const Icon(Icons.close, size: 18),
+                                visualDensity: VisualDensity.compact,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(
+                                  minWidth: 32,
+                                  minHeight: 32,
+                                ),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() {
+                                    _searchQuery = '';
+                                    _isSearchOpen = false;
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
+                        onChanged: (value) =>
+                            setState(() => _searchQuery = value),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    _GroupCardList(groups: filteredGroups),
-                  ],
-                  if (filteredUngrouped.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          l10n.milestones,
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
+                    )
+                  else
+                    _StatsCard(
+                      stats: _aggregateStats(
+                        ref.watch(itemsNotifierProvider.notifier).dailyStats,
+                        DateTime.now(),
                       ),
+                      onOpenSearch: () {
+                        setState(() => _isSearchOpen = true);
+                      },
                     ),
-                    const SizedBox(height: 4),
-                  ],
-                  Expanded(
-                    child: filteredUngrouped.isEmpty
-                        ? const SizedBox.shrink()
-                        : isSearching
-                            ? ListView.builder(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                itemCount: filteredUngrouped.length,
-                                itemBuilder: (context, index) {
-                                  final item = filteredUngrouped[index];
-                                  return _UngroupedItemCard(
-                                    item: item,
+                  if (noSearchResults)
+                    Expanded(
+                      child: Center(
+                        child: Text(l10n.noResults),
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: isSearching
+                          ? ListView.builder(
+                              padding: const EdgeInsets.only(top: 4, bottom: 6),
+                              itemCount: totalCount,
+                              itemBuilder: (context, index) {
+                                if (index < filteredGroups.length) {
+                                  final group = filteredGroups[index];
+                                  final memberCount = items
+                                      .where((i) => i.groupIds.contains(group.id))
+                                      .length;
+                                  return _GroupItemCard(
+                                    key: ValueKey('group_${group.id}'),
+                                    group: group,
+                                    memberCount: memberCount,
                                     index: index,
-                                    key: ValueKey(item.id),
                                     selectionActive: selectionActive,
-                                    selected: selection.contains(item.id),
+                                    selected: selection.contains(group.id),
                                     onToggle: () => ref
                                         .read(tesbihSelectionProvider.notifier)
-                                        .toggle(item.id),
-                                    onAction: (action) => _handleAction(
+                                        .toggle(group.id),
+                                    onAction: (action) => _handleGroupAction(
                                       context,
                                       ref,
-                                      item,
-                                      items.indexOf(item),
+                                      group,
+                                      groups.indexOf(group),
                                       action,
                                     ),
                                   );
-                                },
-                              )
-                            : ReorderableListView.builder(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                itemCount: filteredUngrouped.length,
-                                onReorderItem: (oldIndex, newIndex) {
-                                  // Reordering happens inside the filtered ungrouped
-                                  // list; map back onto the full items list (which
-                                  // also holds grouped beads). onReorderItem already
-                                  // gives the final index after removal.
+                                }
+                                final itemIndex = index - filteredGroups.length;
+                                final item = filteredUngrouped[itemIndex];
+                                return _UngroupedItemCard(
+                                  key: ValueKey('item_${item.id}'),
+                                  item: item,
+                                  index: index,
+                                  selectionActive: selectionActive,
+                                  selected: selection.contains(item.id),
+                                  onToggle: () => ref
+                                      .read(tesbihSelectionProvider.notifier)
+                                      .toggle(item.id),
+                                  onAction: (action) => _handleAction(
+                                    context,
+                                    ref,
+                                    item,
+                                    items.indexOf(item),
+                                    action,
+                                  ),
+                                );
+                              },
+                            )
+                          : ReorderableListView.builder(
+                              padding: const EdgeInsets.only(top: 4, bottom: 6),
+                              itemCount: totalCount,
+                              onReorderItem: (oldIndex, newIndex) {
+                                if (oldIndex < filteredGroups.length &&
+                                    newIndex <= filteredGroups.length) {
+                                  final targetIndex = newIndex < filteredGroups.length
+                                      ? newIndex
+                                      : filteredGroups.length - 1;
+                                  ref
+                                      .read(groupsNotifierProvider.notifier)
+                                      .reorderGroups(oldIndex, targetIndex);
+                                } else if (oldIndex >= filteredGroups.length &&
+                                    newIndex >= filteredGroups.length) {
+                                  final oldItemIndex =
+                                      oldIndex - filteredGroups.length;
+                                  final newItemIndex =
+                                      newIndex - filteredGroups.length;
                                   final movedFullIndex = items.indexOf(
-                                    ungrouped[oldIndex],
+                                    ungrouped[oldItemIndex],
                                   );
                                   final targetFullIndex =
-                                      newIndex < ungrouped.length
-                                          ? items.indexOf(ungrouped[newIndex])
+                                      newItemIndex < ungrouped.length
+                                          ? items.indexOf(ungrouped[newItemIndex])
                                           : items.length - 1;
                                   ref
                                       .read(itemsNotifierProvider.notifier)
@@ -280,38 +385,64 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
                                         movedFullIndex,
                                         targetFullIndex,
                                       );
-                                },
-                                itemBuilder: (context, index) {
-                                  final item = filteredUngrouped[index];
-                                  return _UngroupedItemCard(
-                                    item: item,
+                                }
+                              },
+                              itemBuilder: (context, index) {
+                                if (index < filteredGroups.length) {
+                                  final group = filteredGroups[index];
+                                  final memberCount = items
+                                      .where((i) => i.groupIds.contains(group.id))
+                                      .length;
+                                  return _GroupItemCard(
+                                    key: ValueKey('group_${group.id}'),
+                                    group: group,
+                                    memberCount: memberCount,
                                     index: index,
-                                    key: ValueKey(item.id),
                                     selectionActive: selectionActive,
-                                    selected: selection.contains(item.id),
+                                    selected: selection.contains(group.id),
                                     onToggle: () => ref
                                         .read(tesbihSelectionProvider.notifier)
-                                        .toggle(item.id),
-                                    onAction: (action) => _handleAction(
+                                        .toggle(group.id),
+                                    onAction: (action) => _handleGroupAction(
                                       context,
                                       ref,
-                                      item,
-                                      items.indexOf(item),
+                                      group,
+                                      groups.indexOf(group),
                                       action,
                                     ),
                                   );
-                                },
-                              ),
-                  ),
+                                }
+                                final itemIndex = index - filteredGroups.length;
+                                final item = filteredUngrouped[itemIndex];
+                                return _UngroupedItemCard(
+                                  key: ValueKey('item_${item.id}'),
+                                  item: item,
+                                  index: index,
+                                  selectionActive: selectionActive,
+                                  selected: selection.contains(item.id),
+                                  onToggle: () => ref
+                                      .read(tesbihSelectionProvider.notifier)
+                                      .toggle(item.id),
+                                  onAction: (action) => _handleAction(
+                                    context,
+                                    ref,
+                                    item,
+                                    items.indexOf(item),
+                                    action,
+                                  ),
+                                );
+                              },
+                            ),
+                    ),
                 ],
-              ],
-            ),
-      floatingActionButton: selectionActive
-          ? null
-          : FloatingActionButton(
-              onPressed: () => _showAddMenu(context),
-              child: const Icon(Icons.add),
-            ),
+              ),
+        floatingActionButton: selectionActive
+            ? null
+            : FloatingActionButton(
+                onPressed: () => _showAddMenu(context),
+                child: const Icon(Icons.add),
+              ),
+      ),
     );
   }
 
@@ -321,7 +452,6 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
       context: context,
       useSafeArea: true,
       builder: (context) => SafeArea(
-
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -351,6 +481,94 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _GroupItemCard extends StatelessWidget {
+  const _GroupItemCard({
+    super.key,
+    required this.group,
+    required this.memberCount,
+    required this.index,
+    required this.selectionActive,
+    required this.selected,
+    required this.onToggle,
+    required this.onAction,
+  });
+
+  final ItemGroup group;
+  final int memberCount;
+  final int index;
+  final bool selectionActive;
+  final bool selected;
+  final VoidCallback onToggle;
+  final ValueChanged<_GroupAction> onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.tesbihatL10n;
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: ListTile(
+        leading: selectionActive
+            ? Checkbox(value: selected, onChanged: (_) => onToggle())
+            : Icon(
+                group.reminderEnabled
+                    ? Icons.notifications_active
+                    : Icons.folder_outlined,
+                color: theme.colorScheme.primary,
+              ),
+        title: Text(group.title),
+        subtitle: Text(
+          group.notes.isNotEmpty
+              ? '${l10n.groupMembers}: $memberCount • ${group.notes}'
+              : '${l10n.groupMembers}: $memberCount',
+        ),
+        trailing: selectionActive
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PopupMenuButton<_GroupAction>(
+                    onSelected: onAction,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: _GroupAction.edit,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.edit),
+                          title: Text(l10n.edit),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _GroupAction.delete,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.delete, color: Colors.red),
+                          title: Text(l10n.delete),
+                        ),
+                      ),
+                    ],
+                  ),
+                  ReorderableDelayedDragStartListener(
+                    index: index,
+                    child: const Icon(Icons.drag_indicator),
+                  ),
+                ],
+              ),
+        onTap: selectionActive
+            ? onToggle
+            : () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => GroupScreen(groupId: group.id),
+                  ),
+                );
+              },
       ),
     );
   }
@@ -449,155 +667,75 @@ class _UngroupedItemCard extends StatelessWidget {
   }
 }
 
-class _GroupCardList extends ConsumerWidget {
-  const _GroupCardList({required this.groups});
-
-  final List<ItemGroup> groups;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(itemsNotifierProvider);
-    final selection = ref.watch(tesbihSelectionProvider);
-    final selectionActive = selection.active;
-    void toggle(String id) =>
-        ref.read(tesbihSelectionProvider.notifier).toggle(id);
-    return SizedBox(
-      height: 92,
-      child: ReorderableListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        itemCount: groups.length,
-        onReorderItem: (oldIndex, newIndex) {
-          if (selectionActive) {
-            return;
-          }
-          ref
-              .read(groupsNotifierProvider.notifier)
-              .reorderGroups(oldIndex, newIndex);
-        },
-        itemBuilder: (context, index) {
-          final group = groups[index];
-          final memberCount = items
-              .where((item) => item.groupIds.contains(group.id))
-              .length;
-          final isSelected = selection.contains(group.id);
-          return Padding(
-            key: ValueKey(group.id),
-            padding: EdgeInsets.only(right: index == groups.length - 1 ? 0 : 8),
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(12),
-                onTap: selectionActive
-                    ? () => toggle(group.id)
-                    : () => Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => GroupScreen(groupId: group.id),
-                        ),
-                      ),
-                child: SizedBox(
-                  width: 140,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            if (selectionActive)
-                              Checkbox(
-                                value: isSelected,
-                                onChanged: (_) => toggle(group.id),
-                              )
-                            else
-                              Icon(
-                                group.reminderEnabled
-                                    ? Icons.notifications_active
-                                    : Icons.folder_outlined,
-                                size: 20,
-                                color: group.reminderEnabled
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
-                              ),
-                            const Spacer(),
-                            Text(
-                              '$memberCount',
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                group.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                            ),
-                            if (!selectionActive)
-                              ReorderableDelayedDragStartListener(
-                                index: index,
-                                child:
-                                    const Icon(Icons.drag_indicator, size: 18),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
 class _StatsCard extends StatelessWidget {
-  const _StatsCard({required this.stats});
+  const _StatsCard({
+    required this.stats,
+    required this.onOpenSearch,
+  });
 
   final ({int today, int last7Days, int total}) stats;
+  final VoidCallback onOpenSearch;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4, bottom: 4),
-            child: Text(
-              l10n.statsTitle,
-              style: Theme.of(context).textTheme.labelLarge,
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.fromLTRB(12, 6, 12, 2),
+      elevation: 0,
+      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.history,
+                    size: 16,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    l10n.statsTitle,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: _StatTile(label: l10n.statsToday, value: stats.today),
+            const SizedBox(
+              height: 24,
+              child: VerticalDivider(width: 14, thickness: 1),
+            ),
+            Expanded(
+              child: _StatTile(label: l10n.statsToday, value: stats.today),
+            ),
+            Expanded(
+              child: _StatTile(
+                label: l10n.statsLast7Days,
+                value: stats.last7Days,
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _StatTile(
-                  label: l10n.statsLast7Days,
-                  value: stats.last7Days,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _StatTile(label: l10n.statsTotal, value: stats.total),
-              ),
-            ],
-          ),
-        ],
+            ),
+            Expanded(
+              child: _StatTile(label: l10n.statsTotal, value: stats.total),
+            ),
+            IconButton(
+              key: const Key('tesbih_search_toggle_button'),
+              icon: const Icon(Icons.search, size: 20),
+              tooltip: l10n.search,
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+              onPressed: onOpenSearch,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -611,23 +749,26 @@ class _StatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        child: Column(
-          children: [
-            Text(label, style: Theme.of(context).textTheme.labelMedium),
-            const SizedBox(height: 4),
-            Text(
-              '$value',
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ],
+    final theme = Theme.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '$value',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
+        Text(
+          label,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.outline,
+          ),
+        ),
+      ],
     );
   }
 }
+

@@ -4,6 +4,8 @@ import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart'
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/daily_item_stat.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/tesbih_home_screen.dart';
 
 import '../helpers/test_harness.dart';
@@ -17,6 +19,7 @@ Item _item({
   int progress = 0,
   int intensity = 50,
   String notes = '',
+  List<String> groupIds = const [],
 }) {
   return Item(
     id: id,
@@ -27,6 +30,7 @@ Item _item({
     setCount: setCount,
     vibrationIntensity: intensity,
     currentProgress: progress,
+    groupIds: groupIds,
   );
 }
 
@@ -198,7 +202,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('filters beads and groups by title and notes', (tester) async {
+  testWidgets('filters beads and groups by title and notes and toggles search bar', (tester) async {
     final harness = TestHarness.create();
     harness.itemRepository = ItemRepository.memory([
       _item(id: '1', title: 'SubhanAllah', notes: 'Praise be to God'),
@@ -212,6 +216,15 @@ void main() {
     expect(find.text('SubhanAllah'), findsOneWidget);
     expect(find.text('Alhamdulillah'), findsOneWidget);
     expect(find.text('AllahuAkbar'), findsOneWidget);
+    expect(find.byKey(const Key('tesbih_search_toggle_button')), findsOneWidget);
+    expect(find.byKey(const Key('tesbih_search_field')), findsNothing);
+
+    // Tap search icon in history stats row to open search box
+    await tester.tap(find.byKey(const Key('tesbih_search_toggle_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('tesbih_search_field')), findsOneWidget);
+    expect(find.byKey(const Key('tesbih_search_toggle_button')), findsNothing);
 
     // Search by title
     await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'Alhamd');
@@ -233,8 +246,108 @@ void main() {
     await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'nonexistent');
     await tester.pumpAndSettle();
 
-    expect(find.text('No results'), findsOneWidget);
+    expect(find.text('No matching items found.'), findsOneWidget);
+
+    // Close search box to restore compact history row
+    await tester.tap(find.byKey(const Key('tesbih_search_close_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('tesbih_search_field')), findsNothing);
+    expect(find.byKey(const Key('tesbih_search_toggle_button')), findsOneWidget);
+    expect(find.text('SubhanAllah'), findsOneWidget);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+    expect(find.text('AllahuAkbar'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('groups are listed together with beads in the main list and can be opened or deleted', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item(id: '1', title: 'SubhanAllah', count: 33),
+      _item(id: '2', title: 'Morning Adhkar 1', groupIds: ['g1']),
+    ]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Daily Adhkar Group', notes: 'Daily routine'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    // Both group and ungrouped bead are listed together
+    expect(find.text('Daily Adhkar Group'), findsOneWidget);
+    expect(find.text('SubhanAllah'), findsOneWidget);
+    expect(find.textContaining('1 • Daily routine'), findsOneWidget);
+
+    // Tapping the group navigates to GroupScreen
+    await tester.tap(find.text('Daily Adhkar Group'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GroupScreen), findsOneWidget);
+
+    // Pop back to home screen
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Daily Adhkar Group'), findsOneWidget);
+
+    // Delete group via its popup menu
+    await tester.tap(
+      find.byWidgetPredicate((widget) => widget is PopupMenuButton).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Daily Adhkar Group'), findsNothing);
+    expect(find.text('"Daily Adhkar Group" deleted'), findsOneWidget);
+    expect(find.text('Undo'), findsOneWidget);
+
+    // Undo restore
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Daily Adhkar Group'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('tapping back navigation button cancels search bar', (tester) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item(id: '1', title: 'SubhanAllah'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    expect(find.byKey(const Key('tesbih_search_toggle_button')), findsOneWidget);
+    expect(find.byKey(const Key('tesbih_search_field')), findsNothing);
+
+    // Open search
+    await tester.tap(find.byKey(const Key('tesbih_search_toggle_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('tesbih_search_field')), findsOneWidget);
+
+    // Type a query
+    await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'xyz');
+    await tester.pumpAndSettle();
+
+    // Trigger back navigation
+    await tester.binding.handlePopRoute();
+    await tester.pumpAndSettle();
+
+    // Search bar should be closed and history stats restored
+    expect(find.byKey(const Key('tesbih_search_field')), findsNothing);
+    expect(find.byKey(const Key('tesbih_search_toggle_button')), findsOneWidget);
+    expect(find.text('SubhanAllah'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });
 }
+
+
+

@@ -2207,6 +2207,14 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Reads the backup JSON string from the chosen offline folder or Documents.
+  Future<String?> readOfflineBackupJson() async {
+    if (_offlineFolderUri != null) {
+      return _offlineFolderService.readBackup();
+    }
+    return _offlineFolderService.readDocumentsBackup();
+  }
+
   /// Best-effort silent write of the full backup into the backup folder.
   /// Uses the custom folder when set, otherwise the shared Documents folder.
   /// Works fully offline and keeps the previous file until it is replaced.
@@ -2217,10 +2225,6 @@ class PrayerAppController extends ChangeNotifier {
     _folderBackupInProgress = true;
     try {
       final jsonStr = await exportBackupJson();
-      final raw = jsonDecode(jsonStr) as Map<String, dynamic>;
-      if (BackupExportService.countItems(raw) == 0) {
-        return;
-      }
       final fingerprint = _dataFingerprint(jsonStr);
       if (fingerprint == _lastFolderBackupFingerprint) {
         return;

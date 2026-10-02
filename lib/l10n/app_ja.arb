@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "キブラ: {degrees}°",
   "qiblaLocationUnavailable": "現在地を特定できませんでした。GPSを有効にして再試行してください。",
+  "grantLocationPermission": "位置情報の権限を許可",
   "qiblaHeadingUnavailable": "コンパスが利用できません - 固定方向を表示中。",
   "qiblaPointDevice": "針が上を向くまでデバイスを回してください。",
   "qiblaKaabaShort": "キブラ",

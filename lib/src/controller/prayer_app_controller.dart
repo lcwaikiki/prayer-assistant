@@ -768,13 +768,18 @@ class PrayerAppController extends ChangeNotifier {
   /// Records a failure, flagging connectivity errors so the UI can show the
   /// "cannot connect" message with a retry action.
   void _recordError(Object e) {
-    _error = e.toString();
+    _error = e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '');
     _hasNetworkError = e is NetworkException;
   }
 
   void _clearError() {
     _error = null;
     _hasNetworkError = false;
+  }
+
+  void clearError() {
+    _clearError();
+    notifyListeners();
   }
 
   /// Retries loading the location option lists after a failed startup fetch
@@ -881,6 +886,7 @@ class PrayerAppController extends ChangeNotifier {
           'Could not match district from GPS. Please choose manually.',
         );
       }
+      _clearError();
       return (country: country, state: state, district: district);
     } catch (e) {
       _recordError(e);

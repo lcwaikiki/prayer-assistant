@@ -236,6 +236,12 @@ abstract class AppLocalizations {
   /// **'Could not determine your location. Enable GPS and try again.'**
   String get qiblaLocationUnavailable;
 
+  /// No description provided for @grantLocationPermission.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Location Permission'**
+  String get grantLocationPermission;
+
   /// No description provided for @qiblaHeadingUnavailable.
   ///
   /// In en, this message translates to:

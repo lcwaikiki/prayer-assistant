@@ -73,6 +73,9 @@ class AppLocalizationsUr extends AppLocalizations {
       'آپ کا مقام معلوم نہیں ہو سکا۔ GPS آن کر کے دوبارہ کوشش کریں۔';
 
   @override
+  String get grantLocationPermission => 'مقام کی اجازت دیں';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'قطب نما دستیاب نہیں - مقررہ سمت دکھائی جا رہی ہے۔';
 

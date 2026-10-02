@@ -73,6 +73,9 @@ class AppLocalizationsBn extends AppLocalizations {
       'আপনার অবস্থান নির্ধারণ করা যায়নি। GPS চালু করে আবার চেষ্টা করুন।';
 
   @override
+  String get grantLocationPermission => 'অবস্থানের অনুমতি দিন';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'কম্পাস অনুপলব্ধ - নির্দিষ্ট দিক দেখানো হচ্ছে।';
 

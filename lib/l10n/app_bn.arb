@@ -31,6 +31,7 @@
   },
   "qiblaBearing": "কিবলা: {degrees}°",
   "qiblaLocationUnavailable": "আপনার অবস্থান নির্ধারণ করা যায়নি। GPS চালু করে আবার চেষ্টা করুন।",
+  "grantLocationPermission": "অবস্থানের অনুমতি দিন",
   "qiblaHeadingUnavailable": "কম্পাস অনুপলব্ধ - নির্দিষ্ট দিক দেখানো হচ্ছে।",
   "qiblaPointDevice": "তীরটি উপরের দিকে নির্দেশ না করা পর্যন্ত আপনার ডিভাইসটি ঘোরান।",
   "qiblaKaabaShort": "কিবলা",

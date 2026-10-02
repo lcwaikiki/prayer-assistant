@@ -73,6 +73,9 @@ class AppLocalizationsEs extends AppLocalizations {
       'No se pudo determinar tu ubicación. Activa el GPS e inténtalo de nuevo.';
 
   @override
+  String get grantLocationPermission => 'Conceder permiso de ubicación';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Brújula no disponible - mostrando dirección fija.';
 

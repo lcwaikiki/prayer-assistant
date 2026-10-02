@@ -70,6 +70,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get qiblaLocationUnavailable => '現在地を特定できませんでした。GPSを有効にして再試行してください。';
 
   @override
+  String get grantLocationPermission => '位置情報の権限を許可';
+
+  @override
   String get qiblaHeadingUnavailable => 'コンパスが利用できません - 固定方向を表示中。';
 
   @override

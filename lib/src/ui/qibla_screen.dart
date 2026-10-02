@@ -10,7 +10,35 @@ import '../utils/qibla_utils.dart';
 typedef QiblaPositionLoader = Future<({double lat, double lon})> Function();
 
 Future<({double lat, double lon})> loadDevicePosition() async {
-  final position = await Geolocator.getCurrentPosition();
+  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    await Geolocator.openLocationSettings();
+    throw Exception(
+      'Location service is disabled on this device. Please enable location services.',
+    );
+  }
+
+  var permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    await Geolocator.openAppSettings();
+    throw Exception(
+      'Location permission is permanently denied. Please enable it in Settings.',
+    );
+  }
+
+  if (permission == LocationPermission.denied) {
+    throw Exception('Location permission is required to detect your location.');
+  }
+
+  final position = await Geolocator.getCurrentPosition(
+    locationSettings: const LocationSettings(
+      accuracy: LocationAccuracy.medium,
+    ),
+  );
   return (lat: position.latitude, lon: position.longitude);
 }
 
@@ -54,7 +82,7 @@ Stream<double>? _defaultCompassStream() {
 
 class _QiblaScreenState extends State<QiblaScreen> {
   Stream<double>? _effectiveHeadingStream;
-  late final Future<({double lat, double lon})> _positionFuture;
+  late Future<({double lat, double lon})> _positionFuture;
 
   @override
   void initState() {
@@ -63,6 +91,32 @@ class _QiblaScreenState extends State<QiblaScreen> {
         widget.headingStream ??
         (widget.compassStreamProvider ?? _defaultCompassStream)();
     _positionFuture = widget.loadPosition?.call() ?? loadDevicePosition();
+  }
+
+  Future<void> _requestLocationPermission() async {
+    try {
+      if (widget.loadPosition == null) {
+        final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+        if (!serviceEnabled) {
+          await Geolocator.openLocationSettings();
+          return;
+        }
+
+        var permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.denied) {
+          permission = await Geolocator.requestPermission();
+        } else if (permission == LocationPermission.deniedForever) {
+          await Geolocator.openAppSettings();
+          return;
+        }
+      }
+    } catch (_) {}
+
+    if (mounted) {
+      setState(() {
+        _positionFuture = widget.loadPosition?.call() ?? loadDevicePosition();
+      });
+    }
   }
 
   @override
@@ -78,6 +132,11 @@ class _QiblaScreenState extends State<QiblaScreen> {
           return _ErrorState(
             message: context.l10n.qiblaLocationUnavailable,
             icon: Icons.location_off_outlined,
+            action: FilledButton.icon(
+              onPressed: _requestLocationPermission,
+              icon: const Icon(Icons.my_location),
+              label: Text(context.l10n.grantLocationPermission),
+            ),
           );
         }
         final bearing = qiblaBearing(position.lat, position.lon);
@@ -288,10 +347,15 @@ class _NeedlePainter extends CustomPainter {
 }
 
 class _ErrorState extends StatelessWidget {
-  const _ErrorState({required this.message, required this.icon});
+  const _ErrorState({
+    required this.message,
+    required this.icon,
+    this.action,
+  });
 
   final String message;
   final IconData icon;
+  final Widget? action;
 
   @override
   Widget build(BuildContext context) {
@@ -304,6 +368,10 @@ class _ErrorState extends StatelessWidget {
             Icon(icon, size: 48),
             const SizedBox(height: 12),
             Text(message, textAlign: TextAlign.center),
+            if (action != null) ...[
+              const SizedBox(height: 16),
+              action!,
+            ],
           ],
         ),
       ),

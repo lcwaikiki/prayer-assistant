@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "朝拜方向: {degrees}°",
   "qiblaLocationUnavailable": "无法确定您的位置。请启用GPS后重试。",
+  "grantLocationPermission": "授予位置权限",
   "qiblaHeadingUnavailable": "指南针不可用 - 显示固定方向。",
   "qiblaPointDevice": "旋转设备直到指针朝上。",
   "qiblaKaabaShort": "朝拜",

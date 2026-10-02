@@ -72,6 +72,9 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذر تحديد موقعك. فعّل نظام تحديد المواقع وحاول مرة أخرى.';
 
   @override
+  String get grantLocationPermission => 'منح إذن الموقع';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'البوصلة غير متاحة - يتم عرض الاتجاه الثابت.';
 

@@ -73,6 +73,9 @@ class AppLocalizationsFa extends AppLocalizations {
       'مکان شما مشخص نشد. GPS را فعال و دوباره تلاش کنید.';
 
   @override
+  String get grantLocationPermission => 'اعطای مجوز مکان';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'قطب‌نما در دسترس نیست - جهت ثابت نمایش داده می‌شود.';
 

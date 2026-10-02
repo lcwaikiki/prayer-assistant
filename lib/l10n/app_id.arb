@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "Kiblat: {degrees}°",
   "qiblaLocationUnavailable": "Tidak dapat menentukan lokasi Anda. Aktifkan GPS dan coba lagi.",
+  "grantLocationPermission": "Berikan Izin Lokasi",
   "qiblaHeadingUnavailable": "Kompas tidak tersedia - menampilkan arah tetap.",
   "qiblaPointDevice": "Putar perangkat hingga jarum menunjuk ke atas.",
   "qiblaKaabaShort": "Kiblat",

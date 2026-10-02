@@ -70,6 +70,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get qiblaLocationUnavailable => '无法确定您的位置。请启用GPS后重试。';
 
   @override
+  String get grantLocationPermission => '授予位置权限';
+
+  @override
   String get qiblaHeadingUnavailable => '指南针不可用 - 显示固定方向。';
 
   @override

@@ -31,6 +31,7 @@
   },
   "qiblaBearing": "கிப்லா: {degrees}°",
   "qiblaLocationUnavailable": "உங்கள் இருப்பிடத்தைக் கண்டறிய முடியவில்லை. GPS-ஐ இயக்கி மீண்டும் முயற்சிக்கவும்.",
+  "grantLocationPermission": "இருப்பிட அனுமதியை வழங்கவும்",
   "qiblaHeadingUnavailable": "திசைகாட்டி கிடைக்கவில்லை - நிலையான திசை காட்டப்படுகிறது.",
   "qiblaPointDevice": "முள் மேலே சுட்டிக்காட்டும் வரை சாதனத்தைச் சுழற்றுங்கள்.",
   "qiblaKaabaShort": "கிப்லா",

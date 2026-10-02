@@ -73,6 +73,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ihre Position konnte nicht ermittelt werden. GPS aktivieren und erneut versuchen.';
 
   @override
+  String get grantLocationPermission => 'Standortberechtigung erteilen';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Kompass nicht verfügbar - feste Richtung wird angezeigt.';
 

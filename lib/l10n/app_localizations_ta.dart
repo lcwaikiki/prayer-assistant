@@ -73,6 +73,9 @@ class AppLocalizationsTa extends AppLocalizations {
       'உங்கள் இருப்பிடத்தைக் கண்டறிய முடியவில்லை. GPS-ஐ இயக்கி மீண்டும் முயற்சிக்கவும்.';
 
   @override
+  String get grantLocationPermission => 'இருப்பிட அனுமதியை வழங்கவும்';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'திசைகாட்டி கிடைக்கவில்லை - நிலையான திசை காட்டப்படுகிறது.';
 

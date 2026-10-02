@@ -73,6 +73,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Impossible de déterminer votre position. Activez le GPS et réessayez.';
 
   @override
+  String get grantLocationPermission => 'Autoriser l\'accès à la position';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Boussole indisponible - direction fixe affichée.';
 

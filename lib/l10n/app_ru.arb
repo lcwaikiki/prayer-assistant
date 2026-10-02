@@ -31,6 +31,7 @@
   },
   "qiblaBearing": "Кибла: {degrees}°",
   "qiblaLocationUnavailable": "Не удалось определить местоположение. Включите GPS и попробуйте снова.",
+  "grantLocationPermission": "Предоставить доступ к местоположению",
   "qiblaHeadingUnavailable": "Компас недоступен - показано фиксированное направление.",
   "qiblaPointDevice": "Поверните устройство, пока стрелка не укажет вверх.",
   "qiblaKaabaShort": "Кибла",

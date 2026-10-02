@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "القبلة: {degrees}°",
   "qiblaLocationUnavailable": "تعذر تحديد موقعك. فعّل نظام تحديد المواقع وحاول مرة أخرى.",
+  "grantLocationPermission": "منح إذن الموقع",
   "qiblaHeadingUnavailable": "البوصلة غير متاحة - يتم عرض الاتجاه الثابت.",
   "qiblaPointDevice": "أدر جهازك حتى يشير السهم إلى الأعلى.",
   "qiblaKaabaShort": "القبلة",

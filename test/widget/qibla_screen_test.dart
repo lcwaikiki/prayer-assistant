@@ -111,6 +111,43 @@ void main() {
       find.text('Could not determine your location. Enable GPS and try again.'),
       findsOneWidget,
     );
+    expect(find.text('Grant Location Permission'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('requesting permission button retries loading position', (
+    tester,
+  ) async {
+    var callCount = 0;
+    await tester.pumpWidget(
+      testLocalizedApp(
+        child: QiblaScreen(
+          loadPosition: () async {
+            callCount++;
+            if (callCount == 1) {
+              throw Exception('permission denied');
+            }
+            return (lat: 41.0082, lon: 28.9784);
+          },
+          compassStreamProvider: () => null,
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('Grant Location Permission'), findsOneWidget);
+    expect(callCount, 1);
+
+    await tester.tap(find.text('Grant Location Permission'));
+    await tester.pump();
+    await tester.pump();
+    await tester.pump();
+
+    expect(callCount, 2);
+    expect(find.text('Qibla: 152°'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

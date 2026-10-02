@@ -31,6 +31,7 @@
   },
   "qiblaBearing": "Qibla: {degrees}°",
   "qiblaLocationUnavailable": "Could not determine your location. Enable GPS and try again.",
+  "grantLocationPermission": "Grant Location Permission",
   "qiblaHeadingUnavailable": "Compass unavailable - showing fixed bearing.",
   "qiblaPointDevice": "Rotate your device until the needle points up.",
   "qiblaKaabaShort": "Qibla",

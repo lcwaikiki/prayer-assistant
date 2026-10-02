@@ -72,6 +72,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'Could not determine your location. Enable GPS and try again.';
 
   @override
+  String get grantLocationPermission => 'Grant Location Permission';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Compass unavailable - showing fixed bearing.';
 

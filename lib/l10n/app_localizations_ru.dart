@@ -73,6 +73,9 @@ class AppLocalizationsRu extends AppLocalizations {
       'Не удалось определить местоположение. Включите GPS и попробуйте снова.';
 
   @override
+  String get grantLocationPermission => 'Предоставить доступ к местоположению';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Компас недоступен - показано фиксированное направление.';
 

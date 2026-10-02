@@ -118,13 +118,20 @@ class _LocationScreenState extends State<LocationScreen> {
             if (hasError) ...[
               const SizedBox(height: 16),
               _ConnectionErrorCard(
+                isNetworkError: hasNetworkError,
                 title: hasNetworkError
                     ? context.l10n.noInternetTitle
                     : null,
                 message: hasNetworkError ? context.l10n.noInternetMessage : errorMessage,
                 onRetry: controller.isBusy
                     ? null
-                    : () => controller.reloadLocationOptions(),
+                    : () {
+                        if (hasNetworkError || controller.countries.isEmpty) {
+                          controller.reloadLocationOptions();
+                        } else {
+                          controller.clearError();
+                        }
+                      },
               ),
             ],
             const SizedBox(height: 20),
@@ -422,11 +429,13 @@ class _ConnectionErrorCard extends StatelessWidget {
     required this.message,
     required this.onRetry,
     this.title,
+    this.isNetworkError = false,
   });
 
   final String? title;
   final String message;
   final VoidCallback? onRetry;
+  final bool isNetworkError;
 
   @override
   Widget build(BuildContext context) {
@@ -440,7 +449,12 @@ class _ConnectionErrorCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.wifi_off_outlined, color: colorScheme.onErrorContainer),
+                Icon(
+                  isNetworkError
+                      ? Icons.wifi_off_outlined
+                      : Icons.error_outline,
+                  color: colorScheme.onErrorContainer,
+                ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(

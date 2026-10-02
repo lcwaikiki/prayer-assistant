@@ -23,7 +23,8 @@ class LocationResolver {
   Future<DeviceLocationGuess> resolveFromDevice() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      throw Exception('Location service is disabled on this device.');
+      await Geolocator.openLocationSettings();
+      throw Exception('Location service is disabled on this device. Please enable location services.');
     }
 
     var permission = await Geolocator.checkPermission();
@@ -31,9 +32,15 @@ class LocationResolver {
       permission = await Geolocator.requestPermission();
     }
 
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      throw Exception('Location permission is required.');
+    if (permission == LocationPermission.deniedForever) {
+      await Geolocator.openAppSettings();
+      throw Exception(
+        'Location permission is permanently denied. Please enable it in Settings.',
+      );
+    }
+
+    if (permission == LocationPermission.denied) {
+      throw Exception('Location permission is required to detect your location.');
     }
 
     final pos = await Geolocator.getCurrentPosition(

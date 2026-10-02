@@ -642,6 +642,25 @@ void main() {
       expect(picked, isNull);
       expect(controller.error, contains('Could not match your country'));
     });
+
+    test('autoPickFromGps formats exception cleanly when permission fails',
+        () async {
+      when(() => locationResolver.resolveFromDevice()).thenThrow(
+        Exception('Location permission is required to detect your location.'),
+      );
+
+      final controller = buildController();
+      final picked = await controller.autoPickFromGps();
+
+      expect(picked, isNull);
+      expect(
+        controller.error,
+        'Location permission is required to detect your location.',
+      );
+
+      controller.clearError();
+      expect(controller.error, isNull);
+    });
   });
 
   group('nextPrayer', () {

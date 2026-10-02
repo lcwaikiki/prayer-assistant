@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "قبلہ: {degrees}°",
   "qiblaLocationUnavailable": "آپ کا مقام معلوم نہیں ہو سکا۔ GPS آن کر کے دوبارہ کوشش کریں۔",
+  "grantLocationPermission": "مقام کی اجازت دیں",
   "qiblaHeadingUnavailable": "قطب نما دستیاب نہیں - مقررہ سمت دکھائی جا رہی ہے۔",
   "qiblaPointDevice": "جب تک سوئی اوپر کی طرف نہ اشارہ کرے اپنا آلہ گھمائیں۔",
   "qiblaKaabaShort": "قبلہ",

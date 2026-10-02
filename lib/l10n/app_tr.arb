@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "Kıble: {degrees}°",
   "qiblaLocationUnavailable": "Konumunuz belirlenemedi. GPS'i açıp tekrar deneyin.",
+  "grantLocationPermission": "Konum İznini Ver",
   "qiblaHeadingUnavailable": "Pusula yok - sabit yön gösteriliyor.",
   "qiblaPointDevice": "İbre yukarıyı gösterene kadar cihazınızı çevirin.",
   "qiblaKaabaShort": "Kıble",

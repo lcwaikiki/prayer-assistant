@@ -26,6 +26,7 @@
   },
   "qiblaBearing": "Qibla : {degrees}°",
   "qiblaLocationUnavailable": "Impossible de déterminer votre position. Activez le GPS et réessayez.",
+  "grantLocationPermission": "Autoriser l'accès à la position",
   "qiblaHeadingUnavailable": "Boussole indisponible - direction fixe affichée.",
   "qiblaPointDevice": "Tournez l'appareil jusqu'à ce que la flèche pointe vers le haut.",
   "qiblaKaabaShort": "Qibla",

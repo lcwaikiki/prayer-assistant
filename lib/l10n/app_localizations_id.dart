@@ -73,6 +73,9 @@ class AppLocalizationsId extends AppLocalizations {
       'Tidak dapat menentukan lokasi Anda. Aktifkan GPS dan coba lagi.';
 
   @override
+  String get grantLocationPermission => 'Berikan Izin Lokasi';
+
+  @override
   String get qiblaHeadingUnavailable =>
       'Kompas tidak tersedia - menampilkan arah tetap.';
 

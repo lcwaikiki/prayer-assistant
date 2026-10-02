@@ -73,6 +73,9 @@ class AppLocalizationsTr extends AppLocalizations {
       'Konumunuz belirlenemedi. GPS\'i açıp tekrar deneyin.';
 
   @override
+  String get grantLocationPermission => 'Konum İznini Ver';
+
+  @override
   String get qiblaHeadingUnavailable => 'Pusula yok - sabit yön gösteriliyor.';
 
   @override

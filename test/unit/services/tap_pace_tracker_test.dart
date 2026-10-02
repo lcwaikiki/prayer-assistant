@@ -1,5 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/services/tap_pace_tracker.dart';
+import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
+
+import '../../helpers/mocks.dart';
 
 void main() {
   group('TapPaceTracker', () {
@@ -88,6 +95,37 @@ void main() {
       expect(tracker.averageIntervalMs, 800);
     });
 
+    test('restores calculation data and continues long running beads after app restart', () {
+      // Re-instantiate tracker with persisted intervals
+      final restoredTracker = TapPaceTracker(
+        initialIntervals: [15000, 16000, 14000],
+      );
+
+      // Immediately calculates time left from persisted pace without needing new taps
+      expect(restoredTracker.averageIntervalMs, 15000);
+      expect(restoredTracker.formatRemaining(100), '25:00');
+
+      // First tap after restart resumes smoothly without counting restart delay
+      final tNow = DateTime(2026, 1, 5, 10, 0, 0);
+      restoredTracker.recordTap(tNow);
+      expect(restoredTracker.averageIntervalMs, 15000);
+      expect(restoredTracker.formatRemaining(99), '24:45');
+
+      // Next tap 15 seconds later refines pace
+      restoredTracker.recordTap(tNow.add(const Duration(seconds: 15)));
+      expect(restoredTracker.intervalCount, 4);
+      expect(restoredTracker.averageIntervalMs, 15000);
+    });
+
+    test('serializes to and from map', () {
+      final original = TapPaceTracker(initialIntervals: [500, 600, 550]);
+      final map = original.toMap();
+      final restored = TapPaceTracker.fromMap(map);
+
+      expect(restored.intervalsMs, [500, 600, 550]);
+      expect(restored.averageIntervalMs, 550);
+    });
+
     test('formats long durations in hours', () {
       final t0 = DateTime(2026, 1, 1, 12, 0, 0);
       tracker.recordTap(t0);
@@ -117,4 +155,61 @@ void main() {
       expect(tracker.formatRemaining(33), '--:--');
     });
   });
+
+  group('BeadPaceNotifier with ItemRepository', () {
+    test('persists and restores pace directly via Item.paceIntervals across container / app restarts', () {
+      const initialItem = Item(
+        id: 'item_1',
+        title: 'Subhanallah',
+        count: 33,
+        check: 0,
+        setCount: 0,
+        vibrationIntensity: 50,
+      );
+      final repository = ItemRepository.memory([initialItem]);
+      final reminderService = MockItemReminderService();
+      final historyRepository = ItemHistoryRepository.memory();
+
+      final container1 = ProviderContainer(
+        overrides: [
+          itemRepositoryProvider.overrideWithValue(repository),
+          itemHistoryRepositoryProvider.overrideWithValue(historyRepository),
+          itemReminderServiceProvider.overrideWithValue(reminderService),
+        ],
+      );
+
+      final notifier1 = container1.read(beadPaceTrackerProvider.notifier);
+      final t0 = DateTime(2026, 1, 1, 12, 0, 0);
+      notifier1.recordTap('item_1', t0);
+      notifier1.recordTap('item_1', t0.add(const Duration(seconds: 15)));
+      notifier1.recordTap('item_1', t0.add(const Duration(seconds: 30)));
+
+      final tracker1 = container1.read(beadPaceTrackerProvider)['item_1'];
+      expect(tracker1?.averageIntervalMs, 15000);
+      expect(tracker1?.formatRemaining(10), '02:30');
+
+      // Verify it was persisted directly into the Item in repository
+      final savedItems = repository.loadItems();
+      expect(savedItems.first.paceIntervals, [15000, 15000]);
+
+      // Simulate app restart: fresh container created with same persisted repository
+      final container2 = ProviderContainer(
+        overrides: [
+          itemRepositoryProvider.overrideWithValue(repository),
+          itemHistoryRepositoryProvider.overrideWithValue(historyRepository),
+          itemReminderServiceProvider.overrideWithValue(reminderService),
+        ],
+      );
+
+      final restoredTrackers = container2.read(beadPaceTrackerProvider);
+      final restoredItem1 = restoredTrackers['item_1'];
+      expect(restoredItem1, isNotNull);
+      expect(restoredItem1!.averageIntervalMs, 15000);
+      expect(restoredItem1.formatRemaining(10), '02:30');
+
+      container1.dispose();
+      container2.dispose();
+    });
+  });
 }
+

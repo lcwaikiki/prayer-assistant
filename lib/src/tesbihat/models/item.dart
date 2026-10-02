@@ -43,6 +43,7 @@ class Item implements ReminderSchedulable {
     this.reminderDayOfMonth,
     this.reminderYearlyDate,
     this.groupIds = const [],
+    this.paceIntervals = const [],
     this.isTask = false,
   }) : assert(count > 0, 'count must be positive'),
        assert(check >= 0, 'check cannot be negative'),
@@ -66,6 +67,7 @@ class Item implements ReminderSchedulable {
   final int vibrationIntensity;
   final int currentProgress;
   final bool reminderEnabled;
+  final List<int> paceIntervals;
   @override
   final bool isTask;
 
@@ -157,6 +159,7 @@ class Item implements ReminderSchedulable {
     int? reminderDayOfMonth,
     DateTime? reminderYearlyDate,
     List<String>? groupIds,
+    List<int>? paceIntervals,
     bool? isTask,
   }) {
     return Item(
@@ -184,6 +187,7 @@ class Item implements ReminderSchedulable {
       reminderDayOfMonth: reminderDayOfMonth ?? this.reminderDayOfMonth,
       reminderYearlyDate: reminderYearlyDate ?? this.reminderYearlyDate,
       groupIds: groupIds ?? this.groupIds,
+      paceIntervals: paceIntervals ?? this.paceIntervals,
       isTask: isTask ?? this.isTask,
     );
   }
@@ -212,6 +216,7 @@ class Item implements ReminderSchedulable {
       'reminderDayOfMonth': reminderDayOfMonth,
       'reminderYearlyDate': reminderYearlyDate?.toIso8601String(),
       'groupIds': groupIds.join(','),
+      'paceIntervals': paceIntervals,
       'isTask': isTask,
     };
   }
@@ -241,6 +246,21 @@ class Item implements ReminderSchedulable {
         .map((part) => part.trim())
         .where((part) => part.isNotEmpty)
         .toList(growable: false);
+    final rawPace = map['paceIntervals'];
+    final List<int> paceIntervals;
+    if (rawPace is List) {
+      paceIntervals = rawPace
+          .map((e) => (e as num).toInt())
+          .toList(growable: false);
+    } else if (rawPace is String && rawPace.isNotEmpty) {
+      paceIntervals = rawPace
+          .split(',')
+          .map((e) => int.tryParse(e.trim()))
+          .whereType<int>()
+          .toList(growable: false);
+    } else {
+      paceIntervals = const [];
+    }
     final rawRecurrence = map['reminderRecurrence']?.toString() ??
         map['reminderRepeat']?.toString();
     var recurrence = ReminderRecurrence.fromName(rawRecurrence);
@@ -290,6 +310,7 @@ class Item implements ReminderSchedulable {
       reminderDayOfMonth: (map['reminderDayOfMonth'] as num?)?.toInt(),
       reminderYearlyDate: reminderYearlyDate,
       groupIds: groupIds,
+      paceIntervals: paceIntervals,
       isTask: (map['isTask'] as bool?) ?? false,
     );
   }

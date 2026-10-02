@@ -331,6 +331,17 @@ class ItemsNotifier extends Notifier<List<Item>> {
     });
   }
 
+  void updatePaceIntervals(String id, List<int> intervals) {
+    final index = state.indexWhere((item) => item.id == id);
+    if (index == -1) {
+      return;
+    }
+    final nextState = [...state];
+    nextState[index] = nextState[index].copyWith(paceIntervals: intervals);
+    state = nextState;
+    _repository.saveItems(state);
+  }
+
   void resetProgress(String id) {
     final index = state.indexWhere((item) => item.id == id);
     if (index == -1) {
@@ -338,7 +349,10 @@ class ItemsNotifier extends Notifier<List<Item>> {
     }
 
     final nextState = [...state];
-    nextState[index] = nextState[index].copyWith(currentProgress: 0);
+    nextState[index] = nextState[index].copyWith(
+      currentProgress: 0,
+      paceIntervals: const [],
+    );
     state = nextState;
     _repository.saveItems(state);
   }
@@ -352,7 +366,10 @@ class ItemsNotifier extends Notifier<List<Item>> {
     final item = state[index];
     final safeProgress = progress.clamp(0, item.count).toInt();
     final nextState = [...state];
-    nextState[index] = item.copyWith(currentProgress: safeProgress);
+    nextState[index] = item.copyWith(
+      currentProgress: safeProgress,
+      paceIntervals: safeProgress != item.currentProgress ? const [] : item.paceIntervals,
+    );
     state = nextState;
     _repository.saveItems(state);
   }
@@ -378,6 +395,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     nextState[index] = item.copyWith(
       currentProgress: progress,
       setCount: setCount,
+      paceIntervals: progress != item.currentProgress ? const [] : item.paceIntervals,
     );
     state = nextState;
     _repository.saveItems(state);

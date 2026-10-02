@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../state/items_notifier.dart';
+
 final beadPaceTrackerProvider =
     NotifierProvider<BeadPaceNotifier, Map<String, TapPaceTracker>>(
   BeadPaceNotifier.new,
@@ -7,7 +9,23 @@ final beadPaceTrackerProvider =
 
 class BeadPaceNotifier extends Notifier<Map<String, TapPaceTracker>> {
   @override
-  Map<String, TapPaceTracker> build() => <String, TapPaceTracker>{};
+  Map<String, TapPaceTracker> build() {
+    final items = ref.watch(itemsNotifierProvider);
+    final previous = stateOrNull ?? const {};
+    final result = <String, TapPaceTracker>{};
+    for (final item in items) {
+      final existing = previous[item.id];
+      if (existing != null) {
+        if (item.paceIntervals.isEmpty && existing.intervalCount > 0) {
+          existing.reset();
+        }
+        result[item.id] = existing;
+      } else {
+        result[item.id] = TapPaceTracker(initialIntervals: item.paceIntervals);
+      }
+    }
+    return result;
+  }
 
   TapPaceTracker trackerFor(String itemId) {
     return state[itemId] ??= TapPaceTracker();
@@ -17,6 +35,10 @@ class BeadPaceNotifier extends Notifier<Map<String, TapPaceTracker>> {
     final tracker = state[itemId] ?? TapPaceTracker();
     tracker.recordTap(timestamp);
     state = {...state, itemId: tracker};
+    ref.read(itemsNotifierProvider.notifier).updatePaceIntervals(
+      itemId,
+      tracker.intervalsMs,
+    );
   }
 
   void reset(String itemId) {
@@ -25,6 +47,10 @@ class BeadPaceNotifier extends Notifier<Map<String, TapPaceTracker>> {
       tracker.reset();
       state = {...state, itemId: tracker};
     }
+    ref.read(itemsNotifierProvider.notifier).updatePaceIntervals(
+      itemId,
+      const [],
+    );
   }
 
   void pauseSession(String itemId) {
@@ -37,6 +63,12 @@ class BeadPaceNotifier extends Notifier<Map<String, TapPaceTracker>> {
 }
 
 class TapPaceTracker {
+  TapPaceTracker({List<int>? initialIntervals}) {
+    if (initialIntervals != null && initialIntervals.isNotEmpty) {
+      _intervalsMs.addAll(initialIntervals);
+    }
+  }
+
   DateTime? _lastTapTime;
   final List<int> _intervalsMs = [];
   static const int _maxHistory = 30;
@@ -48,6 +80,17 @@ class TapPaceTracker {
   double? get averageIntervalMs {
     if (_intervalsMs.isEmpty) return null;
     return _intervalsMs.reduce((a, b) => a + b) / _intervalsMs.length;
+  }
+
+  Map<String, dynamic> toMap() => {
+    'intervalsMs': _intervalsMs,
+  };
+
+  factory TapPaceTracker.fromMap(Map<String, dynamic> map) {
+    final list = (map['intervalsMs'] as List<dynamic>?)
+        ?.map((e) => (e as num).toInt())
+        .toList();
+    return TapPaceTracker(initialIntervals: list);
   }
 
   void reset() {

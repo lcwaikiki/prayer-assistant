@@ -646,5 +646,48 @@ void main() {
       expect(repository.loadItems()[0].groupIds, ['g3']);
       expect(repository.loadItems()[1].groupIds, isEmpty);
     });
+
+    test('updatePaceIntervals saves pace intervals to repository', () {
+      final repository = ItemRepository.memory([item('a')]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .updatePaceIntervals('a', [600, 700]);
+
+      expect(repository.loadItems().single.paceIntervals, [600, 700]);
+    });
+
+    test('resetProgress resets paceIntervals to empty list', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(
+          currentProgress: 10,
+          paceIntervals: const [600, 700],
+        ),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).resetProgress('a');
+
+      final updated = repository.loadItems().single;
+      expect(updated.currentProgress, 0);
+      expect(updated.paceIntervals, isEmpty);
+    });
+
+    test('setProgress clears paceIntervals when progress changes', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(
+          currentProgress: 10,
+          paceIntervals: const [600, 700],
+        ),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).setProgress('a', 5);
+
+      final updated = repository.loadItems().single;
+      expect(updated.currentProgress, 5);
+      expect(updated.paceIntervals, isEmpty);
+    });
   });
 }

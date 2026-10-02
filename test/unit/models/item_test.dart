@@ -24,6 +24,7 @@ Item item({
   List<int> reminderWeekdays = const [],
   int? reminderDayOfMonth,
   DateTime? reminderYearlyDate,
+  List<int> paceIntervals = const [],
 }) {
   return Item(
     id: id,
@@ -47,6 +48,7 @@ Item item({
     reminderWeekdays: reminderWeekdays,
     reminderDayOfMonth: reminderDayOfMonth,
     reminderYearlyDate: reminderYearlyDate,
+    paceIntervals: paceIntervals,
   );
 }
 
@@ -116,6 +118,7 @@ void main() {
         reminderOffsetMinutes: -10,
         reminderAnchorDate: DateTime(2026, 8, 17),
         reminderRepeatCount: 7,
+        paceIntervals: const [650, 700, 680],
       );
 
       final restored = Item.fromMap(source.toMap());
@@ -138,6 +141,29 @@ void main() {
       expect(restored.reminderOffsetMinutes, -10);
       expect(restored.reminderAnchorDate, DateTime(2026, 8, 17));
       expect(restored.reminderRepeatCount, 7);
+      expect(restored.paceIntervals, [650, 700, 680]);
+    });
+
+    test('fromMap deserializes paceIntervals from comma separated string and list', () {
+      final fromList = Item.fromMap(const {
+        'id': 'p1',
+        'count': 33,
+        'paceIntervals': [500, 600],
+      });
+      expect(fromList.paceIntervals, [500, 600]);
+
+      final fromString = Item.fromMap(const {
+        'id': 'p2',
+        'count': 33,
+        'paceIntervals': '500, 600, 700',
+      });
+      expect(fromString.paceIntervals, [500, 600, 700]);
+
+      final fromMissing = Item.fromMap(const {
+        'id': 'p3',
+        'count': 33,
+      });
+      expect(fromMissing.paceIntervals, isEmpty);
     });
 
     test('fromMap tolerates a missing reminderRepeatCount', () {

@@ -1013,6 +1013,16 @@ void main() {
       expect(find.text('Doctor Appointment'), findsOneWidget);
       expect(find.text('Read Quran'), findsOneWidget);
 
+      // Search button is present, search field is not visible initially
+      expect(find.byKey(const Key('tasks_search_button')), findsOneWidget);
+      expect(find.byKey(const Key('tasks_search_field')), findsNothing);
+
+      // Tap search button to open search bar
+      await tester.tap(find.byKey(const Key('tasks_search_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('tasks_search_field')), findsOneWidget);
+
       // Search by note content
       await tester.enterText(
         find.byKey(const Key('tasks_search_field')),
@@ -1041,10 +1051,74 @@ void main() {
       expect(find.text('Doctor Appointment'), findsOneWidget);
       expect(find.text('Read Quran'), findsOneWidget);
 
+      // Close search bar
+      await tester.tap(find.byKey(const Key('tasks_search_close_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('tasks_search_button')), findsOneWidget);
+      expect(find.byKey(const Key('tasks_search_field')), findsNothing);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'DayDetailSheet allows expanding and collapsing combined Moon Phase and Prayer Times container',
+    (tester) async {
+      final harness = TestHarness.create();
+      when(
+        () => harness.database.loadSelectedLocation(),
+      ).thenAnswer((_) async => sampleSelectedLocation());
+      when(
+        () => harness.database.getDay(
+          districtId: any(named: 'districtId'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => samplePrayerDay());
+      when(
+        () => harness.database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        ),
+      ).thenAnswer((_) async => [samplePrayerDay()]);
+      await harness.initialize();
+
+      final date = DateTime(2026, 8, 17);
+      await pumpWithHarness(
+        tester,
+        harness,
+        Scaffold(
+          body: DayDetailSheet(
+            date: date,
+            primary: CalendarPrimaryDisplay.gregorian,
+          ),
+        ),
+        settle: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Combined expansion tile is initially expanded and presents prayer times and moon phase
+      expect(find.byKey(const Key('prayer_times_expansion_tile')), findsOneWidget);
+      expect(find.text('Fajr'), findsOneWidget);
+
+      // Collapse combined tile
+      await tester.tap(find.byKey(const Key('prayer_times_expansion_tile')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Fajr'), findsNothing);
+
+      // Re-expand combined tile
+      await tester.tap(find.byKey(const Key('prayer_times_expansion_tile')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Fajr'), findsOneWidget);
+
       await tester.pumpWidget(const SizedBox());
     },
   );
 }
+
 
 
 

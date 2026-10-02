@@ -15,9 +15,7 @@ import '../../tesbihat/models/reminder_schedulable.dart';
 import '../../tesbihat/state/groups_notifier.dart';
 import '../../tesbihat/state/items_notifier.dart';
 
-import '../../tesbihat/screens/execution_screen.dart';
 import '../../tesbihat/screens/group_form_screen.dart';
-import '../../tesbihat/screens/group_screen.dart';
 import '../../tesbihat/screens/item_form_screen.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
@@ -832,6 +830,8 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
   late DateTime _date = widget.date;
   bool _showWeekTasks = false;
   bool _tasksExpanded = true;
+  bool _prayerMoonExpanded = true;
+  bool _isTaskSearchOpen = false;
   final TextEditingController _taskSearchController = TextEditingController();
   String _taskSearchQuery = '';
 
@@ -1296,9 +1296,20 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                 t.occursOn(_date) && controller.isTaskCompleted(t.id, _date))
             .length;
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+    return PopScope(
+      canPop: !_isTaskSearchOpen && _taskSearchQuery.isEmpty,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && (_isTaskSearchOpen || _taskSearchQuery.isNotEmpty)) {
+          setState(() {
+            _isTaskSearchOpen = false;
+            _taskSearchQuery = '';
+            _taskSearchController.clear();
+          });
+        }
+      },
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1368,57 +1379,80 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
               ),
             ],
             const SizedBox(height: 12),
-            MoonPhaseCard(
-              date: _date,
-              hijriOffset: controller.hijriDateOffset,
-            ),
-            if (controller.prayerDayFor(_date) case final day?) ...[
-              const SizedBox(height: 8),
-              Card(
-                margin: EdgeInsets.zero,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    children: [
-                      for (final entry in prayerOrder.indexed) ...[
-                        if (entry.$1 > 0) const Divider(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              iconForPrayer(entry.$2),
-                              size: 16,
-                              color: Theme.of(context).colorScheme.primary,
+            const SizedBox(height: 12),
+            Builder(
+              builder: (context) {
+                final day = controller.prayerDayFor(_date);
+                return Card(
+                  margin: EdgeInsets.zero,
+                  clipBehavior: Clip.antiAlias,
+                  child: Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      key: const Key('prayer_times_expansion_tile'),
+                      initiallyExpanded: _prayerMoonExpanded,
+                      onExpansionChanged: (expanded) =>
+                          setState(() => _prayerMoonExpanded = expanded),
+                      tilePadding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      childrenPadding:
+                          const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                      leading: Icon(
+                        day != null ? Icons.access_time_filled : Icons.nightlight_round,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      title: Text(
+                        day != null
+                            ? '${context.l10n.datesPrayerTimesTab} & ${context.l10n.moonPhaseTitle}'
+                            : context.l10n.moonPhaseTitle,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                context.l10n.prayerNameLabel(entry.$2),
-                                style: Theme.of(context).textTheme.bodyMedium,
-                              ),
-                            ),
-
-                            Text(
-                              prayerMapForDay(day)[entry.$2] ?? '--:--',
-                              style: Theme.of(context).textTheme.titleMedium
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontFeatures: const [
-                                      FontFeature.tabularFigures(),
-                                    ],
+                      ),
+                      children: [
+                        MoonPhaseCard(
+                          date: _date,
+                          hijriOffset: controller.hijriDateOffset,
+                        ),
+                        if (day != null) ...[
+                          const SizedBox(height: 12),
+                          for (final entry in prayerOrder.indexed) ...[
+                            if (entry.$1 > 0) const Divider(height: 8),
+                            Row(
+                              children: [
+                                Icon(
+                                  iconForPrayer(entry.$2),
+                                  size: 16,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    context.l10n.prayerNameLabel(entry.$2),
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                   ),
+                                ),
+                                Text(
+                                  prayerMapForDay(day)[entry.$2] ?? '--:--',
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontFeatures: const [
+                                          FontFeature.tabularFigures(),
+                                        ],
+                                      ),
+                                ),
+                              ],
                             ),
                           ],
-                        ),
+                        ],
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-            const SizedBox(height: 8),
+                );
+              },
+            ),
             const SizedBox(height: 8),
             if (reminders.isEmpty)
               Padding(
@@ -1569,161 +1603,204 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                     ],
                   ),
                   children: [
-                    Wrap(
-                      alignment: WrapAlignment.spaceBetween,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 8,
-                      runSpacing: 6,
-                      children: [
-                        PopupMenuButton<CalendarSortOption>(
-                          key: const Key('calendar_sort_menu_button'),
-                          tooltip: l10n.calendarSortOption,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 4,
+                    if (_isTaskSearchOpen || _taskSearchQuery.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: TextField(
+                          key: const Key('tasks_search_field'),
+                          controller: _taskSearchController,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
                             ),
-                            child: Row(
+                            hintText: '${l10n.search}...',
+                            prefixIcon: const Icon(Icons.search, size: 20),
+                            suffixIcon: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(
-                                  controller.calendarSortOption ==
-                                          CalendarSortOption.time
-                                      ? Icons.access_time
-                                      : Icons.sort_by_alpha,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  controller.calendarSortOption ==
-                                          CalendarSortOption.time
-                                      ? l10n.calendarSortByTime
-                                      : l10n.calendarSortByName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium
-                                      ?.copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                ),
-                                Icon(
-                                  Icons.arrow_drop_down,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
+                                if (_taskSearchQuery.isNotEmpty)
+                                  IconButton(
+                                    key: const Key('tasks_search_clear_button'),
+                                    icon: const Icon(Icons.clear, size: 18),
+                                    visualDensity: VisualDensity.compact,
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(
+                                      minWidth: 32,
+                                      minHeight: 32,
+                                    ),
+                                    onPressed: () {
+                                      _taskSearchController.clear();
+                                      setState(() => _taskSearchQuery = '');
+                                    },
+                                  ),
+                                IconButton(
+                                  key: const Key('tasks_search_close_button'),
+                                  icon: const Icon(Icons.close, size: 18),
+                                  visualDensity: VisualDensity.compact,
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(
+                                    minWidth: 32,
+                                    minHeight: 32,
+                                  ),
+                                  onPressed: () {
+                                    _taskSearchController.clear();
+                                    setState(() {
+                                      _taskSearchQuery = '';
+                                      _isTaskSearchOpen = false;
+                                    });
+                                  },
                                 ),
                               ],
                             ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
-                          initialValue: controller.calendarSortOption,
-                          onSelected: (option) =>
-                              controller.updateCalendarSortOption(option),
-                          itemBuilder: (context) => [
-                            PopupMenuItem(
-                              value: CalendarSortOption.alphabetical,
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.sort_by_alpha, size: 18),
-                                  const SizedBox(width: 8),
-                                  Text(l10n.calendarSortByName),
-                                ],
-                              ),
-                            ),
-                            PopupMenuItem(
-                              value: CalendarSortOption.time,
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.access_time, size: 18),
-                                  const SizedBox(width: 8),
-                                  Text(l10n.calendarSortByTime),
-                                ],
-                              ),
-                            ),
-                          ],
+                          onChanged: (value) =>
+                              setState(() => _taskSearchQuery = value),
                         ),
-                        SegmentedButton<bool>(
-                          segments: [
-                            ButtonSegment(
-                              value: false,
-                              label: Text(l10n.calendarTasksFilterDay),
-                            ),
-                            ButtonSegment(
-                              value: true,
-                              label: Text(l10n.calendarTasksFilterWeek),
-                            ),
-                          ],
-                          selected: {_showWeekTasks},
-                          onSelectionChanged: (selection) => setState(
-                            () => _showWeekTasks = selection.first,
-                          ),
-                          style: const ButtonStyle(
-                            visualDensity: VisualDensity.compact,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                        ),
-                        FilterChip(
-                          key: const Key('day_detail_toggle_beads_button'),
-                          tooltip: controller.showBeadsInCalendar
-                              ? l10n.calendarHideBeads
-                              : l10n.calendarShowBeads,
-                          avatar: Icon(
-                            controller.showBeadsInCalendar
-                                ? Icons.check
-                                : Icons.circle_outlined,
-                            size: 14,
-                            color: controller.showBeadsInCalendar
-                                ? Theme.of(context).colorScheme.onPrimaryContainer
-                                : Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          label: Text(
-                            l10n.tabTesbih,
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
+                      )
+                    else
+                      Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 8,
+                        runSpacing: 6,
+                        children: [
+                          PopupMenuButton<CalendarSortOption>(
+                            key: const Key('calendar_sort_menu_button'),
+                            tooltip: l10n.calendarSortOption,
+                            initialValue: controller.calendarSortOption,
+                            onSelected: (option) =>
+                                controller.updateCalendarSortOption(option),
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                value: CalendarSortOption.alphabetical,
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.sort_by_alpha, size: 18),
+                                    const SizedBox(width: 8),
+                                    Text(l10n.calendarSortByName),
+                                  ],
                                 ),
+                              ),
+                              PopupMenuItem(
+                                value: CalendarSortOption.time,
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.access_time, size: 18),
+                                    const SizedBox(width: 8),
+                                    Text(l10n.calendarSortByTime),
+                                  ],
+                                ),
+                              ),
+                            ],
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 4,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    controller.calendarSortOption ==
+                                            CalendarSortOption.time
+                                        ? Icons.access_time
+                                        : Icons.sort_by_alpha,
+                                    size: 16,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    controller.calendarSortOption ==
+                                            CalendarSortOption.time
+                                        ? l10n.calendarSortByTime
+                                        : l10n.calendarSortByName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelMedium
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_drop_down,
+                                    size: 16,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          selected: controller.showBeadsInCalendar,
-                          visualDensity: VisualDensity.compact,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          onSelected: (selected) =>
-                              controller.updateShowBeadsInCalendar(selected),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: TextField(
-                        key: const Key('tasks_search_field'),
-                        controller: _taskSearchController,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 8,
+                          SegmentedButton<bool>(
+                            segments: [
+                              ButtonSegment(
+                                value: false,
+                                label: Text(l10n.calendarTasksFilterDay),
+                              ),
+                              ButtonSegment(
+                                value: true,
+                                label: Text(l10n.calendarTasksFilterWeek),
+                              ),
+                            ],
+                            selected: {_showWeekTasks},
+                            onSelectionChanged: (selection) => setState(
+                              () => _showWeekTasks = selection.first,
+                            ),
+                            style: const ButtonStyle(
+                              visualDensity: VisualDensity.compact,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
                           ),
-                          hintText: '${l10n.search}...',
-                          prefixIcon: const Icon(Icons.search, size: 20),
-                          suffixIcon: _taskSearchQuery.isNotEmpty
-                              ? IconButton(
-                                  icon: const Icon(Icons.clear, size: 18),
-                                  onPressed: () {
-                                    _taskSearchController.clear();
-                                    setState(() => _taskSearchQuery = '');
-                                  },
-                                )
-                              : null,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          FilterChip(
+                            key: const Key('day_detail_toggle_beads_button'),
+                            tooltip: controller.showBeadsInCalendar
+                                ? l10n.calendarHideBeads
+                                : l10n.calendarShowBeads,
+                            avatar: Icon(
+                              controller.showBeadsInCalendar
+                                  ? Icons.check
+                                  : Icons.circle_outlined,
+                              size: 14,
+                              color: controller.showBeadsInCalendar
+                                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                                  : Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            label: Text(
+                              l10n.tabTesbih,
+                              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                            selected: controller.showBeadsInCalendar,
+                            visualDensity: VisualDensity.compact,
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            onSelected: (selected) =>
+                                controller.updateShowBeadsInCalendar(selected),
                           ),
-                        ),
-                        onChanged: (value) =>
-                            setState(() => _taskSearchQuery = value),
+                          IconButton(
+                            key: const Key('tasks_search_button'),
+                            tooltip: l10n.search,
+                            icon: const Icon(Icons.search, size: 20),
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(
+                              minWidth: 32,
+                              minHeight: 32,
+                            ),
+                            onPressed: () =>
+                                setState(() => _isTaskSearchOpen = true),
+                          ),
+                        ],
                       ),
-                    ),
                     const SizedBox(height: 4),
                     Builder(
                       builder: (context) {
@@ -1771,6 +1848,7 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

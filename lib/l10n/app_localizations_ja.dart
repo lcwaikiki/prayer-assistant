@@ -93,6 +93,19 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'キブラに向いています';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return '右に回す $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return '左に回す $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => '今日の時刻を共有';
 
   @override

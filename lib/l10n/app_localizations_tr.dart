@@ -97,6 +97,19 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'Kıbleye hizalandı';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'Sağa dönün $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'Sola dönün $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'Bugünün vakitlerini paylaş';
 
   @override

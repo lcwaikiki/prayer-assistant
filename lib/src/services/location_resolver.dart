@@ -23,8 +23,9 @@ class LocationResolver {
   Future<DeviceLocationGuess> resolveFromDevice() async {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      await Geolocator.openLocationSettings();
-      throw Exception('Location service is disabled on this device. Please enable location services.');
+      throw Exception(
+        'Location service is disabled on this device. Please enable location services.',
+      );
     }
 
     var permission = await Geolocator.checkPermission();
@@ -33,7 +34,6 @@ class LocationResolver {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      await Geolocator.openAppSettings();
       throw Exception(
         'Location permission is permanently denied. Please enable it in Settings.',
       );
@@ -43,15 +43,20 @@ class LocationResolver {
       throw Exception('Location permission is required to detect your location.');
     }
 
-    final pos = await Geolocator.getCurrentPosition(
+    Position? pos = await Geolocator.getLastKnownPosition();
+    pos ??= await Geolocator.getCurrentPosition(
       locationSettings: const LocationSettings(
         accuracy: LocationAccuracy.medium,
+        timeLimit: Duration(seconds: 5),
       ),
-    );
-    final places = await _geocoding.placemarkFromCoordinates(
-      pos.latitude,
-      pos.longitude,
-    );
+    ).timeout(const Duration(seconds: 5));
+
+    final places = await _geocoding
+        .placemarkFromCoordinates(
+          pos.latitude,
+          pos.longitude,
+        )
+        .timeout(const Duration(seconds: 5));
     if (places.isEmpty) {
       throw Exception('Could not resolve location details from GPS.');
     }

@@ -98,6 +98,19 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'قبلہ رخ ہو گیا';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'دائیں مڑیں $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'بائیں مڑیں $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'آج کے اوقات شیئر کریں';
 
   @override

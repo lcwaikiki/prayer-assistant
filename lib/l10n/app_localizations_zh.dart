@@ -93,6 +93,19 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => '已对准克尔白朝向';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return '向右转 $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return '向左转 $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => '分享今日时间';
 
   @override

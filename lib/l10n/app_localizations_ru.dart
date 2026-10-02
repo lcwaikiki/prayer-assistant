@@ -98,6 +98,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'Направлено на Киблу';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'Поверните направо $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'Поверните налево $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'Поделиться временем на сегодня';
 
   @override

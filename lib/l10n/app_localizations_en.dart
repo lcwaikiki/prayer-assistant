@@ -97,6 +97,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'Aligned with Qibla';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'Turn right $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'Turn left $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'Share today\'s times';
 
   @override

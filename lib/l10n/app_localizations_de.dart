@@ -98,6 +98,19 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'Zur Qibla ausgerichtet';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'Nach rechts drehen $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'Nach links drehen $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'Heutige Zeiten teilen';
 
   @override

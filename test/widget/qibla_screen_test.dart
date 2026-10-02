@@ -23,6 +23,12 @@ void main() {
     expect(distIstanbul, closeTo(2430, 50));
   });
 
+  test('sunPosition calculates valid solar azimuth and elevation', () {
+    final sun = sunPosition(41.0082, 28.9784, DateTime.utc(2026, 6, 21, 10, 0));
+    expect(sun.azimuth, inInclusiveRange(0.0, 360.0));
+    expect(sun.elevation, inInclusiveRange(-90.0, 90.0));
+  });
+
   testWidgets('renders the bearing and position with injected streams', (
     tester,
   ) async {

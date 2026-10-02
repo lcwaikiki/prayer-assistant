@@ -278,6 +278,24 @@ abstract class AppLocalizations {
   /// **'{distance} km'**
   String qiblaDistanceKm(String distance);
 
+  /// No description provided for @qiblaAligned.
+  ///
+  /// In en, this message translates to:
+  /// **'Aligned with Qibla'**
+  String get qiblaAligned;
+
+  /// No description provided for @qiblaTurnRight.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn right {degrees}°'**
+  String qiblaTurnRight(int degrees);
+
+  /// No description provided for @qiblaTurnLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn left {degrees}°'**
+  String qiblaTurnLeft(int degrees);
+
   /// No description provided for @shareTodayTimes.
   ///
   /// In en, this message translates to:

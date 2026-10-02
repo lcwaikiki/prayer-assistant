@@ -98,6 +98,19 @@ class AppLocalizationsFa extends AppLocalizations {
   }
 
   @override
+  String get qiblaAligned => 'هم‌جهت با قبله';
+
+  @override
+  String qiblaTurnRight(int degrees) {
+    return 'به راست بچرخید $degrees°';
+  }
+
+  @override
+  String qiblaTurnLeft(int degrees) {
+    return 'به چپ بچرخید $degrees°';
+  }
+
+  @override
   String get shareTodayTimes => 'اشتراک اوقات امروز';
 
   @override

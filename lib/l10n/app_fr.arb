@@ -580,6 +580,10 @@
   "calendarSortByName": "Nom",
   "calendarSortByTime": "Heure",
   "calendarSortOption": "Trier par",
+  "calendarHideBeads": "Masquer les rappels de chapelet",
+  "calendarShowBeads": "Afficher les rappels de chapelet",
+  "showBeadsInCalendarTitle": "Afficher le chapelet dans le calendrier",
+  "showBeadsInCalendarSubtitle": "Afficher les rappels de chapelet et de groupe dans les vues du calendrier",
   "remindersTitle": "Rappels",
   "statusBarTitle": "Barre d'état"
 }

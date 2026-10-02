@@ -685,6 +685,10 @@
   "calendarSortByName": "பெயர்",
   "calendarSortByTime": "நேரம்",
   "calendarSortOption": "வரிசைப்படுத்து",
+  "calendarHideBeads": "தஸ்பீஹ் நினைவூட்டல்களை மறைக்கவும்",
+  "calendarShowBeads": "தஸ்பீஹ் நினைவூட்டல்களைக் காட்டவும்",
+  "showBeadsInCalendarTitle": "நாட்காட்டியில் தஸ்பீஹைக் காட்டு",
+  "showBeadsInCalendarSubtitle": "நாட்காட்டி பார்வைகளில் தஸ்பீஹ் மற்றும் குழு நினைவூட்டல்களைக் காண்பி",
   "remindersTitle": "நினைவூட்டல்கள்",
   "statusBarTitle": "நிலைப்பட்டி"
 }

@@ -1681,17 +1681,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get calendarSortOption => 'Ordenar por';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'Ocultar recordatorios de tasbih';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'Mostrar recordatorios de tasbih';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'Mostrar tasbih en el calendario';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'Mostrar recordatorios de tasbih y grupos en las vistas del calendario';
 
   @override
   String get remindersTitle => 'Recordatorios';

@@ -635,6 +635,10 @@
   "calendarSortByName": "Имя",
   "calendarSortByTime": "Время",
   "calendarSortOption": "Сортировка",
+  "calendarHideBeads": "Скрыть напоминания тасбиха",
+  "calendarShowBeads": "Показать напоминания тасбиха",
+  "showBeadsInCalendarTitle": "Показывать тасбих в календаре",
+  "showBeadsInCalendarSubtitle": "Отображать напоминания о тасбихе и группах в календаре",
   "remindersTitle": "Напоминания",
   "statusBarTitle": "Строка состояния"
 }

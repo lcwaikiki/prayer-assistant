@@ -580,6 +580,10 @@
   "calendarSortByName": "نام",
   "calendarSortByTime": "وقت",
   "calendarSortOption": "ترتیب",
+  "calendarHideBeads": "تسبیح کی یاد دہانیاں چھپائیں",
+  "calendarShowBeads": "تسبیح کی یاد دہانیاں دکھائیں",
+  "showBeadsInCalendarTitle": "کیلنڈر میں تسبیح دکھائیں",
+  "showBeadsInCalendarSubtitle": "کیلنڈر کے مناظر میں تسبیح اور گروپ کی یاد دہانیاں دکھائیں",
   "remindersTitle": "یاد دہانیاں",
   "statusBarTitle": "اسٹیٹس بار"
 }

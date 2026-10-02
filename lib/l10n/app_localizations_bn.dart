@@ -1670,17 +1670,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarSortOption => 'সাজান';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'তসবিহ রিমাইন্ডার লুকান';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'তসবিহ রিমাইন্ডার দেখান';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'ক্যালেন্ডারে তসবিহ দেখান';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'ক্যালেন্ডার ভিউতে তসবিহ এবং গ্রুপ রিমাইন্ডার প্রদর্শন করুন';
 
   @override
   String get remindersTitle => 'অনুস্মারক';

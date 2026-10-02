@@ -1662,17 +1662,17 @@ class AppLocalizationsFa extends AppLocalizations {
   String get calendarSortOption => 'مرتب‌سازی';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'پنهان کردن یادآوری‌های تسبیح';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'نمایش یادآوری‌های تسبیح';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'نمایش تسبیح در تقویم';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'نمایش یادآوری‌های تسبیح و گروه‌ها در نماهای تقویم';
 
   @override
   String get remindersTitle => 'یادآورها';

@@ -685,6 +685,10 @@
   "calendarSortByName": "নাম",
   "calendarSortByTime": "সময়",
   "calendarSortOption": "সাজান",
+  "calendarHideBeads": "তসবিহ রিমাইন্ডার লুকান",
+  "calendarShowBeads": "তসবিহ রিমাইন্ডার দেখান",
+  "showBeadsInCalendarTitle": "ক্যালেন্ডারে তসবিহ দেখান",
+  "showBeadsInCalendarSubtitle": "ক্যালেন্ডার ভিউতে তসবিহ এবং গ্রুপ রিমাইন্ডার প্রদর্শন করুন",
   "remindersTitle": "অনুস্মারক",
   "statusBarTitle": "স্ট্যাটাস বার"
 }

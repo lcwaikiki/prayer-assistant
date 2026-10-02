@@ -580,6 +580,10 @@
   "calendarSortByName": "Name",
   "calendarSortByTime": "Zeit",
   "calendarSortOption": "Sortieren nach",
+  "calendarHideBeads": "Gebetsketten-Erinnerungen ausblenden",
+  "calendarShowBeads": "Gebetsketten-Erinnerungen anzeigen",
+  "showBeadsInCalendarTitle": "Gebetskette im Kalender anzeigen",
+  "showBeadsInCalendarSubtitle": "Erinnerungen für Gebetsketten und Gruppen in Kalenderansichten anzeigen",
   "remindersTitle": "Erinnerungen",
   "statusBarTitle": "Statusleiste"
 }

@@ -1676,17 +1676,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get calendarSortOption => 'Sortieren nach';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'Gebetsketten-Erinnerungen ausblenden';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'Gebetsketten-Erinnerungen anzeigen';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'Gebetskette im Kalender anzeigen';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'Erinnerungen für Gebetsketten und Gruppen in Kalenderansichten anzeigen';
 
   @override
   String get remindersTitle => 'Erinnerungen';

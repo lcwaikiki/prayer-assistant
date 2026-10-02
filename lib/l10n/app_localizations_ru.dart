@@ -1673,17 +1673,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get calendarSortOption => 'Сортировка';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'Скрыть напоминания тасбиха';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'Показать напоминания тасбиха';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'Показывать тасбих в календаре';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'Отображать напоминания о тасбихе и группах в календаре';
 
   @override
   String get remindersTitle => 'Напоминания';

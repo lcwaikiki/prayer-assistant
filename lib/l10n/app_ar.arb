@@ -580,6 +580,10 @@
   "calendarSortByName": "الاسم",
   "calendarSortByTime": "الوقت",
   "calendarSortOption": "ترتيب حسب",
+  "calendarHideBeads": "إخفاء تذكيرات التسبيح",
+  "calendarShowBeads": "إظهار تذكيرات التسبيح",
+  "showBeadsInCalendarTitle": "إظهار التسبيح في التقويم",
+  "showBeadsInCalendarSubtitle": "عرض تذكيرات التسبيح والمجموعات في عروض التقويم",
   "remindersTitle": "التذكيرات",
   "statusBarTitle": "شريط الحالة"
 }

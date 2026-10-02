@@ -1616,17 +1616,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarSortOption => '並び替え';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'タスビーフのリマインダーを非表示';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'タスビーフのリマインダーを表示';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'カレンダーにタスビーフを表示';
 
   @override
-  String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+  String get showBeadsInCalendarSubtitle => 'カレンダービューでタスビーフとグループのリマインダーを表示';
 
   @override
   String get remindersTitle => 'リマインダー';

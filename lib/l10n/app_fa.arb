@@ -580,6 +580,10 @@
   "calendarSortByName": "نام",
   "calendarSortByTime": "زمان",
   "calendarSortOption": "مرتب‌سازی",
+  "calendarHideBeads": "پنهان کردن یادآوری‌های تسبیح",
+  "calendarShowBeads": "نمایش یادآوری‌های تسبیح",
+  "showBeadsInCalendarTitle": "نمایش تسبیح در تقویم",
+  "showBeadsInCalendarSubtitle": "نمایش یادآوری‌های تسبیح و گروه‌ها در نماهای تقویم",
   "remindersTitle": "یادآورها",
   "statusBarTitle": "نوار وضعیت"
 }

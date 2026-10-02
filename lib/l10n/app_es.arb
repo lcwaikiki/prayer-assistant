@@ -580,6 +580,10 @@
   "calendarSortByName": "Nombre",
   "calendarSortByTime": "Hora",
   "calendarSortOption": "Ordenar por",
+  "calendarHideBeads": "Ocultar recordatorios de tasbih",
+  "calendarShowBeads": "Mostrar recordatorios de tasbih",
+  "showBeadsInCalendarTitle": "Mostrar tasbih en el calendario",
+  "showBeadsInCalendarSubtitle": "Mostrar recordatorios de tasbih y grupos en las vistas del calendario",
   "remindersTitle": "Recordatorios",
   "statusBarTitle": "Barra de estado"
 }

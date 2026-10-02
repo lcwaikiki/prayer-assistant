@@ -1688,17 +1688,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get calendarSortOption => 'Trier par';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'Masquer les rappels de chapelet';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'Afficher les rappels de chapelet';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle =>
+      'Afficher le chapelet dans le calendrier';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'Afficher les rappels de chapelet et de groupe dans les vues du calendrier';
 
   @override
   String get remindersTitle => 'Rappels';

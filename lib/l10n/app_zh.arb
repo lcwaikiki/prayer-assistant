@@ -580,6 +580,10 @@
   "calendarSortByName": "名称",
   "calendarSortByTime": "时间",
   "calendarSortOption": "排序",
+  "calendarHideBeads": "隐藏赞珠提醒",
+  "calendarShowBeads": "显示赞珠提醒",
+  "showBeadsInCalendarTitle": "在日历中显示赞珠",
+  "showBeadsInCalendarSubtitle": "在日历视图中显示赞珠和分组提醒",
   "remindersTitle": "提醒",
   "statusBarTitle": "状态栏"
 }

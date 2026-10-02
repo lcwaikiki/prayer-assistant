@@ -1609,17 +1609,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarSortOption => '排序';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => '隐藏赞珠提醒';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => '显示赞珠提醒';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => '在日历中显示赞珠';
 
   @override
-  String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+  String get showBeadsInCalendarSubtitle => '在日历视图中显示赞珠和分组提醒';
 
   @override
   String get remindersTitle => '提醒';

@@ -1695,17 +1695,17 @@ class AppLocalizationsTa extends AppLocalizations {
   String get calendarSortOption => 'வரிசைப்படுத்து';
 
   @override
-  String get calendarHideBeads => 'Hide beads reminders';
+  String get calendarHideBeads => 'தஸ்பீஹ் நினைவூட்டல்களை மறைக்கவும்';
 
   @override
-  String get calendarShowBeads => 'Show beads reminders';
+  String get calendarShowBeads => 'தஸ்பீஹ் நினைவூட்டல்களைக் காட்டவும்';
 
   @override
-  String get showBeadsInCalendarTitle => 'Show Beads in Calendar';
+  String get showBeadsInCalendarTitle => 'நாட்காட்டியில் தஸ்பீஹைக் காட்டு';
 
   @override
   String get showBeadsInCalendarSubtitle =>
-      'Display beads and group reminders in calendar views';
+      'நாட்காட்டி பார்வைகளில் தஸ்பீஹ் மற்றும் குழு நினைவூட்டல்களைக் காண்பி';
 
   @override
   String get remindersTitle => 'நினைவூட்டல்கள்';

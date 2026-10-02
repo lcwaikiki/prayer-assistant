@@ -580,6 +580,10 @@
   "calendarSortByName": "名前",
   "calendarSortByTime": "時間",
   "calendarSortOption": "並び替え",
+  "calendarHideBeads": "タスビーフのリマインダーを非表示",
+  "calendarShowBeads": "タスビーフのリマインダーを表示",
+  "showBeadsInCalendarTitle": "カレンダーにタスビーフを表示",
+  "showBeadsInCalendarSubtitle": "カレンダービューでタスビーフとグループのリマインダーを表示",
   "remindersTitle": "リマインダー",
   "statusBarTitle": "ステータスバー"
 }

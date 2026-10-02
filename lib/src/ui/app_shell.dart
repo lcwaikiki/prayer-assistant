@@ -48,7 +48,6 @@ class _AppShellState extends State<AppShell> {
     _controller = context.read<PrayerAppController>();
     _lastTabIndex = _controller.tabIndex;
     _controller.addListener(_onTabChange);
-    _updateOrientation(_controller.tabIndex);
     _timer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (!mounted) {
         return;
@@ -56,6 +55,9 @@ class _AppShellState extends State<AppShell> {
       setState(() => _now = DateTime.now());
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _updateOrientation(_controller.tabIndex);
+      }
       if (_controller.isInitializing) {
         _controller.addListener(_onInitializeDone);
       } else {
@@ -89,6 +91,14 @@ class _AppShellState extends State<AppShell> {
   }
 
   void _updateOrientation(int tabIndex) {
+    if (!mounted) return;
+    try {
+      final route = ModalRoute.of(context);
+      if (route != null && !route.isCurrent) {
+        return;
+      }
+    } catch (_) {}
+
     if (tabIndex == 4) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,

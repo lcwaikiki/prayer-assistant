@@ -29,16 +29,21 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     });
   }
 
+  void _lockOrientation() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _setWakelock(true);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    _lockOrientation();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _lockOrientation();
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       final item = ref
           .read(itemsNotifierProvider)
@@ -52,7 +57,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
+    if (state == AppLifecycleState.resumed) {
+      _lockOrientation();
+    } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
     }

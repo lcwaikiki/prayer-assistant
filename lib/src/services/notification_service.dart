@@ -104,9 +104,7 @@ class NotificationService {
     required bool vibrationEnabled,
     required bool soundEnabled,
     required bool adhanEnabled,
-    NotificationStrings? strings,
   }) {
-    final s = strings ?? NotificationStrings.of(null);
     final String channelId;
     final String channelName;
     final String? soundResource;
@@ -147,30 +145,16 @@ class NotificationService {
         channelDescription: 'Prayer reminder notifications',
         importance: Importance.high,
         priority: Priority.high,
-        autoCancel: false,
-        ongoing: true,
-        additionalFlags: Int32List.fromList(const <int>[32]),
+        autoCancel: true,
+        ongoing: false,
         playSound: soundEnabled,
         sound: soundEnabled && soundResource != null
             ? RawResourceAndroidNotificationSound(soundResource)
             : null,
         enableVibration: vibrationEnabled,
         vibrationPattern: vibrationEnabled ? _reminderVibrationPattern() : null,
-        actions: <AndroidNotificationAction>[
-          AndroidNotificationAction(
-            notificationActionSnooze,
-            s.snooze,
-            cancelNotification: true,
-          ),
-          AndroidNotificationAction(
-            notificationActionDismiss,
-            s.dismiss,
-            cancelNotification: true,
-          ),
-        ],
       ),
       iOS: DarwinNotificationDetails(
-        categoryIdentifier: notificationCategoryReminder,
         presentSound: soundEnabled,
       ),
     );
@@ -476,7 +460,6 @@ class NotificationService {
         vibrationEnabled: item.vibrationEnabled,
         soundEnabled: item.soundEnabled,
         adhanEnabled: item.adhanEnabled,
-        strings: strings,
       );
 
       final payload = jsonEncode({

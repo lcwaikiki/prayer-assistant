@@ -34,9 +34,11 @@ Future<({double lat, double lon})> loadDevicePosition() async {
     throw Exception('Location permission is required to detect your location.');
   }
 
-  final position = await Geolocator.getCurrentPosition(
+  Position? position = await Geolocator.getLastKnownPosition();
+  position ??= await Geolocator.getCurrentPosition(
     locationSettings: const LocationSettings(
       accuracy: LocationAccuracy.medium,
+      timeLimit: Duration(seconds: 5),
     ),
   );
   return (lat: position.latitude, lon: position.longitude);

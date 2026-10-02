@@ -14,6 +14,7 @@ Item _item({
   int progress = 0,
   int check = 11,
   String notes = '',
+  List<int> paceIntervals = const [],
 }) {
   return Item(
     id: 'a',
@@ -24,6 +25,7 @@ Item _item({
     setCount: 11,
     vibrationIntensity: 50,
     currentProgress: progress,
+    paceIntervals: paceIntervals,
   );
 }
 
@@ -207,4 +209,57 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+    'shows estimated time to complete when executed count is 0 or equals count number, otherwise shows time left',
+    (tester) async {
+      final harness = TestHarness.create();
+      // Item with paceIntervals of 1000ms (1 sec per tap) and progress = 0
+      final initialItem = _item(
+        progress: 0,
+        paceIntervals: const [1000, 1000, 1000],
+      );
+      await _pumpExecution(tester, harness, item: initialItem);
+
+      // Executed count is 0: shows estimated time to complete full count (33 sec -> 00:33)
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('time_left_value_text')))
+            .data,
+        '00:33',
+      );
+
+      // Tap button once (executed becomes 1, remaining is 32)
+      await tester.tap(find.byKey(const Key('big_tap_button')));
+      await tester.pump();
+
+      // Executed count is 1 (in between): shows time left for remaining (32 sec -> 00:32)
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('time_left_value_text')))
+            .data,
+        '00:32',
+      );
+
+      await tester.pumpWidget(const SizedBox());
+
+      // When executed equals count number (completed 33/33)
+      final completedHarness = TestHarness.create();
+      final completedItem = _item(
+        progress: 33,
+        paceIntervals: const [1000, 1000, 1000],
+      );
+      await _pumpExecution(tester, completedHarness, item: completedItem);
+
+      // Executed count equals count number: shows estimated time to complete (33 sec -> 00:33)
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('time_left_value_text')))
+            .data,
+        '00:33',
+      );
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }

@@ -210,6 +210,20 @@ void main() {
       container1.dispose();
       container2.dispose();
     });
+
+    test('formatPace returns formatted pace in seconds or --:--', () {
+      final emptyTracker = TapPaceTracker();
+      expect(emptyTracker.formatPace(), '--:--');
+
+      final fastTracker = TapPaceTracker(initialIntervals: [800, 800]);
+      expect(fastTracker.formatPace(), '0.8s');
+
+      final slowTracker = TapPaceTracker(initialIntervals: [1500, 1500]);
+      expect(slowTracker.formatPace(), '1.5s');
+
+      final veryLongTracker = TapPaceTracker(initialIntervals: [75000]);
+      expect(veryLongTracker.formatPace(), '01:15');
+    });
   });
 }
 

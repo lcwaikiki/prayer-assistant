@@ -154,4 +154,18 @@ class TapPaceTracker {
     }
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
+
+  String formatPace() {
+    if (_intervalsMs.isEmpty) {
+      return '--:--';
+    }
+    final avg = averageIntervalMs ?? 0;
+    if (avg <= 0) {
+      return '--:--';
+    }
+    if (avg < 60000) {
+      return '${(avg / 1000).toStringAsFixed(1)}s';
+    }
+    return formatRemaining(1);
+  }
 }

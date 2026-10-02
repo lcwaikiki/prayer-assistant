@@ -105,6 +105,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         ref.read(beadPaceTrackerProvider.notifier).trackerFor(widget.itemId);
 
     String computeTimeLeft() {
+      if (item.currentProgress == 0 || item.currentProgress >= item.count) {
+        return paceTracker.formatRemaining(item.count);
+      }
       final remaining =
           (item.count - item.currentProgress).clamp(0, item.count);
       return paceTracker.formatRemaining(remaining);
@@ -149,7 +152,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       );
 
       if (shouldReset == true) {
-        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+        ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
     }

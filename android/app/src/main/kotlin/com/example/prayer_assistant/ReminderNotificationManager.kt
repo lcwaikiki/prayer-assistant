@@ -143,6 +143,25 @@ object ReminderNotificationManager {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val isPrayer = payload?.contains("\"type\":\"prayer\"") == true
+        if (isPrayer) {
+            val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                .setAutoCancel(true)
+                .setOngoing(false)
+                .setOnlyAlertOnce(true)
+                .setContentIntent(contentPendingIntent)
+
+            val notification = builder.build()
+            NotificationManagerCompat.from(context).notify(id, notification)
+            return
+        }
+
         // Delete intent triggered by OS when the notification is swiped away.
         // Causes ReminderDismissReceiver to immediately reopen the notification.
         val dismissIntent = Intent(context, ReminderDismissReceiver::class.java).apply {

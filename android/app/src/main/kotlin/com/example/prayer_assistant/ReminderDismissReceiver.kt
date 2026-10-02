@@ -20,6 +20,11 @@ class ReminderDismissReceiver : BroadcastReceiver() {
         val showDone = intent.getBooleanExtra("showDone", false)
         val soundResource = intent.getStringExtra("soundResource")
         val originalTime = intent.getStringExtra("originalTime")
+        if (payload?.contains("\"type\":\"prayer\"") == true) {
+            ReminderNotificationManager.markActionHandled(id)
+            ReminderNotificationManager.cancel(context, id)
+            return
+        }
         val dismissConfirm = PrayerWidgetStorage.readDismissConfirm(context) && intent.getBooleanExtra("dismissConfirm", true)
         if (!dismissConfirm) {
             ReminderNotificationManager.markActionHandled(id)

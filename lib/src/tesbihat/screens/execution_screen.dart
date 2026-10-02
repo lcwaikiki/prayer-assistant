@@ -21,13 +21,8 @@ class ExecutionScreen extends ConsumerStatefulWidget {
   ConsumerState<ExecutionScreen> createState() => _ExecutionScreenState();
 }
 
-class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
-  final _paceTracker = TapPaceTracker();
-
-  void _resetTapTiming() {
-    _paceTracker.reset();
-  }
-
+class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
+    with WidgetsBindingObserver {
   void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
       // Ignore platform channel errors in unsupported environments.
@@ -37,12 +32,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _setWakelock(true);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       final item = ref
           .read(itemsNotifierProvider)
           .where((element) => element.id == widget.itemId)
@@ -54,7 +51,16 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive) {
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _setWakelock(false);
     try {
       final context = rootNavigatorKey.currentContext;
@@ -88,14 +94,17 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
     }
 
+    final paceTracker = ref.watch(beadPaceTrackerProvider)[widget.itemId] ??
+        ref.read(beadPaceTrackerProvider.notifier).trackerFor(widget.itemId);
+
     String computeTimeLeft() {
       final remaining =
           (item.count - item.currentProgress).clamp(0, item.count);
-      return _paceTracker.formatRemaining(remaining);
+      return paceTracker.formatRemaining(remaining);
     }
 
     Future<void> handleTap() async {
-      setState(_paceTracker.recordTap);
+      ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
 
       final feedback = ref
           .read(itemsNotifierProvider.notifier)
@@ -133,7 +142,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
 
       if (shouldReset == true) {
-        setState(_resetTapTiming);
+        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
     }
@@ -226,7 +235,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen> {
       );
 
       if (result != null) {
-        setState(_resetTapTiming);
+        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
         final error = ref
             .read(itemsNotifierProvider.notifier)
             .updateProgressAndSetCount(

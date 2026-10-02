@@ -1,6 +1,46 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final beadPaceTrackerProvider =
+    NotifierProvider<BeadPaceNotifier, Map<String, TapPaceTracker>>(
+  BeadPaceNotifier.new,
+);
+
+class BeadPaceNotifier extends Notifier<Map<String, TapPaceTracker>> {
+  @override
+  Map<String, TapPaceTracker> build() => <String, TapPaceTracker>{};
+
+  TapPaceTracker trackerFor(String itemId) {
+    return state[itemId] ??= TapPaceTracker();
+  }
+
+  void recordTap(String itemId, [DateTime? timestamp]) {
+    final tracker = state[itemId] ?? TapPaceTracker();
+    tracker.recordTap(timestamp);
+    state = {...state, itemId: tracker};
+  }
+
+  void reset(String itemId) {
+    final tracker = state[itemId];
+    if (tracker != null) {
+      tracker.reset();
+      state = {...state, itemId: tracker};
+    }
+  }
+
+  void pauseSession(String itemId) {
+    final tracker = state[itemId];
+    if (tracker != null) {
+      tracker.pauseSession();
+      state = {...state, itemId: tracker};
+    }
+  }
+}
+
 class TapPaceTracker {
   DateTime? _lastTapTime;
   final List<int> _intervalsMs = [];
+  static const int _maxHistory = 30;
+  static const int _maxInitialIntervalMs = 300000; // 5 minutes
 
   List<int> get intervalsMs => List.unmodifiable(_intervalsMs);
   int get intervalCount => _intervalsMs.length;
@@ -15,23 +55,34 @@ class TapPaceTracker {
     _intervalsMs.clear();
   }
 
+  /// Pauses the active interval timing so time spent away from the app or bead
+  /// is completely excluded from the pace calculation.
+  void pauseSession() {
+    _lastTapTime = null;
+  }
+
   void recordTap([DateTime? timestamp]) {
     final now = timestamp ?? DateTime.now();
     if (_lastTapTime != null) {
       final rawIntervalMs = now.difference(_lastTapTime!).inMilliseconds;
       if (rawIntervalMs > 0) {
         if (_intervalsMs.isEmpty) {
-          // If first interval is an unusually long pause (> 3s), cap it to 2000ms.
-          _intervalsMs.add(rawIntervalMs > 3000 ? 2000 : rawIntervalMs);
+          // Supports both fast beads (0.5s-0.8s) and long beads (10s-20s+).
+          // Only discard if the first gap was an abandoned session (> 5 min).
+          if (rawIntervalMs <= _maxInitialIntervalMs) {
+            _intervalsMs.add(rawIntervalMs);
+          }
         } else {
           final currentAvg =
               _intervalsMs.reduce((a, b) => a + b) / _intervalsMs.length;
-          // Long waits compared to the calculated average are treated as an exception
-          // and calculated as tapped in average time.
-          if (rawIntervalMs > currentAvg * 2.5 && rawIntervalMs > 2000) {
-            _intervalsMs.add(currentAvg.round());
-          } else {
+          // Any interval exceeding 2.5x of the bead's average pace is considered
+          // a pause/interruption and completely excluded from the pace calculation.
+          final isLongWait = rawIntervalMs > (currentAvg * 2.5);
+          if (!isLongWait) {
             _intervalsMs.add(rawIntervalMs);
+            if (_intervalsMs.length > _maxHistory) {
+              _intervalsMs.removeAt(0);
+            }
           }
         }
       }

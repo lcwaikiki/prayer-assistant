@@ -197,4 +197,44 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('filters beads and groups by title and notes', (tester) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item(id: '1', title: 'SubhanAllah', notes: 'Praise be to God'),
+      _item(id: '2', title: 'Alhamdulillah', notes: 'All praise to Allah'),
+      _item(id: '3', title: 'AllahuAkbar', notes: 'God is greatest'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    expect(find.text('SubhanAllah'), findsOneWidget);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+    expect(find.text('AllahuAkbar'), findsOneWidget);
+
+    // Search by title
+    await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'Alhamd');
+    await tester.pumpAndSettle();
+
+    expect(find.text('SubhanAllah'), findsNothing);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+    expect(find.text('AllahuAkbar'), findsNothing);
+
+    // Search by notes
+    await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'greatest');
+    await tester.pumpAndSettle();
+
+    expect(find.text('SubhanAllah'), findsNothing);
+    expect(find.text('Alhamdulillah'), findsNothing);
+    expect(find.text('AllahuAkbar'), findsOneWidget);
+
+    // Search with no matching results
+    await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'nonexistent');
+    await tester.pumpAndSettle();
+
+    expect(find.text('No results'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

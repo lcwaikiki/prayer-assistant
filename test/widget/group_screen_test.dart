@@ -453,4 +453,79 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('filters member beads by title and notes with search field', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      const Item(
+        id: '1',
+        title: 'Subhanallah',
+        notes: 'Morning glory',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+        groupIds: ['g1'],
+      ),
+      const Item(
+        id: '2',
+        title: 'Alhamdulillah',
+        notes: 'Gratitude praise',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 50,
+        groupIds: ['g1'],
+      ),
+    ]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Daily Adhkar'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const GroupScreen(groupId: 'g1'),
+    );
+
+    expect(find.text('Subhanallah'), findsOneWidget);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+
+    // Tap search icon in app bar
+    await tester.tap(find.byKey(const Key('group_search_button')));
+    await tester.pumpAndSettle();
+
+    // Enter search text matching notes of Bead 2
+    await tester.enterText(
+      find.byKey(const Key('group_search_field')),
+      'Gratitude',
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Subhanallah'), findsNothing);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+
+    // Search query with no match
+    await tester.enterText(
+      find.byKey(const Key('group_search_field')),
+      'NonExistent',
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Subhanallah'), findsNothing);
+    expect(find.text('Alhamdulillah'), findsNothing);
+    expect(find.text('No matching items found.'), findsOneWidget);
+
+    // Clear search
+    await tester.tap(find.byKey(const Key('group_search_clear_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Subhanallah'), findsOneWidget);
+    expect(find.text('Alhamdulillah'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

@@ -148,6 +148,8 @@ class TesbihatLocalizations {
   String get markAsTaskSubtitle => _appL10n.calendarMarkAsTaskSubtitle;
   String get previewVibration => _appL10n.beadsPreviewVibration;
   String get execute => _appL10n.beadsExecute;
+  String get search => _appL10n.search;
+  String get noResults => _appL10n.noResults;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

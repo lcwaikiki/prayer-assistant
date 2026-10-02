@@ -30,6 +30,15 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
   late bool _readOnly = widget.readOnly;
   bool _selecting = false;
   final Set<String> _selected = <String>{};
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  bool _isSearching = false;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void _cancelSelection() {
     setState(() {
@@ -244,94 +253,157 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
       return Scaffold(appBar: AppBar(), body: const SizedBox());
     }
 
+    final q = _searchQuery.trim().toLowerCase();
+    final isSearching = q.isNotEmpty;
+    final filteredMembers = !isSearching
+        ? members
+        : members
+            .where((item) =>
+                item.title.toLowerCase().contains(q) ||
+                item.notes.toLowerCase().contains(q))
+            .toList(growable: false);
+
     return PopScope(
-      canPop: !_selecting,
+      canPop: !_selecting && !_isSearching,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && _selecting) {
-          _cancelSelection();
+        if (!didPop) {
+          if (_selecting) {
+            _cancelSelection();
+          } else if (_isSearching) {
+            setState(() {
+              _isSearching = false;
+              _searchQuery = '';
+              _searchController.clear();
+            });
+          }
         }
       },
       child: Scaffold(
       appBar: AppBar(
-        leading: _selecting
+        leading: _isSearching
             ? IconButton(
-                key: const Key('cancel_member_selection_button'),
-                tooltip: l10n.cancel,
-                icon: const Icon(Icons.close),
-                onPressed: _cancelSelection,
+                key: const Key('close_group_search_button'),
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => setState(() {
+                  _isSearching = false;
+                  _searchQuery = '';
+                  _searchController.clear();
+                }),
               )
-            : null,
-        title: _selecting
-            ? Text(l10n.selectedCount(_selected.length))
-            : Text(group.title),
-        actions: _selecting
+            : _selecting
+                ? IconButton(
+                    key: const Key('cancel_member_selection_button'),
+                    tooltip: l10n.cancel,
+                    icon: const Icon(Icons.close),
+                    onPressed: _cancelSelection,
+                  )
+                : null,
+        title: _isSearching
+            ? TextField(
+                key: const Key('group_search_field'),
+                controller: _searchController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: '${l10n.search}...',
+                  border: InputBorder.none,
+                ),
+                onChanged: (val) => setState(() => _searchQuery = val),
+              )
+            : _selecting
+                ? Text(l10n.selectedCount(_selected.length))
+                : Text(group.title),
+        actions: _isSearching
             ? [
-                IconButton(
-                  key: const Key('select_all_members_button'),
-                  tooltip: l10n.selectAll,
-                  icon: Icon(
-                    members.isNotEmpty && _selected.length == members.length
-                        ? Icons.deselect
-                        : Icons.select_all,
+                if (_searchQuery.isNotEmpty)
+                  IconButton(
+                    key: const Key('clear_group_search_button'),
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() => _searchQuery = '');
+                    },
                   ),
-                  onPressed: () => setState(() {
-                    if (members.isNotEmpty &&
-                        _selected.length == members.length) {
-                      _selected.clear();
-                    } else {
-                      _selected
-                        ..clear()
-                        ..addAll(members.map((item) => item.id));
-                    }
-                  }),
-                ),
-                IconButton(
-                  key: const Key('bulk_delete_members_button'),
-                  tooltip: l10n.delete,
-                  icon: const Icon(Icons.delete_outline),
-                  onPressed: _selected.isEmpty
-                      ? null
-                      : () => _bulkDeleteMembers(context, members),
-                ),
               ]
-            : _readOnly
+            : _selecting
                 ? [
                     IconButton(
-                      key: const Key('edit_group_screen_button'),
-                      tooltip: l10n.edit,
-                      icon: const Icon(Icons.edit),
-                      onPressed: () => setState(() => _readOnly = false),
+                      key: const Key('select_all_members_button'),
+                      tooltip: l10n.selectAll,
+                      icon: Icon(
+                        members.isNotEmpty && _selected.length == members.length
+                            ? Icons.deselect
+                            : Icons.select_all,
+                      ),
+                      onPressed: () => setState(() {
+                        if (members.isNotEmpty &&
+                            _selected.length == members.length) {
+                          _selected.clear();
+                        } else {
+                          _selected
+                            ..clear()
+                            ..addAll(members.map((item) => item.id));
+                        }
+                      }),
+                    ),
+                    IconButton(
+                      key: const Key('bulk_delete_members_button'),
+                      tooltip: l10n.delete,
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: _selected.isEmpty
+                          ? null
+                          : () => _bulkDeleteMembers(context, members),
                     ),
                   ]
-                : [
-                    IconButton(
-                      key: const Key('select_members_button'),
-                      tooltip: l10n.select,
-                      icon: const Icon(Icons.checklist),
-                      onPressed: () => setState(() => _selecting = true),
-                    ),
-                    IconButton(
-                      key: const Key('edit_group_button'),
-                      tooltip: l10n.editGroup,
-                      icon: const Icon(Icons.edit_outlined),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => GroupFormScreen(groupToEdit: group),
+                : _readOnly
+                    ? [
+                        IconButton(
+                          key: const Key('group_search_button'),
+                          tooltip: l10n.search,
+                          icon: const Icon(Icons.search),
+                          onPressed: () => setState(() => _isSearching = true),
                         ),
-                      ),
-                    ),
-                    IconButton(
-                      key: const Key('delete_group_button'),
-                      tooltip: l10n.deleteGroup,
-                      icon: const Icon(Icons.delete_outline),
-                      onPressed: () => _deleteGroup(context, ref),
-                    ),
-                  ],
+                        IconButton(
+                          key: const Key('edit_group_screen_button'),
+                          tooltip: l10n.edit,
+                          icon: const Icon(Icons.edit),
+                          onPressed: () => setState(() => _readOnly = false),
+                        ),
+                      ]
+                    : [
+                        IconButton(
+                          key: const Key('group_search_button'),
+                          tooltip: l10n.search,
+                          icon: const Icon(Icons.search),
+                          onPressed: () => setState(() => _isSearching = true),
+                        ),
+                        IconButton(
+                          key: const Key('select_members_button'),
+                          tooltip: l10n.select,
+                          icon: const Icon(Icons.checklist),
+                          onPressed: () => setState(() => _selecting = true),
+                        ),
+                        IconButton(
+                          key: const Key('edit_group_button'),
+                          tooltip: l10n.editGroup,
+                          icon: const Icon(Icons.edit_outlined),
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => GroupFormScreen(groupToEdit: group),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          key: const Key('delete_group_button'),
+                          tooltip: l10n.deleteGroup,
+                          icon: const Icon(Icons.delete_outline),
+                          onPressed: () => _deleteGroup(context, ref),
+                        ),
+                      ],
       ),
       body: Column(
         children: [
-          if (group.notes.trim().isNotEmpty)
+          if (group.notes.trim().isNotEmpty && !isSearching)
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
               child: Card(
@@ -348,23 +420,135 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
           Expanded(
             child: members.isEmpty
                 ? Center(child: Text(l10n.noBeadsInGroup))
-                : ReorderableListView.builder(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    buildDefaultDragHandles: false,
-                    itemCount: members.length,
-                    onReorderItem: (oldIndex, newIndex) {
-                      if (_selecting || _readOnly) {
-                        return;
-                      }
-                      final allItems = ref.read(itemsNotifierProvider);
-                      final movedFullIndex = allItems.indexOf(members[oldIndex]);
-                      final targetFullIndex = newIndex < members.length
-                          ? allItems.indexOf(members[newIndex])
-                          : allItems.length - 1;
-                      ref
-                          .read(itemsNotifierProvider.notifier)
-                          .reorderItems(movedFullIndex, targetFullIndex);
-                    },
+                : filteredMembers.isEmpty
+                    ? Center(child: Text(l10n.noResults))
+                    : isSearching
+                        ? ListView.builder(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            itemCount: filteredMembers.length,
+                            itemBuilder: (context, index) {
+                              final item = filteredMembers[index];
+                              return Card(
+                                key: ValueKey(item.id),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                child: ListTile(
+                                  leading: _selecting
+                                      ? Checkbox(
+                                          value: _selected.contains(item.id),
+                                          onChanged: (_) => setState(() {
+                                            if (!_selected.remove(item.id)) {
+                                              _selected.add(item.id);
+                                            }
+                                          }),
+                                        )
+                                      : item.reminderEnabled
+                                          ? Icon(
+                                              Icons.notifications_active,
+                                              color:
+                                                  Theme.of(context).colorScheme.primary,
+                                            )
+                                          : null,
+                                  title: Text(item.title),
+                                  subtitle: Text(
+                                    '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
+                                    '${l10n.progress}: ${item.currentProgress} / ${item.count}',
+                                  ),
+                                  isThreeLine: true,
+                                  trailing: (_selecting || _readOnly)
+                                      ? null
+                                      : Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            PopupMenuButton<_MemberAction>(
+                                              onSelected: (action) =>
+                                                  _handleMemberAction(
+                                                context,
+                                                ref,
+                                                item,
+                                                action,
+                                              ),
+                                              itemBuilder: (context) => [
+                                                PopupMenuItem(
+                                                  value: _MemberAction.edit,
+                                                  child: ListTile(
+                                                    dense: true,
+                                                    leading: const Icon(Icons.edit),
+                                                    title: Text(l10n.edit),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: _MemberAction.duplicate,
+                                                  child: ListTile(
+                                                    dense: true,
+                                                    leading: const Icon(Icons.copy_outlined),
+                                                    title: Text(l10n.duplicate),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: _MemberAction.remove,
+                                                  child: ListTile(
+                                                    dense: true,
+                                                    leading: const Icon(Icons.playlist_remove),
+                                                    title: Text(l10n.removeFromGroup),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  value: _MemberAction.delete,
+                                                  child: ListTile(
+                                                    dense: true,
+                                                    leading: const Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red,
+                                                    ),
+                                                    title: Text(l10n.delete),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                  onTap: () {
+                                    if (_selecting) {
+                                      setState(() {
+                                        if (!_selected.remove(item.id)) {
+                                          _selected.add(item.id);
+                                        }
+                                      });
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute<void>(
+                                          builder: (_) => ExecutionScreen(
+                                            itemId: item.id,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              );
+                            },
+                          )
+                        : ReorderableListView.builder(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            buildDefaultDragHandles: false,
+                            itemCount: members.length,
+                            onReorderItem: (oldIndex, newIndex) {
+                              if (_selecting || _readOnly) {
+                                return;
+                              }
+                              final allItems = ref.read(itemsNotifierProvider);
+                              final movedFullIndex = allItems.indexOf(members[oldIndex]);
+                              final targetFullIndex = newIndex < members.length
+                                  ? allItems.indexOf(members[newIndex])
+                                  : allItems.length - 1;
+                              ref
+                                  .read(itemsNotifierProvider.notifier)
+                                  .reorderItems(movedFullIndex, targetFullIndex);
+                            },
                     itemBuilder: (context, index) {
                       final item = members[index];
                       return Card(

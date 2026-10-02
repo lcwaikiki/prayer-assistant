@@ -43,8 +43,22 @@ String _dayKey(DateTime date) {
   return (today: today, last7Days: last7Days, total: total);
 }
 
-class TesbihHomeScreen extends ConsumerWidget {
+class TesbihHomeScreen extends ConsumerStatefulWidget {
   const TesbihHomeScreen({super.key});
+
+  @override
+  ConsumerState<TesbihHomeScreen> createState() => _TesbihHomeScreenState();
+}
+
+class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   void _deleteWithUndo(
     BuildContext context,
@@ -102,7 +116,7 @@ class TesbihHomeScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
     final items = ref.watch(itemsNotifierProvider);
     final groups = ref.watch(groupsNotifierProvider);
@@ -112,6 +126,35 @@ class TesbihHomeScreen extends ConsumerWidget {
         .where((item) => item.groupIds.isEmpty)
         .toList(growable: false);
     final isEmpty = groups.isEmpty && ungrouped.isEmpty;
+
+    final q = _searchQuery.trim().toLowerCase();
+    final isSearching = q.isNotEmpty;
+
+    final filteredGroups = !isSearching
+        ? groups
+        : groups.where((g) {
+            if (g.title.toLowerCase().contains(q) ||
+                g.notes.toLowerCase().contains(q)) {
+              return true;
+            }
+            return items
+                .where((i) => i.groupIds.contains(g.id))
+                .any((i) =>
+                    i.title.toLowerCase().contains(q) ||
+                    i.notes.toLowerCase().contains(q));
+          }).toList(growable: false);
+
+    final filteredUngrouped = !isSearching
+        ? ungrouped
+        : ungrouped
+            .where((item) =>
+                item.title.toLowerCase().contains(q) ||
+                item.notes.toLowerCase().contains(q))
+            .toList(growable: false);
+
+    final noSearchResults = isSearching &&
+        filteredGroups.isEmpty &&
+        filteredUngrouped.isEmpty;
 
     return Scaffold(
       body: isEmpty
@@ -124,77 +167,143 @@ class TesbihHomeScreen extends ConsumerWidget {
                     DateTime.now(),
                   ),
                 ),
-                if (groups.isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        l10n.groups,
-                        style: Theme.of(context).textTheme.labelLarge,
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                  child: TextField(
+                    key: const Key('tesbih_search_field'),
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      hintText: '${l10n.search}...',
+                      prefixIcon: const Icon(Icons.search, size: 20),
+                      suffixIcon: isSearching
+                          ? IconButton(
+                              icon: const Icon(Icons.clear, size: 18),
+                              onPressed: () {
+                                _searchController.clear();
+                                setState(() => _searchQuery = '');
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    onChanged: (value) =>
+                        setState(() => _searchQuery = value),
                   ),
-                  const SizedBox(height: 4),
-                  _GroupCardList(groups: groups),
-                ],
-                if (ungrouped.isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        l10n.milestones,
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                ],
-                Expanded(
-                  child: ungrouped.isEmpty
-                      ? const SizedBox.shrink()
-                      : ReorderableListView.builder(
-                          padding: const EdgeInsets.only(bottom: 6),
-                          itemCount: ungrouped.length,
-                          onReorderItem: (oldIndex, newIndex) {
-                            // Reordering happens inside the filtered ungrouped
-                            // list; map back onto the full items list (which
-                            // also holds grouped beads). onReorderItem already
-                            // gives the final index after removal.
-                            final movedFullIndex = items.indexOf(
-                              ungrouped[oldIndex],
-                            );
-                            final targetFullIndex =
-                                newIndex < ungrouped.length
-                                    ? items.indexOf(ungrouped[newIndex])
-                                    : items.length - 1;
-                            ref
-                                .read(itemsNotifierProvider.notifier)
-                                .reorderItems(movedFullIndex, targetFullIndex);
-                          },
-                          itemBuilder: (context, index) {
-                            final item = ungrouped[index];
-                            return _UngroupedItemCard(
-                              item: item,
-                              index: index,
-                              key: ValueKey(item.id),
-                              selectionActive: selectionActive,
-                              selected: selection.contains(item.id),
-                              onToggle: () => ref
-                                  .read(tesbihSelectionProvider.notifier)
-                                  .toggle(item.id),
-                              onAction: (action) => _handleAction(
-                                context,
-                                ref,
-                                item,
-                                items.indexOf(item),
-                                action,
-                              ),
-                            );
-                          },
-                        ),
                 ),
+                if (noSearchResults)
+                  Expanded(
+                    child: Center(
+                      child: Text(l10n.noResults),
+                    ),
+                  )
+                else ...[
+                  if (filteredGroups.isNotEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          l10n.groups,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    _GroupCardList(groups: filteredGroups),
+                  ],
+                  if (filteredUngrouped.isNotEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          l10n.milestones,
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                  Expanded(
+                    child: filteredUngrouped.isEmpty
+                        ? const SizedBox.shrink()
+                        : isSearching
+                            ? ListView.builder(
+                                padding: const EdgeInsets.only(bottom: 6),
+                                itemCount: filteredUngrouped.length,
+                                itemBuilder: (context, index) {
+                                  final item = filteredUngrouped[index];
+                                  return _UngroupedItemCard(
+                                    item: item,
+                                    index: index,
+                                    key: ValueKey(item.id),
+                                    selectionActive: selectionActive,
+                                    selected: selection.contains(item.id),
+                                    onToggle: () => ref
+                                        .read(tesbihSelectionProvider.notifier)
+                                        .toggle(item.id),
+                                    onAction: (action) => _handleAction(
+                                      context,
+                                      ref,
+                                      item,
+                                      items.indexOf(item),
+                                      action,
+                                    ),
+                                  );
+                                },
+                              )
+                            : ReorderableListView.builder(
+                                padding: const EdgeInsets.only(bottom: 6),
+                                itemCount: filteredUngrouped.length,
+                                onReorderItem: (oldIndex, newIndex) {
+                                  // Reordering happens inside the filtered ungrouped
+                                  // list; map back onto the full items list (which
+                                  // also holds grouped beads). onReorderItem already
+                                  // gives the final index after removal.
+                                  final movedFullIndex = items.indexOf(
+                                    ungrouped[oldIndex],
+                                  );
+                                  final targetFullIndex =
+                                      newIndex < ungrouped.length
+                                          ? items.indexOf(ungrouped[newIndex])
+                                          : items.length - 1;
+                                  ref
+                                      .read(itemsNotifierProvider.notifier)
+                                      .reorderItems(
+                                        movedFullIndex,
+                                        targetFullIndex,
+                                      );
+                                },
+                                itemBuilder: (context, index) {
+                                  final item = filteredUngrouped[index];
+                                  return _UngroupedItemCard(
+                                    item: item,
+                                    index: index,
+                                    key: ValueKey(item.id),
+                                    selectionActive: selectionActive,
+                                    selected: selection.contains(item.id),
+                                    onToggle: () => ref
+                                        .read(tesbihSelectionProvider.notifier)
+                                        .toggle(item.id),
+                                    onAction: (action) => _handleAction(
+                                      context,
+                                      ref,
+                                      item,
+                                      items.indexOf(item),
+                                      action,
+                                    ),
+                                  );
+                                },
+                              ),
+                  ),
+                ],
               ],
             ),
       floatingActionButton: selectionActive

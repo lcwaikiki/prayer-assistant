@@ -94,5 +94,18 @@ class TaskItem {
     return null;
   }
 
+  String get notes {
+    if (reminder != null) {
+      return reminder!.notes;
+    }
+    if (bead != null) {
+      return bead!.notes;
+    }
+    if (group != null) {
+      return group!.notes;
+    }
+    return '';
+  }
+
   bool occursOn(DateTime date) => occursOnDate(date);
 }

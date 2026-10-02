@@ -832,6 +832,14 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
   late DateTime _date = widget.date;
   bool _showWeekTasks = false;
   bool _tasksExpanded = true;
+  final TextEditingController _taskSearchController = TextEditingController();
+  String _taskSearchQuery = '';
+
+  @override
+  void dispose() {
+    _taskSearchController.dispose();
+    super.dispose();
+  }
 
   void _shiftDay(int delta) {
     setState(() {
@@ -998,7 +1006,9 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
-            context.l10n.calendarNoTasksOnDay,
+            _taskSearchQuery.trim().isNotEmpty
+                ? context.l10n.noResults
+                : context.l10n.calendarNoTasksOnDay,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -1069,7 +1079,9 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(
-            context.l10n.calendarNoTasksOnWeek,
+            _taskSearchQuery.trim().isNotEmpty
+                ? context.l10n.noResults
+                : context.l10n.calendarNoTasksOnWeek,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -1682,26 +1694,76 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    if (!_showWeekTasks) ...[
-                      ..._buildDayTasksList(
-                        context,
-                        controller,
-                        beads,
-                        groups,
-                        allTasks,
-                        _date,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: TextField(
+                        key: const Key('tasks_search_field'),
+                        controller: _taskSearchController,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
+                          hintText: '${l10n.search}...',
+                          prefixIcon: const Icon(Icons.search, size: 20),
+                          suffixIcon: _taskSearchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear, size: 18),
+                                  onPressed: () {
+                                    _taskSearchController.clear();
+                                    setState(() => _taskSearchQuery = '');
+                                  },
+                                )
+                              : null,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onChanged: (value) =>
+                            setState(() => _taskSearchQuery = value),
                       ),
-                    ] else ...[
-                      ..._buildWeekTasksList(
-                        context,
-                        controller,
-                        beads,
-                        groups,
-                        allTasks,
-                        _date,
-                        locale,
-                      ),
-                    ],
+                    ),
+                    const SizedBox(height: 4),
+                    Builder(
+                      builder: (context) {
+                        final q = _taskSearchQuery.trim().toLowerCase();
+                        final filteredTasks = q.isEmpty
+                            ? allTasks
+                            : allTasks
+                                .where((t) =>
+                                    t.title.toLowerCase().contains(q) ||
+                                    t.notes.toLowerCase().contains(q))
+                                .toList(growable: false);
+
+                        if (!_showWeekTasks) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: _buildDayTasksList(
+                              context,
+                              controller,
+                              beads,
+                              groups,
+                              filteredTasks,
+                              _date,
+                            ),
+                          );
+                        } else {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: _buildWeekTasksList(
+                              context,
+                              controller,
+                              beads,
+                              groups,
+                              filteredTasks,
+                              _date,
+                              locale,
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),

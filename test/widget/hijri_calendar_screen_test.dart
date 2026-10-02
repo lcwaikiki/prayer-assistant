@@ -968,6 +968,83 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
+
+  testWidgets(
+    'DayDetailSheet searches tasks/todos by title and notes',
+    (tester) async {
+      final harness = TestHarness.create();
+      final date = DateTime(2026, 8, 17);
+      await harness.initialize();
+
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-1',
+          title: 'Doctor Appointment',
+          notes: 'Bring previous prescriptions',
+          anchorAt: DateTime(2026, 8, 17, 10, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+      await harness.controller.addCalendarReminder(
+        CalendarReminder(
+          id: 'rem-2',
+          title: 'Read Quran',
+          notes: 'Surah Al-Kahf verses 1-10',
+          anchorAt: DateTime(2026, 8, 17, 14, 0),
+          enabled: true,
+          isTask: true,
+        ),
+      );
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        Scaffold(
+          body: DayDetailSheet(
+            date: date,
+            primary: CalendarPrimaryDisplay.gregorian,
+          ),
+        ),
+        settle: false,
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Doctor Appointment'), findsOneWidget);
+      expect(find.text('Read Quran'), findsOneWidget);
+
+      // Search by note content
+      await tester.enterText(
+        find.byKey(const Key('tasks_search_field')),
+        'prescriptions',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Doctor Appointment'), findsOneWidget);
+      expect(find.text('Read Quran'), findsNothing);
+
+      // Search query that matches nothing
+      await tester.enterText(
+        find.byKey(const Key('tasks_search_field')),
+        'NonExistentQuery',
+      );
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Doctor Appointment'), findsNothing);
+      expect(find.text('Read Quran'), findsNothing);
+      expect(find.text('No matching items found.'), findsOneWidget);
+
+      // Clear search
+      await tester.tap(find.byKey(const Key('tasks_search_clear_button')));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Doctor Appointment'), findsOneWidget);
+      expect(find.text('Read Quran'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }
+
 
 

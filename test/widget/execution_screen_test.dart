@@ -45,7 +45,10 @@ Future<MockHapticService> _pumpExecution(
   await pumpWithHarness(
     tester,
     harness,
-    ExecutionScreen(itemId: 'a'),
+    ExecutionScreen(
+      itemId: 'a',
+      audioPlayerService: FakeAudioPlayerService(),
+    ),
     settle: false,
     extraOverrides: [hapticServiceProvider.overrideWithValue(haptic)],
   );
@@ -63,8 +66,8 @@ void main() {
     );
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
-      SystemChannels.platform,
-      (call) async => null,
+      const MethodChannel('dev.fluttercommunity.plus/wakelock'),
+      (call) async => true,
     );
   });
 
@@ -75,7 +78,10 @@ void main() {
     await pumpWithHarness(
       tester,
       harness,
-      const ExecutionScreen(itemId: 'x'),
+      ExecutionScreen(
+        itemId: 'x',
+        audioPlayerService: FakeAudioPlayerService(),
+      ),
       settle: false,
     );
     await tester.pump();

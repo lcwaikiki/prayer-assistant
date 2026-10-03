@@ -1679,4 +1679,85 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'نوار وضعیت';
+
+  @override
+  String get sound => 'صدا';
+
+  @override
+  String get soundLibrary => 'کتابخانه صوتی';
+
+  @override
+  String get noSoundsInLibrary => 'هنوز صدایی در کتابخانه ذخیره نشده است.';
+
+  @override
+  String get recordSound => 'ضبط صدا';
+
+  @override
+  String get recording => 'در حال ضبط...';
+
+  @override
+  String get startRecording => 'شروع ضبط';
+
+  @override
+  String get stopRecording => 'توقف ضبط';
+
+  @override
+  String get pickFromFiles => 'انتخاب فایل صوتی';
+
+  @override
+  String get pickFromLibrary => 'انتخاب از کتابخانه';
+
+  @override
+  String get soundName => 'نام صدا';
+
+  @override
+  String get soundNameHint => 'یک نام برای صدا وارد کنید';
+
+  @override
+  String get soundAttached => 'صدا ضمیمه شد';
+
+  @override
+  String get noSoundAttached => 'هیچ صدایی ضمیمه نشده است';
+
+  @override
+  String get removeSound => 'حذف صدا';
+
+  @override
+  String get autoCountWithSound => 'افزایش خودکار شمارنده با پایان صدا';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'با هر بار تمام شدن پخش صدا، شمارنده به طور خودکار ۱ عدد افزایش می‌یابد';
+
+  @override
+  String get attachSoundToExistingBead => 'ضمیمه به تسبیح موجود';
+
+  @override
+  String get saveToSoundLibrary => 'ذخیره در کتابخانه صوتی';
+
+  @override
+  String get sharedAudioReceived => 'صوت به اشتراک گذاشته شده دریافت شد';
+
+  @override
+  String get sharedAudioPrompt =>
+      'نحوه استفاده از فایل صوتی به اشتراک گذاشته شده را انتخاب کنید:';
+
+  @override
+  String get play => 'پخش';
+
+  @override
+  String get pause => 'مکث';
+
+  @override
+  String get soundSavedSuccess => 'صدا با موفقیت ذخیره شد';
+
+  @override
+  String get soundDeletedSuccess => 'صدا حذف شد';
+
+  @override
+  String get rename => 'تغییر نام';
+
+  @override
+  String get microphonePermissionRequired =>
+      'برای ضبط صدا اجازه دسترسی به میکروفون لازم است.';
 }

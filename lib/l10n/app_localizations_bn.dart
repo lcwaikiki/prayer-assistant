@@ -1687,4 +1687,85 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'স্ট্যাটাস বার';
+
+  @override
+  String get sound => 'শব্দ';
+
+  @override
+  String get soundLibrary => 'সাউন্ড লাইব্রেরি';
+
+  @override
+  String get noSoundsInLibrary => 'লাইব্রেরিতে এখনও কোনো শব্দ সংরক্ষিত নেই।';
+
+  @override
+  String get recordSound => 'শব্দ রেকর্ড করুন';
+
+  @override
+  String get recording => 'রেকর্ডিং হচ্ছে...';
+
+  @override
+  String get startRecording => 'রেকর্ডিং শুরু করুন';
+
+  @override
+  String get stopRecording => 'রেকর্ডিং বন্ধ করুন';
+
+  @override
+  String get pickFromFiles => 'অডিও ফাইল নির্বাচন করুন';
+
+  @override
+  String get pickFromLibrary => 'লাইব্রেরি থেকে নির্বাচন করুন';
+
+  @override
+  String get soundName => 'শব্দের নাম';
+
+  @override
+  String get soundNameHint => 'শব্দের জন্য একটি নাম লিখুন';
+
+  @override
+  String get soundAttached => 'শব্দ সংযুক্ত করা হয়েছে';
+
+  @override
+  String get noSoundAttached => 'কোনো শব্দ সংযুক্ত নেই';
+
+  @override
+  String get removeSound => 'শব্দ সরান';
+
+  @override
+  String get autoCountWithSound => 'শব্দ লুপে স্বয়ংক্রিয় গণনা বৃদ্ধি';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'প্রতিবার অডিও লুপ শেষ হলে স্বয়ংক্রিয়ভাবে গণনা ১ বাড়ান';
+
+  @override
+  String get attachSoundToExistingBead => 'বিদ্যমান তসবিহে সংযুক্ত করুন';
+
+  @override
+  String get saveToSoundLibrary => 'সাউন্ড লাইব্রেরিতে সংরক্ষণ করুন';
+
+  @override
+  String get sharedAudioReceived => 'শেয়ার করা অডিও প্রাপ্ত হয়েছে';
+
+  @override
+  String get sharedAudioPrompt =>
+      'শেয়ার করা অডিও ফাইলটি কীভাবে ব্যবহার করতে চান তা নির্বাচন করুন:';
+
+  @override
+  String get play => 'চালান';
+
+  @override
+  String get pause => 'বিরতি';
+
+  @override
+  String get soundSavedSuccess => 'শব্দ সফলভাবে সংরক্ষিত হয়েছে';
+
+  @override
+  String get soundDeletedSuccess => 'শব্দ মুছে ফেলা হয়েছে';
+
+  @override
+  String get rename => 'পুনঃনামকরণ';
+
+  @override
+  String get microphonePermissionRequired =>
+      'অডিও রেকর্ড করতে মাইক্রোফোনের অনুমতি প্রয়োজন।';
 }

@@ -9,6 +9,7 @@ import '../models/prayer_models.dart';
 import '../tesbihat/models/daily_item_stat.dart';
 import '../tesbihat/models/item.dart';
 import '../tesbihat/models/item_group.dart';
+import '../tesbihat/models/sound_item.dart';
 
 class BackupExportService {
   const BackupExportService();
@@ -27,6 +28,7 @@ class BackupExportService {
     required List<DailyItemStat> tesbihStats,
     required Map<String, dynamic> preferences,
     Map<String, FastingLog> fastingLogs = const {},
+    List<SoundItem> soundLibrary = const [],
   }) {
     final data = <String, dynamic>{
       'version': currentVersion,
@@ -38,6 +40,7 @@ class BackupExportService {
       'tesbihItems': tesbihItems.map((i) => i.toMap()).toList(),
       'tesbihGroups': tesbihGroups.map((g) => g.toMap()).toList(),
       'tesbihStats': tesbihStats.map((s) => s.toMap()).toList(),
+      'soundLibrary': soundLibrary.map((s) => s.toMap()).toList(),
       'preferences': preferences,
       'fastingLogs': fastingLogs.map((k, v) => MapEntry(k, v.toMap())),
     };
@@ -74,6 +77,7 @@ class BackupExportService {
       'tesbihItems',
       'tesbihGroups',
       'tesbihStats',
+      'soundLibrary',
     ]) {
       count += (raw[arrayKey] as List?)?.length ?? 0;
     }
@@ -159,6 +163,14 @@ class BackupExportService {
             .toList()
         : const <DailyItemStat>[];
 
+    final soundLibraryRaw = raw['soundLibrary'] as List<dynamic>?;
+    final soundLibrary = soundLibraryRaw != null
+        ? soundLibraryRaw
+            .whereType<Map<String, dynamic>>()
+            .map((m) => SoundItem.fromMap(m))
+            .toList()
+        : const <SoundItem>[];
+
     final preferences =
         (raw['preferences'] as Map<String, dynamic>?) ?? <String, dynamic>{};
 
@@ -180,6 +192,7 @@ class BackupExportService {
       'tesbihItems': tesbihItems,
       'tesbihGroups': tesbihGroups,
       'tesbihStats': tesbihStats,
+      'soundLibrary': soundLibrary,
       'preferences': preferences,
       'fastingLogs': fastingLogs,
     };

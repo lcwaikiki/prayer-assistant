@@ -11,6 +11,7 @@ import '../kaza/screens/kaza_tracker_screen.dart';
 import '../l10n/l10n.dart';
 import '../models/prayer_models.dart';
 import '../tesbihat/l10n/tesbihat_localizations.dart';
+import '../tesbihat/screens/sound_library_screen.dart';
 import '../tesbihat/screens/tesbih_home_screen.dart';
 import '../tesbihat/state/groups_notifier.dart';
 import '../tesbihat/state/items_notifier.dart';
@@ -381,7 +382,19 @@ class _AppShellState extends State<AppShell> {
       title: titleWidget,
       actions: [
         if (trailing != null) trailing,
-        if (controller.tabIndex == _tesbihTabIndex)
+        if (controller.tabIndex == _tesbihTabIndex) ...[
+          IconButton(
+            key: const Key('sound_library_button'),
+            tooltip: context.tesbihatL10n.soundLibrary,
+            icon: const Icon(Icons.library_music_outlined),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const SoundLibraryScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             key: const Key('select_items_button'),
             tooltip: context.tesbihatL10n.select,
@@ -389,6 +402,7 @@ class _AppShellState extends State<AppShell> {
             onPressed: () =>
                 ref.read(tesbihSelectionProvider.notifier).start(),
           ),
+        ],
         IconButton(
           tooltip: controller.remindersSilenced
               ? context.l10n.tooltipRemindersOn

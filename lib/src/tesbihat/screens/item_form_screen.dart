@@ -8,10 +8,13 @@ import '../../services/local_database.dart';
 import '../../widgets/discard_confirmation_dialog.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
+import '../services/audio_player_service.dart';
 import '../services/haptic_service.dart';
 import '../services/prayer_anchor_resolver.dart';
 import '../state/groups_notifier.dart';
 import '../state/items_notifier.dart';
+import '../state/sound_library_notifier.dart';
+import '../widgets/sound_picker_sheet.dart';
 import 'execution_screen.dart';
 import '../widgets/reminder_section.dart';
 
@@ -45,6 +48,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late int _vibrationIntensity;
   late ReminderConfig _reminderConfig;
   late Set<String> _selectedGroupIds;
+  String? _soundId;
+  String? _soundTitle;
+  late bool _autoCountWithSound;
+  late final AudioPlayerService _audioPlayer;
+  bool _isPlayingPreview = false;
   bool _saving = false;
   bool _allowPop = false;
 
@@ -73,6 +81,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final initialGroups = item != null
         ? item.groupIds.toSet()
         : (widget.initialGroupIds ?? const []).toSet();
+    final initialSoundId = item?.soundId;
+    final initialAutoCount = item?.autoCountWithSound ?? true;
 
     if (_titleController.text != initialTitle) return true;
     if (_notesController.text != initialNotes) return true;
@@ -81,6 +91,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (_vibrationIntensity != initialVibration) return true;
     if (_reminderConfig != initialReminder) return true;
     if (!setEquals(_selectedGroupIds, initialGroups)) return true;
+    if (_soundId != initialSoundId) return true;
+    if (_autoCountWithSound != initialAutoCount) return true;
 
     return false;
   }
@@ -107,6 +119,13 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _selectedGroupIds = item != null
         ? item.groupIds.toSet()
         : (widget.initialGroupIds ?? const []).toSet();
+    _soundId = item?.soundId;
+    _soundTitle = item?.soundTitle;
+    _autoCountWithSound = item?.autoCountWithSound ?? true;
+    _audioPlayer = AudioPlayerService();
+    _audioPlayer.onPlayerComplete.listen((_) {
+      if (mounted) setState(() => _isPlayingPreview = false);
+    });
   }
 
   @override
@@ -116,7 +135,49 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _countController.dispose();
     _checkController.dispose();
     _setCountController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+
+  Future<void> _togglePreviewSound() async {
+    if (_soundId == null) return;
+    if (_isPlayingPreview) {
+      await _audioPlayer.pause();
+      setState(() => _isPlayingPreview = false);
+      return;
+    }
+
+    final sound =
+        ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
+    if (sound != null) {
+      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+      setState(() => _isPlayingPreview = true);
+    }
+  }
+
+  Future<void> _pickSound() async {
+    if (_isPlayingPreview) {
+      await _audioPlayer.stop();
+      setState(() => _isPlayingPreview = false);
+    }
+    final sound = await SoundPickerSheet.show(context);
+    if (sound != null && mounted) {
+      setState(() {
+        _soundId = sound.id;
+        _soundTitle = sound.title;
+      });
+    }
+  }
+
+  void _removeSound() {
+    if (_isPlayingPreview) {
+      _audioPlayer.stop();
+      setState(() => _isPlayingPreview = false);
+    }
+    setState(() {
+      _soundId = null;
+      _soundTitle = null;
+    });
   }
 
   String? _requiredValidator(String? value, String fieldName) {
@@ -224,6 +285,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             : null,
         groupIds: _selectedGroupIds.toList(growable: false),
         isTask: reminder.isTask,
+        soundId: _soundId,
+        soundTitle: _soundTitle,
+        autoCountWithSound: _autoCountWithSound,
+        clearSound: _soundId == null,
       );
       notifier.updateItem(edited);
     } else {
@@ -254,6 +319,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             : null,
         groupIds: _selectedGroupIds.toList(growable: false),
         isTask: reminder.isTask,
+        soundId: _soundId,
+        soundTitle: _soundTitle,
+        autoCountWithSound: _autoCountWithSound,
       );
     }
 
@@ -433,6 +501,90 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                           );
                         },
                       ),
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          l10n.sound,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      if (_soundId != null) ...[
+                        Card(
+                          margin: EdgeInsets.zero,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        _isPlayingPreview
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle_filled,
+                                      ),
+                                      iconSize: 32,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      onPressed: _togglePreviewSound,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        _soundTitle ?? l10n.sound,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    if (!_readOnly) ...[
+                                      IconButton(
+                                        icon: const Icon(Icons.swap_horiz),
+                                        tooltip: l10n.pickFromLibrary,
+                                        onPressed: _pickSound,
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.close),
+                                        tooltip: l10n.removeSound,
+                                        onPressed: _removeSound,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                                SwitchListTile(
+                                  dense: true,
+                                  contentPadding: EdgeInsets.zero,
+                                  title: Text(l10n.autoCountWithSound),
+                                  subtitle: Text(
+                                    l10n.autoCountWithSoundSubtitle,
+                                  ),
+                                  value: _autoCountWithSound,
+                                  onChanged: _readOnly
+                                      ? null
+                                      : (value) => setState(
+                                            () => _autoCountWithSound = value,
+                                          ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        OutlinedButton.icon(
+                          onPressed: _readOnly ? null : _pickSound,
+                          icon: const Icon(Icons.music_note_outlined),
+                          label: Text(
+                            '${l10n.recordSound} / ${l10n.pickFromLibrary}',
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 20),
                       ReminderSection(
                         readOnly: _readOnly,

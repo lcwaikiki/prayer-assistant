@@ -1681,4 +1681,85 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Status bar';
+
+  @override
+  String get sound => 'Sound';
+
+  @override
+  String get soundLibrary => 'Sound Library';
+
+  @override
+  String get noSoundsInLibrary => 'No sounds saved in library yet.';
+
+  @override
+  String get recordSound => 'Record Sound';
+
+  @override
+  String get recording => 'Recording...';
+
+  @override
+  String get startRecording => 'Start Recording';
+
+  @override
+  String get stopRecording => 'Stop Recording';
+
+  @override
+  String get pickFromFiles => 'Pick Audio File';
+
+  @override
+  String get pickFromLibrary => 'Pick from Library';
+
+  @override
+  String get soundName => 'Sound Name';
+
+  @override
+  String get soundNameHint => 'Enter a name for the sound';
+
+  @override
+  String get soundAttached => 'Sound Attached';
+
+  @override
+  String get noSoundAttached => 'No sound attached';
+
+  @override
+  String get removeSound => 'Remove Sound';
+
+  @override
+  String get autoCountWithSound => 'Auto-advance count on sound loop';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Automatically increment counter each time the audio loop finishes';
+
+  @override
+  String get attachSoundToExistingBead => 'Attach to Existing Bead';
+
+  @override
+  String get saveToSoundLibrary => 'Save to Sound Library';
+
+  @override
+  String get sharedAudioReceived => 'Shared Audio Received';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Choose how you want to use the shared audio file:';
+
+  @override
+  String get play => 'Play';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get soundSavedSuccess => 'Sound saved successfully';
+
+  @override
+  String get soundDeletedSuccess => 'Sound deleted';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Microphone permission is required to record audio.';
 }

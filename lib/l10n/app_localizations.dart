@@ -3187,6 +3187,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Status bar'**
   String get statusBarTitle;
+
+  /// No description provided for @sound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get sound;
+
+  /// No description provided for @soundLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Library'**
+  String get soundLibrary;
+
+  /// No description provided for @noSoundsInLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'No sounds saved in library yet.'**
+  String get noSoundsInLibrary;
+
+  /// No description provided for @recordSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Record Sound'**
+  String get recordSound;
+
+  /// No description provided for @recording.
+  ///
+  /// In en, this message translates to:
+  /// **'Recording...'**
+  String get recording;
+
+  /// No description provided for @startRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Recording'**
+  String get startRecording;
+
+  /// No description provided for @stopRecording.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Recording'**
+  String get stopRecording;
+
+  /// No description provided for @pickFromFiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick Audio File'**
+  String get pickFromFiles;
+
+  /// No description provided for @pickFromLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick from Library'**
+  String get pickFromLibrary;
+
+  /// No description provided for @soundName.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Name'**
+  String get soundName;
+
+  /// No description provided for @soundNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a name for the sound'**
+  String get soundNameHint;
+
+  /// No description provided for @soundAttached.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound Attached'**
+  String get soundAttached;
+
+  /// No description provided for @noSoundAttached.
+  ///
+  /// In en, this message translates to:
+  /// **'No sound attached'**
+  String get noSoundAttached;
+
+  /// No description provided for @removeSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Sound'**
+  String get removeSound;
+
+  /// No description provided for @autoCountWithSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-advance count on sound loop'**
+  String get autoCountWithSound;
+
+  /// No description provided for @autoCountWithSoundSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically increment counter each time the audio loop finishes'**
+  String get autoCountWithSoundSubtitle;
+
+  /// No description provided for @attachSoundToExistingBead.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach to Existing Bead'**
+  String get attachSoundToExistingBead;
+
+  /// No description provided for @saveToSoundLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to Sound Library'**
+  String get saveToSoundLibrary;
+
+  /// No description provided for @sharedAudioReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Shared Audio Received'**
+  String get sharedAudioReceived;
+
+  /// No description provided for @sharedAudioPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you want to use the shared audio file:'**
+  String get sharedAudioPrompt;
+
+  /// No description provided for @play.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get play;
+
+  /// No description provided for @pause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pause;
+
+  /// No description provided for @soundSavedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound saved successfully'**
+  String get soundSavedSuccess;
+
+  /// No description provided for @soundDeletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound deleted'**
+  String get soundDeletedSuccess;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @microphonePermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission is required to record audio.'**
+  String get microphonePermissionRequired;
 }
 
 class _AppLocalizationsDelegate

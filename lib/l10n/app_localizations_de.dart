@@ -1693,4 +1693,87 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Statusleiste';
+
+  @override
+  String get sound => 'Ton';
+
+  @override
+  String get soundLibrary => 'Tonbibliothek';
+
+  @override
+  String get noSoundsInLibrary =>
+      'Noch keine Töne in der Bibliothek gespeichert.';
+
+  @override
+  String get recordSound => 'Ton aufnehmen';
+
+  @override
+  String get recording => 'Aufnahme läuft...';
+
+  @override
+  String get startRecording => 'Aufnahme starten';
+
+  @override
+  String get stopRecording => 'Aufnahme beenden';
+
+  @override
+  String get pickFromFiles => 'Audiodatei auswählen';
+
+  @override
+  String get pickFromLibrary => 'Aus Bibliothek wählen';
+
+  @override
+  String get soundName => 'Tonname';
+
+  @override
+  String get soundNameHint => 'Geben Sie einen Namen für den Ton ein';
+
+  @override
+  String get soundAttached => 'Ton angehängt';
+
+  @override
+  String get noSoundAttached => 'Kein Ton angehängt';
+
+  @override
+  String get removeSound => 'Ton entfernen';
+
+  @override
+  String get autoCountWithSound =>
+      'Zähler automatisch mit Tonschleife weiterschalten';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Erhöht den Zähler automatisch jedes Mal, wenn die Audioschleife endet';
+
+  @override
+  String get attachSoundToExistingBead => 'An vorhandenes Tesbih anhängen';
+
+  @override
+  String get saveToSoundLibrary => 'In Tonbibliothek speichern';
+
+  @override
+  String get sharedAudioReceived => 'Geteilte Audiodatei empfangen';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Wählen Sie, wie Sie die geteilte Audiodatei verwenden möchten:';
+
+  @override
+  String get play => 'Abspielen';
+
+  @override
+  String get pause => 'Pause';
+
+  @override
+  String get soundSavedSuccess => 'Ton erfolgreich gespeichert';
+
+  @override
+  String get soundDeletedSuccess => 'Ton gelöscht';
+
+  @override
+  String get rename => 'Umbenennen';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Mikrofonberechtigung ist erforderlich, um Audio aufzunehmen.';
 }

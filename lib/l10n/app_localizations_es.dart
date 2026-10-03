@@ -1698,4 +1698,87 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Barra de estado';
+
+  @override
+  String get sound => 'Sonido';
+
+  @override
+  String get soundLibrary => 'Biblioteca de sonidos';
+
+  @override
+  String get noSoundsInLibrary =>
+      'Aún no hay sonidos guardados en la biblioteca.';
+
+  @override
+  String get recordSound => 'Grabar sonido';
+
+  @override
+  String get recording => 'Grabando...';
+
+  @override
+  String get startRecording => 'Iniciar grabación';
+
+  @override
+  String get stopRecording => 'Detener grabación';
+
+  @override
+  String get pickFromFiles => 'Elegir archivo de audio';
+
+  @override
+  String get pickFromLibrary => 'Elegir de la biblioteca';
+
+  @override
+  String get soundName => 'Nombre del sonido';
+
+  @override
+  String get soundNameHint => 'Introduce un nombre para el sonido';
+
+  @override
+  String get soundAttached => 'Sonido adjunto';
+
+  @override
+  String get noSoundAttached => 'Ningún sonido adjunto';
+
+  @override
+  String get removeSound => 'Eliminar sonido';
+
+  @override
+  String get autoCountWithSound =>
+      'Avanzar conteo automáticamente con el bucle de sonido';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Incrementa el contador automáticamente cada vez que finaliza el audio';
+
+  @override
+  String get attachSoundToExistingBead => 'Adjuntar a tasbih existente';
+
+  @override
+  String get saveToSoundLibrary => 'Guardar en la biblioteca de sonidos';
+
+  @override
+  String get sharedAudioReceived => 'Audio compartido recibido';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Elige cómo deseas utilizar el archivo de audio compartido:';
+
+  @override
+  String get play => 'Reproducir';
+
+  @override
+  String get pause => 'Pausar';
+
+  @override
+  String get soundSavedSuccess => 'Sonido guardado con éxito';
+
+  @override
+  String get soundDeletedSuccess => 'Sonido eliminado';
+
+  @override
+  String get rename => 'Renombrar';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Se requiere permiso de micrófono para grabar audio.';
 }

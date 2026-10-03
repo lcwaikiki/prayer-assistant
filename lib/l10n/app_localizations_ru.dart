@@ -1690,4 +1690,85 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Строка состояния';
+
+  @override
+  String get sound => 'Звук';
+
+  @override
+  String get soundLibrary => 'Библиотека звуков';
+
+  @override
+  String get noSoundsInLibrary => 'В библиотеке пока нет сохраненных звуков.';
+
+  @override
+  String get recordSound => 'Записать звук';
+
+  @override
+  String get recording => 'Запись...';
+
+  @override
+  String get startRecording => 'Начать запись';
+
+  @override
+  String get stopRecording => 'Остановить запись';
+
+  @override
+  String get pickFromFiles => 'Выбрать аудиофайл';
+
+  @override
+  String get pickFromLibrary => 'Выбрать из библиотеки';
+
+  @override
+  String get soundName => 'Название звука';
+
+  @override
+  String get soundNameHint => 'Введите название звука';
+
+  @override
+  String get soundAttached => 'Звук прикреплен';
+
+  @override
+  String get noSoundAttached => 'Звук не прикреплен';
+
+  @override
+  String get removeSound => 'Удалить звук';
+
+  @override
+  String get autoCountWithSound => 'Автоматический счет при окончании звука';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Автоматически увеличивать счетчик на 1 при каждом завершении аудио';
+
+  @override
+  String get attachSoundToExistingBead => 'Прикрепить к существующему тасбиху';
+
+  @override
+  String get saveToSoundLibrary => 'Сохранить в библиотеку звуков';
+
+  @override
+  String get sharedAudioReceived => 'Получено общее аудио';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Выберите, как вы хотите использовать полученный аудиофайл:';
+
+  @override
+  String get play => 'Воспроизвести';
+
+  @override
+  String get pause => 'Пауза';
+
+  @override
+  String get soundSavedSuccess => 'Звук успешно сохранен';
+
+  @override
+  String get soundDeletedSuccess => 'Звук удален';
+
+  @override
+  String get rename => 'Переименовать';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Для записи аудио требуется разрешение на использование микрофона.';
 }

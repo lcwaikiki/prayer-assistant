@@ -1712,4 +1712,87 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'நிலைப்பட்டி';
+
+  @override
+  String get sound => 'ஒலி';
+
+  @override
+  String get soundLibrary => 'ஒலி நூலகம்';
+
+  @override
+  String get noSoundsInLibrary =>
+      'நூலகத்தில் இன்னும் ஒலிகள் எதுவும் சேமிக்கப்படவில்லை.';
+
+  @override
+  String get recordSound => 'ஒலியைப் பதிவுசெய்க';
+
+  @override
+  String get recording => 'பதிவாகிறது...';
+
+  @override
+  String get startRecording => 'பதிவைத் தொடங்கு';
+
+  @override
+  String get stopRecording => 'பதிவை நிறுத்து';
+
+  @override
+  String get pickFromFiles => 'ஆடியோ கோப்பைத் தேர்ந்தெடுக்கவும்';
+
+  @override
+  String get pickFromLibrary => 'நூலகத்திலிருந்து தேர்வு செய்யவும்';
+
+  @override
+  String get soundName => 'ஒலி பெயர்';
+
+  @override
+  String get soundNameHint => 'ஒலியின் பெயரை உள்ளிடவும்';
+
+  @override
+  String get soundAttached => 'ஒலி இணைக்கப்பட்டது';
+
+  @override
+  String get noSoundAttached => 'ஒலி எதுவும் இணைக்கப்படவில்லை';
+
+  @override
+  String get removeSound => 'ஒலியை நீக்கு';
+
+  @override
+  String get autoCountWithSound =>
+      'ஒலி சுழற்சியில் தானியங்கி எண்ணிக்கையை அதிகரிக்கவும்';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'ஒவ்வொரு முறையும் ஆடியோ முடிவடையும் போது தானாக எண்ணிக்கையை 1 அதிகரிக்கும்';
+
+  @override
+  String get attachSoundToExistingBead => 'இருக்கும் தஸ்பீஹுடன் இணைக்கவும்';
+
+  @override
+  String get saveToSoundLibrary => 'ஒலி நூலகத்தில் சேமிக்கவும்';
+
+  @override
+  String get sharedAudioReceived => 'பகிரப்பட்ட ஆடியோ பெறப்பட்டது';
+
+  @override
+  String get sharedAudioPrompt =>
+      'பகிரப்பட்ட ஆடியோ கோப்பை எவ்வாறு பயன்படுத்த விரும்புகிறீர்கள் என்பதைத் தேர்ந்தெடுக்கவும்:';
+
+  @override
+  String get play => 'இயக்கு';
+
+  @override
+  String get pause => 'இடைநிறுத்து';
+
+  @override
+  String get soundSavedSuccess => 'ஒலி வெற்றிகரமாக சேமிக்கப்பட்டது';
+
+  @override
+  String get soundDeletedSuccess => 'ஒலி நீக்கப்பட்டது';
+
+  @override
+  String get rename => 'மறுபெயரிடு';
+
+  @override
+  String get microphonePermissionRequired =>
+      'ஆடியோ பதிவு செய்ய மைக்ரோஃபோன் அனுமதி தேவை.';
 }

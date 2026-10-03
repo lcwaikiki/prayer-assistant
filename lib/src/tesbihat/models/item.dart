@@ -45,6 +45,9 @@ class Item implements ReminderSchedulable {
     this.groupIds = const [],
     this.paceIntervals = const [],
     this.isTask = false,
+    this.soundId,
+    this.soundTitle,
+    this.autoCountWithSound = true,
   }) : assert(count > 0, 'count must be positive'),
        assert(check >= 0, 'check cannot be negative'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -70,6 +73,9 @@ class Item implements ReminderSchedulable {
   final List<int> paceIntervals;
   @override
   final bool isTask;
+  final String? soundId;
+  final String? soundTitle;
+  final bool autoCountWithSound;
 
   /// Recurrence for both anchors. Mirrors [ReminderRecurrence]: once,
   /// daily, weekly, monthly, yearly. For
@@ -161,6 +167,10 @@ class Item implements ReminderSchedulable {
     List<String>? groupIds,
     List<int>? paceIntervals,
     bool? isTask,
+    String? soundId,
+    String? soundTitle,
+    bool? autoCountWithSound,
+    bool clearSound = false,
   }) {
     return Item(
       id: id ?? this.id,
@@ -189,6 +199,9 @@ class Item implements ReminderSchedulable {
       groupIds: groupIds ?? this.groupIds,
       paceIntervals: paceIntervals ?? this.paceIntervals,
       isTask: isTask ?? this.isTask,
+      soundId: clearSound ? null : (soundId ?? this.soundId),
+      soundTitle: clearSound ? null : (soundTitle ?? this.soundTitle),
+      autoCountWithSound: autoCountWithSound ?? this.autoCountWithSound,
     );
   }
 
@@ -218,6 +231,9 @@ class Item implements ReminderSchedulable {
       'groupIds': groupIds.join(','),
       'paceIntervals': paceIntervals,
       'isTask': isTask,
+      'soundId': soundId,
+      'soundTitle': soundTitle,
+      'autoCountWithSound': autoCountWithSound,
     };
   }
 
@@ -312,6 +328,9 @@ class Item implements ReminderSchedulable {
       groupIds: groupIds,
       paceIntervals: paceIntervals,
       isTask: (map['isTask'] as bool?) ?? false,
+      soundId: map['soundId']?.toString(),
+      soundTitle: map['soundTitle']?.toString(),
+      autoCountWithSound: (map['autoCountWithSound'] as bool?) ?? true,
     );
   }
 

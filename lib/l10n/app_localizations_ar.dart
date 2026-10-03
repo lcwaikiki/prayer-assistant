@@ -1673,4 +1673,84 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'شريط الحالة';
+
+  @override
+  String get sound => 'الصوت';
+
+  @override
+  String get soundLibrary => 'مكتبة الأصوات';
+
+  @override
+  String get noSoundsInLibrary => 'لا توجد أصوات محفوظة في المكتبة بعد.';
+
+  @override
+  String get recordSound => 'تسجيل صوت';
+
+  @override
+  String get recording => 'جاري التسجيل...';
+
+  @override
+  String get startRecording => 'بدء التسجيل';
+
+  @override
+  String get stopRecording => 'إيقاف التسجيل';
+
+  @override
+  String get pickFromFiles => 'اختيار ملف صوتي';
+
+  @override
+  String get pickFromLibrary => 'اختيار من المكتبة';
+
+  @override
+  String get soundName => 'اسم الصوت';
+
+  @override
+  String get soundNameHint => 'أدخل اسمًا للصوت';
+
+  @override
+  String get soundAttached => 'تم إرفاق الصوت';
+
+  @override
+  String get noSoundAttached => 'لم يتم إرفاق صوت';
+
+  @override
+  String get removeSound => 'إزالة الصوت';
+
+  @override
+  String get autoCountWithSound => 'التقدم التلقائي مع تكرار الصوت';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'زيادة العداد تلقائيًا في كل مرة ينتهي فيها تشغيل الصوت';
+
+  @override
+  String get attachSoundToExistingBead => 'إرفاق بتسبيح موجود';
+
+  @override
+  String get saveToSoundLibrary => 'حفظ في مكتبة الأصوات';
+
+  @override
+  String get sharedAudioReceived => 'تم استلام ملف صوتي مشترك';
+
+  @override
+  String get sharedAudioPrompt => 'اختر كيف تريد استخدام الملف الصوتي المشترك:';
+
+  @override
+  String get play => 'تشغيل';
+
+  @override
+  String get pause => 'إيقاف مؤقت';
+
+  @override
+  String get soundSavedSuccess => 'تم حفظ الصوت بنجاح';
+
+  @override
+  String get soundDeletedSuccess => 'تم حذف الصوت';
+
+  @override
+  String get rename => 'إعادة تسمية';
+
+  @override
+  String get microphonePermissionRequired =>
+      'إذن الميكروفون مطلوب لتسجيل الصوت.';
 }

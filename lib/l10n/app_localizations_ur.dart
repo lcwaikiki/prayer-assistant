@@ -1677,4 +1677,86 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'اسٹیٹس بار';
+
+  @override
+  String get sound => 'آواز';
+
+  @override
+  String get soundLibrary => 'صوتی لائبریری';
+
+  @override
+  String get noSoundsInLibrary =>
+      'لائبریری میں ابھی تک کوئی آواز محفوظ نہیں ہے۔';
+
+  @override
+  String get recordSound => 'آواز ریکارڈ کریں';
+
+  @override
+  String get recording => 'ریکارڈنگ جاری ہے...';
+
+  @override
+  String get startRecording => 'ریکارڈنگ شروع کریں';
+
+  @override
+  String get stopRecording => 'ریکارڈنگ بند کریں';
+
+  @override
+  String get pickFromFiles => 'آڈیو فائل منتخب کریں';
+
+  @override
+  String get pickFromLibrary => 'لائبریری سے منتخب کریں';
+
+  @override
+  String get soundName => 'آواز کا نام';
+
+  @override
+  String get soundNameHint => 'آواز کا نام درج کریں';
+
+  @override
+  String get soundAttached => 'آواز منسلک ہے';
+
+  @override
+  String get noSoundAttached => 'کوئی آواز منسلک نہیں ہے';
+
+  @override
+  String get removeSound => 'آواز ہٹائیں';
+
+  @override
+  String get autoCountWithSound => 'آواز کے لوپ پر خودکار گنتی';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'ہر بار آڈیو مکمل ہونے پر خودکار طور پر گنتی میں 1 کا اضافہ کریں';
+
+  @override
+  String get attachSoundToExistingBead => 'موجودہ تسبیح کے ساتھ منسلک کریں';
+
+  @override
+  String get saveToSoundLibrary => 'صوتی لائبریری میں محفوظ کریں';
+
+  @override
+  String get sharedAudioReceived => 'شیئر کی گئی آڈیو موصول ہوئی';
+
+  @override
+  String get sharedAudioPrompt =>
+      'منتخب کریں کہ آپ شیئر کی گئی آڈیو فائل کو کیسے استعمال کرنا چاہتے ہیں:';
+
+  @override
+  String get play => 'چلائیں';
+
+  @override
+  String get pause => 'روکیں';
+
+  @override
+  String get soundSavedSuccess => 'آواز کامیابی سے محفوظ ہو گئی';
+
+  @override
+  String get soundDeletedSuccess => 'آواز حذف کر دی گئی';
+
+  @override
+  String get rename => 'نام تبدیل کریں';
+
+  @override
+  String get microphonePermissionRequired =>
+      'آڈیو ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔';
 }

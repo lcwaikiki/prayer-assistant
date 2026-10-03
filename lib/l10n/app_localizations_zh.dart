@@ -1625,4 +1625,82 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get statusBarTitle => '状态栏';
+
+  @override
+  String get sound => '声音';
+
+  @override
+  String get soundLibrary => '声音库';
+
+  @override
+  String get noSoundsInLibrary => '库中尚无保存的声音。';
+
+  @override
+  String get recordSound => '录制声音';
+
+  @override
+  String get recording => '录制中...';
+
+  @override
+  String get startRecording => '开始录制';
+
+  @override
+  String get stopRecording => '停止录制';
+
+  @override
+  String get pickFromFiles => '选择音频文件';
+
+  @override
+  String get pickFromLibrary => '从库中选择';
+
+  @override
+  String get soundName => '声音名称';
+
+  @override
+  String get soundNameHint => '输入声音名称';
+
+  @override
+  String get soundAttached => '已附加声音';
+
+  @override
+  String get noSoundAttached => '未附加声音';
+
+  @override
+  String get removeSound => '移除声音';
+
+  @override
+  String get autoCountWithSound => '随声音循环自动递增计数';
+
+  @override
+  String get autoCountWithSoundSubtitle => '每次音频播放结束时自动将计数加 1';
+
+  @override
+  String get attachSoundToExistingBead => '附加到现有念珠';
+
+  @override
+  String get saveToSoundLibrary => '保存到声音库';
+
+  @override
+  String get sharedAudioReceived => '已接收共享音频';
+
+  @override
+  String get sharedAudioPrompt => '请选择如何使用此共享音频文件：';
+
+  @override
+  String get play => '播放';
+
+  @override
+  String get pause => '暂停';
+
+  @override
+  String get soundSavedSuccess => '声音保存成功';
+
+  @override
+  String get soundDeletedSuccess => '声音已删除';
+
+  @override
+  String get rename => '重命名';
+
+  @override
+  String get microphonePermissionRequired => '录制音频需要麦克风权限。';
 }

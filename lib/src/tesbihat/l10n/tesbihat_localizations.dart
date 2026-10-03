@@ -150,6 +150,32 @@ class TesbihatLocalizations {
   String get execute => _appL10n.beadsExecute;
   String get search => _appL10n.search;
   String get noResults => _appL10n.noResults;
+  String get sound => _appL10n.sound;
+  String get soundLibrary => _appL10n.soundLibrary;
+  String get noSoundsInLibrary => _appL10n.noSoundsInLibrary;
+  String get recordSound => _appL10n.recordSound;
+  String get recording => _appL10n.recording;
+  String get startRecording => _appL10n.startRecording;
+  String get stopRecording => _appL10n.stopRecording;
+  String get pickFromFiles => _appL10n.pickFromFiles;
+  String get pickFromLibrary => _appL10n.pickFromLibrary;
+  String get soundName => _appL10n.soundName;
+  String get soundNameHint => _appL10n.soundNameHint;
+  String get soundAttached => _appL10n.soundAttached;
+  String get noSoundAttached => _appL10n.noSoundAttached;
+  String get removeSound => _appL10n.removeSound;
+  String get autoCountWithSound => _appL10n.autoCountWithSound;
+  String get autoCountWithSoundSubtitle => _appL10n.autoCountWithSoundSubtitle;
+  String get attachSoundToExistingBead => _appL10n.attachSoundToExistingBead;
+  String get saveToSoundLibrary => _appL10n.saveToSoundLibrary;
+  String get sharedAudioReceived => _appL10n.sharedAudioReceived;
+  String get sharedAudioPrompt => _appL10n.sharedAudioPrompt;
+  String get play => _appL10n.play;
+  String get pause => _appL10n.pause;
+  String get soundSavedSuccess => _appL10n.soundSavedSuccess;
+  String get soundDeletedSuccess => _appL10n.soundDeletedSuccess;
+  String get rename => _appL10n.rename;
+  String get microphonePermissionRequired => _appL10n.microphonePermissionRequired;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

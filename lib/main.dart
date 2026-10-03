@@ -23,10 +23,13 @@ import 'src/services/widget_bridge_service.dart';
 import 'src/supplications/services/wisdom_service.dart';
 import 'src/tesbihat/data/item_history_repository.dart';
 import 'src/tesbihat/data/item_repository.dart';
+import 'src/tesbihat/data/sound_library_repository.dart';
 import 'src/tesbihat/services/item_reminder_service.dart';
 import 'src/tesbihat/services/midnight_reminder_scheduler.dart';
+import 'src/tesbihat/services/shared_audio_handler.dart';
 import 'src/tesbihat/state/groups_notifier.dart';
 import 'src/tesbihat/state/items_notifier.dart';
+import 'src/tesbihat/state/sound_library_notifier.dart';
 import 'src/ui/app_shell.dart';
 
 Future<void> main() async {
@@ -82,6 +85,9 @@ Future<void> main() async {
   final container = ProviderContainer(
     overrides: [
       itemRepositoryProvider.overrideWithValue(ItemRepository.hive(itemsBox)),
+      soundLibraryRepositoryProvider.overrideWithValue(
+        SoundLibraryRepository.hive(itemsBox),
+      ),
       itemHistoryRepositoryProvider.overrideWithValue(
         ItemHistoryRepository.hive(itemHistoryBox),
       ),
@@ -92,6 +98,7 @@ Future<void> main() async {
     container.read(itemHistoryRepositoryProvider).reload();
     container.invalidate(itemsNotifierProvider);
     container.invalidate(groupsNotifierProvider);
+    container.invalidate(soundLibraryNotifierProvider);
   };
 
   runApp(
@@ -107,6 +114,7 @@ Future<void> main() async {
   // which screen opens.
   WidgetsBinding.instance.addPostFrameCallback((_) {
     handleAppLaunchFromNotification();
+    SharedAudioHandler.initialize(container);
   });
 }
 

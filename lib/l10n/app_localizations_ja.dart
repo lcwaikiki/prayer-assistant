@@ -1632,4 +1632,82 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'ステータスバー';
+
+  @override
+  String get sound => '音声';
+
+  @override
+  String get soundLibrary => '音声ライブラリ';
+
+  @override
+  String get noSoundsInLibrary => 'ライブラリに保存された音声はまだありません。';
+
+  @override
+  String get recordSound => '音声を録音';
+
+  @override
+  String get recording => '録音中...';
+
+  @override
+  String get startRecording => '録音開始';
+
+  @override
+  String get stopRecording => '録音停止';
+
+  @override
+  String get pickFromFiles => '音声ファイルを選択';
+
+  @override
+  String get pickFromLibrary => 'ライブラリから選択';
+
+  @override
+  String get soundName => '音声名';
+
+  @override
+  String get soundNameHint => '音声の名前を入力してください';
+
+  @override
+  String get soundAttached => '音声添付済み';
+
+  @override
+  String get noSoundAttached => '音声が添付されていません';
+
+  @override
+  String get removeSound => '音声を削除';
+
+  @override
+  String get autoCountWithSound => '音声ループに合わせて自動カウント';
+
+  @override
+  String get autoCountWithSoundSubtitle => '音声の再生が終了するたびにカウントを自動で1増やします';
+
+  @override
+  String get attachSoundToExistingBead => '既存のタスビフに添付';
+
+  @override
+  String get saveToSoundLibrary => '音声ライブラリに保存';
+
+  @override
+  String get sharedAudioReceived => '共有された音声を受信しました';
+
+  @override
+  String get sharedAudioPrompt => '共有された音声ファイルの使用方法を選択してください：';
+
+  @override
+  String get play => '再生';
+
+  @override
+  String get pause => '一時停止';
+
+  @override
+  String get soundSavedSuccess => '音声を保存しました';
+
+  @override
+  String get soundDeletedSuccess => '音声を削除しました';
+
+  @override
+  String get rename => '名前変更';
+
+  @override
+  String get microphonePermissionRequired => '音声を録音するにはマイクの許可が必要です。';
 }

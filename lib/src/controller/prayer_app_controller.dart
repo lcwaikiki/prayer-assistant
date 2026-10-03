@@ -28,9 +28,11 @@ import '../services/notification_service.dart';
 import '../services/widget_bridge_service.dart';
 import '../tesbihat/data/item_history_repository.dart';
 import '../tesbihat/data/item_repository.dart';
+import '../tesbihat/data/sound_library_repository.dart';
 import '../tesbihat/models/daily_item_stat.dart';
 import '../tesbihat/models/item.dart';
 import '../tesbihat/models/item_group.dart';
+import '../tesbihat/models/sound_item.dart';
 import '../utils/time_utils.dart';
 
 
@@ -1587,17 +1589,27 @@ class PrayerAppController extends ChangeNotifier {
     return ItemHistoryRepository.memory();
   }
 
+  SoundLibraryRepository get _defaultSoundRepo {
+    if (Hive.isBoxOpen('items_box')) {
+      return SoundLibraryRepository.hive(Hive.box<dynamic>('items_box'));
+    }
+    return SoundLibraryRepository.memory();
+  }
+
   /// Exports a comprehensive JSON backup string of all app data.
   Future<String> exportBackupJson({
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
+    SoundLibraryRepository? soundRepo,
   }) async {
     const service = BackupExportService();
     final repo = itemRepo ?? _defaultItemRepo;
     final hRepo = historyRepo ?? _defaultHistoryRepo;
+    final sRepo = soundRepo ?? _defaultSoundRepo;
     final items = repo.loadItems();
     final groups = repo.loadGroups();
     final stats = hRepo.loadStats();
+    final sounds = sRepo.loadSounds();
 
     final prefs = <String, dynamic>{
       'remindersSilenced': _remindersSilenced,
@@ -1644,6 +1656,7 @@ class PrayerAppController extends ChangeNotifier {
       tesbihItems: items,
       tesbihGroups: groups,
       tesbihStats: stats,
+      soundLibrary: sounds,
       preferences: prefs,
       fastingLogs: _fastingLogs,
     );
@@ -1653,7 +1666,8 @@ class PrayerAppController extends ChangeNotifier {
   /// install and offer a Google Drive restore on first launch.
   bool hasLocalData() {
     if (_defaultItemRepo.loadItems().isNotEmpty ||
-        _defaultItemRepo.loadGroups().isNotEmpty) {
+        _defaultItemRepo.loadGroups().isNotEmpty ||
+        _defaultSoundRepo.loadSounds().isNotEmpty) {
       return true;
     }
     if (_prayerCompletions.isNotEmpty ||
@@ -1671,10 +1685,12 @@ class PrayerAppController extends ChangeNotifier {
     bool restorePreferences = true,
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
+    SoundLibraryRepository? soundRepo,
   }) async {
     const service = BackupExportService();
     final repo = itemRepo ?? _defaultItemRepo;
     final hRepo = historyRepo ?? _defaultHistoryRepo;
+    final sRepo = soundRepo ?? _defaultSoundRepo;
     final parsed = service.parseAndValidateBackup(jsonString);
 
     if (restoreData) {
@@ -1686,6 +1702,7 @@ class PrayerAppController extends ChangeNotifier {
       final restoredItems = parsed['tesbihItems'] as List<Item>;
       final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
       final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
+      final restoredSounds = parsed['soundLibrary'] as List<SoundItem>? ?? [];
       final restoredFastingLogs =
           parsed['fastingLogs'] as Map<String, FastingLog>? ?? {};
 
@@ -1731,6 +1748,9 @@ class PrayerAppController extends ChangeNotifier {
       }
       if (restoredStats.isNotEmpty) {
         hRepo.saveStats(restoredStats);
+      }
+      if (restoredSounds.isNotEmpty) {
+        sRepo.saveSounds(restoredSounds);
       }
     }
 

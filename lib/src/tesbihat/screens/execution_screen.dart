@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,15 +8,22 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../navigation.dart';
 import '../l10n/tesbihat_localizations.dart';
+import '../services/audio_player_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tap_pace_tracker.dart';
 import '../state/items_notifier.dart';
+import '../state/sound_library_notifier.dart';
 import 'item_form_screen.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
-  const ExecutionScreen({super.key, required this.itemId});
+  const ExecutionScreen({
+    super.key,
+    required this.itemId,
+    this.audioPlayerService,
+  });
 
   final String itemId;
+  final AudioPlayerService? audioPlayerService;
 
   @override
   ConsumerState<ExecutionScreen> createState() => _ExecutionScreenState();
@@ -23,6 +31,11 @@ class ExecutionScreen extends ConsumerStatefulWidget {
 
 class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     with WidgetsBindingObserver {
+  late final AudioPlayerService _audioPlayer;
+  StreamSubscription<void>? _playerCompleteSub;
+  bool _isAudioPlaying = false;
+  int _soundLoopCount = 0;
+
   void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
       // Ignore platform channel errors in unsupported environments.
@@ -42,6 +55,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     WidgetsBinding.instance.addObserver(this);
     _setWakelock(true);
     _lockOrientation();
+    _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
+    _playerCompleteSub = _audioPlayer.onPlayerComplete.listen((_) => _onSoundComplete());
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _lockOrientation();
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
@@ -55,6 +71,94 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     });
   }
 
+  Future<void> _playCurrentSound() async {
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item == null || item.soundId == null) return;
+
+    final sound = ref
+        .read(soundLibraryNotifierProvider.notifier)
+        .getSoundById(item.soundId);
+    if (sound != null) {
+      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+    }
+  }
+
+  Future<void> _toggleAudioPlayback() async {
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item == null || item.soundId == null) return;
+
+    if (_isAudioPlaying) {
+      await _audioPlayer.pause();
+      setState(() => _isAudioPlaying = false);
+    } else {
+      if (item.currentProgress >= item.count) {
+        return;
+      }
+      setState(() {
+        _isAudioPlaying = true;
+        _soundLoopCount = 0;
+      });
+      await _playCurrentSound();
+    }
+  }
+
+  Future<void> _onSoundComplete() async {
+    if (!_isAudioPlaying || !mounted) return;
+    final currentItem = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (currentItem == null) return;
+
+    if (currentItem.autoCountWithSound) {
+      if (currentItem.currentProgress < currentItem.count) {
+        ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
+        final feedback = ref
+            .read(itemsNotifierProvider.notifier)
+            .incrementProgress(widget.itemId);
+        final haptic = ref.read(hapticServiceProvider);
+        if (feedback == TapFeedback.standard) {
+          await haptic.standard(intensity: currentItem.vibrationIntensity);
+        } else if (feedback == TapFeedback.checkpoint) {
+          await haptic.checkpoint(intensity: currentItem.vibrationIntensity);
+        }
+
+        final updatedItem = ref
+            .read(itemsNotifierProvider)
+            .where((element) => element.id == widget.itemId)
+            .firstOrNull;
+        if (updatedItem != null &&
+            updatedItem.currentProgress < updatedItem.count &&
+            _isAudioPlaying) {
+          await _playCurrentSound();
+        } else {
+          if (mounted) setState(() => _isAudioPlaying = false);
+        }
+      } else {
+        if (mounted) setState(() => _isAudioPlaying = false);
+      }
+    } else {
+      _soundLoopCount++;
+      final remainingNeeded = currentItem.count - currentItem.currentProgress;
+      if (_soundLoopCount < remainingNeeded && _isAudioPlaying) {
+        await _playCurrentSound();
+      } else {
+        if (mounted) {
+          setState(() {
+            _isAudioPlaying = false;
+            _soundLoopCount = 0;
+          });
+        }
+      }
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -62,6 +166,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+      if (_isAudioPlaying) {
+        _audioPlayer.pause();
+        setState(() => _isAudioPlaying = false);
+      }
     }
   }
 
@@ -69,6 +177,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _setWakelock(false);
+    _playerCompleteSub?.cancel();
+    _audioPlayer.stop();
+    _audioPlayer.dispose();
     try {
       final context = rootNavigatorKey.currentContext;
       final controller = context?.read<PrayerAppController>();
@@ -116,6 +227,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     Future<void> handleTap() async {
       ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
 
+      if (item.currentProgress + 1 >= item.count && _isAudioPlaying) {
+        await _audioPlayer.stop();
+        setState(() => _isAudioPlaying = false);
+      }
+
       final feedback = ref
           .read(itemsNotifierProvider.notifier)
           .incrementProgress(widget.itemId);
@@ -152,6 +268,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       );
 
       if (shouldReset == true) {
+        if (_isAudioPlaying) {
+          await _audioPlayer.stop();
+          setState(() => _isAudioPlaying = false);
+        }
         ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
@@ -245,6 +365,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       );
 
       if (result != null) {
+        if (_isAudioPlaying) {
+          await _audioPlayer.stop();
+          setState(() => _isAudioPlaying = false);
+        }
         ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
         final error = ref
             .read(itemsNotifierProvider.notifier)
@@ -339,7 +463,53 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
             ),
-            const SizedBox(height: 20),
+            if (item.soundId != null) ...[
+              const SizedBox(height: 12),
+              Card(
+                margin: EdgeInsets.zero,
+                color: _isAudioPlaying
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : null,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      IconButton.filled(
+                        key: const Key('audio_playback_button'),
+                        icon: Icon(_isAudioPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow),
+                        onPressed: item.currentProgress >= item.count
+                            ? null
+                            : _toggleAudioPlayback,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.soundTitle ?? l10n.sound,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              '${l10n.maxMinusCount}: $maxMinusCount',
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+            const SizedBox(height: 16),
             Expanded(
               child: SizedBox.expand(
                 child: OutlinedButton(

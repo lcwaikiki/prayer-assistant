@@ -1691,4 +1691,85 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Bilah status';
+
+  @override
+  String get sound => 'Suara';
+
+  @override
+  String get soundLibrary => 'Pustaka Suara';
+
+  @override
+  String get noSoundsInLibrary => 'Belum ada suara yang tersimpan di pustaka.';
+
+  @override
+  String get recordSound => 'Rekam Suara';
+
+  @override
+  String get recording => 'Merekam...';
+
+  @override
+  String get startRecording => 'Mulai Merekam';
+
+  @override
+  String get stopRecording => 'Berhenti Merekam';
+
+  @override
+  String get pickFromFiles => 'Pilih File Audio';
+
+  @override
+  String get pickFromLibrary => 'Pilih dari Pustaka';
+
+  @override
+  String get soundName => 'Nama Suara';
+
+  @override
+  String get soundNameHint => 'Masukkan nama untuk suara';
+
+  @override
+  String get soundAttached => 'Suara Terlampir';
+
+  @override
+  String get noSoundAttached => 'Tidak ada suara yang dilampirkan';
+
+  @override
+  String get removeSound => 'Hapus Suara';
+
+  @override
+  String get autoCountWithSound => 'Hitung otomatis pada perulangan suara';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Secara otomatis menambah hitungan setiap kali audio selesai diputar';
+
+  @override
+  String get attachSoundToExistingBead => 'Lampirkan ke Tasbih yang Ada';
+
+  @override
+  String get saveToSoundLibrary => 'Simpan ke Pustaka Suara';
+
+  @override
+  String get sharedAudioReceived => 'Audio Berbagi Diterima';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Pilih cara Anda ingin menggunakan file audio yang dibagikan:';
+
+  @override
+  String get play => 'Putar';
+
+  @override
+  String get pause => 'Jeda';
+
+  @override
+  String get soundSavedSuccess => 'Suara berhasil disimpan';
+
+  @override
+  String get soundDeletedSuccess => 'Suara dihapus';
+
+  @override
+  String get rename => 'Ganti Nama';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Izin mikrofon diperlukan untuk merekam audio.';
 }

@@ -1681,4 +1681,85 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get statusBarTitle => 'Durum çubuğu';
+
+  @override
+  String get sound => 'Ses';
+
+  @override
+  String get soundLibrary => 'Ses Kitaplığı';
+
+  @override
+  String get noSoundsInLibrary => 'Kitaplıkta henüz kayıtlı ses yok.';
+
+  @override
+  String get recordSound => 'Ses Kaydet';
+
+  @override
+  String get recording => 'Kaydediliyor...';
+
+  @override
+  String get startRecording => 'Kaydı Başlat';
+
+  @override
+  String get stopRecording => 'Kaydı Durdur';
+
+  @override
+  String get pickFromFiles => 'Ses Dosyası Seç';
+
+  @override
+  String get pickFromLibrary => 'Kitaplıktan Seç';
+
+  @override
+  String get soundName => 'Ses Adı';
+
+  @override
+  String get soundNameHint => 'Ses için bir ad girin';
+
+  @override
+  String get soundAttached => 'Ses Eklendi';
+
+  @override
+  String get noSoundAttached => 'Ses eklenmedi';
+
+  @override
+  String get removeSound => 'Sesi Kaldır';
+
+  @override
+  String get autoCountWithSound => 'Ses döngüsünde sayacı otomatik ilerlet';
+
+  @override
+  String get autoCountWithSoundSubtitle =>
+      'Ses her bittiğinde sayacı otomatik olarak 1 artırır';
+
+  @override
+  String get attachSoundToExistingBead => 'Mevcut Tesbihe Ekle';
+
+  @override
+  String get saveToSoundLibrary => 'Ses Kitaplığına Kaydet';
+
+  @override
+  String get sharedAudioReceived => 'Paylaşılan Ses Alındı';
+
+  @override
+  String get sharedAudioPrompt =>
+      'Paylaşılan ses dosyasını nasıl kullanmak istersiniz:';
+
+  @override
+  String get play => 'Oynat';
+
+  @override
+  String get pause => 'Duraklat';
+
+  @override
+  String get soundSavedSuccess => 'Ses başarıyla kaydedildi';
+
+  @override
+  String get soundDeletedSuccess => 'Ses silindi';
+
+  @override
+  String get rename => 'Yeniden Adlandır';
+
+  @override
+  String get microphonePermissionRequired =>
+      'Ses kaydetmek için mikrofon izni gereklidir.';
 }

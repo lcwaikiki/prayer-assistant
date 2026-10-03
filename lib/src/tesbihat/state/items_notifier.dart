@@ -62,6 +62,9 @@ class ItemsNotifier extends Notifier<List<Item>> {
     DateTime? reminderYearlyDate,
     List<String> groupIds = const [],
     bool isTask = false,
+    String? soundId,
+    String? soundTitle,
+    bool autoCountWithSound = true,
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -87,6 +90,9 @@ class ItemsNotifier extends Notifier<List<Item>> {
       reminderYearlyDate: reminderYearlyDate,
       groupIds: groupIds,
       isTask: isTask,
+      soundId: soundId,
+      soundTitle: soundTitle,
+      autoCountWithSound: autoCountWithSound,
     );
     state = [...state, newItem];
     _repository.saveItems(state);
@@ -352,7 +358,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     final nextState = [...state];
     nextState[index] = item.copyWith(
       currentProgress: 0,
-      paceIntervals: item.paceIntervals,
+      paceIntervals: const [],
     );
     state = nextState;
     _repository.saveItems(state);
@@ -369,7 +375,8 @@ class ItemsNotifier extends Notifier<List<Item>> {
     final nextState = [...state];
     nextState[index] = item.copyWith(
       currentProgress: safeProgress,
-      paceIntervals: item.paceIntervals,
+      paceIntervals:
+          safeProgress == item.currentProgress ? item.paceIntervals : const [],
     );
     state = nextState;
     _repository.saveItems(state);

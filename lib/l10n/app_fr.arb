@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "Son supprimé",
   "rename": "Renommer",
   "microphonePermissionRequired": "L'autorisation du microphone est requise pour enregistrer de l'audio.",
-  "playbackSpeed": "Vitesse de lecture"
+  "playbackSpeed": "Vitesse de lecture",
+  "silentModeTitle": "Mettre l'appareil en silencieux pendant la prière",
+  "silentModeSubtitle": "Passe automatiquement l'appareil en vibration seule pendant la prière.",
+  "silentModeChip": "Silencieux (vibration seule)",
+  "enableSilentModeToSelectDuration": "Activez le mode silencieux pour choisir la durée.",
+  "dndPermissionDialogTitle": "Accès Ne pas déranger",
+  "dndPermissionDialogMessage": "Pour couper automatiquement la sonnerie pendant la prière, veuillez autoriser l'accès à Ne pas déranger dans les paramètres système.",
+  "dndPermissionOpenSettings": "Ouvrir les paramètres"
 }

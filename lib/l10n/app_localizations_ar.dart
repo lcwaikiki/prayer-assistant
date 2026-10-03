@@ -1759,4 +1759,28 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'سرعة التشغيل';
+
+  @override
+  String get silentModeTitle => 'كتم صوت الجهاز أثناء وقت الصلاة';
+
+  @override
+  String get silentModeSubtitle =>
+      'تحويل الجهاز تلقائيًا إلى وضع الاهتزاز فقط أثناء وقت الصلاة.';
+
+  @override
+  String get silentModeChip => 'صامت (اهتزاز فقط)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'قم بتمكين الوضع الصامت لاختيار المدة.';
+
+  @override
+  String get dndPermissionDialogTitle => 'إذن عدم الإزعاج';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'لكتم صوت الرنين تلقائيًا أثناء وقت الصلاة، يرجى السماح بالوصول إلى وضع عدم الإزعاج في إعدادات النظام.';
+
+  @override
+  String get dndPermissionOpenSettings => 'فتح الإعدادات';
 }

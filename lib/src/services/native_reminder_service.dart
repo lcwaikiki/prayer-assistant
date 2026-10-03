@@ -82,6 +82,52 @@ class NativeReminderService {
     } catch (_) {}
   }
 
+  static Future<void> scheduleSilentMode({
+    required int id,
+    required DateTime triggerAt,
+    required int durationMinutes,
+  }) async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('scheduleSilentMode', {
+        'id': id,
+        'triggerAtMillis': triggerAt.millisecondsSinceEpoch,
+        'durationMinutes': durationMinutes,
+      });
+    } catch (_) {}
+  }
+
+  static Future<void> cancelSilentMode(int id) async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('cancelSilentMode', {'id': id});
+    } catch (_) {}
+  }
+
+  static Future<void> cancelAllSilentMode() async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('cancelAllSilentMode');
+    } catch (_) {}
+  }
+
+  static Future<bool> hasDndPermission() async {
+    if (!isAndroid) return true;
+    try {
+      final res = await _channel.invokeMethod<bool>('hasDndPermission');
+      return res ?? true;
+    } catch (_) {
+      return true;
+    }
+  }
+
+  static Future<void> openDndSettings() async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('openDndSettings');
+    } catch (_) {}
+  }
+
   static Future<void> updateDismissConfirm(bool enabled) async {
     if (!isAndroid) return;
     try {

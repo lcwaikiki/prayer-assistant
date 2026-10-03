@@ -797,19 +797,42 @@ void main() {
       ).called(2);
     });
 
-    test('updateReminderSetting skips notification sync for minute-only edits',
+    test('updateReminderSetting updates silentMode and silentDuration and resyncs',
         () async {
+      when(() => database.loadSelectedLocation()).thenAnswer(
+        (_) async => sampleSelectedLocation(),
+      );
+      final day = samplePrayerDay();
+      when(
+        () => database.getDay(
+          districtId: any(named: 'districtId'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => day);
+      when(
+        () => database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        ),
+      ).thenAnswer((_) async => [day]);
       when(
         () => database.saveReminderSettings(any()),
       ).thenAnswer((_) async {});
       final controller = buildController();
+      await controller.initialize();
 
       await controller.updateReminderSetting(
         prayer: 'Imsak',
-        customMinutesBefore: 25,
+        silentMode: true,
+        silentDuration: 20,
       );
 
-      verifyNever(
+      expect(controller.reminderFor('Imsak').silentMode, isTrue);
+      expect(controller.reminderFor('Imsak').silentDuration, 20);
+      verify(() => database.saveReminderSettings(any())).called(1);
+      // Once from initialize(), once from updateReminderSetting.
+      verify(
         () => notificationService.reschedulePrayerNotifications(
           days: any(named: 'days'),
           reminderSettings: any(named: 'reminderSettings'),
@@ -819,7 +842,7 @@ void main() {
           soundEnabled: any(named: 'soundEnabled'),
           locale: any(named: 'locale'),
         ),
-      );
+      ).called(2);
     });
   });
 

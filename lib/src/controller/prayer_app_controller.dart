@@ -951,6 +951,8 @@ class PrayerAppController extends ChangeNotifier {
     bool? vibrationEnabled,
     bool? soundEnabled,
     bool? adhanEnabled,
+    bool? silentMode,
+    int? silentDuration,
   }) async {
     final updated = Map<String, ReminderSetting>.from(_reminderSettings);
     final current = reminderFor(prayer);
@@ -965,6 +967,8 @@ class PrayerAppController extends ChangeNotifier {
       vibrationEnabled: vibrationEnabled,
       soundEnabled: soundEnabled,
       adhanEnabled: adhanEnabled,
+      silentMode: silentMode,
+      silentDuration: silentDuration,
     );
     updated[prayer] = next;
     _reminderSettings = updated;
@@ -978,7 +982,9 @@ class PrayerAppController extends ChangeNotifier {
         notifyAfter != null ||
         vibrationEnabled != null ||
         soundEnabled != null ||
-        adhanEnabled != null;
+        adhanEnabled != null ||
+        silentMode != null ||
+        silentDuration != null;
     if (!shouldSyncNotifications) {
       return;
     }

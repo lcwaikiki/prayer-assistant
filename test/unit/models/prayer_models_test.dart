@@ -184,6 +184,8 @@ void main() {
       expect(setting.notifyAfter, isFalse);
       expect(setting.vibrationEnabled, isTrue);
       expect(setting.soundEnabled, isTrue);
+      expect(setting.silentMode, isFalse);
+      expect(setting.silentDuration, 15);
     });
 
     test('toJson/fromJson round-trips every field', () {
@@ -198,8 +200,9 @@ void main() {
         vibrationEnabled: false,
         soundEnabled: true,
         adhanEnabled: false,
+        silentMode: true,
+        silentDuration: 20,
       );
-
 
       final restored = ReminderSetting.fromJson(setting.toJson());
 
@@ -212,6 +215,8 @@ void main() {
       expect(restored.notifyAfter, isTrue);
       expect(restored.vibrationEnabled, isFalse);
       expect(restored.soundEnabled, isTrue);
+      expect(restored.silentMode, isTrue);
+      expect(restored.silentDuration, 20);
     });
 
     test('fromJson(bool) maps the legacy enabled flag to notifyBefore', () {
@@ -222,6 +227,8 @@ void main() {
       expect(setting.notifyAfter, isFalse);
       expect(setting.minutesBefore, 10);
       expect(setting.vibrationEnabled, isTrue);
+      expect(setting.silentMode, isFalse);
+      expect(setting.silentDuration, 15);
     });
 
     test('fromJson(bool false) maps to all-off', () {
@@ -273,6 +280,8 @@ void main() {
       expect(setting.customMinutesBefore, 10);
       expect(setting.minutesAfter, 10);
       expect(setting.customMinutesAfter, 10);
+      expect(setting.silentMode, isFalse);
+      expect(setting.silentDuration, 15);
     });
 
     test('fromJson on non-map/non-bool input returns defaults', () {
@@ -283,12 +292,19 @@ void main() {
 
     test('copyWith overrides only the provided fields', () {
       final base = ReminderSetting.defaults();
-      final updated = base.copyWith(minutesBefore: 25, notifyAfter: true);
+      final updated = base.copyWith(
+        minutesBefore: 25,
+        notifyAfter: true,
+        silentMode: true,
+        silentDuration: 30,
+      );
 
       expect(updated.minutesBefore, 25);
       expect(updated.notifyAfter, isTrue);
       expect(updated.minutesAfter, 10);
       expect(updated.notifyOnTime, isFalse);
+      expect(updated.silentMode, isTrue);
+      expect(updated.silentDuration, 30);
     });
 
     test('ensureCurrent preserves all current fields', () {
@@ -303,8 +319,9 @@ void main() {
         vibrationEnabled: false,
         soundEnabled: true,
         adhanEnabled: false,
+        silentMode: true,
+        silentDuration: 30,
       );
-
 
       final current = ReminderSetting.ensureCurrent(base);
 
@@ -314,6 +331,8 @@ void main() {
       expect(current.vibrationEnabled, isFalse);
       expect(current.soundEnabled, isTrue);
       expect(current.minutesBefore, 15);
+      expect(current.silentMode, isTrue);
+      expect(current.silentDuration, 30);
     });
   });
 }

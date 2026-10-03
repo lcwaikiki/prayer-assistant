@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "Sonido eliminado",
   "rename": "Renombrar",
   "microphonePermissionRequired": "Se requiere permiso de micrófono para grabar audio.",
-  "playbackSpeed": "Velocidad de reproducción"
+  "playbackSpeed": "Velocidad de reproducción",
+  "silentModeTitle": "Silenciar dispositivo durante la oración",
+  "silentModeSubtitle": "Cambia automáticamente el dispositivo a solo vibración durante la oración.",
+  "silentModeChip": "Silencio (solo vibración)",
+  "enableSilentModeToSelectDuration": "Habilite el modo silencioso para seleccionar la duración.",
+  "dndPermissionDialogTitle": "Acceso a No molestar",
+  "dndPermissionDialogMessage": "Para silenciar automáticamente el timbre durante la oración, permita el acceso a No molestar en la configuración del sistema.",
+  "dndPermissionOpenSettings": "Abrir configuración"
 }

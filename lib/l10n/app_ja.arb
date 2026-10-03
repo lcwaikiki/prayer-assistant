@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "音声を削除しました",
   "rename": "名前変更",
   "microphonePermissionRequired": "音声を録音するにはマイクの許可が必要です。",
-  "playbackSpeed": "再生速度"
+  "playbackSpeed": "再生速度",
+  "silentModeTitle": "礼拝中に端末をサイレントにする",
+  "silentModeSubtitle": "礼拝時間中は自動的にバイブレーションのみに切り替えます。",
+  "silentModeChip": "サイレント (バイブのみ)",
+  "enableSilentModeToSelectDuration": "期間を選択するにはサイレントモードを有効にしてください。",
+  "dndPermissionDialogTitle": "サイレントモードへのアクセス",
+  "dndPermissionDialogMessage": "礼拝中に自動的に着信音を消音するには、システム設定で「サイレントモードへのアクセス」を許可してください。",
+  "dndPermissionOpenSettings": "設定を開く"
 }

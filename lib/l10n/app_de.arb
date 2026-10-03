@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "Ton gelöscht",
   "rename": "Umbenennen",
   "microphonePermissionRequired": "Mikrofonberechtigung ist erforderlich, um Audio aufzunehmen.",
-  "playbackSpeed": "Wiedergabegeschwindigkeit"
+  "playbackSpeed": "Wiedergabegeschwindigkeit",
+  "silentModeTitle": "Gerät während der Gebetszeit stummschalten",
+  "silentModeSubtitle": "Schaltet das Gerät während der Gebetszeit automatisch auf nur Vibration.",
+  "silentModeChip": "Lautlos (nur Vibration)",
+  "enableSilentModeToSelectDuration": "Lautlosmodus aktivieren, um Dauer auszuwählen.",
+  "dndPermissionDialogTitle": "Bitte nicht stören-Zugriff",
+  "dndPermissionDialogMessage": "Um den Klingelton während der Gebetszeit automatisch stummzuschalten, gewähren Sie bitte in den Systemeinstellungen Zugriff auf 'Bitte nicht stören'.",
+  "dndPermissionOpenSettings": "Einstellungen öffnen"
 }

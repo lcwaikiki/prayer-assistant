@@ -165,6 +165,7 @@ class NotificationService {
       await _plugin.cancel(id: id);
       await NativeReminderService.cancel(id);
     }
+    await NativeReminderService.cancelAllSilentMode();
   }
 
   Future<List<ScheduledReminderEntry>> getPendingScheduledReminders() async {
@@ -326,6 +327,8 @@ class NotificationService {
     final endDay = startDay.add(const Duration(days: 1));
     final notifications = <_ReminderNotification>[];
 
+    var silentScheduleId = 1;
+
     for (final day in days) {
       final safeDay = DateTime(day.date.year, day.date.month, day.date.day);
       final isTodayDay =
@@ -341,7 +344,8 @@ class NotificationService {
             reminderSettings[prayerName] ?? ReminderSetting.defaults();
         if (!setting.notifyOnTime &&
             !setting.notifyBefore &&
-            !setting.notifyAfter) {
+            !setting.notifyAfter &&
+            !setting.silentMode) {
           continue;
         }
         final prayerTime = parsePrayerTime(
@@ -350,6 +354,33 @@ class NotificationService {
         );
         if (prayerTime == null) {
           continue;
+        }
+
+        final isFajr = prayerName.toLowerCase() == 'imsak' ||
+            prayerName.toLowerCase() == 'fajr';
+        if (!isFajr && setting.silentMode && setting.silentDuration > 0) {
+          if (prayerTime.isAfter(now)) {
+            await NativeReminderService.scheduleSilentMode(
+              id: silentScheduleId++,
+              triggerAt: prayerTime,
+              durationMinutes: setting.silentDuration,
+            );
+          } else if (isTodayDay &&
+              now.isBefore(
+                prayerTime.add(Duration(minutes: setting.silentDuration)),
+              )) {
+            final remainingMinutes = prayerTime
+                .add(Duration(minutes: setting.silentDuration))
+                .difference(now)
+                .inMinutes;
+            if (remainingMinutes > 0) {
+              await NativeReminderService.scheduleSilentMode(
+                id: silentScheduleId++,
+                triggerAt: now,
+                durationMinutes: remainingMinutes,
+              );
+            }
+          }
         }
 
         final displayName = prayerNameLabel(prayerName);

@@ -3355,6 +3355,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Playback Speed'**
   String get playbackSpeed;
+
+  /// No description provided for @silentModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent device during prayer'**
+  String get silentModeTitle;
+
+  /// No description provided for @silentModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically switch device to vibrate only during prayer time.'**
+  String get silentModeSubtitle;
+
+  /// No description provided for @silentModeChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Silent (vibrate only)'**
+  String get silentModeChip;
+
+  /// No description provided for @enableSilentModeToSelectDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable silent mode to select duration.'**
+  String get enableSilentModeToSelectDuration;
+
+  /// No description provided for @dndPermissionDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Do Not Disturb Access'**
+  String get dndPermissionDialogTitle;
+
+  /// No description provided for @dndPermissionDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'To automatically silence the ringer during prayer time, please allow Do Not Disturb access in system settings.'**
+  String get dndPermissionDialogMessage;
+
+  /// No description provided for @dndPermissionOpenSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get dndPermissionOpenSettings;
 }
 
 class _AppLocalizationsDelegate

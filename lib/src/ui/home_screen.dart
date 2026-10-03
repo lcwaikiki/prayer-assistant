@@ -429,8 +429,13 @@ class _CompactPrayerRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isFajr =
+        name.toLowerCase() == 'imsak' || name.toLowerCase() == 'fajr';
     final hasReminder =
-        reminderSetting.notifyOnTime || reminderSetting.notifyBefore;
+        reminderSetting.notifyOnTime ||
+        reminderSetting.notifyBefore ||
+        reminderSetting.notifyAfter ||
+        (!isFajr && reminderSetting.silentMode);
     String statusText;
     if (reminderSetting.notifyOnTime && reminderSetting.notifyBefore) {
       statusText = context.l10n.reminderOnTimeAndBefore(

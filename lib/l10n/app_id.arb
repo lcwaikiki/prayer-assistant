@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "Suara dihapus",
   "rename": "Ganti Nama",
   "microphonePermissionRequired": "Izin mikrofon diperlukan untuk merekam audio.",
-  "playbackSpeed": "Kecepatan Pemutaran"
+  "playbackSpeed": "Kecepatan Pemutaran",
+  "silentModeTitle": "Heningkan perangkat saat waktu shalat",
+  "silentModeSubtitle": "Mengalihkan perangkat ke getar saja secara otomatis saat waktu shalat.",
+  "silentModeChip": "Hening (getar saja)",
+  "enableSilentModeToSelectDuration": "Aktifkan mode hening untuk memilih durasi.",
+  "dndPermissionDialogTitle": "Akses Jangan Ganggu",
+  "dndPermissionDialogMessage": "Untuk membungkam nada dering secara otomatis selama waktu shalat, izinkan akses Jangan Ganggu di pengaturan sistem.",
+  "dndPermissionOpenSettings": "Buka Pengaturan"
 }

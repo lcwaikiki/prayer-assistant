@@ -1782,4 +1782,28 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Wiedergabegeschwindigkeit';
+
+  @override
+  String get silentModeTitle => 'Gerät während der Gebetszeit stummschalten';
+
+  @override
+  String get silentModeSubtitle =>
+      'Schaltet das Gerät während der Gebetszeit automatisch auf nur Vibration.';
+
+  @override
+  String get silentModeChip => 'Lautlos (nur Vibration)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Lautlosmodus aktivieren, um Dauer auszuwählen.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Bitte nicht stören-Zugriff';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Um den Klingelton während der Gebetszeit automatisch stummzuschalten, gewähren Sie bitte in den Systemeinstellungen Zugriff auf \'Bitte nicht stören\'.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Einstellungen öffnen';
 }

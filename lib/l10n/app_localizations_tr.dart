@@ -1768,4 +1768,28 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Oynatma Hızı';
+
+  @override
+  String get silentModeTitle => 'Namaz vaktinde cihazı sessize al';
+
+  @override
+  String get silentModeSubtitle =>
+      'Namaz vaktinde cihazı otomatik olarak yalnızca titreşim moduna alır.';
+
+  @override
+  String get silentModeChip => 'Sessiz (yalnızca titreşim)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Süre seçmek için sessiz modu etkinleştirin.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Rahatsız Etmeyin Erişimi';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Namaz vaktinde cihazı otomatik sessize alabilmek için lütfen sistem ayarlarından Rahatsız Etmeyin erişimine izin verin.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Ayarları Aç';
 }

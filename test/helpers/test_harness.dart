@@ -175,6 +175,9 @@ class TestHarness {
       () => database.loadReminderSettings(),
     ).thenAnswer((_) async => const {});
     when(
+      () => database.saveReminderSettings(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadStatusBarRemainingEnabled(),
     ).thenAnswer((_) async => null);
     when(

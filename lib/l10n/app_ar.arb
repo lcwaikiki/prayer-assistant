@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "تم حذف الصوت",
   "rename": "إعادة تسمية",
   "microphonePermissionRequired": "إذن الميكروفون مطلوب لتسجيل الصوت.",
-  "playbackSpeed": "سرعة التشغيل"
+  "playbackSpeed": "سرعة التشغيل",
+  "silentModeTitle": "كتم صوت الجهاز أثناء وقت الصلاة",
+  "silentModeSubtitle": "تحويل الجهاز تلقائيًا إلى وضع الاهتزاز فقط أثناء وقت الصلاة.",
+  "silentModeChip": "صامت (اهتزاز فقط)",
+  "enableSilentModeToSelectDuration": "قم بتمكين الوضع الصامت لاختيار المدة.",
+  "dndPermissionDialogTitle": "إذن عدم الإزعاج",
+  "dndPermissionDialogMessage": "لكتم صوت الرنين تلقائيًا أثناء وقت الصلاة، يرجى السماح بالوصول إلى وضع عدم الإزعاج في إعدادات النظام.",
+  "dndPermissionOpenSettings": "فتح الإعدادات"
 }

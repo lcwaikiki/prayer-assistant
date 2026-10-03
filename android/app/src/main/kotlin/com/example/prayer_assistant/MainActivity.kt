@@ -569,6 +569,29 @@ class MainActivity : FlutterActivity() {
                     ReminderNotificationManager.cancel(this, id)
                     result.success(null)
                 }
+                "scheduleSilentMode" -> {
+                    val id = call.argument<Int>("id") ?: 0
+                    val triggerAtMillis = call.argument<Number>("triggerAtMillis")?.toLong() ?: System.currentTimeMillis()
+                    val durationMinutes = call.argument<Int>("durationMinutes") ?: 15
+                    PrayerSilentModeManager.scheduleSilentMode(this, id, triggerAtMillis, durationMinutes)
+                    result.success(null)
+                }
+                "cancelSilentMode" -> {
+                    val id = call.argument<Int>("id") ?: 0
+                    PrayerSilentModeManager.cancelSilentMode(this, id)
+                    result.success(null)
+                }
+                "cancelAllSilentMode" -> {
+                    PrayerSilentModeManager.cancelAll(this)
+                    result.success(null)
+                }
+                "hasDndPermission" -> {
+                    result.success(PrayerSilentModeManager.hasDndPermission(this))
+                }
+                "openDndSettings" -> {
+                    PrayerSilentModeManager.openDndSettings(this)
+                    result.success(null)
+                }
                 else -> result.notImplemented()
             }
         }

@@ -798,5 +798,12 @@
   "soundDeletedSuccess": "Sound deleted",
   "rename": "Rename",
   "microphonePermissionRequired": "Microphone permission is required to record audio.",
-  "playbackSpeed": "Playback Speed"
+  "playbackSpeed": "Playback Speed",
+  "silentModeTitle": "Silent device during prayer",
+  "silentModeSubtitle": "Automatically switch device to vibrate only during prayer time.",
+  "silentModeChip": "Silent (vibrate only)",
+  "enableSilentModeToSelectDuration": "Enable silent mode to select duration.",
+  "dndPermissionDialogTitle": "Do Not Disturb Access",
+  "dndPermissionDialogMessage": "To automatically silence the ringer during prayer time, please allow Do Not Disturb access in system settings.",
+  "dndPermissionOpenSettings": "Open Settings"
 }

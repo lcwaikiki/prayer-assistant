@@ -1768,4 +1768,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Playback Speed';
+
+  @override
+  String get silentModeTitle => 'Silent device during prayer';
+
+  @override
+  String get silentModeSubtitle =>
+      'Automatically switch device to vibrate only during prayer time.';
+
+  @override
+  String get silentModeChip => 'Silent (vibrate only)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Enable silent mode to select duration.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Do Not Disturb Access';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'To automatically silence the ringer during prayer time, please allow Do Not Disturb access in system settings.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Open Settings';
 }

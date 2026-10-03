@@ -1787,4 +1787,28 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Velocidad de reproducción';
+
+  @override
+  String get silentModeTitle => 'Silenciar dispositivo durante la oración';
+
+  @override
+  String get silentModeSubtitle =>
+      'Cambia automáticamente el dispositivo a solo vibración durante la oración.';
+
+  @override
+  String get silentModeChip => 'Silencio (solo vibración)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Habilite el modo silencioso para seleccionar la duración.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Acceso a No molestar';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Para silenciar automáticamente el timbre durante la oración, permita el acceso a No molestar en la configuración del sistema.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Abrir configuración';
 }

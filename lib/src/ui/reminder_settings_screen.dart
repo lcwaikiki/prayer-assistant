@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
-import '../l10n/prayer_names.dart';
 
 
 class ReminderSettingsScreen extends StatefulWidget {
@@ -18,6 +17,7 @@ class ReminderSettingsScreen extends StatefulWidget {
 class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
     with WidgetsBindingObserver {
   static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
+  static const List<int> _silentDurationOptions = <int>[10, 15, 20, 30];
 
   late final TextEditingController _customMinutesController;
   final FocusNode _customMinutesFocus = FocusNode();
@@ -138,6 +138,10 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
     _customAfterMinutesController.text = customMinutesAfter.toString();
     _customAfterMinutesInitialized = true;
   }
+
+  bool get _isFajr =>
+      widget.prayerName.toLowerCase() == 'imsak' ||
+      widget.prayerName.toLowerCase() == 'fajr';
 
   @override
   Widget build(BuildContext context) {
@@ -631,6 +635,76 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                     ),
                   ),
                 ),
+                if (!_isFajr) ...[
+                  const SizedBox(height: 12),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: FilterChip(
+                              label: Text(context.l10n.silentModeChip),
+                              selected: setting.silentMode,
+                              onSelected: (value) {
+                                controller.updateReminderSetting(
+                                  prayer: widget.prayerName,
+                                  silentMode: value,
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            context.l10n.silentModeTitle,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            context.l10n.silentModeSubtitle,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          const SizedBox(height: 12),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              ..._silentDurationOptions.map(
+                                (option) => ChoiceChip(
+                                  label: Text(
+                                    context.l10n.minutesValue(option),
+                                  ),
+                                  selected: setting.silentDuration == option,
+                                  onSelected: setting.silentMode
+                                      ? (selected) {
+                                          if (selected != true) {
+                                            return;
+                                          }
+                                          controller.updateReminderSetting(
+                                            prayer: widget.prayerName,
+                                            silentDuration: option,
+                                          );
+                                        }
+                                      : null,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (!setting.silentMode)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                context.l10n.enableSilentModeToSelectDuration,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
             ),

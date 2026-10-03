@@ -718,5 +718,12 @@
   "soundDeletedSuccess": "ஒலி நீக்கப்பட்டது",
   "rename": "மறுபெயரிடு",
   "microphonePermissionRequired": "ஆடியோ பதிவு செய்ய மைக்ரோஃபோன் அனுமதி தேவை.",
-  "playbackSpeed": "இயக்க வேகம்"
+  "playbackSpeed": "இயக்க வேகம்",
+  "silentModeTitle": "தொழுகை நேரத்தில் சாதனத்தை அமைதியாக்கு",
+  "silentModeSubtitle": "தொழுகை நேரத்தில் சாதனத்தை தானாக அதிர்வு முறைக்கு மட்டும் மாற்றும்.",
+  "silentModeChip": "அமைதி (அதிர்வு மட்டும்)",
+  "enableSilentModeToSelectDuration": "கால அளவைத் தேர்ந்தெடுக்க அமைதி பயன்முறையை இயக்கவும்.",
+  "dndPermissionDialogTitle": "தொந்தரவு செய்யாதே அணுகல்",
+  "dndPermissionDialogMessage": "தொழுகை நேரத்தில் தானாக ஒலியை அணைக்க, கணினி அமைப்புகளில் தொந்தரவு செய்யாதே அணுகலை அனுமதிக்கவும்.",
+  "dndPermissionOpenSettings": "அமைப்புகளைத் திற"
 }

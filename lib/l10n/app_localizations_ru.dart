@@ -1778,4 +1778,28 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Скорость воспроизведения';
+
+  @override
+  String get silentModeTitle => 'Без звука во время намаза';
+
+  @override
+  String get silentModeSubtitle =>
+      'Автоматически переводит устройство в режим «только вибрация» во время намаза.';
+
+  @override
+  String get silentModeChip => 'Без звука (только вибрация)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Включите режим «без звука», чтобы выбрать длительность.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Доступ к режиму «Не беспокоить»';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Чтобы автоматически отключать звук звонка во время намаза, разрешите доступ к режиму «Не беспокоить» в настройках системы.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Открыть настройки';
 }

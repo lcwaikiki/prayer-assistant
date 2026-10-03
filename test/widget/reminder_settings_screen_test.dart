@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/ui/reminder_settings_screen.dart';
@@ -6,6 +7,19 @@ import 'package:prayer_assistant/src/ui/reminder_settings_screen.dart';
 import '../helpers/test_harness.dart';
 
 void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('prayer_assistant/native_reminders'),
+      (call) async {
+        if (call.method == 'hasDndPermission') {
+          return true;
+        }
+        return null;
+      },
+    );
+  });
   testWidgets('shows the prayer name in the title', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
@@ -23,7 +37,7 @@ void main() {
     expect(find.text('Sound'), findsOneWidget);
 
     await tester.drag(find.byType(ListView), const Offset(0, -300));
-    await tester.pumpAndSettle();
+    await tester.pump();
     expect(find.text('After'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
@@ -118,6 +132,66 @@ void main() {
     await tester.pump();
 
     expect(harness.controller.reminderFor('Imsak').customMinutesBefore, 23);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('silent mode card is not displayed for Fajr (Imsak)',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const ReminderSettingsScreen(prayerName: 'Imsak'),
+    );
+
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pump();
+
+    expect(find.text('Silent (vibrate only)'), findsNothing);
+    expect(find.text('Silent device during prayer'), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('toggling silent mode chip and selecting duration updates setting',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(
+      () => harness.database.saveReminderSettings(any()),
+    ).thenAnswer((_) async {});
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const ReminderSettingsScreen(prayerName: 'Ogle'),
+    );
+
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
+    await tester.pump();
+
+    expect(find.text('Silent (vibrate only)'), findsOneWidget);
+    expect(find.text('Silent device during prayer'), findsOneWidget);
+
+    await tester.tap(find.text('Silent (vibrate only)'));
+    await tester.pump();
+
+    expect(harness.controller.reminderFor('Ogle').silentMode, isTrue);
+
+    // Select 20 min choice chip in silent section
+    await tester.tap(find.text('20 min').last);
+    await tester.pump();
+
+    expect(harness.controller.reminderFor('Ogle').silentDuration, 20);
+
+    // Select 30 min choice chip in silent section
+    await tester.tap(find.text('30 min').last);
+    await tester.pump();
+
+    expect(harness.controller.reminderFor('Ogle').silentDuration, 30);
 
     await tester.pumpWidget(const SizedBox());
   });

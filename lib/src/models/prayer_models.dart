@@ -175,6 +175,8 @@ class ReminderSetting {
     required this.vibrationEnabled,
     required this.soundEnabled,
     required this.adhanEnabled,
+    this.silentMode = false,
+    this.silentDuration = 15,
   });
 
   final int minutesBefore;
@@ -187,6 +189,8 @@ class ReminderSetting {
   final bool vibrationEnabled;
   final bool soundEnabled;
   final bool adhanEnabled;
+  final bool silentMode;
+  final int silentDuration;
 
   factory ReminderSetting.defaults() {
     return ReminderSetting(
@@ -200,6 +204,8 @@ class ReminderSetting {
       vibrationEnabled: true,
       soundEnabled: true,
       adhanEnabled: false,
+      silentMode: false,
+      silentDuration: 15,
     );
   }
 
@@ -215,6 +221,8 @@ class ReminderSetting {
       'vibrationEnabled': vibrationEnabled,
       'soundEnabled': soundEnabled,
       'adhanEnabled': adhanEnabled,
+      'silentMode': silentMode,
+      'silentDuration': silentDuration,
     };
   }
 
@@ -231,6 +239,8 @@ class ReminderSetting {
         vibrationEnabled: true,
         soundEnabled: true,
         adhanEnabled: false,
+        silentMode: false,
+        silentDuration: 15,
       );
     }
     if (value is Map<String, dynamic>) {
@@ -240,6 +250,7 @@ class ReminderSetting {
       final legacyBefore = rawTiming == ReminderTiming.before.name;
       final minutesBefore = ((value['minutesBefore'] as num?) ?? 10).toInt();
       final minutesAfter = ((value['minutesAfter'] as num?) ?? 10).toInt();
+      final silentDuration = ((value['silentDuration'] as num?) ?? 15).toInt();
       return ReminderSetting(
         minutesBefore: minutesBefore,
         customMinutesBefore:
@@ -256,6 +267,8 @@ class ReminderSetting {
         vibrationEnabled: (value['vibrationEnabled'] as bool?) ?? true,
         soundEnabled: (value['soundEnabled'] as bool?) ?? true,
         adhanEnabled: (value['adhanEnabled'] as bool?) ?? false,
+        silentMode: (value['silentMode'] as bool?) ?? false,
+        silentDuration: silentDuration <= 0 ? 15 : silentDuration,
       );
     }
     return ReminderSetting.defaults();
@@ -272,6 +285,8 @@ class ReminderSetting {
     bool? vibrationEnabled,
     bool? soundEnabled,
     bool? adhanEnabled,
+    bool? silentMode,
+    int? silentDuration,
   }) {
     return ReminderSetting(
       minutesBefore: minutesBefore ?? this.minutesBefore,
@@ -284,12 +299,13 @@ class ReminderSetting {
       vibrationEnabled: vibrationEnabled ?? this.vibrationEnabled,
       soundEnabled: soundEnabled ?? this.soundEnabled,
       adhanEnabled: adhanEnabled ?? this.adhanEnabled,
+      silentMode: silentMode ?? this.silentMode,
+      silentDuration: silentDuration ?? this.silentDuration,
     );
   }
 
-  /// Rebuilds settings loaded before [customMinutesBefore]/[vibrationEnabled]/
-  /// [soundEnabled] existed (e.g. after hot reload) so new fields can be read
-  /// safely.
+  /// Rebuilds settings loaded before new fields existed (e.g. after hot reload)
+  /// so new fields can be read safely.
   static ReminderSetting ensureCurrent(ReminderSetting setting) {
     var customMinutes = setting.minutesBefore;
     try {
@@ -323,6 +339,18 @@ class ReminderSetting {
     } catch (_) {
       // Stale instance from hot reload before adhanEnabled was added.
     }
+    var silentMode = false;
+    try {
+      silentMode = setting.silentMode;
+    } catch (_) {
+      // Stale instance from hot reload before silentMode was added.
+    }
+    var silentDuration = 15;
+    try {
+      silentDuration = setting.silentDuration;
+    } catch (_) {
+      // Stale instance from hot reload before silentDuration was added.
+    }
     return ReminderSetting(
       minutesBefore: setting.minutesBefore,
       customMinutesBefore: customMinutes,
@@ -334,6 +362,8 @@ class ReminderSetting {
       vibrationEnabled: vibrationEnabled,
       soundEnabled: soundEnabled,
       adhanEnabled: adhanEnabled,
+      silentMode: silentMode,
+      silentDuration: silentDuration <= 0 ? 15 : silentDuration,
     );
   }
 }

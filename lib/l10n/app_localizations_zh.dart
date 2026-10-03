@@ -1709,4 +1709,25 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get playbackSpeed => '播放速度';
+
+  @override
+  String get silentModeTitle => '礼拜期间静音设备';
+
+  @override
+  String get silentModeSubtitle => '在礼拜时间自动将设备切换为仅振动。';
+
+  @override
+  String get silentModeChip => '静音（仅振动）';
+
+  @override
+  String get enableSilentModeToSelectDuration => '启用静音模式以选择持续时间。';
+
+  @override
+  String get dndPermissionDialogTitle => '勿扰访问权限';
+
+  @override
+  String get dndPermissionDialogMessage => '要在礼拜期间自动将铃声静音，请在系统设置中允许勿扰访问权限。';
+
+  @override
+  String get dndPermissionOpenSettings => '打开设置';
 }

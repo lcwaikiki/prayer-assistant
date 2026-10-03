@@ -1802,4 +1802,28 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'இயக்க வேகம்';
+
+  @override
+  String get silentModeTitle => 'தொழுகை நேரத்தில் சாதனத்தை அமைதியாக்கு';
+
+  @override
+  String get silentModeSubtitle =>
+      'தொழுகை நேரத்தில் சாதனத்தை தானாக அதிர்வு முறைக்கு மட்டும் மாற்றும்.';
+
+  @override
+  String get silentModeChip => 'அமைதி (அதிர்வு மட்டும்)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'கால அளவைத் தேர்ந்தெடுக்க அமைதி பயன்முறையை இயக்கவும்.';
+
+  @override
+  String get dndPermissionDialogTitle => 'தொந்தரவு செய்யாதே அணுகல்';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'தொழுகை நேரத்தில் தானாக ஒலியை அணைக்க, கணினி அமைப்புகளில் தொந்தரவு செய்யாதே அணுகலை அனுமதிக்கவும்.';
+
+  @override
+  String get dndPermissionOpenSettings => 'அமைப்புகளைத் திற';
 }

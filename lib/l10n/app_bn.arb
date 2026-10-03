@@ -718,5 +718,12 @@
   "soundDeletedSuccess": "শব্দ মুছে ফেলা হয়েছে",
   "rename": "পুনঃনামকরণ",
   "microphonePermissionRequired": "অডিও রেকর্ড করতে মাইক্রোফোনের অনুমতি প্রয়োজন।",
-  "playbackSpeed": "প্লেব্যাক গতি"
+  "playbackSpeed": "প্লেব্যাক গতি",
+  "silentModeTitle": "নামাজের সময় ডিভাইস নীরব করুন",
+  "silentModeSubtitle": "নামাজের সময় ডিভাইসটি স্বয়ংক্রিয়ভাবে শুধুমাত্র ভাইব্রেশন মোডে চলে যাবে।",
+  "silentModeChip": "নীরব (শুধুমাত্র ভাইব্রেশন)",
+  "enableSilentModeToSelectDuration": "সময়কাল নির্বাচন করতে নীরব মোড সক্ষম করুন।",
+  "dndPermissionDialogTitle": "বিরক্ত করবেন না অ্যাক্সেস",
+  "dndPermissionDialogMessage": "নামাজের সময় স্বয়ংক্রিয়ভাবে রিংগার নীরব করতে, অনুগ্রহ করে সিস্টেম সেটিংসে বিরক্ত করবেন না অ্যাক্সেসের অনুমতি দিন।",
+  "dndPermissionOpenSettings": "সেটিংস খুলুন"
 }

@@ -1716,4 +1716,26 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get playbackSpeed => '再生速度';
+
+  @override
+  String get silentModeTitle => '礼拝中に端末をサイレントにする';
+
+  @override
+  String get silentModeSubtitle => '礼拝時間中は自動的にバイブレーションのみに切り替えます。';
+
+  @override
+  String get silentModeChip => 'サイレント (バイブのみ)';
+
+  @override
+  String get enableSilentModeToSelectDuration => '期間を選択するにはサイレントモードを有効にしてください。';
+
+  @override
+  String get dndPermissionDialogTitle => 'サイレントモードへのアクセス';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      '礼拝中に自動的に着信音を消音するには、システム設定で「サイレントモードへのアクセス」を許可してください。';
+
+  @override
+  String get dndPermissionOpenSettings => '設定を開く';
 }

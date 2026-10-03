@@ -1766,4 +1766,28 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'سرعت پخش';
+
+  @override
+  String get silentModeTitle => 'بی‌صدا کردن دستگاه در زمان نماز';
+
+  @override
+  String get silentModeSubtitle =>
+      'در زمان نماز دستگاه را خودکار فقط به حالت لرزش تغییر می‌دهد.';
+
+  @override
+  String get silentModeChip => 'بی‌صدا (فقط لرزش)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'برای انتخاب مدت زمان، حالت بی‌صدا را فعال کنید.';
+
+  @override
+  String get dndPermissionDialogTitle => 'دسترسی به مزاحم نشوید';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'برای بی‌صدا کردن خودکار زنگ در زمان نماز، لطفاً در تنظیمات سیستم دسترسی به «مزاحم نشوید» را مجاز کنید.';
+
+  @override
+  String get dndPermissionOpenSettings => 'باز کردن تنظیمات';
 }

@@ -668,5 +668,12 @@
   "soundDeletedSuccess": "Звук удален",
   "rename": "Переименовать",
   "microphonePermissionRequired": "Для записи аудио требуется разрешение на использование микрофона.",
-  "playbackSpeed": "Скорость воспроизведения"
+  "playbackSpeed": "Скорость воспроизведения",
+  "silentModeTitle": "Без звука во время намаза",
+  "silentModeSubtitle": "Автоматически переводит устройство в режим «только вибрация» во время намаза.",
+  "silentModeChip": "Без звука (только вибрация)",
+  "enableSilentModeToSelectDuration": "Включите режим «без звука», чтобы выбрать длительность.",
+  "dndPermissionDialogTitle": "Доступ к режиму «Не беспокоить»",
+  "dndPermissionDialogMessage": "Чтобы автоматически отключать звук звонка во время намаза, разрешите доступ к режиму «Не беспокоить» в настройках системы.",
+  "dndPermissionOpenSettings": "Открыть настройки"
 }

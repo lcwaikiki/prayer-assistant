@@ -1778,4 +1778,28 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Kecepatan Pemutaran';
+
+  @override
+  String get silentModeTitle => 'Heningkan perangkat saat waktu shalat';
+
+  @override
+  String get silentModeSubtitle =>
+      'Mengalihkan perangkat ke getar saja secara otomatis saat waktu shalat.';
+
+  @override
+  String get silentModeChip => 'Hening (getar saja)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Aktifkan mode hening untuk memilih durasi.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Akses Jangan Ganggu';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Untuk membungkam nada dering secara otomatis selama waktu shalat, izinkan akses Jangan Ganggu di pengaturan sistem.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Buka Pengaturan';
 }

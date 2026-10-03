@@ -1766,4 +1766,28 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'پلے بیک کی رفتار';
+
+  @override
+  String get silentModeTitle => 'نماز کے وقت ڈیوائس خاموش کریں';
+
+  @override
+  String get silentModeSubtitle =>
+      'نماز کے وقت ڈیوائس کو خودکار طور پر صرف وائبریشن موڈ پر تبدیل کریں۔';
+
+  @override
+  String get silentModeChip => 'خاموش (صرف وائبریشن)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'مدت منتخب کرنے کے لیے خاموش موڈ فعال کریں۔';
+
+  @override
+  String get dndPermissionDialogTitle => 'ڈو ناٹ ڈسٹرب تک رسائی';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'نماز کے وقت رنگر کو خودکار طور پر خاموش کرنے کے لیے، براہ کرم سسٹم کی ترتیبات میں ڈو ناٹ ڈسٹرب رسائی کی اجازت دیں۔';
+
+  @override
+  String get dndPermissionOpenSettings => 'ترتیبات کھولیں';
 }

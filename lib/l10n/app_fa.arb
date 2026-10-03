@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "صدا حذف شد",
   "rename": "تغییر نام",
   "microphonePermissionRequired": "برای ضبط صدا اجازه دسترسی به میکروفون لازم است.",
-  "playbackSpeed": "سرعت پخش"
+  "playbackSpeed": "سرعت پخش",
+  "silentModeTitle": "بی‌صدا کردن دستگاه در زمان نماز",
+  "silentModeSubtitle": "در زمان نماز دستگاه را خودکار فقط به حالت لرزش تغییر می‌دهد.",
+  "silentModeChip": "بی‌صدا (فقط لرزش)",
+  "enableSilentModeToSelectDuration": "برای انتخاب مدت زمان، حالت بی‌صدا را فعال کنید.",
+  "dndPermissionDialogTitle": "دسترسی به مزاحم نشوید",
+  "dndPermissionDialogMessage": "برای بی‌صدا کردن خودکار زنگ در زمان نماز، لطفاً در تنظیمات سیستم دسترسی به «مزاحم نشوید» را مجاز کنید.",
+  "dndPermissionOpenSettings": "باز کردن تنظیمات"
 }

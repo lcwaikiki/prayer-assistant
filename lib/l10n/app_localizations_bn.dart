@@ -1774,4 +1774,28 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'প্লেব্যাক গতি';
+
+  @override
+  String get silentModeTitle => 'নামাজের সময় ডিভাইস নীরব করুন';
+
+  @override
+  String get silentModeSubtitle =>
+      'নামাজের সময় ডিভাইসটি স্বয়ংক্রিয়ভাবে শুধুমাত্র ভাইব্রেশন মোডে চলে যাবে।';
+
+  @override
+  String get silentModeChip => 'নীরব (শুধুমাত্র ভাইব্রেশন)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'সময়কাল নির্বাচন করতে নীরব মোড সক্ষম করুন।';
+
+  @override
+  String get dndPermissionDialogTitle => 'বিরক্ত করবেন না অ্যাক্সেস';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'নামাজের সময় স্বয়ংক্রিয়ভাবে রিংগার নীরব করতে, অনুগ্রহ করে সিস্টেম সেটিংসে বিরক্ত করবেন না অ্যাক্সেসের অনুমতি দিন।';
+
+  @override
+  String get dndPermissionOpenSettings => 'সেটিংস খুলুন';
 }

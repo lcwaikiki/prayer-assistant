@@ -1795,4 +1795,29 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get playbackSpeed => 'Vitesse de lecture';
+
+  @override
+  String get silentModeTitle =>
+      'Mettre l\'appareil en silencieux pendant la prière';
+
+  @override
+  String get silentModeSubtitle =>
+      'Passe automatiquement l\'appareil en vibration seule pendant la prière.';
+
+  @override
+  String get silentModeChip => 'Silencieux (vibration seule)';
+
+  @override
+  String get enableSilentModeToSelectDuration =>
+      'Activez le mode silencieux pour choisir la durée.';
+
+  @override
+  String get dndPermissionDialogTitle => 'Accès Ne pas déranger';
+
+  @override
+  String get dndPermissionDialogMessage =>
+      'Pour couper automatiquement la sonnerie pendant la prière, veuillez autoriser l\'accès à Ne pas déranger dans les paramètres système.';
+
+  @override
+  String get dndPermissionOpenSettings => 'Ouvrir les paramètres';
 }

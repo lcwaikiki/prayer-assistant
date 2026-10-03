@@ -613,5 +613,12 @@
   "soundDeletedSuccess": "آواز حذف کر دی گئی",
   "rename": "نام تبدیل کریں",
   "microphonePermissionRequired": "آڈیو ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔",
-  "playbackSpeed": "پلے بیک کی رفتار"
+  "playbackSpeed": "پلے بیک کی رفتار",
+  "silentModeTitle": "نماز کے وقت ڈیوائس خاموش کریں",
+  "silentModeSubtitle": "نماز کے وقت ڈیوائس کو خودکار طور پر صرف وائبریشن موڈ پر تبدیل کریں۔",
+  "silentModeChip": "خاموش (صرف وائبریشن)",
+  "enableSilentModeToSelectDuration": "مدت منتخب کرنے کے لیے خاموش موڈ فعال کریں۔",
+  "dndPermissionDialogTitle": "ڈو ناٹ ڈسٹرب تک رسائی",
+  "dndPermissionDialogMessage": "نماز کے وقت رنگر کو خودکار طور پر خاموش کرنے کے لیے، براہ کرم سسٹم کی ترتیبات میں ڈو ناٹ ڈسٹرب رسائی کی اجازت دیں۔",
+  "dndPermissionOpenSettings": "ترتیبات کھولیں"
 }

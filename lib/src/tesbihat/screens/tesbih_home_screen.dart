@@ -718,6 +718,24 @@ class _UngroupedItemCard extends StatelessWidget {
                           ),
                         ),
                       ),
+                    if (item.soundId != null)
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.volume_up,
+                            key: Key('item_sound_badge_icon'),
+                            size: 9,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),

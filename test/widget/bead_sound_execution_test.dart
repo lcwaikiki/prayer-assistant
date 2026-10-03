@@ -9,8 +9,11 @@ import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart'
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/sound_library_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/models/sound_item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/tesbih_home_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
 import 'package:prayer_assistant/src/tesbihat/services/item_reminder_service.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
@@ -291,6 +294,118 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('1'), findsWidgets);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('shows sound attached badge on bead list items in TesbihHomeScreen', (tester) async {
+    final itemWithSound = Item(
+      id: 'bead_sound',
+      title: 'Bead with Sound',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 50,
+      soundId: 'snd_1',
+      soundTitle: 'Dhikr',
+    );
+    final itemWithReminder = Item(
+      id: 'bead_reminder',
+      title: 'Bead with Reminder',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 50,
+      reminderEnabled: true,
+    );
+
+    final mockReminderService = MockItemReminderService();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          itemRepositoryProvider
+              .overrideWithValue(ItemRepository.memory([itemWithSound, itemWithReminder])),
+          itemHistoryRepositoryProvider
+              .overrideWithValue(ItemHistoryRepository.memory()),
+          soundLibraryRepositoryProvider
+              .overrideWithValue(SoundLibraryRepository.memory()),
+          itemReminderServiceProvider
+              .overrideWithValue(mockReminderService),
+        ],
+        child: testLocalizedApp(
+          child: const TesbihHomeScreen(),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Bead with Sound'), findsOneWidget);
+    expect(find.text('Bead with Reminder'), findsOneWidget);
+
+    // Verify sound badge is displayed on bead with sound
+    expect(find.byKey(const Key('item_sound_badge_icon')), findsOneWidget);
+
+    // Verify reminder bell badge is displayed on bead with reminder
+    expect(find.byIcon(Icons.notifications_active), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('shows progress icon, sound and reminder badges on group members in GroupScreen', (tester) async {
+    final group = const ItemGroup(id: 'grp_1', title: 'Daily Group');
+    final itemWithSound = Item(
+      id: 'bead_sound_grp',
+      title: 'Group Bead with Sound',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 50,
+      groupIds: ['grp_1'],
+      soundId: 'snd_1',
+      soundTitle: 'Dhikr',
+    );
+    final itemWithReminder = Item(
+      id: 'bead_reminder_grp',
+      title: 'Group Bead with Reminder',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 50,
+      groupIds: ['grp_1'],
+      reminderEnabled: true,
+    );
+
+    final mockReminderService = MockItemReminderService();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          itemRepositoryProvider
+              .overrideWithValue(ItemRepository.memory([itemWithSound, itemWithReminder], [group])),
+          itemHistoryRepositoryProvider
+              .overrideWithValue(ItemHistoryRepository.memory()),
+          soundLibraryRepositoryProvider
+              .overrideWithValue(SoundLibraryRepository.memory()),
+          itemReminderServiceProvider
+              .overrideWithValue(mockReminderService),
+        ],
+        child: testLocalizedApp(
+          child: const GroupScreen(groupId: 'grp_1'),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Group Bead with Sound'), findsOneWidget);
+    expect(find.text('Group Bead with Reminder'), findsOneWidget);
+
+    // Verify progress icons and badges
+    expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+    expect(find.byKey(const Key('item_sound_badge_icon')), findsOneWidget);
+    expect(find.byIcon(Icons.notifications_active), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

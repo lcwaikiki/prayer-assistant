@@ -20,6 +20,9 @@ Item _item({
   int intensity = 50,
   String notes = '',
   List<String> groupIds = const [],
+  bool reminderEnabled = false,
+  String? soundId,
+  String? soundTitle,
 }) {
   return Item(
     id: id,
@@ -31,6 +34,9 @@ Item _item({
     vibrationIntensity: intensity,
     currentProgress: progress,
     groupIds: groupIds,
+    reminderEnabled: reminderEnabled,
+    soundId: soundId,
+    soundTitle: soundTitle,
   );
 }
 
@@ -47,11 +53,11 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('lists seeded items with their stats', (tester) async {
+  testWidgets('lists seeded items with their stats and badges', (tester) async {
     final harness = TestHarness.create();
     harness.itemRepository = ItemRepository.memory([
-      _item(),
-      _item(id: 'b', title: 'Salavat', count: 100, check: 25),
+      _item(soundId: 'snd_1', soundTitle: 'SubhanAllah'),
+      _item(id: 'b', title: 'Salavat', count: 100, check: 25, reminderEnabled: true),
     ]);
     await harness.initialize();
 
@@ -61,6 +67,10 @@ void main() {
     expect(find.text('Salavat'), findsOneWidget);
     expect(find.textContaining('Progress: 0 / 33'), findsOneWidget);
     expect(find.textContaining('Count: 100'), findsOneWidget);
+
+    // Verify sound badge and reminder badge icons
+    expect(find.byKey(const Key('item_sound_badge_icon')), findsOneWidget);
+    expect(find.byIcon(Icons.notifications_active), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

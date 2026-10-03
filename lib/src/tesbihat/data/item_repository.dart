@@ -6,10 +6,12 @@ import '../models/item_group.dart';
 class ItemRepository {
   ItemRepository.hive(Box<dynamic> box) : _box = box, _memoryItems = null;
 
-  ItemRepository.memory([List<Item>? initialItems])
-    : _box = null,
-      _memoryItems = List<Item>.from(initialItems ?? const []),
-      _memoryGroups = <ItemGroup>[];
+  ItemRepository.memory([
+    List<Item>? initialItems,
+    List<ItemGroup>? initialGroups,
+  ]) : _box = null,
+       _memoryItems = List<Item>.from(initialItems ?? const []),
+       _memoryGroups = List<ItemGroup>.from(initialGroups ?? const []);
 
   final Box<dynamic>? _box;
   List<Item>? _memoryItems;

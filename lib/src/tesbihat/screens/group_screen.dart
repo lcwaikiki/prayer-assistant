@@ -428,106 +428,40 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                             itemCount: filteredMembers.length,
                             itemBuilder: (context, index) {
                               final item = filteredMembers[index];
-                              return Card(
+                              return _GroupMemberCard(
                                 key: ValueKey(item.id),
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 6,
-                                ),
-                                child: ListTile(
-                                  leading: _selecting
-                                      ? Checkbox(
-                                          value: _selected.contains(item.id),
-                                          onChanged: (_) => setState(() {
-                                            if (!_selected.remove(item.id)) {
-                                              _selected.add(item.id);
-                                            }
-                                          }),
-                                        )
-                                      : item.reminderEnabled
-                                          ? Icon(
-                                              Icons.notifications_active,
-                                              color:
-                                                  Theme.of(context).colorScheme.primary,
-                                            )
-                                          : null,
-                                  title: Text(item.title),
-                                  subtitle: Text(
-                                    '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
-                                    '${l10n.progress}: ${item.currentProgress} / ${item.count}',
-                                  ),
-                                  isThreeLine: true,
-                                  trailing: (_selecting || _readOnly)
-                                      ? null
-                                      : Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            PopupMenuButton<_MemberAction>(
-                                              onSelected: (action) =>
-                                                  _handleMemberAction(
-                                                context,
-                                                ref,
-                                                item,
-                                                action,
-                                              ),
-                                              itemBuilder: (context) => [
-                                                PopupMenuItem(
-                                                  value: _MemberAction.edit,
-                                                  child: ListTile(
-                                                    dense: true,
-                                                    leading: const Icon(Icons.edit),
-                                                    title: Text(l10n.edit),
-                                                  ),
-                                                ),
-                                                PopupMenuItem(
-                                                  value: _MemberAction.duplicate,
-                                                  child: ListTile(
-                                                    dense: true,
-                                                    leading: const Icon(Icons.copy_outlined),
-                                                    title: Text(l10n.duplicate),
-                                                  ),
-                                                ),
-                                                PopupMenuItem(
-                                                  value: _MemberAction.remove,
-                                                  child: ListTile(
-                                                    dense: true,
-                                                    leading: const Icon(Icons.playlist_remove),
-                                                    title: Text(l10n.removeFromGroup),
-                                                  ),
-                                                ),
-                                                PopupMenuItem(
-                                                  value: _MemberAction.delete,
-                                                  child: ListTile(
-                                                    dense: true,
-                                                    leading: const Icon(
-                                                      Icons.delete,
-                                                      color: Colors.red,
-                                                    ),
-                                                    title: Text(l10n.delete),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                item: item,
+                                selecting: _selecting,
+                                selected: _selected.contains(item.id),
+                                readOnly: _readOnly,
+                                onToggleSelect: () => setState(() {
+                                  if (!_selected.remove(item.id)) {
+                                    _selected.add(item.id);
+                                  }
+                                }),
+                                onTap: () {
+                                  if (_selecting) {
+                                    setState(() {
+                                      if (!_selected.remove(item.id)) {
+                                        _selected.add(item.id);
+                                      }
+                                    });
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => ExecutionScreen(
+                                          itemId: item.id,
                                         ),
-                                  onTap: () {
-                                    if (_selecting) {
-                                      setState(() {
-                                        if (!_selected.remove(item.id)) {
-                                          _selected.add(item.id);
-                                        }
-                                      });
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute<void>(
-                                          builder: (_) => ExecutionScreen(
-                                            itemId: item.id,
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                  },
+                                      ),
+                                    );
+                                  }
+                                },
+                                onAction: (action) => _handleMemberAction(
+                                  context,
+                                  ref,
+                                  item,
+                                  action,
                                 ),
                               );
                             },
@@ -549,108 +483,48 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                                   .read(itemsNotifierProvider.notifier)
                                   .reorderItems(movedFullIndex, targetFullIndex);
                             },
-                    itemBuilder: (context, index) {
-                      final item = members[index];
-                      return Card(
-                        key: ValueKey(item.id),
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        child: ListTile(
-                          leading: _selecting
-                              ? Checkbox(
-                                  value: _selected.contains(item.id),
-                                  onChanged: (_) => setState(() {
-                                    if (!_selected.remove(item.id)) {
-                                      _selected.add(item.id);
-                                    }
-                                  }),
-                                )
-                              : item.reminderEnabled
-                                  ? Icon(
-                                      Icons.notifications_active,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    )
-                                  : null,
-                          title: Text(item.title),
-                          subtitle: Text(
-                            '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
-                            '${l10n.progress}: ${item.currentProgress} / ${item.count}',
+                            itemBuilder: (context, index) {
+                              final item = members[index];
+                              return _GroupMemberCard(
+                                key: ValueKey(item.id),
+                                item: item,
+                                selecting: _selecting,
+                                selected: _selected.contains(item.id),
+                                readOnly: _readOnly,
+                                dragHandleIndex:
+                                    (_selecting || _readOnly) ? null : index,
+                                onToggleSelect: () => setState(() {
+                                  if (!_selected.remove(item.id)) {
+                                    _selected.add(item.id);
+                                  }
+                                }),
+                                onTap: () {
+                                  if (_selecting) {
+                                    setState(() {
+                                      if (!_selected.remove(item.id)) {
+                                        _selected.add(item.id);
+                                      }
+                                    });
+                                  } else {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => ExecutionScreen(
+                                          itemId: item.id,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                                onAction: (action) => _handleMemberAction(
+                                  context,
+                                  ref,
+                                  item,
+                                  action,
+                                ),
+                              );
+                            },
                           ),
-                    isThreeLine: true,
-                    trailing: (_selecting || _readOnly)
-                        ? null
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              PopupMenuButton<_MemberAction>(
-                      onSelected: (action) =>
-                          _handleMemberAction(context, ref, item, action),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: _MemberAction.edit,
-                          child: ListTile(
-                            dense: true,
-                            leading: const Icon(Icons.edit),
-                            title: Text(l10n.edit),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: _MemberAction.duplicate,
-                          child: ListTile(
-                            dense: true,
-                            leading: const Icon(Icons.copy_outlined),
-                            title: Text(l10n.duplicate),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: _MemberAction.remove,
-                          child: ListTile(
-                            dense: true,
-                            leading: const Icon(Icons.playlist_remove),
-                            title: Text(l10n.removeFromGroup),
-                          ),
-                        ),
-                        PopupMenuItem(
-                          value: _MemberAction.delete,
-                          child: ListTile(
-                            dense: true,
-                            leading: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                            title: Text(l10n.delete),
-                          ),
-                        ),
-                      ],
-                              ),
-                              ReorderableDelayedDragStartListener(
-                                index: index,
-                                child: const Icon(Icons.drag_indicator),
-                              ),
-                            ],
-                          ),
-                    onTap: _selecting
-                        ? () => setState(() {
-                              if (!_selected.remove(item.id)) {
-                                _selected.add(item.id);
-                              }
-                            })
-                        : () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute<void>(
-                                builder: (_) =>
-                                    ExecutionScreen(itemId: item.id),
-                              ),
-                            );
-                          },
-                  ),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -755,6 +629,170 @@ class _AddBeadsSheetState extends State<_AddBeadsSheet> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _GroupMemberCard extends StatelessWidget {
+  const _GroupMemberCard({
+    super.key,
+    required this.item,
+    required this.selecting,
+    required this.selected,
+    required this.readOnly,
+    required this.onToggleSelect,
+    required this.onTap,
+    required this.onAction,
+    this.dragHandleIndex,
+  });
+
+  final Item item;
+  final bool selecting;
+  final bool selected;
+  final bool readOnly;
+  final VoidCallback onToggleSelect;
+  final VoidCallback onTap;
+  final ValueChanged<_MemberAction> onAction;
+  final int? dragHandleIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.tesbihatL10n;
+    final theme = Theme.of(context);
+    final progressFraction = item.count > 0
+        ? (item.currentProgress / item.count).clamp(0.0, 1.0)
+        : 0.0;
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      color: theme.colorScheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        leading: selecting
+            ? Checkbox(value: selected, onChanged: (_) => onToggleSelect())
+            : SizedBox(
+                width: 44,
+                height: 44,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      value: progressFraction,
+                      strokeWidth: 3,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
+                      color: theme.colorScheme.primary,
+                    ),
+                    Icon(
+                      Icons.touch_app_outlined,
+                      size: 20,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    if (item.reminderEnabled)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.error,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.notifications_active,
+                            size: 9,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    if (item.soundId != null)
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primary,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.volume_up,
+                            key: Key('item_sound_badge_icon'),
+                            size: 9,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+        title: Text(
+          item.title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'
+          '${l10n.progress}: ${item.currentProgress} / ${item.count}',
+        ),
+        isThreeLine: true,
+        trailing: (selecting || readOnly)
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PopupMenuButton<_MemberAction>(
+                    onSelected: onAction,
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: _MemberAction.edit,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.edit),
+                          title: Text(l10n.edit),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _MemberAction.duplicate,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.copy_outlined),
+                          title: Text(l10n.duplicate),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _MemberAction.remove,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(Icons.playlist_remove),
+                          title: Text(l10n.removeFromGroup),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: _MemberAction.delete,
+                        child: ListTile(
+                          dense: true,
+                          leading: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          title: Text(l10n.delete),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (dragHandleIndex != null)
+                    ReorderableDelayedDragStartListener(
+                      index: dragHandleIndex!,
+                      child: const Icon(Icons.drag_indicator),
+                    ),
+                ],
+              ),
+        onTap: onTap,
       ),
     );
   }

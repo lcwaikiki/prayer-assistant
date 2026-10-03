@@ -1735,6 +1735,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get attachSoundToExistingBead => 'Mevcut Tesbihe Ekle';
 
   @override
+  String get attachSoundToExistingReminder => 'Aktif Hatırlatıcıya Ekle';
+
+  @override
   String get saveToSoundLibrary => 'Ses Kitaplığına Kaydet';
 
   @override

@@ -1741,6 +1741,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get attachSoundToExistingBead => 'বিদ্যমান তসবিহে সংযুক্ত করুন';
 
   @override
+  String get attachSoundToExistingReminder => 'সক্রিয় অনুস্মারকে সংযুক্ত করুন';
+
+  @override
   String get saveToSoundLibrary => 'সাউন্ড লাইব্রেরিতে সংরক্ষণ করুন';
 
   @override

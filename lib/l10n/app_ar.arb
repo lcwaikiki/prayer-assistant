@@ -603,6 +603,7 @@
   "autoCountWithSound": "التقدم التلقائي مع تكرار الصوت",
   "autoCountWithSoundSubtitle": "زيادة العداد تلقائيًا في كل مرة ينتهي فيها تشغيل الصوت",
   "attachSoundToExistingBead": "إرفاق بتسبيح موجود",
+  "attachSoundToExistingReminder": "إرفاق بتذكير نشط",
   "saveToSoundLibrary": "حفظ في مكتبة الأصوات",
   "sharedAudioReceived": "تم استلام ملف صوتي مشترك",
   "sharedAudioPrompt": "اختر كيف تريد استخدام الملف الصوتي المشترك:",

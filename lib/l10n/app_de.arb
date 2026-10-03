@@ -603,6 +603,7 @@
   "autoCountWithSound": "Zähler automatisch mit Tonschleife weiterschalten",
   "autoCountWithSoundSubtitle": "Erhöht den Zähler automatisch jedes Mal, wenn die Audioschleife endet",
   "attachSoundToExistingBead": "An vorhandenes Tesbih anhängen",
+  "attachSoundToExistingReminder": "An aktive Erinnerung anhängen",
   "saveToSoundLibrary": "In Tonbibliothek speichern",
   "sharedAudioReceived": "Geteilte Audiodatei empfangen",
   "sharedAudioPrompt": "Wählen Sie, wie Sie die geteilte Audiodatei verwenden möchten:",

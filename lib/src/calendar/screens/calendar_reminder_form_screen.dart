@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +13,10 @@ import '../../l10n/l10n.dart';
 import '../../services/local_database.dart';
 import '../../widgets/discard_confirmation_dialog.dart';
 
+import '../../tesbihat/services/audio_player_service.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
+import '../../tesbihat/state/sound_library_notifier.dart';
+import '../../tesbihat/widgets/sound_picker_sheet.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
@@ -17,13 +24,15 @@ import 'calendar_anchor_date_picker.dart';
 
 enum _OffsetDirection { onTime, before, after }
 
-class CalendarReminderFormScreen extends StatefulWidget {
+class CalendarReminderFormScreen extends ConsumerStatefulWidget {
   const CalendarReminderFormScreen({
     super.key,
     this.reminder,
     this.reminderId,
     this.initialDate,
     this.readOnly = false,
+    this.audioPlayerService,
+    this.database,
   });
 
   /// Non-null when editing an existing reminder.
@@ -33,14 +42,16 @@ class CalendarReminderFormScreen extends StatefulWidget {
   /// Pre-fills the date when creating a new reminder from a tapped day.
   final DateTime? initialDate;
   final bool readOnly;
+  final AudioPlayerService? audioPlayerService;
+  final LocalDatabase? database;
 
   @override
-  State<CalendarReminderFormScreen> createState() =>
+  ConsumerState<CalendarReminderFormScreen> createState() =>
       _CalendarReminderFormScreenState();
 }
 
 class _CalendarReminderFormScreenState
-    extends State<CalendarReminderFormScreen> {
+    extends ConsumerState<CalendarReminderFormScreen> {
   static const List<int> _minuteOptions = <int>[5, 10, 15, 20, 30, 45, 60];
 
   late bool _readOnly = widget.readOnly;
@@ -66,6 +77,11 @@ class _CalendarReminderFormScreenState
   late DateTime _yearlyDate;
   late List<DateTime> _excludedDates;
   late bool _isTask;
+  String? _soundId;
+  String? _soundTitle;
+  late final AudioPlayerService _audioPlayer;
+  StreamSubscription<void>? _playerCompleteSubscription;
+  bool _isPlayingPreview = false;
   bool _saving = false;
   bool _allowPop = false;
 
@@ -74,6 +90,8 @@ class _CalendarReminderFormScreenState
   late int _initialDayOfMonth;
   late DateTime _initialYearlyDate;
   late List<DateTime> _initialExcludedDates;
+  String? _initialSoundId;
+  String? _initialSoundTitle;
 
   bool get _isEditing => _reminder != null || widget.reminder != null;
 
@@ -109,6 +127,8 @@ class _CalendarReminderFormScreenState
     if (_titleController.text.trim() != initialTitle) return true;
     if (_notesController.text.trim() != initialNotes) return true;
     if (_isTask != (reminder?.isTask ?? false)) return true;
+    if (_soundId != _initialSoundId) return true;
+    if (_soundTitle != _initialSoundTitle) return true;
     if (_repeatCount != initialRepeatCount) return true;
     if (_repeatCountController.text.trim() !=
         (initialRepeatCount?.toString() ?? '')) {
@@ -139,6 +159,8 @@ class _CalendarReminderFormScreenState
     _titleController.text = reminder?.title ?? '';
     _notesController.text = reminder?.notes ?? '';
     _isTask = reminder?.isTask ?? false;
+    _soundId = reminder?.soundId;
+    _soundTitle = reminder?.soundTitle;
     _repeatCount = reminder?.repeatCount;
     _repeatCountController.text = reminder?.repeatCount?.toString() ?? '';
     final baseDate =
@@ -173,6 +195,17 @@ class _CalendarReminderFormScreenState
     _initialDayOfMonth = _dayOfMonth;
     _initialYearlyDate = _yearlyDate;
     _initialExcludedDates = List<DateTime>.from(_excludedDates);
+    _initialSoundId = _soundId;
+    _initialSoundTitle = _soundTitle;
+  }
+
+  LocalDatabase _getDatabase(BuildContext context) {
+    if (widget.database != null) return widget.database!;
+    try {
+      return context.read<PrayerAppController>().database;
+    } catch (_) {
+      return LocalDatabase();
+    }
   }
 
   @override
@@ -183,6 +216,12 @@ class _CalendarReminderFormScreenState
     _repeatCountController = TextEditingController();
     _offsetMinutesController = TextEditingController();
     _offsetMinutesFocus.addListener(() => setState(() {}));
+    _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
+    _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+      if (mounted) {
+        setState(() => _isPlayingPreview = false);
+      }
+    });
 
     _reminder = widget.reminder;
     _populateFromReminder(_reminder);
@@ -201,9 +240,10 @@ class _CalendarReminderFormScreenState
             }
           }
         } catch (_) {}
-        if (found == null) {
+        if (found == null && mounted) {
           try {
-            final dbReminders = await LocalDatabase().loadCalendarReminders();
+            final db = _getDatabase(context);
+            final dbReminders = await db.loadCalendarReminders();
             for (final r in dbReminders) {
               if (r.id == targetId) {
                 found = r;
@@ -224,12 +264,64 @@ class _CalendarReminderFormScreenState
 
   @override
   void dispose() {
+    _playerCompleteSubscription?.cancel();
+    _audioPlayer.stop();
+    if (widget.audioPlayerService == null) {
+      _audioPlayer.dispose();
+    }
     _titleController.dispose();
     _notesController.dispose();
     _offsetMinutesController.dispose();
     _repeatCountController.dispose();
     _offsetMinutesFocus.dispose();
     super.dispose();
+  }
+
+  Future<void> _togglePreviewSound() async {
+    if (_soundId == null) return;
+    if (_isPlayingPreview) {
+      await _audioPlayer.pause();
+      setState(() => _isPlayingPreview = false);
+      return;
+    }
+
+    if (_audioPlayer.state == PlayerState.paused) {
+      await _audioPlayer.resume();
+      setState(() => _isPlayingPreview = true);
+      return;
+    }
+
+    final sound =
+        ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
+    if (sound != null) {
+      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+      setState(() => _isPlayingPreview = true);
+    }
+  }
+
+  Future<void> _pickSound() async {
+    if (_isPlayingPreview) {
+      await _audioPlayer.stop();
+      setState(() => _isPlayingPreview = false);
+    }
+    final sound = await SoundPickerSheet.show(context);
+    if (sound != null && mounted) {
+      setState(() {
+        _soundId = sound.id;
+        _soundTitle = sound.title;
+      });
+    }
+  }
+
+  void _removeSound() {
+    if (_isPlayingPreview) {
+      _audioPlayer.stop();
+      setState(() => _isPlayingPreview = false);
+    }
+    setState(() {
+      _soundId = null;
+      _soundTitle = null;
+    });
   }
 
   Future<void> _pickDate() async {
@@ -623,7 +715,7 @@ class _CalendarReminderFormScreenState
     if (_anchor == CalendarReminderAnchor.prayerTime) {
       setState(() => _saving = true);
       final resolved = await resolvePrayerAnchoredTime(
-        LocalDatabase(),
+        _getDatabase(context),
         prayerName: _anchorPrayerName,
         offsetMinutes: offsetMinutes,
       );
@@ -665,6 +757,8 @@ class _CalendarReminderFormScreenState
           : null,
       excludedDates: _excludedDates,
       isTask: _isTask,
+      soundId: _soundId,
+      soundTitle: _soundTitle,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);
@@ -672,6 +766,7 @@ class _CalendarReminderFormScreenState
       controller.addCalendarReminder(reminder);
     }
     if (mounted) {
+      await _audioPlayer.stop();
       _allowPop = true;
       Navigator.pop(context);
     }
@@ -694,6 +789,7 @@ class _CalendarReminderFormScreenState
         if (didPop) return;
         final navigator = Navigator.of(context);
         if (!_isDirty) {
+          await _audioPlayer.stop();
           setState(() {
             _allowPop = true;
           });
@@ -702,6 +798,7 @@ class _CalendarReminderFormScreenState
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
         if (shouldDiscard == true && mounted) {
+          await _audioPlayer.stop();
           setState(() {
             _allowPop = true;
           });
@@ -746,322 +843,399 @@ class _CalendarReminderFormScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-            TextField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText: l10n.calendarReminderTitleLabel,
-                hintText: l10n.calendarReminderTitleHint,
-                errorText: _titleError,
-              ),
-              onChanged: (_) {
-                if (_titleError != null) {
-                  setState(() => _titleError = null);
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _notesController,
-              decoration: InputDecoration(
-                labelText: l10n.calendarReminderNotesLabel,
-              ),
-              maxLines: 2,
-            ),
-            const SizedBox(height: 12),
-            SwitchListTile(
-              key: const Key('calendar_reminder_is_task_switch'),
-              contentPadding: EdgeInsets.zero,
-              title: Text(l10n.calendarMarkAsTask),
-              subtitle: Text(l10n.calendarMarkAsTaskSubtitle),
-              value: _isTask,
-              onChanged: (value) => setState(() => _isTask = value),
-            ),
-            const SizedBox(height: 16),
-            SegmentedButton<CalendarReminderAnchor>(
-              segments: [
-                ButtonSegment(
-                  value: CalendarReminderAnchor.clockTime,
-                  label: Text(l10n.calendarAnchorClockTime),
-                  icon: const Icon(Icons.event),
+                    TextField(
+                      controller: _titleController,
+                      decoration: InputDecoration(
+                        labelText: l10n.calendarReminderTitleLabel,
+                        hintText: l10n.calendarReminderTitleHint,
+                        errorText: _titleError,
+                      ),
+                      onChanged: (_) {
+                        if (_titleError != null) {
+                          setState(() => _titleError = null);
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _notesController,
+                      decoration: InputDecoration(
+                        labelText: l10n.calendarReminderNotesLabel,
+                      ),
+                      maxLines: 2,
+                    ),
+                    const SizedBox(height: 12),
+                    SwitchListTile(
+                      key: const Key('calendar_reminder_is_task_switch'),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(l10n.calendarMarkAsTask),
+                      subtitle: Text(l10n.calendarMarkAsTaskSubtitle),
+                      value: _isTask,
+                      onChanged: (value) => setState(() => _isTask = value),
+                    ),
+                  ],
                 ),
-                ButtonSegment(
-                  value: CalendarReminderAnchor.prayerTime,
-                  label: Text(l10n.calendarAnchorPrayerTime),
-                  icon: const Icon(Icons.mosque_outlined),
+              ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  l10n.sound,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-              ],
-              selected: {_anchor},
-              onSelectionChanged: (selection) =>
-                  setState(() => _anchor = selection.first),
-            ),
-            const SizedBox(height: 20),
-            if (_anchor == CalendarReminderAnchor.clockTime) ...[
-              Text(
-                l10n.calendarReminderDateTimeLabel,
-                style: Theme.of(context).textTheme.labelLarge,
               ),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _pickDate,
-                      child: Text(DateFormat.yMMMd(locale).format(_anchorAt)),
+              if (_soundId != null) ...[
+                Card(
+                  margin: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _pickTime,
-                      child: Text(TimeOfDay.fromDateTime(_anchorAt).format(context)),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarReminderRecurrenceLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceOnce,
-                    selected: _recurrence == ReminderRecurrence.once,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.once),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceDaily,
-                    selected: _recurrence == ReminderRecurrence.daily,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.daily),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceWeekly,
-                    selected: _recurrence == ReminderRecurrence.weekly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.weekly),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceMonthly,
-                    selected: _recurrence == ReminderRecurrence.monthly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.monthly),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceYearly,
-                    selected: _recurrence == ReminderRecurrence.yearly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.yearly),
-                  ),
-                ],
-              ),
-              _buildRecurrenceOptions(l10n, locale),
-            ] else ...[
-              DropdownButtonFormField<String>(
-                initialValue: _anchorPrayerName,
-                decoration: InputDecoration(labelText: l10n.calendarSelectPrayer),
-                items: prayerOrder
-                    .map(
-                      (key) => DropdownMenuItem(
-                        value: key,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              iconForPrayer(key),
-                              size: 18,
-                              color: colorScheme.primary,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(l10n.prayerNameLabel(key)),
-                          ],
+                    child: Row(
+                      children: [
+                        IconButton(
+                          key: const Key('reminder_sound_preview_button'),
+                          icon: Icon(
+                            _isPlayingPreview
+                                ? Icons.pause_circle_filled
+                                : Icons.play_circle_filled,
+                          ),
+                          iconSize: 32,
+                          color: colorScheme.primary,
+                          onPressed: _togglePreviewSound,
                         ),
-                      ),
-                    )
-                    .toList(),
-
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() => _anchorPrayerName = value);
-                  }
-                },
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarOffsetOnTime,
-                    selected: _offsetDirection == _OffsetDirection.onTime,
-                    onSelected: () =>
-                        setState(() => _offsetDirection = _OffsetDirection.onTime),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarOffsetBefore,
-                    selected: _offsetDirection == _OffsetDirection.before,
-                    onSelected: () =>
-                        setState(() => _offsetDirection = _OffsetDirection.before),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarOffsetAfter,
-                    selected: _offsetDirection == _OffsetDirection.after,
-                    onSelected: () =>
-                        setState(() => _offsetDirection = _OffsetDirection.after),
-                  ),
-                ],
-              ),
-              if (_offsetDirection != _OffsetDirection.onTime) ...[
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    ..._minuteOptions.map(
-                      (option) => ChoiceChip(
-                        label: Text(l10n.minutesValue(option)),
-                        selected:
-                            !isCustomOffsetMinutes && offsetMagnitude == option,
-                        onSelected: (selected) {
-                          if (!selected) return;
-                          setState(() {
-                            _offsetMinutesController.text = option.toString();
-                            _offsetMinutesFocus.unfocus();
-                          });
-                        },
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => _offsetMinutesFocus.requestFocus(),
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
-                        decoration: BoxDecoration(
-                          color: isCustomOffsetMinutes
-                              ? colorScheme.primaryContainer
-                              : colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: isCustomOffsetMinutes
-                                ? colorScheme.primary
-                                : colorScheme.outlineVariant,
-                            width: isCustomOffsetMinutes ? 2 : 1,
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _soundTitle ?? l10n.sound,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.edit_outlined,
-                              size: 18,
-                              color: isCustomOffsetMinutes
-                                  ? colorScheme.primary
-                                  : colorScheme.onSurfaceVariant,
+                        if (!_readOnly) ...[
+                          IconButton(
+                            key: const Key('reminder_sound_swap_button'),
+                            icon: const Icon(Icons.swap_horiz),
+                            tooltip: l10n.pickFromLibrary,
+                            onPressed: _pickSound,
+                          ),
+                          IconButton(
+                            key: const Key('reminder_sound_remove_button'),
+                            icon: const Icon(Icons.close),
+                            tooltip: l10n.removeSound,
+                            onPressed: _removeSound,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ] else ...[
+                OutlinedButton.icon(
+                  key: const Key('reminder_pick_sound_button'),
+                  onPressed: _readOnly ? null : _pickSound,
+                  icon: const Icon(Icons.music_note_outlined),
+                  label: Text(
+                    '${l10n.recordSound} / ${l10n.pickFromLibrary}',
+                  ),
+                ),
+              ],
+              const SizedBox(height: 16),
+              IgnorePointer(
+                ignoring: _readOnly,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SegmentedButton<CalendarReminderAnchor>(
+                      segments: [
+                        ButtonSegment(
+                          value: CalendarReminderAnchor.clockTime,
+                          label: Text(l10n.calendarAnchorClockTime),
+                          icon: const Icon(Icons.event),
+                        ),
+                        ButtonSegment(
+                          value: CalendarReminderAnchor.prayerTime,
+                          label: Text(l10n.calendarAnchorPrayerTime),
+                          icon: const Icon(Icons.mosque_outlined),
+                        ),
+                      ],
+                      selected: {_anchor},
+                      onSelectionChanged: (selection) =>
+                          setState(() => _anchor = selection.first),
+                    ),
+                    const SizedBox(height: 20),
+                    if (_anchor == CalendarReminderAnchor.clockTime) ...[
+                      Text(
+                        l10n.calendarReminderDateTimeLabel,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _pickDate,
+                              child: Text(DateFormat.yMMMd(locale).format(_anchorAt)),
                             ),
-                            const SizedBox(width: 8),
-                            Text(
-                              l10n.custom,
-                              style: Theme.of(context).textTheme.labelLarge
-                                  ?.copyWith(
-                                    fontWeight: isCustomOffsetMinutes
-                                        ? FontWeight.w600
-                                        : FontWeight.w500,
-                                    color: isCustomOffsetMinutes
-                                        ? colorScheme.onPrimaryContainer
-                                        : colorScheme.onSurfaceVariant,
-                                  ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _pickTime,
+                              child: Text(TimeOfDay.fromDateTime(_anchorAt).format(context)),
                             ),
-                            const SizedBox(width: 8),
-                            SizedBox(
-                              width: 44,
-                              child: TextField(
-                                controller: _offsetMinutesController,
-                                focusNode: _offsetMinutesFocus,
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly,
-                                ],
-                                onChanged: (_) => setState(() {}),
-                                style: Theme.of(context).textTheme.titleSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w700,
-                                      color: isCustomOffsetMinutes
-                                          ? colorScheme.onPrimaryContainer
-                                          : colorScheme.onSurface,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        l10n.calendarReminderRecurrenceLabel,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceOnce,
+                            selected: _recurrence == ReminderRecurrence.once,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.once),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceDaily,
+                            selected: _recurrence == ReminderRecurrence.daily,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.daily),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceWeekly,
+                            selected: _recurrence == ReminderRecurrence.weekly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.weekly),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceMonthly,
+                            selected: _recurrence == ReminderRecurrence.monthly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.monthly),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceYearly,
+                            selected: _recurrence == ReminderRecurrence.yearly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.yearly),
+                          ),
+                        ],
+                      ),
+                      _buildRecurrenceOptions(l10n, locale),
+                    ] else ...[
+                      DropdownButtonFormField<String>(
+                        initialValue: _anchorPrayerName,
+                        decoration: InputDecoration(labelText: l10n.calendarSelectPrayer),
+                        items: prayerOrder
+                            .map(
+                              (key) => DropdownMenuItem(
+                                value: key,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      iconForPrayer(key),
+                                      size: 18,
+                                      color: colorScheme.primary,
                                     ),
-                                decoration: const InputDecoration(
-                                  isDense: true,
-                                  isCollapsed: true,
-                                  border: InputBorder.none,
+                                    const SizedBox(width: 8),
+                                    Text(l10n.prayerNameLabel(key)),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => _anchorPrayerName = value);
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _ChoiceChipOption(
+                            label: l10n.calendarOffsetOnTime,
+                            selected: _offsetDirection == _OffsetDirection.onTime,
+                            onSelected: () =>
+                                setState(() => _offsetDirection = _OffsetDirection.onTime),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarOffsetBefore,
+                            selected: _offsetDirection == _OffsetDirection.before,
+                            onSelected: () =>
+                                setState(() => _offsetDirection = _OffsetDirection.before),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarOffsetAfter,
+                            selected: _offsetDirection == _OffsetDirection.after,
+                            onSelected: () =>
+                                setState(() => _offsetDirection = _OffsetDirection.after),
+                          ),
+                        ],
+                      ),
+                      if (_offsetDirection != _OffsetDirection.onTime) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            ..._minuteOptions.map(
+                              (option) => ChoiceChip(
+                                label: Text(l10n.minutesValue(option)),
+                                selected:
+                                    !isCustomOffsetMinutes && offsetMagnitude == option,
+                                onSelected: (selected) {
+                                  if (!selected) return;
+                                  setState(() {
+                                    _offsetMinutesController.text = option.toString();
+                                    _offsetMinutesFocus.unfocus();
+                                  });
+                                },
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => _offsetMinutesFocus.requestFocus(),
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+                                decoration: BoxDecoration(
+                                  color: isCustomOffsetMinutes
+                                      ? colorScheme.primaryContainer
+                                      : colorScheme.surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: isCustomOffsetMinutes
+                                        ? colorScheme.primary
+                                        : colorScheme.outlineVariant,
+                                    width: isCustomOffsetMinutes ? 2 : 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.edit_outlined,
+                                      size: 18,
+                                      color: isCustomOffsetMinutes
+                                          ? colorScheme.primary
+                                          : colorScheme.onSurfaceVariant,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      l10n.custom,
+                                      style: Theme.of(context).textTheme.labelLarge
+                                          ?.copyWith(
+                                            fontWeight: isCustomOffsetMinutes
+                                                ? FontWeight.w600
+                                                : FontWeight.w500,
+                                            color: isCustomOffsetMinutes
+                                                ? colorScheme.onPrimaryContainer
+                                                : colorScheme.onSurfaceVariant,
+                                          ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    SizedBox(
+                                      width: 44,
+                                      child: TextField(
+                                        controller: _offsetMinutesController,
+                                        focusNode: _offsetMinutesFocus,
+                                        keyboardType: TextInputType.number,
+                                        textAlign: TextAlign.center,
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.digitsOnly,
+                                        ],
+                                        onChanged: (_) => setState(() {}),
+                                        style: Theme.of(context).textTheme.titleSmall
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: isCustomOffsetMinutes
+                                                  ? colorScheme.onPrimaryContainer
+                                                  : colorScheme.onSurface,
+                                            ),
+                                        decoration: const InputDecoration(
+                                          isDense: true,
+                                          isCollapsed: true,
+                                          border: InputBorder.none,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ],
                         ),
+                      ],
+                      const SizedBox(height: 20),
+                      Text(
+                        l10n.calendarReminderRecurrenceLabel,
+                        style: Theme.of(context).textTheme.labelLarge,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-              const SizedBox(height: 20),
-              Text(
-                l10n.calendarReminderRecurrenceLabel,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceOnce,
-                    selected: _recurrence == ReminderRecurrence.once,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.once),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceDaily,
-                    selected: _recurrence == ReminderRecurrence.daily,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.daily),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceWeekly,
-                    selected: _recurrence == ReminderRecurrence.weekly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.weekly),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceMonthly,
-                    selected: _recurrence == ReminderRecurrence.monthly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.monthly),
-                  ),
-                  _ChoiceChipOption(
-                    label: l10n.calendarRecurrenceYearly,
-                    selected: _recurrence == ReminderRecurrence.yearly,
-                    onSelected: () =>
-                        setState(() => _recurrence = ReminderRecurrence.yearly),
-                  ),
-                ],
-              ),
-              _buildRecurrenceOptions(l10n, locale),
-              if (_recurrence != ReminderRecurrence.daily) ...[
-                const SizedBox(height: 20),
-                OutlinedButton.icon(
-                  onPressed: _pickAnchorDate,
-                  icon: const Icon(Icons.calendar_month_outlined),
-                  label: Text(_anchorDateLabel(l10n)),
-                ),
-              ],
-            ],
-            _buildExcludedDatesSection(l10n, locale),
+                      const SizedBox(height: 8),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceOnce,
+                            selected: _recurrence == ReminderRecurrence.once,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.once),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceDaily,
+                            selected: _recurrence == ReminderRecurrence.daily,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.daily),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceWeekly,
+                            selected: _recurrence == ReminderRecurrence.weekly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.weekly),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceMonthly,
+                            selected: _recurrence == ReminderRecurrence.monthly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.monthly),
+                          ),
+                          _ChoiceChipOption(
+                            label: l10n.calendarRecurrenceYearly,
+                            selected: _recurrence == ReminderRecurrence.yearly,
+                            onSelected: () =>
+                                setState(() => _recurrence = ReminderRecurrence.yearly),
+                          ),
+                        ],
+                      ),
+                      _buildRecurrenceOptions(l10n, locale),
+                      if (_recurrence != ReminderRecurrence.daily) ...[
+                        const SizedBox(height: 20),
+                        OutlinedButton.icon(
+                          onPressed: _pickAnchorDate,
+                          icon: const Icon(Icons.calendar_month_outlined),
+                          label: Text(_anchorDateLabel(l10n)),
+                        ),
+                      ],
+                    ],
+                    _buildExcludedDatesSection(l10n, locale),
                   ],
                 ),
               ),

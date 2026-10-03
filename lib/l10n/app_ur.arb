@@ -603,6 +603,7 @@
   "autoCountWithSound": "آواز کے لوپ پر خودکار گنتی",
   "autoCountWithSoundSubtitle": "ہر بار آڈیو مکمل ہونے پر خودکار طور پر گنتی میں 1 کا اضافہ کریں",
   "attachSoundToExistingBead": "موجودہ تسبیح کے ساتھ منسلک کریں",
+  "attachSoundToExistingReminder": "فعال یاد دہانی کے ساتھ منسلک کریں",
   "saveToSoundLibrary": "صوتی لائبریری میں محفوظ کریں",
   "sharedAudioReceived": "شیئر کی گئی آڈیو موصول ہوئی",
   "sharedAudioPrompt": "منتخب کریں کہ آپ شیئر کی گئی آڈیو فائل کو کیسے استعمال کرنا چاہتے ہیں:",

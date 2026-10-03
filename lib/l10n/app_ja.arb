@@ -603,6 +603,7 @@
   "autoCountWithSound": "音声ループに合わせて自動カウント",
   "autoCountWithSoundSubtitle": "音声の再生が終了するたびにカウントを自動で1増やします",
   "attachSoundToExistingBead": "既存のタスビフに添付",
+  "attachSoundToExistingReminder": "アクティブなリマインダーに添付",
   "saveToSoundLibrary": "音声ライブラリに保存",
   "sharedAudioReceived": "共有された音声を受信しました",
   "sharedAudioPrompt": "共有された音声ファイルの使用方法を選択してください：",

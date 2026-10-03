@@ -3290,6 +3290,12 @@ abstract class AppLocalizations {
   /// **'Attach to Existing Bead'**
   String get attachSoundToExistingBead;
 
+  /// No description provided for @attachSoundToExistingReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach to Active Reminder'**
+  String get attachSoundToExistingReminder;
+
   /// No description provided for @saveToSoundLibrary.
   ///
   /// In en, this message translates to:

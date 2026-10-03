@@ -708,6 +708,7 @@
   "autoCountWithSound": "শব্দ লুপে স্বয়ংক্রিয় গণনা বৃদ্ধি",
   "autoCountWithSoundSubtitle": "প্রতিবার অডিও লুপ শেষ হলে স্বয়ংক্রিয়ভাবে গণনা ১ বাড়ান",
   "attachSoundToExistingBead": "বিদ্যমান তসবিহে সংযুক্ত করুন",
+  "attachSoundToExistingReminder": "সক্রিয় অনুস্মারকে সংযুক্ত করুন",
   "saveToSoundLibrary": "সাউন্ড লাইব্রেরিতে সংরক্ষণ করুন",
   "sharedAudioReceived": "শেয়ার করা অডিও প্রাপ্ত হয়েছে",
   "sharedAudioPrompt": "শেয়ার করা অডিও ফাইলটি কীভাবে ব্যবহার করতে চান তা নির্বাচন করুন:",

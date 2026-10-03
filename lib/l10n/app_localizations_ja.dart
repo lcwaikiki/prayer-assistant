@@ -1685,6 +1685,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get attachSoundToExistingBead => '既存のタスビフに添付';
 
   @override
+  String get attachSoundToExistingReminder => 'アクティブなリマインダーに添付';
+
+  @override
   String get saveToSoundLibrary => '音声ライブラリに保存';
 
   @override

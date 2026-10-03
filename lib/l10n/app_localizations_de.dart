@@ -1749,6 +1749,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get attachSoundToExistingBead => 'An vorhandenes Tesbih anhängen';
 
   @override
+  String get attachSoundToExistingReminder => 'An aktive Erinnerung anhängen';
+
+  @override
   String get saveToSoundLibrary => 'In Tonbibliothek speichern';
 
   @override

@@ -603,6 +603,7 @@
   "autoCountWithSound": "随声音循环自动递增计数",
   "autoCountWithSoundSubtitle": "每次音频播放结束时自动将计数加 1",
   "attachSoundToExistingBead": "附加到现有念珠",
+  "attachSoundToExistingReminder": "附加到活动提醒",
   "saveToSoundLibrary": "保存到声音库",
   "sharedAudioReceived": "已接收共享音频",
   "sharedAudioPrompt": "请选择如何使用此共享音频文件：",

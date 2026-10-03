@@ -603,6 +603,7 @@
   "autoCountWithSound": "Avanzar conteo automáticamente con el bucle de sonido",
   "autoCountWithSoundSubtitle": "Incrementa el contador automáticamente cada vez que finaliza el audio",
   "attachSoundToExistingBead": "Adjuntar a tasbih existente",
+  "attachSoundToExistingReminder": "Adjuntar a recordatorio activo",
   "saveToSoundLibrary": "Guardar en la biblioteca de sonidos",
   "sharedAudioReceived": "Audio compartido recibido",
   "sharedAudioPrompt": "Elige cómo deseas utilizar el archivo de audio compartido:",

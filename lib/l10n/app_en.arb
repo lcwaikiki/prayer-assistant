@@ -788,6 +788,7 @@
   "autoCountWithSound": "Auto-advance count on sound loop",
   "autoCountWithSoundSubtitle": "Automatically increment counter each time the audio loop finishes",
   "attachSoundToExistingBead": "Attach to Existing Bead",
+  "attachSoundToExistingReminder": "Attach to Active Reminder",
   "saveToSoundLibrary": "Save to Sound Library",
   "sharedAudioReceived": "Shared Audio Received",
   "sharedAudioPrompt": "Choose how you want to use the shared audio file:",

@@ -658,6 +658,7 @@
   "autoCountWithSound": "Автоматический счет при окончании звука",
   "autoCountWithSoundSubtitle": "Автоматически увеличивать счетчик на 1 при каждом завершении аудио",
   "attachSoundToExistingBead": "Прикрепить к существующему тасбиху",
+  "attachSoundToExistingReminder": "Прикрепить к активному напоминанию",
   "saveToSoundLibrary": "Сохранить в библиотеку звуков",
   "sharedAudioReceived": "Получено общее аудио",
   "sharedAudioPrompt": "Выберите, как вы хотите использовать полученный аудиофайл:",

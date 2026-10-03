@@ -1768,6 +1768,10 @@ class AppLocalizationsTa extends AppLocalizations {
   String get attachSoundToExistingBead => 'இருக்கும் தஸ்பீஹுடன் இணைக்கவும்';
 
   @override
+  String get attachSoundToExistingReminder =>
+      'செயலில் உள்ள நினைவூட்டலுடன் இணைக்கவும்';
+
+  @override
   String get saveToSoundLibrary => 'ஒலி நூலகத்தில் சேமிக்கவும்';
 
   @override

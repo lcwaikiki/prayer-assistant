@@ -1732,6 +1732,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get attachSoundToExistingBead => 'موجودہ تسبیح کے ساتھ منسلک کریں';
 
   @override
+  String get attachSoundToExistingReminder =>
+      'فعال یاد دہانی کے ساتھ منسلک کریں';
+
+  @override
   String get saveToSoundLibrary => 'صوتی لائبریری میں محفوظ کریں';
 
   @override

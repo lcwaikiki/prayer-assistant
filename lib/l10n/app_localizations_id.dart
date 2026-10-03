@@ -1745,6 +1745,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get attachSoundToExistingBead => 'Lampirkan ke Tasbih yang Ada';
 
   @override
+  String get attachSoundToExistingReminder => 'Lampirkan ke Pengingat Aktif';
+
+  @override
   String get saveToSoundLibrary => 'Simpan ke Pustaka Suara';
 
   @override

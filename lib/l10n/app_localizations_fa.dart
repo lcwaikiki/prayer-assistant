@@ -1733,6 +1733,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get attachSoundToExistingBead => 'ضمیمه به تسبیح موجود';
 
   @override
+  String get attachSoundToExistingReminder => 'ضمیمه به یادآور فعال';
+
+  @override
   String get saveToSoundLibrary => 'ذخیره در کتابخانه صوتی';
 
   @override

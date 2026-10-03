@@ -66,11 +66,15 @@ class CalendarReminder {
     this.yearlyDate,
     this.excludedDates = const [],
     this.isTask = false,
+    this.soundId,
+    this.soundTitle,
   });
 
   final String id;
   final String title;
   final String notes;
+  final String? soundId;
+  final String? soundTitle;
 
   /// For [ReminderRecurrence.once] this is the exact moment the reminder
   /// fires. For every other recurrence, the date part anchors which
@@ -157,6 +161,9 @@ class CalendarReminder {
     DateTime? yearlyDate,
     List<DateTime>? excludedDates,
     bool? isTask,
+    String? soundId,
+    String? soundTitle,
+    bool clearSound = false,
   }) {
     return CalendarReminder(
       id: id,
@@ -177,6 +184,8 @@ class CalendarReminder {
       yearlyDate: yearlyDate ?? this.yearlyDate,
       excludedDates: excludedDates ?? this.excludedDates,
       isTask: isTask ?? this.isTask,
+      soundId: clearSound ? null : (soundId ?? this.soundId),
+      soundTitle: clearSound ? null : (soundTitle ?? this.soundTitle),
     );
   }
 
@@ -475,6 +484,8 @@ class CalendarReminder {
           .map((d) => DateTime(d.year, d.month, d.day).toIso8601String())
           .join(','),
       'is_task': isTask ? 1 : 0,
+      'sound_id': soundId,
+      'sound_title': soundTitle,
     };
   }
 
@@ -537,6 +548,8 @@ class CalendarReminder {
       yearlyDate: yearlyDate,
       excludedDates: excludedDates,
       isTask: (map['is_task'] as int? ?? 0) == 1,
+      soundId: map['sound_id']?.toString(),
+      soundTitle: map['sound_title']?.toString(),
     );
   }
 }

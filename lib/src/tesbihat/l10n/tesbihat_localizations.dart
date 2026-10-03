@@ -167,6 +167,7 @@ class TesbihatLocalizations {
   String get autoCountWithSound => _appL10n.autoCountWithSound;
   String get autoCountWithSoundSubtitle => _appL10n.autoCountWithSoundSubtitle;
   String get attachSoundToExistingBead => _appL10n.attachSoundToExistingBead;
+  String get attachSoundToExistingReminder => _appL10n.attachSoundToExistingReminder;
   String get saveToSoundLibrary => _appL10n.saveToSoundLibrary;
   String get sharedAudioReceived => _appL10n.sharedAudioReceived;
   String get sharedAudioPrompt => _appL10n.sharedAudioPrompt;

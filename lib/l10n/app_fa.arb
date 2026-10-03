@@ -603,6 +603,7 @@
   "autoCountWithSound": "افزایش خودکار شمارنده با پایان صدا",
   "autoCountWithSoundSubtitle": "با هر بار تمام شدن پخش صدا، شمارنده به طور خودکار ۱ عدد افزایش می‌یابد",
   "attachSoundToExistingBead": "ضمیمه به تسبیح موجود",
+  "attachSoundToExistingReminder": "ضمیمه به یادآور فعال",
   "saveToSoundLibrary": "ذخیره در کتابخانه صوتی",
   "sharedAudioReceived": "صوت به اشتراک گذاشته شده دریافت شد",
   "sharedAudioPrompt": "نحوه استفاده از فایل صوتی به اشتراک گذاشته شده را انتخاب کنید:",

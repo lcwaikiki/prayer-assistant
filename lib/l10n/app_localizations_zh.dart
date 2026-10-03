@@ -1678,6 +1678,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get attachSoundToExistingBead => '附加到现有念珠';
 
   @override
+  String get attachSoundToExistingReminder => '附加到活动提醒';
+
+  @override
   String get saveToSoundLibrary => '保存到声音库';
 
   @override

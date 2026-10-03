@@ -603,6 +603,7 @@
   "autoCountWithSound": "Hitung otomatis pada perulangan suara",
   "autoCountWithSoundSubtitle": "Secara otomatis menambah hitungan setiap kali audio selesai diputar",
   "attachSoundToExistingBead": "Lampirkan ke Tasbih yang Ada",
+  "attachSoundToExistingReminder": "Lampirkan ke Pengingat Aktif",
   "saveToSoundLibrary": "Simpan ke Pustaka Suara",
   "sharedAudioReceived": "Audio Berbagi Diterima",
   "sharedAudioPrompt": "Pilih cara Anda ingin menggunakan file audio yang dibagikan:",

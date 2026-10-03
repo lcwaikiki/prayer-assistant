@@ -1744,6 +1744,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get attachSoundToExistingBead => 'Прикрепить к существующему тасбиху';
 
   @override
+  String get attachSoundToExistingReminder =>
+      'Прикрепить к активному напоминанию';
+
+  @override
   String get saveToSoundLibrary => 'Сохранить в библиотеку звуков';
 
   @override

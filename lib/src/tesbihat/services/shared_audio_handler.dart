@@ -3,9 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
+import '../../calendar/models/calendar_reminder.dart';
+import '../../controller/prayer_app_controller.dart';
 import '../../navigation.dart';
+import '../../services/local_database.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
 import '../models/sound_item.dart';
@@ -75,19 +79,22 @@ class SharedAudioHandler {
             ? rawName.substring(0, rawName.lastIndexOf('.'))
             : rawName;
 
-        _showAttachOrSaveDialog(bytes, name, container);
+        final context = rootNavigatorKey.currentContext;
+        if (context != null && context.mounted) {
+          showAttachOrSaveDialog(context, bytes, name, container);
+        }
         break;
       } catch (_) {}
     }
   }
 
-  static Future<void> _showAttachOrSaveDialog(
+  static Future<void> showAttachOrSaveDialog(
+    BuildContext context,
     Uint8List bytes,
     String defaultName,
     ProviderContainer container,
   ) async {
-    final context = rootNavigatorKey.currentContext;
-    if (context == null || !context.mounted) return;
+    if (!context.mounted) return;
 
     final l10n = context.tesbihatL10n;
 
@@ -119,7 +126,15 @@ class SharedAudioHandler {
                   title: Text(l10n.attachSoundToExistingBead),
                   onTap: () {
                     Navigator.pop(sheetContext);
-                    _showAttachToExistingBeadDialog(bytes, defaultName, container);
+                    _showAttachToExistingBeadDialog(context, bytes, defaultName, container);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.event_note_outlined),
+                  title: Text(l10n.attachSoundToExistingReminder),
+                  onTap: () {
+                    Navigator.pop(sheetContext);
+                    _showAttachToExistingReminderDialog(context, bytes, defaultName, container);
                   },
                 ),
                 ListTile(
@@ -127,7 +142,7 @@ class SharedAudioHandler {
                   title: Text(l10n.saveToSoundLibrary),
                   onTap: () {
                     Navigator.pop(sheetContext);
-                    _saveToLibraryWithPrompt(bytes, defaultName, container);
+                    _saveToLibraryWithPrompt(context, bytes, defaultName, container);
                   },
                 ),
               ],
@@ -139,12 +154,12 @@ class SharedAudioHandler {
   }
 
   static Future<void> _saveToLibraryWithPrompt(
+    BuildContext context,
     Uint8List bytes,
     String defaultName,
     ProviderContainer container,
   ) async {
-    final context = rootNavigatorKey.currentContext;
-    if (context == null || !context.mounted) return;
+    if (!context.mounted) return;
 
     final titleController = TextEditingController(text: defaultName);
 
@@ -187,17 +202,17 @@ class SharedAudioHandler {
   }
 
   static Future<void> _showAttachToExistingBeadDialog(
+    BuildContext context,
     Uint8List bytes,
     String defaultName,
     ProviderContainer container,
   ) async {
-    final context = rootNavigatorKey.currentContext;
-    if (context == null || !context.mounted) return;
+    if (!context.mounted) return;
 
     final items = container.read(itemsNotifierProvider);
     if (items.isEmpty) {
       // If no beads exist, save to library instead
-      _saveToLibraryWithPrompt(bytes, defaultName, container);
+      _saveToLibraryWithPrompt(context, bytes, defaultName, container);
       return;
     }
 
@@ -239,6 +254,102 @@ class SharedAudioHandler {
         soundTitle: newSound.title,
       );
       container.read(itemsNotifierProvider.notifier).updateItem(updated);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.tesbihatL10n.soundAttached)),
+        );
+      }
+    }
+  }
+
+  static Future<void> _showAttachToExistingReminderDialog(
+    BuildContext context,
+    Uint8List bytes,
+    String defaultName,
+    ProviderContainer container,
+  ) async {
+    if (!context.mounted) return;
+
+    List<CalendarReminder> reminders = [];
+    try {
+      final controller = context.read<PrayerAppController>();
+      reminders = controller.calendarReminders.where((r) => !r.isTask).toList();
+    } catch (_) {
+      try {
+        final dbReminders = await LocalDatabase().loadCalendarReminders();
+        reminders = dbReminders.where((r) => !r.isTask).toList();
+      } catch (_) {}
+    }
+
+    if (reminders.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.tesbihatL10n.cancel, // or feedback
+            ),
+          ),
+        );
+      }
+      if (context.mounted) {
+        _saveToLibraryWithPrompt(context, bytes, defaultName, container);
+      }
+      return;
+    }
+
+    final selectedReminder = await showDialog<CalendarReminder>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(context.tesbihatL10n.attachSoundToExistingReminder),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: reminders.length,
+            itemBuilder: (context, index) {
+              final reminder = reminders[index];
+              return ListTile(
+                leading: Icon(
+                  reminder.soundId != null
+                      ? Icons.music_note
+                      : Icons.notifications_none,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                title: Text(reminder.title),
+                subtitle: Text(reminder.notes.isNotEmpty
+                    ? reminder.notes
+                    : reminder.recurrence.name),
+                onTap: () => Navigator.pop(dialogContext, reminder),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(context.tesbihatL10n.cancel),
+          ),
+        ],
+      ),
+    );
+
+    if (selectedReminder != null) {
+      final newSound = container
+          .read(soundLibraryNotifierProvider.notifier)
+          .addSound(title: defaultName, bytes: bytes);
+
+      final updated = selectedReminder.copyWith(
+        soundId: newSound.id,
+        soundTitle: newSound.title,
+      );
+
+      try {
+        final controller = context.read<PrayerAppController>();
+        await controller.updateCalendarReminder(updated);
+      } catch (_) {
+        await LocalDatabase().saveCalendarReminder(updated);
+      }
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final audioPlayerServiceProvider = Provider.autoDispose<AudioPlayerService>((ref) {
+final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
   final service = AudioPlayerService();
   ref.onDispose(service.dispose);
   return service;

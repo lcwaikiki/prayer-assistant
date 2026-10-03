@@ -1727,6 +1727,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get attachSoundToExistingBead => 'إرفاق بتسبيح موجود';
 
   @override
+  String get attachSoundToExistingReminder => 'إرفاق بتذكير نشط';
+
+  @override
   String get saveToSoundLibrary => 'حفظ في مكتبة الأصوات';
 
   @override

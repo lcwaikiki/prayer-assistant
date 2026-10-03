@@ -14,6 +14,7 @@ import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/sound_library_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/tesbihat/services/audio_player_service.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
 import 'package:provider/provider.dart' as provider;
@@ -37,6 +38,7 @@ class TestHarness {
     this.itemRepository,
     this.itemHistoryRepository,
     this.soundLibraryRepository,
+    this.audioPlayerService,
   );
 
   factory TestHarness.create() {
@@ -424,6 +426,8 @@ class TestHarness {
       offlineFolderService: offlineFolderService,
     );
 
+    final audioPlayerService = FakeAudioPlayerService();
+
     return TestHarness._(
       controller,
       api,
@@ -436,6 +440,7 @@ class TestHarness {
       ItemRepository.memory(),
       ItemHistoryRepository.memory(),
       SoundLibraryRepository.memory(),
+      audioPlayerService,
     );
   }
 
@@ -450,6 +455,7 @@ class TestHarness {
   ItemRepository itemRepository;
   ItemHistoryRepository itemHistoryRepository;
   SoundLibraryRepository soundLibraryRepository;
+  FakeAudioPlayerService audioPlayerService;
 
   /// Runs the controller's full startup sequence against the current stubs.
   Future<void> initialize() => controller.initialize();
@@ -482,6 +488,9 @@ Future<void> pumpWithHarness(
         ),
         itemReminderServiceProvider.overrideWithValue(
           harness.itemReminderService,
+        ),
+        audioPlayerServiceProvider.overrideWithValue(
+          harness.audioPlayerService,
         ),
         ...extraOverrides,
       ],

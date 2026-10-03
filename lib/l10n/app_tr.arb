@@ -600,6 +600,7 @@
   "autoCountWithSound": "Ses döngüsünde sayacı otomatik ilerlet",
   "autoCountWithSoundSubtitle": "Ses her bittiğinde sayacı otomatik olarak 1 artırır",
   "attachSoundToExistingBead": "Mevcut Tesbihe Ekle",
+  "attachSoundToExistingReminder": "Aktif Hatırlatıcıya Ekle",
   "saveToSoundLibrary": "Ses Kitaplığına Kaydet",
   "sharedAudioReceived": "Paylaşılan Ses Alındı",
   "sharedAudioPrompt": "Paylaşılan ses dosyasını nasıl kullanmak istersiniz:",

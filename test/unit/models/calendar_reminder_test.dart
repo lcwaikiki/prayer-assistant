@@ -291,5 +291,44 @@ void main() {
       expect(updated.anchorAt, base.anchorAt);
       expect(updated.recurrence, base.recurrence);
     });
+
+    test('soundId and soundTitle serialize and deserialize correctly', () {
+      final r = CalendarReminder(
+        id: 'r_sound',
+        title: 'Reminder with sound',
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        soundId: 'sound_123',
+        soundTitle: 'Adhan Sound',
+      );
+
+      final map = r.toMap();
+      expect(map['sound_id'], 'sound_123');
+      expect(map['sound_title'], 'Adhan Sound');
+
+      final deserialized = CalendarReminder.fromMap(map);
+      expect(deserialized.soundId, 'sound_123');
+      expect(deserialized.soundTitle, 'Adhan Sound');
+    });
+
+    test('copyWith supports updating and clearing sound', () {
+      final base = CalendarReminder(
+        id: 'r_sound',
+        title: 'Reminder',
+        anchorAt: DateTime(2026, 8, 17, 12, 0),
+        soundId: 'sound_1',
+        soundTitle: 'Sound 1',
+      );
+
+      final updated = base.copyWith(
+        soundId: 'sound_2',
+        soundTitle: 'Sound 2',
+      );
+      expect(updated.soundId, 'sound_2');
+      expect(updated.soundTitle, 'Sound 2');
+
+      final cleared = updated.copyWith(clearSound: true);
+      expect(cleared.soundId, isNull);
+      expect(cleared.soundTitle, isNull);
+    });
   });
 }

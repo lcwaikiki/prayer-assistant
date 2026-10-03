@@ -1735,6 +1735,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get attachSoundToExistingBead => 'Attach to Existing Bead';
 
   @override
+  String get attachSoundToExistingReminder => 'Attach to Active Reminder';
+
+  @override
   String get saveToSoundLibrary => 'Save to Sound Library';
 
   @override

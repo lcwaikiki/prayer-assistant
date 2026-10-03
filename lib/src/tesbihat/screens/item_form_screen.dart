@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +27,7 @@ class ItemFormScreen extends ConsumerStatefulWidget {
     this.itemToEdit,
     this.initialGroupIds,
     this.readOnly = false,
+    this.audioPlayerService,
   });
 
   final Item? itemToEdit;
@@ -32,6 +36,7 @@ class ItemFormScreen extends ConsumerStatefulWidget {
   /// bead from inside a group).
   final List<String>? initialGroupIds;
   final bool readOnly;
+  final AudioPlayerService? audioPlayerService;
 
   @override
   ConsumerState<ItemFormScreen> createState() => _ItemFormScreenState();
@@ -52,6 +57,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   String? _soundTitle;
   late bool _autoCountWithSound;
   late final AudioPlayerService _audioPlayer;
+  StreamSubscription<void>? _playerCompleteSubscription;
   bool _isPlayingPreview = false;
   bool _saving = false;
   bool _allowPop = false;
@@ -122,20 +128,24 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _soundId = item?.soundId;
     _soundTitle = item?.soundTitle;
     _autoCountWithSound = item?.autoCountWithSound ?? true;
-    _audioPlayer = AudioPlayerService();
-    _audioPlayer.onPlayerComplete.listen((_) {
+    _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
+    _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
       if (mounted) setState(() => _isPlayingPreview = false);
     });
   }
 
   @override
   void dispose() {
+    _playerCompleteSubscription?.cancel();
+    _audioPlayer.stop();
+    if (widget.audioPlayerService == null) {
+      _audioPlayer.dispose();
+    }
     _titleController.dispose();
     _notesController.dispose();
     _countController.dispose();
     _checkController.dispose();
     _setCountController.dispose();
-    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -144,6 +154,12 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (_isPlayingPreview) {
       await _audioPlayer.pause();
       setState(() => _isPlayingPreview = false);
+      return;
+    }
+
+    if (_audioPlayer.state == PlayerState.paused) {
+      await _audioPlayer.resume();
+      setState(() => _isPlayingPreview = true);
       return;
     }
 
@@ -326,6 +342,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     }
 
     if (mounted) {
+      await _audioPlayer.stop();
       setState(() => _allowPop = true);
       Navigator.pop(context);
     }
@@ -340,12 +357,14 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         if (didPop) return;
         final navigator = Navigator.of(context);
         if (!_isDirty) {
+          await _audioPlayer.stop();
           setState(() => _allowPop = true);
           navigator.pop(result);
           return;
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
         if (shouldDiscard == true && mounted) {
+          await _audioPlayer.stop();
           setState(() => _allowPop = true);
           navigator.pop(result);
         }
@@ -501,106 +520,109 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                           );
                         },
                       ),
-                      const SizedBox(height: 20),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          l10n.sound,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    l10n.sound,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (_soundId != null) ...[
+                  Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
                       ),
-                      const SizedBox(height: 8),
-                      if (_soundId != null) ...[
-                        Card(
-                          margin: EdgeInsets.zero,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        _isPlayingPreview
-                                            ? Icons.pause_circle_filled
-                                            : Icons.play_circle_filled,
-                                      ),
-                                      iconSize: 32,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      onPressed: _togglePreviewSound,
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        _soundTitle ?? l10n.sound,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    if (!_readOnly) ...[
-                                      IconButton(
-                                        icon: const Icon(Icons.swap_horiz),
-                                        tooltip: l10n.pickFromLibrary,
-                                        onPressed: _pickSound,
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.close),
-                                        tooltip: l10n.removeSound,
-                                        onPressed: _removeSound,
-                                      ),
-                                    ],
-                                  ],
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                key: const Key('sound_preview_button'),
+                                icon: Icon(
+                                  _isPlayingPreview
+                                      ? Icons.pause_circle_filled
+                                      : Icons.play_circle_filled,
                                 ),
-                                SwitchListTile(
-                                  dense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(l10n.autoCountWithSound),
-                                  subtitle: Text(
-                                    l10n.autoCountWithSoundSubtitle,
+                                iconSize: 32,
+                                color: Theme.of(context).colorScheme.primary,
+                                onPressed: _togglePreviewSound,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _soundTitle ?? l10n.sound,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                  value: _autoCountWithSound,
-                                  onChanged: _readOnly
-                                      ? null
-                                      : (value) => setState(
-                                            () => _autoCountWithSound = value,
-                                          ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              if (!_readOnly) ...[
+                                IconButton(
+                                  icon: const Icon(Icons.swap_horiz),
+                                  tooltip: l10n.pickFromLibrary,
+                                  onPressed: _pickSound,
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.close),
+                                  tooltip: l10n.removeSound,
+                                  onPressed: _removeSound,
                                 ),
                               ],
+                            ],
+                          ),
+                          SwitchListTile(
+                            dense: true,
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(l10n.autoCountWithSound),
+                            subtitle: Text(
+                              l10n.autoCountWithSoundSubtitle,
                             ),
+                            value: _autoCountWithSound,
+                            onChanged: _readOnly
+                                ? null
+                                : (value) => setState(
+                                      () => _autoCountWithSound = value,
+                                    ),
                           ),
-                        ),
-                      ] else ...[
-                        OutlinedButton.icon(
-                          onPressed: _readOnly ? null : _pickSound,
-                          icon: const Icon(Icons.music_note_outlined),
-                          label: Text(
-                            '${l10n.recordSound} / ${l10n.pickFromLibrary}',
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 20),
-                      ReminderSection(
-                        readOnly: _readOnly,
-                        initial: _isEditing
-                            ? ReminderConfig.fromItem(widget.itemToEdit!)
-                            : null,
-                        onChanged: (config) =>
-                            setState(() => _reminderConfig = config),
+                        ],
                       ),
-                      const SizedBox(height: 20),
-                      _GroupSelector(
-                        selectedIds: _selectedGroupIds,
-                        onChanged: (ids) =>
-                            setState(() => _selectedGroupIds = ids),
-                      ),
-                    ],
+                    ),
+                  ),
+                ] else ...[
+                  OutlinedButton.icon(
+                    onPressed: _readOnly ? null : _pickSound,
+                    icon: const Icon(Icons.music_note_outlined),
+                    label: Text(
+                      '${l10n.recordSound} / ${l10n.pickFromLibrary}',
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 20),
+                ReminderSection(
+                  readOnly: _readOnly,
+                  initial: _isEditing
+                      ? ReminderConfig.fromItem(widget.itemToEdit!)
+                      : null,
+                  onChanged: (config) =>
+                      setState(() => _reminderConfig = config),
+                ),
+                const SizedBox(height: 20),
+                IgnorePointer(
+                  ignoring: _readOnly,
+                  child: _GroupSelector(
+                    selectedIds: _selectedGroupIds,
+                    onChanged: (ids) =>
+                        setState(() => _selectedGroupIds = ids),
                   ),
                 ),
                 if (_readOnly) ...[

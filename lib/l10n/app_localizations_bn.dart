@@ -1768,4 +1768,7 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'অডিও রেকর্ড করতে মাইক্রোফোনের অনুমতি প্রয়োজন।';
+
+  @override
+  String get playbackSpeed => 'প্লেব্যাক গতি';
 }

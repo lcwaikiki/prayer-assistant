@@ -611,5 +611,6 @@
   "soundSavedSuccess": "Son enregistré avec succès",
   "soundDeletedSuccess": "Son supprimé",
   "rename": "Renommer",
-  "microphonePermissionRequired": "L'autorisation du microphone est requise pour enregistrer de l'audio."
+  "microphonePermissionRequired": "L'autorisation du microphone est requise pour enregistrer de l'audio.",
+  "playbackSpeed": "Vitesse de lecture"
 }

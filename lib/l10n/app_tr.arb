@@ -608,5 +608,6 @@
   "soundSavedSuccess": "Ses başarıyla kaydedildi",
   "soundDeletedSuccess": "Ses silindi",
   "rename": "Yeniden Adlandır",
-  "microphonePermissionRequired": "Ses kaydetmek için mikrofon izni gereklidir."
+  "microphonePermissionRequired": "Ses kaydetmek için mikrofon izni gereklidir.",
+  "playbackSpeed": "Oynatma Hızı"
 }

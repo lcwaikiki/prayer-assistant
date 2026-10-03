@@ -176,6 +176,7 @@ class TesbihatLocalizations {
   String get soundDeletedSuccess => _appL10n.soundDeletedSuccess;
   String get rename => _appL10n.rename;
   String get microphonePermissionRequired => _appL10n.microphonePermissionRequired;
+  String get playbackSpeed => _appL10n.playbackSpeed;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

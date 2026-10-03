@@ -1759,4 +1759,7 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'آڈیو ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔';
+
+  @override
+  String get playbackSpeed => 'پلے بیک کی رفتار';
 }

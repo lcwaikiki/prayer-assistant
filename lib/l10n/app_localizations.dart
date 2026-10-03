@@ -3343,6 +3343,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Microphone permission is required to record audio.'**
   String get microphonePermissionRequired;
+
+  /// No description provided for @playbackSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Playback Speed'**
+  String get playbackSpeed;
 }
 
 class _AppLocalizationsDelegate

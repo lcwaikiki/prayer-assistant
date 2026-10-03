@@ -13,6 +13,7 @@ import '../services/haptic_service.dart';
 import '../services/tap_pace_tracker.dart';
 import '../state/items_notifier.dart';
 import '../state/sound_library_notifier.dart';
+import '../widgets/audio_speed_bar.dart';
 import 'item_form_screen.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
@@ -35,6 +36,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   StreamSubscription<void>? _playerCompleteSub;
   bool _isAudioPlaying = false;
   int _soundLoopCount = 0;
+  double _playbackSpeed = 1.0;
 
   void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
@@ -57,6 +59,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _lockOrientation();
     _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
     _playerCompleteSub = _audioPlayer.onPlayerComplete.listen((_) => _onSoundComplete());
+
+    final initialItem = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (initialItem != null) {
+      _playbackSpeed = initialItem.soundSpeed;
+    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _lockOrientation();
@@ -82,7 +92,26 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(soundLibraryNotifierProvider.notifier)
         .getSoundById(item.soundId);
     if (sound != null) {
-      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+      await _audioPlayer.playBytes(
+        sound.bytes,
+        mimeType: sound.mimeType,
+        playbackRate: _playbackSpeed,
+      );
+    }
+  }
+
+  void _onSpeedChanged(double newSpeed) {
+    setState(() => _playbackSpeed = newSpeed);
+    _audioPlayer.setPlaybackRate(newSpeed);
+
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item != null && item.soundSpeed != newSpeed) {
+      ref
+          .read(itemsNotifierProvider.notifier)
+          .updateItem(item.copyWith(soundSpeed: newSpeed));
     }
   }
 
@@ -412,159 +441,217 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         ],
       ),
       body: SafeArea(
-        child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: _TopStatCard(label: l10n.count, value: '$countValue'),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: _TopStatCard(
-                    label: l10n.maxMinusCount,
-                    value: '$maxMinusCount',
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: _TopStatCard(
-                    label: l10n.timeLeft,
-                    value: computeTimeLeft(),
-                    valueKey: const Key('time_left_value_text'),
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: _TopStatCard(
-                    label: l10n.setCount,
-                    value: '$setCountValue',
-                    valueKey: const Key('set_count_value_text'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            LinearProgressIndicator(
-              key: const Key('progress_bar'),
-              value: item.count == 0 ? 0 : item.currentProgress / item.count,
-              minHeight: 10,
-              borderRadius: BorderRadius.circular(999),
-            ),
-            const SizedBox(height: 16),
-            GestureDetector(
-              key: const Key('progress_text_long_press_target'),
-              onLongPress: editProgressAndSetCount,
-              child: Text(
-                '${item.currentProgress}',
-                key: const Key('progress_text'),
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-            ),
-            if (item.soundId != null) ...[
-              const SizedBox(height: 12),
-              Card(
-                margin: EdgeInsets.zero,
-                color: _isAudioPlaying
-                    ? Theme.of(context).colorScheme.primaryContainer
-                    : null,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      IconButton.filled(
-                        key: const Key('audio_playback_button'),
-                        icon: Icon(_isAudioPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow),
-                        onPressed: item.currentProgress >= item.count
-                            ? null
-                            : _toggleAudioPlayback,
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            Text(
-                              item.soundTitle ?? l10n.sound,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            Expanded(
+                              child: _TopStatCard(label: l10n.count, value: '$countValue'),
                             ),
-                            Text(
-                              '${l10n.maxMinusCount}: $maxMinusCount',
-                              style: Theme.of(context).textTheme.bodySmall,
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: _TopStatCard(
+                                label: l10n.maxMinusCount,
+                                value: '$maxMinusCount',
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: _TopStatCard(
+                                label: l10n.timeLeft,
+                                value: computeTimeLeft(),
+                                valueKey: const Key('time_left_value_text'),
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Expanded(
+                              child: _TopStatCard(
+                                label: l10n.setCount,
+                                value: '$setCountValue',
+                                valueKey: const Key('set_count_value_text'),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-            const SizedBox(height: 16),
-            Expanded(
-              child: SizedBox.expand(
-                child: OutlinedButton(
-                  key: const Key('big_tap_button'),
-                  onPressed: item.currentProgress >= item.count
-                      ? null
-                      : handleTap,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.primary,
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.onSurface,
-                      width: 2,
+                        const SizedBox(height: 16),
+                        LinearProgressIndicator(
+                          key: const Key('progress_bar'),
+                          value: item.count == 0 ? 0 : item.currentProgress / item.count,
+                          minHeight: 10,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          key: const Key('progress_text_long_press_target'),
+                          onLongPress: editProgressAndSetCount,
+                          child: Text(
+                            '${item.currentProgress}',
+                            key: const Key('progress_text'),
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                        ),
+                        if (item.soundId != null) ...[
+                          const SizedBox(height: 12),
+                          Card(
+                            margin: EdgeInsets.zero,
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  FilledButton.tonal(
+                                    key: const Key('audio_playback_button'),
+                                    onPressed: item.currentProgress >= item.count
+                                        ? null
+                                        : _toggleAudioPlayback,
+                                    style: FilledButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 12,
+                                      ),
+                                      backgroundColor: _isAudioPlaying
+                                          ? Theme.of(context).colorScheme.primary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primaryContainer,
+                                      foregroundColor: _isAudioPlaying
+                                          ? Theme.of(context).colorScheme.onPrimary
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .onPrimaryContainer,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          _isAudioPlaying
+                                              ? Icons.pause_circle_filled
+                                              : Icons.play_circle_filled,
+                                          size: 26,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Expanded(
+                                          child: Text(
+                                            item.soundTitle ?? l10n.sound,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 15,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 3,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: _isAudioPlaying
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary
+                                                    .withValues(alpha: 0.2)
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                    .withValues(alpha: 0.15),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          child: Text(
+                                            '${(item.count - item.currentProgress).clamp(0, item.count)}',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  AudioSpeedBar(
+                                    speed: _playbackSpeed,
+                                    onSpeedChanged: _onSpeedChanged,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 16),
+                        Expanded(
+                          child: SizedBox.expand(
+                            child: OutlinedButton(
+                              key: const Key('big_tap_button'),
+                              onPressed: item.currentProgress >= item.count
+                                  ? null
+                                  : handleTap,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Theme.of(context).colorScheme.primary,
+                                side: BorderSide(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                  width: 2,
+                                ),
+                              ),
+                              child: Text(
+                                l10n.tap,
+                                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        OutlinedButton.icon(
+                          key: const Key('reset_button'),
+                          onPressed: confirmReset,
+                          icon: const Icon(Icons.refresh),
+                          label: Text(l10n.reset),
+                        ),
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.notes,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Container(
+                          width: double.infinity,
+                          height: 140,
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                          ),
+                          child: SingleChildScrollView(
+                            child: Text(
+                              item.notes.isEmpty ? l10n.noNotesAdded : item.notes,
+                              key: const Key('notes_bottom_text'),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  child: Text(
-                    l10n.tap,
-                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            OutlinedButton.icon(
-              key: const Key('reset_button'),
-              onPressed: confirmReset,
-              icon: const Icon(Icons.refresh),
-              label: Text(l10n.reset),
-            ),
-            const SizedBox(height: 12),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                l10n.notes,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              width: double.infinity,
-              height: 140,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              ),
-              child: SingleChildScrollView(
-                child: Text(
-                  item.notes.isEmpty ? l10n.noNotesAdded : item.notes,
-                  key: const Key('notes_bottom_text'),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ),
-            ),
-          ],
-        ),
+            );
+          },
         ),
       ),
     );

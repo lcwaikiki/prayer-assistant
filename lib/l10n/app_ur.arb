@@ -611,5 +611,6 @@
   "soundSavedSuccess": "آواز کامیابی سے محفوظ ہو گئی",
   "soundDeletedSuccess": "آواز حذف کر دی گئی",
   "rename": "نام تبدیل کریں",
-  "microphonePermissionRequired": "آڈیو ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔"
+  "microphonePermissionRequired": "آڈیو ریکارڈ کرنے کے لیے مائیکروفون کی اجازت درکار ہے۔",
+  "playbackSpeed": "پلے بیک کی رفتار"
 }

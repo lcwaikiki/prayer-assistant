@@ -611,5 +611,6 @@
   "soundSavedSuccess": "Sonido guardado con éxito",
   "soundDeletedSuccess": "Sonido eliminado",
   "rename": "Renombrar",
-  "microphonePermissionRequired": "Se requiere permiso de micrófono para grabar audio."
+  "microphonePermissionRequired": "Se requiere permiso de micrófono para grabar audio.",
+  "playbackSpeed": "Velocidad de reproducción"
 }

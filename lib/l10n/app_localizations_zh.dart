@@ -1703,4 +1703,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get microphonePermissionRequired => '录制音频需要麦克风权限。';
+
+  @override
+  String get playbackSpeed => '播放速度';
 }

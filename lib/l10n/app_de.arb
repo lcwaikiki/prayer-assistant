@@ -611,5 +611,6 @@
   "soundSavedSuccess": "Ton erfolgreich gespeichert",
   "soundDeletedSuccess": "Ton gelöscht",
   "rename": "Umbenennen",
-  "microphonePermissionRequired": "Mikrofonberechtigung ist erforderlich, um Audio aufzunehmen."
+  "microphonePermissionRequired": "Mikrofonberechtigung ist erforderlich, um Audio aufzunehmen.",
+  "playbackSpeed": "Wiedergabegeschwindigkeit"
 }

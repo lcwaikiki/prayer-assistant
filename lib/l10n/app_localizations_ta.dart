@@ -1795,4 +1795,7 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'ஆடியோ பதிவு செய்ய மைக்ரோஃபோன் அனுமதி தேவை.';
+
+  @override
+  String get playbackSpeed => 'இயக்க வேகம்';
 }

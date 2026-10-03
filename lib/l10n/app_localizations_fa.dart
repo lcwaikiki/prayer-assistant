@@ -1760,4 +1760,7 @@ class AppLocalizationsFa extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'برای ضبط صدا اجازه دسترسی به میکروفون لازم است.';
+
+  @override
+  String get playbackSpeed => 'سرعت پخش';
 }

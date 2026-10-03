@@ -611,5 +611,6 @@
   "soundSavedSuccess": "Suara berhasil disimpan",
   "soundDeletedSuccess": "Suara dihapus",
   "rename": "Ganti Nama",
-  "microphonePermissionRequired": "Izin mikrofon diperlukan untuk merekam audio."
+  "microphonePermissionRequired": "Izin mikrofon diperlukan untuk merekam audio.",
+  "playbackSpeed": "Kecepatan Pemutaran"
 }

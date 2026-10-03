@@ -666,5 +666,6 @@
   "soundSavedSuccess": "Звук успешно сохранен",
   "soundDeletedSuccess": "Звук удален",
   "rename": "Переименовать",
-  "microphonePermissionRequired": "Для записи аудио требуется разрешение на использование микрофона."
+  "microphonePermissionRequired": "Для записи аудио требуется разрешение на использование микрофона.",
+  "playbackSpeed": "Скорость воспроизведения"
 }

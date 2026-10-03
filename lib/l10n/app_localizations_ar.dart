@@ -1753,4 +1753,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'إذن الميكروفون مطلوب لتسجيل الصوت.';
+
+  @override
+  String get playbackSpeed => 'سرعة التشغيل';
 }

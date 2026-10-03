@@ -1776,4 +1776,7 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'Mikrofonberechtigung ist erforderlich, um Audio aufzunehmen.';
+
+  @override
+  String get playbackSpeed => 'Wiedergabegeschwindigkeit';
 }

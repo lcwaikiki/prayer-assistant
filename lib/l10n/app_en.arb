@@ -796,5 +796,6 @@
   "soundSavedSuccess": "Sound saved successfully",
   "soundDeletedSuccess": "Sound deleted",
   "rename": "Rename",
-  "microphonePermissionRequired": "Microphone permission is required to record audio."
+  "microphonePermissionRequired": "Microphone permission is required to record audio.",
+  "playbackSpeed": "Playback Speed"
 }

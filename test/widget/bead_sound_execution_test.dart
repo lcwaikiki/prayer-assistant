@@ -20,9 +20,12 @@ import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
 import '../helpers/test_harness.dart';
 
+class FakeItem extends Fake implements Item {}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
+    registerFallbackValue(FakeItem());
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       const MethodChannel('wakelock_plus'),
@@ -62,6 +65,12 @@ void main() {
     when(() => haptic.checkpoint(intensity: any(named: 'intensity')))
         .thenAnswer((_) async {});
 
+    final mockReminderService = MockItemReminderService();
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+
     final fakeAudioPlayer = FakeAudioPlayerService();
 
     await tester.pumpWidget(
@@ -72,7 +81,7 @@ void main() {
           itemHistoryRepositoryProvider
               .overrideWithValue(ItemHistoryRepository.memory()),
           itemReminderServiceProvider
-              .overrideWithValue(MockItemReminderService()),
+              .overrideWithValue(mockReminderService),
           soundLibraryRepositoryProvider
               .overrideWithValue(SoundLibraryRepository.memory([sound])),
           hapticServiceProvider.overrideWithValue(haptic),
@@ -87,9 +96,34 @@ void main() {
     );
     await tester.pump();
 
-    // Verify sound playback widget is visible
+    // Verify sound playback widget and speed bar are visible
     expect(find.byKey(const Key('audio_playback_button')), findsOneWidget);
     expect(find.text('SubhanAllah Recording'), findsOneWidget);
+    expect(find.byKey(const Key('speed_slider')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_1x')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_1.25x')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_1.5x')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_2x')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_3x')), findsOneWidget);
+    expect(find.byKey(const Key('speed_preset_4x')), findsOneWidget);
+
+    // Tap 1.5x preset
+    await tester.tap(find.byKey(const Key('speed_preset_1.5x')));
+    await tester.pump();
+    expect(fakeAudioPlayer.playbackRate, 1.5);
+    expect(find.text('1.50x'), findsOneWidget);
+
+    // Tap +0.05 button
+    await tester.tap(find.byKey(const Key('speed_increase_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.playbackRate, 1.55);
+    expect(find.text('1.55x'), findsOneWidget);
+
+    // Tap -0.05 button
+    await tester.tap(find.byKey(const Key('speed_decrease_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.playbackRate, 1.5);
+    expect(find.text('1.50x'), findsOneWidget);
 
     // Tap play button and verify state changes
     await tester.tap(find.byKey(const Key('audio_playback_button')));
@@ -102,6 +136,73 @@ void main() {
 
     // Verify progress advanced from 10 to 11
     expect(find.text('11'), findsWidgets);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('initializes execution screen with persisted item soundSpeed', (tester) async {
+    final sound = SoundItem(
+      id: 'snd_2x',
+      title: 'Dhikr 2x',
+      bytes: Uint8List.fromList([1, 2, 3]),
+      createdAt: DateTime(2026, 1, 1),
+    );
+
+    final item = Item(
+      id: 'bead_fast',
+      title: 'Fast Bead',
+      count: 33,
+      check: 0,
+      setCount: 0,
+      vibrationIntensity: 50,
+      currentProgress: 5,
+      soundId: 'snd_2x',
+      soundTitle: 'Dhikr 2x',
+      soundSpeed: 2.0,
+    );
+
+    final haptic = MockHapticService();
+    when(() => haptic.standard(intensity: any(named: 'intensity')))
+        .thenAnswer((_) async {});
+
+    final mockReminderService = MockItemReminderService();
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+
+    final fakeAudioPlayer = FakeAudioPlayerService();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          itemRepositoryProvider
+              .overrideWithValue(ItemRepository.memory([item])),
+          itemHistoryRepositoryProvider
+              .overrideWithValue(ItemHistoryRepository.memory()),
+          itemReminderServiceProvider
+              .overrideWithValue(mockReminderService),
+          soundLibraryRepositoryProvider
+              .overrideWithValue(SoundLibraryRepository.memory([sound])),
+          hapticServiceProvider.overrideWithValue(haptic),
+        ],
+        child: testLocalizedApp(
+          child: ExecutionScreen(
+            itemId: 'bead_fast',
+            audioPlayerService: fakeAudioPlayer,
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    // Verify speed badge initialized to 2.00x
+    expect(find.text('2.00x'), findsOneWidget);
+
+    // Tap play and verify playBytes uses 2.0 speed
+    await tester.tap(find.byKey(const Key('audio_playback_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.playbackRate, 2.0);
 
     await tester.pumpWidget(const SizedBox());
   });

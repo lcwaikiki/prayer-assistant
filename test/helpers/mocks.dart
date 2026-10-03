@@ -46,6 +46,7 @@ class FakeAudioPlayerService implements AudioPlayerService {
   final _durationController = StreamController<Duration>.broadcast(sync: true);
 
   PlayerState _state = PlayerState.stopped;
+  double _playbackRate = 1.0;
 
   @override
   Stream<PlayerState> get onPlayerStateChanged => _stateController.stream;
@@ -62,6 +63,14 @@ class FakeAudioPlayerService implements AudioPlayerService {
   @override
   PlayerState get state => _state;
 
+  @override
+  double get playbackRate => _playbackRate;
+
+  @override
+  Future<void> setPlaybackRate(double rate) async {
+    _playbackRate = rate;
+  }
+
   void triggerComplete() {
     if (!_completeController.isClosed) {
       _completeController.add(null);
@@ -69,8 +78,9 @@ class FakeAudioPlayerService implements AudioPlayerService {
   }
 
   @override
-  Future<void> playBytes(Uint8List bytes, {String? mimeType}) async {
+  Future<void> playBytes(Uint8List bytes, {String? mimeType, double? playbackRate}) async {
     _state = PlayerState.playing;
+    if (playbackRate != null) _playbackRate = playbackRate;
     if (!_stateController.isClosed) _stateController.add(_state);
   }
 

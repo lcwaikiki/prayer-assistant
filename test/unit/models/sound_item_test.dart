@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/sound_item.dart';
 
 void main() {
@@ -54,6 +55,32 @@ void main() {
       expect(restored.mimeType, 'audio/aac');
       expect(restored.durationMs, 3400);
       expect(restored.createdAt, sound.createdAt);
+    });
+  });
+
+  group('Item Sound Speed Tests', () {
+    test('serializes and deserializes soundSpeed correctly', () {
+      final item = Item(
+        id: 'i1',
+        title: 'Custom Speed Item',
+        count: 100,
+        check: 33,
+        setCount: 0,
+        vibrationIntensity: 50,
+        soundId: 'snd_123',
+        soundTitle: 'Dhikr',
+        soundSpeed: 1.75,
+      );
+
+      final map = item.toMap();
+      expect(map['soundSpeed'], 1.75);
+
+      final restored = Item.fromMap(map);
+      expect(restored.soundSpeed, 1.75);
+
+      final legacyMap = item.toMap()..remove('soundSpeed');
+      final legacyRestored = Item.fromMap(legacyMap);
+      expect(legacyRestored.soundSpeed, 1.0);
     });
   });
 }

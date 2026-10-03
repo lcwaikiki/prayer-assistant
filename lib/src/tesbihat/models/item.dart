@@ -48,6 +48,7 @@ class Item implements ReminderSchedulable {
     this.soundId,
     this.soundTitle,
     this.autoCountWithSound = true,
+    this.soundSpeed = 1.0,
   }) : assert(count > 0, 'count must be positive'),
        assert(check >= 0, 'check cannot be negative'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -59,7 +60,8 @@ class Item implements ReminderSchedulable {
        assert(
          currentProgress >= 0 && currentProgress <= count,
          'currentProgress must be in range',
-       );
+       ),
+       assert(soundSpeed > 0, 'soundSpeed must be positive');
 
   final String id;
   final String title;
@@ -76,6 +78,7 @@ class Item implements ReminderSchedulable {
   final String? soundId;
   final String? soundTitle;
   final bool autoCountWithSound;
+  final double soundSpeed;
 
   /// Recurrence for both anchors. Mirrors [ReminderRecurrence]: once,
   /// daily, weekly, monthly, yearly. For
@@ -170,6 +173,7 @@ class Item implements ReminderSchedulable {
     String? soundId,
     String? soundTitle,
     bool? autoCountWithSound,
+    double? soundSpeed,
     bool clearSound = false,
   }) {
     return Item(
@@ -202,6 +206,7 @@ class Item implements ReminderSchedulable {
       soundId: clearSound ? null : (soundId ?? this.soundId),
       soundTitle: clearSound ? null : (soundTitle ?? this.soundTitle),
       autoCountWithSound: autoCountWithSound ?? this.autoCountWithSound,
+      soundSpeed: soundSpeed ?? this.soundSpeed,
     );
   }
 
@@ -234,6 +239,7 @@ class Item implements ReminderSchedulable {
       'soundId': soundId,
       'soundTitle': soundTitle,
       'autoCountWithSound': autoCountWithSound,
+      'soundSpeed': soundSpeed,
     };
   }
 
@@ -331,6 +337,7 @@ class Item implements ReminderSchedulable {
       soundId: map['soundId']?.toString(),
       soundTitle: map['soundTitle']?.toString(),
       autoCountWithSound: (map['autoCountWithSound'] as bool?) ?? true,
+      soundSpeed: (map['soundSpeed'] as num?)?.toDouble() ?? 1.0,
     );
   }
 

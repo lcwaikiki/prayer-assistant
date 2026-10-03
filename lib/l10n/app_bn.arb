@@ -716,5 +716,6 @@
   "soundSavedSuccess": "শব্দ সফলভাবে সংরক্ষিত হয়েছে",
   "soundDeletedSuccess": "শব্দ মুছে ফেলা হয়েছে",
   "rename": "পুনঃনামকরণ",
-  "microphonePermissionRequired": "অডিও রেকর্ড করতে মাইক্রোফোনের অনুমতি প্রয়োজন।"
+  "microphonePermissionRequired": "অডিও রেকর্ড করতে মাইক্রোফোনের অনুমতি প্রয়োজন।",
+  "playbackSpeed": "প্লেব্যাক গতি"
 }

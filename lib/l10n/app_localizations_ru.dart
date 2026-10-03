@@ -1771,4 +1771,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'Для записи аудио требуется разрешение на использование микрофона.';
+
+  @override
+  String get playbackSpeed => 'Скорость воспроизведения';
 }

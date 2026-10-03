@@ -1710,4 +1710,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get microphonePermissionRequired => '音声を録音するにはマイクの許可が必要です。';
+
+  @override
+  String get playbackSpeed => '再生速度';
 }

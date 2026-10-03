@@ -65,6 +65,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     String? soundId,
     String? soundTitle,
     bool autoCountWithSound = true,
+    double soundSpeed = 1.0,
   }) {
     final newItem = Item(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -93,6 +94,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
       soundId: soundId,
       soundTitle: soundTitle,
       autoCountWithSound: autoCountWithSound,
+      soundSpeed: soundSpeed,
     );
     state = [...state, newItem];
     _repository.saveItems(state);

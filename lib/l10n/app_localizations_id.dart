@@ -1772,4 +1772,7 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'Izin mikrofon diperlukan untuk merekam audio.';
+
+  @override
+  String get playbackSpeed => 'Kecepatan Pemutaran';
 }

@@ -611,5 +611,6 @@
   "soundSavedSuccess": "صدا با موفقیت ذخیره شد",
   "soundDeletedSuccess": "صدا حذف شد",
   "rename": "تغییر نام",
-  "microphonePermissionRequired": "برای ضبط صدا اجازه دسترسی به میکروفون لازم است."
+  "microphonePermissionRequired": "برای ضبط صدا اجازه دسترسی به میکروفون لازم است.",
+  "playbackSpeed": "سرعت پخش"
 }

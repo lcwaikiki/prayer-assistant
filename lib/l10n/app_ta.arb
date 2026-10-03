@@ -716,5 +716,6 @@
   "soundSavedSuccess": "ஒலி வெற்றிகரமாக சேமிக்கப்பட்டது",
   "soundDeletedSuccess": "ஒலி நீக்கப்பட்டது",
   "rename": "மறுபெயரிடு",
-  "microphonePermissionRequired": "ஆடியோ பதிவு செய்ய மைக்ரோஃபோன் அனுமதி தேவை."
+  "microphonePermissionRequired": "ஆடியோ பதிவு செய்ய மைக்ரோஃபோன் அனுமதி தேவை.",
+  "playbackSpeed": "இயக்க வேகம்"
 }

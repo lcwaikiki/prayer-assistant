@@ -611,5 +611,6 @@
   "soundSavedSuccess": "تم حفظ الصوت بنجاح",
   "soundDeletedSuccess": "تم حذف الصوت",
   "rename": "إعادة تسمية",
-  "microphonePermissionRequired": "إذن الميكروفون مطلوب لتسجيل الصوت."
+  "microphonePermissionRequired": "إذن الميكروفون مطلوب لتسجيل الصوت.",
+  "playbackSpeed": "سرعة التشغيل"
 }

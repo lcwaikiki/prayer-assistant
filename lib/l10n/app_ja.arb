@@ -611,5 +611,6 @@
   "soundSavedSuccess": "音声を保存しました",
   "soundDeletedSuccess": "音声を削除しました",
   "rename": "名前変更",
-  "microphonePermissionRequired": "音声を録音するにはマイクの許可が必要です。"
+  "microphonePermissionRequired": "音声を録音するにはマイクの許可が必要です。",
+  "playbackSpeed": "再生速度"
 }

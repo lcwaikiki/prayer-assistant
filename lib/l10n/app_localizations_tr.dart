@@ -1762,4 +1762,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get microphonePermissionRequired =>
       'Ses kaydetmek için mikrofon izni gereklidir.';
+
+  @override
+  String get playbackSpeed => 'Oynatma Hızı';
 }

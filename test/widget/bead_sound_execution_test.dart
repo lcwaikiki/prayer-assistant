@@ -96,9 +96,16 @@ void main() {
     );
     await tester.pump();
 
-    // Verify sound playback widget and speed bar are visible
+    // Verify sound playback button and toggle button are visible
     expect(find.byKey(const Key('audio_playback_button')), findsOneWidget);
+    expect(find.byKey(const Key('toggle_sound_controls_button')), findsOneWidget);
     expect(find.text('SubhanAllah Recording'), findsOneWidget);
+    expect(find.byKey(const Key('speed_slider')), findsNothing);
+
+    // Expand sound controls
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
+
     expect(find.byKey(const Key('speed_slider')), findsOneWidget);
     expect(find.byKey(const Key('speed_preset_1x')), findsOneWidget);
     expect(find.byKey(const Key('speed_preset_1.25x')), findsOneWidget);
@@ -125,7 +132,27 @@ void main() {
     expect(fakeAudioPlayer.playbackRate, 1.5);
     expect(find.text('1.50x'), findsOneWidget);
 
-    // Tap play button and verify state changes
+    // Tap play button and verify state changes to playing
+    await tester.tap(find.byKey(const Key('audio_playback_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.state, PlayerState.playing);
+
+    // Tap play button again during playback - should pause, not stop
+    await tester.tap(find.byKey(const Key('audio_playback_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.state, PlayerState.paused);
+
+    // Tap play button again when paused - should resume playback
+    await tester.tap(find.byKey(const Key('audio_playback_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.state, PlayerState.playing);
+
+    // Long press play button - should stop playback
+    await tester.longPress(find.byKey(const Key('audio_playback_button')));
+    await tester.pump();
+    expect(fakeAudioPlayer.state, PlayerState.stopped);
+
+    // Tap play button again and let sound complete
     await tester.tap(find.byKey(const Key('audio_playback_button')));
     await tester.pump();
     expect(fakeAudioPlayer.state, PlayerState.playing);
@@ -136,6 +163,11 @@ void main() {
 
     // Verify progress advanced from 10 to 11
     expect(find.text('11'), findsWidgets);
+
+    // Collapse sound controls
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('speed_slider')), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });
@@ -196,13 +228,69 @@ void main() {
     );
     await tester.pump();
 
-    // Verify speed badge initialized to 2.00x
+    // Expand controls and verify speed badge initialized to 2.00x
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
     expect(find.text('2.00x'), findsOneWidget);
 
     // Tap play and verify playBytes uses 2.0 speed
     await tester.tap(find.byKey(const Key('audio_playback_button')));
     await tester.pump();
     expect(fakeAudioPlayer.playbackRate, 2.0);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('entering bead with no sound attached works without error', (tester) async {
+    final item = Item(
+      id: 'bead_no_sound',
+      title: 'No Sound Bead',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 50,
+      currentProgress: 0,
+      soundId: null,
+      soundTitle: null,
+    );
+
+    final haptic = MockHapticService();
+    when(() => haptic.standard(intensity: any(named: 'intensity')))
+        .thenAnswer((_) async {});
+    when(() => haptic.checkpoint(intensity: any(named: 'intensity')))
+        .thenAnswer((_) async {});
+    final mockReminderService = MockItemReminderService();
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          itemRepositoryProvider
+              .overrideWithValue(ItemRepository.memory([item])),
+          itemHistoryRepositoryProvider
+              .overrideWithValue(ItemHistoryRepository.memory()),
+          itemReminderServiceProvider
+              .overrideWithValue(mockReminderService),
+          soundLibraryRepositoryProvider
+              .overrideWithValue(SoundLibraryRepository.memory()),
+          hapticServiceProvider.overrideWithValue(haptic),
+        ],
+        child: testLocalizedApp(
+          child: const ExecutionScreen(
+            itemId: 'bead_no_sound',
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('No Sound Bead'), findsOneWidget);
+    expect(find.byKey(const Key('audio_playback_button')), findsNothing);
+    expect(find.byKey(const Key('big_tap_button')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('1'), findsWidgets);
 
     await tester.pumpWidget(const SizedBox());
   });

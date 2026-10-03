@@ -337,7 +337,10 @@ class Item implements ReminderSchedulable {
       soundId: map['soundId']?.toString(),
       soundTitle: map['soundTitle']?.toString(),
       autoCountWithSound: (map['autoCountWithSound'] as bool?) ?? true,
-      soundSpeed: (map['soundSpeed'] as num?)?.toDouble() ?? 1.0,
+      soundSpeed: () {
+        final speed = (map['soundSpeed'] as num?)?.toDouble();
+        return (speed != null && speed > 0) ? speed : 1.0;
+      }(),
     );
   }
 

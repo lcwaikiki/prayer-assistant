@@ -27,6 +27,8 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
 
   String _getCategoryLabel(BuildContext context, String cat) {
     switch (cat) {
+      case 'favorites':
+        return context.l10n.tabFavorites;
       case 'morning':
         return context.l10n.morningAdhkar;
       case 'evening':
@@ -51,6 +53,7 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
         : WisdomService.instance.getSupplicationsByCategory(_selectedCategory);
 
     final categories = [
+      'favorites',
       'all',
       'morning',
       'evening',
@@ -105,6 +108,15 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: FilterChip(
                         selected: _selectedCategory == cat,
+                        avatar: cat == 'favorites'
+                            ? Icon(
+                                Icons.favorite,
+                                size: 16,
+                                color: _selectedCategory == 'favorites'
+                                    ? theme.colorScheme.onSecondaryContainer
+                                    : Colors.red.shade400,
+                              )
+                            : null,
                         label: Text(_getCategoryLabel(context, cat)),
                         onSelected: (selected) {
                           if (selected) {
@@ -124,11 +136,18 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.menu_book_outlined,
-                            size: 48, color: theme.colorScheme.outline),
+                        Icon(
+                          _selectedCategory == 'favorites' && _searchQuery.isEmpty
+                              ? Icons.favorite_border
+                              : Icons.menu_book_outlined,
+                          size: 48,
+                          color: theme.colorScheme.outline,
+                        ),
                         const SizedBox(height: 12),
                         Text(
-                          context.l10n.noSupplicationsFound,
+                          _selectedCategory == 'favorites' && _searchQuery.isEmpty
+                              ? context.l10n.noFavoritesFound
+                              : context.l10n.noSupplicationsFound,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -142,8 +161,14 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
+                      final isFav = WisdomService.instance.isFavorite(item.id);
                       return _SupplicationCard(
                         item: item,
+                        isFavorite: isFav,
+                        onFavoriteToggle: () async {
+                          await WisdomService.instance.toggleFavorite(item.id);
+                          setState(() {});
+                        },
                         onTap: () => _openCounterModal(context, item),
                       );
                     },
@@ -163,19 +188,27 @@ class _SupplicationsScreenState extends State<SupplicationsScreen> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (ctx) => SafeArea(child: _CounterModal(item: item)),
+      builder: (ctx) => SafeArea(
+        child: _CounterModal(
+          item: item,
+          onFavoriteChanged: () => setState(() {}),
+        ),
+      ),
     );
-
   }
 }
 
 class _SupplicationCard extends StatelessWidget {
   const _SupplicationCard({
     required this.item,
+    required this.isFavorite,
+    required this.onFavoriteToggle,
     required this.onTap,
   });
 
   final SupplicationItem item;
+  final bool isFavorite;
+  final VoidCallback onFavoriteToggle;
   final VoidCallback onTap;
 
   @override
@@ -195,12 +228,12 @@ class _SupplicationCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(8),
@@ -213,18 +246,28 @@ class _SupplicationCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      item.reference,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          size: 20,
+                          color: isFavorite
+                              ? Colors.red
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                        visualDensity: VisualDensity.compact,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        constraints: const BoxConstraints(),
+                        tooltip: context.l10n.tabFavorites,
+                        onPressed: onFavoriteToggle,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      const SizedBox(width: 4),
+                      Icon(Icons.touch_app_outlined,
+                          size: 18, color: theme.colorScheme.primary),
+                    ],
                   ),
-                  Icon(Icons.touch_app_outlined,
-                      size: 18, color: theme.colorScheme.primary),
                 ],
               ),
               const SizedBox(height: 12),
@@ -250,6 +293,34 @@ class _SupplicationCard extends StatelessWidget {
                   height: 1.3,
                 ),
               ),
+              if (item.reference.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Divider(
+                  height: 1,
+                  thickness: 0.5,
+                  color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.menu_book_outlined,
+                      size: 13,
+                      color: theme.colorScheme.primary.withValues(alpha: 0.7),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        item.reference,
+                        style: theme.textTheme.labelSmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
           ),
         ),
@@ -259,9 +330,13 @@ class _SupplicationCard extends StatelessWidget {
 }
 
 class _CounterModal extends StatefulWidget {
-  const _CounterModal({required this.item});
+  const _CounterModal({
+    required this.item,
+    this.onFavoriteChanged,
+  });
 
   final SupplicationItem item;
+  final VoidCallback? onFavoriteChanged;
 
   @override
   State<_CounterModal> createState() => _CounterModalState();
@@ -269,6 +344,13 @@ class _CounterModal extends StatefulWidget {
 
 class _CounterModalState extends State<_CounterModal> {
   int _count = 0;
+  late bool _isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = WisdomService.instance.isFavorite(widget.item.id);
+  }
 
   void _increment() async {
     if (_count < widget.item.targetCount) {
@@ -312,23 +394,52 @@ class _CounterModalState extends State<_CounterModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primaryContainer,
+                  borderRadius: BorderRadius.circular(8),
+                ),
                 child: Text(
-                  widget.item.reference,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                  '${widget.item.targetCount}x',
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onPrimaryContainer,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.share_outlined, size: 20),
-                onPressed: () {
-                  final text = widget.item.transliteration.isNotEmpty
-                      ? '${widget.item.textAr}\n\n${widget.item.transliteration}\n\n$localizedText\n— ${widget.item.reference}'
-                      : '${widget.item.textAr}\n\n$localizedText\n— ${widget.item.reference}';
-                  SharePlus.instance.share(ShareParams(text: text));
-                },
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      _isFavorite ? Icons.favorite : Icons.favorite_border,
+                      size: 20,
+                      color: _isFavorite
+                          ? Colors.red
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                    tooltip: context.l10n.tabFavorites,
+                    onPressed: () async {
+                      await WisdomService.instance.toggleFavorite(widget.item.id);
+                      setState(() {
+                        _isFavorite =
+                            WisdomService.instance.isFavorite(widget.item.id);
+                      });
+                      widget.onFavoriteChanged?.call();
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.share_outlined, size: 20),
+                    onPressed: () {
+                      final text = widget.item.transliteration.isNotEmpty
+                          ? '${widget.item.textAr}\n\n${widget.item.transliteration}\n\n$localizedText\n— ${widget.item.reference}'
+                          : '${widget.item.textAr}\n\n$localizedText\n— ${widget.item.reference}';
+                      SharePlus.instance.share(ShareParams(text: text));
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -367,6 +478,30 @@ class _CounterModalState extends State<_CounterModal> {
               height: 1.4,
             ),
           ),
+          if (widget.item.reference.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.menu_book_outlined,
+                  size: 14,
+                  color: theme.colorScheme.primary.withValues(alpha: 0.7),
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    widget.item.reference,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 24),
           GestureDetector(
             onTap: _increment,

@@ -775,6 +775,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noSupplicationsFound => 'Dua bulunamadı';
 
   @override
+  String get noFavoritesFound => 'Henüz favori dua bulunamadı';
+
+  @override
   String get completed => 'Tamamlandı';
 
   @override
@@ -782,6 +785,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get tabAll => 'Tümü';
+
+  @override
+  String get tabFavorites => 'Favoriler';
 
   @override
   String get kazaTitle => 'Kaza';

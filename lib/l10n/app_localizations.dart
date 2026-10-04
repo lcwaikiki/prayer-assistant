@@ -1526,6 +1526,12 @@ abstract class AppLocalizations {
   /// **'No supplications found'**
   String get noSupplicationsFound;
 
+  /// No description provided for @noFavoritesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorite supplications yet'**
+  String get noFavoritesFound;
+
   /// No description provided for @completed.
   ///
   /// In en, this message translates to:
@@ -1543,6 +1549,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All'**
   String get tabAll;
+
+  /// No description provided for @tabFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get tabFavorites;
 
   /// No description provided for @kazaTitle.
   ///

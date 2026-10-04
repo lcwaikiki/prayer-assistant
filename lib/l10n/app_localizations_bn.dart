@@ -777,6 +777,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noSupplicationsFound => 'কোন দোয়া পাওয়া যায়নি';
 
   @override
+  String get noFavoritesFound => 'এখনও কোনও প্রিয় দোয়া নেই';
+
+  @override
   String get completed => 'সম্পন্ন';
 
   @override
@@ -784,6 +787,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get tabAll => 'সব';
+
+  @override
+  String get tabFavorites => 'প্রিয়';
 
   @override
   String get kazaTitle => 'কাজা';

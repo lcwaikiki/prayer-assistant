@@ -784,6 +784,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get noSupplicationsFound => 'துஆக்கள் எதுவும் கிடைக்கவில்லை';
 
   @override
+  String get noFavoritesFound => 'விருப்பமான பிரார்த்தனைகள் எதுவும் இல்லை';
+
+  @override
   String get completed => 'முடிந்தது';
 
   @override
@@ -791,6 +794,9 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get tabAll => 'அனைத்தும்';
+
+  @override
+  String get tabFavorites => 'விருப்பமானவை';
 
   @override
   String get kazaTitle => 'களா';

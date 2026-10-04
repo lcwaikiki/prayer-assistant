@@ -774,6 +774,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get noSupplicationsFound => 'دعا یافت نشد';
 
   @override
+  String get noFavoritesFound => 'هنوز دعای مورد علاقه‌ای وجود ندارد';
+
+  @override
   String get completed => 'تکمیل شده';
 
   @override
@@ -781,6 +784,9 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get tabAll => 'همه';
+
+  @override
+  String get tabFavorites => 'علاقه‌مندی‌ها';
 
   @override
   String get kazaTitle => 'قضا';

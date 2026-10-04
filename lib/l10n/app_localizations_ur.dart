@@ -774,6 +774,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get noSupplicationsFound => 'کوئی دعا نہیں ملی';
 
   @override
+  String get noFavoritesFound => 'ابھی تک کوئی پسندیدہ دعا نہیں ہے';
+
+  @override
   String get completed => 'مکمل';
 
   @override
@@ -781,6 +784,9 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get tabAll => 'تمام';
+
+  @override
+  String get tabFavorites => 'پسندیدہ';
 
   @override
   String get kazaTitle => 'قضاء';

@@ -781,6 +781,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get noSupplicationsFound => 'Aucune invocation trouvée';
 
   @override
+  String get noFavoritesFound => 'Aucune supplication favorite pour l\'instant';
+
+  @override
   String get completed => 'Terminé';
 
   @override
@@ -788,6 +791,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tabAll => 'Tous';
+
+  @override
+  String get tabFavorites => 'Favoris';
 
   @override
   String get kazaTitle => 'Qadaa';

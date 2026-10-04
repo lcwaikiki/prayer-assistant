@@ -1,14 +1,48 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/supplication_models.dart';
 
 class WisdomService {
   WisdomService._();
   static final WisdomService instance = WisdomService._();
 
+  static const String _favoritesKey = 'hisn_favorite_ids';
+
   List<DailyWisdom> _wisdomList = [];
   List<SupplicationItem> _supplicationList = [];
+  final Set<String> _favoriteIds = {};
   bool _initialized = false;
+
+  Set<String> get favoriteIds => Set.unmodifiable(_favoriteIds);
+
+  bool isFavorite(String id) => _favoriteIds.contains(id);
+
+  Future<void> toggleFavorite(String id) async {
+    if (_favoriteIds.contains(id)) {
+      _favoriteIds.remove(id);
+    } else {
+      _favoriteIds.add(id);
+    }
+    await _saveFavorites();
+  }
+
+  Future<void> _saveFavorites() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setStringList(_favoritesKey, _favoriteIds.toList());
+    } catch (_) {}
+  }
+
+  void setFavoritesForTesting(Iterable<String> ids) {
+    _favoriteIds
+      ..clear()
+      ..addAll(ids);
+  }
+
+  void setSupplicationsForTesting(List<SupplicationItem> items) {
+    _supplicationList = List.from(items);
+  }
 
   Future<void> init() async {
     if (_initialized) return;
@@ -35,6 +69,16 @@ class WisdomService {
       _supplicationList = [];
     }
 
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final favs = prefs.getStringList(_favoritesKey);
+      if (favs != null) {
+        _favoriteIds
+          ..clear()
+          ..addAll(favs);
+      }
+    } catch (_) {}
+
     _initialized = true;
   }
 
@@ -46,6 +90,9 @@ class WisdomService {
   }
 
   List<SupplicationItem> getSupplicationsByCategory(String category) {
+    if (category == 'favorites') {
+      return _supplicationList.where((s) => _favoriteIds.contains(s.id)).toList();
+    }
     if (category.isEmpty || category == 'all') {
       return List.unmodifiable(_supplicationList);
     }

@@ -777,6 +777,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get noSupplicationsFound => 'Doa tidak ditemukan';
 
   @override
+  String get noFavoritesFound => 'Belum ada doa favorit';
+
+  @override
   String get completed => 'Selesai';
 
   @override
@@ -784,6 +787,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get tabAll => 'Semua';
+
+  @override
+  String get tabFavorites => 'Favorit';
 
   @override
   String get kazaTitle => 'Qadha';

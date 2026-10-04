@@ -780,6 +780,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noSupplicationsFound => 'Мольбы не найдены';
 
   @override
+  String get noFavoritesFound => 'Пока нет избранных мольб';
+
+  @override
   String get completed => 'Завершено';
 
   @override
@@ -787,6 +790,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get tabAll => 'Все';
+
+  @override
+  String get tabFavorites => 'Избранное';
 
   @override
   String get kazaTitle => 'Каза';

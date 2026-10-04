@@ -749,6 +749,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noSupplicationsFound => '未找到相关祈祷词';
 
   @override
+  String get noFavoritesFound => '暂无收藏的祈祷';
+
+  @override
   String get completed => '已完成';
 
   @override
@@ -756,6 +759,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tabAll => '全部';
+
+  @override
+  String get tabFavorites => '收藏';
 
   @override
   String get kazaTitle => '补礼';

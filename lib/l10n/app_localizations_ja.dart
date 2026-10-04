@@ -751,6 +751,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get noSupplicationsFound => '該当するデュアーが見つかりません';
 
   @override
+  String get noFavoritesFound => 'お気に入りの祈りがまだありません';
+
+  @override
   String get completed => '完了';
 
   @override
@@ -758,6 +761,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tabAll => 'すべて';
+
+  @override
+  String get tabFavorites => 'お気に入り';
 
   @override
   String get kazaTitle => 'カザー';

@@ -775,6 +775,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noSupplicationsFound => 'No supplications found';
 
   @override
+  String get noFavoritesFound => 'No favorite supplications yet';
+
+  @override
   String get completed => 'Completed';
 
   @override
@@ -782,6 +785,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tabAll => 'All';
+
+  @override
+  String get tabFavorites => 'Favorites';
 
   @override
   String get kazaTitle => 'Qadaa';

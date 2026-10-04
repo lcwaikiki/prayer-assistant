@@ -777,6 +777,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noSupplicationsFound => 'Keine Bittgebete gefunden';
 
   @override
+  String get noFavoritesFound => 'Noch keine Lieblingsbitten';
+
+  @override
   String get completed => 'Abgeschlossen';
 
   @override
@@ -784,6 +787,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tabAll => 'Alle';
+
+  @override
+  String get tabFavorites => 'Favoriten';
 
   @override
   String get kazaTitle => 'Qadaa';

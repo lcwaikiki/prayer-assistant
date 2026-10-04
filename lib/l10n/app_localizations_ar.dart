@@ -771,6 +771,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get noSupplicationsFound => 'لم يتم العثور على أدعية';
 
   @override
+  String get noFavoritesFound => 'لا توجد أدعية مفضلة بعد';
+
+  @override
   String get completed => 'مكتمل';
 
   @override
@@ -778,6 +781,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get tabAll => 'الكل';
+
+  @override
+  String get tabFavorites => 'المفضلة';
 
   @override
   String get kazaTitle => 'القضاء';

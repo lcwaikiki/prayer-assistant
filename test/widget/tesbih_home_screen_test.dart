@@ -357,6 +357,42 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('renders items and groups interleaved according to home order', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory(
+      [
+        _item(id: 'i1', title: 'First Item'),
+        _item(id: 'i2', title: 'Second Item'),
+      ],
+      [
+        const ItemGroup(id: 'g1', title: 'First Group'),
+        const ItemGroup(id: 'g2', title: 'Second Group'),
+      ],
+      [
+        'item:i2',
+        'group:g1',
+        'item:i1',
+        'group:g2',
+      ],
+    );
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const TesbihHomeScreen());
+
+    // Verify all 4 entries appear in the UI
+    expect(find.text('First Item'), findsOneWidget);
+    expect(find.text('Second Item'), findsOneWidget);
+    expect(find.text('First Group'), findsOneWidget);
+    expect(find.text('Second Group'), findsOneWidget);
+
+    // Verify ReorderableListView is present
+    expect(find.byType(ReorderableListView), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
 
 

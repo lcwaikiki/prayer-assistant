@@ -98,6 +98,30 @@ void main() {
 
       expect(repository.loadGroups(), isEmpty);
     });
+
+    test('loadHomeOrder returns saved home order and saves are readable back', () {
+      final repository = ItemRepository.memory();
+
+      repository.saveHomeOrder(['item:a', 'group:g1', 'item:b']);
+
+      expect(repository.loadHomeOrder(), ['item:a', 'group:g1', 'item:b']);
+    });
+
+    test('loadHomeOrder returns initial home order when seeded', () {
+      final repository = ItemRepository.memory(
+        null,
+        null,
+        ['group:g1', 'item:a'],
+      );
+
+      expect(repository.loadHomeOrder(), ['group:g1', 'item:a']);
+    });
+
+    test('loadHomeOrder returns empty list when nothing was saved', () {
+      final repository = ItemRepository.memory();
+
+      expect(repository.loadHomeOrder(), isEmpty);
+    });
   });
 }
 

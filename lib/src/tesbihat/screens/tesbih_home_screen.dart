@@ -6,12 +6,32 @@ import '../models/daily_item_stat.dart';
 import '../models/item.dart';
 import '../models/item_group.dart';
 import '../state/groups_notifier.dart';
+import '../state/home_order_notifier.dart';
 import '../state/items_notifier.dart';
 import '../state/tesbih_selection.dart';
 import 'execution_screen.dart';
 import 'group_form_screen.dart';
 import 'group_screen.dart';
 import 'item_form_screen.dart';
+
+sealed class _TesbihEntry {
+  const _TesbihEntry();
+  String get key;
+}
+
+class _GroupEntry extends _TesbihEntry {
+  final ItemGroup group;
+  const _GroupEntry(this.group);
+  @override
+  String get key => 'group:${group.id}';
+}
+
+class _ItemEntry extends _TesbihEntry {
+  final Item item;
+  const _ItemEntry(this.item);
+  @override
+  String get key => 'item:${item.id}';
+}
 
 enum _ItemAction { edit, duplicate, delete }
 enum _GroupAction { edit, delete }
@@ -176,6 +196,7 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
     final l10n = context.tesbihatL10n;
     final items = ref.watch(itemsNotifierProvider);
     final groups = ref.watch(groupsNotifierProvider);
+    final homeOrder = ref.watch(homeOrderNotifierProvider);
     final selection = ref.watch(tesbihSelectionProvider);
     final selectionActive = selection.active;
     final ungrouped = items
@@ -183,32 +204,46 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
         .toList(growable: false);
     final isEmpty = groups.isEmpty && ungrouped.isEmpty;
 
+    final entriesByKey = <String, _TesbihEntry>{
+      for (final g in groups) 'group:${g.id}': _GroupEntry(g),
+      for (final i in ungrouped) 'item:${i.id}': _ItemEntry(i),
+    };
+
+    final orderedEntries = <_TesbihEntry>[];
+    for (final key in homeOrder) {
+      final entry = entriesByKey.remove(key);
+      if (entry != null) {
+        orderedEntries.add(entry);
+      }
+    }
+    orderedEntries.addAll(entriesByKey.values);
+
     final q = _searchQuery.trim().toLowerCase();
     final isSearching = q.isNotEmpty;
 
-    final filteredGroups = !isSearching
-        ? groups
-        : groups.where((g) {
-            if (g.title.toLowerCase().contains(q) ||
-                g.notes.toLowerCase().contains(q)) {
-              return true;
+    final filteredEntries = !isSearching
+        ? orderedEntries
+        : orderedEntries.where((entry) {
+            if (entry is _GroupEntry) {
+              final g = entry.group;
+              if (g.title.toLowerCase().contains(q) ||
+                  g.notes.toLowerCase().contains(q)) {
+                return true;
+              }
+              return items
+                  .where((i) => i.groupIds.contains(g.id))
+                  .any((i) =>
+                      i.title.toLowerCase().contains(q) ||
+                      i.notes.toLowerCase().contains(q));
+            } else if (entry is _ItemEntry) {
+              final i = entry.item;
+              return i.title.toLowerCase().contains(q) ||
+                  i.notes.toLowerCase().contains(q);
             }
-            return items
-                .where((i) => i.groupIds.contains(g.id))
-                .any((i) =>
-                    i.title.toLowerCase().contains(q) ||
-                    i.notes.toLowerCase().contains(q));
+            return false;
           }).toList(growable: false);
 
-    final filteredUngrouped = !isSearching
-        ? ungrouped
-        : ungrouped
-            .where((item) =>
-                item.title.toLowerCase().contains(q) ||
-                item.notes.toLowerCase().contains(q))
-            .toList(growable: false);
-
-    final totalCount = filteredGroups.length + filteredUngrouped.length;
+    final totalCount = filteredEntries.length;
     final noSearchResults = isSearching && totalCount == 0;
 
     return PopScope(
@@ -309,10 +344,12 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
                               padding: const EdgeInsets.only(top: 4, bottom: 6),
                               itemCount: totalCount,
                               itemBuilder: (context, index) {
-                                if (index < filteredGroups.length) {
-                                  final group = filteredGroups[index];
+                                final entry = filteredEntries[index];
+                                if (entry is _GroupEntry) {
+                                  final group = entry.group;
                                   final memberCount = items
-                                      .where((i) => i.groupIds.contains(group.id))
+                                      .where(
+                                          (i) => i.groupIds.contains(group.id))
                                       .length;
                                   return _GroupItemCard(
                                     key: ValueKey('group_${group.id}'),
@@ -332,66 +369,62 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
                                       action,
                                     ),
                                   );
+                                } else if (entry is _ItemEntry) {
+                                  final item = entry.item;
+                                  return _UngroupedItemCard(
+                                    key: ValueKey('item_${item.id}'),
+                                    item: item,
+                                    index: index,
+                                    selectionActive: selectionActive,
+                                    selected: selection.contains(item.id),
+                                    onToggle: () => ref
+                                        .read(tesbihSelectionProvider.notifier)
+                                        .toggle(item.id),
+                                    onAction: (action) => _handleAction(
+                                      context,
+                                      ref,
+                                      item,
+                                      items.indexOf(item),
+                                      action,
+                                    ),
+                                  );
                                 }
-                                final itemIndex = index - filteredGroups.length;
-                                final item = filteredUngrouped[itemIndex];
-                                return _UngroupedItemCard(
-                                  key: ValueKey('item_${item.id}'),
-                                  item: item,
-                                  index: index,
-                                  selectionActive: selectionActive,
-                                  selected: selection.contains(item.id),
-                                  onToggle: () => ref
-                                      .read(tesbihSelectionProvider.notifier)
-                                      .toggle(item.id),
-                                  onAction: (action) => _handleAction(
-                                    context,
-                                    ref,
-                                    item,
-                                    items.indexOf(item),
-                                    action,
-                                  ),
-                                );
+                                return const SizedBox.shrink();
                               },
                             )
                           : ReorderableListView.builder(
                               padding: const EdgeInsets.only(top: 4, bottom: 6),
                               itemCount: totalCount,
                               onReorderItem: (oldIndex, newIndex) {
-                                if (oldIndex < filteredGroups.length &&
-                                    newIndex <= filteredGroups.length) {
-                                  final targetIndex = newIndex < filteredGroups.length
-                                      ? newIndex
-                                      : filteredGroups.length - 1;
-                                  ref
-                                      .read(groupsNotifierProvider.notifier)
-                                      .reorderGroups(oldIndex, targetIndex);
-                                } else if (oldIndex >= filteredGroups.length &&
-                                    newIndex >= filteredGroups.length) {
-                                  final oldItemIndex =
-                                      oldIndex - filteredGroups.length;
-                                  final newItemIndex =
-                                      newIndex - filteredGroups.length;
-                                  final movedFullIndex = items.indexOf(
-                                    ungrouped[oldItemIndex],
-                                  );
-                                  final targetFullIndex =
-                                      newItemIndex < ungrouped.length
-                                          ? items.indexOf(ungrouped[newItemIndex])
-                                          : items.length - 1;
-                                  ref
-                                      .read(itemsNotifierProvider.notifier)
-                                      .reorderItems(
-                                        movedFullIndex,
-                                        targetFullIndex,
-                                      );
+                                if (oldIndex < 0 ||
+                                    oldIndex >= orderedEntries.length) {
+                                  return;
                                 }
+                                final targetIndex =
+                                    newIndex < orderedEntries.length
+                                        ? newIndex
+                                        : orderedEntries.length - 1;
+                                if (targetIndex < 0 ||
+                                    targetIndex >= orderedEntries.length ||
+                                    oldIndex == targetIndex) {
+                                  return;
+                                }
+                                final reordered = [...orderedEntries];
+                                final moved = reordered.removeAt(oldIndex);
+                                reordered.insert(targetIndex, moved);
+                                ref
+                                    .read(homeOrderNotifierProvider.notifier)
+                                    .updateOrder([
+                                  for (final e in reordered) e.key,
+                                ]);
                               },
                               itemBuilder: (context, index) {
-                                if (index < filteredGroups.length) {
-                                  final group = filteredGroups[index];
+                                final entry = filteredEntries[index];
+                                if (entry is _GroupEntry) {
+                                  final group = entry.group;
                                   final memberCount = items
-                                      .where((i) => i.groupIds.contains(group.id))
+                                      .where(
+                                          (i) => i.groupIds.contains(group.id))
                                       .length;
                                   return _GroupItemCard(
                                     key: ValueKey('group_${group.id}'),
@@ -411,26 +444,27 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
                                       action,
                                     ),
                                   );
+                                } else if (entry is _ItemEntry) {
+                                  final item = entry.item;
+                                  return _UngroupedItemCard(
+                                    key: ValueKey('item_${item.id}'),
+                                    item: item,
+                                    index: index,
+                                    selectionActive: selectionActive,
+                                    selected: selection.contains(item.id),
+                                    onToggle: () => ref
+                                        .read(tesbihSelectionProvider.notifier)
+                                        .toggle(item.id),
+                                    onAction: (action) => _handleAction(
+                                      context,
+                                      ref,
+                                      item,
+                                      items.indexOf(item),
+                                      action,
+                                    ),
+                                  );
                                 }
-                                final itemIndex = index - filteredGroups.length;
-                                final item = filteredUngrouped[itemIndex];
-                                return _UngroupedItemCard(
-                                  key: ValueKey('item_${item.id}'),
-                                  item: item,
-                                  index: index,
-                                  selectionActive: selectionActive,
-                                  selected: selection.contains(item.id),
-                                  onToggle: () => ref
-                                      .read(tesbihSelectionProvider.notifier)
-                                      .toggle(item.id),
-                                  onAction: (action) => _handleAction(
-                                    context,
-                                    ref,
-                                    item,
-                                    items.indexOf(item),
-                                    action,
-                                  ),
-                                );
+                                return const SizedBox.shrink();
                               },
                             ),
                     ),

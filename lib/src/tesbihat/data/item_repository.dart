@@ -4,20 +4,28 @@ import '../models/item.dart';
 import '../models/item_group.dart';
 
 class ItemRepository {
-  ItemRepository.hive(Box<dynamic> box) : _box = box, _memoryItems = null;
+  ItemRepository.hive(Box<dynamic> box)
+      : _box = box,
+        _memoryItems = null,
+        _memoryGroups = null,
+        _memoryHomeOrder = null;
 
   ItemRepository.memory([
     List<Item>? initialItems,
     List<ItemGroup>? initialGroups,
-  ]) : _box = null,
-       _memoryItems = List<Item>.from(initialItems ?? const []),
-       _memoryGroups = List<ItemGroup>.from(initialGroups ?? const []);
+    List<String>? initialHomeOrder,
+  ])  : _box = null,
+        _memoryItems = List<Item>.from(initialItems ?? const []),
+        _memoryGroups = List<ItemGroup>.from(initialGroups ?? const []),
+        _memoryHomeOrder = List<String>.from(initialHomeOrder ?? const []);
 
   final Box<dynamic>? _box;
   List<Item>? _memoryItems;
   List<ItemGroup>? _memoryGroups;
+  List<String>? _memoryHomeOrder;
   static const _itemsKey = 'items';
   static const _groupsKey = 'groups';
+  static const _homeOrderKey = 'home_order';
 
   List<Item> loadItems() {
     if (_memoryItems != null) {
@@ -63,5 +71,24 @@ class ItemRepository {
 
     final data = groups.map((group) => group.toMap()).toList(growable: false);
     _box?.put(_groupsKey, data);
+  }
+
+  List<String> loadHomeOrder() {
+    if (_memoryHomeOrder != null) {
+      return List<String>.from(_memoryHomeOrder!);
+    }
+
+    final raw =
+        _box?.get(_homeOrderKey, defaultValue: <dynamic>[]) as List<dynamic>?;
+    return raw?.whereType<String>().toList(growable: false) ?? const [];
+  }
+
+  void saveHomeOrder(List<String> order) {
+    if (_memoryHomeOrder != null) {
+      _memoryHomeOrder = List<String>.from(order);
+      return;
+    }
+
+    _box?.put(_homeOrderKey, List<String>.from(order));
   }
 }

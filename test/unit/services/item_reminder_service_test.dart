@@ -39,16 +39,6 @@ Item _item({
   );
 }
 
-/// The first occurrence day for a clock-anchored reminder, starting today.
-/// Mirrors the service: naive (machine-local) DateTimes throughout.
-DateTime _firstDay(DateTime anchorTime) {
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final todayAt = DateTime(
-      today.year, today.month, today.day, anchorTime.hour, anchorTime.minute);
-  return todayAt.isAfter(now) ? today : today.add(const Duration(days: 1));
-}
-
 /// Next date (>= [from]) whose Gregorian day-of-month is the 31st.
 DateTime? _next31(DateTime from) {
   for (var offset = 0; offset < 12; offset++) {
@@ -93,12 +83,10 @@ void main() {
         _item(reminderAt: anchor, reminderRepeatCount: 3),
       );
 
-      // Mirrors the service: today's 12:00 is dropped when already past, so
-      // fewer than three occurrences may remain.
       final now = DateTime.now();
       final expectedDates = <DateTime>[];
       var from = DateTime(now.year, now.month, now.day);
-      for (var i = 0; i < 3; i++) {
+      while (expectedDates.length < 3) {
         final at = DateTime(from.year, from.month, from.day, 12, 0);
         if (at.isAfter(now)) {
           expectedDates.add(at);
@@ -248,11 +236,7 @@ void main() {
         _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3),
       );
 
-      // Today's 12:00 is dropped when already past, like the service does.
-      final now = DateTime.now();
-      final todayAt = DateTime(now.year, now.month, now.day, 12, 0);
-      final expected = todayAt.isAfter(now) ? 3 : 2;
-      expect(platform.scheduledIds.length, expected);
+      expect(platform.scheduledIds.length, 3);
     });
 
     test('stops scheduling when even inexact scheduling fails', () async {
@@ -265,7 +249,9 @@ void main() {
     });
   });
   group('infinite repeat count', () {
-    test('null count daily uses the OS-level daily repeat', () async {
+    test('null count daily uses OS-level repeat when enabled', () async {
+      ItemReminderService.usesOsRepeatsOverride = true;
+      addTearDown(() => ItemReminderService.usesOsRepeatsOverride = null);
       final base = _notificationId('item-1');
       await service.scheduleReminder(
         _item(reminderAt: DateTime(2099, 12, 31, 12, 0)),
@@ -275,7 +261,9 @@ void main() {
       expect(platform.scheduledMatches.single, DateTimeComponents.time);
     });
 
-    test('null count weekly uses the OS-level weekly repeat', () async {
+    test('null count weekly uses OS-level repeat when enabled', () async {
+      ItemReminderService.usesOsRepeatsOverride = true;
+      addTearDown(() => ItemReminderService.usesOsRepeatsOverride = null);
       await service.scheduleReminder(
         _item(
           reminderAt: DateTime(2099, 1, 2, 12, 0),
@@ -287,6 +275,18 @@ void main() {
         platform.scheduledMatches.single,
         DateTimeComponents.dayOfWeekAndTime,
       );
+    });
+
+    test('null count daily schedules window of upcoming occurrences on Android', () async {
+      ItemReminderService.usesOsRepeatsOverride = false;
+      addTearDown(() => ItemReminderService.usesOsRepeatsOverride = null);
+      final base = _notificationId('item-1');
+      await service.scheduleReminder(
+        _item(reminderAt: DateTime(2099, 12, 31, 12, 0)),
+      );
+
+      expect(platform.scheduledIds.first, base);
+      expect(platform.scheduledIds.length, 30);
     });
   });
 

@@ -67,7 +67,7 @@ class NotificationService {
     _isInitialized = true;
   }
 
-  static const int _maxScheduledReminders = 48;
+  static const int _maxScheduledReminders = 100;
 
   /// A repeating 0.5s-vibrate / 1s-pause pattern lasting about 10 seconds,
   /// in the [delay, vibrate, pause, vibrate, pause, ...] format Android
@@ -324,7 +324,7 @@ class NotificationService {
     final strings = NotificationStrings.of(locale);
     final now = DateTime.now();
     final startDay = DateTime(now.year, now.month, now.day);
-    final endDay = startDay.add(const Duration(days: 1));
+    final endDay = startDay.add(const Duration(days: 30));
     final notifications = <_ReminderNotification>[];
 
     var silentScheduleId = 1;
@@ -360,11 +360,13 @@ class NotificationService {
             prayerName.toLowerCase() == 'fajr';
         if (!isFajr && setting.silentMode && setting.silentDuration > 0) {
           if (prayerTime.isAfter(now)) {
-            await NativeReminderService.scheduleSilentMode(
-              id: silentScheduleId++,
-              triggerAt: prayerTime,
-              durationMinutes: setting.silentDuration,
-            );
+            if (silentScheduleId <= _maxScheduledReminders) {
+              await NativeReminderService.scheduleSilentMode(
+                id: silentScheduleId++,
+                triggerAt: prayerTime,
+                durationMinutes: setting.silentDuration,
+              );
+            }
           } else if (isTodayDay &&
               now.isBefore(
                 prayerTime.add(Duration(minutes: setting.silentDuration)),
@@ -373,7 +375,8 @@ class NotificationService {
                 .add(Duration(minutes: setting.silentDuration))
                 .difference(now)
                 .inMinutes;
-            if (remainingMinutes > 0) {
+            if (remainingMinutes > 0 &&
+                silentScheduleId <= _maxScheduledReminders) {
               await NativeReminderService.scheduleSilentMode(
                 id: silentScheduleId++,
                 triggerAt: now,
@@ -482,7 +485,8 @@ class NotificationService {
     }
 
     notifications.sort((a, b) => a.fireAt.compareTo(b.fireAt));
-    final limited = notifications.take(48).toList(growable: false);
+    final limited =
+        notifications.take(_maxScheduledReminders).toList(growable: false);
 
     for (var i = 0; i < limited.length; i++) {
       final item = limited[i];

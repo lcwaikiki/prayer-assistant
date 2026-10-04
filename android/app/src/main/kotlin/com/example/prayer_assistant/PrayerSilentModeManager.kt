@@ -112,7 +112,7 @@ object PrayerSilentModeManager {
     }
 
     fun cancelAll(context: Context) {
-        for (id in 1..48) {
+        for (id in 1..100) {
             cancelSilentMode(context, id)
         }
     }

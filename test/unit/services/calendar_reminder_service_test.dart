@@ -41,16 +41,6 @@ CalendarReminder _reminder({
   );
 }
 
-/// The first occurrence day for a clock-anchored reminder, starting today.
-/// Mirrors the service: naive (machine-local) DateTimes throughout.
-DateTime _firstDay(DateTime anchorTime) {
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final todayAt = DateTime(
-      today.year, today.month, today.day, anchorTime.hour, anchorTime.minute);
-  return todayAt.isAfter(now) ? today : today.add(const Duration(days: 1));
-}
-
 /// Next date (>= [from]) whose Gregorian day-of-month is the 31st.
 DateTime? _next31(DateTime from) {
   for (var offset = 0; offset < 12; offset++) {
@@ -198,12 +188,10 @@ setUpAll(() {
         _reminder(anchorAt: anchor, repeatCount: 3),
       );
 
-      // Mirrors the service: today's 12:00 is dropped when already past, so
-      // fewer than three occurrences may remain.
       final now = DateTime.now();
       final expectedDates = <DateTime>[];
       var from = DateTime(now.year, now.month, now.day);
-      for (var i = 0; i < 3; i++) {
+      while (expectedDates.length < 3) {
         final at = DateTime(from.year, from.month, from.day, 12, 0);
         if (at.isAfter(now)) {
           expectedDates.add(at);
@@ -448,11 +436,7 @@ final now = DateTime.now();
         ),
       );
 
-      // Today's 12:00 is dropped when already past, like the service does.
-      final now = DateTime.now();
-      final todayAt = DateTime(now.year, now.month, now.day, 12, 0);
-      final expected = todayAt.isAfter(now) ? 3 : 2;
-      expect(platform.scheduledIds.length, expected);
+      expect(platform.scheduledIds.length, 3);
     });
 
     test('stops scheduling when even inexact scheduling fails', () async {
@@ -691,7 +675,7 @@ final now = DateTime.now();
     });
   });
 
-  group('Android one-shot scheduling (no OS-level repeats)', () {
+  group('Android windowed occurrence scheduling (no OS-level repeats)', () {
     setUp(() {
       CalendarReminderService.usesOsRepeatsOverride = false;
     });
@@ -700,19 +684,19 @@ final now = DateTime.now();
       CalendarReminderService.usesOsRepeatsOverride = null;
     });
 
-    test('daily schedules a single next-occurrence one-shot', () async {
+    test('daily schedules upcoming occurrences window', () async {
       final base = _notificationId('calendar-1');
       await service.scheduleReminder(
         _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0)),
       );
 
-      expect(platform.scheduledIds, [base]);
-      expect(platform.scheduledMatches.single, isNull);
-      expect(platform.scheduledDates.single.isAfter(DateTime.now()), isTrue);
+      expect(platform.scheduledIds.first, base);
+      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledMatches.first, isNull);
+      expect(platform.scheduledDates.first.isAfter(DateTime.now()), isTrue);
     });
 
-    test('weekly on selected weekdays schedules a single next-weekday '
-        'one-shot', () async {
+    test('weekly on selected weekdays schedules upcoming occurrences window', () async {
       final base = _notificationId('calendar-1');
       await service.scheduleReminder(
         _reminder(
@@ -722,11 +706,12 @@ final now = DateTime.now();
         ),
       );
 
-      expect(platform.scheduledIds, [base]);
-      expect(platform.scheduledMatches.single, isNull);
+      expect(platform.scheduledIds.first, base);
+      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledMatches.first, isNull);
     });
 
-    test('monthly gregorian schedules a single next-month one-shot', () async {
+    test('monthly gregorian schedules upcoming occurrences window', () async {
       final base = _notificationId('calendar-1');
       await service.scheduleReminder(
         _reminder(
@@ -736,12 +721,12 @@ final now = DateTime.now();
         ),
       );
 
-      expect(platform.scheduledIds, [base]);
-      expect(platform.scheduledMatches.single, isNull);
+      expect(platform.scheduledIds.first, base);
+      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledMatches.first, isNull);
     });
 
-    test('re-arming a daily reminder schedules exactly one new one-shot each '
-        'time and never accumulates ids', () async {
+    test('re-arming a daily reminder schedules occurrences and clears full window', () async {
       final base = _notificationId('calendar-1');
       for (var i = 0; i < 3; i++) {
         await service.scheduleReminder(
@@ -749,9 +734,6 @@ final now = DateTime.now();
         );
       }
 
-      // Each re-arm cancels the 100-id window then schedules one one-shot at
-      // the same stable id — a duplicate would show as an extra id here.
-      expect(platform.scheduledIds, [base, base, base]);
       expect(
         platform.cancelledIds.where(
           (id) => id >= base && id < base + 100,

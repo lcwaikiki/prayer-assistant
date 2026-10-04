@@ -242,11 +242,18 @@ class CalendarReminderService {
     }
 
     if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
-      // Resolve the next occurrence's concrete fire time, honoring the
-      // reminder's recurrence (the underlying prayer time shifts day to
-      // day, so a fixed OS-level repeat would drift). Re-resolved nightly
-      // by CalendarMidnightScheduler so the reminder advances to the next
-      // matching day.
+      if (NativeReminderService.isAndroid || !_usesOsRepeats) {
+        await _scheduleOccurrences(
+          reminder,
+          id,
+          reminder.recurrence == ReminderRecurrence.once ? 1 : 30,
+          details,
+          body,
+          catchUp: catchUp,
+          strings: strings,
+        );
+        return;
+      }
       final fireAt = await _resolveNextPrayerFireTime(
         reminder,
         catchUp: catchUp,
@@ -265,6 +272,21 @@ class CalendarReminderService {
         showDone: reminder.isTask,
       );
       return;
+    }
+
+    if (NativeReminderService.isAndroid || !_usesOsRepeats) {
+      if (reminder.recurrence != ReminderRecurrence.once) {
+        await _scheduleOccurrences(
+          reminder,
+          id,
+          30,
+          details,
+          body,
+          catchUp: catchUp,
+          strings: strings,
+        );
+        return;
+      }
     }
 
     switch (reminder.recurrence) {
@@ -701,7 +723,9 @@ class CalendarReminderService {
     );
     var from = DateTime(now.year, now.month, now.day);
     final occurrences = <DateTime>[];
-    for (var i = 0; i < count; i++) {
+    for (var attempts = 0;
+        attempts < 400 && occurrences.length < count;
+        attempts++) {
       final date = _nextPrayerOccurrenceDate(reminder, anchor, from);
       if (date == null) {
         break;

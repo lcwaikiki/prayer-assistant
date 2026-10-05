@@ -1818,4 +1818,7 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get beadsFloatingCounterEnable => 'Enable';
+
+  @override
+  String get beadsMinimizeOnExit => 'Minimize on exit';
 }

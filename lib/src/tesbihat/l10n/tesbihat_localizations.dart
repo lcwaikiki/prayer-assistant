@@ -181,6 +181,7 @@ class TesbihatLocalizations {
   String get floatingCounterTitle => _appL10n.beadsFloatingCounterTitle;
   String get floatingCounterBody => _appL10n.beadsFloatingCounterBody;
   String get floatingCounterEnable => _appL10n.beadsFloatingCounterEnable;
+  String get minimizeOnExit => _appL10n.beadsMinimizeOnExit;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

@@ -1808,4 +1808,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get beadsFloatingCounterEnable => 'Etkinleştir';
+
+  @override
+  String get beadsMinimizeOnExit => 'Çıkışta simge durumuna küçült';
 }

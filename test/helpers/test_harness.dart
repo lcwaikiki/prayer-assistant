@@ -16,6 +16,7 @@ import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/services/audio_player_service.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
+import 'package:prayer_assistant/src/tesbihat/state/minimize_on_exit_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
 import 'package:provider/provider.dart' as provider;
 
@@ -278,6 +279,12 @@ class TestHarness {
       () => database.loadShowCardMoonPhase(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadBeadsMinimizeOnExit(),
+    ).thenAnswer((_) async => true);
+    when(
+      () => database.saveBeadsMinimizeOnExit(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadShowCardIftarSuhoor(),
     ).thenAnswer((_) async => null);
     when(
@@ -495,6 +502,7 @@ Future<void> pumpWithHarness(
         audioPlayerServiceProvider.overrideWithValue(
           harness.audioPlayerService,
         ),
+        localDatabaseProvider.overrideWithValue(harness.database),
         ...extraOverrides,
       ],
       child: testLocalizedApp(child: child, locale: locale),

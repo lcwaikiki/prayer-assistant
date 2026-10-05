@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:prayer_assistant/src/tesbihat/data/item_history_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/data/sound_library_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/services/audio_player_service.dart';
 import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
+import 'package:prayer_assistant/src/tesbihat/services/item_reminder_service.dart';
+import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
+import 'package:prayer_assistant/src/tesbihat/state/minimize_on_exit_notifier.dart';
+import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
 
 import '../helpers/mocks.dart';
-import '../helpers/test_harness.dart';
+import '../helpers/test_app.dart';
 
 Item _item({
   int progress = 0,
@@ -30,35 +38,61 @@ Item _item({
 }
 
 Future<MockHapticService> _pumpExecution(
-  WidgetTester tester,
-  TestHarness harness, {
+  WidgetTester tester, {
   Item? item,
+  String? targetItemId,
+  MockLocalDatabase? database,
+  AudioPlayerService? audioPlayer,
 }) async {
   final haptic = MockHapticService();
   when(() => haptic.standard(intensity: any(named: 'intensity')))
       .thenAnswer((_) async {});
   when(() => haptic.checkpoint(intensity: any(named: 'intensity')))
       .thenAnswer((_) async {});
-  harness.itemRepository = ItemRepository.memory([?item]);
-  await harness.initialize();
 
-  await pumpWithHarness(
-    tester,
-    harness,
-    ExecutionScreen(
-      itemId: 'a',
-      audioPlayerService: FakeAudioPlayerService(),
+  final mockReminderService = MockItemReminderService();
+  when(() => mockReminderService.scheduleReminder(any()))
+      .thenAnswer((_) async {});
+  when(() => mockReminderService.cancelReminder(any()))
+      .thenAnswer((_) async {});
+
+  final db = database ?? MockLocalDatabase();
+  when(() => db.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
+  when(() => db.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
+
+  final items = item != null ? [item] : <Item>[];
+  await tester.pumpWidget(
+    ProviderScope(
+      overrides: [
+        itemRepositoryProvider.overrideWithValue(ItemRepository.memory(items)),
+        itemHistoryRepositoryProvider.overrideWithValue(
+          ItemHistoryRepository.memory(),
+        ),
+        itemReminderServiceProvider.overrideWithValue(mockReminderService),
+        soundLibraryRepositoryProvider.overrideWithValue(
+          SoundLibraryRepository.memory(),
+        ),
+        hapticServiceProvider.overrideWithValue(haptic),
+        localDatabaseProvider.overrideWithValue(db),
+      ],
+      child: testLocalizedApp(
+        child: ExecutionScreen(
+          itemId: targetItemId ?? item?.id ?? 'a',
+          audioPlayerService: audioPlayer ?? FakeAudioPlayerService(),
+        ),
+      ),
     ),
-    settle: false,
-    extraOverrides: [hapticServiceProvider.overrideWithValue(haptic)],
   );
   await tester.pump();
   return haptic;
 }
 
+class FakeItem extends Fake implements Item {}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
+    registerFallbackValue(FakeItem());
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       const MethodChannel('wakelock_plus'),
@@ -72,19 +106,7 @@ void main() {
   });
 
   testWidgets('shows item not found for an unknown id', (tester) async {
-    final harness = TestHarness.create();
-    await harness.initialize();
-
-    await pumpWithHarness(
-      tester,
-      harness,
-      ExecutionScreen(
-        itemId: 'x',
-        audioPlayerService: FakeAudioPlayerService(),
-      ),
-      settle: false,
-    );
-    await tester.pump();
+    await _pumpExecution(tester, targetItemId: 'x');
 
     expect(find.text('Item not found'), findsOneWidget);
 
@@ -92,8 +114,7 @@ void main() {
   });
 
   testWidgets('renders the stats, progress and notes', (tester) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item(notes: 'Keep going'));
+    await _pumpExecution(tester, item: _item(notes: 'Keep going'));
 
     expect(find.text('Tasbih'), findsOneWidget);
     expect(find.text('Count'), findsOneWidget);
@@ -108,8 +129,7 @@ void main() {
   });
 
   testWidgets('shows the no-notes placeholder', (tester) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item());
+    await _pumpExecution(tester, item: _item());
 
     expect(find.text('No notes added.'), findsOneWidget);
 
@@ -119,8 +139,7 @@ void main() {
   testWidgets('shows an outlined tap button while the counter is empty', (
     tester,
   ) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item());
+    await _pumpExecution(tester, item: _item());
 
     expect(find.widgetWithText(OutlinedButton, 'TAP'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'TAP'), findsNothing);
@@ -131,8 +150,7 @@ void main() {
   testWidgets('keeps the outlined tap button once progress has started', (
     tester,
   ) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item(progress: 5));
+    await _pumpExecution(tester, item: _item(progress: 5));
 
     expect(find.widgetWithText(OutlinedButton, 'TAP'), findsOneWidget);
     expect(find.widgetWithText(FilledButton, 'TAP'), findsNothing);
@@ -142,8 +160,7 @@ void main() {
 
   testWidgets('tapping TAP increments progress and triggers a standard buzz',
       (tester) async {
-    final harness = TestHarness.create();
-    final haptic = await _pumpExecution(tester, harness, item: _item());
+    final haptic = await _pumpExecution(tester, item: _item());
 
     await tester.tap(find.byKey(const Key('big_tap_button')));
     await tester.pump();
@@ -155,8 +172,7 @@ void main() {
   });
 
   testWidgets('a checkpoint tap triggers the checkpoint buzz', (tester) async {
-    final harness = TestHarness.create();
-    final haptic = await _pumpExecution(tester, harness, item: _item(progress: 10));
+    final haptic = await _pumpExecution(tester, item: _item(progress: 10));
 
     await tester.tap(find.byKey(const Key('big_tap_button')));
     await tester.pump();
@@ -169,8 +185,7 @@ void main() {
 
   testWidgets('reset asks for confirmation and resets progress',
       (tester) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item(progress: 30));
+    await _pumpExecution(tester, item: _item(progress: 30));
 
     await tester.tap(find.byKey(const Key('reset_button')));
     await tester.pumpAndSettle();
@@ -192,8 +207,7 @@ void main() {
   });
 
   testWidgets('AppBar edit button opens ItemFormScreen', (tester) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item());
+    await _pumpExecution(tester, item: _item());
 
     expect(find.byKey(const Key('edit_item_button')), findsOneWidget);
     await tester.tap(find.byKey(const Key('edit_item_button')));
@@ -207,8 +221,7 @@ void main() {
   testWidgets('displays time left stat card initialized to --:--', (
     tester,
   ) async {
-    final harness = TestHarness.create();
-    await _pumpExecution(tester, harness, item: _item(progress: 0));
+    await _pumpExecution(tester, item: _item(progress: 0));
 
     expect(find.text('Time Left'), findsOneWidget);
     expect(
@@ -224,15 +237,12 @@ void main() {
   testWidgets(
     'shows estimated time to complete when executed count is 0 or equals count number, otherwise shows time left',
     (tester) async {
-      final harness = TestHarness.create();
-      // Item with paceIntervals of 1000ms (1 sec per tap) and progress = 0
       final initialItem = _item(
         progress: 0,
         paceIntervals: const [1000, 1000, 1000],
       );
-      await _pumpExecution(tester, harness, item: initialItem);
+      await _pumpExecution(tester, item: initialItem);
 
-      // Executed count is 0: shows estimated time to complete full count (33 sec -> 00:33)
       expect(
         tester
             .widget<Text>(find.byKey(const Key('time_left_value_text')))
@@ -240,11 +250,9 @@ void main() {
         '00:33',
       );
 
-      // Tap button once (executed becomes 1, remaining is 32)
       await tester.tap(find.byKey(const Key('big_tap_button')));
       await tester.pump();
 
-      // Executed count is 1 (in between): shows time left for remaining (32 sec -> 00:32)
       expect(
         tester
             .widget<Text>(find.byKey(const Key('time_left_value_text')))
@@ -253,22 +261,36 @@ void main() {
       );
 
       await tester.pumpWidget(const SizedBox());
+    },
+  );
 
-      // When executed equals count number (completed 33/33)
-      final completedHarness = TestHarness.create();
-      final completedItem = _item(
-        progress: 33,
-        paceIntervals: const [1000, 1000, 1000],
-      );
-      await _pumpExecution(tester, completedHarness, item: completedItem);
+  testWidgets(
+    'renders minimize on exit button in AppBar actions and allows toggling',
+    (tester) async {
+      final db = MockLocalDatabase();
+      await _pumpExecution(tester, item: _item(progress: 0), database: db);
 
-      // Executed count equals count number: shows estimated time to complete (33 sec -> 00:33)
+      final buttonFinder =
+          find.byKey(const Key('toggle_minimize_on_exit_button'));
+      expect(buttonFinder, findsOneWidget);
+      expect(find.byIcon(Icons.picture_in_picture_alt), findsOneWidget);
+
+      // Tap to toggle off
+      await tester.tap(buttonFinder);
+      await tester.pump();
+
       expect(
-        tester
-            .widget<Text>(find.byKey(const Key('time_left_value_text')))
-            .data,
-        '00:33',
+        find.byIcon(Icons.picture_in_picture_alt_outlined),
+        findsOneWidget,
       );
+      verify(() => db.saveBeadsMinimizeOnExit(false)).called(1);
+
+      // Tap again to toggle on
+      await tester.tap(buttonFinder);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.picture_in_picture_alt), findsOneWidget);
+      verify(() => db.saveBeadsMinimizeOnExit(true)).called(1);
 
       await tester.pumpWidget(const SizedBox());
     },

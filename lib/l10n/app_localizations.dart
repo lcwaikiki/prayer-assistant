@@ -3427,6 +3427,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable'**
   String get beadsFloatingCounterEnable;
+
+  /// No description provided for @beadsMinimizeOnExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimize on exit'**
+  String get beadsMinimizeOnExit;
 }
 
 class _AppLocalizationsDelegate

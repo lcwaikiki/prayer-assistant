@@ -48,6 +48,7 @@ class LocalDatabase {
   static const _notificationShowPrayerTimesMessageKey =
       'notification_show_prayer_times_message';
   static const _notificationDismissConfirmKey = 'notification_dismiss_confirm';
+  static const _beadsMinimizeOnExitKey = 'beads_minimize_on_exit';
 
   Database? _db;
 
@@ -616,6 +617,28 @@ class LocalDatabase {
       'setting_key': _reminderSoundEnabledKey,
       'setting_value': enabled ? 'true' : 'false',
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> saveBeadsMinimizeOnExit(bool enabled) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _beadsMinimizeOnExitKey,
+      'setting_value': enabled ? 'true' : 'false',
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<bool> loadBeadsMinimizeOnExit() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_beadsMinimizeOnExitKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return true;
+    }
+    return (rows.first['setting_value'] as String?) == 'true';
   }
 
   Future<bool?> loadReminderSoundEnabled() async {

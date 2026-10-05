@@ -1836,4 +1836,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get beadsFloatingCounterEnable => 'Enable';
+
+  @override
+  String get beadsMinimizeOnExit => 'Minimize on exit';
 }

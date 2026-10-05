@@ -12,6 +12,7 @@ import '../services/bead_overlay_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tap_pace_tracker.dart';
 import '../state/items_notifier.dart';
+import '../state/minimize_on_exit_notifier.dart';
 import '../state/sound_library_notifier.dart';
 import '../widgets/audio_speed_bar.dart';
 import 'item_form_screen.dart';
@@ -77,6 +78,17 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       (_, _) => _syncOverlay(),
       fireImmediately: true,
     );
+    ref.listenManual(
+      minimizeOnExitNotifierProvider,
+      (_, enabled) {
+        if (enabled) {
+          _syncOverlay();
+          _maybePromptOverlayPermission();
+        } else {
+          _overlay.disarm();
+        }
+      },
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _lockOrientation();
@@ -93,8 +105,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   }
 
   /// Arms the floating bubble with the current progress, or disarms it
-  /// when the item is missing or complete.
+  /// when the item is missing, complete, or minimize on exit is disabled.
   void _syncOverlay() {
+    final minimizeOnExit = ref.read(minimizeOnExitNotifierProvider);
+    if (!minimizeOnExit) {
+      _overlay.disarm();
+      return;
+    }
     final item = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
@@ -116,6 +133,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   }
 
   Future<void> _maybePromptOverlayPermission() async {
+    final minimizeOnExit = ref.read(minimizeOnExitNotifierProvider);
+    if (!minimizeOnExit) return;
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item == null || item.currentProgress >= item.count) return;
     if (_isPromptingPermission || !mounted) return;
     if (!await _overlay.shouldPromptForPermission() || !mounted) return;
     _isPromptingPermission = true;
@@ -141,6 +165,16 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       if (enable == true) await _overlay.requestPermission();
     } finally {
       _isPromptingPermission = false;
+    }
+  }
+
+  void _toggleMinimizeOnExit(bool value) {
+    ref.read(minimizeOnExitNotifierProvider.notifier).setEnabled(value);
+    if (value) {
+      _syncOverlay();
+      _maybePromptOverlayPermission();
+    } else {
+      _overlay.disarm();
     }
   }
 
@@ -494,11 +528,30 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       item.count,
     );
     final setCountValue = item.setCount;
+    final minimizeOnExit = ref.watch(minimizeOnExitNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(item.title),
         actions: [
+          IconButton.filledTonal(
+            key: const Key('toggle_minimize_on_exit_button'),
+            tooltip: l10n.minimizeOnExit,
+            style: IconButton.styleFrom(
+              backgroundColor: minimizeOnExit
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.surfaceContainerHighest,
+              foregroundColor: minimizeOnExit
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : Theme.of(context).colorScheme.outline,
+            ),
+            icon: Icon(
+              minimizeOnExit
+                  ? Icons.picture_in_picture_alt
+                  : Icons.picture_in_picture_alt_outlined,
+            ),
+            onPressed: () => _toggleMinimizeOnExit(!minimizeOnExit),
+          ),
           IconButton(
             key: const Key('edit_item_button'),
             tooltip: l10n.edit,
@@ -507,7 +560,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (_) => ItemFormScreen(itemToEdit: item),
+                  builder: (_) => ItemFormScreen(
+                    itemToEdit: item,
+                    audioPlayerService: widget.audioPlayerService,
+                  ),
                 ),
               );
             },

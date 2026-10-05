@@ -289,7 +289,7 @@ void main() {
       );
 
       expect(platform.scheduledIds.first, base);
-      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledIds.length, 7);
     });
   });
 

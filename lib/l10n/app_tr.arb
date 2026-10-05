@@ -619,5 +619,8 @@
   "enableSilentModeToSelectDuration": "Süre seçmek için sessiz modu etkinleştirin.",
   "dndPermissionDialogTitle": "Rahatsız Etmeyin Erişimi",
   "dndPermissionDialogMessage": "Namaz vaktinde cihazı otomatik sessize alabilmek için lütfen sistem ayarlarından Rahatsız Etmeyin erişimine izin verin.",
-  "dndPermissionOpenSettings": "Ayarları Aç"
+  "dndPermissionOpenSettings": "Ayarları Aç",
+  "beadsFloatingCounterTitle": "Yüzen Sayaç",
+  "beadsFloatingCounterBody": "Diğer uygulamaları kullanırken tesbih çekmeye devam edin. Bu ekrandayken Ana Ekran tuşuna bastığınızda yüzen bir sayaç görünür: saymak için dokunun, geri dönmek için basılı tutun, taşımak için sürükleyin. Etkinleştirmek için \"Diğer uygulamaların üzerinde göster\" iznini verin.",
+  "beadsFloatingCounterEnable": "Etkinleştir"
 }

@@ -1798,4 +1798,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get dndPermissionOpenSettings => 'Ayarları Aç';
+
+  @override
+  String get beadsFloatingCounterTitle => 'Yüzen Sayaç';
+
+  @override
+  String get beadsFloatingCounterBody =>
+      'Diğer uygulamaları kullanırken tesbih çekmeye devam edin. Bu ekrandayken Ana Ekran tuşuna bastığınızda yüzen bir sayaç görünür: saymak için dokunun, geri dönmek için basılı tutun, taşımak için sürükleyin. Etkinleştirmek için \"Diğer uygulamaların üzerinde göster\" iznini verin.';
+
+  @override
+  String get beadsFloatingCounterEnable => 'Etkinleştir';
 }

@@ -1817,4 +1817,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dndPermissionOpenSettings => 'Abrir configuración';
+
+  @override
+  String get beadsFloatingCounterTitle => 'Floating Counter';
+
+  @override
+  String get beadsFloatingCounterBody =>
+      'Keep counting beads while using other apps. When you press Home on this screen, a floating counter appears: tap to count, long-press to return, drag to move. Allow \"Display over other apps\" to enable it.';
+
+  @override
+  String get beadsFloatingCounterEnable => 'Enable';
 }

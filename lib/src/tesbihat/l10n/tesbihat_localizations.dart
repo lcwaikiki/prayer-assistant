@@ -178,6 +178,9 @@ class TesbihatLocalizations {
   String get rename => _appL10n.rename;
   String get microphonePermissionRequired => _appL10n.microphonePermissionRequired;
   String get playbackSpeed => _appL10n.playbackSpeed;
+  String get floatingCounterTitle => _appL10n.beadsFloatingCounterTitle;
+  String get floatingCounterBody => _appL10n.beadsFloatingCounterBody;
+  String get floatingCounterEnable => _appL10n.beadsFloatingCounterEnable;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

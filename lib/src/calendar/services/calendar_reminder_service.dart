@@ -49,6 +49,10 @@ class CalendarReminderService {
   /// leftover per-occurrence notifications.
   static const _maxOccurrences = 100;
 
+  /// Default upcoming occurrences window scheduled on Android for infinite
+  /// recurring reminders. Refreshed nightly by CalendarMidnightScheduler.
+  static const _androidUpcomingWindow = 7;
+
   Future<void> initialize() async {
     // The midnight refresh callback runs this in its own background
     // isolate, where timezone state doesn't exist until initialized.
@@ -246,7 +250,9 @@ class CalendarReminderService {
         await _scheduleOccurrences(
           reminder,
           id,
-          reminder.recurrence == ReminderRecurrence.once ? 1 : 30,
+          reminder.recurrence == ReminderRecurrence.once
+              ? 1
+              : _androidUpcomingWindow,
           details,
           body,
           catchUp: catchUp,
@@ -279,7 +285,7 @@ class CalendarReminderService {
         await _scheduleOccurrences(
           reminder,
           id,
-          30,
+          _androidUpcomingWindow,
           details,
           body,
           catchUp: catchUp,

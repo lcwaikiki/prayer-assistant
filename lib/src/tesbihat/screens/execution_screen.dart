@@ -1,15 +1,14 @@
 import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart' show PlayerState;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart' show ReadContext;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
-import '../../controller/prayer_app_controller.dart';
-import '../../navigation.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../services/audio_player_service.dart';
+import '../services/bead_overlay_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tap_pace_tracker.dart';
 import '../state/items_notifier.dart';
@@ -39,6 +38,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   int _soundLoopCount = 0;
   double _playbackSpeed = 1.0;
   bool _isSoundControlsExpanded = false;
+  final _overlay = BeadOverlayService();
+  bool _isPromptingPermission = false;
 
   void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
@@ -70,6 +71,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       _playbackSpeed = initialItem.soundSpeed;
     }
 
+    _overlay.setOnTap(_onOverlayTap);
+    ref.listenManual(
+      itemsNotifierProvider,
+      (_, _) => _syncOverlay(),
+      fireImmediately: true,
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _lockOrientation();
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
@@ -80,7 +88,86 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       if (item != null && item.currentProgress >= item.count) {
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
+      _maybePromptOverlayPermission();
     });
+  }
+
+  /// Arms the floating bubble with the current progress, or disarms it
+  /// when the item is missing or complete.
+  void _syncOverlay() {
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item == null || item.currentProgress >= item.count) {
+      _overlay.disarm();
+    } else {
+      _overlay.arm('${item.currentProgress}');
+    }
+  }
+
+  void _onOverlayTap() {
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item == null || item.currentProgress >= item.count) return;
+    _countBead();
+  }
+
+  Future<void> _maybePromptOverlayPermission() async {
+    if (_isPromptingPermission || !mounted) return;
+    if (!await _overlay.shouldPromptForPermission() || !mounted) return;
+    _isPromptingPermission = true;
+    try {
+      final l10n = context.tesbihatL10n;
+      final enable = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.floatingCounterTitle),
+          content: Text(l10n.floatingCounterBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(l10n.cancel),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(l10n.floatingCounterEnable),
+            ),
+          ],
+        ),
+      );
+      if (enable == true) await _overlay.requestPermission();
+    } finally {
+      _isPromptingPermission = false;
+    }
+  }
+
+  /// Counts one bead with haptic feedback; shared by the tap button and
+  /// the floating bubble.
+  Future<void> _countBead() async {
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .first;
+    ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
+
+    if (item.currentProgress + 1 >= item.count && _isAudioPlaying) {
+      await _audioPlayer.stop();
+      setState(() => _isAudioPlaying = false);
+    }
+
+    final feedback = ref
+        .read(itemsNotifierProvider.notifier)
+        .incrementProgress(widget.itemId);
+    final haptic = ref.read(hapticServiceProvider);
+
+    if (feedback == TapFeedback.standard) {
+      await haptic.standard(intensity: item.vibrationIntensity);
+    } else if (feedback == TapFeedback.checkpoint) {
+      await haptic.checkpoint(intensity: item.vibrationIntensity);
+    }
   }
 
   Future<void> _playCurrentSound() async {
@@ -206,6 +293,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _lockOrientation();
+      _syncOverlay();
+      _maybePromptOverlayPermission();
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
@@ -219,6 +308,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _overlay.setOnTap(null);
+    _overlay.disarm();
     _setWakelock(false);
     _playerCompleteSub?.cancel();
     _audioPlayer.stop();
@@ -254,25 +345,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       return paceTracker.formatRemaining(remaining);
     }
 
-    Future<void> handleTap() async {
-      ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
-
-      if (item.currentProgress + 1 >= item.count && _isAudioPlaying) {
-        await _audioPlayer.stop();
-        setState(() => _isAudioPlaying = false);
-      }
-
-      final feedback = ref
-          .read(itemsNotifierProvider.notifier)
-          .incrementProgress(widget.itemId);
-      final haptic = ref.read(hapticServiceProvider);
-
-      if (feedback == TapFeedback.standard) {
-        await haptic.standard(intensity: item.vibrationIntensity);
-      } else if (feedback == TapFeedback.checkpoint) {
-        await haptic.checkpoint(intensity: item.vibrationIntensity);
-      }
-    }
+    Future<void> handleTap() => _countBead();
 
     Future<void> confirmReset() async {
       final shouldReset = await showDialog<bool>(

@@ -355,7 +355,7 @@ final now = DateTime.now();
       final now = DateTime.now();
       final matches = <DateTime>[];
       var from = DateTime(now.year, now.month, now.day);
-      for (var i = 0; i < 2; i++) {
+      while (matches.length < 2) {
         final date = _nextMatchingWeekday(from, [1, 3, 5]);
         final at = DateTime(date.year, date.month, date.day, 12, 0);
         if (at.isAfter(now)) {
@@ -691,7 +691,7 @@ final now = DateTime.now();
       );
 
       expect(platform.scheduledIds.first, base);
-      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledIds.length, 7);
       expect(platform.scheduledMatches.first, isNull);
       expect(platform.scheduledDates.first.isAfter(DateTime.now()), isTrue);
     });
@@ -707,7 +707,7 @@ final now = DateTime.now();
       );
 
       expect(platform.scheduledIds.first, base);
-      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledIds.length, 7);
       expect(platform.scheduledMatches.first, isNull);
     });
 
@@ -722,7 +722,7 @@ final now = DateTime.now();
       );
 
       expect(platform.scheduledIds.first, base);
-      expect(platform.scheduledIds.length, 30);
+      expect(platform.scheduledIds.length, 7);
       expect(platform.scheduledMatches.first, isNull);
     });
 

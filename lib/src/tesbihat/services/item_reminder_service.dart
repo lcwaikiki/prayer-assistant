@@ -54,6 +54,10 @@ class ItemReminderService {
   /// leftover per-occurrence notifications.
   static const _maxOccurrences = 100;
 
+  /// Default upcoming occurrences window scheduled on Android for infinite
+  /// recurring reminders. Refreshed nightly by MidnightReminderScheduler.
+  static const _androidUpcomingWindow = 7;
+
   Future<void> initialize() async {
     // The midnight refresh callback runs this in its own background
     // isolate, where timezone state doesn't exist until initialized.
@@ -275,7 +279,9 @@ class ItemReminderService {
         await _scheduleOccurrences(
           subject,
           id,
-          subject.reminderRecurrence == ReminderRecurrence.once ? 1 : 30,
+          subject.reminderRecurrence == ReminderRecurrence.once
+              ? 1
+              : _androidUpcomingWindow,
           details,
           body,
           payload,
@@ -309,7 +315,7 @@ class ItemReminderService {
         await _scheduleOccurrences(
           subject,
           id,
-          30,
+          _androidUpcomingWindow,
           details,
           body,
           payload,

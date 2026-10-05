@@ -13,6 +13,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
+import android.provider.Settings
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
@@ -39,6 +40,9 @@ class MainActivity : FlutterActivity() {
     private lateinit var widgetChannel: MethodChannel
     private lateinit var backupFolderChannel: MethodChannel
     private var reminderChannel: MethodChannel? = null
+    private var beadOverlayChannel: MethodChannel? = null
+    /** Bubble text while the bead execution screen is open; null otherwise. */
+    private var beadOverlayText: String? = null
     private var pendingReminderPayload: String? = null
     private var pendingReminderId: Int? = null
     private var pendingOpenHome: Boolean = false
@@ -595,8 +599,62 @@ class MainActivity : FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+        configureBeadOverlayChannel(flutterEngine)
         maybeNotifyOpenHome(intent)
         maybeNotifyReminderTap(intent)
+    }
+
+    private fun configureBeadOverlayChannel(flutterEngine: FlutterEngine) {
+        val channel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "prayer_assistant/bead_overlay"
+        )
+        beadOverlayChannel = channel
+        channel.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "hasPermission" -> result.success(BeadOverlay.canDraw(this))
+                "requestPermission" -> {
+                    startActivity(
+                        Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:$packageName")
+                        )
+                    )
+                    result.success(null)
+                }
+                "arm" -> {
+                    beadOverlayText = call.argument<String>("text")
+                    BeadOverlay.update(beadOverlayText ?: "")
+                    result.success(null)
+                }
+                "disarm" -> {
+                    beadOverlayText = null
+                    BeadOverlay.hide(this)
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        val text = beadOverlayText ?: return
+        if (BeadOverlay.canDraw(this)) {
+            BeadOverlay.show(this, text) {
+                beadOverlayChannel?.invokeMethod("tap", null)
+            }
+        } else {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:$packageName")
+            ).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            try {
+                startActivity(intent)
+            } catch (_: Exception) {}
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -662,6 +720,7 @@ class MainActivity : FlutterActivity() {
      */
     override fun onResume() {
         super.onResume()
+        BeadOverlay.hide(this)
         PrayerWidgetUpdater.screenOnRefresh(this)
     }
 

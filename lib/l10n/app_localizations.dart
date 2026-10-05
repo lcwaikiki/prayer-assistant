@@ -3409,6 +3409,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open Settings'**
   String get dndPermissionOpenSettings;
+
+  /// No description provided for @beadsFloatingCounterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Floating Counter'**
+  String get beadsFloatingCounterTitle;
+
+  /// No description provided for @beadsFloatingCounterBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep counting beads while using other apps. When you press Home on this screen, a floating counter appears: tap to count, long-press to return, drag to move. Allow \"Display over other apps\" to enable it.'**
+  String get beadsFloatingCounterBody;
+
+  /// No description provided for @beadsFloatingCounterEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable'**
+  String get beadsFloatingCounterEnable;
 }
 
 class _AppLocalizationsDelegate

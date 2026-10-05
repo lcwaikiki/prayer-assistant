@@ -4,8 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
+import 'package:prayer_assistant/src/models/prayer_models.dart';
+import 'package:prayer_assistant/src/services/local_database.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/services/item_reminder_service.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -360,6 +363,100 @@ void main() {
 
       expect(platform.scheduledBodies, isNotEmpty);
       expect(platform.scheduledBodies.first, 'Time for your Subhanallah dhikr.');
+    });
+  });
+
+  group('prayer-anchored beads reminders', () {
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
+
+    test('Item.fromMap migrates legacy prayer-time items to daily when anchorDate is null', () {
+      final map = {
+        'id': 'bead-123',
+        'title': 'Dhikr',
+        'count': 33,
+        'check': 11,
+        'setCount': 0,
+        'vibrationIntensity': 1,
+        'currentProgress': 0,
+        'reminderEnabled': true,
+        'reminderAnchor': 'prayerTime',
+        'reminderPrayerName': 'Imsak',
+      };
+      final item = Item.fromMap(map);
+      expect(item.reminderAnchor, ItemReminderAnchor.prayerTime);
+      expect(item.reminderRecurrence, ReminderRecurrence.daily);
+    });
+
+    test('once prayer reminder without anchorDate schedules next day when today prayer passed', () async {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final tomorrow = today.add(const Duration(days: 1));
+
+      final databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      await databaseFactoryFfi.deleteDatabase(
+        '$databasesPath/prayer_assistant.db',
+      );
+      final database = LocalDatabase();
+      await database.saveSelectedLocation(
+        SelectedLocation(
+          countryId: 'tr',
+          countryName: 'Turkiye',
+          stateId: '34',
+          stateName: 'Istanbul',
+          districtId: '541',
+          districtName: 'Uskudar',
+        ),
+      );
+      await database.upsertPrayerDays('541', [
+        PrayerDay(
+          date: today,
+          hijriDate: '1',
+          imsak: '04:00',
+          gunes: '05:30',
+          ogle: '12:30',
+          ikindi: '15:30',
+          aksam: '18:30',
+          yatsi: '20:00',
+        ),
+        PrayerDay(
+          date: tomorrow,
+          hijriDate: '2',
+          imsak: '04:02',
+          gunes: '05:31',
+          ogle: '12:30',
+          ikindi: '15:30',
+          aksam: '18:30',
+          yatsi: '20:00',
+        ),
+      ]);
+
+      final item = Item(
+        id: 'bead-prayer-1',
+        title: 'Tasbih',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 1,
+        reminderEnabled: true,
+        reminderAnchor: ItemReminderAnchor.prayerTime,
+        reminderRecurrence: ReminderRecurrence.once,
+        reminderPrayerName: 'Imsak',
+        // reminderAnchorDate is null: means user chose Fajr prayer without a forced past date
+      );
+
+      final savePlatform = FakeFlutterLocalNotificationsPlatform();
+      FlutterLocalNotificationsPlatform.instance = savePlatform;
+      final localService = ItemReminderService(database: database);
+
+      await localService.scheduleReminder(item, catchUp: false);
+      // Because today's 04:00 is in the past, it should resolve tomorrow's 04:02.
+      expect(savePlatform.scheduledIds, isNotEmpty);
+      expect(savePlatform.scheduledDates.first.day, tomorrow.day);
+      expect(savePlatform.scheduledDates.first.minute, 2);
+      expect(savePlatform.scheduledDates.first.isAfter(now), isTrue);
     });
   });
 }

@@ -63,24 +63,24 @@ Future<void> main() async {
   final itemReminderService = ItemReminderService();
   itemReminderService.currentLocale = controller.resolvedLocale;
   await itemReminderService.initialize();
+
+  final repository = ItemRepository.hive(itemsBox);
+
   controller.onLocaleChanged = (locale) async {
     itemReminderService.currentLocale = locale;
-    final repository = ItemRepository.hive(itemsBox);
-    final items = repository.loadItems();
-    final groups = repository.loadGroups();
-    for (final item in items) {
+    final currentItems = repository.loadItems();
+    final currentGroups = repository.loadGroups();
+    for (final item in currentItems) {
       if (item.reminderEnabled) {
         await itemReminderService.scheduleReminder(item, locale: locale, catchUp: false);
       }
     }
-    for (final group in groups) {
+    for (final group in currentGroups) {
       if (group.reminderEnabled) {
         await itemReminderService.scheduleGroupReminder(group, locale: locale, catchUp: false);
       }
     }
   };
-  await MidnightReminderScheduler.initializeAndSchedule();
-  await CalendarMidnightScheduler.initializeAndSchedule();
 
   final container = ProviderContainer(
     overrides: [
@@ -99,6 +99,22 @@ Future<void> main() async {
     container.invalidate(itemsNotifierProvider);
     container.invalidate(groupsNotifierProvider);
     container.invalidate(soundLibraryNotifierProvider);
+    final restoredItems = repository.loadItems();
+    final restoredGroups = repository.loadGroups();
+    for (final item in restoredItems) {
+      if (item.reminderEnabled) {
+        await itemReminderService.scheduleReminder(item, locale: controller.resolvedLocale, catchUp: false);
+      } else {
+        await itemReminderService.cancelReminder(item.id);
+      }
+    }
+    for (final group in restoredGroups) {
+      if (group.reminderEnabled) {
+        await itemReminderService.scheduleGroupReminder(group, locale: controller.resolvedLocale, catchUp: false);
+      } else {
+        await itemReminderService.cancelReminder(group.id);
+      }
+    }
   };
 
   runApp(
@@ -115,7 +131,33 @@ Future<void> main() async {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     handleAppLaunchFromNotification();
     SharedAudioHandler.initialize(container);
+    MidnightReminderScheduler.initializeAndSchedule();
+    CalendarMidnightScheduler.initializeAndSchedule();
+    _scheduleInitialBeadsReminders(
+      repository,
+      itemReminderService,
+      controller.resolvedLocale,
+    );
   });
+}
+
+Future<void> _scheduleInitialBeadsReminders(
+  ItemRepository repository,
+  ItemReminderService reminderService,
+  Locale locale,
+) async {
+  final items = repository.loadItems();
+  final groups = repository.loadGroups();
+  for (final item in items) {
+    if (item.reminderEnabled) {
+      await reminderService.scheduleReminder(item, locale: locale, catchUp: false);
+    }
+  }
+  for (final group in groups) {
+    if (group.reminderEnabled) {
+      await reminderService.scheduleGroupReminder(group, locale: locale, catchUp: false);
+    }
+  }
 }
 
 class PrayerAssistantApp extends StatelessWidget {

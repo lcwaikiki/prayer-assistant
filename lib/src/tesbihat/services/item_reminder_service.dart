@@ -176,7 +176,7 @@ class ItemReminderService {
 
   Future<void> scheduleReminder(
     Item item, {
-    bool catchUp = false,
+    bool catchUp = true,
     Locale? locale,
   }) =>
       _schedule(
@@ -188,7 +188,7 @@ class ItemReminderService {
 
   Future<void> scheduleGroupReminder(
     ItemGroup group, {
-    bool catchUp = false,
+    bool catchUp = true,
     Locale? locale,
   }) =>
       _schedule(
@@ -204,18 +204,16 @@ class ItemReminderService {
     bool catchUp = true,
     Locale? locale,
   }) async {
-    final id = _notificationId(subject.id);
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
     // count would otherwise leave stale notifications behind.
-    for (var i = 0; i < _maxOccurrences; i++) {
-      await _plugin.cancel(id: id + i);
-      await NativeReminderService.cancel(id + i);
-    }
+    await cancelReminder(subject.id);
 
     if (!subject.reminderEnabled) {
       return;
     }
+
+    final id = _notificationId(subject.id);
 
     final effectiveLocale = await _resolveLocale(locale);
     final strings = NotificationStrings.of(effectiveLocale);
@@ -737,7 +735,8 @@ class ItemReminderService {
         times.add(resolved);
       } else if (catchUp && now.difference(resolved) <= _catchUpWindow) {
         times.add(now.add(const Duration(seconds: 5)));
-      } else if (subject.reminderRecurrence == ReminderRecurrence.once) {
+      } else if (subject.reminderRecurrence == ReminderRecurrence.once &&
+          subject.reminderAnchorDate != null) {
         break;
       }
       from = occurrence.add(const Duration(days: 1));
@@ -793,7 +792,10 @@ class ItemReminderService {
   ) {
     switch (subject.reminderRecurrence) {
       case ReminderRecurrence.once:
-        return anchor.isBefore(from) ? null : anchor;
+        return subject.reminderAnchor == ItemReminderAnchor.prayerTime &&
+                subject.reminderAnchorDate == null
+            ? from
+            : (anchor.isBefore(from) ? null : anchor);
       case ReminderRecurrence.daily:
         return from;
       case ReminderRecurrence.weekly:

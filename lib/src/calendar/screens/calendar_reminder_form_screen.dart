@@ -16,6 +16,7 @@ import '../../widgets/discard_confirmation_dialog.dart';
 import '../../tesbihat/services/audio_player_service.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../../tesbihat/state/sound_library_notifier.dart';
+import '../../tesbihat/widgets/audio_speed_bar.dart';
 import '../../tesbihat/widgets/sound_picker_sheet.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
@@ -79,6 +80,8 @@ class _CalendarReminderFormScreenState
   late bool _isTask;
   String? _soundId;
   String? _soundTitle;
+  double _playbackSpeed = 1.0;
+  bool _isSoundControlsExpanded = false;
   late final AudioPlayerService _audioPlayer;
   StreamSubscription<void>? _playerCompleteSubscription;
   bool _isPlayingPreview = false;
@@ -277,6 +280,11 @@ class _CalendarReminderFormScreenState
     super.dispose();
   }
 
+  void _onSpeedChanged(double newSpeed) {
+    setState(() => _playbackSpeed = newSpeed);
+    _audioPlayer.setPlaybackRate(newSpeed);
+  }
+
   Future<void> _togglePreviewSound() async {
     if (_soundId == null) return;
     if (_isPlayingPreview) {
@@ -294,7 +302,11 @@ class _CalendarReminderFormScreenState
     final sound =
         ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
     if (sound != null) {
-      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+      await _audioPlayer.playBytes(
+        sound.bytes,
+        mimeType: sound.mimeType,
+        playbackRate: _playbackSpeed,
+      );
       setState(() => _isPlayingPreview = true);
     }
   }
@@ -889,46 +901,117 @@ class _CalendarReminderFormScreenState
                 Card(
                   margin: EdgeInsets.zero,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    child: Row(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          key: const Key('reminder_sound_preview_button'),
-                          icon: Icon(
-                            _isPlayingPreview
-                                ? Icons.pause_circle_filled
-                                : Icons.play_circle_filled,
-                          ),
-                          iconSize: 32,
-                          color: colorScheme.primary,
-                          onPressed: _togglePreviewSound,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            _soundTitle ?? l10n.sound,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w600,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: FilledButton.tonal(
+                                key: const Key('reminder_sound_preview_button'),
+                                onPressed: _togglePreviewSound,
+                                onLongPress: () async {
+                                  await _audioPlayer.stop();
+                                  if (mounted) {
+                                    setState(() => _isPlayingPreview = false);
+                                  }
+                                },
+                                style: FilledButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 12,
+                                  ),
+                                  backgroundColor: _isPlayingPreview
+                                      ? colorScheme.primary
+                                      : colorScheme.primaryContainer,
+                                  foregroundColor: _isPlayingPreview
+                                      ? colorScheme.onPrimary
+                                      : colorScheme.onPrimaryContainer,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      _isPlayingPreview
+                                          ? Icons.pause_circle_filled
+                                          : Icons.play_circle_filled,
+                                      size: 26,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        _soundTitle ?? l10n.sound,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                            const SizedBox(width: 8),
+                            IconButton.filledTonal(
+                              key: const Key('toggle_sound_controls_button'),
+                              onPressed: () {
+                                setState(() {
+                                  _isSoundControlsExpanded =
+                                      !_isSoundControlsExpanded;
+                                });
+                              },
+                              style: IconButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                padding: const EdgeInsets.all(12),
+                              ),
+                              icon: AnimatedRotation(
+                                turns: _isSoundControlsExpanded ? 0.5 : 0.0,
+                                duration: const Duration(milliseconds: 200),
+                                child: const Icon(Icons.keyboard_arrow_down),
+                              ),
+                            ),
+                            if (!_readOnly) ...[
+                              const SizedBox(width: 8),
+                              IconButton.filledTonal(
+                                key: const Key('reminder_sound_swap_button'),
+                                icon: const Icon(Icons.swap_horiz),
+                                tooltip: l10n.pickFromLibrary,
+                                onPressed: _pickSound,
+                                style: IconButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              IconButton.filledTonal(
+                                key: const Key('reminder_sound_remove_button'),
+                                icon: const Icon(Icons.close),
+                                tooltip: l10n.removeSound,
+                                onPressed: _removeSound,
+                                style: IconButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                              ),
+                            ],
+                          ],
                         ),
-                        if (!_readOnly) ...[
-                          IconButton(
-                            key: const Key('reminder_sound_swap_button'),
-                            icon: const Icon(Icons.swap_horiz),
-                            tooltip: l10n.pickFromLibrary,
-                            onPressed: _pickSound,
-                          ),
-                          IconButton(
-                            key: const Key('reminder_sound_remove_button'),
-                            icon: const Icon(Icons.close),
-                            tooltip: l10n.removeSound,
-                            onPressed: _removeSound,
+                        if (_isSoundControlsExpanded) ...[
+                          const SizedBox(height: 8),
+                          AudioSpeedBar(
+                            speed: _playbackSpeed,
+                            onSpeedChanged: _onSpeedChanged,
                           ),
                         ],
                       ],

@@ -17,6 +17,7 @@ import '../services/prayer_anchor_resolver.dart';
 import '../state/groups_notifier.dart';
 import '../state/items_notifier.dart';
 import '../state/sound_library_notifier.dart';
+import '../widgets/audio_speed_bar.dart';
 import '../widgets/sound_picker_sheet.dart';
 import 'execution_screen.dart';
 import '../widgets/reminder_section.dart';
@@ -55,6 +56,8 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   late Set<String> _selectedGroupIds;
   String? _soundId;
   String? _soundTitle;
+  double _playbackSpeed = 1.0;
+  bool _isSoundControlsExpanded = false;
   late bool _autoCountWithSound;
   late final AudioPlayerService _audioPlayer;
   StreamSubscription<void>? _playerCompleteSubscription;
@@ -99,6 +102,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (!setEquals(_selectedGroupIds, initialGroups)) return true;
     if (_soundId != initialSoundId) return true;
     if (_autoCountWithSound != initialAutoCount) return true;
+    if ((_playbackSpeed - (item?.soundSpeed ?? 1.0)).abs() > 0.001) return true;
 
     return false;
   }
@@ -127,6 +131,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         : (widget.initialGroupIds ?? const []).toSet();
     _soundId = item?.soundId;
     _soundTitle = item?.soundTitle;
+    _playbackSpeed = item?.soundSpeed ?? 1.0;
     _autoCountWithSound = item?.autoCountWithSound ?? true;
     _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
     _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
@@ -149,6 +154,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     super.dispose();
   }
 
+  void _onSpeedChanged(double newSpeed) {
+    setState(() => _playbackSpeed = newSpeed);
+    _audioPlayer.setPlaybackRate(newSpeed);
+  }
+
   Future<void> _togglePreviewSound() async {
     if (_soundId == null) return;
     if (_isPlayingPreview) {
@@ -166,7 +176,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final sound =
         ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
     if (sound != null) {
-      await _audioPlayer.playBytes(sound.bytes, mimeType: sound.mimeType);
+      await _audioPlayer.playBytes(
+        sound.bytes,
+        mimeType: sound.mimeType,
+        playbackRate: _playbackSpeed,
+      );
       setState(() => _isPlayingPreview = true);
     }
   }
@@ -304,6 +318,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         soundId: _soundId,
         soundTitle: _soundTitle,
         autoCountWithSound: _autoCountWithSound,
+        soundSpeed: _playbackSpeed,
         clearSound: _soundId == null,
       );
       notifier.updateItem(edited);
@@ -338,6 +353,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         soundId: _soundId,
         soundTitle: _soundTitle,
         autoCountWithSound: _autoCountWithSound,
+        soundSpeed: _playbackSpeed,
       );
     }
 
@@ -536,50 +552,123 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                   Card(
                     margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
+                      padding: const EdgeInsets.all(12),
                       child: Column(
                         children: [
                           Row(
                             children: [
-                              IconButton(
-                                key: const Key('sound_preview_button'),
-                                icon: Icon(
-                                  _isPlayingPreview
-                                      ? Icons.pause_circle_filled
-                                      : Icons.play_circle_filled,
+                              Expanded(
+                                child: FilledButton.tonal(
+                                  key: const Key('sound_preview_button'),
+                                  onPressed: _togglePreviewSound,
+                                  onLongPress: () async {
+                                    await _audioPlayer.stop();
+                                    if (mounted) {
+                                      setState(() => _isPlayingPreview = false);
+                                    }
+                                  },
+                                  style: FilledButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 12,
+                                    ),
+                                    backgroundColor: _isPlayingPreview
+                                        ? Theme.of(context).colorScheme.primary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .primaryContainer,
+                                    foregroundColor: _isPlayingPreview
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                        : Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        _isPlayingPreview
+                                            ? Icons.pause_circle_filled
+                                            : Icons.play_circle_filled,
+                                        size: 26,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                          _soundTitle ?? l10n.sound,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                iconSize: 32,
-                                color: Theme.of(context).colorScheme.primary,
-                                onPressed: _togglePreviewSound,
                               ),
                               const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  _soundTitle ?? l10n.sound,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
+                              IconButton.filledTonal(
+                                key: const Key('toggle_sound_controls_button'),
+                                onPressed: () {
+                                  setState(() {
+                                    _isSoundControlsExpanded =
+                                        !_isSoundControlsExpanded;
+                                  });
+                                },
+                                style: IconButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                                  padding: const EdgeInsets.all(12),
+                                ),
+                                icon: AnimatedRotation(
+                                  turns: _isSoundControlsExpanded ? 0.5 : 0.0,
+                                  duration: const Duration(milliseconds: 200),
+                                  child: const Icon(Icons.keyboard_arrow_down),
                                 ),
                               ),
                               if (!_readOnly) ...[
-                                IconButton(
+                                const SizedBox(width: 8),
+                                IconButton.filledTonal(
                                   icon: const Icon(Icons.swap_horiz),
                                   tooltip: l10n.pickFromLibrary,
                                   onPressed: _pickSound,
+                                  style: IconButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
                                 ),
-                                IconButton(
+                                const SizedBox(width: 8),
+                                IconButton.filledTonal(
                                   icon: const Icon(Icons.close),
                                   tooltip: l10n.removeSound,
                                   onPressed: _removeSound,
+                                  style: IconButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                  ),
                                 ),
                               ],
                             ],
                           ),
+                          if (_isSoundControlsExpanded) ...[
+                            const SizedBox(height: 8),
+                            AudioSpeedBar(
+                              speed: _playbackSpeed,
+                              onSpeedChanged: _onSpeedChanged,
+                            ),
+                          ],
+                          const SizedBox(height: 4),
                           SwitchListTile(
                             dense: true,
                             contentPadding: EdgeInsets.zero,

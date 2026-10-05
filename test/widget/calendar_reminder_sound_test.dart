@@ -363,5 +363,84 @@ void main() {
     container.dispose();
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+      'calendar reminder form can expand sound controls and change speed preset',
+      (tester) async {
+    final reminderWithSound = CalendarReminder(
+      id: 'r_sound_speed',
+      title: 'Speed Reminder',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+      soundId: 'sound_123',
+      soundTitle: 'Adhan Makkah',
+    );
+
+    await _pumpForm(tester, reminder: reminderWithSound);
+
+    expect(find.byKey(const Key('toggle_sound_controls_button')), findsOneWidget);
+    expect(find.byKey(const Key('speed_value_text')), findsNothing);
+
+    // Expand
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('speed_value_text')), findsOneWidget);
+    expect(find.text('1.00x'), findsOneWidget);
+
+    // Tap 1.5x preset
+    await tester.tap(find.byKey(const Key('speed_preset_1.5x')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('1.50x'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets(
+      'item form screen can expand sound controls and change speed preset',
+      (tester) async {
+    final harness = TestHarness.create();
+    final itemWithSound = Item(
+      id: 'bead_speed',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 11,
+      vibrationIntensity: 4,
+      soundId: 'sound_bead',
+      soundTitle: 'SubhanAllah Audio',
+      soundSpeed: 1.0,
+    );
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      ItemFormScreen(
+        itemToEdit: itemWithSound,
+      ),
+    );
+    await tester.pump();
+    await tester.drag(find.byType(ListView), const Offset(0, -300));
+    await tester.pump();
+
+    expect(find.byKey(const Key('toggle_sound_controls_button')), findsOneWidget);
+    expect(find.byKey(const Key('speed_value_text')), findsNothing);
+
+    // Expand
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('speed_value_text')), findsOneWidget);
+    expect(find.text('1.00x'), findsOneWidget);
+
+    // Tap 2x preset
+    await tester.tap(find.byKey(const Key('speed_preset_2x')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('2.00x'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
+
 

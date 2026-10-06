@@ -727,14 +727,19 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       await _syncCalendarRemindersWidget();
-      _countries = await api.getCountries();
       if (_selectedLocation != null) {
-        await _loadStates(_selectedLocation!.countryId);
-        await _loadDistricts(_selectedLocation!.stateId);
         await refreshPrayerData(forceSync: false);
+        try {
+          _countries = await api.getCountries();
+          await _loadStates(_selectedLocation!.countryId);
+          await _loadDistricts(_selectedLocation!.stateId);
+        } catch (_) {
+          // Ignore network errors when offline; cached prayer data is already active.
+        }
       } else {
         await notificationService.cancelAllPrayerNotifications();
         await _updateWidgetBridgeData();
+        _countries = await api.getCountries();
       }
       try {
         await _driveService.restoreSession();
@@ -907,12 +912,25 @@ class PrayerAppController extends ChangeNotifier {
     try {
       final now = DateTime.now();
       final currentYear = now.year;
-      await _syncYearIfNeeded(
-        selected.districtId,
-        currentYear,
-        forceSync: forceSync,
-      );
       await _loadVisibleData(selected.districtId);
+      final alreadyCached = await database.hasSufficientYearData(
+        districtId: selected.districtId,
+        year: currentYear,
+      );
+      if (forceSync || !alreadyCached) {
+        try {
+          await _syncYearIfNeeded(
+            selected.districtId,
+            currentYear,
+            forceSync: forceSync,
+          );
+          await _loadVisibleData(selected.districtId);
+        } catch (e) {
+          if (_today == null && _yearRange.isEmpty) {
+            rethrow;
+          }
+        }
+      }
       await _syncNotifications();
       _clearError();
     } catch (e) {

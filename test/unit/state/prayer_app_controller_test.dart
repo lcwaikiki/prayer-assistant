@@ -417,7 +417,51 @@ void main() {
       ).called(1);
     });
 
-    test('surfaces failures in error without throwing', () async {
+    test('loads cached prayer times and initializes cleanly offline when network is down', () async {
+      final location = sampleSelectedLocation();
+      when(() => database.loadSelectedLocation()).thenAnswer(
+        (_) async => location,
+      );
+      // Simulate network being completely offline
+      when(() => api.getCountries()).thenThrow(Exception('No internet connection'));
+      when(() => api.getStates(any())).thenThrow(Exception('No internet connection'));
+      when(() => api.getDistricts(any())).thenThrow(Exception('No internet connection'));
+
+      final day = samplePrayerDay();
+      when(
+        () => database.getDay(
+          districtId: any(named: 'districtId'),
+          date: any(named: 'date'),
+        ),
+      ).thenAnswer((_) async => day);
+      when(
+        () => database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        ),
+      ).thenAnswer((_) async => [day]);
+      when(
+        () => database.hasSufficientYearData(
+          districtId: any(named: 'districtId'),
+          year: any(named: 'year'),
+        ),
+      ).thenAnswer((_) async => true);
+
+      final controller = buildController();
+      await controller.initialize();
+
+      expect(controller.error, isNull);
+      expect(controller.hasNetworkError, isFalse);
+      expect(controller.selectedLocation!.fullName, location.fullName);
+      expect(controller.today, isNotNull);
+      expect(controller.yearRange, hasLength(1));
+      expect(controller.isInitializing, isFalse);
+      expect(controller.isBusy, isFalse);
+      verifyNever(() => api.getYearlyPrayerTimes(districtId: any(named: 'districtId'), year: any(named: 'year')));
+    });
+
+    test('surfaces failures in error on fresh install when network is down', () async {
       when(() => api.getCountries()).thenThrow(Exception('network down'));
 
       final controller = buildController();

@@ -459,9 +459,13 @@ void main() {
   });
 
   group('ItemsNotifier.resetProgress', () {
-    test('zeroes progress but keeps setCount', () {
+    test('zeroes progress but keeps setCount and paceIntervals', () {
       final container = containerWith(
-        ItemRepository.memory([item('a', currentProgress: 20, setCount: 1)]),
+        ItemRepository.memory([
+          item('a', currentProgress: 20, setCount: 1).copyWith(
+            paceIntervals: const [1000, 1000],
+          ),
+        ]),
         reminderService,
       );
 
@@ -470,6 +474,7 @@ void main() {
       final current = container.read(itemsNotifierProvider).single;
       expect(current.currentProgress, 0);
       expect(current.setCount, 1);
+      expect(current.paceIntervals, const [1000, 1000]);
     });
 
     test('is a no-op for unknown ids', () {

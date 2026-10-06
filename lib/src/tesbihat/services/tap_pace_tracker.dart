@@ -118,9 +118,10 @@ class TapPaceTracker {
         } else {
           final currentAvg =
               _intervalsMs.reduce((a, b) => a + b) / _intervalsMs.length;
-          // Any interval exceeding 2.5x of the bead's average pace is considered
-          // a pause/interruption and completely excluded from the pace calculation.
-          final isLongWait = rawIntervalMs > (currentAvg * 2.5);
+          // Any interval exceeding 2.5x of average pace (with a minimum 5s threshold)
+          // is considered a pause/interruption and excluded from pace calculation.
+          final thresholdMs = (currentAvg * 2.5).clamp(5000.0, double.infinity);
+          final isLongWait = rawIntervalMs > thresholdMs;
           if (!isLongWait) {
             _intervalsMs.add(rawIntervalMs);
             if (_intervalsMs.length > _maxHistory) {

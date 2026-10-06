@@ -360,7 +360,7 @@ class ItemsNotifier extends Notifier<List<Item>> {
     final nextState = [...state];
     nextState[index] = item.copyWith(
       currentProgress: 0,
-      paceIntervals: const [],
+      paceIntervals: item.paceIntervals,
     );
     state = nextState;
     _repository.saveItems(state);

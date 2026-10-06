@@ -154,6 +154,23 @@ void main() {
       expect(tracker.intervalCount, 0);
       expect(tracker.formatRemaining(33), '--:--');
     });
+
+    test('adapts pace smoothly when transitioning from fast taps to slower overlay taps', () {
+      final t0 = DateTime(2026, 1, 1, 12, 0, 0);
+      tracker.recordTap(t0);
+      tracker.recordTap(t0.add(const Duration(milliseconds: 600)));
+      tracker.recordTap(t0.add(const Duration(milliseconds: 1200)));
+      expect(tracker.averageIntervalMs, 600);
+
+      // User minimizes and taps on overlay button at a slower pace (1.8s per bead)
+      tracker.recordTap(t0.add(const Duration(milliseconds: 3000)));
+      expect(tracker.intervalCount, 3);
+      expect(tracker.averageIntervalMs, 1000);
+
+      tracker.recordTap(t0.add(const Duration(milliseconds: 4800)));
+      expect(tracker.intervalCount, 4);
+      expect(tracker.averageIntervalMs, 1200);
+    });
   });
 
   group('BeadPaceNotifier with ItemRepository', () {

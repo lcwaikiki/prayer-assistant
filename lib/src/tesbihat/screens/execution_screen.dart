@@ -15,6 +15,7 @@ import '../state/items_notifier.dart';
 import '../state/minimize_on_exit_notifier.dart';
 import '../state/sound_library_notifier.dart';
 import '../widgets/audio_speed_bar.dart';
+import '../widgets/truncated_title_tooltip.dart';
 import 'item_form_screen.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
@@ -532,7 +533,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(item.title),
+        title: TruncatedTitleTooltip(title: item.title),
         actions: [
           IconButton.filledTonal(
             key: const Key('toggle_minimize_on_exit_button'),

@@ -9,6 +9,7 @@ import '../state/items_notifier.dart';
 import 'execution_screen.dart';
 import 'group_form_screen.dart';
 import 'item_form_screen.dart';
+import '../widgets/truncated_title_tooltip.dart';
 
 enum _MemberAction { edit, duplicate, remove, delete }
 
@@ -311,7 +312,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
               )
             : _selecting
                 ? Text(l10n.selectedCount(_selected.length))
-                : Text(group.title),
+                : TruncatedTitleTooltip(title: group.title),
         actions: _isSearching
             ? [
                 if (_searchQuery.isNotEmpty)
@@ -734,6 +735,8 @@ class _GroupMemberCard extends StatelessWidget {
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
           ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
           '${l10n.count}: ${item.count} | ${l10n.check}: ${item.check} | ${l10n.set}: ${item.setCount}\n'

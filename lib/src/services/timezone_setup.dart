@@ -13,10 +13,10 @@ Future<void> initializeLocalTimezone() async {
   tz.initializeTimeZones();
   try {
     final timezoneInfo = await FlutterTimezone.getLocalTimezone().timeout(
-      const Duration(milliseconds: 500),
+      const Duration(seconds: 3),
     );
     tz.setLocalLocation(tz.getLocation(timezoneInfo.identifier));
   } catch (_) {
-    tz.setLocalLocation(tz.getLocation('UTC'));
+    tz.setLocalLocation(tz.UTC);
   }
 }

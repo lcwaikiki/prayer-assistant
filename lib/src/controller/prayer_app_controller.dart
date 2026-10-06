@@ -657,31 +657,6 @@ class PrayerAppController extends ChangeNotifier {
       }
       _widgetCalendarDisplay = widgetCalDisplay;
 
-      _widgetMmssThresholdMinutes = (await database
-              .loadWidgetMmssThreshold())
-          .clamp(0, 60);
-      await _syncStatusBarConfig();
-      await widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name);
-      await widgetBridgeService.updateWidgetTheme(_widgetTheme.name);
-      await widgetBridgeService.updateWidgetCalendarDisplay(
-        _widgetCalendarDisplay.name,
-        _showSecondaryCalendarDate,
-      );
-      await widgetBridgeService.updateWidgetMmssThreshold(
-        _widgetMmssThresholdMinutes,
-      );
-      await widgetBridgeService.updateSnoozeDurationMinutes(
-        _snoozeDurationMinutes,
-      );
-      await widgetBridgeService.updateDismissConfirm(
-        _notificationDismissConfirm,
-      );
-      await NativeReminderService.updateDismissConfirm(
-        _notificationDismissConfirm,
-      );
-      try {
-        await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
-      } catch (_) {}
       final rawCalendarPrimaryDisplay = await database
           .loadCalendarPrimaryDisplay();
       var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
@@ -716,17 +691,29 @@ class PrayerAppController extends ChangeNotifier {
       _showCardUpcomingReminders =
           await database.loadShowCardUpcomingReminders() ?? true;
       _calendarReminders = await database.loadCalendarReminders();
-      for (final reminder in _calendarReminders) {
-        if (reminder.enabled) {
-          // Re-arms already-fired occurrences without re-firing them: the
-          // catch-up only applies when the user saves/enables a reminder.
-          await calendarReminderService.scheduleReminder(
-            reminder,
-            catchUp: false,
-          );
-        }
-      }
+
+      await Future.wait([
+        _syncStatusBarConfig(),
+        widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name),
+        widgetBridgeService.updateWidgetTheme(_widgetTheme.name),
+        widgetBridgeService.updateWidgetCalendarDisplay(
+          _widgetCalendarDisplay.name,
+          _showSecondaryCalendarDate,
+        ),
+        widgetBridgeService.updateWidgetMmssThreshold(_widgetMmssThresholdMinutes),
+        widgetBridgeService.updateSnoozeDurationMinutes(_snoozeDurationMinutes),
+        widgetBridgeService.updateDismissConfirm(_notificationDismissConfirm),
+        NativeReminderService.updateDismissConfirm(_notificationDismissConfirm),
+        ..._calendarReminders
+            .where((r) => r.enabled)
+            .map((r) => calendarReminderService.scheduleReminder(r, catchUp: false)),
+      ]);
+      try {
+        await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
+      } catch (_) {}
+
       await _syncCalendarRemindersWidget();
+
       if (_selectedLocation != null) {
         await refreshPrayerData(forceSync: false);
         try {
@@ -741,6 +728,7 @@ class PrayerAppController extends ChangeNotifier {
         await _updateWidgetBridgeData();
         _countries = await api.getCountries();
       }
+
       try {
         await _driveService.restoreSession();
         _offlineFolderUri = await _offlineFolderService.currentFolder();
@@ -748,6 +736,7 @@ class PrayerAppController extends ChangeNotifier {
             ? await _offlineFolderService.documentsFolderAvailable()
             : false;
       } catch (_) {}
+
       _clearError();
     } catch (e) {
       _recordError(e);

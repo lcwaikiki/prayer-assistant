@@ -34,19 +34,23 @@ import 'src/ui/app_shell.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting();
-
   NativeReminderService.initializeNotificationTapHandler(handleNotificationTap);
 
-  await WisdomService.instance.init();
-
-  await Hive.initFlutter();
-
-  final itemsBox = await Hive.openBox<dynamic>('items_box');
-  final itemHistoryBox = await Hive.openBox<dynamic>('item_history_box');
-
   final calendarReminderService = CalendarReminderService();
-  await calendarReminderService.initialize();
+
+  final initResults = await Future.wait([
+    initializeDateFormatting(),
+    WisdomService.instance.init(),
+    Hive.initFlutter().then((_) => Future.wait([
+      Hive.openBox<dynamic>('items_box'),
+      Hive.openBox<dynamic>('item_history_box'),
+    ])),
+    calendarReminderService.initialize(),
+  ]);
+
+  final hiveBoxes = initResults[2] as List<dynamic>;
+  final itemsBox = hiveBoxes[0] as Box<dynamic>;
+  final itemHistoryBox = hiveBoxes[1] as Box<dynamic>;
 
   final controller = PrayerAppController(
     api: ImsakiyemApi(),

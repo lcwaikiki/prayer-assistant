@@ -63,7 +63,7 @@ object BeadOverlay {
         }
 
         val touchSlop = ViewConfiguration.get(app).scaledTouchSlop
-        val longPressTimeout = ViewConfiguration.getLongPressTimeout().toLong()
+        val longPressTimeout = 1000L
         val handler = Handler(Looper.getMainLooper())
 
         var initialX = 0
@@ -89,6 +89,7 @@ object BeadOverlay {
                     initialTouchY = event.rawY
                     isDragging = false
                     isLongPressed = false
+                    handler.removeCallbacks(longPressRunnable)
                     handler.postDelayed(longPressRunnable, longPressTimeout)
                     true
                 }

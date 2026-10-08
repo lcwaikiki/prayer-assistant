@@ -272,11 +272,16 @@ class _AppShellState extends State<AppShell> {
         return riverpod.Consumer(
           builder: (context, ref, _) {
             final selection = ref.watch(tesbihSelectionProvider);
+            final isTodayTab = controller.tabIndex == 2;
+            final canPop = isTodayTab && !selection.active;
             return PopScope(
-              canPop: !selection.active,
+              canPop: canPop,
               onPopInvokedWithResult: (didPop, _) {
-                if (!didPop && selection.active) {
+                if (didPop) return;
+                if (selection.active) {
                   ref.read(tesbihSelectionProvider.notifier).cancel();
+                } else if (!isTodayTab) {
+                  controller.setTab(2);
                 }
               },
               child: Scaffold(

@@ -8,6 +8,12 @@ final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
   return service;
 });
 
+final chimePlayerServiceProvider = Provider<AudioPlayerService>((ref) {
+  final service = AudioPlayerService();
+  ref.onDispose(service.dispose);
+  return service;
+});
+
 class AudioPlayerService {
   AudioPlayerService({AudioPlayer? player}) : _player = player ?? AudioPlayer();
 

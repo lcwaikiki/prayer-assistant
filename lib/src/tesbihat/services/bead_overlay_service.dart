@@ -32,6 +32,12 @@ class BeadOverlayService {
     await _channel.invokeMethod<void>('disarm');
   }
 
+  /// Brings the app back to the foreground (e.g. when count completes in minimized mode).
+  Future<void> openApp() async {
+    if (!isSupported) return;
+    await _channel.invokeMethod<void>('openApp');
+  }
+
   Future<bool> hasPermission() async =>
       await _channel.invokeMethod<bool>('hasPermission') ?? false;
 

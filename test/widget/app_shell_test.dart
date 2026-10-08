@@ -360,6 +360,37 @@ await tester.pumpWidget(const SizedBox());
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets('pressing back on any non-today tab switches to today tab',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, AppShell(qiblaScreen: qiblaTab()));
+
+    // Navigate to Qibla (index 0)
+    await tester.tap(find.text('Qibla'));
+    await tester.pump();
+    expect(harness.controller.tabIndex, 0);
+
+    // Simulate system back button
+    final dynamic widgetsAppState = tester.state(find.byType(WidgetsApp).first);
+    await widgetsAppState.didPopRoute();
+    await tester.pump();
+    expect(harness.controller.tabIndex, 2);
+
+    // Navigate to Beads (index 4)
+    await tester.tap(find.text('Beads'));
+    await tester.pump();
+    expect(harness.controller.tabIndex, 4);
+
+    // Simulate system back button
+    await widgetsAppState.didPopRoute();
+    await tester.pump();
+    expect(harness.controller.tabIndex, 2);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
 
 Future<void> _pickDropdown(

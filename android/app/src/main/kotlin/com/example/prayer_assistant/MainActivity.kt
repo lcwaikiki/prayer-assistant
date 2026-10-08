@@ -632,6 +632,14 @@ class MainActivity : FlutterActivity() {
                     BeadOverlay.hide(this)
                     result.success(null)
                 }
+                "openApp" -> {
+                    val app = applicationContext
+                    val intent = Intent(app, MainActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    }
+                    app.startActivity(intent)
+                    result.success(null)
+                }
                 else -> result.notImplemented()
             }
         }

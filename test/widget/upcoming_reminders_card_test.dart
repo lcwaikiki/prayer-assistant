@@ -11,9 +11,19 @@ import 'package:prayer_assistant/src/ui/widgets/upcoming_reminders_card.dart';
 
 import '../helpers/test_harness.dart';
 
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.UTC);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('flutter_timezone'),
+      (call) async => 'UTC',
+    );
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(
       const MethodChannel('wakelock_plus'),

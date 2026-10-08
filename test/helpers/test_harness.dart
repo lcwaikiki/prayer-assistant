@@ -502,6 +502,9 @@ Future<void> pumpWithHarness(
         audioPlayerServiceProvider.overrideWithValue(
           harness.audioPlayerService,
         ),
+        chimePlayerServiceProvider.overrideWithValue(
+          harness.audioPlayerService,
+        ),
         localDatabaseProvider.overrideWithValue(harness.database),
         ...extraOverrides,
       ],

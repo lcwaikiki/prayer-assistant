@@ -32,6 +32,7 @@ import '../tesbihat/data/sound_library_repository.dart';
 import '../tesbihat/models/daily_item_stat.dart';
 import '../tesbihat/models/item.dart';
 import '../tesbihat/models/item_group.dart';
+import '../tesbihat/models/reminder_schedulable.dart';
 import '../tesbihat/models/sound_item.dart';
 import '../utils/time_utils.dart';
 
@@ -1257,24 +1258,41 @@ class PrayerAppController extends ChangeNotifier {
   }
 
   /// Pushes the next few upcoming enabled calendar reminders to the Android
+  Future<void> syncUpcomingRemindersWidget() async {
+    await _syncCalendarRemindersWidget();
+  }
+
+  /// Pushes the upcoming reminders (calendar, bead, and group) to the
   /// home-screen widget. Fire-and-forget: display-only, not the scheduling
   /// authority (CalendarReminderService/CalendarMidnightScheduler are).
   Future<void> _syncCalendarRemindersWidget() async {
     final now = DateTime.now();
-    final upcoming = <({CalendarReminder reminder, DateTime next})>[
+    final itemRepo = _itemRepo ?? _defaultItemRepo;
+    final beads = itemRepo.loadItems();
+    final groups = itemRepo.loadGroups();
+
+    final upcoming = <({String title, DateTime next})>[
       for (final reminder in _calendarReminders)
         if (reminder.enabled)
           if (reminder.nextOccurrenceFrom(now) case final next?)
-            (reminder: reminder, next: next),
+            (title: reminder.title, next: next),
+      for (final bead in beads)
+        if (bead.reminderEnabled)
+          if (bead.toCalendarReminder().nextOccurrenceFrom(now) case final next?)
+            (title: bead.title, next: next),
+      for (final group in groups)
+        if (group.reminderEnabled)
+          if (group.toCalendarReminder().nextOccurrenceFrom(now) case final next?)
+            (title: group.title, next: next),
     ]..sort((a, b) => a.next.compareTo(b.next));
     final dateFormat = DateFormat(
       'EEE, d MMM · HH:mm',
       resolvedLocale.toString(),
     );
     final payload = [
-      for (final entry in upcoming.take(3))
+      for (final entry in upcoming.take(10))
         {
-          'title': entry.reminder.title,
+          'title': entry.title,
           'when': dateFormat.format(entry.next),
           'epochMs': entry.next.millisecondsSinceEpoch,
         },

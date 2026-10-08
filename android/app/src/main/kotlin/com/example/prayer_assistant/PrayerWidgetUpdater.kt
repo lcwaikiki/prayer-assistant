@@ -498,17 +498,53 @@ object PrayerWidgetUpdater {
         val rowIds = intArrayOf(
             R.id.widgetUpcomingReminderRow1,
             R.id.widgetUpcomingReminderRow2,
-            R.id.widgetUpcomingReminderRow3
+            R.id.widgetUpcomingReminderRow3,
+            R.id.widgetUpcomingReminderRow4,
+            R.id.widgetUpcomingReminderRow5,
+            R.id.widgetUpcomingReminderRow6,
+            R.id.widgetUpcomingReminderRow7,
+            R.id.widgetUpcomingReminderRow8,
+            R.id.widgetUpcomingReminderRow9,
+            R.id.widgetUpcomingReminderRow10,
+            R.id.widgetUpcomingReminderRow11,
+            R.id.widgetUpcomingReminderRow12,
+            R.id.widgetUpcomingReminderRow13,
+            R.id.widgetUpcomingReminderRow14,
+            R.id.widgetUpcomingReminderRow15
         )
         val titleIds = intArrayOf(
             R.id.widgetUpcomingReminderTitle1,
             R.id.widgetUpcomingReminderTitle2,
-            R.id.widgetUpcomingReminderTitle3
+            R.id.widgetUpcomingReminderTitle3,
+            R.id.widgetUpcomingReminderTitle4,
+            R.id.widgetUpcomingReminderTitle5,
+            R.id.widgetUpcomingReminderTitle6,
+            R.id.widgetUpcomingReminderTitle7,
+            R.id.widgetUpcomingReminderTitle8,
+            R.id.widgetUpcomingReminderTitle9,
+            R.id.widgetUpcomingReminderTitle10,
+            R.id.widgetUpcomingReminderTitle11,
+            R.id.widgetUpcomingReminderTitle12,
+            R.id.widgetUpcomingReminderTitle13,
+            R.id.widgetUpcomingReminderTitle14,
+            R.id.widgetUpcomingReminderTitle15
         )
         val whenIds = intArrayOf(
             R.id.widgetUpcomingReminderWhen1,
             R.id.widgetUpcomingReminderWhen2,
-            R.id.widgetUpcomingReminderWhen3
+            R.id.widgetUpcomingReminderWhen3,
+            R.id.widgetUpcomingReminderWhen4,
+            R.id.widgetUpcomingReminderWhen5,
+            R.id.widgetUpcomingReminderWhen6,
+            R.id.widgetUpcomingReminderWhen7,
+            R.id.widgetUpcomingReminderWhen8,
+            R.id.widgetUpcomingReminderWhen9,
+            R.id.widgetUpcomingReminderWhen10,
+            R.id.widgetUpcomingReminderWhen11,
+            R.id.widgetUpcomingReminderWhen12,
+            R.id.widgetUpcomingReminderWhen13,
+            R.id.widgetUpcomingReminderWhen14,
+            R.id.widgetUpcomingReminderWhen15
         )
         for (i in rowIds.indices) {
             val reminder = reminders.getOrNull(i)

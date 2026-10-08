@@ -86,23 +86,26 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     WidgetsBinding.instance.addObserver(this);
     _setWakelock(true);
     _lockOrientation();
-    _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
-    _chimePlayer = widget.chimePlayerService ?? AudioPlayerService();
+    _audioPlayer =
+        widget.audioPlayerService ?? ref.read(audioPlayerServiceProvider);
+    _chimePlayer =
+        widget.chimePlayerService ?? ref.read(chimePlayerServiceProvider);
     _playerCompleteSub = _audioPlayer.onPlayerComplete.listen((_) => _onSoundComplete());
 
     final initialItem = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
-    if (initialItem != null && initialItem.soundSpeed > 0) {
-      _playbackSpeed = initialItem.soundSpeed;
+    if (initialItem != null) {
+      if (initialItem.soundSpeed > 0) {
+        _playbackSpeed = initialItem.soundSpeed;
+      }
     }
 
     _overlay.setOnTap(_onOverlayTap);
     ref.listenManual(
       itemsNotifierProvider,
       (_, _) => _syncOverlay(),
-      fireImmediately: true,
     );
     ref.listenManual(
       minimizeOnExitNotifierProvider,
@@ -127,12 +130,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
         ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
       }
+      _syncOverlay();
       _maybePromptOverlayPermission();
     });
   }
 
   /// Arms the floating bubble with the current progress, or disarms it
-  /// when the item is missing, complete, or minimize on exit is disabled.
+  /// when the item is missing or minimize on exit is disabled.
   void _syncOverlay() {
     final minimizeOnExit = ref.read(minimizeOnExitNotifierProvider);
     if (!minimizeOnExit) {
@@ -143,7 +147,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
-    if (item == null || item.currentProgress >= item.count) {
+    if (item == null) {
       _overlay.disarm();
     } else {
       _overlay.arm('${item.currentProgress}');
@@ -155,8 +159,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
-    if (item == null || item.currentProgress >= item.count) return;
-    _countBead();
+    if (item == null) return;
+    _countBead(fromOverlay: true);
   }
 
   Future<void> _maybePromptOverlayPermission() async {
@@ -166,7 +170,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
-    if (item == null || item.currentProgress >= item.count) return;
+    if (item == null) return;
     if (_isPromptingPermission || !mounted) return;
     if (!await _overlay.shouldPromptForPermission() || !mounted) return;
     _isPromptingPermission = true;
@@ -207,17 +211,21 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
   /// Counts one bead with haptic feedback; shared by the tap button and
   /// the floating bubble.
-  Future<void> _countBead() async {
+  Future<void> _countBead({bool fromOverlay = false}) async {
     final item = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .first;
-    if (item.currentProgress == 0) {
+    if (item.currentProgress >= item.count) {
+      ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
+      ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+    } else if (item.currentProgress == 0) {
       ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
     }
     ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
 
-    if (item.currentProgress + 1 >= item.count && _isAudioPlaying) {
+    final isTargetReached = item.currentProgress + 1 >= item.count;
+    if (isTargetReached && _isAudioPlaying) {
       await _audioPlayer.stop();
       setState(() => _isAudioPlaying = false);
     }
@@ -232,6 +240,12 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     } else if (feedback == TapFeedback.checkpoint) {
       await haptic.checkpoint(intensity: item.vibrationIntensity);
       _playIntervalChime();
+    }
+
+    if (isTargetReached && fromOverlay) {
+      // When counting in minimized mode and count reached the end,
+      // do not close: bring the user back to the bead execution screen!
+      await _overlay.openApp();
     }
   }
 
@@ -368,11 +382,25 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _lockOrientation();
-      _syncOverlay();
-      _maybePromptOverlayPermission();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final item = ref
+            .read(itemsNotifierProvider)
+            .where((element) => element.id == widget.itemId)
+            .firstOrNull;
+        if (item != null && item.currentProgress >= item.count) {
+          ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
+          ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+        }
+        _syncOverlay();
+        _maybePromptOverlayPermission();
+      });
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
-      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+      });
       if (_isAudioPlaying) {
         _audioPlayer.pause();
         setState(() => _isAudioPlaying = false);
@@ -388,13 +416,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _setWakelock(false);
     _playerCompleteSub?.cancel();
     _audioPlayer.stop();
-    if (widget.audioPlayerService == null) {
-      _audioPlayer.dispose();
-    }
     _chimePlayer.stop();
-    if (widget.chimePlayerService == null) {
-      _chimePlayer.dispose();
-    }
     _restoreOrientation();
     super.dispose();
   }
@@ -570,7 +592,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     }
 
     final countValue = item.count;
-    final maxMinusCount = (item.count - item.currentProgress).clamp(
+    final effectiveProgress =
+        item.currentProgress >= item.count ? 0 : item.currentProgress;
+    final maxMinusCount = (item.count - effectiveProgress).clamp(
       0,
       item.count,
     );

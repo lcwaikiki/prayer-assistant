@@ -54,7 +54,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
       setState(() => _now = DateTime.now());
     });
-
+    ref.listenManual(itemsNotifierProvider, (_, _) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<PrayerAppController>().syncUpcomingRemindersWidget();
+        }
+      });
+    });
+    ref.listenManual(groupsNotifierProvider, (_, _) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          context.read<PrayerAppController>().syncUpcomingRemindersWidget();
+        }
+      });
+    });
   }
 
 

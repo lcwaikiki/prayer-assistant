@@ -27,13 +27,13 @@
         android:textSize="12sp"
         android:visibility="gone" />
 
+    <!-- 15 static rows for up to 15 upcoming reminders -->
     <LinearLayout
         android:id="@+id/widgetUpcomingReminderRow1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/widgetUpcomingReminderTitle1"
             android:layout_width="0dp"
@@ -43,7 +43,6 @@
             android:maxLines="1"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
-
         <TextView
             android:id="@+id/widgetUpcomingReminderWhen1"
             android:layout_width="wrap_content"
@@ -52,7 +51,6 @@
             android:maxLines="1"
             android:textColor="#CCFFFFFF"
             android:textSize="11sp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +59,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/widgetUpcomingReminderTitle2"
             android:layout_width="0dp"
@@ -71,7 +68,6 @@
             android:maxLines="1"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
-
         <TextView
             android:id="@+id/widgetUpcomingReminderWhen2"
             android:layout_width="wrap_content"
@@ -80,7 +76,6 @@
             android:maxLines="1"
             android:textColor="#CCFFFFFF"
             android:textSize="11sp" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -89,7 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/widgetUpcomingReminderTitle3"
             android:layout_width="0dp"
@@ -99,7 +93,6 @@
             android:maxLines="1"
             android:textColor="#FFFFFFFF"
             android:textSize="13sp" />
-
         <TextView
             android:id="@+id/widgetUpcomingReminderWhen3"
             android:layout_width="wrap_content"
@@ -108,7 +101,306 @@
             android:maxLines="1"
             android:textColor="#CCFFFFFF"
             android:textSize="11sp" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle9"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle10"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow13"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widgetUpcomingReminderRow15"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/widgetUpcomingReminderTitle15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/widgetUpcomingReminderWhen15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="1"
+            android:textColor="#CCFFFFFF"
+            android:textSize="11sp" />
     </LinearLayout>
 
 </LinearLayout>

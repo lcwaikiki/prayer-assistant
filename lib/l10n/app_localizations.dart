@@ -1682,6 +1682,36 @@ abstract class AppLocalizations {
   /// **'No qadaa prayers logged yet'**
   String get kazaDailyLogEmpty;
 
+  /// No description provided for @kazaDailyLogPickDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Log for another date'**
+  String get kazaDailyLogPickDate;
+
+  /// No description provided for @kazaAllPrayers.
+  ///
+  /// In en, this message translates to:
+  /// **'All prayers'**
+  String get kazaAllPrayers;
+
+  /// No description provided for @kazaPreviousDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get kazaPreviousDay;
+
+  /// No description provided for @kazaNextDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get kazaNextDay;
+
+  /// No description provided for @kazaRakatShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} rak.'**
+  String kazaRakatShort(int count);
+
   /// No description provided for @kazaDailyLogCount.
   ///
   /// In en, this message translates to:

@@ -58,6 +58,19 @@ class KazaTracker {
     };
   }
 
+  /// Returns a copy with the completed count for [prayerKey] set to [count].
+  KazaTracker withCompleted(String prayerKey, int count) {
+    return switch (prayerKey.toLowerCase()) {
+      'fajr' || 'imsak' => copyWith(fajrCompleted: count),
+      'dhuhr' || 'ogle' => copyWith(dhuhrCompleted: count),
+      'asr' || 'ikindi' => copyWith(asrCompleted: count),
+      'maghrib' || 'aksam' => copyWith(maghribCompleted: count),
+      'isha' || 'yatsi' => copyWith(ishaCompleted: count),
+      'witr' => copyWith(witrCompleted: count),
+      _ => this,
+    };
+  }
+
   int remainingFor(String prayerKey) {
     final target = targetFor(prayerKey);
     final done = completedFor(prayerKey);

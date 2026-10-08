@@ -862,6 +862,23 @@ class AppLocalizationsTr extends AppLocalizations {
   String get kazaDailyLogEmpty => 'Henüz kaza namazı kaydedilmedi';
 
   @override
+  String get kazaDailyLogPickDate => 'Başka bir tarih için kaydet';
+
+  @override
+  String get kazaAllPrayers => 'Tüm namazlar';
+
+  @override
+  String get kazaPreviousDay => 'Önceki gün';
+
+  @override
+  String get kazaNextDay => 'Sonraki gün';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count rek.';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count kılındı';
   }

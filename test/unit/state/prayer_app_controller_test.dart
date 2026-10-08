@@ -369,6 +369,46 @@ void main() {
       verify(() => database.saveKazaDailyLogs(any())).called(4);
     });
 
+    test('setKazaDayCount edits a past date and adjusts totals', () {
+      final controller = buildController();
+      final date = DateTime(2026, 1, 15);
+
+      controller.setKazaDayCount(date, 'fajr', 3);
+      expect(controller.kazaDailyLogs, {
+        '2026-01-15': {'fajr': 3},
+      });
+      expect(controller.kazaTracker.fajrCompleted, 3);
+
+      controller.setKazaDayCount(date, 'fajr', 1);
+      expect(controller.kazaCountOn(date, 'fajr'), 1);
+      expect(controller.kazaTracker.fajrCompleted, 1);
+
+      controller.setKazaDayCount(date, 'fajr', 0);
+      expect(controller.kazaDailyLogs, isEmpty);
+      expect(controller.kazaTracker.fajrCompleted, 0);
+    });
+
+    test('adjustKazaDay changes every prayer on a date by one', () {
+      final controller = buildController();
+      final date = DateTime(2026, 2, 1);
+
+      controller.setKazaDayCount(date, 'asr', 2);
+      controller.adjustKazaDay(date, 1);
+      expect(controller.kazaDailyLogs['2026-02-01'], {
+        'fajr': 1,
+        'dhuhr': 1,
+        'asr': 3,
+        'maghrib': 1,
+        'isha': 1,
+        'witr': 1,
+      });
+      expect(controller.kazaTracker.totalCompleted, 8);
+
+      controller.adjustKazaDay(date, -1);
+      expect(controller.kazaDailyLogs['2026-02-01'], {'asr': 2});
+      expect(controller.kazaTracker.totalCompleted, 2);
+    });
+
     test('decrements reduce today and remove empty days', () {
       final controller = buildController();
 

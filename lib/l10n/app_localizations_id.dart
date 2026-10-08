@@ -863,6 +863,23 @@ class AppLocalizationsId extends AppLocalizations {
   String get kazaDailyLogEmpty => 'Belum ada salat qada yang dicatat';
 
   @override
+  String get kazaDailyLogPickDate => 'Catat untuk tanggal lain';
+
+  @override
+  String get kazaAllPrayers => 'Semua salat';
+
+  @override
+  String get kazaPreviousDay => 'Hari sebelumnya';
+
+  @override
+  String get kazaNextDay => 'Hari berikutnya';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count rakaat';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count dikerjakan';
   }

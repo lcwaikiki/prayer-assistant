@@ -386,7 +386,7 @@ class PrayerAppController extends ChangeNotifier {
       default:
         return;
     }
-    _logKazaForToday({_canonicalKazaKey(key): amount});
+    _logKaza(DateTime.now(), {_canonicalKazaKey(key): amount});
     updateKazaTracker(updated);
   }
 
@@ -433,7 +433,7 @@ class PrayerAppController extends ChangeNotifier {
       default:
         return;
     }
-    _logKazaForToday({_canonicalKazaKey(key): -removed});
+    _logKaza(DateTime.now(), {_canonicalKazaKey(key): -removed});
     updateKazaTracker(updated);
   }
 
@@ -453,7 +453,7 @@ class PrayerAppController extends ChangeNotifier {
       ishaCompleted: _kazaTracker.ishaCompleted + 1,
       witrCompleted: _kazaTracker.witrCompleted + 1,
     );
-    _logKazaForToday({for (final key in kazaPrayerKeys) key: 1});
+    _logKaza(DateTime.now(), {for (final key in kazaPrayerKeys) key: 1});
     updateKazaTracker(updated);
   }
 
@@ -466,6 +466,16 @@ class PrayerAppController extends ChangeNotifier {
     'witr',
   ];
 
+  /// Obligatory raka'at made up per qadaa prayer (witr is wajib).
+  static const kazaRakatPerPrayer = {
+    'fajr': 2,
+    'dhuhr': 4,
+    'asr': 4,
+    'maghrib': 3,
+    'isha': 4,
+    'witr': 3,
+  };
+
   static String _canonicalKazaKey(String key) => switch (key) {
     'imsak' => 'fajr',
     'ogle' => 'dhuhr',
@@ -475,10 +485,34 @@ class PrayerAppController extends ChangeNotifier {
     _ => key,
   };
 
-  /// Adds [deltas] (prayerKey -> count) to today's qadaa log and persists it.
-  /// Counts never drop below zero; empty entries are removed.
-  void _logKazaForToday(Map<String, int> deltas) {
-    final dateKey = _toDateKey(DateTime.now());
+  /// Qadaa count logged on [date] for [prayerKey].
+  int kazaCountOn(DateTime date, String prayerKey) =>
+      _kazaDailyLogs[_toDateKey(date)]?[prayerKey] ?? 0;
+
+  /// Sets the qadaa count logged on [date] for [prayerKey] and adjusts the
+  /// completed total by the same difference.
+  void setKazaDayCount(DateTime date, String prayerKey, int count) {
+    final delta = count - kazaCountOn(date, prayerKey);
+    if (delta == 0) return;
+    _logKaza(date, {prayerKey: delta});
+    final completed = _kazaTracker.completedFor(prayerKey) + delta;
+    updateKazaTracker(
+      _kazaTracker.withCompleted(prayerKey, completed.clamp(0, 999999)),
+    );
+  }
+
+  /// Adds [delta] to the qadaa count of every prayer logged on [date].
+  void adjustKazaDay(DateTime date, int delta) {
+    for (final key in kazaPrayerKeys) {
+      final count = kazaCountOn(date, key) + delta;
+      setKazaDayCount(date, key, count.clamp(0, 999999));
+    }
+  }
+
+  /// Adds [deltas] (prayerKey -> count) to the qadaa log of [date] and
+  /// persists it. Counts never drop below zero; empty entries are removed.
+  void _logKaza(DateTime date, Map<String, int> deltas) {
+    final dateKey = _toDateKey(date);
     final day = Map<String, int>.from(_kazaDailyLogs[dateKey] ?? const {});
     for (final MapEntry(:key, :value) in deltas.entries) {
       final next = ((day[key] ?? 0) + value).clamp(0, 999999);

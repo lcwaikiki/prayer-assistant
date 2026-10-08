@@ -872,6 +872,23 @@ class AppLocalizationsTa extends AppLocalizations {
   String get kazaDailyLogEmpty => 'இன்னும் களா தொழுகைகள் பதிவு செய்யப்படவில்லை';
 
   @override
+  String get kazaDailyLogPickDate => 'வேறு தேதிக்கு பதிவு செய்';
+
+  @override
+  String get kazaAllPrayers => 'அனைத்து தொழுகைகள்';
+
+  @override
+  String get kazaPreviousDay => 'முந்தைய நாள்';
+
+  @override
+  String get kazaNextDay => 'அடுத்த நாள்';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count ரக்.';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count நிறைவேற்றப்பட்டது';
   }

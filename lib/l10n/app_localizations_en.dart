@@ -862,6 +862,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kazaDailyLogEmpty => 'No qadaa prayers logged yet';
 
   @override
+  String get kazaDailyLogPickDate => 'Log for another date';
+
+  @override
+  String get kazaAllPrayers => 'All prayers';
+
+  @override
+  String get kazaPreviousDay => 'Previous day';
+
+  @override
+  String get kazaNextDay => 'Next day';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count rak.';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count prayed';
   }

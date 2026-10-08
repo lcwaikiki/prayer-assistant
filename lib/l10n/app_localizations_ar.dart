@@ -856,6 +856,23 @@ class AppLocalizationsAr extends AppLocalizations {
   String get kazaDailyLogEmpty => 'لم يتم تسجيل صلوات قضاء بعد';
 
   @override
+  String get kazaDailyLogPickDate => 'تسجيل لتاريخ آخر';
+
+  @override
+  String get kazaAllPrayers => 'كل الصلوات';
+
+  @override
+  String get kazaPreviousDay => 'اليوم السابق';
+
+  @override
+  String get kazaNextDay => 'اليوم التالي';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count ركعة';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count مؤداة';
   }

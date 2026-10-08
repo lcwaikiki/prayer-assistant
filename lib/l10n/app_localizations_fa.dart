@@ -858,6 +858,23 @@ class AppLocalizationsFa extends AppLocalizations {
   String get kazaDailyLogEmpty => 'هنوز نماز قضایی ثبت نشده است';
 
   @override
+  String get kazaDailyLogPickDate => 'ثبت برای تاریخ دیگر';
+
+  @override
+  String get kazaAllPrayers => 'همه نمازها';
+
+  @override
+  String get kazaPreviousDay => 'روز قبل';
+
+  @override
+  String get kazaNextDay => 'روز بعد';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count رکعت';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count خوانده شد';
   }

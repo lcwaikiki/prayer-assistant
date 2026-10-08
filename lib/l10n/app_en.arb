@@ -376,6 +376,16 @@
   "kazaCalculateButton": "Set Targets",
   "kazaDailyLogTitle": "Daily Log",
   "kazaDailyLogEmpty": "No qadaa prayers logged yet",
+  "kazaDailyLogPickDate": "Log for another date",
+  "kazaAllPrayers": "All prayers",
+  "kazaPreviousDay": "Previous day",
+  "kazaNextDay": "Next day",
+  "kazaRakatShort": "{count} rak.",
+  "@kazaRakatShort": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "kazaDailyLogCount": "{count} prayed",
   "@kazaDailyLogCount": {
     "placeholders": {

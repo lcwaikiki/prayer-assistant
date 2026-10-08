@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../controller/prayer_app_controller.dart';
+import '../../calendar/hijri_utils.dart';
 import '../../l10n/l10n.dart';
 import '../../l10n/prayer_names.dart';
 import '../widgets/kaza_calculator_dialog.dart';
@@ -218,7 +219,7 @@ class KazaTrackerScreen extends StatelessWidget {
           const SizedBox(height: 8),
           _KazaDailyLogSection(
             logs: controller.kazaDailyLogs,
-            prayerNames: {for (final item in prayers) item.$3: item.$1},
+            prayers: prayers,
           ),
         ],
         ),
@@ -278,10 +279,16 @@ class KazaTrackerScreen extends StatelessWidget {
 }
 
 class _KazaDailyLogSection extends StatelessWidget {
-  const _KazaDailyLogSection({required this.logs, required this.prayerNames});
+  const _KazaDailyLogSection({required this.logs, required this.prayers});
 
   final Map<String, Map<String, int>> logs;
-  final Map<String, String> prayerNames;
+
+  /// (name, icon, prayerKey) for each tracked prayer, in display order.
+  final List<(String, IconData, String)> prayers;
+
+  Map<String, String> get prayerNames => {
+    for (final (name, _, key) in prayers) key: name,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -292,12 +299,23 @@ class _KazaDailyLogSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-          child: Text(
-            context.l10n.kazaDailyLogTitle,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+          padding: const EdgeInsets.only(left: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  context.l10n.kazaDailyLogTitle,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              IconButton(
+                tooltip: context.l10n.kazaDailyLogPickDate,
+                icon: const Icon(Icons.edit_calendar_outlined, size: 20),
+                onPressed: () => _pickDateAndEdit(context),
+              ),
+            ],
           ),
         ),
         if (dateKeys.isEmpty)
@@ -310,57 +328,374 @@ class _KazaDailyLogSection extends StatelessWidget {
               ),
             ),
           ),
-        for (final dateKey in dateKeys)
-          _KazaDailyLogTile(
-            date: DateTime.parse(dateKey),
-            counts: logs[dateKey]!,
-            prayerNames: prayerNames,
+        if (dateKeys.isNotEmpty)
+          Card(
+            elevation: 0,
+            margin: EdgeInsets.zero,
+            clipBehavior: Clip.antiAlias,
+            color: theme.colorScheme.surfaceContainerLow,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+              ),
+            ),
+            child: Column(
+              children: [
+                _KazaLogHeaderRow(prayers: prayers),
+                for (final dateKey in dateKeys) ...[
+                  Divider(
+                    height: 1,
+                    color: theme.colorScheme.outlineVariant.withValues(
+                      alpha: 0.5,
+                    ),
+                  ),
+                  _KazaLogTableRow(
+                    date: DateTime.parse(dateKey),
+                    counts: logs[dateKey]!,
+                    prayerKeys: [for (final (_, _, key) in prayers) key],
+                    onTap: () => _showDayEditor(
+                      context,
+                      DateTime.parse(dateKey),
+                      prayerNames,
+                    ),
+                  ),
+                ],
+              ],
+            ),
           ),
+      ],
+    );
+  }
+
+  Future<void> _pickDateAndEdit(BuildContext context) async {
+    final today = DateUtils.dateOnly(DateTime.now());
+    final date = await showDatePicker(
+      context: context,
+      initialDate: today,
+      firstDate: DateTime(today.year - 100),
+      lastDate: today,
+    );
+    if (date == null || !context.mounted) return;
+    _showDayEditor(context, date, prayerNames);
+  }
+}
+
+void _showDayEditor(
+  BuildContext context,
+  DateTime date,
+  Map<String, String> prayerNames,
+) {
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    showDragHandle: true,
+    builder: (_) => _KazaDayEditorSheet(date: date, prayerNames: prayerNames),
+  );
+}
+
+/// Edits the qadaa counts logged on a single day, starting at [date].
+class _KazaDayEditorSheet extends StatefulWidget {
+  const _KazaDayEditorSheet({required this.date, required this.prayerNames});
+
+  final DateTime date;
+  final Map<String, String> prayerNames;
+
+  @override
+  State<_KazaDayEditorSheet> createState() => _KazaDayEditorSheetState();
+}
+
+class _KazaDayEditorSheetState extends State<_KazaDayEditorSheet> {
+  late DateTime _date = DateUtils.dateOnly(widget.date);
+
+  void _shiftDay(int days) {
+    setState(() => _date = DateUtils.addDaysToDate(_date, days));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final controller = context.watch<PrayerAppController>();
+    final locale = Localizations.localeOf(context);
+    final isToday = DateUtils.isSameDay(_date, DateTime.now());
+    final counts = {
+      for (final key in widget.prayerNames.keys)
+        key: controller.kazaCountOn(_date, key),
+    };
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  tooltip: context.l10n.kazaPreviousDay,
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: () => _shiftDay(-1),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        DateFormat.yMMMMEEEEd(locale.toString()).format(_date),
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        formatHijriDate(
+                          _date,
+                          locale.languageCode,
+                          offset: controller.hijriDateOffset,
+                        ),
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  tooltip: context.l10n.kazaNextDay,
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: isToday ? null : () => _shiftDay(1),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _KazaDayCountRow(
+              name: context.l10n.kazaAllPrayers,
+              bold: true,
+              canDecrement: counts.values.any((count) => count > 0),
+              onDecrement: () => controller.adjustKazaDay(_date, -1),
+              onIncrement: () => controller.adjustKazaDay(_date, 1),
+            ),
+            const Divider(),
+            for (final MapEntry(key: prayerKey, value: name)
+                in widget.prayerNames.entries)
+              _KazaDayCountRow(
+                name: name,
+                count: counts[prayerKey],
+                canDecrement: counts[prayerKey]! > 0,
+                onDecrement: () => controller.setKazaDayCount(
+                  _date,
+                  prayerKey,
+                  counts[prayerKey]! - 1,
+                ),
+                onIncrement: () => controller.setKazaDayCount(
+                  _date,
+                  prayerKey,
+                  counts[prayerKey]! + 1,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A label with -/+ buttons; [count] is left blank when null.
+class _KazaDayCountRow extends StatelessWidget {
+  const _KazaDayCountRow({
+    required this.name,
+    required this.canDecrement,
+    required this.onDecrement,
+    required this.onIncrement,
+    this.count,
+    this.bold = false,
+  });
+
+  final String name;
+  final int? count;
+  final bool bold;
+  final bool canDecrement;
+  final VoidCallback onDecrement;
+  final VoidCallback onIncrement;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            name,
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: bold ? FontWeight.bold : null,
+            ),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.remove_circle_outline),
+          onPressed: canDecrement ? onDecrement : null,
+        ),
+        SizedBox(
+          width: 36,
+          child: Text(
+            count?.toString() ?? '',
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        IconButton(
+          icon: const Icon(Icons.add_circle_outline),
+          onPressed: onIncrement,
+        ),
       ],
     );
   }
 }
 
-class _KazaDailyLogTile extends StatelessWidget {
-  const _KazaDailyLogTile({
+const double _kLogCountCellWidth = 30;
+const double _kLogTotalCellWidth = 56;
+const _kLogRowPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 10);
+
+/// Daily log table header: a prayer icon per column, then the total.
+class _KazaLogHeaderRow extends StatelessWidget {
+  const _KazaLogHeaderRow({required this.prayers});
+
+  final List<(String, IconData, String)> prayers;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      color: theme.colorScheme.primaryContainer.withValues(alpha: 0.35),
+      padding: _kLogRowPadding,
+      child: Row(
+        children: [
+          const Spacer(),
+          for (final (name, icon, _) in prayers)
+            SizedBox(
+              width: _kLogCountCellWidth,
+              child: Tooltip(
+                message: name,
+                child: Icon(icon, size: 18, color: theme.colorScheme.primary),
+              ),
+            ),
+          SizedBox(
+            width: _kLogTotalCellWidth,
+            child: Text(
+              'Σ',
+              textAlign: TextAlign.end,
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// One day in the daily log table; tapping it opens the day editor.
+class _KazaLogTableRow extends StatelessWidget {
+  const _KazaLogTableRow({
     required this.date,
     required this.counts,
-    required this.prayerNames,
+    required this.prayerKeys,
+    required this.onTap,
   });
 
   final DateTime date;
   final Map<String, int> counts;
-  final Map<String, String> prayerNames;
+  final List<String> prayerKeys;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final locale = Localizations.localeOf(context).toString();
-    final now = DateTime.now();
-    final isToday = DateUtils.isSameDay(date, now);
+    final isToday = DateUtils.isSameDay(date, DateTime.now());
+    final isThisYear = date.year == DateTime.now().year;
     final total = counts.values.fold(0, (sum, count) => sum + count);
-    final breakdown = [
-      for (final MapEntry(:key, :value) in prayerNames.entries)
-        if (counts[key] case final count? when count > 0) '$value $count',
-    ].join('  ·  ');
+    final rakat = counts.entries.fold(
+      0,
+      (sum, entry) =>
+          sum +
+          entry.value * PrayerAppController.kazaRakatPerPrayer[entry.key]!,
+    );
+    final muted = theme.colorScheme.outline;
 
-    return ListTile(
-      dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-      title: Text(
-        isToday
-            ? context.l10n.today
-            : DateFormat.yMMMEd(locale).format(date),
-        style: theme.textTheme.bodyMedium?.copyWith(
-          fontWeight: isToday ? FontWeight.bold : null,
-        ),
-      ),
-      subtitle: Text(breakdown),
-      trailing: Text(
-        context.l10n.kazaDailyLogCount(total),
-        style: theme.textTheme.labelMedium?.copyWith(
-          color: theme.colorScheme.primary,
-          fontWeight: FontWeight.bold,
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: _kLogRowPadding,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isToday
+                        ? context.l10n.today
+                        : DateFormat.MMMd(locale).format(date),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isToday ? theme.colorScheme.primary : null,
+                    ),
+                  ),
+                  Text(
+                    (isThisYear
+                            ? DateFormat.EEEE(locale)
+                            : DateFormat.E(locale).add_y())
+                        .format(date),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(color: muted),
+                  ),
+                ],
+              ),
+            ),
+            for (final key in prayerKeys)
+              SizedBox(
+                width: _kLogCountCellWidth,
+                child: Text(
+                  (counts[key] ?? 0) > 0 ? '${counts[key]}' : '–',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: (counts[key] ?? 0) > 0 ? null : muted,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
+                ),
+              ),
+            SizedBox(
+              width: _kLogTotalCellWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    '$total',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                  Text(
+                    context.l10n.kazaRakatShort(rakat),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    softWrap: false,
+                    style: theme.textTheme.labelSmall?.copyWith(color: muted),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

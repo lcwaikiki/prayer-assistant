@@ -866,6 +866,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get kazaDailyLogEmpty => 'Возмещённые намазы ещё не записаны';
 
   @override
+  String get kazaDailyLogPickDate => 'Записать на другую дату';
+
+  @override
+  String get kazaAllPrayers => 'Все намазы';
+
+  @override
+  String get kazaPreviousDay => 'Предыдущий день';
+
+  @override
+  String get kazaNextDay => 'Следующий день';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count рак.';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return 'выполнено: $count';
   }

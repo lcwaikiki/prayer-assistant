@@ -864,6 +864,23 @@ class AppLocalizationsBn extends AppLocalizations {
   String get kazaDailyLogEmpty => 'এখনও কোনো কাযা নামাজ লগ করা হয়নি';
 
   @override
+  String get kazaDailyLogPickDate => 'অন্য তারিখের জন্য লগ করুন';
+
+  @override
+  String get kazaAllPrayers => 'সব নামাজ';
+
+  @override
+  String get kazaPreviousDay => 'আগের দিন';
+
+  @override
+  String get kazaNextDay => 'পরের দিন';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count রাকাত';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$countটি আদায়';
   }

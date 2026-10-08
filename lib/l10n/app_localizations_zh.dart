@@ -833,6 +833,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kazaDailyLogEmpty => '尚未记录补礼拜';
 
   @override
+  String get kazaDailyLogPickDate => '记录其他日期';
+
+  @override
+  String get kazaAllPrayers => '全部礼拜';
+
+  @override
+  String get kazaPreviousDay => '前一天';
+
+  @override
+  String get kazaNextDay => '后一天';
+
+  @override
+  String kazaRakatShort(int count) {
+    return '$count 拜';
+  }
+
+  @override
   String kazaDailyLogCount(int count) {
     return '已补 $count 次';
   }

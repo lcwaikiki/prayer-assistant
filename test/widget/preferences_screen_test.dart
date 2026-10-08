@@ -16,7 +16,7 @@ void main() {
 
     await pumpWithHarness(tester, harness, const PreferencesScreen());
 
-    await tester.tap(find.text('Home screen settings'));
+    await tester.tap(find.text('Appearance'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Theme mode'));
     await tester.pumpAndSettle();

@@ -347,7 +347,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get themeDark => 'ডার্ক';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'হোম স্ক্রিন সেটিংস';
+  String get homeScreenSettingsSectionTitle => 'চেহারা';
 
   @override
   String get appBarRemainingTitle => 'হোম অ্যাপ বার অবশিষ্ট সময়';

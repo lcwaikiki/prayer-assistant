@@ -331,7 +331,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get themeDark => 'ダーク';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'ホーム画面の設定';
+  String get homeScreenSettingsSectionTitle => '外観';
 
   @override
   String get appBarRemainingTitle => 'ホーム上部バーの残り時間表示';

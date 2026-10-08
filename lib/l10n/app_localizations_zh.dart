@@ -329,7 +329,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get themeDark => '深色';
 
   @override
-  String get homeScreenSettingsSectionTitle => '主屏幕设置';
+  String get homeScreenSettingsSectionTitle => '外观';
 
   @override
   String get appBarRemainingTitle => '首页顶栏剩余时间显示';

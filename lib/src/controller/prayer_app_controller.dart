@@ -717,26 +717,14 @@ class PrayerAppController extends ChangeNotifier {
 
       if (_selectedLocation != null) {
         await refreshPrayerData(forceSync: false);
-        try {
-          _countries = await api.getCountries();
-          await _loadStates(_selectedLocation!.countryId);
-          await _loadDistricts(_selectedLocation!.stateId);
-        } catch (_) {
-          // Ignore network errors when offline; cached prayer data is already active.
-        }
       } else {
         await notificationService.cancelAllPrayerNotifications();
         await _updateWidgetBridgeData();
         _countries = await api.getCountries();
       }
 
-      try {
-        await _driveService.restoreSession();
-        _offlineFolderUri = await _offlineFolderService.currentFolder();
-        _useDefaultDocumentsFolder = _offlineFolderUri == null
-            ? await _offlineFolderService.documentsFolderAvailable()
-            : false;
-      } catch (_) {}
+      // Background non-blocking tasks that do not delay app startup or frame rendering
+      _loadStartupBackgroundData();
 
       _clearError();
     } catch (e) {
@@ -745,6 +733,26 @@ class PrayerAppController extends ChangeNotifier {
       _isInitializing = false;
       _setLoading(false);
     }
+  }
+
+  Future<void> _loadStartupBackgroundData() async {
+    try {
+      if (_selectedLocation != null && _countries.isEmpty) {
+        _countries = await api.getCountries();
+        await _loadStates(_selectedLocation!.countryId);
+        await _loadDistricts(_selectedLocation!.stateId);
+      }
+    } catch (_) {
+      // Ignore network errors when offline; cached prayer data is already active.
+    }
+
+    try {
+      await _driveService.restoreSession();
+      _offlineFolderUri = await _offlineFolderService.currentFolder();
+      _useDefaultDocumentsFolder = _offlineFolderUri == null
+          ? await _offlineFolderService.documentsFolderAvailable()
+          : false;
+    } catch (_) {}
   }
 
   void setTab(int index) {

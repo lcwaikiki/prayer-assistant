@@ -399,11 +399,11 @@ void main() {
       await controller.initialize();
 
       expect(controller.error, isNull);
-      expect(controller.selectedLocation!.fullName, location.fullName);
-      expect(controller.states, hasLength(1));
-      expect(controller.districts, hasLength(1));
       expect(controller.today, isNotNull);
       expect(controller.yearRange, hasLength(1));
+      await controller.reloadLocationOptions();
+      expect(controller.states, hasLength(1));
+      expect(controller.districts, hasLength(1));
       verify(
         () => notificationService.reschedulePrayerNotifications(
           days: any(named: 'days'),

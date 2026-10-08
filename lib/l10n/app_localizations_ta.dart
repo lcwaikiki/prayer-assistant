@@ -351,7 +351,7 @@ class AppLocalizationsTa extends AppLocalizations {
   String get themeDark => 'டார்க்';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'முகப்புத் திரை அமைப்புகள்';
+  String get homeScreenSettingsSectionTitle => 'தோற்றம்';
 
   @override
   String get appBarRemainingTitle => 'முகப்பு ஆப் பார் மீதமுள்ள நேரம்';

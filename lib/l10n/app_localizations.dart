@@ -713,7 +713,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeScreenSettingsSectionTitle.
   ///
   /// In en, this message translates to:
-  /// **'Home screen settings'**
+  /// **'Appearance'**
   String get homeScreenSettingsSectionTitle;
 
   /// No description provided for @appBarRemainingTitle.

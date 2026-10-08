@@ -347,7 +347,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get themeDark => 'ڈارک';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'ہوم اسکرین کی ترتیبات';
+  String get homeScreenSettingsSectionTitle => 'ظاہری شکل';
 
   @override
   String get appBarRemainingTitle => 'ہوم ایپ بار باقی وقت متن';

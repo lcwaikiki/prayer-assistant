@@ -359,10 +359,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Expanded(
                         child: Card(
                           margin: EdgeInsets.zero,
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            side: BorderSide(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .outlineVariant
+                                  .withAlpha(70),
+                            ),
+                          ),
                           child: Column(
                             children: [
                               for (final entry in prayerOrder.indexed) ...[
-                                if (entry.$1 > 0) const Divider(height: 1),
+                                if (entry.$1 > 0)
+                                  Divider(
+                                    height: 1,
+                                    thickness: 1,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant
+                                        .withAlpha(40),
+                                  ),
                                 Expanded(
                                   child: _CompactPrayerRow(
                                     name: entry.$2,
@@ -469,8 +488,8 @@ class _CompactPrayerRow extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
       tileColor: isCompleted
-          ? Colors.green.withAlpha(30)
-          : (isNext ? colorScheme.primaryContainer : null),
+          ? Colors.green.withAlpha(25)
+          : (isNext ? colorScheme.primaryContainer.withAlpha(140) : null),
       onTap: onTap,
       leading: IconButton(
         visualDensity: VisualDensity.compact,
@@ -482,7 +501,7 @@ class _CompactPrayerRow extends StatelessWidget {
           size: 22,
           color: isCompleted
               ? Colors.green
-              : (isNext ? colorScheme.onPrimaryContainer : null),
+              : (isNext ? colorScheme.primary : colorScheme.outline),
         ),
       ),
 
@@ -494,16 +513,16 @@ class _CompactPrayerRow extends StatelessWidget {
             size: 18,
             color: isCompleted
                 ? Colors.green.shade700
-                : (isNext ? colorScheme.onPrimaryContainer : colorScheme.primary),
+                : (isNext ? colorScheme.primary : colorScheme.primary),
           ),
           const SizedBox(width: 8),
           Text(
             context.l10n.prayerNameLabel(name),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
+              fontWeight: isNext ? FontWeight.bold : FontWeight.w600,
               color: isCompleted
                   ? Colors.green.shade700
-                  : (isNext ? colorScheme.onPrimaryContainer : null),
+                  : (isNext ? colorScheme.onSurface : null),
             ),
           ),
         ],
@@ -526,7 +545,7 @@ class _CompactPrayerRow extends StatelessWidget {
                     ? (isCompleted
                           ? Colors.green.shade700
                           : (isNext
-                              ? colorScheme.onPrimaryContainer
+                              ? colorScheme.primary
                               : colorScheme.primary))
                     : (isCompleted ? Colors.green.shade300 : colorScheme.outline),
               ),
@@ -536,9 +555,12 @@ class _CompactPrayerRow extends StatelessWidget {
           Text(
             value,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontSize: 22,
+              fontWeight: isNext ? FontWeight.bold : FontWeight.w600,
+              fontFeatures: const [FontFeature.tabularFigures()],
               color: isCompleted
                   ? Colors.green.shade700
-                  : (isNext ? colorScheme.onPrimaryContainer : null),
+                  : (isNext ? colorScheme.onSurface : null),
             ),
           ),
           const SizedBox(width: 4),
@@ -547,7 +569,7 @@ class _CompactPrayerRow extends StatelessWidget {
             size: 22,
             color: isCompleted
                 ? Colors.green.shade300
-                : (isNext ? colorScheme.onPrimaryContainer : null),
+                : (isNext ? colorScheme.primary : colorScheme.outlineVariant),
           ),
         ],
       ),
@@ -562,29 +584,44 @@ class _NextPrayerBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(10),
+        color: colorScheme.primaryContainer.withAlpha(160),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.primary.withAlpha(50),
+        ),
       ),
       child: Row(
         children: [
           Icon(
             Icons.play_arrow_rounded,
-            size: 18,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+            size: 20,
+            color: colorScheme.primary,
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Expanded(
             child: Text.rich(
               TextSpan(
-                style: Theme.of(context).textTheme.bodySmall,
+                style: theme.textTheme.bodyMedium,
                 children: [
-                  TextSpan(text: '${context.l10n.nextPrayerTitle}: '),
+                  TextSpan(
+                    text: '${context.l10n.nextPrayerTitle}: ',
+                    style: TextStyle(
+                      color: colorScheme.onSurfaceVariant,
+                      fontSize: 13,
+                    ),
+                  ),
                   TextSpan(
                     text: context.l10n.prayerNameLabel(info.name),
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                      fontSize: 13,
+                    ),
                   ),
                 ],
               ),
@@ -592,27 +629,28 @@ class _NextPrayerBanner extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(6),
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
               DateFormat('HH:mm').format(info.time),
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 8),
           Text(
             context.l10n.startsIn(formatRemaining(info.remaining)),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            style: theme.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.bold,
+              color: colorScheme.primary,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
           ),

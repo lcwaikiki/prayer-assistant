@@ -350,7 +350,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get themeDark => 'Тёмная';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'Настройки главного экрана';
+  String get homeScreenSettingsSectionTitle => 'Внешний вид';
 
   @override
   String get appBarRemainingTitle => 'Текст оставшегося времени в заголовке';

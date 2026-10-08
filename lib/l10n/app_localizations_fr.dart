@@ -349,8 +349,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get themeDark => 'Sombre';
 
   @override
-  String get homeScreenSettingsSectionTitle =>
-      'Paramètres de l\'écran d\'accueil';
+  String get homeScreenSettingsSectionTitle => 'Apparence';
 
   @override
   String get appBarRemainingTitle =>

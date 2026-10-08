@@ -944,19 +944,28 @@ object PrayerWidgetUpdater {
             R.id.widgetDailyTime6
         )
 
+        val rowHighlightRes = if (isLight(context)) {
+            R.drawable.widget_row_highlight_light
+        } else {
+            R.drawable.widget_row_highlight
+        }
+        val highlightTextColor = if (isLight(context)) Color.parseColor("#FF0F5144") else Color.WHITE
+
         for (i in rowIds.indices) {
             val prayer = todayPrayers.getOrNull(i)
             val displayName = prayer?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
-            views.setTextColor(nameIds[i], primaryTextColor)
-            views.setTextColor(timeIds[i], primaryTextColor)
-            views.setTextViewText(nameIds[i], displayName)
-            views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
             val isNext = prayer != null && next != null && prayer.second == next.second
             if (isNext) {
-                views.setInt(rowIds[i], "setBackgroundResource", R.drawable.widget_row_highlight)
+                views.setInt(rowIds[i], "setBackgroundResource", rowHighlightRes)
+                views.setTextColor(nameIds[i], highlightTextColor)
+                views.setTextColor(timeIds[i], highlightTextColor)
             } else {
                 views.setInt(rowIds[i], "setBackgroundColor", 0)
+                views.setTextColor(nameIds[i], primaryTextColor)
+                views.setTextColor(timeIds[i], primaryTextColor)
             }
+            views.setTextViewText(nameIds[i], displayName)
+            views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
         }
         return views
     }

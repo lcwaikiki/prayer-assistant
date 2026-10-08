@@ -346,7 +346,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get themeDark => 'Koyu';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'Ana ekran ayarları';
+  String get homeScreenSettingsSectionTitle => 'Görünüm';
 
   @override
   String get appBarRemainingTitle => 'Ana sayfa üst çubuk kalan süre';

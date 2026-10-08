@@ -346,7 +346,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeDark => 'Dark';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'Home screen settings';
+  String get homeScreenSettingsSectionTitle => 'Appearance';
 
   @override
   String get appBarRemainingTitle => 'Home app bar remaining text';

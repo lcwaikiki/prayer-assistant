@@ -348,7 +348,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get themeDark => 'Dunkel';
 
   @override
-  String get homeScreenSettingsSectionTitle => 'Startbildschirm-Einstellungen';
+  String get homeScreenSettingsSectionTitle => 'Erscheinungsbild';
 
   @override
   String get appBarRemainingTitle => 'Restzeit im App-Bar';

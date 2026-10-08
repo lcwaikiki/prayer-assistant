@@ -10,17 +10,23 @@
         android:id="@+id/widgetDailyPrayersLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingHorizontal="4dp"
         android:textColor="#B3FFFFFF"
         android:textSize="10sp" />
 
     <LinearLayout
         android:id="@+id/widgetDailyRow1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName1"
@@ -47,9 +53,13 @@
     <LinearLayout
         android:id="@+id/widgetDailyRow2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName2"
@@ -76,9 +86,13 @@
     <LinearLayout
         android:id="@+id/widgetDailyRow3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName3"
@@ -105,9 +119,13 @@
     <LinearLayout
         android:id="@+id/widgetDailyRow4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName4"
@@ -134,9 +152,13 @@
     <LinearLayout
         android:id="@+id/widgetDailyRow5"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName5"
@@ -163,9 +185,13 @@
     <LinearLayout
         android:id="@+id/widgetDailyRow6"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="1dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/widgetDailyName6"

@@ -5,24 +5,28 @@
     android:layout_height="match_parent"
     android:background="@drawable/widget_bg"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <TextView
         android:id="@+id/widgetRemainingOnlyLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:text="--"
-        android:textColor="#FFFFFFFF"
-        android:textSize="14sp" />
+        android:textColor="#B3FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/widgetRemainingOnlyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:ellipsize="end"
         android:text="--:--"
         android:textColor="#FFFFFFFF"
         android:textSize="30sp"

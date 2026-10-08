@@ -35,6 +35,7 @@ class LocalDatabase {
   static const _showCardIftarSuhoorKey = 'show_card_iftar_suhoor';
   static const _showCardDailyWisdomKey = 'show_card_daily_wisdom';
   static const _showCardUpcomingRemindersKey = 'show_card_upcoming_reminders';
+  static const _todayCardsOrderKey = 'today_cards_order';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
   static const _fastingLogsKey = 'fasting_logs';
@@ -1010,6 +1011,38 @@ class LocalDatabase {
       return null;
     }
     return (rows.first['setting_value'] as String?) == 'true';
+  }
+
+  Future<void> saveTodayCardsOrder(List<String> order) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _todayCardsOrderKey,
+      'setting_value': jsonEncode(order),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<List<String>?> loadTodayCardsOrder() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_todayCardsOrderKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    final raw = rows.first['setting_value'] as String?;
+    if (raw == null || raw.isEmpty) {
+      return null;
+    }
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is List) {
+        return decoded.map((e) => e.toString()).toList();
+      }
+    } catch (_) {}
+    return null;
   }
 
   Future<List<CalendarReminder>> loadCalendarReminders() async {

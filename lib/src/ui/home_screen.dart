@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui' show lerpDouble;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
@@ -177,258 +178,312 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final upcoming = upcomingReminders.take(3).toList(growable: false);
 
         const outerPadding = 12.0;
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            return SingleChildScrollView(
-              physics: const ClampingScrollPhysics(),
-              padding: const EdgeInsets.all(outerPadding),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: constraints.maxHeight - outerPadding * 2,
+
+        Widget buildCard(String id) {
+          switch (id) {
+            case 'next_prayer':
+              return _NextPrayerBanner(info: nextPrayer!);
+            case 'daily_wisdom':
+              return DailyWisdomCard(wisdom: dailyWisdom!);
+            case 'iftar_suhoor':
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0),
+                child: IftarSuhoorCountdownCard(),
+              );
+            case 'moon_phase':
+              return MoonPhaseCard(
+                date: day.date,
+                hijriOffset: controller.hijriDateOffset,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => MoonCalendarScreen(initialDate: day.date),
+                    ),
+                  );
+                },
+              );
+            case 'upcoming_reminders':
+              return UpcomingRemindersCard(entries: upcoming);
+            case 'prayer_times':
+              return Card(
+                margin: EdgeInsets.zero,
+                clipBehavior: Clip.antiAlias,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outlineVariant
+                        .withAlpha(70),
+                  ),
                 ),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      // Top Header Row
-                      Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (final entry in prayerOrder.indexed) ...[
+                      if (entry.$1 > 0)
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outlineVariant
+                              .withAlpha(40),
+                        ),
+                      _CompactPrayerRow(
+                        name: entry.$2,
+                        value: prayers[entry.$2] ?? '--:--',
+                        reminderSetting: controller.reminderFor(
+                          entry.$2,
+                        ),
+                        isNext: entry.$2 == nextPrayer?.name,
+                        isCompleted: controller.isPrayerCompleted(
+                          entry.$2,
+                          day.date,
+                        ),
+                        onTap: () async {
+                          await Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  ReminderSettingsScreen(
+                                    prayerName: entry.$2,
+                                  ),
+                            ),
+                          );
+                        },
+                        onToggleReminder: () =>
+                            controller.updateReminderSetting(
+                              prayer: entry.$2,
+                              notifyOnTime: !controller
+                                  .reminderFor(entry.$2)
+                                  .notifyOnTime,
+                            ),
+                        onToggleCompleted: () =>
+                            controller.togglePrayerCompletionForDate(
+                              entry.$2,
+                              day.date,
+                            ),
+                      ),
+                    ],
+                  ],
+                ),
+              );
+            default:
+              return const SizedBox.shrink();
+          }
+        }
+
+        final visibleCardIds = controller.todayCardsOrder.where((id) {
+          switch (id) {
+            case 'next_prayer':
+              return nextPrayer != null;
+            case 'daily_wisdom':
+              return controller.showCardDailyWisdom && dailyWisdom != null;
+            case 'iftar_suhoor':
+              return controller.showCardIftarSuhoor;
+            case 'moon_phase':
+              return controller.showCardMoonPhase;
+            case 'upcoming_reminders':
+              return controller.showCardUpcomingReminders && upcoming.isNotEmpty;
+            case 'prayer_times':
+              return true;
+            default:
+              return false;
+          }
+        }).toList(growable: false);
+
+        return ReorderableListView(
+          physics: const ClampingScrollPhysics(),
+          padding: const EdgeInsets.all(outerPadding),
+          buildDefaultDragHandles: false,
+          header: Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Top Header Row
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  DateFormat(
-                                    'EEEE, dd MMM yyyy',
-                                    Localizations.localeOf(context).toString(),
-                                  ).format(day.date),
+                          Text(
+                            DateFormat(
+                              'EEEE, dd MMM yyyy',
+                              Localizations.localeOf(context).toString(),
+                            ).format(day.date),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.location_on,
+                                size: 12,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 2),
+                              Expanded(
+                                child: Text(
+                                  '${selected.districtName} · ${formatHijriDate(day.date, Localizations.localeOf(context).languageCode)}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .titleSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      .labelSmall,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-
-                                Row(
-                                   children: [
-                                     Icon(
-                                       Icons.location_on,
-                                       size: 12,
-                                       color: Theme.of(context).colorScheme.primary,
-                                     ),
-                                     const SizedBox(width: 2),
-                                     Expanded(
-                                       child: Text(
-                                         '${selected.districtName} · ${formatHijriDate(day.date, Localizations.localeOf(context).languageCode)}',
-                                         style: Theme.of(context)
-                                             .textTheme
-                                             .labelSmall,
-                                         maxLines: 1,
-                                         overflow: TextOverflow.ellipsis,
-                                       ),
-                                     ),
-                                     const SizedBox(width: 4),
-                                     SubtleMoonIcon(
-                                       phaseValue: getMoonPhase(
-                                         day.date,
-                                         hijriOffset: controller.hijriDateOffset,
-                                       ).phaseValue,
-                                       size: 13,
-                                     ),
-                                   ],
-                                 ),
-
-                              ],
-                            ),
-                          ),
-                          IconButton(
-                            visualDensity: VisualDensity.compact,
-                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                            padding: EdgeInsets.zero,
-                            tooltip: context.l10n.hisnAlMuslimTitle,
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => const SupplicationsScreen(),
-                                ),
-                              );
-                            },
-                            icon: const Icon(Icons.menu_book_outlined, size: 18),
-                          ),
-                          IconButton(
-                            visualDensity: VisualDensity.compact,
-                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                            padding: EdgeInsets.zero,
-                            tooltip: context.l10n.shareTodayTimes,
-                            onPressed: () {
-                              final text = buildSharePrayerTimesText(
-                                location: selected,
-                                day: day,
-                                label: context.l10n.prayerNameLabel,
-                                locale: Localizations.localeOf(context)
-                                    .languageCode,
-                              );
-                              final onShare = widget.onShare;
-                              if (onShare != null) {
-                                onShare(text);
-                              } else {
-                                SharePlus.instance.share(
-                                  ShareParams(text: text),
-                                );
-                              }
-                            },
-                            icon: const Icon(Icons.share_outlined, size: 18),
-                          ),
-                          IconButton(
-                            visualDensity: VisualDensity.compact,
-                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                            padding: EdgeInsets.zero,
-                            onPressed: controller.isBusy
-                                ? null
-                                : () => controller.refreshPrayerData(
-                                    forceSync: true,
-                                  ),
-                            icon: const Icon(Icons.refresh, size: 18),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 4),
-
-                      // Sub-header stats row
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.check_circle_outline,
-                            size: 14,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            context.l10n.prayersCompleted(
-                              controller.completedCountForDate(day.date),
-                              6,
-                            ),
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-
-                      if (nextPrayer != null) ...[
-                        _NextPrayerBanner(info: nextPrayer),
-                        const SizedBox(height: 6),
-                      ],
-                      if (controller.showCardDailyWisdom && dailyWisdom != null) ...[
-                        DailyWisdomCard(wisdom: dailyWisdom),
-                        const SizedBox(height: 6),
-                      ],
-                      if (controller.showCardIftarSuhoor) ...[
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 0),
-                          child: IftarSuhoorCountdownCard(),
-                        ),
-                        const SizedBox(height: 6),
-                      ],
-                      if (controller.showCardMoonPhase) ...[
-                        MoonPhaseCard(
-                          date: day.date,
-                          hijriOffset: controller.hijriDateOffset,
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => MoonCalendarScreen(initialDate: day.date),
                               ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 6),
-                      ],
-                      if (controller.showCardUpcomingReminders && upcoming.isNotEmpty) ...[
-                        UpcomingRemindersCard(entries: upcoming),
-                        const SizedBox(height: 6),
-                      ],
-
-
-                      // Prayer rows taking remaining vertical space
-                      Expanded(
-                        child: Card(
-                          margin: EdgeInsets.zero,
-                          clipBehavior: Clip.antiAlias,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outlineVariant
-                                  .withAlpha(70),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              for (final entry in prayerOrder.indexed) ...[
-                                if (entry.$1 > 0)
-                                  Divider(
-                                    height: 1,
-                                    thickness: 1,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant
-                                        .withAlpha(40),
-                                  ),
-                                Expanded(
-                                  child: _CompactPrayerRow(
-                                    name: entry.$2,
-                                    value: prayers[entry.$2] ?? '--:--',
-                                    reminderSetting: controller.reminderFor(
-                                      entry.$2,
-                                    ),
-                                    isNext: entry.$2 == nextPrayer?.name,
-                                    isCompleted: controller.isPrayerCompleted(
-                                      entry.$2,
-                                      day.date,
-                                    ),
-                                    onTap: () async {
-                                      await Navigator.of(context).push(
-                                        MaterialPageRoute<void>(
-                                          builder: (_) =>
-                                              ReminderSettingsScreen(
-                                                prayerName: entry.$2,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    onToggleReminder: () =>
-                                        controller.updateReminderSetting(
-                                          prayer: entry.$2,
-                                          notifyOnTime: !controller
-                                              .reminderFor(entry.$2)
-                                              .notifyOnTime,
-                                        ),
-                                    onToggleCompleted: () =>
-                                        controller.togglePrayerCompletionForDate(
-                                          entry.$2,
-                                          day.date,
-                                        ),
-                                  ),
-                                ),
-                              ],
+                              const SizedBox(width: 4),
+                              SubtleMoonIcon(
+                                phaseValue: getMoonPhase(
+                                  day.date,
+                                  hijriOffset: controller.hijriDateOffset,
+                                ).phaseValue,
+                                size: 13,
+                              ),
                             ],
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      padding: EdgeInsets.zero,
+                      tooltip: context.l10n.hisnAlMuslimTitle,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) => const SupplicationsScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.menu_book_outlined, size: 18),
+                    ),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      padding: EdgeInsets.zero,
+                      tooltip: context.l10n.shareTodayTimes,
+                      onPressed: () {
+                        final text = buildSharePrayerTimesText(
+                          location: selected,
+                          day: day,
+                          label: context.l10n.prayerNameLabel,
+                          locale: Localizations.localeOf(context)
+                              .languageCode,
+                        );
+                        final onShare = widget.onShare;
+                        if (onShare != null) {
+                          onShare(text);
+                        } else {
+                          SharePlus.instance.share(
+                            ShareParams(text: text),
+                          );
+                        }
+                      },
+                      icon: const Icon(Icons.share_outlined, size: 18),
+                    ),
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+                      padding: EdgeInsets.zero,
+                      onPressed: controller.isBusy
+                          ? null
+                          : () => controller.refreshPrayerData(
+                              forceSync: true,
+                            ),
+                      icon: const Icon(Icons.refresh, size: 18),
+                    ),
+                  ],
                 ),
-              ),
+                const SizedBox(height: 4),
+
+                // Sub-header stats row
+                Row(
+                  children: [
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      context.l10n.prayersCompleted(
+                        controller.completedCountForDate(day.date),
+                        6,
+                      ),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          proxyDecorator: (child, index, animation) {
+            return AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                final double animValue =
+                    Curves.easeInOut.transform(animation.value);
+                final double elevation = lerpDouble(0, 6, animValue) ?? 0.0;
+                return Material(
+                  elevation: elevation,
+                  color: Colors.transparent,
+                  shadowColor: Colors.black38,
+                  borderRadius: BorderRadius.circular(16),
+                  child: child,
+                );
+              },
+              child: child,
             );
           },
+          onReorder: (oldIndex, newIndex) {
+            if (oldIndex < 0 || oldIndex >= visibleCardIds.length) return;
+            if (newIndex > visibleCardIds.length) newIndex = visibleCardIds.length;
+            if (oldIndex < newIndex) {
+              newIndex -= 1;
+            }
+            if (oldIndex == newIndex) return;
+
+            final reorderedVisible = List<String>.from(visibleCardIds);
+            final movedItem = reorderedVisible.removeAt(oldIndex);
+            reorderedVisible.insert(newIndex, movedItem);
+
+            final fullOrder = List<String>.from(controller.todayCardsOrder);
+            var visibleIdx = 0;
+            for (var i = 0; i < fullOrder.length; i++) {
+              if (visibleCardIds.contains(fullOrder[i])) {
+                fullOrder[i] = reorderedVisible[visibleIdx++];
+              }
+            }
+            controller.updateTodayCardsOrder(fullOrder);
+          },
+          children: [
+            for (var i = 0; i < visibleCardIds.length; i++)
+              ReorderableDelayedDragStartListener(
+                key: ValueKey('today_card_${visibleCardIds[i]}'),
+                index: i,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: buildCard(visibleCardIds[i]),
+                ),
+              ),
+          ],
         );
 
 

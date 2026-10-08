@@ -294,6 +294,12 @@ class TestHarness {
       () => database.loadShowCardUpcomingReminders(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadTodayCardsOrder(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveTodayCardsOrder(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadPrayerCompletions(),
     ).thenAnswer((_) async => const <String, List<String>>{});
     when(

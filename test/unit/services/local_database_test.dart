@@ -150,6 +150,9 @@ void main() {
 
       await database.saveCalendarSortOption(CalendarSortOption.alphabetical);
       expect(await database.loadCalendarSortOption(), CalendarSortOption.alphabetical);
+
+      await database.saveTodayCardsOrder(['prayer_times', 'moon_phase', 'daily_wisdom']);
+      expect(await database.loadTodayCardsOrder(), ['prayer_times', 'moon_phase', 'daily_wisdom']);
     });
 
     test('loaders return null when unset', () async {
@@ -164,6 +167,7 @@ void main() {
       expect(await database.loadLocalePreference(), isNull);
       expect(await database.loadCalendarPrimaryDisplay(), isNull);
       expect(await database.loadCalendarSortOption(), isNull);
+      expect(await database.loadTodayCardsOrder(), isNull);
     });
   });
 

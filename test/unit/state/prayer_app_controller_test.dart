@@ -254,10 +254,12 @@ void main() {
     when(() => database.loadShowCardIftarSuhoor()).thenAnswer((_) async => null);
     when(() => database.loadShowCardDailyWisdom()).thenAnswer((_) async => null);
     when(() => database.loadShowCardUpcomingReminders()).thenAnswer((_) async => null);
+    when(() => database.loadTodayCardsOrder()).thenAnswer((_) async => null);
     when(() => database.saveShowCardMoonPhase(any())).thenAnswer((_) async {});
     when(() => database.saveShowCardIftarSuhoor(any())).thenAnswer((_) async {});
     when(() => database.saveShowCardDailyWisdom(any())).thenAnswer((_) async {});
     when(() => database.saveShowCardUpcomingReminders(any())).thenAnswer((_) async {});
+    when(() => database.saveTodayCardsOrder(any())).thenAnswer((_) async {});
 
     when(
       () => database.loadPrayerCompletions(),
@@ -1297,6 +1299,40 @@ void main() {
       verify(
         () => database.saveNotificationDismissConfirm(false),
       ).called(1);
+    });
+
+    test('todayCardsOrder defaults and updates properly', () async {
+      final controller = buildController();
+      expect(
+        controller.todayCardsOrder,
+        PrayerAppController.defaultTodayCardsOrder,
+      );
+
+      final newOrder = [
+        'prayer_times',
+        'moon_phase',
+        'daily_wisdom',
+        'next_prayer',
+        'iftar_suhoor',
+        'upcoming_reminders',
+      ];
+      controller.updateTodayCardsOrder(newOrder);
+
+      expect(controller.todayCardsOrder, newOrder);
+      verify(() => database.saveTodayCardsOrder(newOrder)).called(1);
+    });
+
+    test('todayCardsOrder sanitizes missing or duplicate entries', () async {
+      final controller = buildController();
+      controller.updateTodayCardsOrder(['prayer_times', 'moon_phase']);
+
+      expect(controller.todayCardsOrder.first, 'prayer_times');
+      expect(controller.todayCardsOrder[1], 'moon_phase');
+      expect(controller.todayCardsOrder.length, PrayerAppController.defaultTodayCardsOrder.length);
+      expect(
+        controller.todayCardsOrder.toSet(),
+        PrayerAppController.defaultTodayCardsOrder.toSet(),
+      );
     });
   });
 }

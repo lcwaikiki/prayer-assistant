@@ -111,6 +111,15 @@ class PrayerAppController extends ChangeNotifier {
   bool _showCardIftarSuhoor = true;
   bool _showCardDailyWisdom = true;
   bool _showCardUpcomingReminders = true;
+  static const List<String> defaultTodayCardsOrder = [
+    'next_prayer',
+    'daily_wisdom',
+    'iftar_suhoor',
+    'moon_phase',
+    'upcoming_reminders',
+    'prayer_times',
+  ];
+  List<String> _todayCardsOrder = List<String>.from(defaultTodayCardsOrder);
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   Map<String, List<String>> _taskCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
@@ -287,6 +296,32 @@ class PrayerAppController extends ChangeNotifier {
     _showCardUpcomingReminders = show;
     database.saveShowCardUpcomingReminders(show);
     notifyListeners();
+  }
+
+  List<String> get todayCardsOrder => List<String>.unmodifiable(_todayCardsOrder);
+
+  void updateTodayCardsOrder(List<String> order) {
+    _todayCardsOrder = _sanitizeTodayCardsOrder(order);
+    database.saveTodayCardsOrder(_todayCardsOrder);
+    notifyListeners();
+  }
+
+  static List<String> _sanitizeTodayCardsOrder(List<String>? incoming) {
+    if (incoming == null || incoming.isEmpty) {
+      return List<String>.from(defaultTodayCardsOrder);
+    }
+    final result = <String>[];
+    for (final id in incoming) {
+      if (defaultTodayCardsOrder.contains(id) && !result.contains(id)) {
+        result.add(id);
+      }
+    }
+    for (final id in defaultTodayCardsOrder) {
+      if (!result.contains(id)) {
+        result.add(id);
+      }
+    }
+    return result;
   }
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
@@ -691,6 +726,8 @@ class PrayerAppController extends ChangeNotifier {
       _showCardDailyWisdom = await database.loadShowCardDailyWisdom() ?? true;
       _showCardUpcomingReminders =
           await database.loadShowCardUpcomingReminders() ?? true;
+      _todayCardsOrder =
+          _sanitizeTodayCardsOrder(await database.loadTodayCardsOrder());
       _calendarReminders = await database.loadCalendarReminders();
 
       await Future.wait([
@@ -1681,6 +1718,7 @@ class PrayerAppController extends ChangeNotifier {
       'showCardIftarSuhoor': _showCardIftarSuhoor,
       'showCardDailyWisdom': _showCardDailyWisdom,
       'showCardUpcomingReminders': _showCardUpcomingReminders,
+      'todayCardsOrder': _todayCardsOrder,
       'reminderSettings': {
         for (final entry in _reminderSettings.entries)
           entry.key: entry.value.toJson(),
@@ -1942,6 +1980,14 @@ class PrayerAppController extends ChangeNotifier {
         _showCardUpcomingReminders,
       );
     }
+    if (prefs.containsKey('todayCardsOrder')) {
+      final list = prefs['todayCardsOrder'];
+      if (list is List) {
+        _todayCardsOrder = _sanitizeTodayCardsOrder(
+          list.map((e) => e.toString()).toList(),
+        );
+      }
+    }
     if (prefs.containsKey('hijriDateOffset')) {
       _hijriDateOffset = asInt(prefs['hijriDateOffset'], _hijriDateOffset);
     }
@@ -2035,6 +2081,7 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveShowCardIftarSuhoor(_showCardIftarSuhoor);
     await database.saveShowCardDailyWisdom(_showCardDailyWisdom);
     await database.saveShowCardUpcomingReminders(_showCardUpcomingReminders);
+    await database.saveTodayCardsOrder(_todayCardsOrder);
     await database.saveHijriDateOffset(_hijriDateOffset);
     await database.saveWidgetMmssThreshold(_widgetMmssThresholdMinutes);
     await database.saveThemePreference(_themePreference.name);

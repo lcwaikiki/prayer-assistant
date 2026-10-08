@@ -241,7 +241,7 @@ void main() {
   });
 
   testWidgets(
-    'shows estimated time to complete when executed count is 0 or equals count number, otherwise shows time left',
+    'resets time left when tapping the first bead from progress 0',
     (tester) async {
       final initialItem = _item(
         progress: 0,
@@ -263,7 +263,7 @@ void main() {
         tester
             .widget<Text>(find.byKey(const Key('time_left_value_text')))
             .data,
-        '00:32',
+        '--:--',
       );
 
       await tester.pumpWidget(const SizedBox());

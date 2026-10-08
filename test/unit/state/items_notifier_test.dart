@@ -663,7 +663,7 @@ void main() {
       expect(repository.loadItems().single.paceIntervals, [600, 700]);
     });
 
-    test('resetProgress resets paceIntervals to empty list', () {
+    test('resetProgress preserves paceIntervals', () {
       final repository = ItemRepository.memory([
         item('a').copyWith(
           currentProgress: 10,
@@ -676,7 +676,7 @@ void main() {
 
       final updated = repository.loadItems().single;
       expect(updated.currentProgress, 0);
-      expect(updated.paceIntervals, isEmpty);
+      expect(updated.paceIntervals, const [600, 700]);
     });
 
     test('setProgress clears paceIntervals when progress changes', () {

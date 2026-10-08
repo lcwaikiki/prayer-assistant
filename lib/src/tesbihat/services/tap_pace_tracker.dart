@@ -121,7 +121,7 @@ class TapPaceTracker {
           // Any interval exceeding 2.5x of average pace (with a minimum 5s threshold)
           // is considered a pause/interruption and excluded from pace calculation.
           final thresholdMs = (currentAvg * 2.5).clamp(5000.0, double.infinity);
-          final isLongWait = rawIntervalMs > thresholdMs;
+          final isLongWait = rawIntervalMs >= thresholdMs;
           if (!isLongWait) {
             _intervalsMs.add(rawIntervalMs);
             if (_intervalsMs.length > _maxHistory) {

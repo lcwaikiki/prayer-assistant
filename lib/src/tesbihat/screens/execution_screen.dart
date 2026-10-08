@@ -4,8 +4,10 @@ import 'package:audioplayers/audioplayers.dart' show PlayerState;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../controller/prayer_app_controller.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../services/audio_player_service.dart';
 import '../services/bead_overlay_service.dart';
@@ -37,6 +39,7 @@ class ExecutionScreen extends ConsumerStatefulWidget {
 
 class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     with WidgetsBindingObserver {
+  PrayerAppController? _appController;
   late final AudioPlayerService _audioPlayer;
   late final AudioPlayerService _chimePlayer;
   StreamSubscription<void>? _playerCompleteSub;
@@ -58,6 +61,23 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  void _restoreOrientation() {
+    final tab = _appController?.tabIndex;
+    if (tab != 0 && tab != 4) {
+      SystemChrome.setPreferredOrientations([]);
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    try {
+      _appController = context.read<PrayerAppController>();
+    } catch (_) {
+      _appController = null;
+    }
   }
 
   @override
@@ -105,6 +125,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           .firstOrNull;
       if (item != null && item.currentProgress >= item.count) {
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
+        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
       }
       _maybePromptOverlayPermission();
     });
@@ -191,6 +212,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .first;
+    if (item.currentProgress == 0) {
+      ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+    }
     ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
 
     if (item.currentProgress + 1 >= item.count && _isAudioPlaying) {
@@ -295,6 +319,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
     if (currentItem.autoCountWithSound) {
       if (currentItem.currentProgress < currentItem.count) {
+        if (currentItem.currentProgress == 0) {
+          ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+        }
         ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
         final feedback = ref
             .read(itemsNotifierProvider.notifier)
@@ -361,10 +388,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _setWakelock(false);
     _playerCompleteSub?.cancel();
     _audioPlayer.stop();
-    _audioPlayer.dispose();
+    if (widget.audioPlayerService == null) {
+      _audioPlayer.dispose();
+    }
     _chimePlayer.stop();
-    _chimePlayer.dispose();
-    SystemChrome.setPreferredOrientations([]);
+    if (widget.chimePlayerService == null) {
+      _chimePlayer.dispose();
+    }
+    _restoreOrientation();
     super.dispose();
   }
 
@@ -425,7 +456,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           await _audioPlayer.stop();
           setState(() => _isAudioPlaying = false);
         }
-        ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       }
     }

@@ -100,7 +100,7 @@ class _AppShellState extends State<AppShell> {
       }
     } catch (_) {}
 
-    if (tabIndex == 4) {
+    if (tabIndex == 0 || tabIndex == 4) {
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.portraitUp,
         DeviceOrientation.portraitDown,

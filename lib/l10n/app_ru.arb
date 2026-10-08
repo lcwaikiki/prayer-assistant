@@ -340,6 +340,9 @@
   "kazaYearsMissed": "Пропущенных лет",
   "kazaMonthsMissed": "Дополнительные месяцы",
   "kazaCalculateButton": "Сохранить цели",
+  "kazaDailyLogTitle": "Дневной журнал",
+  "kazaDailyLogEmpty": "Возмещённые намазы ещё не записаны",
+  "kazaDailyLogCount": "выполнено: {count}",
   "kazaWitrLabel": "Витр",
   "kazaRemainingCount": "{count} осталось",
   "@kazaRemainingCount": {

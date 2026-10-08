@@ -827,6 +827,17 @@ class AppLocalizationsZh extends AppLocalizations {
   String get kazaCalculateButton => '设置目标';
 
   @override
+  String get kazaDailyLogTitle => '每日记录';
+
+  @override
+  String get kazaDailyLogEmpty => '尚未记录补礼拜';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '已补 $count 次';
+  }
+
+  @override
   String get kazaWitrLabel => '奇数拜';
 
   @override

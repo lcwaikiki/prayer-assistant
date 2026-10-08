@@ -285,6 +285,9 @@
   "kazaYearsMissed": "چھوٹے ہوئے سال",
   "kazaMonthsMissed": "مزید مہینے",
   "kazaCalculateButton": "محفوظ کریں",
+  "kazaDailyLogTitle": "روزانہ ریکارڈ",
+  "kazaDailyLogEmpty": "ابھی تک کوئی قضا نماز درج نہیں کی گئی",
+  "kazaDailyLogCount": "{count} ادا کی گئیں",
   "kazaWitrLabel": "وتر",
   "kazaRemainingCount": "{count} باقی",
   "@kazaRemainingCount": {

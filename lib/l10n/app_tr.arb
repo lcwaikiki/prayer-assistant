@@ -291,6 +291,9 @@
   "kazaYearsMissed": "Kılınmayan Yıl Sayısı",
   "kazaMonthsMissed": "İlave Ay Sayısı",
   "kazaCalculateButton": "Hedefleri Kaydet",
+  "kazaDailyLogTitle": "Günlük Kayıt",
+  "kazaDailyLogEmpty": "Henüz kaza namazı kaydedilmedi",
+  "kazaDailyLogCount": "{count} kılındı",
   "kazaWitrLabel": "Vitir",
   "kazaRemainingCount": "{count} kalan",
   "@kazaRemainingCount": {

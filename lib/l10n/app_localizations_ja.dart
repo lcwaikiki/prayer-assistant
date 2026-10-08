@@ -829,6 +829,17 @@ class AppLocalizationsJa extends AppLocalizations {
   String get kazaCalculateButton => '目標を設定';
 
   @override
+  String get kazaDailyLogTitle => '日別記録';
+
+  @override
+  String get kazaDailyLogEmpty => 'まだカザーの礼拝は記録されていません';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count 回実施';
+  }
+
+  @override
   String get kazaWitrLabel => 'ウィトル';
 
   @override

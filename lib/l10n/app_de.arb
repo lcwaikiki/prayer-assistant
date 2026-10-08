@@ -285,6 +285,9 @@
   "kazaYearsMissed": "Versäumte Jahre",
   "kazaMonthsMissed": "Zusätzliche Monate",
   "kazaCalculateButton": "Ziele Speichern",
+  "kazaDailyLogTitle": "Tagesprotokoll",
+  "kazaDailyLogEmpty": "Noch keine Nachholgebete erfasst",
+  "kazaDailyLogCount": "{count} verrichtet",
   "kazaWitrLabel": "Witr",
   "kazaRemainingCount": "{count} verbleibend",
   "@kazaRemainingCount": {

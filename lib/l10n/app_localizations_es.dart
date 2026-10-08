@@ -860,6 +860,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get kazaCalculateButton => 'Establecer Metas';
 
   @override
+  String get kazaDailyLogTitle => 'Registro diario';
+
+  @override
+  String get kazaDailyLogEmpty => 'Aún no hay oraciones qada registradas';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count realizadas';
+  }
+
+  @override
   String get kazaWitrLabel => 'Witr';
 
   @override

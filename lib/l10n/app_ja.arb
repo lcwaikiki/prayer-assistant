@@ -285,6 +285,9 @@
   "kazaYearsMissed": "未実施の年数",
   "kazaMonthsMissed": "追加の月数",
   "kazaCalculateButton": "目標を設定",
+  "kazaDailyLogTitle": "日別記録",
+  "kazaDailyLogEmpty": "まだカザーの礼拝は記録されていません",
+  "kazaDailyLogCount": "{count} 回実施",
   "kazaWitrLabel": "ウィトル",
   "kazaRemainingCount": "残り{count}回",
   "@kazaRemainingCount": {

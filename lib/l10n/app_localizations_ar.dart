@@ -850,6 +850,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get kazaCalculateButton => 'حفظ الأهداف';
 
   @override
+  String get kazaDailyLogTitle => 'السجل اليومي';
+
+  @override
+  String get kazaDailyLogEmpty => 'لم يتم تسجيل صلوات قضاء بعد';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count مؤداة';
+  }
+
+  @override
   String get kazaWitrLabel => 'الوتر';
 
   @override

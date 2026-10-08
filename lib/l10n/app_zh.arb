@@ -285,6 +285,9 @@
   "kazaYearsMissed": "遗漏年数",
   "kazaMonthsMissed": "额外月数",
   "kazaCalculateButton": "设置目标",
+  "kazaDailyLogTitle": "每日记录",
+  "kazaDailyLogEmpty": "尚未记录补礼拜",
+  "kazaDailyLogCount": "已补 {count} 次",
   "kazaWitrLabel": "奇数拜",
   "kazaRemainingCount": "还剩 {count} 次",
   "@kazaRemainingCount": {

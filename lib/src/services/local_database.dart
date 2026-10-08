@@ -38,6 +38,7 @@ class LocalDatabase {
   static const _todayCardsOrderKey = 'today_cards_order';
   static const _prayerCompletionsKey = 'prayer_completions';
   static const _kazaTrackerKey = 'kaza_tracker_data';
+  static const _kazaDailyLogsKey = 'kaza_daily_logs';
   static const _fastingLogsKey = 'fasting_logs';
   static const _snoozeDurationMinutesKey = 'snooze_duration_minutes';
   static const _taskCompletionsKey = 'task_completions';
@@ -1233,6 +1234,32 @@ class LocalDatabase {
     await db.insert('app_settings', {
       'setting_key': _kazaTrackerKey,
       'setting_value': tracker.toJson(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  /// Loads qadaa prayers logged per day: dateKey -> {prayerKey: count}.
+  Future<Map<String, Map<String, int>>> loadKazaDailyLogs() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_kazaDailyLogsKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return <String, Map<String, int>>{};
+    }
+    final raw =
+        jsonDecode(rows.first['setting_value'] as String)
+            as Map<String, dynamic>;
+    return kazaDailyLogsFromMap(raw);
+  }
+
+  Future<void> saveKazaDailyLogs(Map<String, Map<String, int>> logs) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _kazaDailyLogsKey,
+      'setting_value': jsonEncode(logs),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 

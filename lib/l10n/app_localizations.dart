@@ -1670,6 +1670,24 @@ abstract class AppLocalizations {
   /// **'Set Targets'**
   String get kazaCalculateButton;
 
+  /// No description provided for @kazaDailyLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Log'**
+  String get kazaDailyLogTitle;
+
+  /// No description provided for @kazaDailyLogEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No qadaa prayers logged yet'**
+  String get kazaDailyLogEmpty;
+
+  /// No description provided for @kazaDailyLogCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} prayed'**
+  String kazaDailyLogCount(int count);
+
   /// No description provided for @kazaWitrLabel.
   ///
   /// In en, this message translates to:

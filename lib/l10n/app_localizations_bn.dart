@@ -858,6 +858,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get kazaCalculateButton => 'লক্ষ্য সেট করুন';
 
   @override
+  String get kazaDailyLogTitle => 'দৈনিক লগ';
+
+  @override
+  String get kazaDailyLogEmpty => 'এখনও কোনো কাযা নামাজ লগ করা হয়নি';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$countটি আদায়';
+  }
+
+  @override
   String get kazaWitrLabel => 'বিতর';
 
   @override

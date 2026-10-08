@@ -285,6 +285,9 @@
   "kazaYearsMissed": "Jumlah Tahun",
   "kazaMonthsMissed": "Tambahan Bulan",
   "kazaCalculateButton": "Simpan Target",
+  "kazaDailyLogTitle": "Log Harian",
+  "kazaDailyLogEmpty": "Belum ada salat qada yang dicatat",
+  "kazaDailyLogCount": "{count} dikerjakan",
   "kazaWitrLabel": "Witir",
   "kazaRemainingCount": "Sisa {count}",
   "@kazaRemainingCount": {

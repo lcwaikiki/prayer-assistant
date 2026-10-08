@@ -856,6 +856,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get kazaCalculateButton => 'Hedefleri Kaydet';
 
   @override
+  String get kazaDailyLogTitle => 'Günlük Kayıt';
+
+  @override
+  String get kazaDailyLogEmpty => 'Henüz kaza namazı kaydedilmedi';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count kılındı';
+  }
+
+  @override
   String get kazaWitrLabel => 'Vitir';
 
   @override

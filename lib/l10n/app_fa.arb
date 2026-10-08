@@ -285,6 +285,9 @@
   "kazaYearsMissed": "سال‌های قضا شده",
   "kazaMonthsMissed": "ماه‌های اضافی",
   "kazaCalculateButton": "ثبت اهداف",
+  "kazaDailyLogTitle": "گزارش روزانه",
+  "kazaDailyLogEmpty": "هنوز نماز قضایی ثبت نشده است",
+  "kazaDailyLogCount": "{count} خوانده شد",
   "kazaWitrLabel": "واتر",
   "kazaRemainingCount": "{count} باقیمانده",
   "@kazaRemainingCount": {

@@ -852,6 +852,17 @@ class AppLocalizationsFa extends AppLocalizations {
   String get kazaCalculateButton => 'ثبت اهداف';
 
   @override
+  String get kazaDailyLogTitle => 'گزارش روزانه';
+
+  @override
+  String get kazaDailyLogEmpty => 'هنوز نماز قضایی ثبت نشده است';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count خوانده شد';
+  }
+
+  @override
   String get kazaWitrLabel => 'واتر';
 
   @override

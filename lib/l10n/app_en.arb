@@ -374,6 +374,14 @@
   "kazaYearsMissed": "Years Missed",
   "kazaMonthsMissed": "Additional Months",
   "kazaCalculateButton": "Set Targets",
+  "kazaDailyLogTitle": "Daily Log",
+  "kazaDailyLogEmpty": "No qadaa prayers logged yet",
+  "kazaDailyLogCount": "{count} prayed",
+  "@kazaDailyLogCount": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
   "kazaWitrLabel": "Witr",
   "kazaRemainingCount": "{count} remaining",
   "@kazaRemainingCount": {

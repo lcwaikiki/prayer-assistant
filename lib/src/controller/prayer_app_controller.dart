@@ -123,6 +123,7 @@ class PrayerAppController extends ChangeNotifier {
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   Map<String, List<String>> _taskCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
+  Map<String, Map<String, int>> _kazaDailyLogs = <String, Map<String, int>>{};
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
   int _snoozeDurationMinutes = 10;
   Future<void> Function(Locale? locale)? onLocaleChanged;
@@ -326,6 +327,7 @@ class PrayerAppController extends ChangeNotifier {
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
   KazaTracker get kazaTracker => _kazaTracker;
+  Map<String, Map<String, int>> get kazaDailyLogs => _kazaDailyLogs;
   int get snoozeDurationMinutes => _snoozeDurationMinutes;
 
   Future<void> updateSnoozeDurationMinutes(int minutes) async {
@@ -384,11 +386,13 @@ class PrayerAppController extends ChangeNotifier {
       default:
         return;
     }
+    _logKazaForToday({_canonicalKazaKey(key): amount});
     updateKazaTracker(updated);
   }
 
   void decrementKaza(String prayerKey, [int amount = 1]) {
     final key = prayerKey.toLowerCase();
+    final removed = amount.clamp(0, _kazaTracker.completedFor(key));
     KazaTracker updated;
     switch (key) {
       case 'fajr':
@@ -429,7 +433,15 @@ class PrayerAppController extends ChangeNotifier {
       default:
         return;
     }
+    _logKazaForToday({_canonicalKazaKey(key): -removed});
     updateKazaTracker(updated);
+  }
+
+  /// Sets the completed count for [prayerKey], logging the change to today.
+  void setKazaCompleted(String prayerKey, int count) {
+    final delta = count - _kazaTracker.completedFor(prayerKey);
+    if (delta > 0) incrementKaza(prayerKey, delta);
+    if (delta < 0) decrementKaza(prayerKey, -delta);
   }
 
   void logFullDayKaza() {
@@ -441,7 +453,49 @@ class PrayerAppController extends ChangeNotifier {
       ishaCompleted: _kazaTracker.ishaCompleted + 1,
       witrCompleted: _kazaTracker.witrCompleted + 1,
     );
+    _logKazaForToday({for (final key in kazaPrayerKeys) key: 1});
     updateKazaTracker(updated);
+  }
+
+  static const kazaPrayerKeys = [
+    'fajr',
+    'dhuhr',
+    'asr',
+    'maghrib',
+    'isha',
+    'witr',
+  ];
+
+  static String _canonicalKazaKey(String key) => switch (key) {
+    'imsak' => 'fajr',
+    'ogle' => 'dhuhr',
+    'ikindi' => 'asr',
+    'aksam' => 'maghrib',
+    'yatsi' => 'isha',
+    _ => key,
+  };
+
+  /// Adds [deltas] (prayerKey -> count) to today's qadaa log and persists it.
+  /// Counts never drop below zero; empty entries are removed.
+  void _logKazaForToday(Map<String, int> deltas) {
+    final dateKey = _toDateKey(DateTime.now());
+    final day = Map<String, int>.from(_kazaDailyLogs[dateKey] ?? const {});
+    for (final MapEntry(:key, :value) in deltas.entries) {
+      final next = ((day[key] ?? 0) + value).clamp(0, 999999);
+      if (next == 0) {
+        day.remove(key);
+      } else {
+        day[key] = next;
+      }
+    }
+    final logs = Map<String, Map<String, int>>.from(_kazaDailyLogs);
+    if (day.isEmpty) {
+      logs.remove(dateKey);
+    } else {
+      logs[dateKey] = day;
+    }
+    _kazaDailyLogs = logs;
+    database.saveKazaDailyLogs(logs);
   }
 
   bool isPrayerCompleted(String prayerName, DateTime date) {
@@ -583,6 +637,7 @@ class PrayerAppController extends ChangeNotifier {
       _prayerCompletions = await database.loadPrayerCompletions();
       _taskCompletions = await database.loadTaskCompletions();
       _kazaTracker = await database.loadKazaTracker();
+      _kazaDailyLogs = await database.loadKazaDailyLogs();
       _fastingLogs = await database.loadFastingLogs();
 
 
@@ -1736,6 +1791,7 @@ class PrayerAppController extends ChangeNotifier {
       soundLibrary: sounds,
       preferences: prefs,
       fastingLogs: _fastingLogs,
+      kazaDailyLogs: _kazaDailyLogs,
     );
   }
 
@@ -1791,6 +1847,11 @@ class PrayerAppController extends ChangeNotifier {
 
       await database.saveFastingLogs(restoredFastingLogs);
       _fastingLogs = restoredFastingLogs;
+
+      final restoredKazaDailyLogs =
+          parsed['kazaDailyLogs'] as Map<String, Map<String, int>>;
+      await database.saveKazaDailyLogs(restoredKazaDailyLogs);
+      _kazaDailyLogs = restoredKazaDailyLogs;
 
       final previousReminderIds = _calendarReminders
           .map((reminder) => reminder.id)

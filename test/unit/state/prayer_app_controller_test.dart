@@ -283,6 +283,12 @@ void main() {
       () => database.saveKazaTracker(any()),
     ).thenAnswer((_) async {});
     when(
+      () => database.loadKazaDailyLogs(),
+    ).thenAnswer((_) async => <String, Map<String, int>>{});
+    when(
+      () => database.saveKazaDailyLogs(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadFastingLogs(),
     ).thenAnswer((_) async => const {});
     when(
@@ -332,6 +338,47 @@ void main() {
       calendarReminderService: calendarReminderService,
     );
   }
+
+  group('kaza daily log', () {
+    String todayKey() {
+      final now = DateTime.now();
+      return '${now.year.toString().padLeft(4, '0')}-'
+          '${now.month.toString().padLeft(2, '0')}-'
+          '${now.day.toString().padLeft(2, '0')}';
+    }
+
+    test('logs increments, full days and manual sets under today', () {
+      final controller = buildController();
+
+      controller.incrementKaza('fajr');
+      controller.incrementKaza('ogle', 2);
+      controller.logFullDayKaza();
+      controller.setKazaCompleted('asr', 4);
+
+      expect(controller.kazaDailyLogs, {
+        todayKey(): {
+          'fajr': 2,
+          'dhuhr': 3,
+          'asr': 4,
+          'maghrib': 1,
+          'isha': 1,
+          'witr': 1,
+        },
+      });
+      expect(controller.kazaTracker.totalCompleted, 12);
+      verify(() => database.saveKazaDailyLogs(any())).called(4);
+    });
+
+    test('decrements reduce today and remove empty days', () {
+      final controller = buildController();
+
+      controller.incrementKaza('isha');
+      controller.decrementKaza('isha', 5);
+
+      expect(controller.kazaDailyLogs, isEmpty);
+      expect(controller.kazaTracker.ishaCompleted, 0);
+    });
+  });
 
   group('initialize', () {
     test('loads preferences and countries without a saved location', () async {

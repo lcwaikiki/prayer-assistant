@@ -346,6 +346,9 @@
   "kazaYearsMissed": "விடுபட்ட ஆண்டுகள்",
   "kazaMonthsMissed": "கூடுதல் மாதங்கள்",
   "kazaCalculateButton": "இலக்குகளை அமை",
+  "kazaDailyLogTitle": "தினசரி பதிவு",
+  "kazaDailyLogEmpty": "இன்னும் களா தொழுகைகள் பதிவு செய்யப்படவில்லை",
+  "kazaDailyLogCount": "{count} நிறைவேற்றப்பட்டது",
   "kazaWitrLabel": "வித்ர்",
   "kazaRemainingCount": "{count} மீதமுள்ளது",
   "@kazaRemainingCount": {

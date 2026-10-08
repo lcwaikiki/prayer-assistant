@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
 import '../../l10n/prayer_names.dart';
-import '../models/kaza_tracker.dart';
 import '../widgets/kaza_calculator_dialog.dart';
 
 
@@ -211,36 +210,16 @@ class KazaTrackerScreen extends StatelessWidget {
               completed: tracker.completedFor(item.$3),
               onIncrement: () => controller.incrementKaza(item.$3),
               onDecrement: () => controller.decrementKaza(item.$3),
-              onSetCompleted: (count) {
-                final current = tracker;
-                KazaTracker updated;
-                switch (item.$3) {
-                  case 'fajr':
-                    updated = current.copyWith(fajrCompleted: count);
-                    break;
-                  case 'dhuhr':
-                    updated = current.copyWith(dhuhrCompleted: count);
-                    break;
-                  case 'asr':
-                    updated = current.copyWith(asrCompleted: count);
-                    break;
-                  case 'maghrib':
-                    updated = current.copyWith(maghribCompleted: count);
-                    break;
-                  case 'isha':
-                    updated = current.copyWith(ishaCompleted: count);
-                    break;
-                  case 'witr':
-                    updated = current.copyWith(witrCompleted: count);
-                    break;
-                  default:
-                    return;
-                }
-                controller.updateKazaTracker(updated);
-              },
+              onSetCompleted: (count) =>
+                  controller.setKazaCompleted(item.$3, count),
             ),
             const SizedBox(height: 8),
           ],
+          const SizedBox(height: 8),
+          _KazaDailyLogSection(
+            logs: controller.kazaDailyLogs,
+            prayerNames: {for (final item in prayers) item.$3: item.$1},
+          ),
         ],
         ),
       ),
@@ -293,6 +272,96 @@ class KazaTrackerScreen extends StatelessWidget {
             child: Text(ctx.l10n.save),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _KazaDailyLogSection extends StatelessWidget {
+  const _KazaDailyLogSection({required this.logs, required this.prayerNames});
+
+  final Map<String, Map<String, int>> logs;
+  final Map<String, String> prayerNames;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final dateKeys = logs.keys.toList()..sort((a, b) => b.compareTo(a));
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+          child: Text(
+            context.l10n.kazaDailyLogTitle,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        if (dateKeys.isEmpty)
+          Padding(
+            padding: const EdgeInsets.all(4),
+            child: Text(
+              context.l10n.kazaDailyLogEmpty,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        for (final dateKey in dateKeys)
+          _KazaDailyLogTile(
+            date: DateTime.parse(dateKey),
+            counts: logs[dateKey]!,
+            prayerNames: prayerNames,
+          ),
+      ],
+    );
+  }
+}
+
+class _KazaDailyLogTile extends StatelessWidget {
+  const _KazaDailyLogTile({
+    required this.date,
+    required this.counts,
+    required this.prayerNames,
+  });
+
+  final DateTime date;
+  final Map<String, int> counts;
+  final Map<String, String> prayerNames;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final locale = Localizations.localeOf(context).toString();
+    final now = DateTime.now();
+    final isToday = DateUtils.isSameDay(date, now);
+    final total = counts.values.fold(0, (sum, count) => sum + count);
+    final breakdown = [
+      for (final MapEntry(:key, :value) in prayerNames.entries)
+        if (counts[key] case final count? when count > 0) '$value $count',
+    ].join('  ·  ');
+
+    return ListTile(
+      dense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+      title: Text(
+        isToday
+            ? context.l10n.today
+            : DateFormat.yMMMEd(locale).format(date),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          fontWeight: isToday ? FontWeight.bold : null,
+        ),
+      ),
+      subtitle: Text(breakdown),
+      trailing: Text(
+        context.l10n.kazaDailyLogCount(total),
+        style: theme.textTheme.labelMedium?.copyWith(
+          color: theme.colorScheme.primary,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

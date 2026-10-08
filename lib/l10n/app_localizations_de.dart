@@ -858,6 +858,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get kazaCalculateButton => 'Ziele Speichern';
 
   @override
+  String get kazaDailyLogTitle => 'Tagesprotokoll';
+
+  @override
+  String get kazaDailyLogEmpty => 'Noch keine Nachholgebete erfasst';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count verrichtet';
+  }
+
+  @override
   String get kazaWitrLabel => 'Witr';
 
   @override

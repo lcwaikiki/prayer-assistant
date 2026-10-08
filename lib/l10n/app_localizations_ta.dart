@@ -866,6 +866,17 @@ class AppLocalizationsTa extends AppLocalizations {
   String get kazaCalculateButton => 'இலக்குகளை அமை';
 
   @override
+  String get kazaDailyLogTitle => 'தினசரி பதிவு';
+
+  @override
+  String get kazaDailyLogEmpty => 'இன்னும் களா தொழுகைகள் பதிவு செய்யப்படவில்லை';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count நிறைவேற்றப்பட்டது';
+  }
+
+  @override
   String get kazaWitrLabel => 'வித்ர்';
 
   @override

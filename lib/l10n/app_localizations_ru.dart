@@ -860,6 +860,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get kazaCalculateButton => 'Сохранить цели';
 
   @override
+  String get kazaDailyLogTitle => 'Дневной журнал';
+
+  @override
+  String get kazaDailyLogEmpty => 'Возмещённые намазы ещё не записаны';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return 'выполнено: $count';
+  }
+
+  @override
   String get kazaWitrLabel => 'Витр';
 
   @override

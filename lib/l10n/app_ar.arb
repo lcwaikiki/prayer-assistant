@@ -285,6 +285,9 @@
   "kazaYearsMissed": "عدد السنوات الفائتة",
   "kazaMonthsMissed": "أشهر إضافية",
   "kazaCalculateButton": "حفظ الأهداف",
+  "kazaDailyLogTitle": "السجل اليومي",
+  "kazaDailyLogEmpty": "لم يتم تسجيل صلوات قضاء بعد",
+  "kazaDailyLogCount": "{count} مؤداة",
   "kazaWitrLabel": "الوتر",
   "kazaRemainingCount": "{count} متبقٍ",
   "@kazaRemainingCount": {

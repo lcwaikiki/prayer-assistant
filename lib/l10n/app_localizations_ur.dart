@@ -854,6 +854,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get kazaCalculateButton => 'محفوظ کریں';
 
   @override
+  String get kazaDailyLogTitle => 'روزانہ ریکارڈ';
+
+  @override
+  String get kazaDailyLogEmpty => 'ابھی تک کوئی قضا نماز درج نہیں کی گئی';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count ادا کی گئیں';
+  }
+
+  @override
   String get kazaWitrLabel => 'وتر';
 
   @override

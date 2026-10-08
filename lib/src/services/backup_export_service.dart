@@ -29,6 +29,7 @@ class BackupExportService {
     required Map<String, dynamic> preferences,
     Map<String, FastingLog> fastingLogs = const {},
     List<SoundItem> soundLibrary = const [],
+    Map<String, Map<String, int>> kazaDailyLogs = const {},
   }) {
     final data = <String, dynamic>{
       'version': currentVersion,
@@ -43,6 +44,7 @@ class BackupExportService {
       'soundLibrary': soundLibrary.map((s) => s.toMap()).toList(),
       'preferences': preferences,
       'fastingLogs': fastingLogs.map((k, v) => MapEntry(k, v.toMap())),
+      'kazaDailyLogs': kazaDailyLogs,
     };
     return const JsonEncoder.withIndent('  ').convert(data);
   }
@@ -185,8 +187,14 @@ class BackupExportService {
       }
     }
 
+    final kazaDailyLogsRaw = raw['kazaDailyLogs'] as Map<String, dynamic>?;
+    final kazaDailyLogs = kazaDailyLogsRaw != null
+        ? kazaDailyLogsFromMap(kazaDailyLogsRaw)
+        : <String, Map<String, int>>{};
+
     return {
       'kazaTracker': kazaTracker,
+      'kazaDailyLogs': kazaDailyLogs,
       'prayerCompletions': prayerCompletions,
       'calendarReminders': calendarReminders,
       'tesbihItems': tesbihItems,

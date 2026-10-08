@@ -346,6 +346,9 @@
   "kazaYearsMissed": "ছুটে যাওয়া বছর",
   "kazaMonthsMissed": "অতিরিক্ত মাস",
   "kazaCalculateButton": "লক্ষ্য সেট করুন",
+  "kazaDailyLogTitle": "দৈনিক লগ",
+  "kazaDailyLogEmpty": "এখনও কোনো কাযা নামাজ লগ করা হয়নি",
+  "kazaDailyLogCount": "{count}টি আদায়",
   "kazaWitrLabel": "বিতর",
   "kazaRemainingCount": "{count}টি অবশিষ্ট",
   "@kazaRemainingCount": {

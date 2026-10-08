@@ -856,6 +856,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get kazaCalculateButton => 'Set Targets';
 
   @override
+  String get kazaDailyLogTitle => 'Daily Log';
+
+  @override
+  String get kazaDailyLogEmpty => 'No qadaa prayers logged yet';
+
+  @override
+  String kazaDailyLogCount(int count) {
+    return '$count prayed';
+  }
+
+  @override
   String get kazaWitrLabel => 'Witr';
 
   @override

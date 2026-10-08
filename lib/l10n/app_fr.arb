@@ -285,6 +285,9 @@
   "kazaYearsMissed": "Années Manquées",
   "kazaMonthsMissed": "Mois Supplémentaires",
   "kazaCalculateButton": "Définir les Objectifs",
+  "kazaDailyLogTitle": "Journal quotidien",
+  "kazaDailyLogEmpty": "Aucune prière qada enregistrée",
+  "kazaDailyLogCount": "{count} accomplies",
   "kazaWitrLabel": "Witr",
   "kazaRemainingCount": "{count} restantes",
   "@kazaRemainingCount": {

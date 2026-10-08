@@ -170,3 +170,15 @@ class KazaTracker {
   factory KazaTracker.fromJson(String source) =>
       KazaTracker.fromMap(jsonDecode(source) as Map<String, dynamic>);
 }
+
+/// Parses a raw daily qadaa log map (dateKey -> {prayerKey: count}).
+Map<String, Map<String, int>> kazaDailyLogsFromMap(Map<String, dynamic> raw) {
+  return raw.map(
+    (dateKey, counts) => MapEntry(
+      dateKey,
+      (counts as Map<String, dynamic>).map(
+        (prayerKey, count) => MapEntry(prayerKey, (count as num).toInt()),
+      ),
+    ),
+  );
+}

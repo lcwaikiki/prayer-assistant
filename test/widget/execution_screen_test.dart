@@ -19,20 +19,26 @@ import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
 
 Item _item({
+  String id = 'a',
+  String title = 'Tasbih',
+  int count = 33,
   int progress = 0,
   int check = 11,
+  int setCount = 11,
   String notes = '',
+  List<String> groupIds = const [],
   List<int> paceIntervals = const [],
 }) {
   return Item(
-    id: 'a',
-    title: 'Tasbih',
+    id: id,
+    title: title,
     notes: notes,
-    count: 33,
+    count: count,
     check: check,
-    setCount: 11,
+    setCount: setCount,
     vibrationIntensity: 50,
     currentProgress: progress,
+    groupIds: groupIds,
     paceIntervals: paceIntervals,
   );
 }
@@ -40,6 +46,8 @@ Item _item({
 Future<MockHapticService> _pumpExecution(
   WidgetTester tester, {
   Item? item,
+  List<Item>? items,
+  String? groupId,
   String? targetItemId,
   MockLocalDatabase? database,
   AudioPlayerService? audioPlayer,
@@ -61,11 +69,11 @@ Future<MockHapticService> _pumpExecution(
   when(() => db.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
   when(() => db.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
 
-  final items = item != null ? [item] : <Item>[];
+  final itemList = items ?? (item != null ? [item] : <Item>[]);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        itemRepositoryProvider.overrideWithValue(ItemRepository.memory(items)),
+        itemRepositoryProvider.overrideWithValue(ItemRepository.memory(itemList)),
         itemHistoryRepositoryProvider.overrideWithValue(
           ItemHistoryRepository.memory(),
         ),
@@ -78,7 +86,8 @@ Future<MockHapticService> _pumpExecution(
       ],
       child: testLocalizedApp(
         child: ExecutionScreen(
-          itemId: targetItemId ?? item?.id ?? 'a',
+          itemId: targetItemId ?? item?.id ?? (itemList.isNotEmpty ? itemList.first.id : 'a'),
+          groupId: groupId,
           audioPlayerService: audioPlayer ?? FakeAudioPlayerService(),
           chimePlayerService: chimePlayer ?? FakeAudioPlayerService(),
         ),
@@ -378,6 +387,89 @@ void main() {
       expect(find.text('11'), findsWidgets);
       verify(() => haptic.checkpoint(intensity: 50)).called(1);
       expect(chimePlayer.playAssetCallCount, 0);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'toggles notes expansion upward',
+    (tester) async {
+      await _pumpExecution(tester, item: _item(notes: 'Sample note content'));
+
+      final toggleButton = find.byKey(const Key('toggle_notes_expansion_button'));
+      expect(toggleButton, findsOneWidget);
+      expect(find.byIcon(Icons.keyboard_arrow_up), findsOneWidget);
+
+      final containerBefore = tester.widget<AnimatedContainer>(
+        find.ancestor(
+          of: find.byKey(const Key('notes_bottom_text')),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+      expect(containerBefore.constraints?.maxHeight ?? 60.0, 60.0);
+
+      // Expand notes
+      await tester.tap(toggleButton);
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.keyboard_arrow_down), findsOneWidget);
+      final containerAfter = tester.widget<AnimatedContainer>(
+        find.ancestor(
+          of: find.byKey(const Key('notes_bottom_text')),
+          matching: find.byType(AnimatedContainer),
+        ),
+      );
+      expect(containerAfter.constraints?.maxHeight ?? 200.0, 200.0);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'shows next bead button for group members on completion and transitions to next bead',
+    (tester) async {
+      final bead1 = _item(
+        id: 'b1',
+        title: 'Bead 1',
+        count: 10,
+        check: 5,
+        setCount: 0,
+        progress: 9,
+        groupIds: const ['g1'],
+      );
+      final bead2 = _item(
+        id: 'b2',
+        title: 'Bead 2',
+        count: 10,
+        check: 5,
+        setCount: 0,
+        progress: 0,
+        groupIds: const ['g1'],
+      );
+
+      await _pumpExecution(
+        tester,
+        items: [bead1, bead2],
+        targetItemId: 'b1',
+        groupId: 'g1',
+      );
+
+      expect(find.byType(ExecutionScreen), findsOneWidget);
+      expect(find.text('Bead 1'), findsOneWidget);
+
+      // Tap once to reach progress 10 (target count)
+      await tester.tap(find.byKey(const Key('big_tap_button')));
+      await tester.pumpAndSettle();
+
+      final nextButton = find.byKey(const Key('next_group_bead_button'));
+      expect(nextButton, findsOneWidget);
+
+      // Tap next button to transition to Bead 2
+      await tester.tap(nextButton);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bead 2'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
     },

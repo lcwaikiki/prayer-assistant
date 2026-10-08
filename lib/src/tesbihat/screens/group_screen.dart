@@ -453,6 +453,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                                       MaterialPageRoute<void>(
                                         builder: (_) => ExecutionScreen(
                                           itemId: item.id,
+                                          groupId: widget.groupId,
                                         ),
                                       ),
                                     );
@@ -512,6 +513,7 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
                                       MaterialPageRoute<void>(
                                         builder: (_) => ExecutionScreen(
                                           itemId: item.id,
+                                          groupId: widget.groupId,
                                         ),
                                       ),
                                     );

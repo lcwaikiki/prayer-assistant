@@ -9,6 +9,7 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../controller/prayer_app_controller.dart';
 import '../l10n/tesbihat_localizations.dart';
+import '../models/item.dart';
 import '../services/audio_player_service.dart';
 import '../services/bead_overlay_service.dart';
 import '../services/haptic_service.dart';
@@ -25,11 +26,13 @@ class ExecutionScreen extends ConsumerStatefulWidget {
   const ExecutionScreen({
     super.key,
     required this.itemId,
+    this.groupId,
     this.audioPlayerService,
     this.chimePlayerService,
   });
 
   final String itemId;
+  final String? groupId;
   final AudioPlayerService? audioPlayerService;
   final AudioPlayerService? chimePlayerService;
 
@@ -47,6 +50,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   int _soundLoopCount = 0;
   double _playbackSpeed = 1.0;
   bool _isSoundControlsExpanded = false;
+  bool _isNotesExpanded = false;
   final _overlay = BeadOverlayService();
   bool _isPromptingPermission = false;
 
@@ -602,6 +606,38 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     final minimizeOnExit = ref.watch(minimizeOnExitNotifierProvider);
     final intervalChimeEnabled = ref.watch(intervalSoundNotifierProvider);
 
+    final allItems = ref.watch(itemsNotifierProvider);
+    final groupMembers = widget.groupId != null
+        ? allItems
+            .where((element) => element.groupIds.contains(widget.groupId))
+            .toList(growable: false)
+        : const <Item>[];
+    final groupIndex = widget.groupId != null
+        ? groupMembers.indexWhere((element) => element.id == widget.itemId)
+        : -1;
+    final isGroupMember = widget.groupId != null && groupIndex != -1;
+    final isBeadCompleted = item.currentProgress >= item.count;
+    final hasNextBead = isGroupMember && (groupIndex + 1 < groupMembers.length);
+    final nextItem = hasNextBead ? groupMembers[groupIndex + 1] : null;
+
+    void moveToNextOrGroup() {
+      if (hasNextBead && nextItem != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute<void>(
+            builder: (_) => ExecutionScreen(
+              itemId: nextItem.id,
+              groupId: widget.groupId,
+              audioPlayerService: widget.audioPlayerService,
+              chimePlayerService: widget.chimePlayerService,
+            ),
+          ),
+        );
+      } else {
+        Navigator.pop(context);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: TruncatedTitleTooltip(title: item.title),
@@ -660,6 +696,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
               );
             },
           ),
+          if (isGroupMember && isBeadCompleted)
+            IconButton.filled(
+              key: const Key('next_group_bead_button'),
+              tooltip: hasNextBead ? 'Next' : 'Done',
+              icon: Icon(hasNextBead ? Icons.arrow_forward : Icons.done),
+              onPressed: moveToNextOrGroup,
+            ),
         ],
       ),
       body: SafeArea(
@@ -785,7 +828,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                                                 .colorScheme
                                                 .onPrimary
                                                 .withValues(alpha: 0.2)
-                                            : Theme.of(context)
+                                                : Theme.of(context)
                                                 .colorScheme
                                                 .primary
                                                 .withValues(alpha: 0.15),
@@ -862,24 +905,59 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                 ),
               ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
-                key: const Key('reset_button'),
-                onPressed: confirmReset,
-                icon: const Icon(Icons.refresh),
-                label: Text(l10n.reset),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  OutlinedButton.icon(
+                    key: const Key('reset_button'),
+                    onPressed: confirmReset,
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.reset),
+                  ),
+                  if (isGroupMember && isBeadCompleted) ...[
+                    const SizedBox(width: 12),
+                    FilledButton.icon(
+                      key: const Key('next_group_bead_action_button'),
+                      onPressed: moveToNextOrGroup,
+                      icon: Icon(hasNextBead ? Icons.arrow_forward : Icons.done),
+                      label: Text(hasNextBead ? 'Next' : 'Done'),
+                    ),
+                  ],
+                ],
               ),
               const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  l10n.notes,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n.notes,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  IconButton(
+                    key: const Key('toggle_notes_expansion_button'),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                    tooltip: _isNotesExpanded ? 'Collapse' : 'Expand',
+                    icon: Icon(
+                      _isNotesExpanded
+                          ? Icons.keyboard_arrow_down
+                          : Icons.keyboard_arrow_up,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isNotesExpanded = !_isNotesExpanded;
+                      });
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: 4),
-              Container(
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
                 width: double.infinity,
-                height: 60,
+                height: _isNotesExpanded ? 200 : 60,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),

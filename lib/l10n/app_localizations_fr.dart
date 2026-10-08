@@ -883,6 +883,19 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Touchez une prière pour l’enregistrer';
+
+  @override
+  String get kazaOverallProgress => 'Progression globale';
+
+  @override
+  String get kazaPerPrayer => 'Par prière';
+
+  @override
+  String get kazaBaselineHint =>
+      'Total rattrapé jusqu’ici, y compris les prières avant le début du journal quotidien. Les jours enregistrés sont conservés.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count accomplies';
   }

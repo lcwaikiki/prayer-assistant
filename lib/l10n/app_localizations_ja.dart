@@ -852,6 +852,19 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => '礼拝をタップして記録';
+
+  @override
+  String get kazaOverallProgress => '全体の進捗';
+
+  @override
+  String get kazaPerPrayer => '礼拝ごと';
+
+  @override
+  String get kazaBaselineHint =>
+      '日別記録を始める前の分も含めた、これまでの補った合計です。記録済みの日はそのまま残ります。';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count 回実施';
   }

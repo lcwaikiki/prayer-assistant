@@ -11,7 +11,7 @@ void main() {
     registerFallbackValue(const KazaTracker());
   });
 
-  testWidgets('renders KazaTrackerScreen and increments prayer count on + tap',
+  testWidgets('tapping a prayer tile logs one for today',
       (tester) async {
     final harness = TestHarness.create();
     when(() => harness.database.saveKazaTracker(any()))
@@ -20,16 +20,10 @@ void main() {
 
     await pumpWithHarness(tester, harness, const KazaTrackerScreen());
 
-    expect(find.byIcon(Icons.done_all), findsOneWidget);
-
-
     expect(find.text('Total Remaining'), findsOneWidget);
+    expect(find.text('Tap a prayer to log it'), findsOneWidget);
 
-    // Tap + on Fajr prayer row
-    final addButtons = find.byIcon(Icons.add_circle_outline);
-    expect(addButtons, findsWidgets);
-
-    await tester.tap(addButtons.first);
+    await tester.tap(find.text('Fajr').first);
     await tester.pumpAndSettle();
 
     expect(harness.controller.kazaTracker.completedFor('fajr'), 1);
@@ -38,7 +32,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('batch log +1 full day increments all 6 prayers', (tester) async {
+  testWidgets('all prayers plus logs one of each for today', (tester) async {
     final harness = TestHarness.create();
     when(() => harness.database.saveKazaTracker(any()))
         .thenAnswer((_) async {});
@@ -46,10 +40,10 @@ void main() {
 
     await pumpWithHarness(tester, harness, const KazaTrackerScreen());
 
-    final batchButton = find.text('+1 Full Day');
-    expect(batchButton, findsOneWidget);
+    final addAll = find.widgetWithIcon(IconButton, Icons.add);
+    expect(addAll, findsOneWidget);
 
-    await tester.tap(batchButton);
+    await tester.tap(addAll);
     await tester.pumpAndSettle();
 
     expect(harness.controller.kazaTracker.completedFor('fajr'), 1);

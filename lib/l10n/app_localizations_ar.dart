@@ -873,6 +873,19 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'اضغط على صلاة لتسجيلها';
+
+  @override
+  String get kazaOverallProgress => 'التقدم الإجمالي';
+
+  @override
+  String get kazaPerPrayer => 'حسب الصلاة';
+
+  @override
+  String get kazaBaselineHint =>
+      'إجمالي ما تم قضاؤه حتى الآن، بما في ذلك الصلوات قبل بدء التسجيل اليومي. تبقى الأيام المسجلة كما هي.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count مؤداة';
   }

@@ -879,6 +879,19 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Kaydetmek için bir namaza dokunun';
+
+  @override
+  String get kazaOverallProgress => 'Genel ilerleme';
+
+  @override
+  String get kazaPerPrayer => 'Namaz bazında';
+
+  @override
+  String get kazaBaselineHint =>
+      'Günlük kayda başlamadan önce kılınanlar dahil, şimdiye kadar kılınan toplam. Kayıtlı günler korunur.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count kılındı';
   }

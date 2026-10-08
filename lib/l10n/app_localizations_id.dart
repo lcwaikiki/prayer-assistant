@@ -880,6 +880,19 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Ketuk salat untuk mencatatnya';
+
+  @override
+  String get kazaOverallProgress => 'Kemajuan keseluruhan';
+
+  @override
+  String get kazaPerPrayer => 'Per salat';
+
+  @override
+  String get kazaBaselineHint =>
+      'Total yang sudah diqada, termasuk salat sebelum Anda mulai mencatat harian. Hari yang tercatat tetap disimpan.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count dikerjakan';
   }

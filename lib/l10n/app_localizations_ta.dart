@@ -889,6 +889,19 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'பதிவு செய்ய ஒரு தொழுகையைத் தட்டவும்';
+
+  @override
+  String get kazaOverallProgress => 'மொத்த முன்னேற்றம்';
+
+  @override
+  String get kazaPerPrayer => 'தொழுகை வாரியாக';
+
+  @override
+  String get kazaBaselineHint =>
+      'தினசரி பதிவு தொடங்கும் முன் நிறைவேற்றியவை உட்பட இதுவரையிலான மொத்தம். பதிவு செய்த நாட்கள் வைக்கப்படும்.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count நிறைவேற்றப்பட்டது';
   }

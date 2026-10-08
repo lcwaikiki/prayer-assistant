@@ -883,6 +883,19 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Toca una oración para registrarla';
+
+  @override
+  String get kazaOverallProgress => 'Progreso general';
+
+  @override
+  String get kazaPerPrayer => 'Por oración';
+
+  @override
+  String get kazaBaselineHint =>
+      'Total recuperado hasta ahora, incluidas las oraciones antes de empezar el registro diario. Los días registrados se conservan.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count realizadas';
   }

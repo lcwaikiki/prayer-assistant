@@ -881,6 +881,19 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Tippe auf ein Gebet, um es zu erfassen';
+
+  @override
+  String get kazaOverallProgress => 'Gesamtfortschritt';
+
+  @override
+  String get kazaPerPrayer => 'Pro Gebet';
+
+  @override
+  String get kazaBaselineHint =>
+      'Bisher nachgeholt insgesamt, inklusive Gebete vor Beginn des Tagesprotokolls. Erfasste Tage bleiben erhalten.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count verrichtet';
   }

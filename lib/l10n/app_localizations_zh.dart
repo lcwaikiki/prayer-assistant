@@ -850,6 +850,18 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => '点按礼拜即可记录';
+
+  @override
+  String get kazaOverallProgress => '总体进度';
+
+  @override
+  String get kazaPerPrayer => '按礼拜';
+
+  @override
+  String get kazaBaselineHint => '迄今补礼拜总数，包括开始每日记录之前的部分。已记录的日期会保留。';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '已补 $count 次';
   }

@@ -879,6 +879,19 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Tap a prayer to log it';
+
+  @override
+  String get kazaOverallProgress => 'Overall progress';
+
+  @override
+  String get kazaPerPrayer => 'Per prayer';
+
+  @override
+  String get kazaBaselineHint =>
+      'Total made up so far, including prayers before you started daily logging. Logged days are kept.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count prayed';
   }

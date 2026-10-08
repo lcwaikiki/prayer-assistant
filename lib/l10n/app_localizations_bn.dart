@@ -881,6 +881,19 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'লগ করতে একটি নামাজে ট্যাপ করুন';
+
+  @override
+  String get kazaOverallProgress => 'সামগ্রিক অগ্রগতি';
+
+  @override
+  String get kazaPerPrayer => 'প্রতি নামাজ';
+
+  @override
+  String get kazaBaselineHint =>
+      'দৈনিক লগ শুরুর আগের নামাজসহ এখন পর্যন্ত মোট কাযা। লগ করা দিনগুলো রাখা হয়।';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$countটি আদায়';
   }

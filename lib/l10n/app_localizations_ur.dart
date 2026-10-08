@@ -877,6 +877,19 @@ class AppLocalizationsUr extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'درج کرنے کے لیے کسی نماز پر ٹیپ کریں';
+
+  @override
+  String get kazaOverallProgress => 'مجموعی پیش رفت';
+
+  @override
+  String get kazaPerPrayer => 'ہر نماز';
+
+  @override
+  String get kazaBaselineHint =>
+      'اب تک ادا کی گئی کل قضا، روزانہ ریکارڈ شروع کرنے سے پہلے کی نمازوں سمیت۔ درج شدہ دن برقرار رہتے ہیں۔';
+
+  @override
   String kazaDailyLogCount(int count) {
     return '$count ادا کی گئیں';
   }

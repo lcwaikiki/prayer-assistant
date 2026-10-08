@@ -883,6 +883,19 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get kazaTapToLog => 'Нажмите на намаз, чтобы записать';
+
+  @override
+  String get kazaOverallProgress => 'Общий прогресс';
+
+  @override
+  String get kazaPerPrayer => 'По намазам';
+
+  @override
+  String get kazaBaselineHint =>
+      'Всего возмещено, включая намазы до начала ежедневного журнала. Записанные дни сохраняются.';
+
+  @override
   String kazaDailyLogCount(int count) {
     return 'выполнено: $count';
   }

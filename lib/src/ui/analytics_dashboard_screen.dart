@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hijri/hijri_calendar.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../calendar/hijri_utils.dart';
+import '../calendar/widgets/heatmap_month_calendar.dart';
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
 import '../l10n/prayer_names.dart';
-import '../models/calendar_week_start.dart';
-import '../models/prayer_models.dart';
 import '../services/prayer_analytics_service.dart';
-
-String _shortHijriMonth(DateTime date, String languageCode) {
-  final month = HijriMonth.fromDate(date);
-  final full = month.longMonthName(languageCode);
-  return full.length > 3 ? '${full.substring(0, 3)}.' : full;
-}
 
 enum AnalyticsTimeRange {
   last30Days,
@@ -31,68 +21,16 @@ class AnalyticsDashboardScreen extends StatefulWidget {
 }
 
 class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
-  late DateTime _focusedDate = DateTime.now();
   AnalyticsTimeRange _selectedRange = AnalyticsTimeRange.last30Days;
   final PrayerAnalyticsService _analyticsService =
       const PrayerAnalyticsService();
-
-  void _shiftMonth(CalendarPrimaryDisplay primary, int delta) {
-    setState(() {
-      _focusedDate = primary == CalendarPrimaryDisplay.hijri
-          ? HijriMonth.fromDate(_focusedDate).shift(delta).gregorianStart
-          : DateTime(_focusedDate.year, _focusedDate.month + delta, 1);
-    });
-  }
-
-  void _jumpToToday() {
-    setState(() => _focusedDate = DateTime.now());
-  }
-
-  List<DateTime> _monthDays(CalendarPrimaryDisplay primary) {
-    if (primary == CalendarPrimaryDisplay.gregorian) {
-      final daysInMonth = DateTime(
-        _focusedDate.year,
-        _focusedDate.month + 1,
-        0,
-      ).day;
-      return List.generate(
-        daysInMonth,
-        (i) => DateTime(_focusedDate.year, _focusedDate.month, i + 1),
-      );
-    }
-    final hijriMonth = HijriMonth.fromDate(_focusedDate);
-    final start = hijriMonth.gregorianStart;
-    return List.generate(
-      hijriMonth.daysInMonth,
-      (i) => DateTime(start.year, start.month, start.day + i),
-    );
-  }
-
-  String _monthTitle(BuildContext context, CalendarPrimaryDisplay primary) {
-    if (primary == CalendarPrimaryDisplay.gregorian) {
-      return DateFormat(
-        'MMMM yyyy',
-        Localizations.localeOf(context).toString(),
-      ).format(_focusedDate);
-    }
-    final hijriMonth = HijriMonth.fromDate(_focusedDate);
-    final languageCode = Localizations.localeOf(context).languageCode;
-    return '${hijriMonth.longMonthName(languageCode)} ${hijriMonth.year}';
-  }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
-        final primary = controller.calendarPrimaryDisplay;
-        final showSecondary = controller.showSecondaryCalendarDate;
-        final weekStart = controller.calendarWeekStart;
         final completions = controller.prayerCompletions;
         final streaks = _analyticsService.calculateStreaks(completions);
-        final monthDays = _monthDays(primary);
-        final int leadingBlanks = weekStart.leadingBlanks(monthDays.first);
-        final today = DateTime.now();
-        final locale = Localizations.localeOf(context).toString();
 
         final DateTimeRange? range =
             _selectedRange == AnalyticsTimeRange.last30Days
@@ -216,144 +154,15 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // 3. Monthly Completion Heatmap Grid (Matching HijriCalendarView)
+                // 3. Monthly Completion Heatmap Grid
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                context.l10n.monthlyHeatmapTitle,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: showSecondary
-                                  ? context.l10n.calendarHideSecondary
-                                  : context.l10n.calendarShowSecondary,
-                              icon: Icon(
-                                showSecondary
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                              onPressed: () => controller
-                                  .updateShowSecondaryCalendarDate(!showSecondary),
-                            ),
-                            IconButton(
-                              tooltip: context.l10n.todayShort,
-                              icon: const Icon(Icons.today),
-                              onPressed: _jumpToToday,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SegmentedButton<CalendarPrimaryDisplay>(
-                                segments: [
-                                  ButtonSegment(
-                                    value: CalendarPrimaryDisplay.hijri,
-                                    label: Text(
-                                      context.l10n.calendarYearlyBasisHijri,
-                                    ),
-                                  ),
-                                  ButtonSegment(
-                                    value: CalendarPrimaryDisplay.gregorian,
-                                    label: Text(
-                                      context.l10n.calendarYearlyBasisGregorian,
-                                    ),
-                                  ),
-                                ],
-                                selected: {primary},
-                                onSelectionChanged: (selection) => controller
-                                    .updateCalendarPrimaryDisplay(
-                                        selection.first),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            IconButton(
-                              tooltip: context.l10n.calendarPreviousMonth,
-                              icon: const Icon(Icons.chevron_left),
-                              onPressed: () => _shiftMonth(primary, -1),
-                            ),
-                            Expanded(
-                              child: Text(
-                                _monthTitle(context, primary),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                softWrap: true,
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                            IconButton(
-                              tooltip: context.l10n.calendarNextMonth,
-                              icon: const Icon(Icons.chevron_right),
-                              onPressed: () => _shiftMonth(primary, 1),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        _WeekdayHeaderRow(locale: locale, weekStart: weekStart),
-                        const SizedBox(height: 8),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: leadingBlanks + monthDays.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 7,
-                            mainAxisSpacing: 6,
-                            crossAxisSpacing: 6,
-                            childAspectRatio: 0.72,
-                          ),
-                          itemBuilder: (context, index) {
-                            if (index < leadingBlanks) {
-                              return const SizedBox();
-                            }
-                            final date = monthDays[index - leadingBlanks];
-                            final count = _analyticsService.completedCountForDay(
-                              completions,
-                              date,
-                            );
-                            final isToday = date.year == today.year &&
-                                date.month == today.month &&
-                                date.day == today.day;
-                            final languageCode =
-                                Localizations.localeOf(context).languageCode;
-
-                            final primaryLabel =
-                                primary == CalendarPrimaryDisplay.hijri
-                                    ? HijriCalendar.fromDate(date).hDay.toString()
-                                    : date.day.toString();
-
-                            final secondaryLabel = showSecondary
-                                ? (primary == CalendarPrimaryDisplay.hijri
-                                    ? '${date.day} ${DateFormat.MMM(locale).format(date)}'
-                                    : '${HijriCalendar.fromDate(date).hDay} ${_shortHijriMonth(date, languageCode)}')
-                                : null;
-
-                            return _AnalyticsDayCell(
-                              primaryLabel: primaryLabel,
-                              secondaryLabel: secondaryLabel,
-                              completedCount: count,
-                              isToday: isToday,
-                              date: date,
-                            );
-                          },
-                        ),
-                      ],
+                    child: HeatmapMonthCalendar(
+                      title: context.l10n.monthlyHeatmapTitle,
+                      countFor: (date) => _analyticsService
+                          .completedCountForDay(completions, date),
+                      goal: 5,
                     ),
                   ),
                 ),
@@ -473,148 +282,6 @@ class _StreakCard extends StatelessWidget {
     );
   }
 }
-
-class _WeekdayHeaderRow extends StatelessWidget {
-  const _WeekdayHeaderRow({required this.locale, required this.weekStart});
-
-  final String locale;
-  final CalendarWeekStart weekStart;
-
-  @override
-  Widget build(BuildContext context) {
-    final startOffset = weekStart == CalendarWeekStart.sunday ? 7 : 8;
-    final labels = List.generate(
-      7,
-      (i) => DateFormat.E(locale).format(DateTime(2024, 1, startOffset + i)),
-    );
-    final style = Theme.of(context).textTheme.labelMedium;
-    return Row(
-      children: [
-        for (final label in labels)
-          Expanded(
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: style,
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _AnalyticsDayCell extends StatelessWidget {
-  const _AnalyticsDayCell({
-    required this.primaryLabel,
-    required this.secondaryLabel,
-    required this.completedCount,
-    required this.isToday,
-    required this.date,
-  });
-
-  final String primaryLabel;
-  final String? secondaryLabel;
-  final int completedCount;
-  final bool isToday;
-  final DateTime date;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final ratio = (completedCount / 5).clamp(0.0, 1.0);
-
-    Color bgColor;
-    Color primaryTextColor;
-    Color secondaryTextColor;
-
-    if (completedCount == 0) {
-      bgColor = colorScheme.surfaceContainerHighest;
-      primaryTextColor = colorScheme.onSurface;
-      secondaryTextColor = colorScheme.onSurfaceVariant;
-    } else if (ratio < 0.5) {
-      bgColor = colorScheme.primary.withOpacity(0.3);
-      primaryTextColor = colorScheme.onSurface;
-      secondaryTextColor = colorScheme.onSurfaceVariant;
-    } else if (ratio < 1.0) {
-      bgColor = colorScheme.primary.withOpacity(0.65);
-      primaryTextColor = Colors.white;
-      secondaryTextColor = Colors.white70;
-    } else {
-      bgColor = colorScheme.primary;
-      primaryTextColor = colorScheme.onPrimary;
-      secondaryTextColor = colorScheme.onPrimary.withOpacity(0.8);
-    }
-
-    final dateStr = DateFormat('MMM d').format(date);
-
-    return Tooltip(
-      message: '$dateStr: $completedCount/5 prayers completed',
-      child: Container(
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(8),
-          border: isToday
-              ? Border.all(color: colorScheme.primary, width: 2)
-              : null,
-        ),
-        padding: const EdgeInsets.all(2),
-        child: Center(
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 1),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    primaryLabel,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: primaryTextColor,
-                    ),
-                  ),
-                  if (secondaryLabel != null)
-                    Text(
-                      secondaryLabel!,
-                      style: TextStyle(
-                        fontSize: 8,
-                        color: secondaryTextColor,
-                      ),
-                      maxLines: 1,
-                    ),
-                  if (completedCount > 0) ...[
-                    const SizedBox(height: 1),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 3, vertical: 1),
-                      decoration: BoxDecoration(
-                        color: primaryTextColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Text(
-                        '$completedCount/5',
-                        maxLines: 1,
-                        softWrap: false,
-                        style: TextStyle(
-                          fontSize: 7.5,
-                          fontWeight: FontWeight.bold,
-                          color: primaryTextColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 
 class _PrayerStatRow extends StatelessWidget {
   const _PrayerStatRow({

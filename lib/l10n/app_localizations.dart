@@ -1712,6 +1712,30 @@ abstract class AppLocalizations {
   /// **'{count} rak.'**
   String kazaRakatShort(int count);
 
+  /// No description provided for @kazaTapToLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a prayer to log it'**
+  String get kazaTapToLog;
+
+  /// No description provided for @kazaOverallProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Overall progress'**
+  String get kazaOverallProgress;
+
+  /// No description provided for @kazaPerPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Per prayer'**
+  String get kazaPerPrayer;
+
+  /// No description provided for @kazaBaselineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Total made up so far, including prayers before you started daily logging. Logged days are kept.'**
+  String get kazaBaselineHint;
+
   /// No description provided for @kazaDailyLogCount.
   ///
   /// In en, this message translates to:

@@ -386,6 +386,10 @@
       "count": {"type": "int"}
     }
   },
+  "kazaTapToLog": "Tap a prayer to log it",
+  "kazaOverallProgress": "Overall progress",
+  "kazaPerPrayer": "Per prayer",
+  "kazaBaselineHint": "Total made up so far, including prayers before you started daily logging. Logged days are kept.",
   "kazaDailyLogCount": "{count} prayed",
   "@kazaDailyLogCount": {
     "placeholders": {

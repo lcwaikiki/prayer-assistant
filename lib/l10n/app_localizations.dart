@@ -3433,6 +3433,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimize on exit'**
   String get beadsMinimizeOnExit;
+
+  /// No description provided for @beadsIntervalChime.
+  ///
+  /// In en, this message translates to:
+  /// **'Interval chime'**
+  String get beadsIntervalChime;
 }
 
 class _AppLocalizationsDelegate

@@ -1811,4 +1811,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get beadsMinimizeOnExit => 'Çıkışta simge durumuna küçült';
+
+  @override
+  String get beadsIntervalChime => 'Aralık zili';
 }

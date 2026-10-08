@@ -10,10 +10,10 @@ import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/services/audio_player_service.dart';
 import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
-import 'package:prayer_assistant/src/tesbihat/services/item_reminder_service.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/minimize_on_exit_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
@@ -43,6 +43,7 @@ Future<MockHapticService> _pumpExecution(
   String? targetItemId,
   MockLocalDatabase? database,
   AudioPlayerService? audioPlayer,
+  FakeAudioPlayerService? chimePlayer,
 }) async {
   final haptic = MockHapticService();
   when(() => haptic.standard(intensity: any(named: 'intensity')))
@@ -79,6 +80,7 @@ Future<MockHapticService> _pumpExecution(
         child: ExecutionScreen(
           itemId: targetItemId ?? item?.id ?? 'a',
           audioPlayerService: audioPlayer ?? FakeAudioPlayerService(),
+          chimePlayerService: chimePlayer ?? FakeAudioPlayerService(),
         ),
       ),
     ),
@@ -103,6 +105,10 @@ void main() {
       const MethodChannel('dev.fluttercommunity.plus/wakelock'),
       (call) async => true,
     );
+  });
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
   });
 
   testWidgets('shows item not found for an unknown id', (tester) async {
@@ -291,6 +297,87 @@ void main() {
 
       expect(find.byIcon(Icons.picture_in_picture_alt), findsOneWidget);
       verify(() => db.saveBeadsMinimizeOnExit(true)).called(1);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'renders bell icon in AppBar, defaults to off, and allows toggling',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final db = MockLocalDatabase();
+      await _pumpExecution(tester, item: _item(progress: 0), database: db);
+
+      final buttonFinder =
+          find.byKey(const Key('toggle_interval_chime_button'));
+      expect(buttonFinder, findsOneWidget);
+      // Default is off
+      expect(find.byIcon(Icons.notifications_off_outlined), findsOneWidget);
+
+      // Tap to toggle on
+      await tester.tap(buttonFinder);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications_active), findsOneWidget);
+      final prefs = await SharedPreferences.getInstance();
+      expect(prefs.getBool('beads_interval_sound'), isTrue);
+
+      // Tap again to toggle off
+      await tester.tap(buttonFinder);
+      await tester.pump();
+
+      expect(find.byIcon(Icons.notifications_off_outlined), findsOneWidget);
+      expect(prefs.getBool('beads_interval_sound'), isFalse);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'plays chime together with vibration at every interval when enabled',
+    (tester) async {
+      final chimePlayer = FakeAudioPlayerService();
+      final haptic = await _pumpExecution(
+        tester,
+        item: _item(progress: 10, check: 11),
+        chimePlayer: chimePlayer,
+      );
+
+      // Toggle chime ON
+      await tester.tap(find.byKey(const Key('toggle_interval_chime_button')));
+      await tester.pump();
+
+      // Tap to reach progress 11 (checkpoint)
+      await tester.tap(find.byKey(const Key('big_tap_button')));
+      await tester.pump();
+
+      expect(find.text('11'), findsWidgets);
+      verify(() => haptic.checkpoint(intensity: 50)).called(1);
+      expect(chimePlayer.playAssetCallCount, 1);
+      expect(chimePlayer.lastPlayedAsset, 'audio/interval_chime.mp3');
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'does not play chime at interval when disabled (default off)',
+    (tester) async {
+      final chimePlayer = FakeAudioPlayerService();
+      final haptic = await _pumpExecution(
+        tester,
+        item: _item(progress: 10, check: 11),
+        chimePlayer: chimePlayer,
+      );
+
+      // Tap to reach progress 11 (checkpoint) without toggling on
+      await tester.tap(find.byKey(const Key('big_tap_button')));
+      await tester.pump();
+
+      expect(find.text('11'), findsWidgets);
+      verify(() => haptic.checkpoint(intensity: 50)).called(1);
+      expect(chimePlayer.playAssetCallCount, 0);
 
       await tester.pumpWidget(const SizedBox());
     },

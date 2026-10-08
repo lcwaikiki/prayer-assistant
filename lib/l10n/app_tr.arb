@@ -623,5 +623,6 @@
   "beadsFloatingCounterTitle": "Yüzen Sayaç",
   "beadsFloatingCounterBody": "Diğer uygulamaları kullanırken tesbih çekmeye devam edin. Bu ekrandayken Ana Ekran tuşuna bastığınızda yüzen bir sayaç görünür: saymak için dokunun, geri dönmek için basılı tutun, taşımak için sürükleyin. Etkinleştirmek için \"Diğer uygulamaların üzerinde göster\" iznini verin.",
   "beadsFloatingCounterEnable": "Etkinleştir",
-  "beadsMinimizeOnExit": "Çıkışta simge durumuna küçült"
+  "beadsMinimizeOnExit": "Çıkışta simge durumuna küçült",
+  "beadsIntervalChime": "Aralık zili"
 }

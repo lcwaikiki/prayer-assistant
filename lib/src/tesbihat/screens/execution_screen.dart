@@ -11,6 +11,7 @@ import '../services/audio_player_service.dart';
 import '../services/bead_overlay_service.dart';
 import '../services/haptic_service.dart';
 import '../services/tap_pace_tracker.dart';
+import '../state/interval_sound_notifier.dart';
 import '../state/items_notifier.dart';
 import '../state/minimize_on_exit_notifier.dart';
 import '../state/sound_library_notifier.dart';
@@ -23,10 +24,12 @@ class ExecutionScreen extends ConsumerStatefulWidget {
     super.key,
     required this.itemId,
     this.audioPlayerService,
+    this.chimePlayerService,
   });
 
   final String itemId;
   final AudioPlayerService? audioPlayerService;
+  final AudioPlayerService? chimePlayerService;
 
   @override
   ConsumerState<ExecutionScreen> createState() => _ExecutionScreenState();
@@ -35,6 +38,7 @@ class ExecutionScreen extends ConsumerStatefulWidget {
 class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     with WidgetsBindingObserver {
   late final AudioPlayerService _audioPlayer;
+  late final AudioPlayerService _chimePlayer;
   StreamSubscription<void>? _playerCompleteSub;
   bool _isAudioPlaying = false;
   int _soundLoopCount = 0;
@@ -63,6 +67,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _setWakelock(true);
     _lockOrientation();
     _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
+    _chimePlayer = widget.chimePlayerService ?? AudioPlayerService();
     _playerCompleteSub = _audioPlayer.onPlayerComplete.listen((_) => _onSoundComplete());
 
     final initialItem = ref
@@ -202,6 +207,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       await haptic.standard(intensity: item.vibrationIntensity);
     } else if (feedback == TapFeedback.checkpoint) {
       await haptic.checkpoint(intensity: item.vibrationIntensity);
+      _playIntervalChime();
+    }
+  }
+
+  void _playIntervalChime() {
+    if (ref.read(intervalSoundNotifierProvider)) {
+      _chimePlayer.playAsset('audio/interval_chime.mp3').catchError((_) {});
     }
   }
 
@@ -292,6 +304,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           await haptic.standard(intensity: currentItem.vibrationIntensity);
         } else if (feedback == TapFeedback.checkpoint) {
           await haptic.checkpoint(intensity: currentItem.vibrationIntensity);
+          _playIntervalChime();
         }
 
         final updatedItem = ref
@@ -349,6 +362,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _playerCompleteSub?.cancel();
     _audioPlayer.stop();
     _audioPlayer.dispose();
+    _chimePlayer.stop();
+    _chimePlayer.dispose();
     SystemChrome.setPreferredOrientations([]);
     super.dispose();
   }
@@ -530,11 +545,32 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     );
     final setCountValue = item.setCount;
     final minimizeOnExit = ref.watch(minimizeOnExitNotifierProvider);
+    final intervalChimeEnabled = ref.watch(intervalSoundNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: TruncatedTitleTooltip(title: item.title),
         actions: [
+          IconButton.filledTonal(
+            key: const Key('toggle_interval_chime_button'),
+            tooltip: l10n.intervalChime,
+            style: IconButton.styleFrom(
+              backgroundColor: intervalChimeEnabled
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.surfaceContainerHighest,
+              foregroundColor: intervalChimeEnabled
+                  ? Theme.of(context).colorScheme.onPrimaryContainer
+                  : Theme.of(context).colorScheme.outline,
+            ),
+            icon: Icon(
+              intervalChimeEnabled
+                  ? Icons.notifications_active
+                  : Icons.notifications_off_outlined,
+            ),
+            onPressed: () => ref
+                .read(intervalSoundNotifierProvider.notifier)
+                .setEnabled(!intervalChimeEnabled),
+          ),
           IconButton.filledTonal(
             key: const Key('toggle_minimize_on_exit_button'),
             tooltip: l10n.minimizeOnExit,

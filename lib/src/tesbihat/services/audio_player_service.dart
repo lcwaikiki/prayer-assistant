@@ -37,6 +37,11 @@ class AudioPlayerService {
     }
   }
 
+  Future<void> playAsset(String assetPath) async {
+    await _player.stop();
+    await _player.play(AssetSource(assetPath));
+  }
+
   Future<void> pause() async {
     await _player.pause();
   }

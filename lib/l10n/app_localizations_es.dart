@@ -1830,4 +1830,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get beadsMinimizeOnExit => 'Minimize on exit';
+
+  @override
+  String get beadsIntervalChime => 'Interval chime';
 }

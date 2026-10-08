@@ -811,5 +811,6 @@
   "beadsFloatingCounterTitle": "Floating Counter",
   "beadsFloatingCounterBody": "Keep counting beads while using other apps. When you press Home on this screen, a floating counter appears: tap to count, long-press to return, drag to move. Allow \"Display over other apps\" to enable it.",
   "beadsFloatingCounterEnable": "Enable",
-  "beadsMinimizeOnExit": "Minimize on exit"
+  "beadsMinimizeOnExit": "Minimize on exit",
+  "beadsIntervalChime": "Interval chime"
 }

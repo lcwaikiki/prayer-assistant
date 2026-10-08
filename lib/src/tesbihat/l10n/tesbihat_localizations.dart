@@ -182,6 +182,7 @@ class TesbihatLocalizations {
   String get floatingCounterBody => _appL10n.beadsFloatingCounterBody;
   String get floatingCounterEnable => _appL10n.beadsFloatingCounterEnable;
   String get minimizeOnExit => _appL10n.beadsMinimizeOnExit;
+  String get intervalChime => _appL10n.beadsIntervalChime;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

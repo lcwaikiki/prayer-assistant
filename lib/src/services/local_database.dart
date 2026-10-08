@@ -1210,57 +1210,47 @@ class LocalDatabase {
     }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  /// Loads the qadaa tracker together with its daily logs. A legacy tracker
+  /// (stored completed totals, no baseline) is converted and saved back once.
   Future<KazaTracker> loadKazaTracker() async {
-    final db = await instance;
-    final rows = await db.query(
-      'app_settings',
-      where: 'setting_key = ?',
-      whereArgs: [_kazaTrackerKey],
-      limit: 1,
-    );
-    if (rows.isEmpty) {
-      return const KazaTracker();
+    final trackerJson = await _loadSettingValue(_kazaTrackerKey);
+    final logsJson = await _loadSettingValue(_kazaDailyLogsKey);
+    final logs = logsJson == null
+        ? <String, Map<String, int>>{}
+        : kazaDailyLogsFromMap(jsonDecode(logsJson) as Map<String, dynamic>);
+    if (trackerJson == null) {
+      return KazaTracker(dailyLogs: logs);
     }
-    try {
-      final jsonStr = rows.first['setting_value'] as String;
-      return KazaTracker.fromJson(jsonStr);
-    } catch (_) {
-      return const KazaTracker();
+    final map = jsonDecode(trackerJson) as Map<String, dynamic>;
+    final tracker = KazaTracker.fromMap(map, logs);
+    if (!map.containsKey('baseline')) {
+      await saveKazaTracker(tracker);
     }
+    return tracker;
   }
 
+  /// Saves the tracker settings and its daily logs.
   Future<void> saveKazaTracker(KazaTracker tracker) async {
     final db = await instance;
     await db.insert('app_settings', {
       'setting_key': _kazaTrackerKey,
       'setting_value': tracker.toJson(),
     }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await db.insert('app_settings', {
+      'setting_key': _kazaDailyLogsKey,
+      'setting_value': jsonEncode(tracker.dailyLogs),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  /// Loads qadaa prayers logged per day: dateKey -> {prayerKey: count}.
-  Future<Map<String, Map<String, int>>> loadKazaDailyLogs() async {
+  Future<String?> _loadSettingValue(String key) async {
     final db = await instance;
     final rows = await db.query(
       'app_settings',
       where: 'setting_key = ?',
-      whereArgs: [_kazaDailyLogsKey],
+      whereArgs: [key],
       limit: 1,
     );
-    if (rows.isEmpty) {
-      return <String, Map<String, int>>{};
-    }
-    final raw =
-        jsonDecode(rows.first['setting_value'] as String)
-            as Map<String, dynamic>;
-    return kazaDailyLogsFromMap(raw);
-  }
-
-  Future<void> saveKazaDailyLogs(Map<String, Map<String, int>> logs) async {
-    final db = await instance;
-    await db.insert('app_settings', {
-      'setting_key': _kazaDailyLogsKey,
-      'setting_value': jsonEncode(logs),
-    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    return rows.isEmpty ? null : rows.first['setting_value'] as String;
   }
 
   Future<Map<String, FastingLog>> loadFastingLogs() async {

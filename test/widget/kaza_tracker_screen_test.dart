@@ -32,7 +32,7 @@ void main() {
     await tester.tap(addButtons.first);
     await tester.pumpAndSettle();
 
-    expect(harness.controller.kazaTracker.fajrCompleted, 1);
+    expect(harness.controller.kazaTracker.completedFor('fajr'), 1);
     verify(() => harness.database.saveKazaTracker(any())).called(1);
 
     await tester.pumpWidget(const SizedBox());
@@ -52,12 +52,12 @@ void main() {
     await tester.tap(batchButton);
     await tester.pumpAndSettle();
 
-    expect(harness.controller.kazaTracker.fajrCompleted, 1);
-    expect(harness.controller.kazaTracker.dhuhrCompleted, 1);
-    expect(harness.controller.kazaTracker.asrCompleted, 1);
-    expect(harness.controller.kazaTracker.maghribCompleted, 1);
-    expect(harness.controller.kazaTracker.ishaCompleted, 1);
-    expect(harness.controller.kazaTracker.witrCompleted, 1);
+    expect(harness.controller.kazaTracker.completedFor('fajr'), 1);
+    expect(harness.controller.kazaTracker.completedFor('dhuhr'), 1);
+    expect(harness.controller.kazaTracker.completedFor('asr'), 1);
+    expect(harness.controller.kazaTracker.completedFor('maghrib'), 1);
+    expect(harness.controller.kazaTracker.completedFor('isha'), 1);
+    expect(harness.controller.kazaTracker.completedFor('witr'), 1);
 
     await tester.pumpWidget(const SizedBox());
   });

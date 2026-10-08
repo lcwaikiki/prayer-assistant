@@ -6,6 +6,7 @@ import '../../controller/prayer_app_controller.dart';
 import '../../calendar/hijri_utils.dart';
 import '../../l10n/l10n.dart';
 import '../../l10n/prayer_names.dart';
+import '../models/kaza_tracker.dart';
 import '../widgets/kaza_calculator_dialog.dart';
 
 
@@ -209,6 +210,8 @@ class KazaTrackerScreen extends StatelessWidget {
               prayerKey: item.$3,
               target: tracker.targetFor(item.$3),
               completed: tracker.completedFor(item.$3),
+              canDecrement:
+                  controller.kazaCountOn(DateTime.now(), item.$3) > 0,
               onIncrement: () => controller.incrementKaza(item.$3),
               onDecrement: () => controller.decrementKaza(item.$3),
               onSetCompleted: (count) =>
@@ -623,7 +626,7 @@ class _KazaLogTableRow extends StatelessWidget {
       0,
       (sum, entry) =>
           sum +
-          entry.value * PrayerAppController.kazaRakatPerPrayer[entry.key]!,
+          entry.value * KazaTracker.rakatPerPrayer[entry.key]!,
     );
     final muted = theme.colorScheme.outline;
 
@@ -709,6 +712,7 @@ class _KazaPrayerCard extends StatelessWidget {
     required this.prayerKey,
     required this.target,
     required this.completed,
+    required this.canDecrement,
     required this.onIncrement,
     required this.onDecrement,
     required this.onSetCompleted,
@@ -719,6 +723,9 @@ class _KazaPrayerCard extends StatelessWidget {
   final String prayerKey;
   final int target;
   final int completed;
+
+  /// Whether today has a logged prayer that the minus button can remove.
+  final bool canDecrement;
   final VoidCallback onIncrement;
   final VoidCallback onDecrement;
   final ValueChanged<int> onSetCompleted;
@@ -796,7 +803,7 @@ class _KazaPrayerCard extends StatelessWidget {
               visualDensity: VisualDensity.compact,
               constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               icon: const Icon(Icons.remove_circle_outline, size: 20),
-              onPressed: completed > 0 ? onDecrement : null,
+              onPressed: canDecrement ? onDecrement : null,
             ),
             IconButton(
               visualDensity: VisualDensity.compact,

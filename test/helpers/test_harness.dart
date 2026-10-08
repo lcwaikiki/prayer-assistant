@@ -315,12 +315,6 @@ class TestHarness {
       () => database.saveKazaTracker(any()),
     ).thenAnswer((_) async {});
     when(
-      () => database.loadKazaDailyLogs(),
-    ).thenAnswer((_) async => <String, Map<String, int>>{});
-    when(
-      () => database.saveKazaDailyLogs(any()),
-    ).thenAnswer((_) async {});
-    when(
       () => database.loadFastingLogs(),
     ).thenAnswer((_) async => const {});
     when(

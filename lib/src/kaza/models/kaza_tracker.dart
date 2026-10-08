@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+/// Qadaa (missed prayer) progress. Completed counts are derived from an
+/// opening [baseline] (prayers made up before daily logging) plus the
+/// per-day [dailyLogs].
 class KazaTracker {
   const KazaTracker({
     this.fajrTarget = 0,
@@ -8,14 +11,22 @@ class KazaTracker {
     this.maghribTarget = 0,
     this.ishaTarget = 0,
     this.witrTarget = 0,
-    this.fajrCompleted = 0,
-    this.dhuhrCompleted = 0,
-    this.asrCompleted = 0,
-    this.maghribCompleted = 0,
-    this.ishaCompleted = 0,
-    this.witrCompleted = 0,
+    this.baseline = const {},
+    this.dailyLogs = const {},
     this.dailyPace = 6,
   });
+
+  static const prayerKeys = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'witr'];
+
+  /// Obligatory raka'at made up per qadaa prayer (witr is wajib).
+  static const rakatPerPrayer = {
+    'fajr': 2,
+    'dhuhr': 4,
+    'asr': 4,
+    'maghrib': 3,
+    'isha': 4,
+    'witr': 3,
+  };
 
   final int fajrTarget;
   final int dhuhrTarget;
@@ -24,52 +35,46 @@ class KazaTracker {
   final int ishaTarget;
   final int witrTarget;
 
-  final int fajrCompleted;
-  final int dhuhrCompleted;
-  final int asrCompleted;
-  final int maghribCompleted;
-  final int ishaCompleted;
-  final int witrCompleted;
+  /// Prayers made up before daily logging: prayerKey -> count.
+  final Map<String, int> baseline;
+
+  /// Prayers made up per day: dateKey (yyyy-MM-dd) -> prayerKey -> count.
+  final Map<String, Map<String, int>> dailyLogs;
 
   /// Target completed prayers per day (default 6 = 1 full day of prayers).
   final int dailyPace;
 
+  /// Maps Turkish prayer names to their canonical qadaa key.
+  static String canonicalKey(String prayerKey) =>
+      switch (prayerKey.toLowerCase()) {
+        'imsak' => 'fajr',
+        'ogle' => 'dhuhr',
+        'ikindi' => 'asr',
+        'aksam' => 'maghrib',
+        'yatsi' => 'isha',
+        final key => key,
+      };
+
   int targetFor(String prayerKey) {
-    return switch (prayerKey.toLowerCase()) {
-      'fajr' || 'imsak' => fajrTarget,
-      'dhuhr' || 'ogle' => dhuhrTarget,
-      'asr' || 'ikindi' => asrTarget,
-      'maghrib' || 'aksam' => maghribTarget,
-      'isha' || 'yatsi' => ishaTarget,
+    return switch (canonicalKey(prayerKey)) {
+      'fajr' => fajrTarget,
+      'dhuhr' => dhuhrTarget,
+      'asr' => asrTarget,
+      'maghrib' => maghribTarget,
+      'isha' => ishaTarget,
       'witr' => witrTarget,
       _ => 0,
     };
   }
 
-  int completedFor(String prayerKey) {
-    return switch (prayerKey.toLowerCase()) {
-      'fajr' || 'imsak' => fajrCompleted,
-      'dhuhr' || 'ogle' => dhuhrCompleted,
-      'asr' || 'ikindi' => asrCompleted,
-      'maghrib' || 'aksam' => maghribCompleted,
-      'isha' || 'yatsi' => ishaCompleted,
-      'witr' => witrCompleted,
-      _ => 0,
-    };
+  /// Total logged across all days for [prayerKey].
+  int loggedFor(String prayerKey) {
+    final key = canonicalKey(prayerKey);
+    return dailyLogs.values.fold(0, (sum, day) => sum + (day[key] ?? 0));
   }
 
-  /// Returns a copy with the completed count for [prayerKey] set to [count].
-  KazaTracker withCompleted(String prayerKey, int count) {
-    return switch (prayerKey.toLowerCase()) {
-      'fajr' || 'imsak' => copyWith(fajrCompleted: count),
-      'dhuhr' || 'ogle' => copyWith(dhuhrCompleted: count),
-      'asr' || 'ikindi' => copyWith(asrCompleted: count),
-      'maghrib' || 'aksam' => copyWith(maghribCompleted: count),
-      'isha' || 'yatsi' => copyWith(ishaCompleted: count),
-      'witr' => copyWith(witrCompleted: count),
-      _ => this,
-    };
-  }
+  int completedFor(String prayerKey) =>
+      (baseline[canonicalKey(prayerKey)] ?? 0) + loggedFor(prayerKey);
 
   int remainingFor(String prayerKey) {
     final target = targetFor(prayerKey);
@@ -81,20 +86,10 @@ class KazaTracker {
       fajrTarget + dhuhrTarget + asrTarget + maghribTarget + ishaTarget + witrTarget;
 
   int get totalCompleted =>
-      fajrCompleted +
-      dhuhrCompleted +
-      asrCompleted +
-      maghribCompleted +
-      ishaCompleted +
-      witrCompleted;
+      prayerKeys.fold(0, (sum, key) => sum + completedFor(key));
 
   int get totalRemaining =>
-      remainingFor('fajr') +
-      remainingFor('dhuhr') +
-      remainingFor('asr') +
-      remainingFor('maghrib') +
-      remainingFor('isha') +
-      remainingFor('witr');
+      prayerKeys.fold(0, (sum, key) => sum + remainingFor(key));
 
   double get completionRatio {
     if (totalTarget == 0) return 0.0;
@@ -117,12 +112,8 @@ class KazaTracker {
     int? maghribTarget,
     int? ishaTarget,
     int? witrTarget,
-    int? fajrCompleted,
-    int? dhuhrCompleted,
-    int? asrCompleted,
-    int? maghribCompleted,
-    int? ishaCompleted,
-    int? witrCompleted,
+    Map<String, int>? baseline,
+    Map<String, Map<String, int>>? dailyLogs,
     int? dailyPace,
   }) {
     return KazaTracker(
@@ -132,16 +123,13 @@ class KazaTracker {
       maghribTarget: maghribTarget ?? this.maghribTarget,
       ishaTarget: ishaTarget ?? this.ishaTarget,
       witrTarget: witrTarget ?? this.witrTarget,
-      fajrCompleted: fajrCompleted ?? this.fajrCompleted,
-      dhuhrCompleted: dhuhrCompleted ?? this.dhuhrCompleted,
-      asrCompleted: asrCompleted ?? this.asrCompleted,
-      maghribCompleted: maghribCompleted ?? this.maghribCompleted,
-      ishaCompleted: ishaCompleted ?? this.ishaCompleted,
-      witrCompleted: witrCompleted ?? this.witrCompleted,
+      baseline: baseline ?? this.baseline,
+      dailyLogs: dailyLogs ?? this.dailyLogs,
       dailyPace: dailyPace ?? this.dailyPace,
     );
   }
 
+  /// Serializes targets, pace and baseline. [dailyLogs] are stored separately.
   Map<String, dynamic> toMap() {
     return {
       'fajrTarget': fajrTarget,
@@ -150,38 +138,53 @@ class KazaTracker {
       'maghribTarget': maghribTarget,
       'ishaTarget': ishaTarget,
       'witrTarget': witrTarget,
-      'fajrCompleted': fajrCompleted,
-      'dhuhrCompleted': dhuhrCompleted,
-      'asrCompleted': asrCompleted,
-      'maghribCompleted': maghribCompleted,
-      'ishaCompleted': ishaCompleted,
-      'witrCompleted': witrCompleted,
+      'baseline': baseline,
       'dailyPace': dailyPace,
     };
   }
 
-  factory KazaTracker.fromMap(Map<String, dynamic> map) {
-    return KazaTracker(
+  /// Builds a tracker from [map] and its [dailyLogs].
+  ///
+  /// Legacy maps store `<prayer>Completed` totals instead of a baseline;
+  /// those totals already include the logged prayers, so the baseline is
+  /// the total minus what was logged.
+  factory KazaTracker.fromMap(
+    Map<String, dynamic> map, [
+    Map<String, Map<String, int>> dailyLogs = const {},
+  ]) {
+    final tracker = KazaTracker(
       fajrTarget: (map['fajrTarget'] as num?)?.toInt() ?? 0,
       dhuhrTarget: (map['dhuhrTarget'] as num?)?.toInt() ?? 0,
       asrTarget: (map['asrTarget'] as num?)?.toInt() ?? 0,
       maghribTarget: (map['maghribTarget'] as num?)?.toInt() ?? 0,
       ishaTarget: (map['ishaTarget'] as num?)?.toInt() ?? 0,
       witrTarget: (map['witrTarget'] as num?)?.toInt() ?? 0,
-      fajrCompleted: (map['fajrCompleted'] as num?)?.toInt() ?? 0,
-      dhuhrCompleted: (map['dhuhrCompleted'] as num?)?.toInt() ?? 0,
-      asrCompleted: (map['asrCompleted'] as num?)?.toInt() ?? 0,
-      maghribCompleted: (map['maghribCompleted'] as num?)?.toInt() ?? 0,
-      ishaCompleted: (map['ishaCompleted'] as num?)?.toInt() ?? 0,
-      witrCompleted: (map['witrCompleted'] as num?)?.toInt() ?? 0,
+      dailyLogs: dailyLogs,
       dailyPace: (map['dailyPace'] as num?)?.toInt() ?? 6,
+    );
+    final baseline = map['baseline'] as Map<String, dynamic>?;
+    if (baseline != null) {
+      return tracker.copyWith(
+        baseline: baseline.map((k, v) => MapEntry(k, (v as num).toInt())),
+      );
+    }
+    return tracker.copyWith(
+      baseline: {
+        for (final key in prayerKeys)
+          key: (((map['${key}Completed'] as num?)?.toInt() ?? 0) -
+                  tracker.loggedFor(key))
+              .clamp(0, 999999),
+      },
     );
   }
 
   String toJson() => jsonEncode(toMap());
 
-  factory KazaTracker.fromJson(String source) =>
-      KazaTracker.fromMap(jsonDecode(source) as Map<String, dynamic>);
+  factory KazaTracker.fromJson(
+    String source, [
+    Map<String, Map<String, int>> dailyLogs = const {},
+  ]) =>
+      KazaTracker.fromMap(jsonDecode(source) as Map<String, dynamic>, dailyLogs);
 }
 
 /// Parses a raw daily qadaa log map (dateKey -> {prayerKey: count}).

@@ -15,9 +15,11 @@ void main() {
     test('generateJsonBackup and parseAndValidateBackup roundtrip works correctly', () {
       const kaza = KazaTracker(
         fajrTarget: 365,
-        fajrCompleted: 50,
         dhuhrTarget: 365,
-        dhuhrCompleted: 40,
+        baseline: {'fajr': 40},
+        dailyLogs: {
+          '2026-10-08': {'fajr': 10, 'dhuhr': 2},
+        },
         dailyPace: 2,
       );
 
@@ -78,7 +80,8 @@ void main() {
 
       final restoredKaza = restored['kazaTracker'] as KazaTracker;
       expect(restoredKaza.fajrTarget, 365);
-      expect(restoredKaza.fajrCompleted, 50);
+      expect(restoredKaza.completedFor('fajr'), 50);
+      expect(restoredKaza.dailyLogs, kaza.dailyLogs);
 
       final restoredCompletions = restored['prayerCompletions'] as Map<String, List<String>>;
       expect(restoredCompletions['2026-08-22'], contains('Imsak'));

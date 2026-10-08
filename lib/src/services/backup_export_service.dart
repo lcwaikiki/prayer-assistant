@@ -16,7 +16,7 @@ class BackupExportService {
 
   /// Current backup schema version. Bump this whenever the JSON layout
   /// changes so older/newer releases can be told apart on restore.
-  static const int currentVersion = 2;
+  static const int currentVersion = 3;
 
   /// Generates a comprehensive JSON backup string containing all app data.
   String generateJsonBackup({
@@ -29,7 +29,6 @@ class BackupExportService {
     required Map<String, dynamic> preferences,
     Map<String, FastingLog> fastingLogs = const {},
     List<SoundItem> soundLibrary = const [],
-    Map<String, Map<String, int>> kazaDailyLogs = const {},
   }) {
     final data = <String, dynamic>{
       'version': currentVersion,
@@ -44,7 +43,7 @@ class BackupExportService {
       'soundLibrary': soundLibrary.map((s) => s.toMap()).toList(),
       'preferences': preferences,
       'fastingLogs': fastingLogs.map((k, v) => MapEntry(k, v.toMap())),
-      'kazaDailyLogs': kazaDailyLogs,
+      'kazaDailyLogs': kazaTracker.dailyLogs,
     };
     return const JsonEncoder.withIndent('  ').convert(data);
   }
@@ -110,10 +109,14 @@ class BackupExportService {
       throw const FormatException('Unsupported backup version');
     }
 
+    final kazaDailyLogsRaw = raw['kazaDailyLogs'] as Map<String, dynamic>?;
+    final kazaDailyLogs = kazaDailyLogsRaw != null
+        ? kazaDailyLogsFromMap(kazaDailyLogsRaw)
+        : <String, Map<String, int>>{};
     final kazaTrackerMap = raw['kazaTracker'] as Map<String, dynamic>?;
     final kazaTracker = kazaTrackerMap != null
-        ? KazaTracker.fromMap(kazaTrackerMap)
-        : const KazaTracker();
+        ? KazaTracker.fromMap(kazaTrackerMap, kazaDailyLogs)
+        : KazaTracker(dailyLogs: kazaDailyLogs);
 
     final completionsRaw = raw['prayerCompletions'] as Map<String, dynamic>?;
     final prayerCompletions = <String, List<String>>{};
@@ -187,14 +190,8 @@ class BackupExportService {
       }
     }
 
-    final kazaDailyLogsRaw = raw['kazaDailyLogs'] as Map<String, dynamic>?;
-    final kazaDailyLogs = kazaDailyLogsRaw != null
-        ? kazaDailyLogsFromMap(kazaDailyLogsRaw)
-        : <String, Map<String, int>>{};
-
     return {
       'kazaTracker': kazaTracker,
-      'kazaDailyLogs': kazaDailyLogs,
       'prayerCompletions': prayerCompletions,
       'calendarReminders': calendarReminders,
       'tesbihItems': tesbihItems,

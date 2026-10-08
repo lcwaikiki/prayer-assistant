@@ -123,7 +123,6 @@ class PrayerAppController extends ChangeNotifier {
   Map<String, List<String>> _prayerCompletions = <String, List<String>>{};
   Map<String, List<String>> _taskCompletions = <String, List<String>>{};
   KazaTracker _kazaTracker = const KazaTracker();
-  Map<String, Map<String, int>> _kazaDailyLogs = <String, Map<String, int>>{};
   Map<String, FastingLog> _fastingLogs = <String, FastingLog>{};
   int _snoozeDurationMinutes = 10;
   Future<void> Function(Locale? locale)? onLocaleChanged;
@@ -327,7 +326,7 @@ class PrayerAppController extends ChangeNotifier {
 
   Map<String, List<String>> get prayerCompletions => _prayerCompletions;
   KazaTracker get kazaTracker => _kazaTracker;
-  Map<String, Map<String, int>> get kazaDailyLogs => _kazaDailyLogs;
+  Map<String, Map<String, int>> get kazaDailyLogs => _kazaTracker.dailyLogs;
   int get snoozeDurationMinutes => _snoozeDurationMinutes;
 
   Future<void> updateSnoozeDurationMinutes(int minutes) async {
@@ -344,176 +343,55 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Logs [amount] qadaa prayers of [prayerKey] for today.
   void incrementKaza(String prayerKey, [int amount = 1]) {
-    final key = prayerKey.toLowerCase();
-    KazaTracker updated;
-    switch (key) {
-      case 'fajr':
-      case 'imsak':
-        updated = _kazaTracker.copyWith(
-          fajrCompleted: _kazaTracker.fajrCompleted + amount,
-        );
-        break;
-      case 'dhuhr':
-      case 'ogle':
-        updated = _kazaTracker.copyWith(
-          dhuhrCompleted: _kazaTracker.dhuhrCompleted + amount,
-        );
-        break;
-      case 'asr':
-      case 'ikindi':
-        updated = _kazaTracker.copyWith(
-          asrCompleted: _kazaTracker.asrCompleted + amount,
-        );
-        break;
-      case 'maghrib':
-      case 'aksam':
-        updated = _kazaTracker.copyWith(
-          maghribCompleted: _kazaTracker.maghribCompleted + amount,
-        );
-        break;
-      case 'isha':
-      case 'yatsi':
-        updated = _kazaTracker.copyWith(
-          ishaCompleted: _kazaTracker.ishaCompleted + amount,
-        );
-        break;
-      case 'witr':
-        updated = _kazaTracker.copyWith(
-          witrCompleted: _kazaTracker.witrCompleted + amount,
-        );
-        break;
-      default:
-        return;
-    }
-    _logKaza(DateTime.now(), {_canonicalKazaKey(key): amount});
-    updateKazaTracker(updated);
+    _logKaza(DateTime.now(), {KazaTracker.canonicalKey(prayerKey): amount});
   }
 
+  /// Removes up to [amount] of today's logged qadaa prayers of [prayerKey].
   void decrementKaza(String prayerKey, [int amount = 1]) {
-    final key = prayerKey.toLowerCase();
-    final removed = amount.clamp(0, _kazaTracker.completedFor(key));
-    KazaTracker updated;
-    switch (key) {
-      case 'fajr':
-      case 'imsak':
-        updated = _kazaTracker.copyWith(
-          fajrCompleted: (_kazaTracker.fajrCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      case 'dhuhr':
-      case 'ogle':
-        updated = _kazaTracker.copyWith(
-          dhuhrCompleted: (_kazaTracker.dhuhrCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      case 'asr':
-      case 'ikindi':
-        updated = _kazaTracker.copyWith(
-          asrCompleted: (_kazaTracker.asrCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      case 'maghrib':
-      case 'aksam':
-        updated = _kazaTracker.copyWith(
-          maghribCompleted: (_kazaTracker.maghribCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      case 'isha':
-      case 'yatsi':
-        updated = _kazaTracker.copyWith(
-          ishaCompleted: (_kazaTracker.ishaCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      case 'witr':
-        updated = _kazaTracker.copyWith(
-          witrCompleted: (_kazaTracker.witrCompleted - amount).clamp(0, 999999),
-        );
-        break;
-      default:
-        return;
-    }
-    _logKaza(DateTime.now(), {_canonicalKazaKey(key): -removed});
-    updateKazaTracker(updated);
+    _logKaza(DateTime.now(), {KazaTracker.canonicalKey(prayerKey): -amount});
   }
 
-  /// Sets the completed count for [prayerKey], logging the change to today.
+  /// Sets the completed total for [prayerKey] through its baseline. Daily
+  /// logs are kept, so the total never drops below what was logged.
   void setKazaCompleted(String prayerKey, int count) {
-    final delta = count - _kazaTracker.completedFor(prayerKey);
-    if (delta > 0) incrementKaza(prayerKey, delta);
-    if (delta < 0) decrementKaza(prayerKey, -delta);
-  }
-
-  void logFullDayKaza() {
-    final updated = _kazaTracker.copyWith(
-      fajrCompleted: _kazaTracker.fajrCompleted + 1,
-      dhuhrCompleted: _kazaTracker.dhuhrCompleted + 1,
-      asrCompleted: _kazaTracker.asrCompleted + 1,
-      maghribCompleted: _kazaTracker.maghribCompleted + 1,
-      ishaCompleted: _kazaTracker.ishaCompleted + 1,
-      witrCompleted: _kazaTracker.witrCompleted + 1,
+    final key = KazaTracker.canonicalKey(prayerKey);
+    final baseline = (count - _kazaTracker.loggedFor(key)).clamp(0, 999999);
+    updateKazaTracker(
+      _kazaTracker.copyWith(
+        baseline: {..._kazaTracker.baseline, key: baseline},
+      ),
     );
-    _logKaza(DateTime.now(), {for (final key in kazaPrayerKeys) key: 1});
-    updateKazaTracker(updated);
   }
 
-  static const kazaPrayerKeys = [
-    'fajr',
-    'dhuhr',
-    'asr',
-    'maghrib',
-    'isha',
-    'witr',
-  ];
-
-  /// Obligatory raka'at made up per qadaa prayer (witr is wajib).
-  static const kazaRakatPerPrayer = {
-    'fajr': 2,
-    'dhuhr': 4,
-    'asr': 4,
-    'maghrib': 3,
-    'isha': 4,
-    'witr': 3,
-  };
-
-  static String _canonicalKazaKey(String key) => switch (key) {
-    'imsak' => 'fajr',
-    'ogle' => 'dhuhr',
-    'ikindi' => 'asr',
-    'aksam' => 'maghrib',
-    'yatsi' => 'isha',
-    _ => key,
-  };
+  void logFullDayKaza() => adjustKazaDay(DateTime.now(), 1);
 
   /// Qadaa count logged on [date] for [prayerKey].
   int kazaCountOn(DateTime date, String prayerKey) =>
-      _kazaDailyLogs[_toDateKey(date)]?[prayerKey] ?? 0;
+      _kazaTracker.dailyLogs[_toDateKey(date)]?[KazaTracker.canonicalKey(
+        prayerKey,
+      )] ??
+      0;
 
-  /// Sets the qadaa count logged on [date] for [prayerKey] and adjusts the
-  /// completed total by the same difference.
+  /// Sets the qadaa count logged on [date] for [prayerKey].
   void setKazaDayCount(DateTime date, String prayerKey, int count) {
     final delta = count - kazaCountOn(date, prayerKey);
     if (delta == 0) return;
-    _logKaza(date, {prayerKey: delta});
-    final completed = _kazaTracker.completedFor(prayerKey) + delta;
-    updateKazaTracker(
-      _kazaTracker.withCompleted(prayerKey, completed.clamp(0, 999999)),
-    );
+    _logKaza(date, {KazaTracker.canonicalKey(prayerKey): delta});
   }
 
   /// Adds [delta] to the qadaa count of every prayer logged on [date].
   void adjustKazaDay(DateTime date, int delta) {
-    for (final key in kazaPrayerKeys) {
-      final count = kazaCountOn(date, key) + delta;
-      setKazaDayCount(date, key, count.clamp(0, 999999));
-    }
+    _logKaza(date, {for (final key in KazaTracker.prayerKeys) key: delta});
   }
 
   /// Adds [deltas] (prayerKey -> count) to the qadaa log of [date] and
   /// persists it. Counts never drop below zero; empty entries are removed.
   void _logKaza(DateTime date, Map<String, int> deltas) {
     final dateKey = _toDateKey(date);
-    final day = Map<String, int>.from(_kazaDailyLogs[dateKey] ?? const {});
+    final logs = Map<String, Map<String, int>>.from(_kazaTracker.dailyLogs);
+    final day = Map<String, int>.from(logs[dateKey] ?? const {});
     for (final MapEntry(:key, :value) in deltas.entries) {
       final next = ((day[key] ?? 0) + value).clamp(0, 999999);
       if (next == 0) {
@@ -522,14 +400,12 @@ class PrayerAppController extends ChangeNotifier {
         day[key] = next;
       }
     }
-    final logs = Map<String, Map<String, int>>.from(_kazaDailyLogs);
     if (day.isEmpty) {
       logs.remove(dateKey);
     } else {
       logs[dateKey] = day;
     }
-    _kazaDailyLogs = logs;
-    database.saveKazaDailyLogs(logs);
+    updateKazaTracker(_kazaTracker.copyWith(dailyLogs: logs));
   }
 
   bool isPrayerCompleted(String prayerName, DateTime date) {
@@ -671,7 +547,6 @@ class PrayerAppController extends ChangeNotifier {
       _prayerCompletions = await database.loadPrayerCompletions();
       _taskCompletions = await database.loadTaskCompletions();
       _kazaTracker = await database.loadKazaTracker();
-      _kazaDailyLogs = await database.loadKazaDailyLogs();
       _fastingLogs = await database.loadFastingLogs();
 
 
@@ -1825,7 +1700,6 @@ class PrayerAppController extends ChangeNotifier {
       soundLibrary: sounds,
       preferences: prefs,
       fastingLogs: _fastingLogs,
-      kazaDailyLogs: _kazaDailyLogs,
     );
   }
 
@@ -1881,11 +1755,6 @@ class PrayerAppController extends ChangeNotifier {
 
       await database.saveFastingLogs(restoredFastingLogs);
       _fastingLogs = restoredFastingLogs;
-
-      final restoredKazaDailyLogs =
-          parsed['kazaDailyLogs'] as Map<String, Map<String, int>>;
-      await database.saveKazaDailyLogs(restoredKazaDailyLogs);
-      _kazaDailyLogs = restoredKazaDailyLogs;
 
       final previousReminderIds = _calendarReminders
           .map((reminder) => reminder.id)

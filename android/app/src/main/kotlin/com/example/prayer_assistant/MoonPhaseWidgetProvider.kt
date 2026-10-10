@@ -1,10 +1,9 @@
 package com.pirci.prayer_assistant
 
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 
-class MoonPhaseWidgetProvider : AppWidgetProvider() {
+class MoonPhaseWidgetProvider : ResizableWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,

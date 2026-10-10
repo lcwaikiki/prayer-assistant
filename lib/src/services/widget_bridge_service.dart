@@ -116,6 +116,9 @@ class WidgetBridgeService {
       'weekStart': weekStart,
       'moonPhaseValue': moonInfo.phaseValue,
       'moonIllumination': moonInfo.illumination,
+      'moonIlluminationText': l10n.moonIllumination(
+        moonInfo.illumination.round(),
+      ),
       'moonPhaseName': localizedPhaseName,
       'moonHijriDate': dateHeaderHijri,
       'moonGregorianDate': dateHeaderGregorian,
@@ -163,6 +166,36 @@ class WidgetBridgeService {
       'headerText': headerText,
       'reminders': reminders,
     });
+  }
+
+  /// Sends today's qadaa progress and the widget's localized labels.
+  Future<void> updateQadaaWidget({
+    required String dateKey,
+    required int todayCount,
+    required int goal,
+    required int remaining,
+    required String title,
+    required String remainingLabel,
+    required String addDayLabel,
+  }) async {
+    await _channel.invokeMethod<void>('updateQadaaWidget', <String, Object>{
+      'dateKey': dateKey,
+      'todayCount': todayCount,
+      'goal': goal,
+      'remaining': remaining,
+      'title': title,
+      'remainingLabel': remainingLabel,
+      'addDayLabel': addDayLabel,
+    });
+  }
+
+  /// Returns "+1 full day" taps queued by the qadaa widget (dateKey -> days)
+  /// and clears the queue.
+  Future<Map<String, int>> consumeQadaaPending() async {
+    final pending = await _channel.invokeMapMethod<String, int>(
+      'consumeQadaaPending',
+    );
+    return pending ?? const {};
   }
 
   Future<void> updateWidgetTextSize(String size) async {
@@ -231,24 +264,30 @@ class WidgetBridgeService {
     });
   }
 
-  void registerOpenHomeHandler(VoidCallback onOpenHome) {
+  /// Calls [onOpenTarget] with the screen a tapped widget or the status bar
+  /// asks for ('today', 'dates', 'fasting' or 'qadaa'), including a tap
+  /// that launched the app before this handler was registered.
+  void registerOpenTargetHandler(ValueChanged<String> onOpenTarget) {
     if (_hasHomeListener) {
       return;
     }
     _hasHomeListener = true;
     _channel.setMethodCallHandler((call) async {
-      if (call.method == 'openHomeTab') {
-        onOpenHome();
+      if (call.method == 'openTarget') {
+        onOpenTarget(call.arguments as String);
       }
     });
-    _consumePendingOpenHome(onOpenHome);
+    _consumePendingOpenTarget(onOpenTarget);
   }
 
-  Future<void> _consumePendingOpenHome(VoidCallback onOpenHome) async {
-    final shouldOpen =
-        await _channel.invokeMethod<bool>('consumePendingOpenHome') ?? false;
-    if (shouldOpen) {
-      onOpenHome();
+  Future<void> _consumePendingOpenTarget(
+    ValueChanged<String> onOpenTarget,
+  ) async {
+    final target = await _channel.invokeMethod<String>(
+      'consumePendingOpenTarget',
+    );
+    if (target != null) {
+      onOpenTarget(target);
     }
   }
 }

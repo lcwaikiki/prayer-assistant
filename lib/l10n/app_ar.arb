@@ -190,6 +190,7 @@
   "calendarAddReminder": "إضافة تذكير",
   "calendarEditReminder": "تعديل",
   "calendarDeleteReminder": "حذف",
+  "calendarDeleteReminderConfirm": "حذف \"{title}\"؟",
   "calendarDeleteOccurrence": "حذف هذه المرة",
   "calendarDeleteOccurrenceConfirm": "إزالة هذا اليوم فقط من السلسلة؟",
   "calendarOccurrenceDeleted": "تم حذف المرة",

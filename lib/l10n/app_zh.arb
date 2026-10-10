@@ -190,6 +190,7 @@
   "calendarAddReminder": "添加提醒",
   "calendarEditReminder": "编辑",
   "calendarDeleteReminder": "删除",
+  "calendarDeleteReminderConfirm": "删除“{title}”？",
   "calendarDeleteOccurrence": "删除此次",
   "calendarDeleteOccurrenceConfirm": "仅从重复中删除这一天？",
   "calendarOccurrenceDeleted": "已删除此次",

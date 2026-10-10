@@ -190,6 +190,7 @@
   "calendarAddReminder": "افزودن یادآور",
   "calendarEditReminder": "ویرایش",
   "calendarDeleteReminder": "حذف",
+  "calendarDeleteReminderConfirm": "\"{title}\" حذف شود؟",
   "calendarDeleteOccurrence": "حذف این مورد",
   "calendarDeleteOccurrenceConfirm": "فقط این روز از سری حذف شود؟",
   "calendarOccurrenceDeleted": "مورد حذف شد",

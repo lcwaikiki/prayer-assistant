@@ -20,6 +20,7 @@ import '../state/minimize_on_exit_notifier.dart';
 import '../state/sound_library_notifier.dart';
 import '../widgets/audio_speed_bar.dart';
 import '../widgets/truncated_title_tooltip.dart';
+import '../widgets/zoomable_notes_text.dart';
 import 'item_form_screen.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
@@ -963,12 +964,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                   borderRadius: BorderRadius.circular(12),
                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                 ),
-                child: SingleChildScrollView(
-                  child: Text(
-                    item.notes.isEmpty ? l10n.noNotesAdded : item.notes,
-                    key: const Key('notes_bottom_text'),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                child: ZoomableNotesText(
+                  text: item.notes.isEmpty ? l10n.noNotesAdded : item.notes,
+                  textKey: const Key('notes_bottom_text'),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  zoomable: _isNotesExpanded,
                 ),
               ),
             ],

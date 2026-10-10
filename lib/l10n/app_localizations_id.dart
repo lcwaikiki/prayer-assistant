@@ -608,6 +608,11 @@ class AppLocalizationsId extends AppLocalizations {
   String get calendarDeleteReminder => 'Hapus';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return 'Hapus \"$title\"?';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'Hapus kemunculan ini';
 
   @override

@@ -112,6 +112,20 @@ void main() {
         reminders: any(named: 'reminders'),
       ),
     ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateQadaaWidget(
+        dateKey: any(named: 'dateKey'),
+        todayCount: any(named: 'todayCount'),
+        goal: any(named: 'goal'),
+        remaining: any(named: 'remaining'),
+        title: any(named: 'title'),
+        remainingLabel: any(named: 'remainingLabel'),
+        addDayLabel: any(named: 'addDayLabel'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.consumeQadaaPending(),
+    ).thenAnswer((_) async => <String, int>{});
 
     when(() => api.getCountries()).thenAnswer((_) async => const []);
     when(() => api.getStates(any())).thenAnswer((_) async => const []);
@@ -417,6 +431,30 @@ void main() {
       expect(controller.kazaTracker.totalCompleted, 2);
     });
 
+    test('syncQadaaWidget merges queued widget days into the log', () async {
+      when(() => widgetBridge.consumeQadaaPending()).thenAnswer(
+        (_) async => {'2026-03-01': 2},
+      );
+      final controller = buildController();
+
+      await controller.syncQadaaWidget();
+
+      expect(controller.kazaDailyLogs['2026-03-01'], {
+        for (final key in KazaTracker.prayerKeys) key: 2,
+      });
+      verify(
+        () => widgetBridge.updateQadaaWidget(
+          dateKey: any(named: 'dateKey'),
+          todayCount: any(named: 'todayCount'),
+          goal: 6,
+          remaining: 0,
+          title: any(named: 'title'),
+          remainingLabel: any(named: 'remainingLabel'),
+          addDayLabel: any(named: 'addDayLabel'),
+        ),
+      ).called(greaterThan(0));
+    });
+
     test('decrements reduce today and remove empty days', () {
       final controller = buildController();
 
@@ -443,27 +481,39 @@ void main() {
       expect(controller.countries, isEmpty);
       expect(controller.tabIndex, 2);
 
-      verify(() => widgetBridge.registerOpenHomeHandler(any())).called(1);
+      verify(() => widgetBridge.registerOpenTargetHandler(any())).called(1);
       verify(() => notificationService.cancelAllPrayerNotifications()).called(1);
       verify(() => widgetBridge.updateWidgetTextSize('medium')).called(1);
     });
 
-    test('registers widget open handler to switch to today tab (index 2)', () async {
-      VoidCallback? capturedCallback;
-      when(() => widgetBridge.registerOpenHomeHandler(any())).thenAnswer((invocation) {
-        capturedCallback = invocation.positionalArguments.first as VoidCallback;
+    test('widget open targets switch to their tab', () async {
+      ValueChanged<String>? openTarget;
+      when(() => widgetBridge.registerOpenTargetHandler(any())).thenAnswer((
+        invocation,
+      ) {
+        openTarget =
+            invocation.positionalArguments.first as ValueChanged<String>;
       });
 
       final controller = buildController();
       await controller.initialize();
+      expect(openTarget, isNotNull);
 
       controller.setTab(0);
-      expect(controller.tabIndex, 0);
-
-      expect(capturedCallback, isNotNull);
-      capturedCallback!();
-
+      openTarget!('today');
       expect(controller.tabIndex, 2);
+
+      openTarget!('dates');
+      expect(controller.tabIndex, 3);
+
+      openTarget!('fasting');
+      expect(controller.tabIndex, 1);
+      expect(controller.pendingTrackTab, 2);
+
+      openTarget!('qadaa');
+      expect(controller.pendingTrackTab, 1);
+      controller.consumePendingTrackTab();
+      expect(controller.pendingTrackTab, isNull);
     });
 
     test('restores a saved location and refreshes prayer data', () async {

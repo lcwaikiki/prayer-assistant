@@ -340,7 +340,35 @@ class PrayerAppController extends ChangeNotifier {
   void updateKazaTracker(KazaTracker tracker) {
     _kazaTracker = tracker;
     database.saveKazaTracker(tracker);
+    _pushQadaaWidget();
     notifyListeners();
+  }
+
+  /// Merges "+1 full day" taps queued by the home-screen widget into the
+  /// daily log, then refreshes the widget.
+  Future<void> syncQadaaWidget() async {
+    final pending = await widgetBridgeService.consumeQadaaPending();
+    for (final MapEntry(key: dateKey, value: days) in pending.entries) {
+      adjustKazaDay(DateTime.parse(dateKey), days);
+    }
+    _pushQadaaWidget();
+  }
+
+  void _pushQadaaWidget() {
+    final l10n = lookupAppLocalizations(resolvedLocale);
+    final today = DateTime.now();
+    widgetBridgeService.updateQadaaWidget(
+      dateKey: _toDateKey(today),
+      todayCount: KazaTracker.prayerKeys.fold(
+        0,
+        (sum, key) => sum + kazaCountOn(today, key),
+      ),
+      goal: _kazaTracker.dailyPace,
+      remaining: _kazaTracker.totalRemaining,
+      title: l10n.prayerQadaaTitle,
+      remainingLabel: l10n.kazaTotalRemaining,
+      addDayLabel: l10n.kazaBatchLogDay,
+    );
   }
 
   /// Logs [amount] qadaa prayers of [prayerKey] for today.
@@ -540,7 +568,7 @@ class PrayerAppController extends ChangeNotifier {
   Future<void> initialize() async {
     _setLoading(true);
     try {
-      widgetBridgeService.registerOpenHomeHandler(() => setTab(2));
+      widgetBridgeService.registerOpenTargetHandler(openTarget);
       await notificationService.initialize();
       _selectedLocation = await database.loadSelectedLocation();
       _reminderSettings = await database.loadReminderSettings();
@@ -713,6 +741,9 @@ class PrayerAppController extends ChangeNotifier {
       try {
         await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
       } catch (_) {}
+      try {
+        await syncQadaaWidget();
+      } catch (_) {}
 
       await _syncCalendarRemindersWidget();
 
@@ -759,6 +790,33 @@ class PrayerAppController extends ChangeNotifier {
   void setTab(int index) {
     _tabIndex = index;
     notifyListeners();
+  }
+
+  int? _pendingTrackTab;
+
+  /// Track sub-tab (0 analytics, 1 qadaa, 2 fasting) waiting to be shown.
+  int? get pendingTrackTab => _pendingTrackTab;
+
+  /// Opens the Track tab on [subTab].
+  void openTrackTab(int subTab) {
+    _pendingTrackTab = subTab;
+    setTab(1);
+  }
+
+  void consumePendingTrackTab() => _pendingTrackTab = null;
+
+  /// Opens the screen a home-screen widget points at.
+  void openTarget(String target) {
+    switch (target) {
+      case 'dates':
+        setTab(3);
+      case 'fasting':
+        openTrackTab(2);
+      case 'qadaa':
+        openTrackTab(1);
+      default:
+        setTab(2);
+    }
   }
 
   Future<void> chooseCountry(LocationNode? country) async {
@@ -1461,6 +1519,7 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
     try {
       await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
+      _pushQadaaWidget();
     } catch (_) {}
     if (_selectedLocation != null && _yearRange.isNotEmpty) {
       await _updateWidgetBridgeData();

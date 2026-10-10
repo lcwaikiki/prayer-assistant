@@ -274,6 +274,12 @@
   "calendarAddReminder": "Add reminder",
   "calendarEditReminder": "Edit",
   "calendarDeleteReminder": "Delete",
+  "calendarDeleteReminderConfirm": "Delete \"{title}\"?",
+  "@calendarDeleteReminderConfirm": {
+    "placeholders": {
+      "title": {"type": "String"}
+    }
+  },
   "calendarDeleteOccurrence": "Delete this occurrence",
   "calendarDeleteOccurrenceConfirm": "Remove just this day from the series?",
   "calendarOccurrenceDeleted": "Occurrence deleted",

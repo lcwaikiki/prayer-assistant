@@ -325,6 +325,61 @@ class _CalendarReminderFormScreenState
     }
   }
 
+  /// Asks for confirmation, then deletes the shown reminder, closes the
+  /// form and offers Undo.
+  Future<void> _deleteWithUndo() async {
+    final reminder = _reminder!;
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.calendarDeleteReminderConfirm(reminder.title)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            key: const Key('confirm_delete_reminder_button'),
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: Text(l10n.calendarDeleteReminder),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    final controller = context.read<PrayerAppController>();
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+    final index = controller.calendarReminders.indexWhere(
+      (existing) => existing.id == reminder.id,
+    );
+    await _audioPlayer.stop();
+    controller.deleteCalendarReminder(reminder.id);
+    setState(() => _allowPop = true);
+    navigator.pop();
+
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 6),
+        behavior: SnackBarBehavior.floating,
+        content: Row(
+          children: [
+            Expanded(child: Text(l10n.calendarReminderDeleted(reminder.title))),
+            TextButton(
+              onPressed: () {
+                controller.restoreCalendarReminder(reminder, index: index);
+                messenger.hideCurrentSnackBar();
+              },
+              child: Text(l10n.undo),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _removeSound() {
     if (_isPlayingPreview) {
       _audioPlayer.stop();
@@ -825,6 +880,13 @@ class _CalendarReminderFormScreenState
                 : l10n.calendarReminderFormTitleNew,
           ),
           actions: [
+            if (_readOnly && _reminder != null)
+              IconButton(
+                key: const Key('delete_reminder_button'),
+                tooltip: l10n.calendarDeleteReminder,
+                icon: const Icon(Icons.delete_outline),
+                onPressed: _deleteWithUndo,
+              ),
             if (_readOnly)
               IconButton(
                 tooltip: l10n.calendarEditReminder,
@@ -1324,10 +1386,29 @@ class _CalendarReminderFormScreenState
               ),
               if (_readOnly) ...[
                 const SizedBox(height: 28),
-                OutlinedButton.icon(
-                  icon: const Icon(Icons.edit),
-                  label: Text(l10n.calendarEditReminder),
-                  onPressed: () => setState(() => _readOnly = false),
+                Row(
+                  children: [
+                    if (_reminder != null) ...[
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: colorScheme.error,
+                          ),
+                          icon: const Icon(Icons.delete_outline),
+                          label: Text(l10n.calendarDeleteReminder),
+                          onPressed: _deleteWithUndo,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                    ],
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        icon: const Icon(Icons.edit),
+                        label: Text(l10n.calendarEditReminder),
+                        onPressed: () => setState(() => _readOnly = false),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ],

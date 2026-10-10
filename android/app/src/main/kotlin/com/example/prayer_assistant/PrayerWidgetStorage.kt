@@ -316,6 +316,7 @@ object PrayerWidgetStorage {
     data class MoonPhaseData(
         val phaseValue: Double,
         val illumination: Double,
+        val illuminationText: String,
         val phaseName: String,
         val hijriDate: String,
         val gregorianDate: String,
@@ -325,6 +326,7 @@ object PrayerWidgetStorage {
 
     private const val MOON_PHASE_VALUE_KEY = "moon_phase_value"
     private const val MOON_ILLUMINATION_KEY = "moon_illumination"
+    private const val MOON_ILLUMINATION_TEXT_KEY = "moon_illumination_text"
     private const val MOON_PHASE_NAME_KEY = "moon_phase_name"
     private const val MOON_HIJRI_DATE_KEY = "moon_hijri_date"
     private const val MOON_GREGORIAN_DATE_KEY = "moon_gregorian_date"
@@ -335,6 +337,7 @@ object PrayerWidgetStorage {
         context: Context,
         phaseValue: Double,
         illumination: Double,
+        illuminationText: String,
         phaseName: String,
         hijriDate: String,
         gregorianDate: String,
@@ -345,6 +348,7 @@ object PrayerWidgetStorage {
             .edit()
             .putFloat(MOON_PHASE_VALUE_KEY, phaseValue.toFloat())
             .putFloat(MOON_ILLUMINATION_KEY, illumination.toFloat())
+            .putString(MOON_ILLUMINATION_TEXT_KEY, illuminationText)
             .putString(MOON_PHASE_NAME_KEY, phaseName)
             .putString(MOON_HIJRI_DATE_KEY, hijriDate)
             .putString(MOON_GREGORIAN_DATE_KEY, gregorianDate)
@@ -358,6 +362,7 @@ object PrayerWidgetStorage {
         return MoonPhaseData(
             phaseValue = prefs.getFloat(MOON_PHASE_VALUE_KEY, 0.5f).toDouble(),
             illumination = prefs.getFloat(MOON_ILLUMINATION_KEY, 50.0f).toDouble(),
+            illuminationText = prefs.getString(MOON_ILLUMINATION_TEXT_KEY, "") ?: "",
             phaseName = prefs.getString(MOON_PHASE_NAME_KEY, "") ?: "",
             hijriDate = prefs.getString(MOON_HIJRI_DATE_KEY, "") ?: "",
             gregorianDate = prefs.getString(MOON_GREGORIAN_DATE_KEY, "") ?: "",

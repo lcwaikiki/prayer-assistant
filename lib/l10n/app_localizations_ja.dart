@@ -584,6 +584,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get calendarDeleteReminder => '削除';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '「$title」を削除しますか？';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'この回を削除';
 
   @override

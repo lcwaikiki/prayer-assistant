@@ -190,6 +190,7 @@
   "calendarAddReminder": "Añadir recordatorio",
   "calendarEditReminder": "Editar",
   "calendarDeleteReminder": "Eliminar",
+  "calendarDeleteReminderConfirm": "¿Eliminar \"{title}\"?",
   "calendarDeleteOccurrence": "Eliminar esta ocurrencia",
   "calendarDeleteOccurrenceConfirm": "¿Eliminar solo este día de la serie?",
   "calendarOccurrenceDeleted": "Ocurrencia eliminada",

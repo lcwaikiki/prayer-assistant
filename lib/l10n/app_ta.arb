@@ -246,6 +246,7 @@
   "calendarAddReminder": "நினைவூட்டலைச் சேர்",
   "calendarEditReminder": "திருத்து",
   "calendarDeleteReminder": "நீக்கு",
+  "calendarDeleteReminderConfirm": "\"{title}\" நீக்கவா?",
   "calendarDeleteOccurrence": "இந்த நிகழ்வை நீக்கு",
   "calendarDeleteOccurrenceConfirm": "தொடரிலிருந்து இந்த நாளை மட்டும் நீக்கவா?",
   "calendarOccurrenceDeleted": "நிகழ்வு நீக்கப்பட்டது",

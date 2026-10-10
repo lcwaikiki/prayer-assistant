@@ -606,6 +606,11 @@ class AppLocalizationsFa extends AppLocalizations {
   String get calendarDeleteReminder => 'حذف';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '\"$title\" حذف شود؟';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'حذف این مورد';
 
   @override

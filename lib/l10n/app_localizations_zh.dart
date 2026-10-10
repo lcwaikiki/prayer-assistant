@@ -582,6 +582,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get calendarDeleteReminder => '删除';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '删除“$title”？';
+  }
+
+  @override
   String get calendarDeleteOccurrence => '删除此次';
 
   @override

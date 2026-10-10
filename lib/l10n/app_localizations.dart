@@ -1196,6 +1196,12 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get calendarDeleteReminder;
 
+  /// No description provided for @calendarDeleteReminderConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{title}\"?'**
+  String calendarDeleteReminderConfirm(String title);
+
   /// No description provided for @calendarDeleteOccurrence.
   ///
   /// In en, this message translates to:

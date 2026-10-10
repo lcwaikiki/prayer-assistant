@@ -190,6 +190,7 @@
   "calendarAddReminder": "リマインダーを追加",
   "calendarEditReminder": "編集",
   "calendarDeleteReminder": "削除",
+  "calendarDeleteReminderConfirm": "「{title}」を削除しますか？",
   "calendarDeleteOccurrence": "この回を削除",
   "calendarDeleteOccurrenceConfirm": "この日だけをシリーズから削除しますか？",
   "calendarOccurrenceDeleted": "この回を削除しました",

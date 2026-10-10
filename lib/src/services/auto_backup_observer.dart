@@ -19,6 +19,7 @@ class AutoBackupObserver extends WidgetsBindingObserver {
     } else if (state == AppLifecycleState.resumed) {
       _controller.reloadTaskCompletions();
       _controller.reloadPrayerCompletions();
+      _controller.syncQadaaWidget();
     }
   }
 }

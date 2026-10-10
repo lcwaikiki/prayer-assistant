@@ -606,6 +606,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get calendarDeleteReminder => 'حذف کریں';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '\"$title\" حذف کریں؟';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'یہ واقعہ حذف کریں';
 
   @override

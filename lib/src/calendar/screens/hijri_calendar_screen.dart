@@ -907,6 +907,9 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                 .where((r) => r.id == task.targetId)
                 .firstOrNull;
         if (reminder != null) {
+          // Close the sheet first, like the reminder list does: a deleted
+          // reminder's Undo SnackBar would otherwise render behind it.
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute<void>(

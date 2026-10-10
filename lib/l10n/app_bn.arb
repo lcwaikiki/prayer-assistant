@@ -246,6 +246,7 @@
   "calendarAddReminder": "অনুস্মারক যোগ করুন",
   "calendarEditReminder": "সম্পাদনা",
   "calendarDeleteReminder": "মুছুন",
+  "calendarDeleteReminderConfirm": "\"{title}\" মুছবেন?",
   "calendarDeleteOccurrence": "এই পুনরাবৃত্তি মুছুন",
   "calendarDeleteOccurrenceConfirm": "সিরিজ থেকে শুধু এই দিনটি বাদ দেবেন?",
   "calendarOccurrenceDeleted": "পুনরাবৃত্তি মুছে ফেলা হয়েছে",

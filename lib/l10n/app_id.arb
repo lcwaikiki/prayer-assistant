@@ -190,6 +190,7 @@
   "calendarAddReminder": "Tambah pengingat",
   "calendarEditReminder": "Ubah",
   "calendarDeleteReminder": "Hapus",
+  "calendarDeleteReminderConfirm": "Hapus \"{title}\"?",
   "calendarDeleteOccurrence": "Hapus kemunculan ini",
   "calendarDeleteOccurrenceConfirm": "Hapus hanya hari ini dari rangkaian?",
   "calendarOccurrenceDeleted": "Kemunculan dihapus",

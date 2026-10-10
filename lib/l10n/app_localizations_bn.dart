@@ -607,6 +607,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarDeleteReminder => 'মুছুন';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '\"$title\" মুছবেন?';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'এই পুনরাবৃত্তি মুছুন';
 
   @override

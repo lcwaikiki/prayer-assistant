@@ -160,6 +160,20 @@ class TestHarness {
         reminders: any(named: 'reminders'),
       ),
     ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateQadaaWidget(
+        dateKey: any(named: 'dateKey'),
+        todayCount: any(named: 'todayCount'),
+        goal: any(named: 'goal'),
+        remaining: any(named: 'remaining'),
+        title: any(named: 'title'),
+        remainingLabel: any(named: 'remainingLabel'),
+        addDayLabel: any(named: 'addDayLabel'),
+      ),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.consumeQadaaPending(),
+    ).thenAnswer((_) async => <String, int>{});
 
     when(() => api.getCountries()).thenAnswer((_) async => const []);
     when(() => api.getStates(any())).thenAnswer((_) async => const []);

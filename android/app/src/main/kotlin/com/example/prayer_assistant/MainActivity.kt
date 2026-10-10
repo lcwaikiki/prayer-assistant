@@ -45,7 +45,7 @@ class MainActivity : FlutterActivity() {
     private var beadOverlayText: String? = null
     private var pendingReminderPayload: String? = null
     private var pendingReminderId: Int? = null
-    private var pendingOpenHome: Boolean = false
+    private var pendingOpenTarget: String? = null
     private var pendingFolderResult: MethodChannel.Result? = null
     private val pickFolderRequest = 4097
     private var screenReceiverRegistered = false
@@ -289,6 +289,7 @@ class MainActivity : FlutterActivity() {
                     val moonPhaseValue = call.argument<Double>("moonPhaseValue") ?: 0.5
                     val moonIllumination = call.argument<Double>("moonIllumination") ?: 50.0
                     val moonPhaseName = call.argument<String>("moonPhaseName") ?: ""
+                    val moonIlluminationText = call.argument<String>("moonIlluminationText") ?: ""
                     val moonHijriDate = call.argument<String>("moonHijriDate") ?: ""
                     val moonGregorianDate = call.argument<String>("moonGregorianDate") ?: ""
                     val isWhiteDay = call.argument<Boolean>("isWhiteDay") ?: false
@@ -306,6 +307,7 @@ class MainActivity : FlutterActivity() {
                         this,
                         moonPhaseValue,
                         moonIllumination,
+                        moonIlluminationText,
                         moonPhaseName,
                         moonHijriDate,
                         moonGregorianDate,
@@ -387,10 +389,18 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.scheduleWidgetSecondRefresh(this)
                     result.success(null)
                 }
-                "consumePendingOpenHome" -> {
-                    val shouldOpen = pendingOpenHome
-                    pendingOpenHome = false
-                    result.success(shouldOpen)
+                "updateQadaaWidget" -> {
+                    QadaaWidgetStorage.saveState(this, call.arguments as Map<String, Any?>)
+                    QadaaWidgetProvider.updateWidgets(this)
+                    result.success(null)
+                }
+                "consumeQadaaPending" -> {
+                    result.success(QadaaWidgetStorage.consumePending(this))
+                }
+                "consumePendingOpenTarget" -> {
+                    val target = pendingOpenTarget
+                    pendingOpenTarget = null
+                    result.success(target)
                 }
                 else -> {
                     result.notImplemented()
@@ -600,7 +610,7 @@ class MainActivity : FlutterActivity() {
             }
         }
         configureBeadOverlayChannel(flutterEngine)
-        maybeNotifyOpenHome(intent)
+        maybeNotifyOpenTarget(intent)
         maybeNotifyReminderTap(intent)
     }
 
@@ -692,7 +702,7 @@ class MainActivity : FlutterActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        maybeNotifyOpenHome(intent)
+        maybeNotifyOpenTarget(intent)
         maybeNotifyReminderTap(intent)
     }
 
@@ -732,17 +742,20 @@ class MainActivity : FlutterActivity() {
         PrayerWidgetUpdater.screenOnRefresh(this)
     }
 
-    private fun maybeNotifyOpenHome(intent: Intent?) {
+    /** Forwards the screen a widget or the status bar asked to open. */
+    private fun maybeNotifyOpenTarget(intent: Intent?) {
+        intent?.getStringExtra(PrayerWidgetUpdater.EXTRA_OPEN_TARGET)?.let {
+            pendingOpenTarget = it
+        }
         if (intent?.getBooleanExtra("open_home_tab", false) == true) {
-            pendingOpenHome = true
+            pendingOpenTarget = PrayerWidgetUpdater.TARGET_TODAY
         }
         if (!::widgetChannel.isInitialized) {
             return
         }
-        if (pendingOpenHome) {
-            pendingOpenHome = false
-            widgetChannel.invokeMethod("openHomeTab", null)
-        }
+        val target = pendingOpenTarget ?: return
+        pendingOpenTarget = null
+        widgetChannel.invokeMethod("openTarget", target)
     }
 
     private fun maybeNotifyReminderTap(intent: Intent?) {

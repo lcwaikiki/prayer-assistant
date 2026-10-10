@@ -32,6 +32,18 @@ object PrayerWidgetUpdater {
     const val ACTION_REFRESH_ICON = "com.pirci.prayer_assistant.ACTION_REFRESH_ICON"
     const val ACTION_REFRESH_WIDGET_MINUTE = "com.pirci.prayer_assistant.ACTION_REFRESH_WIDGET_MINUTE"
     const val ACTION_STATUS_DISMISSED = "com.pirci.prayer_assistant.ACTION_STATUS_DISMISSED"
+
+    const val EXTRA_OPEN_TARGET = "open_target"
+    const val TARGET_TODAY = "today"
+    const val TARGET_DATES = "dates"
+    const val TARGET_FASTING = "fasting"
+    const val TARGET_QADAA = "qadaa"
+    private val OPEN_TARGET_REQUEST_CODES = mapOf(
+        TARGET_TODAY to 2001,
+        TARGET_DATES to 2002,
+        TARGET_FASTING to 2003,
+        TARGET_QADAA to 2004,
+    )
     const val STATUS_CHANNEL_ID = "prayer_remaining_status"
     const val STATUS_NOTIFICATION_ID = 710001
     private const val ICON_DIGIT_THRESHOLD_MINUTES = 100L
@@ -57,15 +69,16 @@ object PrayerWidgetUpdater {
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
 
-        val openPendingIntent = buildOpenPendingIntent(context)
-        updateCountdownWidgets(context, next, now, textSize, mmssThreshold, openPendingIntent)
+        val openToday = buildOpenPendingIntent(context, TARGET_TODAY)
+        val openDates = buildOpenPendingIntent(context, TARGET_DATES)
+        updateCountdownWidgets(context, next, now, textSize, mmssThreshold)
 
         val widgetManager = AppWidgetManager.getInstance(context)
         val dailyPrayerIds = widgetManager.getAppWidgetIds(
             ComponentName(context, DailyPrayerTimesWidgetProvider::class.java)
         )
         for (widgetId in dailyPrayerIds) {
-            val views = buildDailyPrayerTimesView(context, next, openPendingIntent)
+            val views = buildDailyPrayerTimesView(context, widgetId, next, openToday)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -73,7 +86,7 @@ object PrayerWidgetUpdater {
             ComponentName(context, UpcomingRemindersWidgetProvider::class.java)
         )
         for (widgetId in upcomingRemindersIds) {
-            val views = buildUpcomingRemindersView(context, openPendingIntent)
+            val views = buildUpcomingRemindersView(context, widgetId, openDates)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -81,7 +94,7 @@ object PrayerWidgetUpdater {
             ComponentName(context, CalendarWidgetProvider::class.java)
         )
         for (widgetId in calendarWidgetIds) {
-            val views = buildCalendarWidgetView(context, openPendingIntent)
+            val views = buildCalendarWidgetView(context, openDates)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -89,10 +102,11 @@ object PrayerWidgetUpdater {
             ComponentName(context, MoonPhaseWidgetProvider::class.java)
         )
         for (widgetId in moonPhaseIds) {
-            val views = buildMoonPhaseView(context, openPendingIntent)
+            val views = buildMoonPhaseView(context, widgetId, openDates)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
+        QadaaWidgetProvider.updateWidgets(context)
         updateStatusBar(context, next)
     }
 
@@ -108,14 +122,7 @@ object PrayerWidgetUpdater {
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
-        updateCountdownWidgets(
-            context,
-            next,
-            now,
-            textSize,
-            mmssThreshold,
-            buildOpenPendingIntent(context),
-        )
+        updateCountdownWidgets(context, next, now, textSize, mmssThreshold)
     }
 
     private fun updateCountdownWidgets(
@@ -124,8 +131,9 @@ object PrayerWidgetUpdater {
         now: Long,
         textSize: String,
         mmssThreshold: Int,
-        openPendingIntent: PendingIntent,
     ) {
+        val openPendingIntent = buildOpenPendingIntent(context, TARGET_TODAY)
+        val openFasting = buildOpenPendingIntent(context, TARGET_FASTING)
         val widgetManager = AppWidgetManager.getInstance(context)
         val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val nextPrayerName = next?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
@@ -261,7 +269,16 @@ object PrayerWidgetUpdater {
                 views.setTextColor(R.id.widgetFastingSuhoorLabel, secondaryTextColor)
                 views.setTextColor(R.id.widgetFastingIftarLabel, secondaryTextColor)
                 setTextSizeSp(views, R.id.widgetFastingTitle, textSize, 11f, 13f, 15f, 18f)
-                setTextSizeSp(views, R.id.widgetFastingRemaining, textSize, 18f, 24f, 30f, 34f)
+                val countdownScale = if (widgetHeightDp(context, widgetId) >= TALL_HEIGHT_DP) 1.5f else 1f
+                setTextSizeSp(
+                    views,
+                    R.id.widgetFastingRemaining,
+                    textSize,
+                    18f * countdownScale,
+                    24f * countdownScale,
+                    30f * countdownScale,
+                    34f * countdownScale,
+                )
                 views.setTextViewText(R.id.widgetFastingTitle, title)
                 val targetTimeLabel = if (isFastingHours) "${widgetStrings.iftarLabel}: $aksamTimeStr" else "${widgetStrings.suhoorLabel}: $imsakTimeStr"
                 views.setTextViewText(R.id.widgetFastingIftarTime, targetTimeLabel)
@@ -275,7 +292,7 @@ object PrayerWidgetUpdater {
                 views.setProgressBar(R.id.widgetFastingProgressBar, 100, progressPct, false)
                 views.setTextViewText(R.id.widgetFastingSuhoorLabel, "${widgetStrings.suhoorLabel}: $imsakTimeStr")
                 views.setTextViewText(R.id.widgetFastingIftarLabel, "${widgetStrings.iftarLabel}: $aksamTimeStr")
-                views.setOnClickPendingIntent(R.id.widgetFastingRoot, openPendingIntent)
+                views.setOnClickPendingIntent(R.id.widgetFastingRoot, openFasting)
                 widgetManager.updateAppWidget(widgetId, views)
             }
         }
@@ -283,14 +300,18 @@ object PrayerWidgetUpdater {
     }
 
 
-    private fun buildOpenPendingIntent(context: Context): PendingIntent {
+    /**
+     * Opens the app on the screen a widget belongs to. Each target needs its
+     * own request code, otherwise Android reuses one PendingIntent for all.
+     */
+    internal fun buildOpenPendingIntent(context: Context, target: String): PendingIntent {
         val openIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("open_home_tab", true)
+            putExtra(EXTRA_OPEN_TARGET, target)
         }
         return PendingIntent.getActivity(
             context,
-            2001,
+            OPEN_TARGET_REQUEST_CODES.getValue(target),
             openIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -332,7 +353,7 @@ object PrayerWidgetUpdater {
         return nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
-    private fun getWidgetBgRes(context: Context): Int {
+    internal fun getWidgetBgRes(context: Context): Int {
         return when (PrayerWidgetStorage.readWidgetTheme(context)) {
             "transparent" -> R.drawable.widget_bg_transparent
             else -> if (isLight(context)) R.drawable.widget_bg_light else R.drawable.widget_bg
@@ -350,11 +371,11 @@ object PrayerWidgetUpdater {
         }
     }
 
-    private fun getPrimaryTextColor(context: Context): Int {
+    internal fun getPrimaryTextColor(context: Context): Int {
         return if (isLight(context)) Color.parseColor("#FF1A1C1E") else Color.WHITE
     }
 
-    private fun getSecondaryTextColor(context: Context): Int {
+    internal fun getSecondaryTextColor(context: Context): Int {
         return if (isLight(context)) {
             Color.parseColor("#FF57605B")
         } else {
@@ -463,6 +484,7 @@ object PrayerWidgetUpdater {
      */
     private fun buildUpcomingRemindersView(
         context: Context,
+        widgetId: Int,
         openPendingIntent: PendingIntent
     ): RemoteViews {
         val bgRes = getWidgetBgRes(context)
@@ -476,7 +498,8 @@ object PrayerWidgetUpdater {
 
         val dateHeader = getCalendarDateHeader(context)
         val baseHeader = PrayerWidgetStorage.readCalendarRemindersHeader(context)
-        val fullHeader = if (dateHeader.isNotEmpty()) "$baseHeader • $dateHeader" else baseHeader
+        val wide = widgetWidthDp(context, widgetId) >= WIDE_HEADER_WIDTH_DP
+        val fullHeader = if (wide && dateHeader.isNotEmpty()) "$baseHeader • $dateHeader" else baseHeader
         views.setTextViewText(
             R.id.widgetUpcomingRemindersHeader,
             fullHeader
@@ -546,9 +569,11 @@ object PrayerWidgetUpdater {
             R.id.widgetUpcomingReminderWhen14,
             R.id.widgetUpcomingReminderWhen15
         )
+        val fittingRows = ((widgetHeightDp(context, widgetId) - REMINDERS_CHROME_DP) / REMINDER_ROW_DP)
+            .coerceIn(1, rowIds.size)
         for (i in rowIds.indices) {
             val reminder = reminders.getOrNull(i)
-            if (reminder == null) {
+            if (reminder == null || i >= fittingRows) {
                 views.setViewVisibility(rowIds[i], android.view.View.GONE)
                 continue
             }
@@ -891,6 +916,7 @@ object PrayerWidgetUpdater {
      */
     private fun buildDailyPrayerTimesView(
         context: Context,
+        widgetId: Int,
         next: Pair<String, Long>?,
         openPendingIntent: PendingIntent
     ): RemoteViews {
@@ -902,7 +928,12 @@ object PrayerWidgetUpdater {
         views.setInt(R.id.widgetDailyPrayersRoot, "setBackgroundResource", bgRes)
         views.setTextColor(R.id.widgetDailyPrayersLocation, secondaryTextColor)
 
-        val location = PrayerWidgetStorage.readLocationLabel(context)
+        val fullLocation = PrayerWidgetStorage.readLocationLabel(context)
+        val location = if (widgetWidthDp(context, widgetId) < WIDE_HEADER_WIDTH_DP) {
+            fullLocation.substringBefore(",").trim()
+        } else {
+            fullLocation
+        }
         val dateHeader = getCalendarDateHeader(context)
         val fullLocationLabel = if (dateHeader.isNotEmpty() && location.isNotEmpty()) {
             "$location • $dateHeader"
@@ -969,6 +1000,31 @@ object PrayerWidgetUpdater {
         }
         return views
     }
+
+    /** Widgets narrower than this use their stacked, compact layout. */
+    private const val COMPACT_WIDTH_DP = 200
+
+    /** Widgets at least this tall enlarge their main number to fill the space. */
+    private const val TALL_HEIGHT_DP = 180
+
+    /** Headers add the date (and full location) only from this width on. */
+    private const val WIDE_HEADER_WIDTH_DP = 260
+
+    /** Upcoming reminders: header plus padding, and one 13sp row with its gap. */
+    private const val REMINDERS_CHROME_DP = 48
+    private const val REMINDER_ROW_DP = 20
+
+    /** Current width of [widgetId] in dp, as reported by the launcher (portrait). */
+    internal fun widgetWidthDp(context: Context, widgetId: Int): Int =
+        AppWidgetManager.getInstance(context)
+            .getAppWidgetOptions(widgetId)
+            .getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)
+
+    /** Current height of [widgetId] in dp, as reported by the launcher (portrait). */
+    internal fun widgetHeightDp(context: Context, widgetId: Int): Int =
+        AppWidgetManager.getInstance(context)
+            .getAppWidgetOptions(widgetId)
+            .getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT)
 
     private fun circleDiameterDp(context: Context, widgetId: Int): Int {
         val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
@@ -1057,7 +1113,7 @@ object PrayerWidgetUpdater {
         views.setImageViewBitmap(R.id.widgetRemainingCircleBg, bitmap)
     }
 
-    private fun setTextSizeSp(
+    internal fun setTextSizeSp(
         views: RemoteViews,
         viewId: Int,
         sizePreference: String,
@@ -1767,8 +1823,17 @@ object PrayerWidgetUpdater {
         return langMap[canonical] ?: rawName
     }
 
-    private fun buildMoonPhaseView(context: Context, openPendingIntent: PendingIntent): RemoteViews {
-        val views = RemoteViews(context.packageName, R.layout.widget_moon_phase)
+    private fun buildMoonPhaseView(
+        context: Context,
+        widgetId: Int,
+        openPendingIntent: PendingIntent,
+    ): RemoteViews {
+        val layout = if (widgetWidthDp(context, widgetId) < COMPACT_WIDTH_DP) {
+            R.layout.widget_moon_phase_compact
+        } else {
+            R.layout.widget_moon_phase
+        }
+        val views = RemoteViews(context.packageName, layout)
         val data = PrayerWidgetStorage.readMoonPhaseData(context)
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val dark = isDark(context)
@@ -1792,7 +1857,9 @@ object PrayerWidgetUpdater {
 
         views.setTextViewText(R.id.widgetMoonDateHeader, hijriStr)
         views.setTextViewText(R.id.widgetMoonPhaseName, data.phaseName.ifEmpty { "Moon Phase" })
-        val illuminationText = String.format(Locale.US, "%.0f%% Illuminated", data.illumination)
+        val illuminationText = data.illuminationText.ifEmpty {
+            String.format(Locale.US, "%.0f%% Illuminated", data.illumination)
+        }
         views.setTextViewText(R.id.widgetMoonIllumination, illuminationText)
         views.setTextViewText(R.id.widgetMoonSubHeader, gregorianStr)
 

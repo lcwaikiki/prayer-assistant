@@ -1,10 +1,9 @@
 package com.pirci.prayer_assistant
 
 import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 
-class UpcomingRemindersWidgetProvider : AppWidgetProvider() {
+class UpcomingRemindersWidgetProvider : ResizableWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,

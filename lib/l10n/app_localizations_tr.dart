@@ -606,6 +606,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get calendarDeleteReminder => 'Sil';
 
   @override
+  String calendarDeleteReminderConfirm(String title) {
+    return '\"$title\" silinsin mi?';
+  }
+
+  @override
   String get calendarDeleteOccurrence => 'Bu tekrarı sil';
 
   @override

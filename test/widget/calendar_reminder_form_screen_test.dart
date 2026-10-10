@@ -9,6 +9,7 @@ Future<void> _pumpForm(
   WidgetTester tester,
   TestHarness harness, {
   CalendarReminder? reminder,
+  bool readOnly = false,
 }) async {
   await pumpWithHarness(
     tester,
@@ -20,7 +21,10 @@ Future<void> _pumpForm(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) =>
-                    CalendarReminderFormScreen(reminder: reminder),
+                    CalendarReminderFormScreen(
+                      reminder: reminder,
+                      readOnly: readOnly,
+                    ),
               ),
             ),
             child: const Text('open'),
@@ -114,6 +118,44 @@ void main() {
     expect(reminders, hasLength(1));
     expect(reminders.first.id, 'r1');
     expect(reminders.first.title, 'Updated');
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('read-only reminder can be deleted and restored with undo',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final reminder = CalendarReminder(
+      id: 'r1',
+      title: 'Read Only',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+    );
+    harness.controller.addCalendarReminder(reminder);
+
+    await _pumpForm(tester, harness, reminder: reminder, readOnly: true);
+    expect(find.byKey(const Key('save_reminder_button')), findsNothing);
+
+    await tester.tap(find.byKey(const Key('delete_reminder_button')));
+    await tester.pumpAndSettle();
+    expect(find.text('Delete "Read Only"?'), findsOneWidget);
+
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(harness.controller.calendarReminders, hasLength(1));
+
+    await tester.tap(find.byKey(const Key('delete_reminder_button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('confirm_delete_reminder_button')));
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.calendarReminders, isEmpty);
+    expect(find.byType(CalendarReminderFormScreen), findsNothing);
+    expect(find.text('"Read Only" deleted'), findsOneWidget);
+
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    expect(harness.controller.calendarReminders.single.id, 'r1');
 
     await tester.pumpWidget(const SizedBox());
   });

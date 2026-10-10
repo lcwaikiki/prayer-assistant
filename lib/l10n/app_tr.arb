@@ -196,6 +196,7 @@
   "calendarAddReminder": "Hatırlatıcı ekle",
   "calendarEditReminder": "Düzenle",
   "calendarDeleteReminder": "Sil",
+  "calendarDeleteReminderConfirm": "\"{title}\" silinsin mi?",
   "calendarDeleteOccurrence": "Bu tekrarı sil",
   "calendarDeleteOccurrenceConfirm": "Sadece bu günü seriden kaldır?",
   "calendarOccurrenceDeleted": "Tekrar silindi",

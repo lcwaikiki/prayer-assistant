@@ -22,6 +22,7 @@ import 'preferences_screen.dart';
 import 'qibla_screen.dart';
 import 'restore_options_dialog.dart';
 import 'track_screen.dart';
+import '../utils/orientation_utils.dart';
 
 
 const int _tesbihTabIndex = 4;
@@ -101,10 +102,7 @@ class _AppShellState extends State<AppShell> {
     } catch (_) {}
 
     if (tabIndex == 0 || tabIndex == 4) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+      lockPortraitOnPhones();
     } else {
       SystemChrome.setPreferredOrientations([]);
     }

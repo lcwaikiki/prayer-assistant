@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +10,7 @@ import '../../tesbihat/models/item.dart';
 import '../../tesbihat/models/item_group.dart';
 import '../../tesbihat/screens/execution_screen.dart';
 import '../../tesbihat/screens/group_screen.dart';
+import '../../utils/orientation_utils.dart';
 
 enum UpcomingReminderType {
   calendar,
@@ -57,10 +57,7 @@ class UpcomingRemindersCard extends StatelessWidget {
           ),
         );
       case UpcomingReminderType.bead:
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
+        lockPortraitOnPhones();
         try {
           context.read<PrayerAppController>().setTab(4);
         } catch (_) {}
@@ -70,10 +67,7 @@ class UpcomingRemindersCard extends StatelessWidget {
           ),
         );
       case UpcomingReminderType.group:
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
+        lockPortraitOnPhones();
         try {
           context.read<PrayerAppController>().setTab(4);
         } catch (_) {}

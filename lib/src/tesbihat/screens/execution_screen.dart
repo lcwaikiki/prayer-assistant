@@ -22,6 +22,7 @@ import '../widgets/audio_speed_bar.dart';
 import '../widgets/truncated_title_tooltip.dart';
 import '../widgets/zoomable_notes_text.dart';
 import 'item_form_screen.dart';
+import '../../utils/orientation_utils.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
   const ExecutionScreen({
@@ -62,10 +63,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   }
 
   void _lockOrientation() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    lockPortraitOnPhones();
   }
 
   void _restoreOrientation() {

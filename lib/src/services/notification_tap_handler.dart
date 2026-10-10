@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -18,6 +17,7 @@ import 'local_database.dart';
 import 'native_reminder_service.dart';
 import 'notification_strings.dart';
 import 'timezone_setup.dart';
+import '../utils/orientation_utils.dart';
 
 /// Action identifiers for interactive notifications.
 const notificationActionSnooze = 'action_snooze';
@@ -559,10 +559,7 @@ void _navigateToCalendarReminder({String? reminderId, DateTime? initialDate}) {
 
 void _navigateToTesbihItem(String itemId) {
   _postOrRunNavigation(() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    lockPortraitOnPhones();
     final context = rootNavigatorKey.currentContext;
     if (context != null) {
       try {
@@ -577,10 +574,7 @@ void _navigateToTesbihItem(String itemId) {
 
 void _navigateToTesbihGroup(String groupId) {
   _postOrRunNavigation(() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    lockPortraitOnPhones();
     final context = rootNavigatorKey.currentContext;
     if (context != null) {
       try {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'
     hide ChangeNotifierProvider, Consumer;
 import 'package:intl/intl.dart';
@@ -23,6 +22,7 @@ import '../models/calendar_reminder.dart';
 import '../../ui/widgets/moon_phase_widget.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
+import '../../utils/orientation_utils.dart';
 
 String _formatReminderTime(BuildContext context, CalendarReminder reminder) {
   if (reminder.anchor == CalendarReminderAnchor.prayerTime) {
@@ -863,10 +863,7 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
         final item = task.bead ??
             beads.where((b) => b.id == task.targetId).firstOrNull;
         if (item != null) {
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown,
-          ]);
+          lockPortraitOnPhones();
           try {
             context.read<PrayerAppController>().setTab(4);
           } catch (_) {}
@@ -884,10 +881,7 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
         final group = task.group ??
             groups.where((g) => g.id == task.targetId).firstOrNull;
         if (group != null) {
-          SystemChrome.setPreferredOrientations([
-            DeviceOrientation.portraitUp,
-            DeviceOrientation.portraitDown,
-          ]);
+          lockPortraitOnPhones();
           try {
             context.read<PrayerAppController>().setTab(4);
           } catch (_) {}

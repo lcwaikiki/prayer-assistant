@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pirci company</title>
+<meta name="description" content="pirci company, Android için sade ve gizliliğe saygılı yaşam tarzı uygulamaları geliştirir.">
+<link rel="alternate" hreflang="tr" href="https://company.pirci.tr/">
+<link rel="alternate" hreflang="en" href="https://company.pirci.tr/en/">
+<style>
+  :root {
+    --bg: #f1f5f2;
+    --surface: #ffffff;
+    --text: #1d2a25;
+    --muted: #55665f;
+    --brand: #1f5c48;
+    --leaf: #3d9970;
+    --rule: #d8e3dc;
+    --summary-bg: #e3efe8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1a16;
+      --surface: #16241f;
+      --text: #e4ece8;
+      --muted: #9fb3aa;
+      --brand: #9ad8bb;
+      --leaf: #6cc59b;
+      --rule: #263a32;
+      --summary-bg: #1c3029;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main {
+    max-width: 760px;
+    margin: 40px auto;
+    padding: 40px 48px 48px;
+    background: var(--surface);
+    border-radius: 16px;
+  }
+  header { display: flex; align-items: center; gap: 14px; }
+  header svg { flex: none; }
+  .brand { font-size: 20px; font-weight: 700; color: var(--brand); letter-spacing: .2px; }
+  .lang { margin-left: auto; font-size: 15px; }
+  h1 { font-size: 38px; line-height: 1.2; margin: 40px 0 12px; }
+  .lead { color: var(--muted); font-size: 19px; margin: 0 0 8px; }
+  h2 {
+    font-size: 22px;
+    margin: 40px 0 10px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    color: var(--brand);
+  }
+  .app {
+    background: var(--summary-bg);
+    border-left: 4px solid var(--leaf);
+    border-radius: 8px;
+    padding: 18px 22px;
+  }
+  .app h3 { margin: 0 0 6px; font-size: 20px; }
+  .app ul { padding-left: 22px; margin: 12px 0 16px; }
+  .app li { margin-bottom: 6px; }
+  .button {
+    display: inline-block;
+    background: var(--brand);
+    color: var(--surface);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  a { color: var(--leaf); text-underline-offset: 3px; }
+  footer {
+    margin-top: 40px;
+    color: var(--muted);
+    font-size: 14px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    main { margin: 0; padding: 28px 16px 36px; border-radius: 0; }
+    h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+      <rect x="8" y="4" width="6" height="32" rx="3" fill="var(--brand)"/>
+      <path d="M14 26 C14 14 22 6 34 5 C34 18 26 26 14 26 Z" fill="var(--leaf)"/>
+      <path d="M16 24 L30 9" stroke="var(--surface)" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <span class="brand">pirci company</span>
+    <a class="lang" href="/en/" hreflang="en" lang="en">English</a>
+  </header>
+
+  <h1>Gününüze sessizce uyum sağlayan uygulamalar</h1>
+  <p class="lead">Android için sade ve güvenilir yaşam tarzı uygulamaları geliştiriyoruz. Verileriniz cihazınızda kalır.</p>
+
+  <h2 id="apps">Uygulamalarımız</h2>
+  <div class="app">
+    <h3>Namaz Asistanı</h3>
+    <p>Günlük ibadetiniz tek bir yerde.</p>
+    <ul>
+      <li>Sıradaki namaza canlı geri sayımla doğru namaz vakitleri</li>
+      <li>Herhangi bir vakte bağlanabilen hatırlatıcılar, mesela "cuma günleri sabahtan 15 dakika sonra"</li>
+      <li>Yüzen sayaçla her uygulamada saymaya devam eden dijital tesbih</li>
+      <li>Kıble pusulası, Hicri takvim, kaza ve oruç takibi</li>
+      <li>9 ana ekran widget'ı, 14 dilde</li>
+    </ul>
+    <a class="button" href="https://play.google.com/store/apps/details?id=com.pirci.prayer_assistant">Google Play'den indirin</a>
+  </div>
+
+  <h2 id="privacy">Gizlilik</h2>
+  <p>Uygulamalarımızda hesap, analiz aracı veya reklam yoktur. <a href="/privacy-policy.html">Gizlilik politikamızı</a> okuyun.</p>
+
+  <h2 id="contact">İletişim</h2>
+  <p>Soru ve geri bildirimleriniz için: <a href="mailto:pirci.company@gmail.com">pirci.company@gmail.com</a></p>
+
+  <footer>
+    <span>© 2026 pirci company</span>
+    <a href="/privacy-policy.html">Gizlilik Politikası</a>
+  </footer>
+</main>
+</body>
+</html>

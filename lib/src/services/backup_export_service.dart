@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 
 import '../calendar/models/calendar_reminder.dart';
@@ -9,6 +11,7 @@ import '../models/prayer_models.dart';
 import '../tesbihat/models/daily_item_stat.dart';
 import '../tesbihat/models/item.dart';
 import '../tesbihat/models/item_group.dart';
+import '../tesbihat/data/sound_library_repository.dart';
 import '../tesbihat/models/sound_item.dart';
 
 class BackupExportService {
@@ -16,7 +19,9 @@ class BackupExportService {
 
   /// Current backup schema version. Bump this whenever the JSON layout
   /// changes so older/newer releases can be told apart on restore.
-  static const int currentVersion = 3;
+  /// v4: Google Drive backups may omit sound audio, which is then stored as
+  /// separate Drive files.
+  static const int currentVersion = 4;
 
   /// Generates a comprehensive JSON backup string containing all app data.
   String generateJsonBackup({
@@ -29,6 +34,8 @@ class BackupExportService {
     required Map<String, dynamic> preferences,
     Map<String, FastingLog> fastingLogs = const {},
     List<SoundItem> soundLibrary = const [],
+    Map<String, List<String>> taskCompletions = const {},
+    bool includeSoundAudio = true,
   }) {
     final data = <String, dynamic>{
       'version': currentVersion,
@@ -36,11 +43,18 @@ class BackupExportService {
       'exportedAt': DateTime.now().toUtc().toIso8601String(),
       'kazaTracker': kazaTracker.toMap(),
       'prayerCompletions': prayerCompletions,
+      'taskCompletions': taskCompletions,
       'calendarReminders': calendarReminders.map((r) => r.toMap()).toList(),
       'tesbihItems': tesbihItems.map((i) => i.toMap()).toList(),
       'tesbihGroups': tesbihGroups.map((g) => g.toMap()).toList(),
       'tesbihStats': tesbihStats.map((s) => s.toMap()).toList(),
-      'soundLibrary': soundLibrary.map((s) => s.toMap()).toList(),
+      'soundLibrary': [
+        for (final s in soundLibrary)
+          if (!includeSoundAudio)
+            s.toMap()
+          else if (File(s.path).existsSync())
+            {...s.toMap(), 'bytes': base64Encode(File(s.path).readAsBytesSync())},
+      ],
       'preferences': preferences,
       'fastingLogs': fastingLogs.map((k, v) => MapEntry(k, v.toMap())),
       'kazaDailyLogs': kazaTracker.dailyLogs,
@@ -64,9 +78,9 @@ class BackupExportService {
       }
     }
 
-    final completions = raw['prayerCompletions'] as Map<String, dynamic>?;
-    if (completions != null) {
-      for (final list in completions.values) {
+    for (final key in ['prayerCompletions', 'taskCompletions']) {
+      final completions = raw[key] as Map<String, dynamic>?;
+      for (final list in completions?.values ?? const []) {
         if (list is List) {
           count += list.length;
         }
@@ -86,6 +100,15 @@ class BackupExportService {
     count += (raw['fastingLogs'] as Map?)?.length ?? 0;
 
     return count;
+  }
+
+  /// Parses a `{dateKey: [id, ...]}` completions map, or null when absent.
+  static Map<String, List<String>>? _parseCompletions(Object? raw) {
+    if (raw is! Map<String, dynamic>) return null;
+    return {
+      for (final entry in raw.entries)
+        entry.key: [for (final e in entry.value as List? ?? const []) e.toString()],
+    };
   }
 
   /// Parses and validates a JSON backup payload. Returns a map with parsed objects.
@@ -118,17 +141,11 @@ class BackupExportService {
         ? KazaTracker.fromMap(kazaTrackerMap, kazaDailyLogs)
         : KazaTracker(dailyLogs: kazaDailyLogs);
 
-    final completionsRaw = raw['prayerCompletions'] as Map<String, dynamic>?;
-    final prayerCompletions = <String, List<String>>{};
-    if (completionsRaw != null) {
-      for (final entry in completionsRaw.entries) {
-        final list = (entry.value as List<dynamic>?)
-                ?.map((e) => e.toString())
-                .toList() ??
-            const <String>[];
-        prayerCompletions[entry.key] = list;
-      }
-    }
+    final prayerCompletions = _parseCompletions(raw['prayerCompletions']) ??
+        <String, List<String>>{};
+    // Null for backups made before task completions were included, so a
+    // restore leaves the current ones untouched.
+    final taskCompletions = _parseCompletions(raw['taskCompletions']);
 
     final remindersRaw = raw['calendarReminders'] as List<dynamic>?;
     final calendarReminders = remindersRaw != null
@@ -168,13 +185,14 @@ class BackupExportService {
             .toList()
         : const <DailyItemStat>[];
 
-    final soundLibraryRaw = raw['soundLibrary'] as List<dynamic>?;
-    final soundLibrary = soundLibraryRaw != null
-        ? soundLibraryRaw
-            .whereType<Map<String, dynamic>>()
-            .map((m) => SoundItem.fromMap(m))
-            .toList()
-        : const <SoundItem>[];
+    final soundLibraryRaw = raw['soundLibrary'] as List<dynamic>? ?? const [];
+    final soundLibrary = <SoundWithAudio>[
+      for (final m in soundLibraryRaw.whereType<Map<String, dynamic>>())
+        (
+          sound: SoundItem.fromMap(m, path: ''),
+          bytes: m['bytes'] is String ? base64Decode(m['bytes'] as String) : null,
+        ),
+    ];
 
     final preferences =
         (raw['preferences'] as Map<String, dynamic>?) ?? <String, dynamic>{};
@@ -193,6 +211,7 @@ class BackupExportService {
     return {
       'kazaTracker': kazaTracker,
       'prayerCompletions': prayerCompletions,
+      'taskCompletions': taskCompletions,
       'calendarReminders': calendarReminders,
       'tesbihItems': tesbihItems,
       'tesbihGroups': tesbihGroups,

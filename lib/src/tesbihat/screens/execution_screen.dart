@@ -269,8 +269,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(soundLibraryNotifierProvider.notifier)
         .getSoundById(item.soundId);
     if (sound != null) {
-      await _audioPlayer.playBytes(
-        sound.bytes,
+      await _audioPlayer.playFile(
+        sound.path,
         mimeType: sound.mimeType,
         playbackRate: _playbackSpeed,
       );

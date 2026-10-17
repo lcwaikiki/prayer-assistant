@@ -302,8 +302,8 @@ class _CalendarReminderFormScreenState
     final sound =
         ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
     if (sound != null) {
-      await _audioPlayer.playBytes(
-        sound.bytes,
+      await _audioPlayer.playFile(
+        sound.path,
         mimeType: sound.mimeType,
         playbackRate: _playbackSpeed,
       );

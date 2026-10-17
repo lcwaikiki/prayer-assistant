@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/tesbihat/data/sound_library_repository.dart';
@@ -11,7 +13,7 @@ void main() {
       final initialSound = SoundItem(
         id: 'init_1',
         title: 'Initial Sound',
-        bytes: Uint8List.fromList([1, 2, 3]),
+        path: '/sounds/init_1',
         createdAt: DateTime(2026, 1, 1),
       );
 
@@ -34,6 +36,7 @@ void main() {
 
       expect(container.read(soundLibraryNotifierProvider).length, 2);
       expect(added.title, 'Chant 1');
+      expect(File(added.path).readAsBytesSync(), [4, 5, 6]);
       expect(repo.loadSounds().length, 2);
 
       // Rename sound
@@ -50,6 +53,9 @@ void main() {
       container.read(soundLibraryNotifierProvider.notifier).deleteSound('init_1');
       expect(container.read(soundLibraryNotifierProvider).length, 1);
       expect(repo.loadSounds().length, 1);
+
+      container.read(soundLibraryNotifierProvider.notifier).deleteSound(added.id);
+      expect(File(added.path).existsSync(), isFalse);
     });
   });
 }

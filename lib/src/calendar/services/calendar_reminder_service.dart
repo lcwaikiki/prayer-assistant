@@ -12,6 +12,7 @@ import '../models/calendar_reminder.dart';
 import '../../services/local_database.dart';
 import '../../services/native_reminder_service.dart';
 import '../../services/notification_strings.dart';
+import '../../services/notification_window.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
 import '../../tesbihat/services/prayer_anchor_resolver.dart';
@@ -101,15 +102,11 @@ class CalendarReminderService {
     return 700000 + (hash % 100000);
   }
 
-  Future<void> cancelReminder(String reminderId) {
-    final base = _notificationId(reminderId);
-    return Future.wait([
-      for (var i = 0; i < _maxOccurrences; i++) ...[
-        _plugin.cancel(id: base + i),
-        NativeReminderService.cancel(base + i),
-      ],
-    ]);
-  }
+  Future<void> cancelReminder(String reminderId) => cancelNotificationWindow(
+    _plugin,
+    _notificationId(reminderId),
+    _maxOccurrences,
+  );
 
   /// Schedules with an exact alarm when the OS allows it, falling back to
   /// an inexact alarm when the exact-alarm permission is denied (Android
@@ -182,10 +179,7 @@ class CalendarReminderService {
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
     // count would otherwise leave stale notifications behind.
-    for (var i = 0; i < _maxOccurrences; i++) {
-      await _plugin.cancel(id: id + i);
-      await NativeReminderService.cancel(id + i);
-    }
+    await cancelNotificationWindow(_plugin, id, _maxOccurrences);
 
     if (!reminder.enabled) {
       return;

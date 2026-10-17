@@ -41,6 +41,7 @@ class FakeFlutterLocalNotificationsPlatform
       throw PlatformException(code: 'exact');
     }
     scheduledIds.add(id);
+    _pendingIds.add(id);
     scheduledDates.add(scheduledDate);
     scheduledMatches.add(matchDateTimeComponents);
     scheduledPayloads.add(payload);
@@ -50,5 +51,16 @@ class FakeFlutterLocalNotificationsPlatform
   @override
   Future<void> cancel({required int id}) async {
     cancelledIds.add(id);
+    _pendingIds.remove(id);
   }
+
+  final _pendingIds = <int>{};
+
+  /// Ids scheduled and not cancelled since, like the real plugin's list.
+  @override
+  Future<List<PendingNotificationRequest>> pendingNotificationRequests() async =>
+      [for (final id in _pendingIds) PendingNotificationRequest(id, null, null, null)];
+
+  @override
+  Future<List<ActiveNotification>> getActiveNotifications() async => const [];
 }

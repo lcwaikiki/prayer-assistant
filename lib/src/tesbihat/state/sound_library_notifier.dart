@@ -28,16 +28,13 @@ class SoundLibraryNotifier extends Notifier<List<SoundItem>> {
     String mimeType = 'audio/m4a',
     int? durationMs,
   }) {
-    final newSound = SoundItem(
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
+    final newSound = _repository.addSound(
       title: title.trim().isEmpty ? 'Sound' : title.trim(),
       bytes: bytes,
       mimeType: mimeType,
       durationMs: durationMs,
-      createdAt: DateTime.now(),
     );
     state = [...state, newSound];
-    _repository.saveSounds(state);
     return newSound;
   }
 
@@ -52,6 +49,7 @@ class SoundLibraryNotifier extends Notifier<List<SoundItem>> {
   void deleteSound(String id) {
     state = state.where((sound) => sound.id != id).toList();
     _repository.saveSounds(state);
+    _repository.deleteAudio(id);
   }
 
   SoundItem? getSoundById(String? id) {

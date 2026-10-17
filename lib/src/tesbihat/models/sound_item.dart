@@ -1,11 +1,10 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
+/// A user sound. The audio lives in the file at [path]; [toMap] holds only
+/// the metadata that is stored in Hive.
 class SoundItem {
   const SoundItem({
     required this.id,
     required this.title,
-    required this.bytes,
+    required this.path,
     this.mimeType = 'audio/m4a',
     this.durationMs,
     required this.createdAt,
@@ -13,7 +12,7 @@ class SoundItem {
 
   final String id;
   final String title;
-  final Uint8List bytes;
+  final String path;
   final String mimeType;
   final int? durationMs;
   final DateTime createdAt;
@@ -21,7 +20,7 @@ class SoundItem {
   SoundItem copyWith({
     String? id,
     String? title,
-    Uint8List? bytes,
+    String? path,
     String? mimeType,
     int? durationMs,
     DateTime? createdAt,
@@ -29,7 +28,7 @@ class SoundItem {
     return SoundItem(
       id: id ?? this.id,
       title: title ?? this.title,
-      bytes: bytes ?? this.bytes,
+      path: path ?? this.path,
       mimeType: mimeType ?? this.mimeType,
       durationMs: durationMs ?? this.durationMs,
       createdAt: createdAt ?? this.createdAt,
@@ -40,26 +39,13 @@ class SoundItem {
     return {
       'id': id,
       'title': title,
-      'bytes': base64Encode(bytes),
       'mimeType': mimeType,
       'durationMs': durationMs,
       'createdAt': createdAt.toIso8601String(),
     };
   }
 
-  factory SoundItem.fromMap(Map<dynamic, dynamic> map) {
-    final rawBytes = map['bytes'];
-    final Uint8List parsedBytes;
-    if (rawBytes is String) {
-      parsedBytes = base64Decode(rawBytes);
-    } else if (rawBytes is List<int>) {
-      parsedBytes = Uint8List.fromList(rawBytes);
-    } else if (rawBytes is Uint8List) {
-      parsedBytes = rawBytes;
-    } else {
-      parsedBytes = Uint8List(0);
-    }
-
+  factory SoundItem.fromMap(Map<dynamic, dynamic> map, {required String path}) {
     final rawCreatedAt = map['createdAt']?.toString();
     final createdAt = rawCreatedAt != null && rawCreatedAt.isNotEmpty
         ? DateTime.tryParse(rawCreatedAt) ?? DateTime.now()
@@ -68,7 +54,7 @@ class SoundItem {
     return SoundItem(
       id: (map['id'] ?? '').toString(),
       title: (map['title'] ?? '').toString(),
-      bytes: parsedBytes,
+      path: path,
       mimeType: (map['mimeType'] ?? 'audio/m4a').toString(),
       durationMs: (map['durationMs'] as num?)?.toInt(),
       createdAt: createdAt,

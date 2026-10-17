@@ -121,7 +121,7 @@ void main() {
     final soundItem = SoundItem(
       id: 'sound_123',
       title: 'Adhan Makkah',
-      bytes: Uint8List.fromList([1, 2, 3, 4]),
+      path: '/sounds/test.m4a',
       mimeType: 'audio/mp3',
       createdAt: DateTime.now(),
     );
@@ -157,7 +157,7 @@ void main() {
     final soundItem = SoundItem(
       id: 'sound_123',
       title: 'Adhan Makkah',
-      bytes: Uint8List.fromList([1, 2, 3, 4]),
+      path: '/sounds/test.m4a',
       mimeType: 'audio/mp3',
       createdAt: DateTime.now(),
     );
@@ -236,7 +236,7 @@ void main() {
     final soundItem = SoundItem(
       id: 'sound_bead',
       title: 'SubhanAllah Audio',
-      bytes: Uint8List.fromList([1, 2, 3, 4]),
+      path: '/sounds/test.m4a',
       mimeType: 'audio/mp3',
       createdAt: DateTime.now(),
     );

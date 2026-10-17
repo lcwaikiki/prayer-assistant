@@ -82,6 +82,14 @@ class NativeReminderService {
     } catch (_) {}
   }
 
+  /// Cancels native reminders with ids `[start, start + count)` in one call.
+  static Future<void> cancelRange(int start, int count) async {
+    if (!isAndroid) return;
+    try {
+      await _channel.invokeMethod('cancelRange', {'start': start, 'count': count});
+    } catch (_) {}
+  }
+
   static Future<void> scheduleSilentMode({
     required int id,
     required DateTime triggerAt,

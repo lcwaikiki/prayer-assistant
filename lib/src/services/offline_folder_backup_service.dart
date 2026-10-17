@@ -19,10 +19,11 @@ class OfflineFolderBackupService {
   /// Forgets the chosen folder and releases its persisted permission.
   Future<void> clearFolder() => _channel.invokeMethod<void>('clearFolder');
 
-  /// Writes [json] to the chosen folder, overwriting the previous backup.
-  Future<bool> writeBackup(String json) async {
+  /// Writes the UTF-8 backup [bytes] to the chosen folder, overwriting the
+  /// previous backup.
+  Future<bool> writeBackup(Uint8List bytes) async {
     final ok = await _channel.invokeMethod<bool>('writeBackup', {
-      'content': json,
+      'bytes': bytes,
       'fileName': fileName,
     });
     return ok ?? false;
@@ -40,10 +41,11 @@ class OfflineFolderBackupService {
     return available ?? false;
   }
 
-  /// Writes [json] to the shared Documents folder without a permission prompt.
-  Future<bool> writeDocumentsBackup(String json) async {
+  /// Writes the UTF-8 backup [bytes] to the shared Documents folder without a
+  /// permission prompt.
+  Future<bool> writeDocumentsBackup(Uint8List bytes) async {
     final ok = await _channel.invokeMethod<bool>('writeDocumentsBackup', {
-      'content': json,
+      'bytes': bytes,
       'fileName': fileName,
     });
     return ok ?? false;

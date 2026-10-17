@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -33,9 +34,15 @@ class AudioPlayerService {
     await _player.setPlaybackRate(rate);
   }
 
-  Future<void> playBytes(Uint8List bytes, {String? mimeType, double? playbackRate}) async {
+  Future<void> playFile(String path, {String? mimeType, double? playbackRate}) =>
+      _play(DeviceFileSource(path, mimeType: mimeType), playbackRate);
+
+  /// Plays audio that is not stored yet, such as an unsaved recording.
+  Future<void> playBytes(Uint8List bytes, {String? mimeType, double? playbackRate}) =>
+      _play(BytesSource(bytes, mimeType: mimeType), playbackRate);
+
+  Future<void> _play(Source source, double? playbackRate) async {
     await _player.stop();
-    final source = BytesSource(bytes, mimeType: mimeType);
     await _player.play(source);
     final rate = playbackRate ?? _playbackRate;
     if (rate != 1.0) {

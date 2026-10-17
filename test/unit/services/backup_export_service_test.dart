@@ -119,5 +119,33 @@ void main() {
       expect(ics, contains('END:VCALENDAR'));
       expect(ics, contains('Ashura'));
     });
+
+    test('task completions roundtrip and count as items', () {
+      final json = service.generateJsonBackup(
+        kazaTracker: const KazaTracker(),
+        prayerCompletions: {},
+        taskCompletions: {
+          '2026-10-16': ['calendar:r1', 'item:i1'],
+        },
+        calendarReminders: [],
+        tesbihItems: [],
+        tesbihGroups: [],
+        tesbihStats: [],
+        preferences: {},
+      );
+
+      final parsed = service.parseAndValidateBackup(json);
+      expect(parsed['taskCompletions'], {
+        '2026-10-16': ['calendar:r1', 'item:i1'],
+      });
+    });
+
+    test('backups without task completions parse them as null', () {
+      const legacy = '{"app": "PrayerAssistant", "version": 3, '
+          '"kazaTracker": {}, "prayerCompletions": {}}';
+
+      final parsed = service.parseAndValidateBackup(legacy);
+      expect(parsed['taskCompletions'], isNull);
+    });
   });
 }

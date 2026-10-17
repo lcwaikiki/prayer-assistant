@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../tesbihat/models/sound_item.dart';
 import 'backup_export_service.dart';
 
 /// A single backup file stored on Google Drive.
@@ -19,13 +22,17 @@ class DriveBackupInfo {
 
   final String fileId;
   final DateTime createdTime;
-  final int itemCount;
+  /// Null for large legacy backups, which are not downloaded just to count.
+  final int? itemCount;
   final String fileName;
 }
 
 class GoogleDriveBackupService {
   static const _scopes = [drive.DriveApi.driveFileScope];
   static const _folderName = 'Prayer Assistant';
+  static const _soundsFolderName = 'sounds';
+  static const _itemCountProperty = 'itemCount';
+  static const _countDownloadLimit = 1024 * 1024;
   static const _backupNamePrefix = 'prayer_assistant_backup';
   static const _emailPrefsKey = 'google_drive_account_email';
   static const _listLimitPrefsKey = 'google_drive_backup_list_limit';
@@ -183,18 +190,21 @@ class GoogleDriveBackupService {
     return drive.DriveApi(authorization.authClient(scopes: _scopes));
   }
 
-  /// Uploads the given backup JSON as a new timestamped file.
+  /// Uploads the given UTF-8 backup JSON bytes as a new timestamped file.
   ///
   /// Then applies retention: files older than 3 months that are beyond the
   /// newest 10 backups are deleted. The newest 10 backups are always kept.
-  Future<String> uploadBackup(String jsonContent) async {
+  Future<String> uploadBackup(Uint8List bytes) async {
     final api = await _driveApi();
     final folderId = await _getOrCreateFolder(api);
 
-    final bytes = utf8.encode(jsonContent);
+    final raw = jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
     final file = drive.File()
       ..name = _newBackupName()
-      ..parents = [folderId];
+      ..parents = [folderId]
+      ..appProperties = {
+        _itemCountProperty: '${BackupExportService.countItems(raw)}',
+      };
     final created = await api.files.create(
       file,
       uploadMedia: drive.Media(Stream.value(bytes), bytes.length),
@@ -224,7 +234,7 @@ class GoogleDriveBackupService {
         DriveBackupInfo(
           fileId: file.id!,
           createdTime: file.createdTime ?? DateTime.fromMillisecondsSinceEpoch(0),
-          itemCount: await _countItemsInFile(api, file.id!),
+          itemCount: await _itemCount(api, file),
           fileName: file.name ?? '',
         ),
       );
@@ -239,9 +249,19 @@ class GoogleDriveBackupService {
           "name contains '$_backupNamePrefix' and '$folderId' in parents and trashed=false",
       orderBy: 'createdTime desc',
       pageSize: 100,
-      $fields: 'files(id,name,createdTime)',
+      $fields: 'files(id,name,createdTime,size,appProperties)',
     );
     return result.files ?? <drive.File>[];
+  }
+
+  /// Item count stored with the backup at upload. Older backups lack it:
+  /// small ones are downloaded and counted, large ones (embedding sound
+  /// audio) are skipped.
+  Future<int?> _itemCount(drive.DriveApi api, drive.File file) async {
+    final stored = int.tryParse(file.appProperties?[_itemCountProperty] ?? '');
+    if (stored != null) return stored;
+    final size = int.tryParse(file.size ?? '') ?? 0;
+    return size < _countDownloadLimit ? _countItemsInFile(api, file.id!) : null;
   }
 
   Future<void> _applyRetention(drive.DriveApi api) async {
@@ -282,9 +302,11 @@ class GoogleDriveBackupService {
     return utf8.decode(bytes);
   }
 
-  Future<String> _getOrCreateFolder(drive.DriveApi api) async {
+  Future<String> _getOrCreateFolder(drive.DriveApi api, {String? parentId}) async {
+    final name = parentId == null ? _folderName : _soundsFolderName;
+    final parentClause = parentId == null ? '' : " and '$parentId' in parents";
     final query =
-        "name='$_folderName' and mimeType='application/vnd.google-apps.folder' and trashed=false";
+        "name='$name' and mimeType='application/vnd.google-apps.folder' and trashed=false$parentClause";
     final result = await api.files.list(
       q: query,
       spaces: 'drive',
@@ -296,9 +318,66 @@ class GoogleDriveBackupService {
     }
 
     final folder = drive.File()
-      ..name = _folderName
-      ..mimeType = 'application/vnd.google-apps.folder';
+      ..name = name
+      ..mimeType = 'application/vnd.google-apps.folder'
+      ..parents = parentId == null ? null : [parentId];
     final created = await api.files.create(folder);
     return created.id!;
+  }
+
+  Future<String> _soundsFolder(drive.DriveApi api) async =>
+      _getOrCreateFolder(api, parentId: await _getOrCreateFolder(api));
+
+  /// Uploads the audio of every sound not yet stored on Drive, one file per
+  /// sound named by its id, and returns the ids Drive now holds. Audio never
+  /// changes after a sound is added, so each sound is uploaded once; an
+  /// interrupted run resumes next time. Files are streamed with resumable
+  /// uploads, which send raw bytes instead of base64-encoding them in Dart.
+  Future<Set<String>> uploadMissingSounds(List<SoundItem> sounds) async {
+    if (sounds.isEmpty) return {};
+    final api = await _driveApi();
+    final folderId = await _soundsFolder(api);
+    final stored = (await _listSoundFiles(api, folderId)).keys.toSet();
+    for (final sound in sounds) {
+      final file = File(sound.path);
+      if (stored.contains(sound.id) || !file.existsSync()) continue;
+      await api.files.create(
+        drive.File()
+          ..name = sound.id
+          ..parents = [folderId],
+        uploadMedia: drive.Media(file.openRead(), file.lengthSync()),
+        uploadOptions: drive.ResumableUploadOptions(),
+      );
+      stored.add(sound.id);
+    }
+    return stored;
+  }
+
+  /// Downloads a sound's audio stored by [uploadMissingSounds], or null.
+  Future<Uint8List?> downloadSound(String soundId) async {
+    final api = await _driveApi();
+    final stored = await _listSoundFiles(api, await _soundsFolder(api));
+    final fileId = stored[soundId];
+    if (fileId == null) return null;
+    final media = await api.files.get(
+      fileId,
+      downloadOptions: drive.DownloadOptions.fullMedia,
+    ) as drive.Media;
+    final builder = BytesBuilder(copy: false);
+    await media.stream.forEach(builder.add);
+    return builder.takeBytes();
+  }
+
+  /// Sound file ids on Drive keyed by sound id.
+  Future<Map<String, String>> _listSoundFiles(
+    drive.DriveApi api,
+    String folderId,
+  ) async {
+    final result = await api.files.list(
+      q: "'$folderId' in parents and trashed=false",
+      pageSize: 1000,
+      $fields: 'files(id,name)',
+    );
+    return {for (final f in result.files ?? <drive.File>[]) f.name!: f.id!};
   }
 }

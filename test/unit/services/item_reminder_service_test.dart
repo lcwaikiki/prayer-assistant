@@ -109,14 +109,17 @@ void main() {
       );
     });
 
-    test('daily x3 clears the full id window first', () async {
+    test('rescheduling clears previously scheduled occurrences', () async {
       final base = _notificationId('item-1');
-      await service.scheduleReminder(
-        _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3),
-      );
+      final item =
+          _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3);
+      await service.scheduleReminder(item);
+      platform.cancelledIds.clear();
+
+      await service.scheduleReminder(item);
 
       final cancelled = [...platform.cancelledIds]..sort();
-      expect(cancelled, [for (var i = 0; i < 100; i++) base + i]);
+      expect(cancelled, [base, base + 1, base + 2]);
     });
 
     test('once x5 still schedules a single occurrence', () async {
@@ -294,8 +297,13 @@ void main() {
   });
 
   group('disabled and cancel', () {
-    test('disabled item only clears the id window', () async {
+    test('disabled item only clears its scheduled occurrences', () async {
       final base = _notificationId('item-1');
+      await service.scheduleReminder(
+        _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3),
+      );
+      platform.scheduledIds.clear();
+      platform.cancelledIds.clear();
       await service.scheduleReminder(
         Item(
           id: 'item-1',
@@ -312,22 +320,19 @@ void main() {
       );
 
       expect(platform.scheduledIds, isEmpty);
-      expect(platform.cancelledIds.length, 100);
-      expect(
-        platform.cancelledIds.toSet(),
-        {for (var i = 0; i < 100; i++) base + i},
-      );
+      expect(platform.cancelledIds.toSet(), {base, base + 1, base + 2});
     });
 
-    test('cancelReminder clears the full id window', () async {
+    test('cancelReminder clears every scheduled occurrence', () async {
       final base = _notificationId('item-1');
+      await service.scheduleReminder(
+        _item(reminderAt: DateTime(2099, 12, 31, 12, 0), reminderRepeatCount: 3),
+      );
+      platform.cancelledIds.clear();
+
       await service.cancelReminder('item-1');
 
-      expect(platform.cancelledIds.length, 100);
-      expect(
-        platform.cancelledIds.toSet(),
-        {for (var i = 0; i < 100; i++) base + i},
-      );
+      expect(platform.cancelledIds.toSet(), {base, base + 1, base + 2});
     });
   });
 

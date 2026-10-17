@@ -211,17 +211,19 @@ setUpAll(() {
       );
     });
 
-    test('daily x3 clears the full id window first', () async {
+    test('rescheduling clears previously scheduled occurrences', () async {
       final base = _notificationId('calendar-1');
-      await service.scheduleReminder(
-        _reminder(
-          anchorAt: DateTime(2099, 12, 31, 12, 0),
-          repeatCount: 3,
-        ),
+      final reminder = _reminder(
+        anchorAt: DateTime(2099, 12, 31, 12, 0),
+        repeatCount: 3,
       );
+      await service.scheduleReminder(reminder);
+      platform.cancelledIds.clear();
+
+      await service.scheduleReminder(reminder);
 
       final cancelled = [...platform.cancelledIds]..sort();
-      expect(cancelled, [for (var i = 0; i < 100; i++) base + i]);
+      expect(cancelled, [base, base + 1, base + 2]);
     });
 
     test('once x5 still schedules a single occurrence', () async {
@@ -568,8 +570,13 @@ final now = DateTime.now();
   });
 
   group('disabled and cancel', () {
-    test('disabled reminder only clears the id window', () async {
+    test('disabled reminder only clears its scheduled occurrences', () async {
       final base = _notificationId('calendar-1');
+      await service.scheduleReminder(
+        _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0), repeatCount: 3),
+      );
+      platform.scheduledIds.clear();
+      platform.cancelledIds.clear();
       await service.scheduleReminder(
         CalendarReminder(
           id: 'calendar-1',
@@ -582,22 +589,19 @@ final now = DateTime.now();
       );
 
       expect(platform.scheduledIds, isEmpty);
-      expect(platform.cancelledIds.length, 100);
-      expect(
-        platform.cancelledIds.toSet(),
-        {for (var i = 0; i < 100; i++) base + i},
-      );
+      expect(platform.cancelledIds.toSet(), {base, base + 1, base + 2});
     });
 
-    test('cancelReminder clears the full id window', () async {
+    test('cancelReminder clears every scheduled occurrence', () async {
       final base = _notificationId('calendar-1');
+      await service.scheduleReminder(
+        _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0), repeatCount: 3),
+      );
+      platform.cancelledIds.clear();
+
       await service.cancelReminder('calendar-1');
 
-      expect(platform.cancelledIds.length, 100);
-      expect(
-        platform.cancelledIds.toSet(),
-        {for (var i = 0; i < 100; i++) base + i},
-      );
+      expect(platform.cancelledIds.toSet(), {base, base + 1, base + 2});
     });
   });
 
@@ -726,20 +730,15 @@ final now = DateTime.now();
       expect(platform.scheduledMatches.first, isNull);
     });
 
-    test('re-arming a daily reminder schedules occurrences and clears full window', () async {
-      final base = _notificationId('calendar-1');
+    test('re-arming a daily reminder replaces its occurrences', () async {
       for (var i = 0; i < 3; i++) {
         await service.scheduleReminder(
           _reminder(anchorAt: DateTime(2099, 12, 31, 12, 0)),
         );
       }
 
-      expect(
-        platform.cancelledIds.where(
-          (id) => id >= base && id < base + 100,
-        ),
-        hasLength(300),
-      );
+      final pending = await platform.pendingNotificationRequests();
+      expect(pending, hasLength(7));
     });
   });
 }

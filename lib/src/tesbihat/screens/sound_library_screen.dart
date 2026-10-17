@@ -47,7 +47,8 @@ class _SoundLibraryScreenState extends ConsumerState<SoundLibraryScreen> {
       await _playerService.pause();
       setState(() => _currentlyPlayingId = null);
     } else {
-      await _playerService.playBytes(sound.bytes, mimeType: sound.mimeType);
+      await _playerService.playFile(
+        sound.path, mimeType: sound.mimeType);
       setState(() => _currentlyPlayingId = sound.id);
     }
   }

@@ -45,7 +45,7 @@ void main() {
     final sound = SoundItem(
       id: 'snd_abc',
       title: 'SubhanAllah Recording',
-      bytes: Uint8List.fromList([1, 2, 3]),
+      path: '/sounds/test.m4a',
       createdAt: DateTime(2026, 1, 1),
     );
 
@@ -179,7 +179,7 @@ void main() {
     final sound = SoundItem(
       id: 'snd_2x',
       title: 'Dhikr 2x',
-      bytes: Uint8List.fromList([1, 2, 3]),
+      path: '/sounds/test.m4a',
       createdAt: DateTime(2026, 1, 1),
     );
 

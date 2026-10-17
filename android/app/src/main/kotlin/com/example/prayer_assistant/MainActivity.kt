@@ -132,7 +132,7 @@ class MainActivity : FlutterActivity() {
         treeUri: Uri,
         name: String,
         mime: String,
-        content: String
+        bytes: ByteArray
     ): Boolean {
         var docUri = findChildDocument(resolver, treeUri, name)
         if (docUri == null) {
@@ -144,7 +144,7 @@ class MainActivity : FlutterActivity() {
                 ?: return false
         }
         resolver.openOutputStream(docUri, "wt")?.use { out ->
-            out.write(content.toByteArray(Charsets.UTF_8))
+            out.write(bytes)
             out.flush()
             return true
         }
@@ -191,47 +191,47 @@ class MainActivity : FlutterActivity() {
     private fun defaultDocumentsCollection(): Uri =
         MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
 
-    private fun findDocumentsEntry(name: String): Uri? {
+    /**
+     * Backup files this install owns in Documents, newest first.
+     *
+     * Scoped storage hides files left by earlier installs, yet their names
+     * stay taken, so MediaStore saves ours as "name (N).json". Matching by
+     * prefix finds that file again instead of inserting a new copy each time.
+     */
+    private fun ownDocumentsEntries(name: String): List<Uri> {
+        val base = name.substringBeforeLast('.')
+        val ext = name.substringAfterLast('.', "")
+        val entries = mutableListOf<Uri>()
         contentResolver.query(
             defaultDocumentsCollection(),
-            arrayOf(
-                MediaStore.MediaColumns._ID,
-                MediaStore.MediaColumns.DISPLAY_NAME,
-                MediaStore.MediaColumns.RELATIVE_PATH
-            ),
-            "${MediaStore.MediaColumns.DISPLAY_NAME} = ?",
-            arrayOf(name),
-            null
+            arrayOf(MediaStore.MediaColumns._ID),
+            "${MediaStore.MediaColumns.DISPLAY_NAME} LIKE ? AND " +
+                "${MediaStore.MediaColumns.RELATIVE_PATH} LIKE ?",
+            arrayOf("$base%.$ext", "${Environment.DIRECTORY_DOCUMENTS}%"),
+            "${MediaStore.MediaColumns.DATE_MODIFIED} DESC"
         )?.use { cursor ->
             val idIndex = cursor.getColumnIndex(MediaStore.MediaColumns._ID)
-            val nameIndex =
-                cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME)
-            val pathIndex =
-                cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH)
             while (cursor.moveToNext()) {
-                val display = cursor.getString(nameIndex)
-                val relative = cursor.getString(pathIndex)
-                if (display == name &&
-                    relative != null &&
-                    relative.startsWith(Environment.DIRECTORY_DOCUMENTS)
-                ) {
-                    val id = cursor.getLong(idIndex)
-                    return ContentUris.withAppendedId(
+                entries.add(
+                    ContentUris.withAppendedId(
                         defaultDocumentsCollection(),
-                        id
+                        cursor.getLong(idIndex)
                     )
-                }
+                )
             }
         }
-        return null
+        return entries
     }
 
-    private fun writeDocumentsBackup(name: String, content: String): Boolean {
+    private fun findDocumentsEntry(name: String): Uri? =
+        ownDocumentsEntries(name).firstOrNull()
+
+    private fun writeDocumentsBackup(name: String, bytes: ByteArray): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return try {
                 val file = documentsFile(name)
                 if (!documentsFolderExists()) return false
-                file.writeText(content, Charsets.UTF_8)
+                file.writeBytes(bytes)
                 true
             } catch (_: Exception) {
                 false
@@ -242,14 +242,20 @@ class MainActivity : FlutterActivity() {
             put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
             put(MediaStore.MediaColumns.RELATIVE_PATH, documentsRelativePath)
         }
-        val uri = findDocumentsEntry(name)
+        val existing = ownDocumentsEntries(name)
+        val uri = existing.firstOrNull()
             ?: contentResolver.insert(defaultDocumentsCollection(), values)
             ?: return false
         return try {
-            contentResolver.openOutputStream(uri, "wt")?.use { out ->
-                out.write(content.toByteArray(Charsets.UTF_8))
+            val written = contentResolver.openOutputStream(uri, "wt")?.use { out ->
+                out.write(bytes)
                 out.flush()
             } != null
+            // Remove our own older copies left by earlier versions.
+            if (written) {
+                existing.drop(1).forEach { contentResolver.delete(it, null, null) }
+            }
+            written
         } catch (_: Exception) {
             false
         }
@@ -449,24 +455,26 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
                 "writeBackup" -> {
-                    val content = call.argument<String>("content") ?: ""
+                    val bytes = call.argument<ByteArray>("bytes") ?: ByteArray(0)
                     val name = call.argument<String>("fileName")
                         ?: "prayer_assistant_backup.json"
                     val treeUri = storedFolderUri()
-                    try {
-                        result.success(
-                            treeUri != null &&
+                    // Backups can be tens of MB; write off the main thread.
+                    Thread {
+                        try {
+                            val ok = treeUri != null &&
                                 writeDocument(
                                     contentResolver,
                                     treeUri,
                                     name,
                                     "application/json",
-                                    content
+                                    bytes
                                 )
-                        )
-                    } catch (e: Exception) {
-                        result.error("write_failed", e.message, null)
-                    }
+                            runOnUiThread { result.success(ok) }
+                        } catch (e: Exception) {
+                            runOnUiThread { result.error("write_failed", e.message, null) }
+                        }
+                    }.start()
                 }
                 "readBackup" -> {
                     val name = call.argument<String>("fileName")
@@ -484,10 +492,14 @@ class MainActivity : FlutterActivity() {
                     result.success(documentsFolderExists())
                 }
                 "writeDocumentsBackup" -> {
-                    val content = call.argument<String>("content") ?: ""
+                    val bytes = call.argument<ByteArray>("bytes") ?: ByteArray(0)
                     val name = call.argument<String>("fileName")
                         ?: "prayer_assistant_backup.json"
-                    result.success(writeDocumentsBackup(name, content))
+                    // Backups can be tens of MB; write off the main thread.
+                    Thread {
+                        val ok = writeDocumentsBackup(name, bytes)
+                        runOnUiThread { result.success(ok) }
+                    }.start()
                 }
                 "readDocumentsBackup" -> {
                     val name = call.argument<String>("fileName")
@@ -581,6 +593,14 @@ class MainActivity : FlutterActivity() {
                 "cancel" -> {
                     val id = call.argument<Int>("id") ?: 0
                     ReminderNotificationManager.cancel(this, id)
+                    result.success(null)
+                }
+                "cancelRange" -> {
+                    val start = call.argument<Int>("start") ?: 0
+                    val count = call.argument<Int>("count") ?: 0
+                    for (id in start until start + count) {
+                        ReminderNotificationManager.cancel(this, id)
+                    }
                     result.success(null)
                 }
                 "scheduleSilentMode" -> {

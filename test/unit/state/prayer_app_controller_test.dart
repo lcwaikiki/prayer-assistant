@@ -619,7 +619,7 @@ void main() {
       expect(controller.isBusy, isFalse);
     });
 
-    test('reschedules enabled calendar reminders on launch', () async {
+    test('reschedules enabled calendar reminders after launch', () async {
       final reminder = CalendarReminder(
         id: 'r1',
         title: 'Eid',
@@ -631,6 +631,14 @@ void main() {
 
       final controller = buildController();
       await controller.initialize();
+      verifyNever(
+        () => calendarReminderService.scheduleReminder(
+          reminder,
+          catchUp: false,
+        ),
+      );
+
+      await controller.rescheduleCalendarReminders();
 
       verify(
         () => calendarReminderService.scheduleReminder(

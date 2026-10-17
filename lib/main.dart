@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart'
     hide ChangeNotifierProvider, Consumer;
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'l10n/app_localizations.dart';
 
@@ -46,8 +47,10 @@ Future<void> main() async {
       Hive.openBox<dynamic>('item_history_box'),
     ])),
     calendarReminderService.initialize(),
+    getApplicationSupportDirectory().then(
+      (dir) => SoundLibraryRepository.audioDirectory = '${dir.path}/sounds',
+    ),
   ]);
-
   final hiveBoxes = initResults[2] as List<dynamic>;
   final itemsBox = hiveBoxes[0] as Box<dynamic>;
   final itemHistoryBox = hiveBoxes[1] as Box<dynamic>;
@@ -120,7 +123,6 @@ Future<void> main() async {
       }
     }
   };
-
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -137,6 +139,7 @@ Future<void> main() async {
     SharedAudioHandler.initialize(container);
     MidnightReminderScheduler.initializeAndSchedule();
     CalendarMidnightScheduler.initializeAndSchedule();
+    controller.rescheduleCalendarReminders();
     _scheduleInitialBeadsReminders(
       repository,
       itemReminderService,

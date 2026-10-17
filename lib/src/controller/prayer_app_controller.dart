@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -734,9 +736,6 @@ class PrayerAppController extends ChangeNotifier {
         widgetBridgeService.updateSnoozeDurationMinutes(_snoozeDurationMinutes),
         widgetBridgeService.updateDismissConfirm(_notificationDismissConfirm),
         NativeReminderService.updateDismissConfirm(_notificationDismissConfirm),
-        ..._calendarReminders
-            .where((r) => r.enabled)
-            .map((r) => calendarReminderService.scheduleReminder(r, catchUp: false)),
       ]);
       try {
         await widgetBridgeService.updateWidgetLocale(resolvedLocale.languageCode);
@@ -744,7 +743,6 @@ class PrayerAppController extends ChangeNotifier {
       try {
         await syncQadaaWidget();
       } catch (_) {}
-
       await _syncCalendarRemindersWidget();
 
       if (_selectedLocation != null) {
@@ -754,7 +752,6 @@ class PrayerAppController extends ChangeNotifier {
         await _updateWidgetBridgeData();
         _countries = await api.getCountries();
       }
-
       // Background non-blocking tasks that do not delay app startup or frame rendering
       _loadStartupBackgroundData();
 
@@ -766,6 +763,15 @@ class PrayerAppController extends ChangeNotifier {
       _setLoading(false);
     }
   }
+
+  /// Re-arms all enabled calendar reminders.
+  ///
+  /// Called after the first frame: each reminder clears a 100-id window of
+  /// notifications, which takes seconds with many reminders.
+  Future<void> rescheduleCalendarReminders() => Future.wait([
+    for (final r in _calendarReminders.where((r) => r.enabled))
+      calendarReminderService.scheduleReminder(r, catchUp: false),
+  ]);
 
   Future<void> _loadStartupBackgroundData() async {
     try {
@@ -1700,6 +1706,26 @@ class PrayerAppController extends ChangeNotifier {
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
     SoundLibraryRepository? soundRepo,
+  }) => _exportBackup(
+    (json) => json,
+    itemRepo: itemRepo,
+    historyRepo: historyRepo,
+    soundRepo: soundRepo,
+  );
+
+  /// The backup as UTF-8 JSON bytes, encoded off the UI isolate so tens of
+  /// MB are never converted on the UI thread. Without [includeSoundAudio]
+  /// sounds carry only metadata; Drive stores their audio as separate files.
+  Future<Uint8List> exportBackupBytes({bool includeSoundAudio = true}) =>
+      _exportBackup(utf8.encode, includeSoundAudio: includeSoundAudio);
+
+  /// Builds the backup in a background isolate and applies [finish] there.
+  Future<T> _exportBackup<T>(
+    T Function(String json) finish, {
+    bool includeSoundAudio = true,
+    ItemRepository? itemRepo,
+    ItemHistoryRepository? historyRepo,
+    SoundLibraryRepository? soundRepo,
   }) async {
     const service = BackupExportService();
     final repo = itemRepo ?? _defaultItemRepo;
@@ -1732,6 +1758,8 @@ class PrayerAppController extends ChangeNotifier {
       'defaultCalendarDisplay': _defaultCalendarDisplay.name,
       'showSecondaryCalendarDate': _showSecondaryCalendarDate,
       'calendarWeekStart': _calendarWeekStart.name,
+      'calendarSortOption': _calendarSortOption.name,
+      'snoozeDurationMinutes': _snoozeDurationMinutes,
       'hijriDateOffset': _hijriDateOffset,
       'showIslamicHolidays': _showIslamicHolidays,
       'showFastingBadges': _showFastingBadges,
@@ -1749,16 +1777,29 @@ class PrayerAppController extends ChangeNotifier {
       'selectedLocation': _selectedLocation?.toJson(),
     };
 
-    return service.generateJsonBackup(
-      kazaTracker: _kazaTracker,
-      prayerCompletions: _prayerCompletions,
-      calendarReminders: _calendarReminders,
-      tesbihItems: items,
-      tesbihGroups: groups,
-      tesbihStats: stats,
-      soundLibrary: sounds,
-      preferences: prefs,
-      fastingLogs: _fastingLogs,
+    final kazaTracker = _kazaTracker;
+    final prayerCompletions = _prayerCompletions;
+    final calendarReminders = _calendarReminders;
+    final fastingLogs = _fastingLogs;
+    final taskCompletions = _taskCompletions;
+    // Encoding runs in a background isolate: the sound library makes the
+    // backup tens of MB, which would freeze the UI for seconds.
+    return Isolate.run(
+      () => finish(
+        service.generateJsonBackup(
+          kazaTracker: kazaTracker,
+          prayerCompletions: prayerCompletions,
+          taskCompletions: taskCompletions,
+          calendarReminders: calendarReminders,
+          tesbihItems: items,
+          tesbihGroups: groups,
+          tesbihStats: stats,
+          soundLibrary: sounds,
+          preferences: prefs,
+          fastingLogs: fastingLogs,
+          includeSoundAudio: includeSoundAudio,
+        ),
+      ),
     );
   }
 
@@ -1783,6 +1824,7 @@ class PrayerAppController extends ChangeNotifier {
     String jsonString, {
     bool restoreData = true,
     bool restorePreferences = true,
+    Future<Uint8List?> Function(String soundId)? fetchSoundAudio,
     ItemRepository? itemRepo,
     ItemHistoryRepository? historyRepo,
     SoundLibraryRepository? soundRepo,
@@ -1802,7 +1844,14 @@ class PrayerAppController extends ChangeNotifier {
       final restoredItems = parsed['tesbihItems'] as List<Item>;
       final restoredGroups = parsed['tesbihGroups'] as List<ItemGroup>;
       final restoredStats = parsed['tesbihStats'] as List<DailyItemStat>;
-      final restoredSounds = parsed['soundLibrary'] as List<SoundItem>? ?? [];
+      // Drive backups omit sound audio; fetch it for each sound.
+      final restoredSounds = <SoundWithAudio>[
+        for (final s in parsed['soundLibrary'] as List<SoundWithAudio>? ?? [])
+          (
+            sound: s.sound,
+            bytes: s.bytes ?? await fetchSoundAudio?.call(s.sound.id),
+          ),
+      ];
       final restoredFastingLogs =
           parsed['fastingLogs'] as Map<String, FastingLog>? ?? {};
 
@@ -1811,6 +1860,13 @@ class PrayerAppController extends ChangeNotifier {
 
       await database.savePrayerCompletions(restoredCompletions);
       _prayerCompletions = restoredCompletions;
+
+      final restoredTasks =
+          parsed['taskCompletions'] as Map<String, List<String>>?;
+      if (restoredTasks != null) {
+        await database.saveTaskCompletions(restoredTasks);
+        _taskCompletions = restoredTasks;
+      }
 
       await database.saveFastingLogs(restoredFastingLogs);
       _fastingLogs = restoredFastingLogs;
@@ -1850,7 +1906,7 @@ class PrayerAppController extends ChangeNotifier {
         hRepo.saveStats(restoredStats);
       }
       if (restoredSounds.isNotEmpty) {
-        sRepo.saveSounds(restoredSounds);
+        sRepo.restoreSounds(restoredSounds);
       }
     }
 
@@ -2072,6 +2128,15 @@ class PrayerAppController extends ChangeNotifier {
       prefs['calendarWeekStart'],
       _calendarWeekStart,
     );
+    _calendarSortOption = _enumByName(
+      CalendarSortOption.values,
+      prefs['calendarSortOption'],
+      _calendarSortOption,
+    );
+    if (prefs.containsKey('snoozeDurationMinutes')) {
+      _snoozeDurationMinutes =
+          asInt(prefs['snoozeDurationMinutes'], _snoozeDurationMinutes);
+    }
 
     final reminderSettingsRaw = prefs['reminderSettings'];
     if (reminderSettingsRaw is Map) {
@@ -2117,6 +2182,9 @@ class PrayerAppController extends ChangeNotifier {
     await database.saveCalendarPrimaryDisplay(_calendarPrimaryDisplay.name);
     await database.saveDefaultCalendarDisplay(_defaultCalendarDisplay);
     await database.saveCalendarWeekStart(_calendarWeekStart);
+    await database.saveCalendarSortOption(_calendarSortOption);
+    await database.saveSnoozeDurationMinutes(_snoozeDurationMinutes);
+    await widgetBridgeService.updateSnoozeDurationMinutes(_snoozeDurationMinutes);
     await database.saveWidgetTextSize(
       prefs.containsKey('widgetTextSizeValue')
           ? _widgetTextSizeValue.toString()
@@ -2243,12 +2311,44 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String> uploadBackupToGoogleDrive() {
+  Future<void> uploadBackupToGoogleDrive() {
     return _runBackupOperation(BackupActivity.driveUpload, () async {
-      final jsonStr = await exportBackupJson();
-      await _driveService.uploadBackup(jsonStr);
-      return jsonStr;
+      await _uploadBackupWithoutAudio();
+      _driveSoundIds = await _driveService.uploadMissingSounds(
+        _defaultSoundRepo.loadSounds(),
+      );
     });
+  }
+
+  /// Uploads a small backup whose sounds carry only metadata; their audio
+  /// is stored on Drive as separate files by [syncSoundsToDrive].
+  Future<void> _uploadBackupWithoutAudio() async {
+    await _driveService.uploadBackup(
+      await exportBackupBytes(includeSoundAudio: false),
+    );
+  }
+
+  /// Sound ids known to be on Drive during this session.
+  Set<String>? _driveSoundIds;
+  bool _soundSyncInProgress = false;
+
+  /// Uploads sound audio Drive does not have yet. Free when nothing is
+  /// missing, since the ids already on Drive are remembered. Also runs on
+  /// resume, because uploads started in the background are cut off when
+  /// Android freezes the app.
+  Future<void> syncSoundsToDrive() async {
+    if (!isGoogleDriveSignedIn || _soundSyncInProgress) return;
+    final sounds = _defaultSoundRepo.loadSounds();
+    final known = _driveSoundIds;
+    if (known != null && sounds.every((s) => known.contains(s.id))) return;
+    _soundSyncInProgress = true;
+    try {
+      _driveSoundIds = await _driveService.uploadMissingSounds(sounds);
+    } catch (_) {
+      // Best-effort; missing audio is uploaded on a later attempt.
+    } finally {
+      _soundSyncInProgress = false;
+    }
   }
 
   /// Best-effort silent backup to Google Drive, called when the app is
@@ -2260,13 +2360,13 @@ class PrayerAppController extends ChangeNotifier {
     }
     _autoBackupInProgress = true;
     try {
-      final jsonStr = await exportBackupJson();
-      final fingerprint = _dataFingerprint(jsonStr);
+      final fingerprint = await _backupFingerprint();
       if (fingerprint == _lastAutoBackupFingerprint) {
         return;
       }
-      await _driveService.uploadBackup(jsonStr);
+      await _uploadBackupWithoutAudio();
       _lastAutoBackupFingerprint = fingerprint;
+      await syncSoundsToDrive();
     } catch (_) {
       // Auto backups are best-effort; a failing upload must not surface.
     } finally {
@@ -2274,10 +2374,15 @@ class PrayerAppController extends ChangeNotifier {
     }
   }
 
-  int _dataFingerprint(String jsonStr) {
-    final raw = jsonDecode(jsonStr) as Map<String, dynamic>;
-    raw.remove('exportedAt');
-    return raw.toString().hashCode;
+  /// Cheap change detector for auto backups, so the full backup (which
+  /// embeds every sound's audio, often tens of MB) is only built when
+  /// something changed. Sounds are represented by their summary.
+  Future<int> _backupFingerprint() async {
+    final json = await exportBackupJson(
+      soundRepo: SoundLibraryRepository.memory(),
+    );
+    final raw = jsonDecode(json) as Map<String, dynamic>..remove('exportedAt');
+    return Object.hash(raw.toString(), _defaultSoundRepo.soundSummary());
   }
 
   Future<List<DriveBackupInfo>> listGoogleDriveBackups() {
@@ -2298,6 +2403,7 @@ class PrayerAppController extends ChangeNotifier {
         jsonStr,
         restoreData: restoreData,
         restorePreferences: restorePreferences,
+        fetchSoundAudio: _driveService.downloadSound,
       );
     });
   }
@@ -2359,14 +2465,14 @@ class PrayerAppController extends ChangeNotifier {
     }
     _folderBackupInProgress = true;
     try {
-      final jsonStr = await exportBackupJson();
-      final fingerprint = _dataFingerprint(jsonStr);
+      final fingerprint = await _backupFingerprint();
       if (fingerprint == _lastFolderBackupFingerprint) {
         return;
       }
+      final bytes = await exportBackupBytes();
       final written = _offlineFolderUri != null
-          ? await _offlineFolderService.writeBackup(jsonStr)
-          : await _offlineFolderService.writeDocumentsBackup(jsonStr);
+          ? await _offlineFolderService.writeBackup(bytes)
+          : await _offlineFolderService.writeDocumentsBackup(bytes);
       if (written) {
         _lastFolderBackupFingerprint = fingerprint;
       }

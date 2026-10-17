@@ -1070,11 +1070,13 @@ class PreferencesScreen extends StatelessWidget {
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.cloud_download_outlined),
                     title: Text(dateTime),
-                    subtitle: Text(
-                      context.l10n.googleDriveBackupItemCount(
-                        backup.itemCount,
-                      ),
-                    ),
+                    subtitle: backup.itemCount == null
+                        ? null
+                        : Text(
+                            context.l10n.googleDriveBackupItemCount(
+                              backup.itemCount!,
+                            ),
+                          ),
                     onTap: () async {
                       final selection = await showRestoreOptionsDialog(
                         context,

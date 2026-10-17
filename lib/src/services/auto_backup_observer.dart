@@ -12,14 +12,16 @@ class AutoBackupObserver extends WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.hidden) {
+    // Only `paused`: `hidden` also fires while returning to the app, which
+    // would start a full backup right as the user comes back.
+    if (state == AppLifecycleState.paused) {
       _controller.autoBackupToGoogleDrive();
       _controller.autoBackupToFolder();
     } else if (state == AppLifecycleState.resumed) {
       _controller.reloadTaskCompletions();
       _controller.reloadPrayerCompletions();
       _controller.syncQadaaWidget();
+      _controller.syncSoundsToDrive();
     }
   }
 }

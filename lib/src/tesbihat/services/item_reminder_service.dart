@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
 import '../../services/native_reminder_service.dart';
+import '../../services/notification_window.dart';
 import '../../services/notification_strings.dart';
 import '../../services/notification_tap_handler.dart';
 import '../../services/timezone_setup.dart';
@@ -87,15 +88,11 @@ class ItemReminderService {
     return 800000 + (hash % 100000);
   }
 
-  Future<void> cancelReminder(String itemId) {
-    final base = _notificationId(itemId);
-    return Future.wait([
-      for (var i = 0; i < _maxOccurrences; i++) ...[
-        _plugin.cancel(id: base + i),
-        NativeReminderService.cancel(base + i),
-      ],
-    ]);
-  }
+  Future<void> cancelReminder(String itemId) => cancelNotificationWindow(
+    _plugin,
+    _notificationId(itemId),
+    _maxOccurrences,
+  );
 
   /// Schedules with an exact alarm when the OS allows it, falling back to
   /// an inexact alarm when the exact-alarm permission is denied (Android

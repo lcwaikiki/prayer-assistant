@@ -125,7 +125,9 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
           }
         }
 
-        return Card(
+        return SizedBox(
+          width: double.infinity,
+          child: Card(
           elevation: 0,
           margin: EdgeInsets.zero,
           color: theme.colorScheme.surfaceContainerHigh,
@@ -150,96 +152,113 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Flexible(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                icon,
-                                size: 13,
-                                color: theme.colorScheme.onPrimaryContainer,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.primaryContainer,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      icon,
+                                      size: 13,
+                                      color:
+                                          theme.colorScheme.onPrimaryContainer,
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Flexible(
+                                      child: Text(
+                                        title,
+                                        style: theme.textTheme.labelSmall
+                                            ?.copyWith(
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          color: theme
+                                              .colorScheme.onPrimaryContainer,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(width: 5),
-                              Flexible(
-                                child: Text(
-                                  title,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: theme.colorScheme.onPrimaryContainer,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
+                            ),
+                            if (!_isExpanded) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                timeDisplay,
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures()
+                                  ],
+                                  color: theme.colorScheme.primary,
                                 ),
                               ),
                             ],
-                          ),
+                          ],
                         ),
                       ),
-                      if (!_isExpanded) ...[
-                        const SizedBox(width: 8),
-                        Text(
-                          timeDisplay,
-                          style: theme.textTheme.titleSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontFeatures: const [FontFeature.tabularFigures()],
-                            color: theme.colorScheme.primary,
-                          ),
-                        ),
-                        const Spacer(),
-                      ] else ...[
-                        const Spacer(),
-                        Flexible(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.secondaryContainer,
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              '${context.l10n.iftarTimeLabel}: $aksamStr',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.onSecondaryContainer,
+                      const SizedBox(width: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (_isExpanded) ...[
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.secondaryContainer,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                '${context.l10n.iftarTimeLabel}: $aksamStr',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      theme.colorScheme.onSecondaryContainer,
+                                ),
                               ),
                             ),
+                            const SizedBox(width: 2),
+                          ],
+                          IconButton(
+                            visualDensity: VisualDensity.compact,
+                            constraints: const BoxConstraints(
+                                minWidth: 28, minHeight: 28),
+                            padding: EdgeInsets.zero,
+                            tooltip: context.l10n.fastingTitle,
+                            icon: const Icon(Icons.open_in_new, size: 16),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => const FastingScreen(),
+                                ),
+                              );
+                            },
                           ),
-                        ),
-                        const SizedBox(width: 2),
-                      ],
-                      Icon(
-                        _isExpanded
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
-                        size: 18,
-                        color: theme.colorScheme.outline,
-                      ),
-                      const SizedBox(width: 2),
-                      IconButton(
-                        visualDensity: VisualDensity.compact,
-                        constraints: const BoxConstraints(
-                            minWidth: 28, minHeight: 28),
-                        padding: EdgeInsets.zero,
-                        tooltip: context.l10n.fastingTitle,
-                        icon: const Icon(Icons.open_in_new, size: 16),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const FastingScreen(),
-                            ),
-                          );
-                        },
+                          const SizedBox(width: 2),
+                          Icon(
+                            _isExpanded
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down,
+                            size: 18,
+                            color: theme.colorScheme.outline,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -345,8 +364,9 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
               ),
             ),
           ),
-        );
-      },
+        ),
+      );
+    },
     );
   }
 }

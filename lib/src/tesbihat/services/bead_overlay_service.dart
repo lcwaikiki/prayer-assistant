@@ -10,12 +10,19 @@ class BeadOverlayService {
   bool get isSupported => Platform.isAndroid;
 
   /// Registers the handler invoked when the bubble is tapped.
-  void setOnTap(VoidCallback? onTap) {
+  void setOnTap(void Function(DateTime? timestamp)? onTap) {
     _channel.setMethodCallHandler(
       onTap == null
           ? null
           : (call) async {
-              if (call.method == 'tap') onTap();
+              if (call.method == 'tap') {
+                final args = call.arguments as Map<dynamic, dynamic>?;
+                final ms = args?['timestamp'] as int?;
+                final timestamp = ms != null
+                    ? DateTime.fromMillisecondsSinceEpoch(ms)
+                    : null;
+                onTap(timestamp);
+              }
             },
     );
   }

@@ -25,7 +25,9 @@ void main() {
       tester,
       harness,
       const Scaffold(body: IftarSuhoorCountdownCard()),
+      settle: false,
     );
+    await tester.pump(const Duration(milliseconds: 200));
 
     expect(find.byType(IftarSuhoorCountdownCard), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
@@ -50,11 +52,13 @@ void main() {
       harness,
       const Scaffold(body: IftarSuhoorCountdownCard()),
       locale: const Locale('ru'),
+      settle: false,
     );
+    await tester.pump(const Duration(milliseconds: 200));
 
     // Tap to expand
     await tester.tap(find.byType(InkWell).first);
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 300));
 
     // In Russian, Suhoor label contains "Сухур" and Iftar contains "Ифтар"
     expect(find.textContaining('Сухур'), findsWidgets);
@@ -81,7 +85,9 @@ void main() {
       tester,
       harness,
       const FastingScreen(),
+      settle: false,
     );
+    await tester.pump(const Duration(milliseconds: 200));
 
     // Verify Fasting title renders
     expect(find.text('Fasting'), findsOneWidget);
@@ -130,7 +136,9 @@ void main() {
       tester,
       harness,
       const FastingScreen(),
+      settle: false,
     );
+    await tester.pump(const Duration(milliseconds: 200));
 
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());

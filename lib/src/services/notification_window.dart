@@ -10,17 +10,20 @@ import 'native_reminder_service.dart';
 Future<void> cancelNotificationWindow(
   FlutterLocalNotificationsPlugin plugin,
   int base,
-  int count,
-) async {
+  int count, {
+  bool cancelActive = true,
+}) async {
   bool inWindow(int? id) => id != null && id >= base && id < base + count;
   final pending = await plugin.pendingNotificationRequests();
-  final active = await plugin.getActiveNotifications();
   final ids = {
     ...pending.map((r) => r.id).where(inWindow),
-    ...active.map((n) => n.id).where(inWindow),
+    if (cancelActive)
+      ...((await plugin.getActiveNotifications())
+          .map((n) => n.id)
+          .where(inWindow)),
   };
   await Future.wait([
     for (final id in ids) plugin.cancel(id: id!),
-    NativeReminderService.cancelRange(base, count),
+    NativeReminderService.cancelRange(base, count, cancelActive: cancelActive),
   ]);
 }

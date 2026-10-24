@@ -598,8 +598,13 @@ class MainActivity : FlutterActivity() {
                 "cancelRange" -> {
                     val start = call.argument<Int>("start") ?: 0
                     val count = call.argument<Int>("count") ?: 0
+                    val cancelActive = call.argument<Boolean>("cancelActive") ?: true
                     for (id in start until start + count) {
-                        ReminderNotificationManager.cancel(this, id)
+                        if (cancelActive) {
+                            ReminderNotificationManager.cancel(this, id)
+                        } else {
+                            ReminderNotificationManager.cancelAlarmOnly(this, id)
+                        }
                     }
                     result.success(null)
                 }
@@ -679,8 +684,8 @@ class MainActivity : FlutterActivity() {
         super.onUserLeaveHint()
         val text = beadOverlayText ?: return
         if (BeadOverlay.canDraw(this)) {
-            BeadOverlay.show(this, text) {
-                beadOverlayChannel?.invokeMethod("tap", null)
+            BeadOverlay.show(this, text) { timestamp ->
+                beadOverlayChannel?.invokeMethod("tap", mapOf("timestamp" to timestamp))
             }
         } else {
             val intent = Intent(
@@ -789,6 +794,8 @@ class MainActivity : FlutterActivity() {
         val showDone = intent?.getBooleanExtra("showDone", false) ?: false
         val soundResource = intent?.getStringExtra("soundResource")
 
+        val dismissConfirm = intent?.getBooleanExtra("dismissConfirm", true) ?: true
+
         if (id != -1 && title != null && body != null) {
             ReminderNotificationManager.show(
                 context = this,
@@ -800,7 +807,8 @@ class MainActivity : FlutterActivity() {
                 dismissLabel = dismissLabel,
                 doneLabel = doneLabel,
                 showDone = showDone,
-                soundResource = soundResource
+                soundResource = soundResource,
+                dismissConfirm = dismissConfirm
             )
         }
 
@@ -816,6 +824,7 @@ class MainActivity : FlutterActivity() {
             intent.removeExtra("doneLabel")
             intent.removeExtra("showDone")
             intent.removeExtra("soundResource")
+            intent.removeExtra("dismissConfirm")
         }
         val ch = reminderChannel ?: return
         val currentPayload = pendingReminderPayload ?: return

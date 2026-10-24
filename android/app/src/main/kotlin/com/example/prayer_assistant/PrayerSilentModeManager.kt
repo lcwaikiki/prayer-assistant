@@ -8,6 +8,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.os.Build
 import android.provider.Settings
+import org.json.JSONObject
 
 object PrayerSilentModeManager {
     const val ACTION_PRAYER_SILENT_START = "com.pirci.prayer_assistant.ACTION_PRAYER_SILENT_START"
@@ -41,6 +42,24 @@ object PrayerSilentModeManager {
     }
 
     fun scheduleSilentMode(
+        context: Context,
+        id: Int,
+        triggerAtMillis: Long,
+        durationMinutes: Int
+    ) {
+        try {
+            val json = JSONObject().apply {
+                put("id", id)
+                put("triggerAtMillis", triggerAtMillis)
+                put("durationMinutes", durationMinutes)
+            }
+            getPrefs(context).edit().putString("silent_$id", json.toString()).apply()
+        } catch (_: Throwable) {
+        }
+        setSilentAlarm(context, id, triggerAtMillis, durationMinutes)
+    }
+
+    private fun setSilentAlarm(
         context: Context,
         id: Int,
         triggerAtMillis: Long,
@@ -84,6 +103,10 @@ object PrayerSilentModeManager {
     }
 
     fun cancelSilentMode(context: Context, id: Int) {
+        try {
+            getPrefs(context).edit().remove("silent_$id").apply()
+        } catch (_: Throwable) {
+        }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val startIntent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
@@ -119,6 +142,33 @@ object PrayerSilentModeManager {
         for (id in 1..100) {
             cancelSilentMode(context, id)
         }
+    }
+
+    fun rescheduleAll(context: Context) {
+        val prefs = getPrefs(context)
+        val all = prefs.all
+        val now = System.currentTimeMillis()
+        val editor = prefs.edit()
+        for ((key, value) in all) {
+            if (!key.startsWith("silent_")) continue
+            val jsonStr = value as? String ?: continue
+            try {
+                val json = JSONObject(jsonStr)
+                val id = json.getInt("id")
+                val triggerAtMillis = json.getLong("triggerAtMillis")
+                val durationMinutes = json.getInt("durationMinutes")
+                if (triggerAtMillis < now - 86400000L) {
+                    editor.remove(key)
+                    continue
+                }
+                if (triggerAtMillis >= now) {
+                    setSilentAlarm(context, id, triggerAtMillis, durationMinutes)
+                }
+            } catch (_: Throwable) {
+                editor.remove(key)
+            }
+        }
+        editor.apply()
     }
 
     fun startSilentMode(context: Context, id: Int, durationMinutes: Int) {

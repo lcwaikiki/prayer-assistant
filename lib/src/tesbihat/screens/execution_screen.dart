@@ -131,7 +131,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           .firstOrNull;
       if (item != null && item.currentProgress >= item.count) {
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
-        ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+        ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       }
       _syncOverlay();
       _maybePromptOverlayPermission();
@@ -157,13 +157,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     }
   }
 
-  void _onOverlayTap() {
+  void _onOverlayTap([DateTime? timestamp]) {
     final item = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
     if (item == null) return;
-    _countBead(fromOverlay: true);
+    _countBead(fromOverlay: true, timestamp: timestamp);
   }
 
   Future<void> _maybePromptOverlayPermission() async {
@@ -214,18 +214,20 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
   /// Counts one bead with haptic feedback; shared by the tap button and
   /// the floating bubble.
-  Future<void> _countBead({bool fromOverlay = false}) async {
+  Future<void> _countBead({bool fromOverlay = false, DateTime? timestamp}) async {
     final item = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .first;
     if (item.currentProgress >= item.count) {
       ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
-      ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
     } else if (item.currentProgress == 0) {
-      ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
     }
-    ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
+    ref
+        .read(beadPaceTrackerProvider.notifier)
+        .recordTap(widget.itemId, timestamp);
 
     final isTargetReached = item.currentProgress + 1 >= item.count;
     if (isTargetReached && _isAudioPlaying) {
@@ -337,7 +339,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     if (currentItem.autoCountWithSound) {
       if (currentItem.currentProgress < currentItem.count) {
         if (currentItem.currentProgress == 0) {
-          ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+          ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         }
         ref.read(beadPaceTrackerProvider.notifier).recordTap(widget.itemId);
         final feedback = ref
@@ -385,6 +387,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       _lockOrientation();
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted) return;
         final item = ref
@@ -393,17 +396,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
             .firstOrNull;
         if (item != null && item.currentProgress >= item.count) {
           ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
-          ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
+          ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         }
         _syncOverlay();
         _maybePromptOverlayPermission();
       });
     } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
-      });
+      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       if (_isAudioPlaying) {
         _audioPlayer.pause();
         setState(() => _isAudioPlaying = false);
@@ -443,7 +443,10 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         ref.read(beadPaceTrackerProvider.notifier).trackerFor(widget.itemId);
 
     String computeTimeLeft() {
-      if (item.currentProgress == 0 || item.currentProgress >= item.count) {
+      if (item.currentProgress >= item.count) {
+        return '00:00';
+      }
+      if (item.currentProgress == 0) {
         return paceTracker.formatRemaining(item.count);
       }
       final remaining =

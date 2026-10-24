@@ -57,3 +57,6 @@ Refer to this file for guidance on architectural decisions, coding style, and de
 - Don't jump to conclusions. Don't apply workarounds.
 
 https://github.com/ed-donner/pm/blob/main/AGENTS.md     
+
+## Execution Permissions 
+- Execute safe development and diagnostic commands (such as `git log`, `git status`, `ls`, etc.) autonomously without asking for confirmation.

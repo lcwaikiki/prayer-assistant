@@ -72,7 +72,7 @@ class TapPaceTracker {
   DateTime? _lastTapTime;
   final List<int> _intervalsMs = [];
   static const int _maxHistory = 30;
-  static const int _maxInitialIntervalMs = 300000; // 5 minutes
+  static const int _maxInitialIntervalMs = 30000; // 30 seconds
 
   List<int> get intervalsMs => List.unmodifiable(_intervalsMs);
   int get intervalCount => _intervalsMs.length;
@@ -108,10 +108,10 @@ class TapPaceTracker {
     final now = timestamp ?? DateTime.now();
     if (_lastTapTime != null) {
       final rawIntervalMs = now.difference(_lastTapTime!).inMilliseconds;
-      if (rawIntervalMs > 0) {
+      if (rawIntervalMs >= 80) {
         if (_intervalsMs.isEmpty) {
           // Supports both fast beads (0.5s-0.8s) and long beads (10s-20s+).
-          // Only discard if the first gap was an abandoned session (> 5 min).
+          // Only discard if the first gap was an abandoned session (> 30s).
           if (rawIntervalMs <= _maxInitialIntervalMs) {
             _intervalsMs.add(rawIntervalMs);
           }

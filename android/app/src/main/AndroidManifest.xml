@@ -77,7 +77,7 @@
         <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -180,7 +180,7 @@
         <receiver
             android:name=".PrayerWidgetTickReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.pirci.prayer_assistant.ACTION_REFRESH_WIDGETS" />
                 <action android:name="com.pirci.prayer_assistant.ACTION_REFRESH_ICON" />
@@ -222,6 +222,17 @@
             </intent-filter>
         </receiver>
         <receiver
+            android:name=".ReminderBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver
             android:name=".ReminderActionReceiver"
             android:enabled="true"
             android:exported="false">
@@ -247,8 +258,8 @@
             android:exported="false" />
         <receiver
             android:name="dev.fluttercommunity.plus.androidalarmmanager.RebootBroadcastReceiver"
-            android:enabled="false"
-            android:exported="false">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

@@ -13,6 +13,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver
+import org.json.JSONObject
 
 object ReminderNotificationManager {
     const val CHANNEL_ID = "prayer_reminders_chime_vibrate_sound"
@@ -577,7 +578,63 @@ object ReminderNotificationManager {
         NotificationManagerCompat.from(context).notify(id, notification)
     }
 
+    private const val PREFS_NAME = "reminder_alarms_prefs"
+
+    private fun getPrefs(context: Context) =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
     fun schedule(
+        context: Context,
+        id: Int,
+        triggerAtMillis: Long,
+        title: String,
+        body: String,
+        payload: String? = null,
+        snoozeLabel: String = "Snooze",
+        dismissLabel: String = "Dismiss",
+        doneLabel: String = "Done",
+        showDone: Boolean = false,
+        soundResource: String? = "reminder_chime",
+        originalTime: String? = null,
+        dismissConfirm: Boolean = true
+    ) {
+        try {
+            val json = JSONObject().apply {
+                put("id", id)
+                put("triggerAtMillis", triggerAtMillis)
+                put("title", title)
+                put("body", body)
+                if (payload != null) put("payload", payload)
+                put("snoozeLabel", snoozeLabel)
+                put("dismissLabel", dismissLabel)
+                put("doneLabel", doneLabel)
+                put("showDone", showDone)
+                if (soundResource != null) put("soundResource", soundResource)
+                if (originalTime != null) put("originalTime", originalTime)
+                put("dismissConfirm", dismissConfirm)
+            }
+            getPrefs(context).edit().putString(id.toString(), json.toString()).apply()
+        } catch (_: Throwable) {
+        }
+
+        setAlarm(
+            context,
+            id,
+            triggerAtMillis,
+            title,
+            body,
+            payload,
+            snoozeLabel,
+            dismissLabel,
+            doneLabel,
+            showDone,
+            soundResource,
+            originalTime,
+            dismissConfirm
+        )
+    }
+
+    private fun setAlarm(
         context: Context,
         id: Int,
         triggerAtMillis: Long,
@@ -639,6 +696,15 @@ object ReminderNotificationManager {
     }
 
     fun cancel(context: Context, id: Int) {
+        cancelAlarmOnly(context, id)
+        NotificationManagerCompat.from(context).cancel(id)
+    }
+
+    fun cancelAlarmOnly(context: Context, id: Int) {
+        try {
+            getPrefs(context).edit().remove(id.toString()).apply()
+        } catch (_: Throwable) {
+        }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderAlarmReceiver::class.java).apply {
             action = ACTION_REMINDER_ALARM
@@ -653,6 +719,55 @@ object ReminderNotificationManager {
             alarmManager.cancel(pendingIntent)
             pendingIntent.cancel()
         }
-        NotificationManagerCompat.from(context).cancel(id)
+    }
+
+    fun rescheduleAll(context: Context) {
+        val prefs = getPrefs(context)
+        val all = prefs.all
+        val now = System.currentTimeMillis()
+        val editor = prefs.edit()
+        for ((key, value) in all) {
+            val jsonStr = value as? String ?: continue
+            try {
+                val json = JSONObject(jsonStr)
+                val id = json.getInt("id")
+                val triggerAtMillis = json.getLong("triggerAtMillis")
+                if (triggerAtMillis < now - 86400000L) {
+                    editor.remove(key)
+                    continue
+                }
+                if (triggerAtMillis >= now) {
+                    val title = json.getString("title")
+                    val body = json.getString("body")
+                    val payload = if (json.has("payload")) json.getString("payload") else null
+                    val snoozeLabel = json.optString("snoozeLabel", "Snooze")
+                    val dismissLabel = json.optString("dismissLabel", "Dismiss")
+                    val doneLabel = json.optString("doneLabel", "Done")
+                    val showDone = json.optBoolean("showDone", false)
+                    val soundResource = if (json.has("soundResource")) json.getString("soundResource") else null
+                    val originalTime = if (json.has("originalTime")) json.getString("originalTime") else null
+                    val dismissConfirm = json.optBoolean("dismissConfirm", true)
+
+                    setAlarm(
+                        context,
+                        id,
+                        triggerAtMillis,
+                        title,
+                        body,
+                        payload,
+                        snoozeLabel,
+                        dismissLabel,
+                        doneLabel,
+                        showDone,
+                        soundResource,
+                        originalTime,
+                        dismissConfirm
+                    )
+                }
+            } catch (_: Throwable) {
+                editor.remove(key)
+            }
+        }
+        editor.apply()
     }
 }

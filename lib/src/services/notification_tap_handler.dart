@@ -89,11 +89,14 @@ Future<void> handleNotificationResponse(NotificationResponse response) async {
         raw = raw.substring(tesbihGroupPayloadPrefix.length);
       }
       final map = jsonDecode(raw) as Map<String, dynamic>;
-      final rawId = map['id'];
-      if (rawId is int) {
-        notificationId = rawId;
-      } else if (rawId is String) {
-        notificationId = int.tryParse(rawId);
+      final rawNotifId = map['notificationId'] ?? map['id'];
+      if (rawNotifId is int) {
+        notificationId = rawNotifId;
+      } else if (rawNotifId is String) {
+        final isTesbih = map['type'] == 'tesbih_item' || map['type'] == 'tesbih_group';
+        if (!isTesbih) {
+          notificationId = int.tryParse(rawNotifId);
+        }
       }
     } catch (_) {}
   }
@@ -365,11 +368,14 @@ Future<void> _handleSnooze(
         raw = raw.substring(tesbihGroupPayloadPrefix.length);
       }
       final map = jsonDecode(raw) as Map<String, dynamic>;
-      final rawId = map['id'];
-      if (rawId is int) {
-        id = rawId;
-      } else if (rawId is String) {
-        id = int.tryParse(rawId) ?? id;
+      final rawNotifId = map['notificationId'] ?? map['id'];
+      if (rawNotifId is int) {
+        id = rawNotifId;
+      } else if (rawNotifId is String) {
+        final isTesbih = map['type'] == 'tesbih_item' || map['type'] == 'tesbih_group';
+        if (!isTesbih) {
+          id = int.tryParse(rawNotifId) ?? id;
+        }
       }
     } catch (_) {}
   }

@@ -3,6 +3,22 @@ import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final chimeAudioContext = AudioContext(
+  android: const AudioContextAndroid(
+    isSpeakerphoneOn: false,
+    stayAwake: false,
+    contentType: AndroidContentType.sonification,
+    usageType: AndroidUsageType.assistanceSonification,
+    audioFocus: AndroidAudioFocus.none,
+  ),
+  iOS: AudioContextIOS(
+    category: AVAudioSessionCategory.playback,
+    options: const {
+      AVAudioSessionOptions.mixWithOthers,
+    },
+  ),
+);
+
 final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
   final service = AudioPlayerService();
   ref.onDispose(service.dispose);
@@ -10,13 +26,18 @@ final audioPlayerServiceProvider = Provider<AudioPlayerService>((ref) {
 });
 
 final chimePlayerServiceProvider = Provider<AudioPlayerService>((ref) {
-  final service = AudioPlayerService();
+  final service = AudioPlayerService(audioContext: chimeAudioContext);
   ref.onDispose(service.dispose);
   return service;
 });
 
 class AudioPlayerService {
-  AudioPlayerService({AudioPlayer? player}) : _player = player ?? AudioPlayer();
+  AudioPlayerService({AudioPlayer? player, AudioContext? audioContext})
+      : _player = player ?? AudioPlayer() {
+    if (audioContext != null) {
+      _player.setAudioContext(audioContext);
+    }
+  }
 
   final AudioPlayer _player;
   double _playbackRate = 1.0;

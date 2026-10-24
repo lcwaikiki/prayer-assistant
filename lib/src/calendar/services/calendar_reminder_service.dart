@@ -179,7 +179,7 @@ class CalendarReminderService {
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
     // count would otherwise leave stale notifications behind.
-    await cancelNotificationWindow(_plugin, id, _maxOccurrences);
+    await cancelNotificationWindow(_plugin, id, _maxOccurrences, cancelActive: false);
 
     if (!reminder.enabled) {
       return;
@@ -223,7 +223,7 @@ class CalendarReminderService {
     );
     final body = reminder.notes.isEmpty ? reminder.title : reminder.notes;
     final payload =
-        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': reminder.anchorAt.toIso8601String(), 'isTask': reminder.isTask})}';
+        '$calendarReminderPayloadPrefix${jsonEncode({'id': reminder.id, 'notificationId': id, 'title': reminder.title, 'body': body, 'type': 'calendar', 'date': reminder.anchorAt.toIso8601String(), 'isTask': reminder.isTask})}';
 
     final repeatCount = reminder.repeatCount;
     if (repeatCount != null) {

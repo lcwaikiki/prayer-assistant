@@ -32,7 +32,7 @@ object BeadOverlay {
     val isShowing: Boolean get() = view != null
 
     @SuppressLint("ClickableViewAccessibility")
-    fun show(context: Context, text: String, onTap: () -> Unit) {
+    fun show(context: Context, text: String, onTap: (Long) -> Unit) {
         if (view != null || Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !canDraw(context)) return
         val app = context.applicationContext
         val wm = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -114,7 +114,7 @@ object BeadOverlay {
                 MotionEvent.ACTION_UP -> {
                     handler.removeCallbacks(longPressRunnable)
                     if (!isDragging && !isLongPressed) {
-                        onTap()
+                        onTap(System.currentTimeMillis())
                     }
                     true
                 }

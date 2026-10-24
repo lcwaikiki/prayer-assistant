@@ -208,7 +208,12 @@ class ItemReminderService {
     // Clear the full per-occurrence id window: a finite count schedules
     // several one-shots (id..id+count-1), and switching to/from a finite
     // count would otherwise leave stale notifications behind.
-    await cancelReminder(subject.id);
+    await cancelNotificationWindow(
+      _plugin,
+      _notificationId(subject.id),
+      _maxOccurrences,
+      cancelActive: false,
+    );
 
     if (!subject.reminderEnabled) {
       return;
@@ -254,7 +259,7 @@ class ItemReminderService {
       ),
     );
     final payload =
-        '$payloadPrefix${jsonEncode({'id': subject.id, 'title': subject.title, 'body': body, 'type': subject is Item ? 'tesbih_item' : 'tesbih_group', 'isTask': subject.isTask})}';
+        '$payloadPrefix${jsonEncode({'id': subject.id, 'notificationId': id, 'title': subject.title, 'body': body, 'type': subject is Item ? 'tesbih_item' : 'tesbih_group', 'isTask': subject.isTask})}';
 
     final repeatCount = subject.reminderRepeatCount;
     if (repeatCount != null) {

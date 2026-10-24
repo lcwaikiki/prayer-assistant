@@ -212,7 +212,7 @@ class _FastingScreenState extends State<FastingScreen> {
 
             padding: const EdgeInsets.only(bottom: 24),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 1. Live Countdown Card
                 const Padding(

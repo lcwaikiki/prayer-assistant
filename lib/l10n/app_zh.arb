@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "启用静音模式以选择持续时间。",
   "dndPermissionDialogTitle": "勿扰访问权限",
   "dndPermissionDialogMessage": "要在礼拜期间自动将铃声静音，请在系统设置中允许勿扰访问权限。",
-  "dndPermissionOpenSettings": "打开设置"
+  "dndPermissionOpenSettings": "打开设置",
+  "beadOverlayClose": "关闭"
 }

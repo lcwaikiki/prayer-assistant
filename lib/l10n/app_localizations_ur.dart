@@ -1858,4 +1858,7 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => 'بند کریں';
 }

@@ -3517,6 +3517,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Interval chime'**
   String get beadsIntervalChime;
+
+  /// No description provided for @beadOverlayClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get beadOverlayClose;
 }
 
 class _AppLocalizationsDelegate

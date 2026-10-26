@@ -1866,4 +1866,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => 'বন্ধ করুন';
 }

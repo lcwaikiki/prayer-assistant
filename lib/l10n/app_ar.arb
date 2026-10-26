@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "قم بتمكين الوضع الصامت لاختيار المدة.",
   "dndPermissionDialogTitle": "إذن عدم الإزعاج",
   "dndPermissionDialogMessage": "لكتم صوت الرنين تلقائيًا أثناء وقت الصلاة، يرجى السماح بالوصول إلى وضع عدم الإزعاج في إعدادات النظام.",
-  "dndPermissionOpenSettings": "فتح الإعدادات"
+  "dndPermissionOpenSettings": "فتح الإعدادات",
+  "beadOverlayClose": "إغلاق"
 }

@@ -28,9 +28,12 @@ class BeadOverlayService {
   }
 
   /// Enables the bubble for the next Home press, showing [text].
-  Future<void> arm(String text) async {
+  Future<void> arm(String text, {String? closeLabel}) async {
     if (!isSupported) return;
-    await _channel.invokeMethod<void>('arm', {'text': text});
+    await _channel.invokeMethod<void>('arm', {
+      'text': text,
+      if (closeLabel != null) 'closeLabel': closeLabel,
+    });
   }
 
   /// Disables and hides the bubble.

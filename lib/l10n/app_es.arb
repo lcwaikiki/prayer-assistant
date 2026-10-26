@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "Habilite el modo silencioso para seleccionar la duración.",
   "dndPermissionDialogTitle": "Acceso a No molestar",
   "dndPermissionDialogMessage": "Para silenciar automáticamente el timbre durante la oración, permita el acceso a No molestar en la configuración del sistema.",
-  "dndPermissionOpenSettings": "Abrir configuración"
+  "dndPermissionOpenSettings": "Abrir configuración",
+  "beadOverlayClose": "Cerrar"
 }

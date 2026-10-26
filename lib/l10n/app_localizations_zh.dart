@@ -1797,4 +1797,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => '关闭';
 }

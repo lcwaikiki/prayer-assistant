@@ -43,6 +43,7 @@ class MainActivity : FlutterActivity() {
     private var beadOverlayChannel: MethodChannel? = null
     /** Bubble text while the bead execution screen is open; null otherwise. */
     private var beadOverlayText: String? = null
+    private var beadOverlayCloseLabel: String? = null
     private var pendingReminderPayload: String? = null
     private var pendingReminderId: Int? = null
     private var pendingOpenTarget: String? = null
@@ -660,11 +661,16 @@ class MainActivity : FlutterActivity() {
                 }
                 "arm" -> {
                     beadOverlayText = call.argument<String>("text")
-                    BeadOverlay.update(beadOverlayText ?: "")
+                    beadOverlayCloseLabel = call.argument<String>("closeLabel")
+                    BeadOverlay.update(
+                        text = beadOverlayText ?: "",
+                        closeLabel = beadOverlayCloseLabel
+                    )
                     result.success(null)
                 }
                 "disarm" -> {
                     beadOverlayText = null
+                    beadOverlayCloseLabel = null
                     BeadOverlay.hide(this)
                     result.success(null)
                 }
@@ -688,11 +694,13 @@ class MainActivity : FlutterActivity() {
             BeadOverlay.show(
                 this,
                 text,
+                closeLabel = beadOverlayCloseLabel,
                 onTap = { timestamp ->
                     beadOverlayChannel?.invokeMethod("tap", mapOf("timestamp" to timestamp))
                 },
                 onDismiss = {
                     beadOverlayText = null
+                    beadOverlayCloseLabel = null
                     beadOverlayChannel?.invokeMethod("dismiss", null)
                 }
             )

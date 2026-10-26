@@ -69,6 +69,7 @@ object BeadOverlay {
     fun show(
         context: Context,
         text: String,
+        closeLabel: String? = null,
         onTap: (Long) -> Unit,
         onDismiss: (() -> Unit)? = null
     ) {
@@ -77,8 +78,10 @@ object BeadOverlay {
         val wm = app.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val density = app.resources.displayMetrics.density
         val sizePx = (72 * density).toInt()
-        val dismissSizePx = (46 * density).toInt()
-        val dismissBottomMarginPx = (44 * density).toInt()
+        val dismissHeightPx = (44 * density).toInt()
+        val dismissWidthPx = (136 * density).toInt()
+        val dismissBottomMarginPx = (-12 * density).toInt()
+        val closeText = getCloseText(app, closeLabel)
 
         val (curX, curY) = getSavedPosition(app)
         val params = WindowManager.LayoutParams(
@@ -106,26 +109,34 @@ object BeadOverlay {
             elevation = 8f
         }
 
+        val normalTextColor = Color.parseColor("#3C4043")
+        val activeTextColor = Color.WHITE
+
         val normalDismissBg = GradientDrawable().apply {
-            shape = GradientDrawable.OVAL
-            setColor(Color.parseColor("#99000000"))
-            setStroke((2 * density).toInt(), Color.WHITE)
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 22 * density
+            setColor(Color.parseColor("#FFFFFFFF"))
+            setStroke((2 * density).toInt(), Color.parseColor("#CCCCCC"))
+            alpha = 255
         }
         val activeDismissBg = GradientDrawable().apply {
-            shape = GradientDrawable.OVAL
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = 22 * density
             setColor(Color.parseColor("#E53935"))
-            setStroke((2 * density).toInt(), Color.WHITE)
+            setStroke((2 * density).toInt(), Color.parseColor("#C62828"))
+            alpha = 255
         }
 
         val dismissParams = WindowManager.LayoutParams(
-            dismissSizePx,
-            dismissSizePx,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            dismissHeightPx,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
             y = dismissBottomMarginPx
+            alpha = 1.0f
         }
 
         fun vibrateDismissFeedback() {
@@ -149,13 +160,20 @@ object BeadOverlay {
         fun showDismissTarget() {
             if (dismissView == null) {
                 val target = TextView(app).apply {
-                    this.text = "✕"
+                    this.text = "✕  $closeText"
                     gravity = Gravity.CENTER
-                    setTextColor(Color.WHITE)
-                    textSize = 18f
-                    typeface = Typeface.DEFAULT_BOLD
+                    setTextColor(normalTextColor)
+                    textSize = 17f
+                    typeface = try {
+                        Typeface.create("sans-serif-medium", Typeface.NORMAL)
+                    } catch (_: Exception) {
+                        Typeface.DEFAULT_BOLD
+                    }
                     background = normalDismissBg
                     elevation = 12f
+                    alpha = 1.0f
+                    minWidth = dismissWidthPx
+                    setPadding((16 * density).toInt(), 0, (16 * density).toInt(), 0)
                 }
                 try {
                     wm.addView(target, dismissParams)
@@ -221,43 +239,52 @@ object BeadOverlay {
                         } catch (_: Exception) {}
 
                         val target = dismissView
-                        val dist: Double
-                        val threshold: Float
+                        val isOver: Boolean
                         if (target != null && target.isAttachedToWindow) {
                             val targetLoc = IntArray(2)
                             target.getLocationOnScreen(targetLoc)
-                            val targetCenterX = targetLoc[0] + (target.width / 2f)
-                            val targetCenterY = targetLoc[1] + (target.height / 2f)
+                            val targetLeft = targetLoc[0].toFloat()
+                            val targetTop = targetLoc[1].toFloat()
+                            val targetRight = targetLeft + target.width
+                            val targetBottom = targetTop + target.height
 
                             val bubbleLoc = IntArray(2)
                             bubble.getLocationOnScreen(bubbleLoc)
                             val bubbleCenterX = bubbleLoc[0] + (bubble.width / 2f)
                             val bubbleCenterY = bubbleLoc[1] + (bubble.height / 2f)
 
-                            dist = hypot((bubbleCenterX - targetCenterX).toDouble(), (bubbleCenterY - targetCenterY).toDouble())
-                            threshold = ((bubble.width + target.width) / 2f) * 0.9f
+                            val clampX = bubbleCenterX.coerceIn(targetLeft, targetRight)
+                            val clampY = bubbleCenterY.coerceIn(targetTop, targetBottom)
+                            val dist = hypot((bubbleCenterX - clampX).toDouble(), (bubbleCenterY - clampY).toDouble())
+                            isOver = dist <= (bubble.width / 2f)
                         } else {
                             val metrics = app.resources.displayMetrics
+                            val targetLeft = (metrics.widthPixels - dismissWidthPx) / 2f
+                            val targetTop = (metrics.heightPixels - dismissBottomMarginPx - dismissHeightPx).toFloat()
+                            val targetRight = targetLeft + dismissWidthPx
+                            val targetBottom = targetTop + dismissHeightPx
                             val bubbleCenterX = params.x + (sizePx / 2f)
                             val bubbleCenterY = params.y + (sizePx / 2f)
-                            val targetCenterX = metrics.widthPixels / 2f
-                            val targetCenterY = metrics.heightPixels - dismissBottomMarginPx - (dismissSizePx / 2f)
-                            dist = hypot((bubbleCenterX - targetCenterX).toDouble(), (bubbleCenterY - targetCenterY).toDouble())
-                            threshold = (sizePx + dismissSizePx) / 2f
+                            val clampX = bubbleCenterX.coerceIn(targetLeft, targetRight)
+                            val clampY = bubbleCenterY.coerceIn(targetTop, targetBottom)
+                            val dist = hypot((bubbleCenterX - clampX).toDouble(), (bubbleCenterY - clampY).toDouble())
+                            isOver = dist <= (sizePx / 2f)
                         }
 
-                        if (dist < threshold) {
+                        if (isOver) {
                             if (!isOverDismiss) {
                                 isOverDismiss = true
                                 vibrateDismissFeedback()
                                 dismissView?.background = activeDismissBg
-                                dismissView?.scaleX = 1.25f
-                                dismissView?.scaleY = 1.25f
+                                dismissView?.setTextColor(activeTextColor)
+                                dismissView?.scaleX = 1.08f
+                                dismissView?.scaleY = 1.08f
                             }
                         } else {
                             if (isOverDismiss) {
                                 isOverDismiss = false
                                 dismissView?.background = normalDismissBg
+                                dismissView?.setTextColor(normalTextColor)
                                 dismissView?.scaleX = 1.0f
                                 dismissView?.scaleY = 1.0f
                             }
@@ -298,10 +325,50 @@ object BeadOverlay {
         view = bubble
     }
 
-    fun update(text: String) {
+    fun update(text: String, closeLabel: String? = null) {
         view?.apply {
             this.text = text
             textSize = textSizeFor(text)
+        }
+        if (closeLabel != null) {
+            dismissView?.apply {
+                this.text = "✕  $closeLabel"
+            }
+        }
+    }
+
+    private fun getCloseText(context: Context, customLabel: String? = null): String {
+        val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase()
+        val lang = if (appLocale.isNotEmpty()) {
+            appLocale.split("-", "_")[0]
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            context.resources.configuration.locales[0]?.language?.lowercase()
+        } else {
+            @Suppress("DEPRECATION")
+            context.resources.configuration.locale?.language?.lowercase()
+        } ?: "en"
+
+        if (!customLabel.isNullOrBlank() && (lang == "en" || customLabel != "Close")) {
+            return customLabel
+        }
+
+        return when (lang) {
+            "tr" -> "Kapat"
+            "ar" -> "إغلاق"
+            "bn" -> "বন্ধ করুন"
+            "de" -> "Schließen"
+            "es" -> "Cerrar"
+            "fa" -> "بستن"
+            "fr" -> "Fermer"
+            "id" -> "Tutup"
+            "it" -> "Chiudi"
+            "ja" -> "閉じる"
+            "pt" -> "Fechar"
+            "ru" -> "Закрыть"
+            "ta" -> "மூடு"
+            "ur" -> "بند کریں"
+            "zh" -> "关闭"
+            else -> customLabel?.takeIf { it.isNotBlank() } ?: "Close"
         }
     }
 

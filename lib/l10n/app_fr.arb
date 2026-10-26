@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "Activez le mode silencieux pour choisir la durée.",
   "dndPermissionDialogTitle": "Accès Ne pas déranger",
   "dndPermissionDialogMessage": "Pour couper automatiquement la sonnerie pendant la prière, veuillez autoriser l'accès à Ne pas déranger dans les paramètres système.",
-  "dndPermissionOpenSettings": "Ouvrir les paramètres"
+  "dndPermissionOpenSettings": "Ouvrir les paramètres",
+  "beadOverlayClose": "Fermer"
 }

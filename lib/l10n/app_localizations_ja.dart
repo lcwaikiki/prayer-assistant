@@ -1806,4 +1806,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => '閉じる';
 }

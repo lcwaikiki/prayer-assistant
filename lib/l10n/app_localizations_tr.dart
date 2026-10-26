@@ -1860,4 +1860,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Aralık zili';
+
+  @override
+  String get beadOverlayClose => 'Kapat';
 }

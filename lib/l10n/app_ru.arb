@@ -690,5 +690,6 @@
   "enableSilentModeToSelectDuration": "Включите режим «без звука», чтобы выбрать длительность.",
   "dndPermissionDialogTitle": "Доступ к режиму «Не беспокоить»",
   "dndPermissionDialogMessage": "Чтобы автоматически отключать звук звонка во время намаза, разрешите доступ к режиму «Не беспокоить» в настройках системы.",
-  "dndPermissionOpenSettings": "Открыть настройки"
+  "dndPermissionOpenSettings": "Открыть настройки",
+  "beadOverlayClose": "Закрыть"
 }

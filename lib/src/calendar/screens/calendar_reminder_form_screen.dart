@@ -81,6 +81,7 @@ class _CalendarReminderFormScreenState
   String? _soundId;
   String? _soundTitle;
   double _playbackSpeed = 1.0;
+  int _playbackPositionMs = 0;
   bool _isSoundControlsExpanded = false;
   late final AudioPlayerService _audioPlayer;
   StreamSubscription<void>? _playerCompleteSubscription;
@@ -164,6 +165,8 @@ class _CalendarReminderFormScreenState
     _isTask = reminder?.isTask ?? false;
     _soundId = reminder?.soundId;
     _soundTitle = reminder?.soundTitle;
+    _playbackSpeed = reminder?.soundSpeed ?? 1.0;
+    _playbackPositionMs = reminder?.soundPositionMs ?? 0;
     _repeatCount = reminder?.repeatCount;
     _repeatCountController.text = reminder?.repeatCount?.toString() ?? '';
     final baseDate =
@@ -222,7 +225,10 @@ class _CalendarReminderFormScreenState
     _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
     _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
       if (mounted) {
-        setState(() => _isPlayingPreview = false);
+        setState(() {
+          _isPlayingPreview = false;
+          _playbackPositionMs = 0;
+        });
       }
     });
 
@@ -288,6 +294,10 @@ class _CalendarReminderFormScreenState
   Future<void> _togglePreviewSound() async {
     if (_soundId == null) return;
     if (_isPlayingPreview) {
+      final pos = await _audioPlayer.getCurrentPosition();
+      if (pos != null) {
+        _playbackPositionMs = pos.inMilliseconds;
+      }
       await _audioPlayer.pause();
       setState(() => _isPlayingPreview = false);
       return;
@@ -302,10 +312,14 @@ class _CalendarReminderFormScreenState
     final sound =
         ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
     if (sound != null) {
+      final startPos = _playbackPositionMs > 0
+          ? Duration(milliseconds: _playbackPositionMs)
+          : null;
       await _audioPlayer.playFile(
         sound.path,
         mimeType: sound.mimeType,
         playbackRate: _playbackSpeed,
+        position: startPos,
       );
       setState(() => _isPlayingPreview = true);
     }
@@ -826,6 +840,8 @@ class _CalendarReminderFormScreenState
       isTask: _isTask,
       soundId: _soundId,
       soundTitle: _soundTitle,
+      soundSpeed: _playbackSpeed,
+      soundPositionMs: _playbackPositionMs,
     );
     if (_isEditing) {
       controller.updateCalendarReminder(reminder);

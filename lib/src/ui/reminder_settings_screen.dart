@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../controller/prayer_app_controller.dart';
 import '../l10n/l10n.dart';
+import '../services/native_reminder_service.dart';
 
 
 class ReminderSettingsScreen extends StatefulWidget {
@@ -648,7 +649,14 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                             child: FilterChip(
                               label: Text(context.l10n.silentModeChip),
                               selected: setting.silentMode,
-                              onSelected: (value) {
+                              onSelected: (value) async {
+                                if (value && NativeReminderService.isAndroid) {
+                                  final hasDnd =
+                                      await NativeReminderService.hasDndPermission();
+                                  if (!hasDnd && mounted) {
+                                    await NativeReminderService.openDndSettings();
+                                  }
+                                }
                                 controller.updateReminderSetting(
                                   prayer: widget.prayerName,
                                   silentMode: value,

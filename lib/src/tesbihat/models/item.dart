@@ -49,6 +49,7 @@ class Item implements ReminderSchedulable {
     this.soundTitle,
     this.autoCountWithSound = true,
     this.soundSpeed = 1.0,
+    this.soundPositionMs = 0,
   }) : assert(count > 0, 'count must be positive'),
        assert(check >= 0, 'check cannot be negative'),
        assert(setCount >= 0, 'setCount cannot be negative'),
@@ -61,7 +62,8 @@ class Item implements ReminderSchedulable {
          currentProgress >= 0 && currentProgress <= count,
          'currentProgress must be in range',
        ),
-       assert(soundSpeed > 0, 'soundSpeed must be positive');
+       assert(soundSpeed > 0, 'soundSpeed must be positive'),
+       assert(soundPositionMs >= 0, 'soundPositionMs cannot be negative');
 
   final String id;
   final String title;
@@ -79,6 +81,7 @@ class Item implements ReminderSchedulable {
   final String? soundTitle;
   final bool autoCountWithSound;
   final double soundSpeed;
+  final int soundPositionMs;
 
   /// Recurrence for both anchors. Mirrors [ReminderRecurrence]: once,
   /// daily, weekly, monthly, yearly. For
@@ -174,6 +177,7 @@ class Item implements ReminderSchedulable {
     String? soundTitle,
     bool? autoCountWithSound,
     double? soundSpeed,
+    int? soundPositionMs,
     bool clearSound = false,
   }) {
     return Item(
@@ -207,6 +211,7 @@ class Item implements ReminderSchedulable {
       soundTitle: clearSound ? null : (soundTitle ?? this.soundTitle),
       autoCountWithSound: autoCountWithSound ?? this.autoCountWithSound,
       soundSpeed: soundSpeed ?? this.soundSpeed,
+      soundPositionMs: soundPositionMs ?? this.soundPositionMs,
     );
   }
 
@@ -240,6 +245,7 @@ class Item implements ReminderSchedulable {
       'soundTitle': soundTitle,
       'autoCountWithSound': autoCountWithSound,
       'soundSpeed': soundSpeed,
+      'soundPositionMs': soundPositionMs,
     };
   }
 
@@ -341,6 +347,7 @@ class Item implements ReminderSchedulable {
         final speed = (map['soundSpeed'] as num?)?.toDouble();
         return (speed != null && speed > 0) ? speed : 1.0;
       }(),
+      soundPositionMs: (map['soundPositionMs'] as num?)?.toInt() ?? 0,
     );
   }
 

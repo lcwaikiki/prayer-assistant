@@ -79,19 +79,34 @@ class FakeAudioPlayerService implements AudioPlayerService {
 
   String? lastPlayedAsset;
   int playAssetCallCount = 0;
-
   String? lastPlayedPath;
+  Duration? currentPosition;
 
   @override
-  Future<void> playFile(String path, {String? mimeType, double? playbackRate}) async {
+  Future<Duration?> getCurrentPosition() async => currentPosition;
+
+  @override
+  Future<void> playFile(
+    String path, {
+    String? mimeType,
+    double? playbackRate,
+    Duration? position,
+  }) async {
     lastPlayedPath = path;
+    currentPosition = position;
     _state = PlayerState.playing;
     if (playbackRate != null) _playbackRate = playbackRate;
     if (!_stateController.isClosed) _stateController.add(_state);
   }
 
   @override
-  Future<void> playBytes(Uint8List bytes, {String? mimeType, double? playbackRate}) async {
+  Future<void> playBytes(
+    Uint8List bytes, {
+    String? mimeType,
+    double? playbackRate,
+    Duration? position,
+  }) async {
+    currentPosition = position;
     _state = PlayerState.playing;
     if (playbackRate != null) _playbackRate = playbackRate;
     if (!_stateController.isClosed) _stateController.add(_state);

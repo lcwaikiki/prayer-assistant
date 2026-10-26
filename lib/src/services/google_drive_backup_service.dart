@@ -18,6 +18,7 @@ class DriveBackupInfo {
     required this.createdTime,
     required this.itemCount,
     required this.fileName,
+    this.fileSize,
   });
 
   final String fileId;
@@ -25,6 +26,7 @@ class DriveBackupInfo {
   /// Null for large legacy backups, which are not downloaded just to count.
   final int? itemCount;
   final String fileName;
+  final int? fileSize;
 }
 
 class GoogleDriveBackupService {
@@ -236,6 +238,7 @@ class GoogleDriveBackupService {
           createdTime: file.createdTime ?? DateTime.fromMillisecondsSinceEpoch(0),
           itemCount: await _itemCount(api, file),
           fileName: file.name ?? '',
+          fileSize: int.tryParse(file.size ?? ''),
         ),
       );
     }

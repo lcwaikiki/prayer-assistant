@@ -57,6 +57,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   String? _soundId;
   String? _soundTitle;
   double _playbackSpeed = 1.0;
+  int _playbackPositionMs = 0;
   bool _isSoundControlsExpanded = false;
   late bool _autoCountWithSound;
   late final AudioPlayerService _audioPlayer;
@@ -132,10 +133,17 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     _soundId = item?.soundId;
     _soundTitle = item?.soundTitle;
     _playbackSpeed = item?.soundSpeed ?? 1.0;
+    _playbackPositionMs = item?.soundPositionMs ?? 0;
     _autoCountWithSound = item?.autoCountWithSound ?? true;
-    _audioPlayer = widget.audioPlayerService ?? AudioPlayerService();
+    _audioPlayer =
+        widget.audioPlayerService ?? ref.read(audioPlayerServiceProvider);
     _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
-      if (mounted) setState(() => _isPlayingPreview = false);
+      if (mounted) {
+        setState(() {
+          _isPlayingPreview = false;
+          _playbackPositionMs = 0;
+        });
+      }
     });
   }
 
@@ -162,8 +170,14 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   Future<void> _togglePreviewSound() async {
     if (_soundId == null) return;
     if (_isPlayingPreview) {
+      final pos = await _audioPlayer.getCurrentPosition();
       await _audioPlayer.pause();
-      setState(() => _isPlayingPreview = false);
+      if (mounted) {
+        setState(() {
+          _isPlayingPreview = false;
+          if (pos != null) _playbackPositionMs = pos.inMilliseconds;
+        });
+      }
       return;
     }
 
@@ -176,10 +190,14 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final sound =
         ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId);
     if (sound != null) {
+      final startPos = _playbackPositionMs > 0
+          ? Duration(milliseconds: _playbackPositionMs)
+          : null;
       await _audioPlayer.playFile(
         sound.path,
         mimeType: sound.mimeType,
         playbackRate: _playbackSpeed,
+        position: startPos,
       );
       setState(() => _isPlayingPreview = true);
     }
@@ -193,6 +211,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final sound = await SoundPickerSheet.show(context);
     if (sound != null && mounted) {
       setState(() {
+        if (_soundId != sound.id) {
+          _playbackPositionMs = 0;
+        }
         _soundId = sound.id;
         _soundTitle = sound.title;
       });
@@ -207,6 +228,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     setState(() {
       _soundId = null;
       _soundTitle = null;
+      _playbackPositionMs = 0;
     });
   }
 
@@ -319,6 +341,9 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         soundTitle: _soundTitle,
         autoCountWithSound: _autoCountWithSound,
         soundSpeed: _playbackSpeed,
+        soundPositionMs: _soundId == widget.itemToEdit!.soundId
+            ? _playbackPositionMs
+            : 0,
         clearSound: _soundId == null,
       );
       notifier.updateItem(edited);
@@ -354,6 +379,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
         soundTitle: _soundTitle,
         autoCountWithSound: _autoCountWithSound,
         soundSpeed: _playbackSpeed,
+        soundPositionMs: _playbackPositionMs,
       );
     }
 

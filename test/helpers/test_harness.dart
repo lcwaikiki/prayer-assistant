@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -52,6 +53,17 @@ class TestHarness {
     final itemReminderService = MockItemReminderService();
     final driveService = MockGoogleDriveBackupService();
     final offlineFolderService = MockOfflineFolderBackupService();
+
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('prayer_assistant/native_reminders'),
+      (call) async {
+        if (call.method == 'hasDndPermission') {
+          return true;
+        }
+        return null;
+      },
+    );
 
     when(() => driveService.restoreSession()).thenAnswer((_) async => false);
     when(() => driveService.isSignedIn).thenReturn(false);

@@ -634,6 +634,7 @@ class MainActivity : FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+        PrayerSilentModeManager.checkAndDeactivateIfExpired(this)
         configureBeadOverlayChannel(flutterEngine)
         maybeNotifyOpenTarget(intent)
         maybeNotifyReminderTap(intent)
@@ -684,9 +685,17 @@ class MainActivity : FlutterActivity() {
         super.onUserLeaveHint()
         val text = beadOverlayText ?: return
         if (BeadOverlay.canDraw(this)) {
-            BeadOverlay.show(this, text) { timestamp ->
-                beadOverlayChannel?.invokeMethod("tap", mapOf("timestamp" to timestamp))
-            }
+            BeadOverlay.show(
+                this,
+                text,
+                onTap = { timestamp ->
+                    beadOverlayChannel?.invokeMethod("tap", mapOf("timestamp" to timestamp))
+                },
+                onDismiss = {
+                    beadOverlayText = null
+                    beadOverlayChannel?.invokeMethod("dismiss", null)
+                }
+            )
         } else {
             val intent = Intent(
                 Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -764,6 +773,7 @@ class MainActivity : FlutterActivity() {
     override fun onResume() {
         super.onResume()
         BeadOverlay.hide(this)
+        PrayerSilentModeManager.checkAndDeactivateIfExpired(this)
         PrayerWidgetUpdater.screenOnRefresh(this)
     }
 

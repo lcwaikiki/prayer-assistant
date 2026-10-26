@@ -567,41 +567,90 @@ class PrayerAppController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> initialize() async {
+  Future<void> initialize({bool runPostStartupSync = true}) async {
     _setLoading(true);
     try {
       widgetBridgeService.registerOpenTargetHandler(openTarget);
-      await notificationService.initialize();
-      _selectedLocation = await database.loadSelectedLocation();
-      _reminderSettings = await database.loadReminderSettings();
-      _prayerCompletions = await database.loadPrayerCompletions();
-      _taskCompletions = await database.loadTaskCompletions();
-      _kazaTracker = await database.loadKazaTracker();
-      _fastingLogs = await database.loadFastingLogs();
 
+      final results = await Future.wait([
+        database.loadSelectedLocation(), // 0
+        database.loadReminderSettings(), // 1
+        database.loadPrayerCompletions(), // 2
+        database.loadTaskCompletions(), // 3
+        database.loadKazaTracker(), // 4
+        database.loadFastingLogs(), // 5
+        database.loadStatusBarRemainingEnabled(), // 6
+        database.loadStatusBarShowTimeLeft(), // 7
+        database.loadStatusBarShowPrayerTimes(), // 8
+        database.loadNotificationShowTimeLeft(), // 9
+        database.loadNotificationShowPrayerTimesMessage(), // 10
+        database.loadNotificationDismissConfirm(), // 11
+        database.loadRemindersSilenced(), // 12
+        database.loadReminderVibrationEnabled(), // 13
+        database.loadReminderSoundEnabled(), // 14
+        database.loadSnoozeDurationMinutes(), // 15
+        database.loadThemePreference(), // 16
+        database.loadLocalePreference(), // 17
+        database.loadAppBarRemainingPlacement(), // 18
+        database.loadWidgetTextSize(), // 19
+        database.loadWidgetTheme(), // 20
+        database.loadWidgetCalendarDisplay(), // 21
+        database.loadCalendarPrimaryDisplay(), // 22
+        database.loadShowSecondaryCalendarDate(), // 23
+        database.loadCalendarWeekStart(), // 24
+        database.loadHijriDateOffset(), // 25
+        database.loadShowIslamicHolidays(), // 26
+        database.loadShowFastingBadges(), // 27
+        database.loadDefaultCalendarDisplay(), // 28
+        database.loadCalendarSortOption(), // 29
+        database.loadShowCalendarReminderDots(), // 30
+        database.loadShowBeadsInCalendar(), // 31
+        database.loadShowCardMoonPhase(), // 32
+        database.loadShowCardIftarSuhoor(), // 33
+        database.loadShowCardDailyWisdom(), // 34
+        database.loadShowCardUpcomingReminders(), // 35
+        database.loadTodayCardsOrder(), // 36
+        database.loadCalendarReminders(), // 37
+      ]);
+
+      _selectedLocation = results[0] as SelectedLocation?;
+      final rawReminderSettings = results[1] is Map
+          ? (results[1] as Map).cast<String, ReminderSetting>()
+          : <String, ReminderSetting>{};
+      _prayerCompletions = results[2] is Map
+          ? (results[2] as Map).cast<String, List<String>>()
+          : <String, List<String>>{};
+      _taskCompletions = results[3] is Map
+          ? (results[3] as Map).cast<String, List<String>>()
+          : <String, List<String>>{};
+      _kazaTracker = (results[4] as KazaTracker?) ?? const KazaTracker();
+      _fastingLogs = results[5] is Map
+          ? (results[5] as Map).cast<String, FastingLog>()
+          : <String, FastingLog>{};
 
       _reminderSettings = {
-        for (final entry in _reminderSettings.entries)
+        for (final entry in rawReminderSettings.entries)
           entry.key: ReminderSetting.ensureCurrent(entry.value),
       };
       _statusBarRemainingEnabled =
-          await database.loadStatusBarRemainingEnabled() ?? true;
+          (results[6] as bool?) ?? true;
       _statusBarShowTimeLeft =
-          await database.loadStatusBarShowTimeLeft() ?? true;
+          (results[7] as bool?) ?? true;
       _statusBarShowPrayerTimes =
-          await database.loadStatusBarShowPrayerTimes() ?? true;
+          (results[8] as bool?) ?? true;
       _notificationShowTimeLeft =
-          await database.loadNotificationShowTimeLeft() ?? true;
+          (results[9] as bool?) ?? true;
       _notificationShowPrayerTimesMessage =
-          await database.loadNotificationShowPrayerTimesMessage() ?? true;
+          (results[10] as bool?) ?? true;
       _notificationDismissConfirm =
-          await database.loadNotificationDismissConfirm() ?? true;
-      _remindersSilenced = await database.loadRemindersSilenced() ?? false;
+          (results[11] as bool?) ?? true;
+      _remindersSilenced = (results[12] as bool?) ?? false;
       _reminderVibrationEnabled =
-          await database.loadReminderVibrationEnabled() ?? true;
-      _reminderSoundEnabled = await database.loadReminderSoundEnabled() ?? true;
-      _snoozeDurationMinutes = await database.loadSnoozeDurationMinutes();
-      final rawThemePreference = await database.loadThemePreference();
+          (results[13] as bool?) ?? true;
+      _reminderSoundEnabled = (results[14] as bool?) ?? true;
+      _snoozeDurationMinutes = results[15] as int;
+
+      final rawThemePreference = results[16] as String?;
       var themePreference = AppThemePreference.system;
       for (final item in AppThemePreference.values) {
         if (item.name == rawThemePreference) {
@@ -610,7 +659,8 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _themePreference = themePreference;
-      final rawLocalePreference = await database.loadLocalePreference();
+
+      final rawLocalePreference = results[17] as String?;
       var localePreference = AppLocalePreference.system;
       for (final item in AppLocalePreference.values) {
         if (item.name == rawLocalePreference) {
@@ -619,7 +669,8 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _localePreference = localePreference;
-      final rawAppBarPlacement = await database.loadAppBarRemainingPlacement();
+
+      final rawAppBarPlacement = results[18] as String?;
       var placement = AppBarRemainingPlacement.title;
       for (final item in AppBarRemainingPlacement.values) {
         if (item.name == rawAppBarPlacement) {
@@ -628,7 +679,8 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _appBarRemainingPlacement = placement;
-      final rawWidgetTextSize = await database.loadWidgetTextSize();
+
+      final rawWidgetTextSize = results[19] as String?;
       var widgetTextSize = WidgetTextSize.medium;
       var widgetTextSizeVal = 14;
       final parsedInt = int.tryParse(rawWidgetTextSize ?? '');
@@ -667,7 +719,8 @@ class PrayerAppController extends ChangeNotifier {
       }
       _widgetTextSize = widgetTextSize;
       _widgetTextSizeValue = widgetTextSizeVal;
-      final rawWidgetTheme = await database.loadWidgetTheme();
+
+      final rawWidgetTheme = results[20] as String?;
       var widgetTheme = WidgetTheme.system;
       for (final item in WidgetTheme.values) {
         if (item.name == rawWidgetTheme) {
@@ -677,7 +730,7 @@ class PrayerAppController extends ChangeNotifier {
       }
       _widgetTheme = widgetTheme;
 
-      final rawWidgetCalDisplay = await database.loadWidgetCalendarDisplay();
+      final rawWidgetCalDisplay = results[21] as String?;
       var widgetCalDisplay = WidgetCalendarDisplay.hijri;
       for (final item in WidgetCalendarDisplay.values) {
         if (item.name == rawWidgetCalDisplay) {
@@ -687,8 +740,7 @@ class PrayerAppController extends ChangeNotifier {
       }
       _widgetCalendarDisplay = widgetCalDisplay;
 
-      final rawCalendarPrimaryDisplay = await database
-          .loadCalendarPrimaryDisplay();
+      final rawCalendarPrimaryDisplay = results[22] as String?;
       var calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
       for (final item in CalendarPrimaryDisplay.values) {
         if (item.name == rawCalendarPrimaryDisplay) {
@@ -697,33 +749,59 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _calendarPrimaryDisplay = calendarPrimaryDisplay;
+
       _showSecondaryCalendarDate =
-          await database.loadShowSecondaryCalendarDate() ?? true;
+          (results[23] as bool?) ?? true;
       _calendarWeekStart =
-          await database.loadCalendarWeekStart() ?? CalendarWeekStart.monday;
-      _hijriDateOffset = await database.loadHijriDateOffset() ?? 0;
+          (results[24] as CalendarWeekStart?) ?? CalendarWeekStart.monday;
+      _hijriDateOffset = (results[25] as int?) ?? 0;
       _showIslamicHolidays =
-          await database.loadShowIslamicHolidays() ?? true;
-      _showFastingBadges = await database.loadShowFastingBadges() ?? true;
+          (results[26] as bool?) ?? true;
+      _showFastingBadges = (results[27] as bool?) ?? true;
       _defaultCalendarDisplay =
-          await database.loadDefaultCalendarDisplay() ??
+          (results[28] as CalendarPrimaryDisplay?) ??
           CalendarPrimaryDisplay.hijri;
       _calendarSortOption =
-          await database.loadCalendarSortOption() ??
+          (results[29] as CalendarSortOption?) ??
           CalendarSortOption.time;
       _showCalendarReminderDots =
-          await database.loadShowCalendarReminderDots() ?? true;
+          (results[30] as bool?) ?? true;
       _showBeadsInCalendar =
-          await database.loadShowBeadsInCalendar() ?? true;
-      _showCardMoonPhase = await database.loadShowCardMoonPhase() ?? true;
-      _showCardIftarSuhoor = await database.loadShowCardIftarSuhoor() ?? true;
-      _showCardDailyWisdom = await database.loadShowCardDailyWisdom() ?? true;
+          (results[31] as bool?) ?? true;
+      _showCardMoonPhase = (results[32] as bool?) ?? true;
+      _showCardIftarSuhoor = (results[33] as bool?) ?? true;
+      _showCardDailyWisdom = (results[34] as bool?) ?? true;
       _showCardUpcomingReminders =
-          await database.loadShowCardUpcomingReminders() ?? true;
+          (results[35] as bool?) ?? true;
       _todayCardsOrder =
-          _sanitizeTodayCardsOrder(await database.loadTodayCardsOrder());
-      _calendarReminders = await database.loadCalendarReminders();
+          _sanitizeTodayCardsOrder((results[36] as List?)?.cast<String>());
+      _calendarReminders = results[37] is List
+          ? (results[37] as List).cast<CalendarReminder>()
+          : <CalendarReminder>[];
 
+      if (_selectedLocation != null) {
+        await _loadVisibleData(_selectedLocation!.districtId);
+      }
+
+      _clearError();
+    } catch (e) {
+      _recordError(e);
+    } finally {
+      _isInitializing = false;
+      _setLoading(false);
+    }
+
+    if (runPostStartupSync) {
+      await postStartupSync();
+    }
+  }
+
+  /// Synchronizes widget bridge state, notification alarms, and background
+  /// caches. Kept separate from [initialize] so that UI frames can render
+  /// immediately without waiting for IPC / platform channel calls.
+  Future<void> postStartupSync() async {
+    try {
+      await notificationService.initialize();
       await Future.wait([
         _syncStatusBarConfig(),
         widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name),
@@ -754,13 +832,8 @@ class PrayerAppController extends ChangeNotifier {
       }
       // Background non-blocking tasks that do not delay app startup or frame rendering
       _loadStartupBackgroundData();
-
-      _clearError();
     } catch (e) {
       _recordError(e);
-    } finally {
-      _isInitializing = false;
-      _setLoading(false);
     }
   }
 

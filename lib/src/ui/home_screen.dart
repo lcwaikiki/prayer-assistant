@@ -49,6 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WisdomService.instance.addListener(_onWisdomChanged);
     _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) {
         return;
@@ -71,9 +72,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  void _onWisdomChanged() {
+    if (mounted) setState(() {});
+  }
 
   @override
   void dispose() {
+    WisdomService.instance.removeListener(_onWisdomChanged);
     _timer?.cancel();
     super.dispose();
   }

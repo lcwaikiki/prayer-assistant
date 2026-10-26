@@ -1061,22 +1061,36 @@ class PreferencesScreen extends StatelessWidget {
                 itemCount: backups.length,
                 itemBuilder: (itemContext, index) {
                   final backup = backups[index];
-                  final ml = MaterialLocalizations.of(itemContext);
                   final createdLocal = backup.createdTime.toLocal();
-                  final dateTime =
-                      '${ml.formatMediumDate(createdLocal)}  '
-                      '${ml.formatTimeOfDay(TimeOfDay.fromDateTime(createdLocal))}';
+                  final dateStr =
+                      '${createdLocal.year}-${createdLocal.month.toString().padLeft(2, '0')}-${createdLocal.day.toString().padLeft(2, '0')} ${createdLocal.hour.toString().padLeft(2, '0')}:${createdLocal.minute.toString().padLeft(2, '0')}';
+                  String? sizeStr;
+                  if (backup.fileSize != null) {
+                    final bytes = backup.fileSize!;
+                    if (bytes < 1024) {
+                      sizeStr = '$bytes B';
+                    } else if (bytes < 1024 * 1024) {
+                      sizeStr = '${(bytes / 1024).toStringAsFixed(1)} KB';
+                    } else {
+                      sizeStr = '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+                    }
+                  }
+                  final itemsStr = backup.itemCount == null
+                      ? null
+                      : context.l10n.googleDriveBackupItemCount(
+                          backup.itemCount!,
+                        );
+                  final subtitleParts = [
+                    if (sizeStr != null) sizeStr,
+                    if (itemsStr != null) itemsStr,
+                  ];
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.cloud_download_outlined),
-                    title: Text(dateTime),
-                    subtitle: backup.itemCount == null
+                    title: Text(dateStr),
+                    subtitle: subtitleParts.isEmpty
                         ? null
-                        : Text(
-                            context.l10n.googleDriveBackupItemCount(
-                              backup.itemCount!,
-                            ),
-                          ),
+                        : Text(subtitleParts.join(' • ')),
                     onTap: () async {
                       final selection = await showRestoreOptionsDialog(
                         context,

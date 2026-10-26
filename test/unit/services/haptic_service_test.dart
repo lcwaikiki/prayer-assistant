@@ -21,8 +21,8 @@ void main() {
     });
 
     test('checkpointDurationMs scales standardDurationMs', () {
-      expect(service.checkpointDurationMs(intensity: 1), 30); // 10 * 3 = 30
-      expect(service.checkpointDurationMs(intensity: 8), 600); // 200 * 3 = 600
+      expect(service.checkpointDurationMs(intensity: 1), 90); // 10 * 9 = 90
+      expect(service.checkpointDurationMs(intensity: 8), 1800); // 200 * 9 = 1800
     });
   });
 }

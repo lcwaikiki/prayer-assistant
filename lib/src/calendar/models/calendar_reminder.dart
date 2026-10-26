@@ -68,6 +68,8 @@ class CalendarReminder {
     this.isTask = false,
     this.soundId,
     this.soundTitle,
+    this.soundSpeed = 1.0,
+    this.soundPositionMs = 0,
   });
 
   final String id;
@@ -75,6 +77,8 @@ class CalendarReminder {
   final String notes;
   final String? soundId;
   final String? soundTitle;
+  final double soundSpeed;
+  final int soundPositionMs;
 
   /// For [ReminderRecurrence.once] this is the exact moment the reminder
   /// fires. For every other recurrence, the date part anchors which
@@ -163,6 +167,8 @@ class CalendarReminder {
     bool? isTask,
     String? soundId,
     String? soundTitle,
+    double? soundSpeed,
+    int? soundPositionMs,
     bool clearSound = false,
   }) {
     return CalendarReminder(
@@ -186,6 +192,8 @@ class CalendarReminder {
       isTask: isTask ?? this.isTask,
       soundId: clearSound ? null : (soundId ?? this.soundId),
       soundTitle: clearSound ? null : (soundTitle ?? this.soundTitle),
+      soundSpeed: soundSpeed ?? this.soundSpeed,
+      soundPositionMs: soundPositionMs ?? this.soundPositionMs,
     );
   }
 
@@ -486,6 +494,8 @@ class CalendarReminder {
       'is_task': isTask ? 1 : 0,
       'sound_id': soundId,
       'sound_title': soundTitle,
+      'sound_speed': soundSpeed,
+      'sound_position_ms': soundPositionMs,
     };
   }
 
@@ -550,6 +560,8 @@ class CalendarReminder {
       isTask: (map['is_task'] as int? ?? 0) == 1,
       soundId: map['sound_id']?.toString(),
       soundTitle: map['sound_title']?.toString(),
+      soundSpeed: (map['sound_speed'] as num?)?.toDouble() ?? 1.0,
+      soundPositionMs: (map['sound_position_ms'] as num?)?.toInt() ?? 0,
     );
   }
 }

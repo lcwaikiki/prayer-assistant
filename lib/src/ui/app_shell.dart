@@ -60,29 +60,15 @@ class _AppShellState extends State<AppShell> {
       if (mounted) {
         _updateOrientation(_controller.tabIndex);
       }
-      if (_controller.isInitializing) {
-        _controller.addListener(_onInitializeDone);
-      } else {
-        _assessDriveRestore();
-      }
     });
   }
 
   @override
   void dispose() {
     _controller.removeListener(_onTabChange);
-    _controller.removeListener(_onInitializeDone);
     _timer?.cancel();
     SystemChrome.setPreferredOrientations([]);
     super.dispose();
-  }
-
-  void _onInitializeDone() {
-    if (_controller.isInitializing) {
-      return;
-    }
-    _controller.removeListener(_onInitializeDone);
-    _assessDriveRestore();
   }
 
   void _onTabChange() {
@@ -108,146 +94,7 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  static const _driveRestorePromptSeenKey = 'drive_restore_prompt_seen';
 
-  /// Offers a Google Drive restore on a fresh install (no local data yet).
-  /// Runs only after initialization completes so the data check is accurate.
-  Future<void> _assessDriveRestore() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (_controller.hasLocalData()) {
-      await prefs.setBool(_driveRestorePromptSeenKey, true);
-      return;
-    }
-    if (prefs.getBool(_driveRestorePromptSeenKey) ?? false) {
-      return;
-    }
-    if (!mounted) {
-      return;
-    }
-    _showDriveRestorePrompt();
-  }
-
-  void _showDriveRestorePrompt() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) {
-        return PopScope<void>(
-          canPop: false,
-          child: AlertDialog(
-            title: Text(context.l10n.googleDriveRestore),
-            content: Text(context.l10n.driveRestorePromptBody),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(dialogContext).pop();
-                  _markDriveRestoreSeen();
-                },
-                child: Text(context.l10n.cancel),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(dialogContext).pop();
-                  _restoreFromFolder();
-                },
-                child: Text(context.l10n.offlineFolderRestore),
-              ),
-              FilledButton(
-                onPressed: () {
-                  Navigator.of(dialogContext).pop();
-                  _restoreFromDrive();
-                },
-                child: Text(context.l10n.googleDriveRestore),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> _markDriveRestoreSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_driveRestorePromptSeenKey, true);
-  }
-
-  Future<void> _restoreFromDrive() async {
-    await _markDriveRestoreSeen();
-    try {
-      final signedIn = await _controller.signInToGoogleDrive();
-      if (!signedIn || !mounted) {
-        return;
-      }
-      final backups = await _controller.listGoogleDriveBackups();
-      if (!mounted) {
-        return;
-      }
-      if (backups.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n.googleDriveRestoreEmpty)),
-        );
-        return;
-      }
-      final selection = await showRestoreOptionsDialog(context);
-      if (selection == null || !mounted) {
-        return;
-      }
-      await _controller.restoreBackupFromGoogleDrive(
-        backups.first.fileId,
-        restoreData: selection.data,
-        restorePreferences: selection.preferences,
-      );
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.restoreSuccess)),
-      );
-    } catch (e) {
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${context.l10n.restoreError}\n$e')),
-      );
-    }
-  }
-
-  /// Restores from the full backup file in the backup folder. Works fully
-  /// offline; only asks for a folder when none is available (e.g. no
-  /// Documents folder). The empty-data guard prevents clobbering it first.
-  Future<void> _restoreFromFolder() async {
-    await _markDriveRestoreSeen();
-    try {
-      if (!_controller.hasOfflineBackupFolder) {
-        final chosen = await _controller.chooseOfflineBackupFolder();
-        if (!chosen || !mounted) {
-          return;
-        }
-      }
-      final selection = await showRestoreOptionsDialog(context);
-      if (selection == null || !mounted) {
-        return;
-      }
-      await _controller.restoreFromOfflineFolder(
-        restoreData: selection.data,
-        restorePreferences: selection.preferences,
-      );
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.restoreSuccess)),
-      );
-    } catch (e) {
-      if (!mounted) {
-        return;
-      }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.offlineFolderRestoreEmpty)),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

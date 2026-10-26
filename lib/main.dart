@@ -39,21 +39,11 @@ Future<void> main() async {
 
   final calendarReminderService = CalendarReminderService();
 
-  final initResults = await Future.wait([
-    initializeDateFormatting(),
-    WisdomService.instance.init(),
-    Hive.initFlutter().then((_) => Future.wait([
-      Hive.openBox<dynamic>('items_box'),
-      Hive.openBox<dynamic>('item_history_box'),
-    ])),
-    calendarReminderService.initialize(),
-    getApplicationSupportDirectory().then(
-      (dir) => SoundLibraryRepository.audioDirectory = '${dir.path}/sounds',
-    ),
-  ]);
-  final hiveBoxes = initResults[2] as List<dynamic>;
-  final itemsBox = hiveBoxes[0] as Box<dynamic>;
-  final itemHistoryBox = hiveBoxes[1] as Box<dynamic>;
+  // Defer non-critical services so first frame can render immediately.
+  WisdomService.instance.init();
+  getApplicationSupportDirectory().then(
+    (dir) => SoundLibraryRepository.audioDirectory = '${dir.path}/sounds',
+  );
 
   final controller = PrayerAppController(
     api: ImsakiyemApi(),
@@ -63,13 +53,23 @@ Future<void> main() async {
     widgetBridgeService: WidgetBridgeService(),
     calendarReminderService: calendarReminderService,
   );
-  await controller.initialize();
+
+  final initResults = await Future.wait([
+    initializeDateFormatting(),
+    Hive.initFlutter().then((_) => Future.wait([
+      Hive.openBox<dynamic>('items_box'),
+      Hive.openBox<dynamic>('item_history_box'),
+    ])),
+    controller.initialize(runPostStartupSync: false),
+  ]);
+  final hiveBoxes = initResults[1] as List<dynamic>;
+  final itemsBox = hiveBoxes[0] as Box<dynamic>;
+  final itemHistoryBox = hiveBoxes[1] as Box<dynamic>;
 
   WidgetsBinding.instance.addObserver(AutoBackupObserver(controller));
 
   final itemReminderService = ItemReminderService();
   itemReminderService.currentLocale = controller.resolvedLocale;
-  await itemReminderService.initialize();
 
   final repository = ItemRepository.hive(itemsBox);
 
@@ -134,17 +134,21 @@ Future<void> main() async {
   // actually exists to push onto, in case the app was cold-started by
   // tapping a reminder notification. The payload's feature prefix decides
   // which screen opens.
-  WidgetsBinding.instance.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
     handleAppLaunchFromNotification();
     SharedAudioHandler.initialize(container);
+    controller.postStartupSync();
+    await calendarReminderService.initialize();
     MidnightReminderScheduler.initializeAndSchedule();
     CalendarMidnightScheduler.initializeAndSchedule();
     controller.rescheduleCalendarReminders();
-    _scheduleInitialBeadsReminders(
-      repository,
-      itemReminderService,
-      controller.resolvedLocale,
-    );
+    itemReminderService.initialize().then((_) {
+      _scheduleInitialBeadsReminders(
+        repository,
+        itemReminderService,
+        controller.resolvedLocale,
+      );
+    });
   });
 }
 

@@ -30,7 +30,7 @@ class HapticService {
 
   int checkpointDurationMs({required int intensity}) {
     final base = standardDurationMs(intensity: intensity);
-    return (base * 3).clamp(30, 600);
+    return (base * 9).clamp(90, 1800);
   }
 
   int _amplitudeFor(int intensity) {

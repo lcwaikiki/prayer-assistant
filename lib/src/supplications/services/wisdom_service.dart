@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/supplication_models.dart';
 
-class WisdomService {
+class WisdomService extends ChangeNotifier {
   WisdomService._();
   static final WisdomService instance = WisdomService._();
 
@@ -13,8 +14,10 @@ class WisdomService {
   List<SupplicationItem> _supplicationList = [];
   final Set<String> _favoriteIds = {};
   bool _initialized = false;
+  bool _isInitializing = false;
 
   Set<String> get favoriteIds => Set.unmodifiable(_favoriteIds);
+  bool get isInitialized => _initialized;
 
   bool isFavorite(String id) => _favoriteIds.contains(id);
 
@@ -24,6 +27,7 @@ class WisdomService {
     } else {
       _favoriteIds.add(id);
     }
+    notifyListeners();
     await _saveFavorites();
   }
 
@@ -38,14 +42,17 @@ class WisdomService {
     _favoriteIds
       ..clear()
       ..addAll(ids);
+    notifyListeners();
   }
 
   void setSupplicationsForTesting(List<SupplicationItem> items) {
     _supplicationList = List.from(items);
+    notifyListeners();
   }
 
   Future<void> init() async {
-    if (_initialized) return;
+    if (_initialized || _isInitializing) return;
+    _isInitializing = true;
 
     try {
       final wisdomRaw =
@@ -80,6 +87,8 @@ class WisdomService {
     } catch (_) {}
 
     _initialized = true;
+    _isInitializing = false;
+    notifyListeners();
   }
 
   DailyWisdom? getWisdomForDate(DateTime date) {

@@ -268,8 +268,28 @@ class _SoundLibraryScreenState extends ConsumerState<SoundLibraryScreen> {
                       sound.title,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text(
-                      '${sound.createdAt.year}-${sound.createdAt.month.toString().padLeft(2, '0')}-${sound.createdAt.day.toString().padLeft(2, '0')}',
+                    subtitle: Builder(
+                      builder: (context) {
+                        final created = sound.createdAt.toLocal();
+                        final dateStr =
+                            '${created.year}-${created.month.toString().padLeft(2, '0')}-${created.day.toString().padLeft(2, '0')} ${created.hour.toString().padLeft(2, '0')}:${created.minute.toString().padLeft(2, '0')}';
+                        String? sizeStr;
+                        try {
+                          final file = File(sound.path);
+                          if (file.existsSync()) {
+                            final bytes = file.lengthSync();
+                            if (bytes < 1024) {
+                              sizeStr = '$bytes B';
+                            } else if (bytes < 1024 * 1024) {
+                              sizeStr = '${(bytes / 1024).toStringAsFixed(1)} KB';
+                            } else {
+                              sizeStr = '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+                            }
+                          }
+                        } catch (_) {}
+                        final text = sizeStr != null ? '$dateStr • $sizeStr' : dateStr;
+                        return Text(text);
+                      },
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,

@@ -223,7 +223,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
     } else if (item.currentProgress == 0) {
-      ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
+      ref.read(beadPaceTrackerProvider.notifier).reset(widget.itemId);
     }
     ref
         .read(beadPaceTrackerProvider.notifier)
@@ -260,7 +260,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     }
   }
 
-  Future<void> _playCurrentSound() async {
+  Future<void> _playCurrentSound({bool resumePosition = true}) async {
     final item = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
@@ -271,10 +271,12 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         .read(soundLibraryNotifierProvider.notifier)
         .getSoundById(item.soundId);
     if (sound != null) {
+      final posMs = resumePosition ? item.soundPositionMs : 0;
       await _audioPlayer.playFile(
         sound.path,
         mimeType: sound.mimeType,
         playbackRate: _playbackSpeed,
+        position: posMs > 0 ? Duration(milliseconds: posMs) : null,
       );
     }
   }
@@ -302,7 +304,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     if (item == null || item.soundId == null) return;
 
     if (_isAudioPlaying) {
+      final pos = await _audioPlayer.getCurrentPosition();
       await _audioPlayer.pause();
+      if (item != null && pos != null) {
+        ref.read(itemsNotifierProvider.notifier).updateItem(
+          item.copyWith(soundPositionMs: pos.inMilliseconds),
+        );
+      }
       setState(() => _isAudioPlaying = false);
     } else {
       if (item.currentProgress >= item.count) {
@@ -319,7 +327,17 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   }
 
   Future<void> _stopAudioPlayback() async {
+    final pos = await _audioPlayer.getCurrentPosition();
     await _audioPlayer.stop();
+    final item = ref
+        .read(itemsNotifierProvider)
+        .where((element) => element.id == widget.itemId)
+        .firstOrNull;
+    if (item != null && pos != null) {
+      ref.read(itemsNotifierProvider.notifier).updateItem(
+        item.copyWith(soundPositionMs: pos.inMilliseconds),
+      );
+    }
     if (mounted) {
       setState(() {
         _isAudioPlaying = false;
@@ -329,11 +347,17 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   }
 
   Future<void> _onSoundComplete() async {
-    if (!_isAudioPlaying || !mounted) return;
     final currentItem = ref
         .read(itemsNotifierProvider)
         .where((element) => element.id == widget.itemId)
         .firstOrNull;
+    if (currentItem != null && currentItem.soundPositionMs != 0) {
+      ref.read(itemsNotifierProvider.notifier).updateItem(
+        currentItem.copyWith(soundPositionMs: 0),
+      );
+    }
+
+    if (!_isAudioPlaying || !mounted) return;
     if (currentItem == null) return;
 
     if (currentItem.autoCountWithSound) {
@@ -360,7 +384,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         if (updatedItem != null &&
             updatedItem.currentProgress < updatedItem.count &&
             _isAudioPlaying) {
-          await _playCurrentSound();
+          await _playCurrentSound(resumePosition: false);
         } else {
           if (mounted) setState(() => _isAudioPlaying = false);
         }
@@ -371,7 +395,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       _soundLoopCount++;
       final remainingNeeded = currentItem.count - currentItem.currentProgress;
       if (_soundLoopCount < remainingNeeded && _isAudioPlaying) {
-        await _playCurrentSound();
+        await _playCurrentSound(resumePosition: false);
       } else {
         if (mounted) {
           setState(() {
@@ -405,6 +429,19 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
         state == AppLifecycleState.inactive) {
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       if (_isAudioPlaying) {
+        _audioPlayer.getCurrentPosition().then((pos) {
+          if (pos != null) {
+            final item = ref
+                .read(itemsNotifierProvider)
+                .where((element) => element.id == widget.itemId)
+                .firstOrNull;
+            if (item != null) {
+              ref.read(itemsNotifierProvider.notifier).updateItem(
+                    item.copyWith(soundPositionMs: pos.inMilliseconds),
+                  );
+            }
+          }
+        });
         _audioPlayer.pause();
         setState(() => _isAudioPlaying = false);
       }
@@ -418,6 +455,21 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _overlay.disarm();
     _setWakelock(false);
     _playerCompleteSub?.cancel();
+    if (_isAudioPlaying) {
+      _audioPlayer.getCurrentPosition().then((pos) {
+        if (pos != null) {
+          final item = ref
+              .read(itemsNotifierProvider)
+              .where((element) => element.id == widget.itemId)
+              .firstOrNull;
+          if (item != null) {
+            ref.read(itemsNotifierProvider.notifier).updateItem(
+                  item.copyWith(soundPositionMs: pos.inMilliseconds),
+                );
+          }
+        }
+      });
+    }
     _audioPlayer.stop();
     _chimePlayer.stop();
     _restoreOrientation();

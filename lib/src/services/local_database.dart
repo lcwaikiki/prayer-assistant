@@ -217,6 +217,16 @@ class LocalDatabase {
         'ALTER TABLE calendar_reminders ADD COLUMN sound_title TEXT',
       );
     }
+    if (!names.contains('sound_speed')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN sound_speed REAL NOT NULL DEFAULT 1.0',
+      );
+    }
+    if (!names.contains('sound_position_ms')) {
+      await db.execute(
+        'ALTER TABLE calendar_reminders ADD COLUMN sound_position_ms INTEGER NOT NULL DEFAULT 0',
+      );
+    }
   }
 
   static const _createCalendarRemindersTableSql = '''
@@ -240,7 +250,9 @@ class LocalDatabase {
       excluded_dates TEXT NOT NULL DEFAULT '',
       is_task INTEGER NOT NULL DEFAULT 0,
       sound_id TEXT,
-      sound_title TEXT
+      sound_title TEXT,
+      sound_speed REAL NOT NULL DEFAULT 1.0,
+      sound_position_ms INTEGER NOT NULL DEFAULT 0
     )
   ''';
 

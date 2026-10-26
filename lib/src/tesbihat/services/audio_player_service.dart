@@ -50,21 +50,31 @@ class AudioPlayerService {
   PlayerState get state => _player.state;
   double get playbackRate => _playbackRate;
 
+  Future<Duration?> getCurrentPosition() => _player.getCurrentPosition();
+
   Future<void> setPlaybackRate(double rate) async {
     _playbackRate = rate;
     await _player.setPlaybackRate(rate);
   }
 
-  Future<void> playFile(String path, {String? mimeType, double? playbackRate}) =>
-      _play(DeviceFileSource(path, mimeType: mimeType), playbackRate);
+  Future<void> playFile(
+    String path, {
+    String? mimeType,
+    double? playbackRate,
+    Duration? position,
+  }) => _play(DeviceFileSource(path, mimeType: mimeType), playbackRate, position);
 
   /// Plays audio that is not stored yet, such as an unsaved recording.
-  Future<void> playBytes(Uint8List bytes, {String? mimeType, double? playbackRate}) =>
-      _play(BytesSource(bytes, mimeType: mimeType), playbackRate);
+  Future<void> playBytes(
+    Uint8List bytes, {
+    String? mimeType,
+    double? playbackRate,
+    Duration? position,
+  }) => _play(BytesSource(bytes, mimeType: mimeType), playbackRate, position);
 
-  Future<void> _play(Source source, double? playbackRate) async {
+  Future<void> _play(Source source, double? playbackRate, [Duration? position]) async {
     await _player.stop();
-    await _player.play(source);
+    await _player.play(source, position: position);
     final rate = playbackRate ?? _playbackRate;
     if (rate != 1.0) {
       await _player.setPlaybackRate(rate);

@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "مدت منتخب کرنے کے لیے خاموش موڈ فعال کریں۔",
   "dndPermissionDialogTitle": "ڈو ناٹ ڈسٹرب تک رسائی",
   "dndPermissionDialogMessage": "نماز کے وقت رنگر کو خودکار طور پر خاموش کرنے کے لیے، براہ کرم سسٹم کی ترتیبات میں ڈو ناٹ ڈسٹرب رسائی کی اجازت دیں۔",
-  "dndPermissionOpenSettings": "ترتیبات کھولیں"
+  "dndPermissionOpenSettings": "ترتیبات کھولیں",
+  "beadOverlayClose": "بند کریں"
 }

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
@@ -153,7 +154,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     if (item == null) {
       _overlay.disarm();
     } else {
-      _overlay.arm('${item.currentProgress}');
+      final closeLabel = AppLocalizations.of(context)?.beadOverlayClose;
+      _overlay.arm('${item.currentProgress}', closeLabel: closeLabel);
     }
   }
 

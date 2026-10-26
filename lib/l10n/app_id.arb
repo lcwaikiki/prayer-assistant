@@ -635,5 +635,6 @@
   "enableSilentModeToSelectDuration": "Aktifkan mode hening untuk memilih durasi.",
   "dndPermissionDialogTitle": "Akses Jangan Ganggu",
   "dndPermissionDialogMessage": "Untuk membungkam nada dering secara otomatis selama waktu shalat, izinkan akses Jangan Ganggu di pengaturan sistem.",
-  "dndPermissionOpenSettings": "Buka Pengaturan"
+  "dndPermissionOpenSettings": "Buka Pengaturan",
+  "beadOverlayClose": "Tutup"
 }

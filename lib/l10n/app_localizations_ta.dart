@@ -1894,4 +1894,7 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => 'மூடு';
 }

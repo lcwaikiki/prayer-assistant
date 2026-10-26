@@ -740,5 +740,6 @@
   "enableSilentModeToSelectDuration": "கால அளவைத் தேர்ந்தெடுக்க அமைதி பயன்முறையை இயக்கவும்.",
   "dndPermissionDialogTitle": "தொந்தரவு செய்யாதே அணுகல்",
   "dndPermissionDialogMessage": "தொழுகை நேரத்தில் தானாக ஒலியை அணைக்க, கணினி அமைப்புகளில் தொந்தரவு செய்யாதே அணுகலை அனுமதிக்கவும்.",
-  "dndPermissionOpenSettings": "அமைப்புகளைத் திற"
+  "dndPermissionOpenSettings": "அமைப்புகளைத் திற",
+  "beadOverlayClose": "மூடு"
 }

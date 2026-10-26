@@ -1870,4 +1870,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get beadsIntervalChime => 'Interval chime';
+
+  @override
+  String get beadOverlayClose => 'Закрыть';
 }

@@ -243,7 +243,7 @@
         <receiver
             android:name=".PrayerSilentModeReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.pirci.prayer_assistant.ACTION_PRAYER_SILENT_START" />
                 <action android:name="com.pirci.prayer_assistant.ACTION_PRAYER_SILENT_END" />

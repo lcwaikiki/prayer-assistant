@@ -238,9 +238,9 @@ object PrayerWidgetStorage {
 
     data class PrayerEntry(val name: String, val rawName: String, val epochMs: Long)
 
-    fun readTodayPrayersDetailed(context: Context): List<PrayerEntry> {
+    private fun readDetailedEntryList(context: Context, key: String): List<PrayerEntry> {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val raw = prefs.getString(TODAY_PRAYERS_KEY, "[]") ?: "[]"
+        val raw = prefs.getString(key, "[]") ?: "[]"
         val parsed = mutableListOf<PrayerEntry>()
         val json = JSONArray(raw)
         for (i in 0 until json.length()) {
@@ -254,6 +254,14 @@ object PrayerWidgetStorage {
             parsed.add(PrayerEntry(name, rawName, epoch))
         }
         return parsed
+    }
+
+    fun readTodayPrayersDetailed(context: Context): List<PrayerEntry> {
+        return readDetailedEntryList(context, TODAY_PRAYERS_KEY)
+    }
+
+    fun readTimelineDetailed(context: Context): List<PrayerEntry> {
+        return readDetailedEntryList(context, TIMELINE_KEY).sortedBy { it.epochMs }
     }
 
     private fun readEntryList(context: Context, key: String): List<Pair<String, Long>> {

@@ -211,21 +211,34 @@ object PrayerWidgetUpdater {
             }?.epochMs ?: todayDetailed.getOrNull(4)?.epochMs
 
             val widgetStrings = getWidgetStrings(appLocale)
-            val imsakTimeStr = imsakEpoch?.let { formatClock(it) } ?: "05:00"
-            val aksamTimeStr = aksamEpoch?.let { formatClock(it) } ?: "19:00"
 
             val isFastingHours = imsakEpoch != null && aksamEpoch != null &&
-                    now in imsakEpoch..aksamEpoch
+                    now in imsakEpoch until aksamEpoch
+
+            val timelineDetailed = PrayerWidgetStorage.readTimelineDetailed(context)
+            val nextImsakEpoch = timelineDetailed.firstOrNull {
+                val r = it.rawName.lowercase(Locale.ROOT)
+                (r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр") && it.epochMs > now
+            }?.epochMs
 
             val targetEpoch = if (isFastingHours) {
                 aksamEpoch
             } else {
-                if (aksamEpoch != null && now > aksamEpoch) {
-                    (imsakEpoch ?: (now + 36000000L)) + 86400000L
+                if (aksamEpoch != null && now >= aksamEpoch) {
+                    nextImsakEpoch ?: ((imsakEpoch ?: (now + 36000000L)) + 86400000L)
                 } else {
                     imsakEpoch ?: (now + 36000000L)
                 }
             }
+
+            val targetImsakEpoch = if (aksamEpoch != null && now >= aksamEpoch) {
+                nextImsakEpoch ?: ((imsakEpoch ?: (now + 36000000L)) + 86400000L)
+            } else {
+                imsakEpoch
+            }
+
+            val imsakTimeStr = targetImsakEpoch?.let { formatClock(it) } ?: "05:00"
+            val aksamTimeStr = aksamEpoch?.let { formatClock(it) } ?: "19:00"
 
             val title = if (isFastingHours) widgetStrings.iftarCountdown else widgetStrings.suhoorCountdown
             val remainingMs = (targetEpoch - now).coerceAtLeast(0L)
@@ -242,7 +255,10 @@ object PrayerWidgetUpdater {
                     String.format(Locale.US, "%02d:%02d", minutes, seconds)
                 }
             } else {
-                String.format(Locale.US, "%02d:%02d", hours, minutes)
+                val totalMinutes = (remainingMs + 59_999L) / 60_000L
+                val h = totalMinutes / 60L
+                val m = totalMinutes % 60L
+                String.format(Locale.US, "%02d:%02d", h, m)
             }
 
             var progressPct = 0
@@ -1167,7 +1183,7 @@ object PrayerWidgetUpdater {
     }
 
     private fun formatHoursMinutes(remainingMs: Long): String {
-        val totalMinutes = remainingMs / 60_000L
+        val totalMinutes = (remainingMs + 59_999L) / 60_000L
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
         return if (hours > 0) "%d:%02d".format(hours, minutes) else "${minutes}"
@@ -1202,9 +1218,15 @@ object PrayerWidgetUpdater {
         )
 
         val now = System.currentTimeMillis()
-        val nextTransition = PrayerWidgetStorage.readTimeline(context)
-            .firstOrNull { it.second > now }
-            ?.second
+        val timelineTransitions = PrayerWidgetStorage.readTimeline(context)
+            .map { it.second }
+            .filter { it > now }
+        val detailedTransitions = PrayerWidgetStorage.readTodayPrayersDetailed(context)
+            .map { it.epochMs }
+            .filter { it > now }
+        val nextTransition = (timelineTransitions + detailedTransitions)
+            .distinct()
+            .minOrNull()
 
         if (nextTransition == null) {
             alarmManager.cancel(pendingIntent)
@@ -1278,7 +1300,7 @@ object PrayerWidgetUpdater {
         val remainingMinutes = next?.let { (it.second - now) / 60_000L }
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong()
 
-        if (remainingMinutes == null || remainingMinutes < mmssThreshold) {
+        if (remainingMinutes == null || (shouldTickPerSecond(context) && remainingMinutes < mmssThreshold)) {
             alarmManager.cancel(pendingIntent)
             return
         }
@@ -1343,10 +1365,60 @@ object PrayerWidgetUpdater {
      */
     fun shouldTickPerSecond(context: Context): Boolean {
         val now = System.currentTimeMillis()
-        val next = nextPrayer(context) ?: return false
-        val remainingMinutes = (next.second - now) / 60_000L
-        return remainingMinutes < PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong() &&
-            hasCountdownWidgets(context)
+        val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong()
+        if (mmssThreshold <= 0) return false
+
+        val manager = AppWidgetManager.getInstance(context)
+        val hasStandardCountdown = listOf(
+            RemainingTimeWidgetProvider::class.java,
+            NextPrayerWidgetProvider::class.java,
+            RemainingTimeCircleWidgetProvider::class.java
+        ).any { manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty() }
+
+        if (hasStandardCountdown) {
+            val next = nextPrayer(context)
+            if (next != null) {
+                val remainingMinutes = (next.second - now) / 60_000L
+                if (remainingMinutes in 0 until mmssThreshold) return true
+            }
+        }
+
+        val hasFastingWidget = manager.getAppWidgetIds(
+            ComponentName(context, FastingCountdownWidgetProvider::class.java)
+        ).isNotEmpty()
+
+        if (hasFastingWidget) {
+            val todayDetailed = PrayerWidgetStorage.readTodayPrayersDetailed(context)
+            val imsakEpoch = todayDetailed.find {
+                val r = it.rawName.lowercase(Locale.ROOT)
+                r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр"
+            }?.epochMs ?: todayDetailed.getOrNull(0)?.epochMs
+
+            val aksamEpoch = todayDetailed.find {
+                val r = it.rawName.lowercase(Locale.ROOT)
+                r == "aksam" || r == "akşam" || r == "maghrib" || r == "магриб"
+            }?.epochMs ?: todayDetailed.getOrNull(4)?.epochMs
+
+            if (imsakEpoch != null && aksamEpoch != null) {
+                val timelineDetailed = PrayerWidgetStorage.readTimelineDetailed(context)
+                val nextImsakEpoch = timelineDetailed.firstOrNull {
+                    val r = it.rawName.lowercase(Locale.ROOT)
+                    (r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр") && it.epochMs > now
+                }?.epochMs
+
+                val target = if (now in imsakEpoch until aksamEpoch) {
+                    aksamEpoch
+                } else if (now >= aksamEpoch) {
+                    nextImsakEpoch ?: (imsakEpoch + 86400000L)
+                } else {
+                    imsakEpoch
+                }
+                val remainingMinutes = (target - now) / 60_000L
+                if (remainingMinutes in 0 until mmssThreshold) return true
+            }
+        }
+
+        return false
     }
 
     fun nextPrayer(context: Context): Pair<String, Long>? =
@@ -1358,7 +1430,8 @@ object PrayerWidgetUpdater {
         val providers = listOf(
             RemainingTimeWidgetProvider::class.java,
             NextPrayerWidgetProvider::class.java,
-            RemainingTimeCircleWidgetProvider::class.java
+            RemainingTimeCircleWidgetProvider::class.java,
+            FastingCountdownWidgetProvider::class.java
         )
         return providers.any {
             manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty()

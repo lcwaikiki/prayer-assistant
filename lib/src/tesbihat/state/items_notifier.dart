@@ -319,10 +319,11 @@ class ItemsNotifier extends Notifier<List<Item>> {
       _recordTaskCompletion('bead_${updated.id}', DateTime.now());
     }
 
-    if (Item.isCheckpointProgress(
-      currentProgress: updated.currentProgress,
-      check: updated.check,
-    )) {
+    if (reachedMax ||
+        Item.isCheckpointProgress(
+          currentProgress: updated.currentProgress,
+          check: updated.check,
+        )) {
       return TapFeedback.checkpoint;
     }
     return TapFeedback.standard;

@@ -235,10 +235,14 @@ class MoonPhaseCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              phaseName,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
+                            Flexible(
+                              child: Text(
+                                phaseName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             if (info.isWhiteDay) ...[

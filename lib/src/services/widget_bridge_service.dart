@@ -42,6 +42,7 @@ class WidgetBridgeService {
         }
         timeline.add(<String, Object>{
           'name': localizedPrayerName(locale, prayerName),
+          'rawName': prayerName.toLowerCase(),
           'epochMs': prayerTime.millisecondsSinceEpoch,
         });
       }
@@ -58,6 +59,7 @@ class WidgetBridgeService {
           }
           timeline.add(<String, Object>{
             'name': localizedPrayerName(locale, prayerName),
+            'rawName': prayerName.toLowerCase(),
             'epochMs': prayerTime.millisecondsSinceEpoch,
           });
           break;

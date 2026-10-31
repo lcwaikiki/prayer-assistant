@@ -393,6 +393,18 @@ void main() {
       );
     });
 
+    test('returns checkpoint feedback when max count is reached', () {
+      final container = containerWith(
+        ItemRepository.memory([item('a', count: 33, currentProgress: 32, check: 0)]),
+        reminderService,
+      );
+
+      expect(
+        container.read(itemsNotifierProvider.notifier).incrementProgress('a'),
+        TapFeedback.checkpoint,
+      );
+    });
+
     test('increments setCount when the full count is reached', () {
       final container = containerWith(
         ItemRepository.memory([

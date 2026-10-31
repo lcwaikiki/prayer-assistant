@@ -43,36 +43,45 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
 
         final now = DateTime.now();
 
-        // Parse Fajr (Imsak) and Maghrib (Aksam) times for today
-        DateTime? parseTime(String timeStr) {
+        // Parse Fajr (Imsak) and Maghrib (Aksam) times
+        DateTime? parseTime(String timeStr, {DateTime? date}) {
           final parts = timeStr.split(':');
           if (parts.length != 2) return null;
           final h = int.tryParse(parts[0]);
           final m = int.tryParse(parts[1]);
           if (h == null || m == null) return null;
-          return DateTime(now.year, now.month, now.day, h, m);
+          final d = date ?? now;
+          return DateTime(d.year, d.month, d.day, h, m);
         }
 
         final imsakTime = parseTime(imsakStr) ?? DateTime(now.year, now.month, now.day, 5, 0);
         final aksamTime = parseTime(aksamStr) ?? DateTime(now.year, now.month, now.day, 19, 0);
 
         final bool isFastingHours =
-            now.isAfter(imsakTime) && now.isBefore(aksamTime);
+            !now.isBefore(imsakTime) && now.isBefore(aksamTime);
 
         final DateTime targetTime;
         final String title;
         final IconData icon;
+        final String displayImsakStr;
 
         if (isFastingHours) {
           targetTime = aksamTime;
           title = context.l10n.iftarCountdownTitle;
           icon = Icons.nights_stay;
+          displayImsakStr = imsakStr;
         } else {
-          // If after Aksam, target is tomorrow's Imsak
-          if (now.isAfter(aksamTime)) {
-            targetTime = imsakTime.add(const Duration(days: 1));
+          // If after or at Aksam, target is tomorrow's Imsak
+          if (!now.isBefore(aksamTime)) {
+            final tomorrow = now.add(const Duration(days: 1));
+            final tomorrowDay = controller.prayerDayFor(tomorrow);
+            final tomorrowImsakStr = tomorrowDay?.imsak ?? imsakStr;
+            targetTime = parseTime(tomorrowImsakStr, date: tomorrow) ??
+                imsakTime.add(const Duration(days: 1));
+            displayImsakStr = tomorrowImsakStr;
           } else {
             targetTime = imsakTime;
+            displayImsakStr = imsakStr;
           }
           title = context.l10n.suhoorCountdownTitle;
           icon = Icons.wb_twilight;
@@ -100,8 +109,11 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                 '${seconds.toString().padLeft(2, '0')}';
           }
         } else {
-          timeDisplay = '${hours.toString().padLeft(2, '0')}:'
-              '${minutes.toString().padLeft(2, '0')}';
+          final totalMinutes = (remainingSeconds + 59) ~/ 60;
+          final h = totalMinutes ~/ 60;
+          final m = totalMinutes % 60;
+          timeDisplay = '${h.toString().padLeft(2, '0')}:'
+              '${m.toString().padLeft(2, '0')}';
         }
 
         // Calculate progress percentage
@@ -333,7 +345,7 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          context.l10n.suhoorWithTime(imsakStr),
+                          context.l10n.suhoorWithTime(displayImsakStr),
                           style: theme.textTheme.bodySmall?.copyWith(
                             fontSize: 10,
                             color: theme.colorScheme.onSurfaceVariant,

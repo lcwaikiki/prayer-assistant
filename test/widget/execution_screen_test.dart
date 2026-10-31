@@ -225,6 +225,20 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets('reaching max count triggers checkpoint buzz as well', (tester) async {
+    final haptic = await _pumpExecution(
+      tester,
+      item: _item(count: 33, check: 0, progress: 32),
+    );
+
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pump();
+
+    verify(() => haptic.checkpoint(intensity: 50)).called(1);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('reset asks for confirmation and resets progress',
       (tester) async {
     await _pumpExecution(tester, item: _item(progress: 30));

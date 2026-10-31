@@ -1861,4 +1861,10 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'بستن';
+
+  @override
+  String get beadsDone => 'انجام شد';
+
+  @override
+  String get beadsMarkAsDone => 'علامت‌گذاری به عنوان انجام شده';
 }

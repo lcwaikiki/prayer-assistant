@@ -1877,4 +1877,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Schließen';
+
+  @override
+  String get beadsDone => 'Erledigt';
+
+  @override
+  String get beadsMarkAsDone => 'Als erledigt markieren';
 }

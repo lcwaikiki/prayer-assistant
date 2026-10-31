@@ -17,6 +17,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:wakelock_plus_platform_interface/wakelock_plus_platform_interface.dart';
 
+import 'package:provider/provider.dart' as provider;
+import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
+import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
 import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
 
@@ -30,6 +34,9 @@ Item _item({
   String notes = '',
   List<String> groupIds = const [],
   List<int> paceIntervals = const [],
+  bool isTask = false,
+  bool reminderEnabled = false,
+  ReminderRecurrence reminderRecurrence = ReminderRecurrence.daily,
 }) {
   return Item(
     id: id,
@@ -42,6 +49,9 @@ Item _item({
     currentProgress: progress,
     groupIds: groupIds,
     paceIntervals: paceIntervals,
+    isTask: isTask,
+    reminderEnabled: reminderEnabled,
+    reminderRecurrence: reminderRecurrence,
   );
 }
 
@@ -49,11 +59,14 @@ Future<MockHapticService> _pumpExecution(
   WidgetTester tester, {
   Item? item,
   List<Item>? items,
+  List<ItemGroup>? groups,
   String? groupId,
   String? targetItemId,
   MockLocalDatabase? database,
   AudioPlayerService? audioPlayer,
   FakeAudioPlayerService? chimePlayer,
+  MockItemReminderService? reminderService,
+  PrayerAppController? controller,
 }) async {
   final haptic = MockHapticService();
   when(() => haptic.standard(intensity: any(named: 'intensity')))
@@ -61,21 +74,45 @@ Future<MockHapticService> _pumpExecution(
   when(() => haptic.checkpoint(intensity: any(named: 'intensity')))
       .thenAnswer((_) async {});
 
-  final mockReminderService = MockItemReminderService();
-  when(() => mockReminderService.scheduleReminder(any()))
-      .thenAnswer((_) async {});
-  when(() => mockReminderService.cancelReminder(any()))
-      .thenAnswer((_) async {});
+  final mockReminderService = reminderService ?? MockItemReminderService();
+  if (reminderService == null) {
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelActiveNotification(any()))
+        .thenAnswer((_) async {});
+  }
 
   final db = database ?? MockLocalDatabase();
   when(() => db.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
   when(() => db.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
+  if (database == null) {
+    when(() => db.loadTaskCompletions())
+        .thenAnswer((_) async => <String, List<String>>{});
+    when(() => db.saveTaskCompletions(any())).thenAnswer((_) async {});
+  }
 
   final itemList = items ?? (item != null ? [item] : <Item>[]);
+  final executionScreen = ExecutionScreen(
+    itemId: targetItemId ?? item?.id ?? (itemList.isNotEmpty ? itemList.first.id : 'a'),
+    groupId: groupId,
+    audioPlayerService: audioPlayer ?? FakeAudioPlayerService(),
+    chimePlayerService: chimePlayer ?? FakeAudioPlayerService(),
+    reminderService: mockReminderService,
+  );
+
+  final Widget appWidget = controller != null
+      ? provider.ChangeNotifierProvider<PrayerAppController>.value(
+          value: controller,
+          child: testLocalizedApp(child: executionScreen),
+        )
+      : testLocalizedApp(child: executionScreen);
+
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        itemRepositoryProvider.overrideWithValue(ItemRepository.memory(itemList)),
+        itemRepositoryProvider.overrideWithValue(ItemRepository.memory(itemList, groups ?? const [])),
         itemHistoryRepositoryProvider.overrideWithValue(
           ItemHistoryRepository.memory(),
         ),
@@ -86,14 +123,7 @@ Future<MockHapticService> _pumpExecution(
         hapticServiceProvider.overrideWithValue(haptic),
         localDatabaseProvider.overrideWithValue(db),
       ],
-      child: testLocalizedApp(
-        child: ExecutionScreen(
-          itemId: targetItemId ?? item?.id ?? (itemList.isNotEmpty ? itemList.first.id : 'a'),
-          groupId: groupId,
-          audioPlayerService: audioPlayer ?? FakeAudioPlayerService(),
-          chimePlayerService: chimePlayer ?? FakeAudioPlayerService(),
-        ),
-      ),
+      child: appWidget,
     ),
   );
   await tester.pump();
@@ -613,4 +643,247 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
+
+  testWidgets(
+      'does not show mark as done button for non-task completed bead',
+      (tester) async {
+    final item = _item(count: 33, progress: 33, isTask: false);
+    await _pumpExecution(tester, item: item);
+
+    expect(find.byKey(const Key('reset_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_button')), findsNothing);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsNothing);
+  });
+
+  testWidgets('does not show mark as done button for incomplete task bead',
+      (tester) async {
+    final item = _item(count: 33, progress: 10, isTask: true);
+    await _pumpExecution(tester, item: item);
+
+    expect(find.byKey(const Key('reset_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_button')), findsNothing);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsNothing);
+  });
+
+  testWidgets(
+      'shows mark as done button when task bead is completed and removes notification on tap',
+      (tester) async {
+    final item = _item(
+      id: 'task_bead_1',
+      title: 'Daily Dhikr',
+      count: 33,
+      progress: 33,
+      isTask: true,
+      reminderEnabled: true,
+    );
+    final mockReminderService = MockItemReminderService();
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelActiveNotification(any()))
+        .thenAnswer((_) async {});
+
+    final mockDb = MockLocalDatabase();
+    when(() => mockDb.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
+    when(() => mockDb.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
+    when(() => mockDb.loadTaskCompletions())
+        .thenAnswer((_) async => <String, List<String>>{});
+    when(() => mockDb.saveTaskCompletions(any())).thenAnswer((_) async {});
+
+    await _pumpExecution(
+      tester,
+      item: item,
+      database: mockDb,
+      reminderService: mockReminderService,
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsOneWidget);
+
+    // Tap mark as done
+    await tester.tap(find.byKey(const Key('mark_as_done_button')));
+    await tester.pumpAndSettle();
+
+    // Verify notification/activation was removed
+    verify(() => mockReminderService.cancelActiveNotification('task_bead_1'))
+        .called(1);
+
+    // Verify task completion was recorded in database
+    verify(() => mockDb.saveTaskCompletions(any())).called(1);
+
+    // Screen exits directly upon completion
+    expect(find.byType(ExecutionScreen), findsNothing);
+  });
+
+  testWidgets(
+      'reaching max progress on task bead shows mark as done button and cancels notification',
+      (tester) async {
+    final item = _item(
+      id: 'task_bead_2',
+      title: 'Evening Dhikr',
+      count: 3,
+      check: 1,
+      progress: 2,
+      isTask: true,
+      reminderEnabled: true,
+    );
+    final mockReminderService = MockItemReminderService();
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelActiveNotification(any()))
+        .thenAnswer((_) async {});
+
+    await _pumpExecution(
+      tester,
+      item: item,
+      reminderService: mockReminderService,
+    );
+
+    // Before reaching max
+    expect(find.byKey(const Key('mark_as_done_button')), findsNothing);
+
+    // Tap to reach max progress (2 -> 3)
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
+    // After reaching max, mark as done button appears
+    expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsOneWidget);
+
+    // Automatically cancelled active notification on reaching max
+    verify(() => mockReminderService.cancelActiveNotification('task_bead_2'))
+        .called(1);
+  });
+
+  testWidgets(
+      'tapping mark as done when already done completes and exits',
+      (tester) async {
+    final item = _item(
+      id: 'task_bead_3',
+      title: 'Morning Dhikr',
+      count: 33,
+      progress: 33,
+      isTask: true,
+    );
+
+    final today = DateTime.now();
+    final todayKey =
+        '${today.year.toString().padLeft(4, '0')}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+
+    final mockDb = MockLocalDatabase();
+    when(() => mockDb.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
+    when(() => mockDb.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
+    when(() => mockDb.loadTaskCompletions()).thenAnswer(
+      (_) async => <String, List<String>>{
+        todayKey: ['bead_task_bead_3'],
+      },
+    );
+    when(() => mockDb.saveTaskCompletions(any())).thenAnswer((_) async {});
+
+    await _pumpExecution(tester, item: item, database: mockDb);
+    await tester.pumpAndSettle();
+
+    // Initial state is already done
+    expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
+    expect(find.byIcon(Icons.check_circle), findsWidgets);
+
+    // Tapping it completes and exits directly without confirmation dialog
+    await tester.tap(find.byKey(const Key('mark_as_done_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(ExecutionScreen), findsNothing);
+  });
+
+  testWidgets(
+      'for a group task, mark as done only appears on the last bead',
+      (tester) async {
+    const group = ItemGroup(
+      id: 'task_group_1',
+      title: 'Daily Group Dhikr',
+      isTask: true,
+      reminderEnabled: true,
+      reminderRecurrence: ReminderRecurrence.daily,
+    );
+
+    final bead1 = _item(
+      id: 'g_bead_1',
+      title: 'Bead 1',
+      count: 2,
+      check: 1,
+      progress: 2,
+      groupIds: ['task_group_1'],
+    );
+    final bead2 = _item(
+      id: 'g_bead_2',
+      title: 'Bead 2 (Last)',
+      count: 2,
+      check: 1,
+      progress: 0,
+      groupIds: ['task_group_1'],
+    );
+
+    final mockReminderService = MockItemReminderService();
+    when(() => mockReminderService.scheduleReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelReminder(any()))
+        .thenAnswer((_) async {});
+    when(() => mockReminderService.cancelActiveNotification(any()))
+        .thenAnswer((_) async {});
+
+    final mockDb = MockLocalDatabase();
+    when(() => mockDb.loadBeadsMinimizeOnExit()).thenAnswer((_) async => true);
+    when(() => mockDb.saveBeadsMinimizeOnExit(any())).thenAnswer((_) async {});
+    when(() => mockDb.loadTaskCompletions())
+        .thenAnswer((_) async => <String, List<String>>{});
+    when(() => mockDb.saveTaskCompletions(any())).thenAnswer((_) async {});
+
+    // Open first bead (which is completed, but has next bead)
+    await _pumpExecution(
+      tester,
+      items: [bead1, bead2],
+      groups: [group],
+      groupId: 'task_group_1',
+      targetItemId: 'g_bead_1',
+      reminderService: mockReminderService,
+      database: mockDb,
+    );
+    await tester.pumpAndSettle();
+
+    // On intermediate bead: Next button exists, but mark as done MUST NOT appear
+    expect(find.byKey(const Key('next_group_bead_action_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_button')), findsNothing);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsNothing);
+
+    // Tap Next to move to the last bead
+    await tester.tap(find.byKey(const Key('next_group_bead_action_button')));
+    await tester.pumpAndSettle();
+
+    // Now on last bead: initially incomplete (progress 0 of 2), so mark as done still absent
+    expect(find.text('Bead 2 (Last)'), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_button')), findsNothing);
+
+    // Complete the last bead by tapping to 2
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
+    // On the last bead, once completed: mark as done button appears!
+    expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
+    expect(find.byKey(const Key('mark_as_done_appbar_button')), findsOneWidget);
+
+    // Tap mark as done on the last bead
+    await tester.tap(find.byKey(const Key('mark_as_done_button')));
+    await tester.pumpAndSettle();
+
+    // Group task completion recorded and group notification cancelled
+    verify(() => mockReminderService.cancelActiveNotification('task_group_1'))
+        .called(1);
+    verify(() => mockDb.saveTaskCompletions(any())).called(1);
+    expect(find.byType(ExecutionScreen), findsNothing);
+  });
 }

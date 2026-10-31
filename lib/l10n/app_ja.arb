@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "サイレントモードへのアクセス",
   "dndPermissionDialogMessage": "礼拝中に自動的に着信音を消音するには、システム設定で「サイレントモードへのアクセス」を許可してください。",
   "dndPermissionOpenSettings": "設定を開く",
-  "beadOverlayClose": "閉じる"
+  "beadOverlayClose": "閉じる",
+  "beadsDone": "完了",
+  "beadsMarkAsDone": "完了としてマーク"
 }

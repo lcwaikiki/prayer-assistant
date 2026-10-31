@@ -1873,4 +1873,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Tutup';
+
+  @override
+  String get beadsDone => 'Selesai';
+
+  @override
+  String get beadsMarkAsDone => 'Tandai sudah selesai';
 }

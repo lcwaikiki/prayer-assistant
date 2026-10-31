@@ -1882,4 +1882,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Cerrar';
+
+  @override
+  String get beadsDone => 'Hecho';
+
+  @override
+  String get beadsMarkAsDone => 'Marcar como hecho';
 }

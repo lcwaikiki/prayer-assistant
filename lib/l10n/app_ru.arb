@@ -691,5 +691,7 @@
   "dndPermissionDialogTitle": "Доступ к режиму «Не беспокоить»",
   "dndPermissionDialogMessage": "Чтобы автоматически отключать звук звонка во время намаза, разрешите доступ к режиму «Не беспокоить» в настройках системы.",
   "dndPermissionOpenSettings": "Открыть настройки",
-  "beadOverlayClose": "Закрыть"
+  "beadOverlayClose": "Закрыть",
+  "beadsDone": "Выполнено",
+  "beadsMarkAsDone": "Отметить как выполненное"
 }

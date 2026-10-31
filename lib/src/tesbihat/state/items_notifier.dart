@@ -317,6 +317,12 @@ class ItemsNotifier extends Notifier<List<Item>> {
 
     if (reachedMax && updated.reminderEnabled && updated.isTask) {
       _recordTaskCompletion('bead_${updated.id}', DateTime.now());
+      if (updated.reminderRecurrence == ReminderRecurrence.once ||
+          updated.reminderRepeatCount == 1) {
+        _reminderService.cancelReminder(updated.id);
+      } else {
+        _reminderService.cancelActiveNotification(updated.id);
+      }
     }
 
     if (reachedMax ||
@@ -330,16 +336,18 @@ class ItemsNotifier extends Notifier<List<Item>> {
   }
 
   void _recordTaskCompletion(String taskId, DateTime date) {
-    final db = LocalDatabase();
-    final dayStr = _dayKey(date);
-    db.loadTaskCompletions().then((completions) {
-      final current = List<String>.from(completions[dayStr] ?? []);
-      if (!current.contains(taskId)) {
-        current.add(taskId);
-        final next = Map<String, List<String>>.from(completions)..[dayStr] = current;
-        db.saveTaskCompletions(next);
-      }
-    });
+    try {
+      final db = LocalDatabase();
+      final dayStr = _dayKey(date);
+      db.loadTaskCompletions().then((completions) {
+        final current = List<String>.from(completions[dayStr] ?? []);
+        if (!current.contains(taskId)) {
+          current.add(taskId);
+          final next = Map<String, List<String>>.from(completions)..[dayStr] = current;
+          db.saveTaskCompletions(next);
+        }
+      }).catchError((_) {});
+    } catch (_) {}
   }
 
   void updatePaceIntervals(String id, List<int> intervals) {

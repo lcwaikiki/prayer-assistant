@@ -1863,4 +1863,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Kapat';
+
+  @override
+  String get beadsDone => 'Yapıldı';
+
+  @override
+  String get beadsMarkAsDone => 'Yapıldı olarak işaretle';
 }

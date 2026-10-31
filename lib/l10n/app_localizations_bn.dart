@@ -1869,4 +1869,10 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'বন্ধ করুন';
+
+  @override
+  String get beadsDone => 'সম্পন্ন';
+
+  @override
+  String get beadsMarkAsDone => 'সম্পন্ন হিসেবে চিহ্নিত করুন';
 }

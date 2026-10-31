@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "ڈو ناٹ ڈسٹرب تک رسائی",
   "dndPermissionDialogMessage": "نماز کے وقت رنگر کو خودکار طور پر خاموش کرنے کے لیے، براہ کرم سسٹم کی ترتیبات میں ڈو ناٹ ڈسٹرب رسائی کی اجازت دیں۔",
   "dndPermissionOpenSettings": "ترتیبات کھولیں",
-  "beadOverlayClose": "بند کریں"
+  "beadOverlayClose": "بند کریں",
+  "beadsDone": "مکمل",
+  "beadsMarkAsDone": "مکمل کے طور پر نشان لگائیں"
 }

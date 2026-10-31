@@ -1854,4 +1854,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'إغلاق';
+
+  @override
+  String get beadsDone => 'تم';
+
+  @override
+  String get beadsMarkAsDone => 'تحديد كمكتمل';
 }

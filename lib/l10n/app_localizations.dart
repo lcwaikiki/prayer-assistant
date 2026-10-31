@@ -3523,6 +3523,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get beadOverlayClose;
+
+  /// No description provided for @beadsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get beadsDone;
+
+  /// No description provided for @beadsMarkAsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as done'**
+  String get beadsMarkAsDone;
 }
 
 class _AppLocalizationsDelegate

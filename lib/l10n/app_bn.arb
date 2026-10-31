@@ -741,5 +741,7 @@
   "dndPermissionDialogTitle": "বিরক্ত করবেন না অ্যাক্সেস",
   "dndPermissionDialogMessage": "নামাজের সময় স্বয়ংক্রিয়ভাবে রিংগার নীরব করতে, অনুগ্রহ করে সিস্টেম সেটিংসে বিরক্ত করবেন না অ্যাক্সেসের অনুমতি দিন।",
   "dndPermissionOpenSettings": "সেটিংস খুলুন",
-  "beadOverlayClose": "বন্ধ করুন"
+  "beadOverlayClose": "বন্ধ করুন",
+  "beadsDone": "সম্পন্ন",
+  "beadsMarkAsDone": "সম্পন্ন হিসেবে চিহ্নিত করুন"
 }

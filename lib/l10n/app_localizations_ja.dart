@@ -1809,4 +1809,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get beadOverlayClose => '閉じる';
+
+  @override
+  String get beadsDone => '完了';
+
+  @override
+  String get beadsMarkAsDone => '完了としてマーク';
 }

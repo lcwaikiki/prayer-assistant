@@ -1873,4 +1873,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Закрыть';
+
+  @override
+  String get beadsDone => 'Выполнено';
+
+  @override
+  String get beadsMarkAsDone => 'Отметить как выполненное';
 }

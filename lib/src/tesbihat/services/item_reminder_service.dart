@@ -80,7 +80,7 @@ class ItemReminderService {
 
   /// Derives a stable notification id from an item's string id, in a
   /// dedicated range that doesn't collide with prayer reminder ids.
-  int _notificationId(String itemId) {
+  static int notificationIdFor(String itemId) {
     var hash = 0;
     for (final codeUnit in itemId.codeUnits) {
       hash = (hash * 31 + codeUnit) & 0x7FFFFFFF;
@@ -88,11 +88,40 @@ class ItemReminderService {
     return 800000 + (hash % 100000);
   }
 
+  int _notificationId(String itemId) => notificationIdFor(itemId);
+
   Future<void> cancelReminder(String itemId) => cancelNotificationWindow(
     _plugin,
     _notificationId(itemId),
     _maxOccurrences,
   );
+
+  /// Cancels any currently displayed notification and active alarm/snooze
+  /// for [itemId] without removing future recurring occurrences.
+  Future<void> cancelActiveNotification(String itemId) async {
+    final base = notificationIdFor(itemId);
+    try {
+      final active = await _plugin.getActiveNotifications();
+      for (final n in active) {
+        final id = n.id;
+        if (id != null && id >= base && id < base + _maxOccurrences) {
+          await _plugin.cancel(id: id);
+          if (NativeReminderService.isAndroid) {
+            await NativeReminderService.cancel(id);
+          }
+        }
+      }
+    } catch (_) {}
+
+    try {
+      await _plugin.cancel(id: base);
+    } catch (_) {}
+    if (NativeReminderService.isAndroid) {
+      try {
+        await NativeReminderService.cancel(base);
+      } catch (_) {}
+    }
+  }
 
   /// Schedules with an exact alarm when the OS allows it, falling back to
   /// an inexact alarm when the exact-alarm permission is denied (Android

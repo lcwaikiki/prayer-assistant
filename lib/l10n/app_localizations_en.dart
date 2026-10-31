@@ -1863,4 +1863,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Close';
+
+  @override
+  String get beadsDone => 'Done';
+
+  @override
+  String get beadsMarkAsDone => 'Mark as done';
 }

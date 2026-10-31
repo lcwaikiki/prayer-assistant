@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "Acceso a No molestar",
   "dndPermissionDialogMessage": "Para silenciar automáticamente el timbre durante la oración, permita el acceso a No molestar en la configuración del sistema.",
   "dndPermissionOpenSettings": "Abrir configuración",
-  "beadOverlayClose": "Cerrar"
+  "beadOverlayClose": "Cerrar",
+  "beadsDone": "Hecho",
+  "beadsMarkAsDone": "Marcar como hecho"
 }

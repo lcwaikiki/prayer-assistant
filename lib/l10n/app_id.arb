@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "Akses Jangan Ganggu",
   "dndPermissionDialogMessage": "Untuk membungkam nada dering secara otomatis selama waktu shalat, izinkan akses Jangan Ganggu di pengaturan sistem.",
   "dndPermissionOpenSettings": "Buka Pengaturan",
-  "beadOverlayClose": "Tutup"
+  "beadOverlayClose": "Tutup",
+  "beadsDone": "Selesai",
+  "beadsMarkAsDone": "Tandai sudah selesai"
 }

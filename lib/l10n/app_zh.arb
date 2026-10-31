@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "勿扰访问权限",
   "dndPermissionDialogMessage": "要在礼拜期间自动将铃声静音，请在系统设置中允许勿扰访问权限。",
   "dndPermissionOpenSettings": "打开设置",
-  "beadOverlayClose": "关闭"
+  "beadOverlayClose": "关闭",
+  "beadsDone": "完成",
+  "beadsMarkAsDone": "标记为已完成"
 }

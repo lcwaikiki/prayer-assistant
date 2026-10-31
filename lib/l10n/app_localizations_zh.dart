@@ -1800,4 +1800,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get beadOverlayClose => '关闭';
+
+  @override
+  String get beadsDone => '完成';
+
+  @override
+  String get beadsMarkAsDone => '标记为已完成';
 }

@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "Bitte nicht stören-Zugriff",
   "dndPermissionDialogMessage": "Um den Klingelton während der Gebetszeit automatisch stummzuschalten, gewähren Sie bitte in den Systemeinstellungen Zugriff auf 'Bitte nicht stören'.",
   "dndPermissionOpenSettings": "Einstellungen öffnen",
-  "beadOverlayClose": "Schließen"
+  "beadOverlayClose": "Schließen",
+  "beadsDone": "Erledigt",
+  "beadsMarkAsDone": "Als erledigt markieren"
 }

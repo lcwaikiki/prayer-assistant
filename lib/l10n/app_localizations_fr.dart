@@ -1890,4 +1890,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'Fermer';
+
+  @override
+  String get beadsDone => 'Fait';
+
+  @override
+  String get beadsMarkAsDone => 'Marquer comme fait';
 }

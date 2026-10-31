@@ -24,6 +24,11 @@ import '../widgets/truncated_title_tooltip.dart';
 import '../widgets/zoomable_notes_text.dart';
 import 'item_form_screen.dart';
 import '../../utils/orientation_utils.dart';
+import '../../calendar/models/calendar_reminder.dart';
+import '../../services/local_database.dart';
+import '../models/item_group.dart';
+import '../state/groups_notifier.dart';
+import '../services/item_reminder_service.dart';
 
 class ExecutionScreen extends ConsumerStatefulWidget {
   const ExecutionScreen({
@@ -32,12 +37,14 @@ class ExecutionScreen extends ConsumerStatefulWidget {
     this.groupId,
     this.audioPlayerService,
     this.chimePlayerService,
+    this.reminderService,
   });
 
   final String itemId;
   final String? groupId;
   final AudioPlayerService? audioPlayerService;
   final AudioPlayerService? chimePlayerService;
+  final ItemReminderService? reminderService;
 
   @override
   ConsumerState<ExecutionScreen> createState() => _ExecutionScreenState();
@@ -54,7 +61,68 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   double _playbackSpeed = 1.0;
   bool _isSoundControlsExpanded = false;
   bool _isNotesExpanded = false;
+  bool _isTaskDone = false;
   final _overlay = BeadOverlayService();
+
+  ItemReminderService _getReminderService() {
+    if (widget.reminderService != null) {
+      return widget.reminderService!;
+    }
+    try {
+      return ref.read(itemReminderServiceProvider);
+    } catch (_) {
+      return ItemReminderService();
+    }
+  }
+
+  LocalDatabase _getDatabase() {
+    try {
+      return ref.read(localDatabaseProvider);
+    } catch (_) {
+      return LocalDatabase();
+    }
+  }
+
+  String _dateKey(DateTime date) {
+    final safe = DateTime(date.year, date.month, date.day);
+    return '${safe.year.toString().padLeft(4, '0')}-'
+        '${safe.month.toString().padLeft(2, '0')}-'
+        '${safe.day.toString().padLeft(2, '0')}';
+  }
+
+  void _checkInitialTaskCompletion(String itemId, String? groupId) {
+    final today = DateTime.now();
+    ItemGroup? group;
+    if (groupId != null) {
+      try {
+        final allGroups = ref.read(groupsNotifierProvider);
+        group = allGroups.where((g) => g.id == groupId).firstOrNull;
+      } catch (_) {}
+    }
+    final taskId = (group != null && group.isTask)
+        ? 'group_${group.id}'
+        : 'bead_$itemId';
+
+    if (_appController != null) {
+      _isTaskDone = _appController!.isTaskCompleted(taskId, today);
+    } else {
+      try {
+        _getDatabase().loadTaskCompletions().then((completions) {
+          final key = _dateKey(today);
+          final list = completions[key] ?? [];
+          if (mounted && list.contains(taskId)) {
+            setState(() {
+              _isTaskDone = true;
+            });
+          }
+        }).catchError((_) {});
+      } catch (_) {}
+    }
+  }
+
+  void _onControllerChanged() {
+    if (mounted) setState(() {});
+  }
   bool _isPromptingPermission = false;
   static int _activeExecutionScreens = 0;
 
@@ -84,11 +152,18 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    PrayerAppController? nextController;
     try {
-      _appController = context.read<PrayerAppController>();
+      nextController = context.read<PrayerAppController>();
     } catch (_) {
-      _appController = null;
+      nextController = null;
     }
+    if (_appController != nextController) {
+      _appController?.removeListener(_onControllerChanged);
+      _appController = nextController;
+      _appController?.addListener(_onControllerChanged);
+    }
+    _checkInitialTaskCompletion(widget.itemId, widget.groupId);
   }
 
   @override
@@ -140,7 +215,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           .read(itemsNotifierProvider)
           .where((element) => element.id == widget.itemId)
           .firstOrNull;
-      if (item != null && item.currentProgress >= item.count) {
+      final isTask = item != null &&
+          (item.isTask ||
+              (widget.groupId != null &&
+                  ref
+                      .read(groupsNotifierProvider)
+                      .any((g) => g.id == widget.groupId && g.isTask)));
+      if (item != null && item.currentProgress >= item.count && !isTask) {
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
         ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       }
@@ -433,7 +514,13 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
             .read(itemsNotifierProvider)
             .where((element) => element.id == widget.itemId)
             .firstOrNull;
-        if (item != null && item.currentProgress >= item.count) {
+        final isTask = item != null &&
+            (item.isTask ||
+                (widget.groupId != null &&
+                    ref
+                        .read(groupsNotifierProvider)
+                        .any((g) => g.id == widget.groupId && g.isTask)));
+        if (item != null && item.currentProgress >= item.count && !isTask) {
           ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
           ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         }
@@ -465,6 +552,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
 
   @override
   void dispose() {
+    _appController?.removeListener(_onControllerChanged);
     WidgetsBinding.instance.removeObserver(this);
     _overlay.setOnTap(null);
     _overlay.disarm();
@@ -493,6 +581,57 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     _chimePlayer.stop();
     _restoreOrientation();
     super.dispose();
+  }
+
+  Future<void> _completeTaskAndExit(Item item, [ItemGroup? group]) async {
+    final today = DateTime.now();
+    final isGroupTask = group != null && group.isTask;
+    final taskId = isGroupTask ? 'group_${group.id}' : 'bead_${item.id}';
+
+    if (_appController != null) {
+      _appController!.setTaskCompletion(taskId, today, true);
+      if (item.isTask) {
+        _appController!.setTaskCompletion('bead_${item.id}', today, true);
+      }
+    } else {
+      try {
+        final db = _getDatabase();
+        final completions = await db.loadTaskCompletions();
+        final key = _dateKey(today);
+        final next = Map<String, List<String>>.from(completions);
+        final current = List<String>.from(next[key] ?? []);
+        if (!current.contains(taskId)) {
+          current.add(taskId);
+        }
+        if (item.isTask && !current.contains('bead_${item.id}')) {
+          current.add('bead_${item.id}');
+        }
+        next[key] = current;
+        await db.saveTaskCompletions(next);
+      } catch (_) {}
+    }
+
+    final reminderService = _getReminderService();
+    if (isGroupTask) {
+      if (group.reminderRecurrence == ReminderRecurrence.once ||
+          group.reminderRepeatCount == 1) {
+        await reminderService.cancelReminder(group.id);
+      } else {
+        await reminderService.cancelActiveNotification(group.id);
+      }
+    }
+    if (item.isTask || item.reminderEnabled) {
+      if (item.reminderRecurrence == ReminderRecurrence.once ||
+          item.reminderRepeatCount == 1) {
+        await reminderService.cancelReminder(item.id);
+      } else {
+        await reminderService.cancelActiveNotification(item.id);
+      }
+    }
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -680,6 +819,15 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     final intervalChimeEnabled = ref.watch(intervalSoundNotifierProvider);
 
     final allItems = ref.watch(itemsNotifierProvider);
+    ItemGroup? currentGroup;
+    if (widget.groupId != null) {
+      try {
+        final allGroups = ref.watch(groupsNotifierProvider);
+        currentGroup =
+            allGroups.where((g) => g.id == widget.groupId).firstOrNull;
+      } catch (_) {}
+    }
+
     final groupMembers = widget.groupId != null
         ? allItems
             .where((element) => element.groupIds.contains(widget.groupId))
@@ -691,6 +839,18 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     final isGroupMember = widget.groupId != null && groupIndex != -1;
     final isBeadCompleted = item.currentProgress >= item.count;
     final hasNextBead = isGroupMember && (groupIndex + 1 < groupMembers.length);
+    final isLastGroupBead = isGroupMember && !hasNextBead;
+
+    final isGroupTask = currentGroup != null && currentGroup.isTask;
+    final isTaskItem = item.isTask || isGroupTask;
+    final shouldShowMarkAsDone = isTaskItem &&
+        isBeadCompleted &&
+        (!isGroupMember || isLastGroupBead);
+
+    final taskId = isGroupTask ? 'group_${currentGroup.id}' : 'bead_${item.id}';
+    final isTaskDone =
+        _appController?.isTaskCompleted(taskId, DateTime.now()) ??
+            _isTaskDone;
     final nextItem = hasNextBead ? groupMembers[groupIndex + 1] : null;
 
     void moveToNextOrGroup() {
@@ -703,6 +863,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
               groupId: widget.groupId,
               audioPlayerService: widget.audioPlayerService,
               chimePlayerService: widget.chimePlayerService,
+              reminderService: widget.reminderService,
             ),
           ),
         );
@@ -772,7 +933,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
               }
             },
           ),
-          if (isGroupMember && isBeadCompleted)
+          if (shouldShowMarkAsDone)
+            IconButton.filled(
+              key: const Key('mark_as_done_appbar_button'),
+              tooltip: isTaskDone ? l10n.done : l10n.markAsDone,
+              icon: Icon(isTaskDone ? Icons.check_circle : Icons.check),
+              onPressed: () => _completeTaskAndExit(item, currentGroup),
+            )
+          else if (isGroupMember && isBeadCompleted)
             IconButton.filled(
               key: const Key('next_group_bead_button'),
               tooltip: hasNextBead ? 'Next' : 'Done',
@@ -981,8 +1149,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                 ),
               ),
               const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 12,
+                runSpacing: 8,
                 children: [
                   OutlinedButton.icon(
                     key: const Key('reset_button'),
@@ -990,15 +1161,20 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                     icon: const Icon(Icons.refresh),
                     label: Text(l10n.reset),
                   ),
-                  if (isGroupMember && isBeadCompleted) ...[
-                    const SizedBox(width: 12),
+                  if (shouldShowMarkAsDone)
+                    FilledButton.icon(
+                      key: const Key('mark_as_done_button'),
+                      onPressed: () => _completeTaskAndExit(item, currentGroup),
+                      icon: Icon(isTaskDone ? Icons.check_circle : Icons.check),
+                      label: Text(isTaskDone ? l10n.done : l10n.markAsDone),
+                    )
+                  else if (isGroupMember && isBeadCompleted)
                     FilledButton.icon(
                       key: const Key('next_group_bead_action_button'),
                       onPressed: moveToNextOrGroup,
                       icon: Icon(hasNextBead ? Icons.arrow_forward : Icons.done),
                       label: Text(hasNextBead ? 'Next' : 'Done'),
                     ),
-                  ],
                 ],
               ),
               const SizedBox(height: 10),

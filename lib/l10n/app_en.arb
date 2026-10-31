@@ -841,5 +841,7 @@
   "beadsFloatingCounterEnable": "Enable",
   "beadsMinimizeOnExit": "Minimize on exit",
   "beadsIntervalChime": "Interval chime",
-  "beadOverlayClose": "Close"
+  "beadOverlayClose": "Close",
+  "beadsDone": "Done",
+  "beadsMarkAsDone": "Mark as done"
 }

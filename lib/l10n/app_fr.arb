@@ -636,5 +636,7 @@
   "dndPermissionDialogTitle": "Accès Ne pas déranger",
   "dndPermissionDialogMessage": "Pour couper automatiquement la sonnerie pendant la prière, veuillez autoriser l'accès à Ne pas déranger dans les paramètres système.",
   "dndPermissionOpenSettings": "Ouvrir les paramètres",
-  "beadOverlayClose": "Fermer"
+  "beadOverlayClose": "Fermer",
+  "beadsDone": "Fait",
+  "beadsMarkAsDone": "Marquer comme fait"
 }

@@ -1897,4 +1897,10 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'மூடு';
+
+  @override
+  String get beadsDone => 'முடிந்தது';
+
+  @override
+  String get beadsMarkAsDone => 'முடிந்தது எனக் குறிக்கவும்';
 }

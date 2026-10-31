@@ -1861,4 +1861,10 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get beadOverlayClose => 'بند کریں';
+
+  @override
+  String get beadsDone => 'مکمل';
+
+  @override
+  String get beadsMarkAsDone => 'مکمل کے طور پر نشان لگائیں';
 }

@@ -14,6 +14,8 @@ import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/minimize_on_exit_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:wakelock_plus_platform_interface/wakelock_plus_platform_interface.dart';
 
 import '../helpers/mocks.dart';
 import '../helpers/test_app.dart';
@@ -100,6 +102,18 @@ Future<MockHapticService> _pumpExecution(
 
 class FakeItem extends Fake implements Item {}
 
+class FakeWakelockPlusPlatform extends WakelockPlusPlatformInterface {
+  final calls = <bool>[];
+
+  @override
+  Future<void> toggle({required bool enable}) async {
+    calls.add(enable);
+  }
+
+  @override
+  Future<bool> get enabled => Future.value(calls.isNotEmpty && calls.last);
+}
+
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -118,6 +132,19 @@ void main() {
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
+  });
+
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('wakelock_plus'),
+      (call) async => true,
+    );
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+      const MethodChannel('dev.fluttercommunity.plus/wakelock'),
+      (call) async => true,
+    );
   });
 
   testWidgets('shows item not found for an unknown id', (tester) async {
@@ -470,6 +497,104 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Bead 2'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
+
+  testWidgets(
+    'keeps wakelock enabled across group bead transitions and disables on exit',
+    (tester) async {
+      final fakeWakelock = FakeWakelockPlusPlatform();
+      final originalWakelock = wakelockPlusPlatformInstance;
+      wakelockPlusPlatformInstance = fakeWakelock;
+      addTearDown(() => wakelockPlusPlatformInstance = originalWakelock);
+
+      final bead1 = _item(
+        id: 'b1',
+        title: 'Bead 1',
+        count: 10,
+        check: 5,
+        progress: 9,
+        groupIds: const ['g1'],
+      );
+      final bead2 = _item(
+        id: 'b2',
+        title: 'Bead 2',
+        count: 10,
+        check: 5,
+        progress: 0,
+        groupIds: const ['g1'],
+      );
+
+      await _pumpExecution(
+        tester,
+        items: [bead1, bead2],
+        targetItemId: 'b1',
+        groupId: 'g1',
+      );
+
+      expect(fakeWakelock.calls.isNotEmpty, isTrue);
+      expect(fakeWakelock.calls.last, isTrue);
+
+      // Tap once to reach 10 and show next button
+      await tester.tap(find.byKey(const Key('big_tap_button')));
+      await tester.pumpAndSettle();
+
+      fakeWakelock.calls.clear();
+
+      // Tap next button to pushReplacement to Bead 2
+      await tester.tap(find.byKey(const Key('next_group_bead_button')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Bead 2'), findsOneWidget);
+      // Wakelock must NOT have been turned off by Bead 1's disposal
+      expect(fakeWakelock.calls.last, isTrue);
+      expect(fakeWakelock.calls.contains(false), isFalse);
+
+      fakeWakelock.calls.clear();
+
+      // Exit ExecutionScreen
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+
+      expect(fakeWakelock.calls.contains(false), isTrue);
+    },
+  );
+
+  testWidgets(
+    're-enables wakelock when app resumes from paused state',
+    (tester) async {
+      final fakeWakelock = FakeWakelockPlusPlatform();
+      final originalWakelock = wakelockPlusPlatformInstance;
+      wakelockPlusPlatformInstance = fakeWakelock;
+      addTearDown(() => wakelockPlusPlatformInstance = originalWakelock);
+
+      final bead = _item(
+        id: 'b1',
+        title: 'Bead 1',
+        count: 10,
+        check: 0,
+        progress: 0,
+      );
+
+      await _pumpExecution(tester, items: [bead], targetItemId: 'b1');
+      expect(fakeWakelock.calls.last, isTrue);
+
+      fakeWakelock.calls.clear();
+
+      // Simulate app backgrounding then resuming
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      await tester.pump();
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+
+      expect(fakeWakelock.calls.contains(true), isTrue);
 
       await tester.pumpWidget(const SizedBox());
     },

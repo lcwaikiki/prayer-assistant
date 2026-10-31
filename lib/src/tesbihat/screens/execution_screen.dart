@@ -56,8 +56,15 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   bool _isNotesExpanded = false;
   final _overlay = BeadOverlayService();
   bool _isPromptingPermission = false;
+  static int _activeExecutionScreens = 0;
 
-  void _setWakelock(bool enabled) {
+  @visibleForTesting
+  static int get activeExecutionScreens => _activeExecutionScreens;
+
+  @visibleForTesting
+  static set activeExecutionScreens(int value) => _activeExecutionScreens = value;
+
+  static void _setWakelock(bool enabled) {
     WakelockPlus.toggle(enable: enabled).catchError((_) {
       // Ignore platform channel errors in unsupported environments.
     });
@@ -87,6 +94,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   @override
   void initState() {
     super.initState();
+    _activeExecutionScreens++;
     WidgetsBinding.instance.addObserver(this);
     _setWakelock(true);
     _lockOrientation();
@@ -124,6 +132,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _setWakelock(true);
       _lockOrientation();
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       final item = ref
@@ -412,6 +422,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      if (_activeExecutionScreens > 0) {
+        _setWakelock(true);
+      }
       _lockOrientation();
       ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -455,7 +468,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     WidgetsBinding.instance.removeObserver(this);
     _overlay.setOnTap(null);
     _overlay.disarm();
-    _setWakelock(false);
+    _activeExecutionScreens--;
+    if (_activeExecutionScreens <= 0) {
+      _activeExecutionScreens = 0;
+      _setWakelock(false);
+    }
     _playerCompleteSub?.cancel();
     if (_isAudioPlaying) {
       _audioPlayer.getCurrentPosition().then((pos) {
@@ -740,8 +757,8 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
             key: const Key('edit_item_button'),
             tooltip: l10n.edit,
             icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              await Navigator.push(
                 context,
                 MaterialPageRoute<void>(
                   builder: (_) => ItemFormScreen(
@@ -750,6 +767,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                   ),
                 ),
               );
+              if (mounted) {
+                _setWakelock(true);
+              }
             },
           ),
           if (isGroupMember && isBeadCompleted)

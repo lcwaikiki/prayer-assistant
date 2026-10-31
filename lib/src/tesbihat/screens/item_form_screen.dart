@@ -64,7 +64,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   StreamSubscription<void>? _playerCompleteSubscription;
   bool _isPlayingPreview = false;
   bool _saving = false;
-  bool _allowPop = false;
 
   bool get _isEditing => widget.itemToEdit != null;
 
@@ -99,7 +98,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     if (_countController.text != initialCount) return true;
     if (_checkController.text != initialCheck) return true;
     if (_vibrationIntensity != initialVibration) return true;
-    if (_reminderConfig != initialReminder) return true;
+    if (_reminderConfig.isDirtyComparedTo(initialReminder)) return true;
     if (!setEquals(_selectedGroupIds, initialGroups)) return true;
     if (_soundId != initialSoundId) return true;
     if (_autoCountWithSound != initialAutoCount) return true;
@@ -385,7 +384,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
     if (mounted) {
       await _audioPlayer.stop();
-      setState(() => _allowPop = true);
       Navigator.pop(context);
     }
   }
@@ -394,21 +392,18 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
     return PopScope(
-      canPop: _allowPop,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final navigator = Navigator.of(context);
         if (!_isDirty) {
-          await _audioPlayer.stop();
-          setState(() => _allowPop = true);
-          navigator.pop(result);
+          if (context.mounted) {
+            Navigator.of(context).pop(result);
+          }
           return;
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
-        if (shouldDiscard == true && mounted) {
-          await _audioPlayer.stop();
-          setState(() => _allowPop = true);
-          navigator.pop(result);
+        if (shouldDiscard == true && context.mounted) {
+          Navigator.of(context).pop(result);
         }
       },
       child: Scaffold(

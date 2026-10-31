@@ -109,6 +109,33 @@ class ReminderConfig {
         other.yearlyDate == yearlyDate;
   }
 
+  /// Evaluates whether meaningful reminder fields have changed compared to
+  /// [initial], ignoring inactive fields when reminders are disabled.
+  bool isDirtyComparedTo(ReminderConfig initial) {
+    if (enabled != initial.enabled) return true;
+    if (!enabled) return false;
+    if (isTask != initial.isTask) return true;
+    if (anchor != initial.anchor) return true;
+    if (recurrence != initial.recurrence) return true;
+    if (repeatCount != initial.repeatCount) return true;
+    if (anchor == ItemReminderAnchor.clockTime) {
+      if (at != initial.at) return true;
+    } else {
+      if (prayerName != initial.prayerName) return true;
+      if (offsetMinutes != initial.offsetMinutes) return true;
+    }
+    if (recurrence == ReminderRecurrence.weekly) {
+      if (!listEquals(weekdays, initial.weekdays)) return true;
+    } else if (recurrence == ReminderRecurrence.monthly) {
+      if (monthlyBasis != initial.monthlyBasis) return true;
+      if (dayOfMonth != initial.dayOfMonth) return true;
+    } else if (recurrence == ReminderRecurrence.yearly) {
+      if (yearlyBasis != initial.yearlyBasis) return true;
+      if (yearlyDate != initial.yearlyDate) return true;
+    }
+    return false;
+  }
+
   @override
   int get hashCode => Object.hash(
         enabled,

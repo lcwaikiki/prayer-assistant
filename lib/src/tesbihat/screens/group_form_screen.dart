@@ -33,7 +33,6 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   late final TextEditingController _notesController;
   late ReminderConfig _reminderConfig;
   bool _saving = false;
-  bool _allowPop = false;
 
   bool get _isEditing => widget.groupToEdit != null;
 
@@ -45,7 +44,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
         : const ReminderConfig();
     if (_titleController.text != initialTitle) return true;
     if (_notesController.text != initialNotes) return true;
-    if (_reminderConfig != initialReminder) return true;
+    if (_reminderConfig.isDirtyComparedTo(initialReminder)) return true;
     return false;
   }
 
@@ -153,7 +152,6 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
     }
 
     if (mounted) {
-      setState(() => _allowPop = true);
       Navigator.pop(context);
     }
   }
@@ -162,19 +160,18 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   Widget build(BuildContext context) {
     final l10n = context.tesbihatL10n;
     return PopScope(
-      canPop: _allowPop,
+      canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final navigator = Navigator.of(context);
         if (!_isDirty) {
-          setState(() => _allowPop = true);
-          navigator.pop(result);
+          if (context.mounted) {
+            Navigator.of(context).pop(result);
+          }
           return;
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
-        if (shouldDiscard == true && mounted) {
-          setState(() => _allowPop = true);
-          navigator.pop(result);
+        if (shouldDiscard == true && context.mounted) {
+          Navigator.of(context).pop(result);
         }
       },
       child: Scaffold(

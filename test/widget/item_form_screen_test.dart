@@ -475,10 +475,12 @@ void main() {
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
     expect(find.byType(ItemFormScreen), findsNothing);
+  });
 
-    // Open form again
-    await tester.tap(find.text('open'));
-    await tester.pumpAndSettle();
+  testWidgets('modified form prompts for discard and pops when discard is chosen', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    await _pumpForm(tester, harness, itemToEdit: _item());
 
     // Modify form field -> dirty
     await tester.enterText(find.byKey(const Key('title_field')), 'Draft');
@@ -500,7 +502,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ItemFormScreen), findsOneWidget);
 
-    // Tap back button again and tap 'Discard' -> pops screen
+    // Tap back button again and tap 'Discard' -> pops screen cleanly
     await tester.tap(backButton);
     await tester.pump();
     await tester.pumpAndSettle();
@@ -550,5 +552,111 @@ void main() {
     verify(() => mockHaptic.standard(intensity: any(named: 'intensity'))).called(1);
 
     await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('editing item check=0 does not prompt discard when unmodified', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = const Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 0,
+      setCount: 0,
+      vibrationIntensity: 4,
+    );
+    await _pumpForm(tester, harness, itemToEdit: item);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets('editing item with reminder does not prompt discard when unmodified', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 4,
+      reminderEnabled: true,
+      reminderRecurrence: ReminderRecurrence.daily,
+      reminderAt: DateTime(2026, 1, 1, 8, 30),
+      reminderAnchorDate: DateTime(2026, 1, 1),
+    );
+    await _pumpForm(tester, harness, itemToEdit: item);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets('editing item with disabled reminder does not prompt discard when unmodified', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 4,
+      reminderEnabled: false,
+      reminderRecurrence: ReminderRecurrence.weekly,
+      reminderWeekdays: const [1, 3],
+      reminderPrayerName: 'Ogle',
+      reminderOffsetMinutes: 15,
+    );
+    await _pumpForm(tester, harness, itemToEdit: item);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets('editing item with sound does not prompt discard when unmodified', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = const Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 4,
+      soundId: 's1',
+      soundTitle: 'Sound 1',
+      soundSpeed: 1.5,
+    );
+    await _pumpForm(tester, harness, itemToEdit: item);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets('editing item with group does not prompt discard when unmodified', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Daily Group'),
+    ]);
+    final item = const Item(
+      id: 'a',
+      title: 'Tasbih',
+      count: 33,
+      check: 11,
+      setCount: 0,
+      vibrationIntensity: 4,
+      groupIds: ['g1'],
+    );
+    await _pumpForm(tester, harness, itemToEdit: item);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Discard changes?'), findsNothing);
+    expect(find.byType(ItemFormScreen), findsNothing);
   });
 }

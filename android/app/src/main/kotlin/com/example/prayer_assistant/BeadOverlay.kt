@@ -3,6 +3,7 @@ package com.pirci.prayer_assistant
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PixelFormat
 import android.graphics.Typeface
@@ -61,6 +62,42 @@ object BeadOverlay {
         } catch (_: Exception) {}
     }
 
+    data class DismissTheme(
+        val normalBgColor: String,
+        val normalStrokeColor: String,
+        val normalTextColor: String,
+        val activeBgColor: String,
+        val activeStrokeColor: String,
+        val activeTextColor: String
+    )
+
+    fun isSystemDark(context: Context): Boolean {
+        val uiMode = context.resources.configuration.uiMode
+        return (uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+    }
+
+    fun getDismissTheme(isDark: Boolean): DismissTheme {
+        return if (isDark) {
+            DismissTheme(
+                normalBgColor = "#202124",
+                normalStrokeColor = "#5F6368",
+                normalTextColor = "#F1F3F4",
+                activeBgColor = "#E53935",
+                activeStrokeColor = "#FF8A80",
+                activeTextColor = "#FFFFFF"
+            )
+        } else {
+            DismissTheme(
+                normalBgColor = "#FFFFFFFF",
+                normalStrokeColor = "#CCCCCC",
+                normalTextColor = "#3C4043",
+                activeBgColor = "#E53935",
+                activeStrokeColor = "#C62828",
+                activeTextColor = "#FFFFFF"
+            )
+        }
+    }
+
     fun canDraw(context: Context): Boolean = Settings.canDrawOverlays(context)
 
     val isShowing: Boolean get() = view != null
@@ -109,23 +146,10 @@ object BeadOverlay {
             elevation = 8f
         }
 
-        val normalTextColor = Color.parseColor("#3C4043")
-        val activeTextColor = Color.WHITE
-
-        val normalDismissBg = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 22 * density
-            setColor(Color.parseColor("#FFFFFFFF"))
-            setStroke((2 * density).toInt(), Color.parseColor("#CCCCCC"))
-            alpha = 255
-        }
-        val activeDismissBg = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            cornerRadius = 22 * density
-            setColor(Color.parseColor("#E53935"))
-            setStroke((2 * density).toInt(), Color.parseColor("#C62828"))
-            alpha = 255
-        }
+        var normalTextColor = Color.parseColor("#3C4043")
+        var activeTextColor = Color.WHITE
+        var normalDismissBg: GradientDrawable? = null
+        var activeDismissBg: GradientDrawable? = null
 
         val dismissParams = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
@@ -159,6 +183,28 @@ object BeadOverlay {
 
         fun showDismissTarget() {
             if (dismissView == null) {
+                val isDark = isSystemDark(app)
+                val theme = getDismissTheme(isDark)
+                normalTextColor = Color.parseColor(theme.normalTextColor)
+                activeTextColor = Color.parseColor(theme.activeTextColor)
+
+                val normBg = GradientDrawable().apply {
+                    shape = GradientDrawable.RECTANGLE
+                    cornerRadius = 22 * density
+                    setColor(Color.parseColor(theme.normalBgColor))
+                    setStroke((2 * density).toInt(), Color.parseColor(theme.normalStrokeColor))
+                    alpha = 255
+                }
+                val actBg = GradientDrawable().apply {
+                    shape = GradientDrawable.RECTANGLE
+                    cornerRadius = 22 * density
+                    setColor(Color.parseColor(theme.activeBgColor))
+                    setStroke((2 * density).toInt(), Color.parseColor(theme.activeStrokeColor))
+                    alpha = 255
+                }
+                normalDismissBg = normBg
+                activeDismissBg = actBg
+
                 val target = TextView(app).apply {
                     this.text = "✕  $closeText"
                     gravity = Gravity.CENTER
@@ -169,7 +215,7 @@ object BeadOverlay {
                     } catch (_: Exception) {
                         Typeface.DEFAULT_BOLD
                     }
-                    background = normalDismissBg
+                    background = normBg
                     elevation = 12f
                     alpha = 1.0f
                     minWidth = dismissWidthPx
@@ -275,7 +321,7 @@ object BeadOverlay {
                             if (!isOverDismiss) {
                                 isOverDismiss = true
                                 vibrateDismissFeedback()
-                                dismissView?.background = activeDismissBg
+                                activeDismissBg?.let { dismissView?.background = it }
                                 dismissView?.setTextColor(activeTextColor)
                                 dismissView?.scaleX = 1.08f
                                 dismissView?.scaleY = 1.08f
@@ -284,7 +330,7 @@ object BeadOverlay {
                             if (isOverDismiss) {
                                 isOverDismiss = false
                                 vibrateDismissFeedback()
-                                dismissView?.background = normalDismissBg
+                                normalDismissBg?.let { dismissView?.background = it }
                                 dismissView?.setTextColor(normalTextColor)
                                 dismissView?.scaleX = 1.0f
                                 dismissView?.scaleY = 1.0f

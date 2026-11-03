@@ -67,19 +67,20 @@ object PrayerWidgetUpdater {
         val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
         val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
+        val state = getStatusBarState(context, now)
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
 
         val openToday = buildOpenPendingIntent(context, TARGET_TODAY)
         val openDates = buildOpenPendingIntent(context, TARGET_DATES)
-        updateCountdownWidgets(context, next, now, textSize, mmssThreshold)
+        updateCountdownWidgets(context, state, now, textSize, mmssThreshold)
 
         val widgetManager = AppWidgetManager.getInstance(context)
         val dailyPrayerIds = widgetManager.getAppWidgetIds(
             ComponentName(context, DailyPrayerTimesWidgetProvider::class.java)
         )
         for (widgetId in dailyPrayerIds) {
-            val views = buildDailyPrayerTimesView(context, widgetId, next, openToday)
+            val views = buildDailyPrayerTimesView(context, widgetId, state?.prayer ?: next, openToday)
             widgetManager.updateAppWidget(widgetId, views)
         }
 
@@ -118,12 +119,11 @@ object PrayerWidgetUpdater {
      * must stay cheap: no daily/upcoming/status-bar work here.
      */
     fun updateCountdownWidgets(context: Context) {
-        val timeline = PrayerWidgetStorage.readTimeline(context)
         val now = System.currentTimeMillis()
-        val next = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull()
+        val state = getStatusBarState(context, now)
         val textSize = PrayerWidgetStorage.readWidgetTextSize(context)
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context)
-        updateCountdownWidgets(context, next, now, textSize, mmssThreshold)
+        updateCountdownWidgets(context, state, now, textSize, mmssThreshold)
     }
 
     private fun updateCountdownWidgets(
@@ -133,11 +133,23 @@ object PrayerWidgetUpdater {
         textSize: String,
         mmssThreshold: Int,
     ) {
+        val state = next?.let { StatusBarState(it, false, 0) }
+        updateCountdownWidgets(context, state, now, textSize, mmssThreshold)
+    }
+
+    private fun updateCountdownWidgets(
+        context: Context,
+        state: StatusBarState?,
+        now: Long,
+        textSize: String,
+        mmssThreshold: Int,
+    ) {
         val openPendingIntent = buildOpenPendingIntent(context, TARGET_TODAY)
         val openFasting = buildOpenPendingIntent(context, TARGET_FASTING)
         val widgetManager = AppWidgetManager.getInstance(context)
         val appLocale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
-        val nextPrayerName = next?.let { getLocalizedPrayerName(it.first, appLocale) } ?: "--"
+        val prayerName = state?.prayer?.first
+        val nextPrayerName = prayerName?.let { getLocalizedPrayerName(it, appLocale) } ?: "--"
         val dark = isDark(context)
         val bgRes = getWidgetBgRes(context)
         val fastingBgRes = getWidgetFastingBgRes(context)
@@ -155,7 +167,7 @@ object PrayerWidgetUpdater {
             views.setTextViewText(R.id.widgetRemainingOnlyLabel, nextPrayerName)
             setTextSizeSp(views, R.id.widgetRemainingOnlyLabel, textSize, 9f, 11f, 14f, 17f)
             setTextSizeSp(views, R.id.widgetRemainingOnlyValue, textSize, 16f, 22f, 30f, 34f)
-            applyCountdown(views, R.id.widgetRemainingOnlyValue, next, now, mmssThreshold)
+            applyCountdown(views, R.id.widgetRemainingOnlyValue, state, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingOnlyRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -168,7 +180,7 @@ object PrayerWidgetUpdater {
             val diameterDp = circleDiameterDp(context, widgetId)
             setCircleTextSizeSp(views, context, textSize, diameterDp)
             views.setTextColor(R.id.widgetRemainingCircleValue, primaryTextColor)
-            applyCountdown(views, R.id.widgetRemainingCircleValue, next, now, mmssThreshold)
+            applyCountdown(views, R.id.widgetRemainingCircleValue, state, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetRemainingCircleRoot, openPendingIntent)
             applyCircleBackground(views, context, widgetId)
             widgetManager.updateAppWidget(widgetId, views)
@@ -189,9 +201,9 @@ object PrayerWidgetUpdater {
             views.setTextViewText(R.id.widgetNextPrayerName, nextPrayerName)
             views.setTextViewText(
                 R.id.widgetNextPrayerTime,
-                next?.let { formatClock(it.second) } ?: "--:--"
+                state?.prayer?.let { formatClock(it.second) } ?: "--:--"
             )
-            applyCountdown(views, R.id.widgetNextPrayerRemaining, next, now, mmssThreshold)
+            applyCountdown(views, R.id.widgetNextPrayerRemaining, state, now, mmssThreshold)
             views.setOnClickPendingIntent(R.id.widgetNextPrayerRoot, openPendingIntent)
             widgetManager.updateAppWidget(widgetId, views)
         }
@@ -1115,21 +1127,43 @@ object PrayerWidgetUpdater {
     private fun applyCountdown(
         views: RemoteViews,
         viewId: Int,
-        next: Pair<String, Long>?,
+        state: StatusBarState?,
         now: Long,
         mmssThresholdMinutes: Int
     ) {
-        if (next == null) {
+        if (state == null) {
             views.setTextViewText(viewId, "--:--")
             return
         }
-        val remainingMs = next.second - now
+
+        if (state.isPostPrayer) {
+            val elapsedMs = now - state.prayer.second
+            if (mmssThresholdMinutes > 0) {
+                views.setTextViewText(viewId, formatElapsedMinutesSeconds(elapsedMs))
+            } else {
+                if (state.postMinutes in 1..3) {
+                    views.setTextViewText(viewId, "+${state.postMinutes}")
+                } else {
+                    views.setTextViewText(viewId, "0")
+                }
+            }
+            return
+        }
+
+        val remainingMs = state.prayer.second - now
         val remainingMinutes = remainingMs / 60_000L
         if (remainingMinutes >= mmssThresholdMinutes) {
             views.setTextViewText(viewId, formatHoursMinutes(remainingMs))
             return
         }
         views.setTextViewText(viewId, formatMinutesSeconds(remainingMs))
+    }
+
+    private fun formatElapsedMinutesSeconds(elapsedMs: Long): String {
+        val totalSeconds = (elapsedMs / 1000L).coerceAtLeast(0)
+        val minutes = totalSeconds / 60L
+        val seconds = totalSeconds % 60L
+        return "+$minutes:${seconds.toString().padStart(2, '0')}"
     }
 
     private fun formatHoursMinutes(remainingMs: Long): String {
@@ -1213,18 +1247,28 @@ object PrayerWidgetUpdater {
         )
 
         val now = System.currentTimeMillis()
-        val next = PrayerWidgetStorage.readTimeline(context).firstOrNull { it.second > now }
-
-        if (next == null || !PrayerWidgetStorage.isStatusEnabled(context)) {
+        if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             alarmManager.cancel(pendingIntent)
             return
         }
 
-        val remainingMinutes = (next.second - now) / 60_000L
-        val triggerAt = if (remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
-            next.second - (ICON_DIGIT_THRESHOLD_MINUTES - 1L) * 60_000L
-        } else {
+        val state = getStatusBarState(context, now)
+        if (state == null) {
+            alarmManager.cancel(pendingIntent)
+            return
+        }
+
+        val triggerAt = if (state.isPostPrayer || (state.postMinutes == 0 && now >= state.prayer.second)) {
+            // During post-prayer (0, +1, +2, +3), refresh at the top of every minute
             ((now / 60_000L) + 1L) * 60_000L
+        } else {
+            val remainingMs = state.prayer.second - now
+            val remainingMinutes = if (remainingMs > 0) (remainingMs + 59_999L) / 60_000L else 0L
+            if (remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
+                state.prayer.second - (ICON_DIGIT_THRESHOLD_MINUTES - 1L) * 60_000L
+            } else {
+                ((now / 60_000L) + 1L) * 60_000L
+            }
         }
 
         setExactAlarmSafely(alarmManager, triggerAt, pendingIntent)
@@ -1249,11 +1293,22 @@ object PrayerWidgetUpdater {
         )
 
         val now = System.currentTimeMillis()
-        val next = PrayerWidgetStorage.readTimeline(context).firstOrNull { it.second > now }
-        val remainingMinutes = next?.let { (it.second - now) / 60_000L }
+        val state = getStatusBarState(context, now)
+        if (state == null) {
+            alarmManager.cancel(pendingIntent)
+            return
+        }
+
+        if (state.isPostPrayer || (state.postMinutes == 0 && now >= state.prayer.second)) {
+            val triggerAt = ((now / 60_000L) + 1L) * 60_000L
+            setExactAlarmSafely(alarmManager, triggerAt, pendingIntent)
+            return
+        }
+
+        val remainingMinutes = (state.prayer.second - now) / 60_000L
         val mmssThreshold = PrayerWidgetStorage.readWidgetMmssThreshold(context).toLong()
 
-        if (remainingMinutes == null || (shouldTickPerSecond(context) && remainingMinutes < mmssThreshold)) {
+        if (shouldTickPerSecond(context) && remainingMinutes < mmssThreshold) {
             alarmManager.cancel(pendingIntent)
             return
         }
@@ -1329,10 +1384,15 @@ object PrayerWidgetUpdater {
         ).any { manager.getAppWidgetIds(ComponentName(context, it)).isNotEmpty() }
 
         if (hasStandardCountdown) {
-            val next = nextPrayer(context)
-            if (next != null) {
-                val remainingMinutes = (next.second - now) / 60_000L
-                if (remainingMinutes in 0 until mmssThreshold) return true
+            val state = getStatusBarState(context, now)
+            if (state != null) {
+                if (state.isPostPrayer) {
+                    val elapsedMinutes = (now - state.prayer.second) / 60_000L
+                    if (elapsedMinutes in 0..3) return true
+                } else {
+                    val remainingMinutes = (state.prayer.second - now) / 60_000L
+                    if (remainingMinutes in 0 until mmssThreshold) return true
+                }
             }
         }
 
@@ -1371,14 +1431,52 @@ object PrayerWidgetUpdater {
         }
     }
 
-    internal fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
+    data class StatusBarState(
+        val prayer: Pair<String, Long>,
+        val isPostPrayer: Boolean,
+        val postMinutes: Int
+    )
+
+    fun getStatusBarState(context: Context, now: Long = System.currentTimeMillis()): StatusBarState? {
+        val timeline = PrayerWidgetStorage.readTimeline(context)
+        if (timeline.isEmpty()) return null
+
+        val previous = timeline.filter { it.second <= now }.maxByOrNull { it.second }
+        if (previous != null) {
+            val elapsedMs = now - previous.second
+            val elapsedMinutes = (elapsedMs / 60_000L).toInt()
+            if (elapsedMinutes in 0..3) {
+                return StatusBarState(
+                    prayer = previous,
+                    isPostPrayer = elapsedMinutes > 0,
+                    postMinutes = elapsedMinutes
+                )
+            }
+        }
+
+        val upcoming = timeline.firstOrNull { it.second > now } ?: timeline.firstOrNull() ?: return null
+        return StatusBarState(
+            prayer = upcoming,
+            isPostPrayer = false,
+            postMinutes = 0
+        )
+    }
+
+    internal fun updateStatusBar(
+        context: Context,
+        state: StatusBarState? = getStatusBarState(context)
+    ) {
         val manager = NotificationManagerCompat.from(context)
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             manager.cancel(STATUS_NOTIFICATION_ID)
             return
         }
         createStatusChannel(context)
-        manager.notify(STATUS_NOTIFICATION_ID, buildStatusNotification(context, next))
+        manager.notify(STATUS_NOTIFICATION_ID, buildStatusNotification(context, state))
+    }
+
+    internal fun updateStatusBar(context: Context, next: Pair<String, Long>?) {
+        updateStatusBar(context, getStatusBarState(context))
     }
 
     /**
@@ -1388,7 +1486,7 @@ object PrayerWidgetUpdater {
      */
     internal fun buildStatusNotification(
         context: Context,
-        next: Pair<String, Long>?
+        state: StatusBarState? = getStatusBarState(context)
     ): Notification {
         if (!PrayerWidgetStorage.isStatusEnabled(context)) {
             return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
@@ -1421,10 +1519,10 @@ object PrayerWidgetUpdater {
             dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val contentView = buildStatusContentView(context, next)
-        val expandedView = buildStatusExpandedView(context, next)
+        val contentView = buildStatusContentView(context, state)
+        val expandedView = buildStatusExpandedView(context, state)
         return NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
-            .setSmallIcon(buildSmallIcon(context, next))
+            .setSmallIcon(buildSmallIcon(context, state))
             .setContentTitle("Prayer Assist")
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(contentView)
@@ -1439,21 +1537,41 @@ object PrayerWidgetUpdater {
             .build()
     }
 
+    internal fun buildStatusNotification(
+        context: Context,
+        next: Pair<String, Long>?
+    ): Notification {
+        return buildStatusNotification(context, getStatusBarState(context))
+    }
+
     /**
      * Status bar icon: under [ICON_DIGIT_THRESHOLD_MINUTES] minutes remaining, shows the
      * minute count itself (drawn as a white silhouette bitmap, the required style for
-     * notification small icons); otherwise falls back to the app icon, since a 3-digit
-     * number doesn't read well at status-bar-icon size.
+     * notification small icons). After prayer time (0), it displays +1, +2, +3 for the
+     * first 3 minutes, then reverts to the app icon.
      */
-    private fun buildSmallIcon(context: Context, next: Pair<String, Long>?): IconCompat {
-        val remainingMinutes = next?.let { (it.second - System.currentTimeMillis()) / 60_000L }
-        if (remainingMinutes == null || remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
+    private fun buildSmallIcon(context: Context, state: StatusBarState?): IconCompat {
+        if (state == null) {
             return IconCompat.createWithResource(context, R.mipmap.ic_launcher)
         }
+        val text: String = if (state.isPostPrayer) {
+            if (state.postMinutes in 1..3) {
+                "+${state.postMinutes}"
+            } else {
+                return IconCompat.createWithResource(context, R.mipmap.ic_launcher)
+            }
+        } else {
+            val remainingMs = state.prayer.second - System.currentTimeMillis()
+            val remainingMinutes = if (remainingMs > 0) (remainingMs + 59_999L) / 60_000L else 0L
+            if (remainingMinutes !in 0L until ICON_DIGIT_THRESHOLD_MINUTES) {
+                return IconCompat.createWithResource(context, R.mipmap.ic_launcher)
+            }
+            remainingMinutes.toString()
+        }
+
         val sizePx = (48 * context.resources.displayMetrics.density).toInt().coerceAtLeast(48)
         val bitmap = Bitmap.createBitmap(sizePx, sizePx, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
-        val text = remainingMinutes.coerceIn(0L, 99L).toString()
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = Color.WHITE
             textAlign = Paint.Align.CENTER
@@ -1468,7 +1586,7 @@ object PrayerWidgetUpdater {
         paint.textSize = referenceSize
         val bounds = android.graphics.Rect()
         paint.getTextBounds(text, 0, text.length, bounds)
-        val available = sizePx * 0.99f
+        val available = sizePx * 0.95f
         val scale = minOf(available / bounds.width(), available / bounds.height())
         paint.textSize = referenceSize * scale
         paint.getTextBounds(text, 0, text.length, bounds)
@@ -1481,19 +1599,19 @@ object PrayerWidgetUpdater {
     /**
      * Builds "<prayer> at <time> -> <live ticking countdown>" as a single row, with the
      * countdown rendered by a real Chronometer view so it ticks every second without any
-     * app wakeups. The standard NotificationCompat template has no way to splice a live
-     * value into arbitrary text, so this uses a small custom RemoteViews layout instead.
+     * app wakeups. During post-prayer minutes, it shows the elapsed time counting up (+%s).
      */
-    private fun buildStatusContentView(context: Context, next: Pair<String, Long>?): RemoteViews {
+    private fun buildStatusContentView(context: Context, state: StatusBarState?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar)
         val showTimeLeft = PrayerWidgetStorage.isStatusShowTimeLeft(context)
-        if (next == null) {
+        if (state == null) {
             views.setTextViewText(R.id.statusPrayerLabel, "--")
             views.setChronometer(R.id.statusCountdown, SystemClock.elapsedRealtime(), null, false)
             views.setTextViewText(R.id.statusCountdown, "--:--")
             views.setViewVisibility(R.id.statusCountdown, if (showTimeLeft) android.view.View.VISIBLE else android.view.View.GONE)
             return views
         }
+        val next = state.prayer
         val locale = PrayerWidgetStorage.readAppLocale(context).lowercase()
         val atWord = when (locale) {
             "tr" -> "saat"
@@ -1518,9 +1636,16 @@ object PrayerWidgetUpdater {
         if (showTimeLeft) {
             views.setViewVisibility(R.id.statusCountdown, android.view.View.VISIBLE)
             val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
-            views.setChronometer(R.id.statusCountdown, base, null, true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                views.setChronometerCountDown(R.id.statusCountdown, true)
+            if (state.isPostPrayer) {
+                views.setChronometer(R.id.statusCountdown, base, "+%s", true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    views.setChronometerCountDown(R.id.statusCountdown, false)
+                }
+            } else {
+                views.setChronometer(R.id.statusCountdown, base, null, true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    views.setChronometerCountDown(R.id.statusCountdown, true)
+                }
             }
         } else {
             views.setViewVisibility(R.id.statusCountdown, android.view.View.GONE)
@@ -1534,7 +1659,7 @@ object PrayerWidgetUpdater {
      * Reuses the same today-prayers snapshot the Dart side already pushes on every refresh,
      * so this costs nothing extra to keep in sync with the collapsed view.
      */
-    private fun buildStatusExpandedView(context: Context, next: Pair<String, Long>?): RemoteViews {
+    private fun buildStatusExpandedView(context: Context, state: StatusBarState?): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.notification_status_bar_expanded)
         val locale = PrayerWidgetStorage.readAppLocale(context).lowercase(Locale.ROOT)
         val todayPrayers = PrayerWidgetStorage.readTodayPrayers(context)
@@ -1576,7 +1701,7 @@ object PrayerWidgetUpdater {
             val prayerDisplayName = prayer?.let { getLocalizedPrayerName(it.first, locale) } ?: "--"
             views.setTextViewText(nameIds[i], prayerDisplayName)
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
-            val isNext = prayer != null && next != null && prayer.second == next.second
+            val isNext = prayer != null && state != null && prayer.second == state.prayer.second
             if (isNext) {
                 views.setInt(columnIds[i], "setBackgroundResource", R.drawable.notification_pill_bg)
                 views.setTextColor(nameIds[i], Color.parseColor("#E6FFFFFF"))
@@ -1592,14 +1717,21 @@ object PrayerWidgetUpdater {
         )
 
         if (showTimeLeft) {
-            if (next == null) {
+            if (state == null) {
                 views.setChronometer(R.id.expandedCountdown, SystemClock.elapsedRealtime(), null, false)
                 views.setTextViewText(R.id.expandedCountdown, "--:--")
             } else {
-                val base = SystemClock.elapsedRealtime() + (next.second - System.currentTimeMillis())
-                views.setChronometer(R.id.expandedCountdown, base, null, true)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    views.setChronometerCountDown(R.id.expandedCountdown, true)
+                val base = SystemClock.elapsedRealtime() + (state.prayer.second - System.currentTimeMillis())
+                if (state.isPostPrayer) {
+                    views.setChronometer(R.id.expandedCountdown, base, "+%s", true)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        views.setChronometerCountDown(R.id.expandedCountdown, false)
+                    }
+                } else {
+                    views.setChronometer(R.id.expandedCountdown, base, null, true)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        views.setChronometerCountDown(R.id.expandedCountdown, true)
+                    }
                 }
             }
 

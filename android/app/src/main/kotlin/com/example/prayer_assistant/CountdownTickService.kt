@@ -47,7 +47,7 @@ class CountdownTickService : Service() {
         PrayerWidgetUpdater.createStatusChannel(this)
         startForeground(
             PrayerWidgetUpdater.STATUS_NOTIFICATION_ID,
-            PrayerWidgetUpdater.buildStatusNotification(this, PrayerWidgetUpdater.nextPrayer(this))
+            PrayerWidgetUpdater.buildStatusNotification(this)
         )
         val screenFilter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
@@ -74,7 +74,7 @@ class CountdownTickService : Service() {
             @Suppress("DEPRECATION")
             stopForeground(true)
         }
-        PrayerWidgetUpdater.updateStatusBar(this, PrayerWidgetUpdater.nextPrayer(this))
+        PrayerWidgetUpdater.updateStatusBar(this)
         super.onDestroy()
     }
 

@@ -29,6 +29,7 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
   bool _customMinutesDirty = false;
   bool _customAfterMinutesInitialized = false;
   bool _customAfterMinutesDirty = false;
+  bool _hasDnd = true;
 
   @override
   void initState() {
@@ -38,6 +39,17 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
     WidgetsBinding.instance.addObserver(this);
     _customMinutesFocus.addListener(_handleCustomMinutesFocusChange);
     _customAfterMinutesFocus.addListener(_handleCustomAfterMinutesFocusChange);
+    _checkDndPermission();
+  }
+
+  Future<void> _checkDndPermission() async {
+    if (!NativeReminderService.isAndroid) return;
+    final granted = await NativeReminderService.hasDndPermission();
+    if (mounted && _hasDnd != granted) {
+      setState(() {
+        _hasDnd = granted;
+      });
+    }
   }
 
   void _handleCustomMinutesFocusChange() {
@@ -64,7 +76,9 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
+    if (state == AppLifecycleState.resumed) {
+      _checkDndPermission();
+    } else if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden ||
         state == AppLifecycleState.detached) {
       _persistCustomMinutesIfNeeded();
@@ -653,8 +667,28 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                                 if (value && NativeReminderService.isAndroid) {
                                   final hasDnd =
                                       await NativeReminderService.hasDndPermission();
-                                  if (!hasDnd && mounted) {
-                                    await NativeReminderService.openDndSettings();
+                                  if (!hasDnd && context.mounted) {
+                                    final proceed = await showDialog<bool>(
+                                      context: context,
+                                      builder: (ctx) => AlertDialog(
+                                        title: Text(ctx.l10n.dndPermissionDialogTitle),
+                                        content: Text(ctx.l10n.dndPermissionDialogMessage),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(ctx).pop(false),
+                                            child: Text(MaterialLocalizations.of(ctx).cancelButtonLabel),
+                                          ),
+                                          FilledButton(
+                                            onPressed: () => Navigator.of(ctx).pop(true),
+                                            child: Text(ctx.l10n.dndPermissionOpenSettings),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    if (proceed == true) {
+                                      await NativeReminderService.openDndSettings();
+                                    }
+                                    return;
                                   }
                                 }
                                 controller.updateReminderSetting(
@@ -674,6 +708,60 @@ class _ReminderSettingsScreenState extends State<ReminderSettingsScreen>
                             context.l10n.silentModeSubtitle,
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
+                          if (setting.silentMode && !_hasDnd) ...[
+                            const SizedBox(height: 8),
+                            InkWell(
+                              onTap: () async {
+                                await NativeReminderService.openDndSettings();
+                              },
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .errorContainer
+                                      .withValues(alpha: 0.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .error
+                                        .withValues(alpha: 0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.warning_amber_rounded,
+                                      color: Theme.of(context).colorScheme.error,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        context.l10n.dndPermissionDialogMessage,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall
+                                            ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onErrorContainer,
+                                            ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Icon(
+                                      Icons.chevron_right,
+                                      color: Theme.of(context).colorScheme.error,
+                                      size: 18,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 12),
                           Wrap(
                             spacing: 8,

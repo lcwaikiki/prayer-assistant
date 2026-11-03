@@ -160,12 +160,16 @@ class NotificationService {
     );
   }
 
-  Future<void> cancelAllPrayerNotifications() async {
+  Future<void> cancelAllPrayerNotifications({
+    bool cancelActiveSilent = true,
+  }) async {
     for (var id = 1; id <= _maxScheduledReminders; id++) {
       await _plugin.cancel(id: id);
       await NativeReminderService.cancel(id);
     }
-    await NativeReminderService.cancelAllSilentMode();
+    await NativeReminderService.cancelAllSilentMode(
+      cancelActive: cancelActiveSilent,
+    );
   }
 
   Future<List<ScheduledReminderEntry>> getPendingScheduledReminders() async {
@@ -319,7 +323,7 @@ class NotificationService {
     bool dismissConfirm = true,
     Locale? locale,
   }) async {
-    await cancelAllPrayerNotifications();
+    await cancelAllPrayerNotifications(cancelActiveSilent: false);
 
     final strings = NotificationStrings.of(locale);
     final now = DateTime.now();

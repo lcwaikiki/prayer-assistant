@@ -624,7 +624,8 @@ class MainActivity : FlutterActivity() {
                     result.success(null)
                 }
                 "cancelAllSilentMode" -> {
-                    PrayerSilentModeManager.cancelAll(this)
+                    val cancelActive = call.argument<Boolean>("cancelActive") ?: true
+                    PrayerSilentModeManager.cancelAll(this, cancelActive)
                     result.success(null)
                 }
                 "hasDndPermission" -> {

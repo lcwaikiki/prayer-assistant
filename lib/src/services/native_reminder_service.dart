@@ -120,10 +120,12 @@ class NativeReminderService {
     } catch (_) {}
   }
 
-  static Future<void> cancelAllSilentMode() async {
+  static Future<void> cancelAllSilentMode({bool cancelActive = true}) async {
     if (!isAndroid) return;
     try {
-      await _channel.invokeMethod('cancelAllSilentMode');
+      await _channel.invokeMethod('cancelAllSilentMode', {
+        'cancelActive': cancelActive,
+      });
     } catch (_) {}
   }
 

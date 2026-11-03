@@ -25,6 +25,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
   void addGroup({
     required String title,
     String notes = '',
+    bool isTask = false,
     bool reminderEnabled = false,
     ItemReminderAnchor reminderAnchor = ItemReminderAnchor.clockTime,
     ReminderRecurrence reminderRecurrence = ReminderRecurrence.once,
@@ -43,6 +44,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       title: title,
       notes: notes,
+      isTask: isTask,
       reminderEnabled: reminderEnabled,
       reminderAnchor: reminderAnchor,
       reminderRecurrence: reminderRecurrence,

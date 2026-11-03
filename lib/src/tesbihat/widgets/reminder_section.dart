@@ -113,8 +113,8 @@ class ReminderConfig {
   /// [initial], ignoring inactive fields when reminders are disabled.
   bool isDirtyComparedTo(ReminderConfig initial) {
     if (enabled != initial.enabled) return true;
-    if (!enabled) return false;
     if (isTask != initial.isTask) return true;
+    if (!enabled) return false;
     if (anchor != initial.anchor) return true;
     if (recurrence != initial.recurrence) return true;
     if (repeatCount != initial.repeatCount) return true;

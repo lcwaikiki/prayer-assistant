@@ -517,10 +517,10 @@ void main() {
 
     expect(find.text('Subhanallah'), findsNothing);
     expect(find.text('Alhamdulillah'), findsNothing);
-    expect(find.text('No matching items found.'), findsOneWidget);
+    expect(find.text('No results'), findsOneWidget);
 
     // Clear search
-    await tester.tap(find.byKey(const Key('group_search_clear_button')));
+    await tester.tap(find.byKey(const Key('clear_group_search_button')));
     await tester.pumpAndSettle();
 
     expect(find.text('Subhanallah'), findsOneWidget);

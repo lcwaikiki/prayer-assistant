@@ -104,6 +104,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
         widget.groupToEdit!.copyWith(
           title: title,
           notes: _notesController.text.trim(),
+          isTask: reminder.isTask,
           reminderEnabled: reminder.enabled,
           reminderAnchor: reminder.anchor,
           reminderRecurrence: reminder.recurrence,
@@ -129,6 +130,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       notifier.addGroup(
         title: title,
         notes: _notesController.text.trim(),
+        isTask: reminder.isTask,
         reminderEnabled: reminder.enabled,
         reminderAnchor: reminder.anchor,
         reminderRecurrence: reminder.recurrence,

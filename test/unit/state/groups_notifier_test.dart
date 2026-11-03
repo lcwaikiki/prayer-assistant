@@ -102,6 +102,21 @@ void main() {
 
       verify(() => reminderService.scheduleGroupReminder(any())).called(1);
     });
+
+    test('persists isTask flag when configured', () {
+      final repository = ItemRepository.memory();
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).addGroup(
+        title: 'Morning Adhkar',
+        isTask: true,
+        reminderEnabled: true,
+      );
+
+      final state = container.read(groupsNotifierProvider);
+      expect(state.single.isTask, isTrue);
+      expect(repository.loadGroups().single.isTask, isTrue);
+    });
   });
 
   group('GroupsNotifier.updateGroup', () {
@@ -120,6 +135,22 @@ void main() {
       final state = container.read(groupsNotifierProvider);
       expect(state.map((g) => g.title), ['Renamed', 'Night']);
       expect(repository.loadGroups().map((g) => g.title), ['Renamed', 'Night']);
+    });
+
+    test('persists updated isTask flag', () {
+      final repository = ItemRepository.memory();
+      repository.saveGroups([
+        const ItemGroup(id: 'g1', title: 'Morning', isTask: false),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(groupsNotifierProvider.notifier).updateGroup(
+            const ItemGroup(id: 'g1', title: 'Morning', isTask: true),
+          );
+
+      final state = container.read(groupsNotifierProvider);
+      expect(state.single.isTask, isTrue);
+      expect(repository.loadGroups().single.isTask, isTrue);
     });
   });
 

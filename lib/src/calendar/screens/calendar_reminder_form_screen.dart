@@ -18,7 +18,9 @@ import '../../tesbihat/services/prayer_anchor_resolver.dart';
 import '../../tesbihat/state/sound_library_notifier.dart';
 import '../../tesbihat/widgets/audio_speed_bar.dart';
 import '../../tesbihat/widgets/sound_picker_sheet.dart';
+import '../../utils/reminder_format_utils.dart';
 import '../../utils/time_utils.dart';
+import '../../widgets/read_only_detail_section.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import 'calendar_anchor_date_picker.dart';
@@ -855,6 +857,144 @@ class _CalendarReminderFormScreenState
     }
   }
 
+  Widget _buildReadOnlyView(
+    BuildContext context,
+    AppLocalizations l10n,
+    String locale,
+  ) {
+    final title = _titleController.text.trim();
+    final notes = _notesController.text.trim();
+    final isReminderEnabled =
+        _reminder?.enabled ?? widget.reminder?.enabled ?? true;
+
+    final reminderSummary = formatConciseReminder(
+      context: context,
+      enabled: isReminderEnabled,
+      isPrayerAnchor: _anchor == CalendarReminderAnchor.prayerTime,
+      prayerName: _anchorPrayerName,
+      offsetMinutes: _computeOffsetMinutes(),
+      recurrence: _recurrence,
+      anchorAt: _anchorAt,
+      clockTime: TimeOfDay(hour: _anchorAt.hour, minute: _anchorAt.minute),
+      anchorDate: _anchorDate,
+      weekdays: _weekdays,
+      dayOfMonth: _dayOfMonth,
+      yearlyDate: _yearlyDate,
+      monthlyBasis: _monthlyBasis,
+      yearlyBasis: _yearlyBasis,
+      repeatCount: _repeatCount,
+    );
+
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        ReadOnlyHeroHeader(
+          title: title.isEmpty ? l10n.calendarReminderFormTitleEdit : title,
+          icon: Icons.event_note,
+          subtitle: reminderSummary,
+          badges: [
+            if (_isTask)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.check_circle_outline, size: 16),
+                label: Text(l10n.calendarMarkAsTask),
+              ),
+            if (isReminderEnabled)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.notifications_active, size: 16),
+                label: Text(l10n.calendarReminderDateTimeLabel),
+              ),
+            if (_soundId != null)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.volume_up, size: 16),
+                label: Text(_soundTitle ?? l10n.sound),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ReadOnlyCardContainer(
+          title: l10n.calendarReminderFormTitleEdit,
+          icon: Icons.info_outline,
+          children: [
+            ReadOnlyFieldTile(
+              label: 'Text',
+              value: title.isEmpty ? '-' : title,
+              icon: Icons.title,
+            ),
+            if (notes.isNotEmpty)
+              ReadOnlyFieldTile(
+                label: l10n.calendarReminderNotesLabel,
+                value: notes,
+                icon: Icons.notes,
+              ),
+            ReadOnlyFieldTile(
+              label: 'Reminder at',
+              value: reminderSummary,
+              icon: Icons.alarm,
+              isHighlighted: isReminderEnabled,
+            ),
+            ReadOnlyFieldTile(
+              label: l10n.calendarMarkAsTask,
+              value: _isTask ? 'Yes' : 'No',
+              icon: Icons.task_alt,
+            ),
+            if (_excludedDates.isNotEmpty)
+              ReadOnlyFieldTile(
+                label: l10n.calendarExcludedOccurrencesLabel,
+                value: '${_excludedDates.length} skipped',
+                icon: Icons.event_busy,
+              ),
+          ],
+        ),
+        if (_soundId != null)
+          ReadOnlyCardContainer(
+            title: l10n.sound,
+            icon: Icons.music_note,
+            children: [
+              ReadOnlyFieldTile(
+                label: l10n.sound,
+                value:
+                    '${_soundTitle ?? l10n.sound} • ${_playbackSpeed}x speed',
+                icon: Icons.audiotrack,
+              ),
+            ],
+          ),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            if (_reminder != null || widget.reminder != null) ...[
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: const Key('delete_reminder_button_bottom'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: colorScheme.error,
+                  ),
+                  icon: const Icon(Icons.delete_outline),
+                  label: Text(l10n.calendarDeleteReminder),
+                  onPressed: _deleteWithUndo,
+                ),
+              ),
+              const SizedBox(width: 12),
+            ],
+            Expanded(
+              child: OutlinedButton.icon(
+                key: const Key('edit_reminder_button_bottom'),
+                icon: const Icon(Icons.edit),
+                label: Text(l10n.calendarEditReminder),
+                onPressed: () => setState(() => _readOnly = false),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -896,7 +1036,7 @@ class _CalendarReminderFormScreenState
                 : l10n.calendarReminderFormTitleNew,
           ),
           actions: [
-            if (_readOnly && _reminder != null)
+            if (_readOnly && (_reminder != null || widget.reminder != null))
               IconButton(
                 key: const Key('delete_reminder_button'),
                 tooltip: l10n.calendarDeleteReminder,
@@ -905,6 +1045,7 @@ class _CalendarReminderFormScreenState
               ),
             if (_readOnly)
               IconButton(
+                key: const Key('edit_reminder_button'),
                 tooltip: l10n.calendarEditReminder,
                 icon: const Icon(Icons.edit),
                 onPressed: () => setState(() => _readOnly = false),
@@ -925,47 +1066,46 @@ class _CalendarReminderFormScreenState
           ],
         ),
         body: SafeArea(
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              IgnorePointer(
-                ignoring: _readOnly,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: _readOnly
+              ? _buildReadOnlyView(context, l10n, locale)
+              : ListView(
+                  padding: const EdgeInsets.all(16),
                   children: [
-                    TextField(
-                      controller: _titleController,
-                      decoration: InputDecoration(
-                        labelText: l10n.calendarReminderTitleLabel,
-                        hintText: l10n.calendarReminderTitleHint,
-                        errorText: _titleError,
-                      ),
-                      onChanged: (_) {
-                        if (_titleError != null) {
-                          setState(() => _titleError = null);
-                        }
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _titleController,
+                          decoration: InputDecoration(
+                            labelText: l10n.calendarReminderTitleLabel,
+                            hintText: l10n.calendarReminderTitleHint,
+                            errorText: _titleError,
+                          ),
+                          onChanged: (_) {
+                            if (_titleError != null) {
+                              setState(() => _titleError = null);
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _notesController,
+                          decoration: InputDecoration(
+                            labelText: l10n.calendarReminderNotesLabel,
+                          ),
+                          maxLines: 2,
+                        ),
+                        const SizedBox(height: 12),
+                        SwitchListTile(
+                          key: const Key('calendar_reminder_is_task_switch'),
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(l10n.calendarMarkAsTask),
+                          subtitle: Text(l10n.calendarMarkAsTaskSubtitle),
+                          value: _isTask,
+                          onChanged: (value) => setState(() => _isTask = value),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _notesController,
-                      decoration: InputDecoration(
-                        labelText: l10n.calendarReminderNotesLabel,
-                      ),
-                      maxLines: 2,
-                    ),
-                    const SizedBox(height: 12),
-                    SwitchListTile(
-                      key: const Key('calendar_reminder_is_task_switch'),
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(l10n.calendarMarkAsTask),
-                      subtitle: Text(l10n.calendarMarkAsTaskSubtitle),
-                      value: _isTask,
-                      onChanged: (value) => setState(() => _isTask = value),
-                    ),
-                  ],
-                ),
-              ),
               const SizedBox(height: 16),
               Align(
                 alignment: Alignment.centerLeft,
@@ -1107,11 +1247,9 @@ class _CalendarReminderFormScreenState
                 ),
               ],
               const SizedBox(height: 16),
-              IgnorePointer(
-                ignoring: _readOnly,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                     SegmentedButton<CalendarReminderAnchor>(
                       segments: [
                         ButtonSegment(
@@ -1399,34 +1537,6 @@ class _CalendarReminderFormScreenState
                     _buildExcludedDatesSection(l10n, locale),
                   ],
                 ),
-              ),
-              if (_readOnly) ...[
-                const SizedBox(height: 28),
-                Row(
-                  children: [
-                    if (_reminder != null) ...[
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(
-                            foregroundColor: colorScheme.error,
-                          ),
-                          icon: const Icon(Icons.delete_outline),
-                          label: Text(l10n.calendarDeleteReminder),
-                          onPressed: _deleteWithUndo,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                    ],
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        icon: const Icon(Icons.edit),
-                        label: Text(l10n.calendarEditReminder),
-                        onPressed: () => setState(() => _readOnly = false),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ],
           ),
         ),

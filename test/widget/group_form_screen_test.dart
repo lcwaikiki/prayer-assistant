@@ -8,7 +8,6 @@ import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/group_form_screen.dart';
-import 'package:prayer_assistant/src/tesbihat/state/groups_notifier.dart';
 import 'package:prayer_assistant/src/tesbihat/state/items_notifier.dart';
 
 import '../helpers/mocks.dart';
@@ -171,5 +170,40 @@ void main() {
 
     // Discard confirmation dialog should be shown
     expect(find.byType(AlertDialog), findsOneWidget);
+  });
+
+  testWidgets('renders concise read-only view and switches to edit on tap',
+      (tester) async {
+    final existingGroup = ItemGroup(
+      id: 'g3',
+      title: 'Thursday Adhkar',
+      notes: 'Weekly evening remembrance',
+      reminderEnabled: true,
+      reminderAnchor: ItemReminderAnchor.prayerTime,
+      reminderRecurrence: ReminderRecurrence.weekly,
+      reminderPrayerName: 'Yatsi',
+      reminderOffsetMinutes: 10,
+      reminderWeekdays: const [4],
+      isTask: true,
+    );
+    repository.saveGroups([existingGroup]);
+
+    await pumpForm(tester, groupToEdit: existingGroup, readOnly: true);
+
+    // Read only view displays concise text
+    expect(find.text('Text'), findsOneWidget);
+    expect(find.text('Thursday Adhkar'), findsWidgets);
+    expect(find.text('Weekly evening remembrance'), findsWidgets);
+    expect(find.textContaining('every Thursday 10 minutes after'), findsOneWidget);
+
+    // Form text fields should NOT be shown in read-only mode
+    expect(find.byKey(const Key('group_title_field')), findsNothing);
+
+    // Tap edit button to switch to editable mode
+    await tester.tap(find.byKey(const Key('edit_group_button_bottom')));
+    await tester.pumpAndSettle();
+
+    // Now editable fields are visible
+    expect(find.byKey(const Key('group_title_field')), findsOneWidget);
   });
 }

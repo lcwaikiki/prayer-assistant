@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -28,6 +27,7 @@ Future<void> _pumpForm(
   WidgetTester tester,
   TestHarness harness, {
   Item? itemToEdit,
+  bool readOnly = false,
   List<Override> extraOverrides = const [],
 }) async {
   await pumpWithHarness(
@@ -39,7 +39,10 @@ Future<void> _pumpForm(
           child: FilledButton(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
-                builder: (_) => ItemFormScreen(itemToEdit: itemToEdit),
+                builder: (_) => ItemFormScreen(
+                  itemToEdit: itemToEdit,
+                  readOnly: readOnly,
+                ),
               ),
             ),
             child: const Text('open'),
@@ -658,5 +661,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Discard changes?'), findsNothing);
     expect(find.byType(ItemFormScreen), findsNothing);
+  });
+
+  testWidgets('renders concise read-only view and switches to edit on tap', (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = const Item(
+      id: 'b1',
+      title: 'bismillahellezi',
+      notes: 'Bismillahellezi la yedurru',
+      count: 33,
+      check: 11,
+      setCount: 3,
+      vibrationIntensity: 4,
+      reminderEnabled: true,
+      reminderAnchor: ItemReminderAnchor.prayerTime,
+      reminderRecurrence: ReminderRecurrence.weekly,
+      reminderPrayerName: 'Yatsi',
+      reminderOffsetMinutes: 10,
+      reminderWeekdays: [4],
+      isTask: true,
+    );
+
+    await _pumpForm(tester, harness, itemToEdit: item, readOnly: true);
+
+    // Read only view displays concise text
+    expect(find.text('Text'), findsOneWidget);
+    expect(find.text('bismillahellezi'), findsWidgets);
+    expect(find.text('Bismillahellezi la yedurru'), findsWidgets);
+    expect(find.textContaining('every Thursday 10 minutes after'), findsOneWidget);
+
+    // Form text fields should NOT be shown in read-only mode
+    expect(find.byKey(const Key('title_field')), findsNothing);
+
+    // Tap edit button to switch to editable mode
+    await _scrollTo(tester, find.byKey(const Key('edit_item_button_bottom')));
+    await tester.tap(find.byKey(const Key('edit_item_button_bottom')));
+    await tester.pumpAndSettle();
+
+    // Now editable fields are visible
+    expect(find.byKey(const Key('title_field')), findsOneWidget);
   });
 }

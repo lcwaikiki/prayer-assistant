@@ -8,7 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
+import '../../utils/reminder_format_utils.dart';
 import '../../widgets/discard_confirmation_dialog.dart';
+import '../../widgets/read_only_detail_section.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
 import '../services/audio_player_service.dart';
@@ -448,16 +450,16 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           ],
         ),
         body: SafeArea(
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                IgnorePointer(
-                  ignoring: _readOnly,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          child: _readOnly
+              ? _buildReadOnlyView(context, l10n)
+              : Form(
+                  key: _formKey,
+                  child: ListView(
+                    padding: const EdgeInsets.all(16),
                     children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                       TextFormField(
                         key: const Key('title_field'),
                         controller: _titleController,
@@ -559,7 +561,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                       ),
                     ],
                   ),
-                ),
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -727,52 +728,225 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                       setState(() => _reminderConfig = config),
                 ),
                 const SizedBox(height: 20),
-                IgnorePointer(
-                  ignoring: _readOnly,
-                  child: _GroupSelector(
-                    selectedIds: _selectedGroupIds,
-                    onChanged: (ids) =>
-                        setState(() => _selectedGroupIds = ids),
-                  ),
+                _GroupSelector(
+                  selectedIds: _selectedGroupIds,
+                  onChanged: (ids) =>
+                      setState(() => _selectedGroupIds = ids),
                 ),
-                if (_readOnly) ...[
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          icon: const Icon(Icons.edit),
-                          label: Text(l10n.edit),
-                          onPressed: () => setState(() => _readOnly = false),
-                        ),
-                      ),
-                      if (widget.itemToEdit != null) ...[
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: FilledButton.icon(
-                            icon: const Icon(Icons.play_arrow),
-                            label: Text(l10n.execute),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute<void>(
-                                  builder: (_) => ExecutionScreen(
-                                    itemId: widget.itemToEdit!.id,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ],
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildReadOnlyView(BuildContext context, TesbihatLocalizations l10n) {
+    final title = _titleController.text.trim();
+    final notes = _notesController.text.trim();
+    final targetCount =
+        int.tryParse(_countController.text) ?? widget.itemToEdit?.count ?? 33;
+    final progress = widget.itemToEdit?.currentProgress ?? 0;
+    final progressFraction =
+        targetCount > 0 ? (progress / targetCount).clamp(0.0, 1.0) : 0.0;
+
+    final reminderCfg = _reminderConfig ??
+        (widget.itemToEdit != null
+            ? ReminderConfig.fromItem(widget.itemToEdit!)
+            : null);
+    final isReminderEnabled = reminderCfg?.enabled ?? false;
+    final isTask = reminderCfg?.isTask ?? widget.itemToEdit?.isTask ?? false;
+
+    final reminderSummary = reminderCfg != null
+        ? formatConciseReminder(
+            context: context,
+            enabled: isReminderEnabled,
+            isPrayerAnchor: reminderCfg.anchor == ItemReminderAnchor.prayerTime,
+            recurrence: reminderCfg.recurrence,
+            prayerName: reminderCfg.prayerName,
+            offsetMinutes: reminderCfg.offsetMinutes,
+            anchorDate: reminderCfg.anchorDate,
+            clockTime: reminderCfg.at != null
+                ? TimeOfDay(
+                    hour: reminderCfg.at!.hour,
+                    minute: reminderCfg.at!.minute,
+                  )
+                : null,
+            weekdays: reminderCfg.weekdays,
+            dayOfMonth: reminderCfg.dayOfMonth,
+            yearlyDate: reminderCfg.yearlyDate,
+            monthlyBasis: reminderCfg.monthlyBasis,
+            yearlyBasis: reminderCfg.yearlyBasis,
+            repeatCount: reminderCfg.repeatCount,
+          )
+        : l10n.reminderNotSet;
+
+    final allGroups = ref.watch(groupsNotifierProvider);
+    final groupNames = allGroups
+        .where((g) => _selectedGroupIds.contains(g.id))
+        .map((g) => g.title)
+        .toList(growable: false);
+
+    final theme = Theme.of(context);
+
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      children: [
+        ReadOnlyHeroHeader(
+          title: title.isEmpty ? l10n.createMilestone : title,
+          icon: Icons.touch_app_outlined,
+          subtitle: notes.isNotEmpty ? notes : null,
+          badges: [
+            if (isTask)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.check_circle_outline, size: 16),
+                label: Text(l10n.markAsTask),
+              ),
+            if (isReminderEnabled)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.notifications_active, size: 16),
+                label: Text(l10n.reminderTitle),
+              ),
+            if (_soundId != null)
+              Chip(
+                visualDensity: VisualDensity.compact,
+                avatar: const Icon(Icons.volume_up, size: 16),
+                label: Text(_soundTitle ?? l10n.sound),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        ReadOnlyCardContainer(
+          title: l10n.title,
+          icon: Icons.info_outline,
+          children: [
+            ReadOnlyFieldTile(
+              label: 'Text',
+              value: title.isEmpty ? '-' : title,
+              icon: Icons.title,
+            ),
+            if (notes.isNotEmpty)
+              ReadOnlyFieldTile(
+                label: l10n.notes,
+                value: notes,
+                icon: Icons.notes,
+              ),
+            ReadOnlyFieldTile(
+              label: 'Reminder at',
+              value: reminderSummary,
+              icon: Icons.alarm,
+              isHighlighted: isReminderEnabled,
+            ),
+            ReadOnlyFieldTile(
+              label: l10n.markAsTask,
+              value: isTask ? 'Yes' : 'No',
+              icon: Icons.task_alt,
+            ),
+          ],
+        ),
+        ReadOnlyCardContainer(
+          title: l10n.count,
+          icon: Icons.adjust,
+          children: [
+            ReadOnlyFieldTile(
+              label: 'Target & Check',
+              value:
+                  '${l10n.count}: ${_countController.text} • ${l10n.check}: ${_checkController.text} • ${l10n.set}: ${_setCountController.text}',
+              icon: Icons.format_list_numbered,
+            ),
+            ReadOnlyFieldTile(
+              label: l10n.progress,
+              value:
+                  '$progress / ${_countController.text} (${(progressFraction * 100).toInt()}%)',
+              icon: Icons.trending_up,
+              customChild: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$progress / ${_countController.text} (${(progressFraction * 100).toInt()}%)',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: progressFraction,
+                      minHeight: 6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ReadOnlyFieldTile(
+              label: l10n.vibrationIntensity,
+              value: '$_vibrationIntensity%',
+              icon: Icons.vibration,
+            ),
+          ],
+        ),
+        if (groupNames.isNotEmpty)
+          ReadOnlyCardContainer(
+            title: l10n.groups,
+            icon: Icons.folder,
+            children: [
+              ReadOnlyFieldTile(
+                label: l10n.groups,
+                value: groupNames.join(', '),
+                icon: Icons.folder_open,
+              ),
+            ],
+          ),
+        if (_soundId != null)
+          ReadOnlyCardContainer(
+            title: l10n.sound,
+            icon: Icons.music_note,
+            children: [
+              ReadOnlyFieldTile(
+                label: l10n.sound,
+                value: '${_soundTitle ?? l10n.sound} • ${_playbackSpeed}x speed',
+                icon: Icons.audiotrack,
+              ),
+            ],
+          ),
+        const SizedBox(height: 24),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton.icon(
+                key: const Key('edit_item_button_bottom'),
+                icon: const Icon(Icons.edit),
+                label: Text(l10n.edit),
+                onPressed: () => setState(() => _readOnly = false),
+              ),
+            ),
+            if (widget.itemToEdit != null) ...[
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton.icon(
+                  key: const Key('execute_item_button_bottom'),
+                  icon: const Icon(Icons.play_arrow),
+                  label: Text(l10n.execute),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (_) => ExecutionScreen(
+                          itemId: widget.itemToEdit!.id,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }

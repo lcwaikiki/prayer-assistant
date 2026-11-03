@@ -11,6 +11,11 @@ Future<void> _pumpForm(
   CalendarReminder? reminder,
   bool readOnly = false,
 }) async {
+  tester.view.physicalSize = const Size(800, 2400);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+
   await pumpWithHarness(
     tester,
     harness,
@@ -24,6 +29,7 @@ Future<void> _pumpForm(
                     CalendarReminderFormScreen(
                       reminder: reminder,
                       readOnly: readOnly,
+                      audioPlayerService: harness.audioPlayerService,
                     ),
               ),
             ),
@@ -536,5 +542,43 @@ void main() {
     await tester.pump();
     await tester.pumpAndSettle();
     expect(find.byType(CalendarReminderFormScreen), findsNothing);
+  });
+
+  testWidgets('renders concise read-only view and switches to edit on tap',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final reminder = CalendarReminder(
+      id: 'cr1',
+      title: 'bismillahellezi',
+      notes: 'Bismillahellezi la yedurru',
+      anchorAt: DateTime(2026, 8, 20, 20, 30),
+      anchor: CalendarReminderAnchor.prayerTime,
+      anchorPrayerName: 'Yatsi',
+      anchorOffsetMinutes: 10,
+      recurrence: ReminderRecurrence.weekly,
+      weekdays: const [4],
+      enabled: true,
+      isTask: true,
+    );
+    harness.controller.addCalendarReminder(reminder);
+
+    await _pumpForm(tester, harness, reminder: reminder, readOnly: true);
+
+    // Read only view displays concise text
+    expect(find.text('Text'), findsOneWidget);
+    expect(find.text('bismillahellezi'), findsWidgets);
+    expect(find.text('Bismillahellezi la yedurru'), findsWidgets);
+    expect(find.textContaining('every Thursday 10 minutes after'), findsWidgets);
+
+    // Form text fields should NOT be shown in read-only mode
+    expect(find.byType(TextField), findsNothing);
+
+    // Tap edit button to switch to editable mode
+    await tester.tap(find.byKey(const Key('edit_reminder_button_bottom')));
+    await tester.pumpAndSettle();
+
+    // Now editable fields are visible
+    expect(find.byType(TextField), findsWidgets);
   });
 }

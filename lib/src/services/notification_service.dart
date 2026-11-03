@@ -371,10 +371,11 @@ class NotificationService {
               now.isBefore(
                 prayerTime.add(Duration(minutes: setting.silentDuration)),
               )) {
-            final remainingMinutes = prayerTime
+            final remainingSeconds = prayerTime
                 .add(Duration(minutes: setting.silentDuration))
                 .difference(now)
-                .inMinutes;
+                .inSeconds;
+            final remainingMinutes = (remainingSeconds + 59) ~/ 60;
             if (remainingMinutes > 0 &&
                 silentScheduleId <= _maxScheduledReminders) {
               await NativeReminderService.scheduleSilentMode(

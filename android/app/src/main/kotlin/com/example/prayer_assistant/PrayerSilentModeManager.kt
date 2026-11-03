@@ -68,6 +68,34 @@ object PrayerSilentModeManager {
         }
     }
 
+    private fun setExactAlarmSafely(
+        alarmManager: AlarmManager,
+        triggerAtMillis: Long,
+        pendingIntent: PendingIntent
+    ) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                } else {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            } else {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+            }
+        } catch (_: SecurityException) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                } else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
+                }
+            } catch (_: Throwable) {}
+        } catch (_: Throwable) {}
+    }
+
     private fun setSilentAlarm(
         context: Context,
         id: Int,
@@ -101,27 +129,7 @@ object PrayerSilentModeManager {
             val clockInfo = AlarmManager.AlarmClockInfo(triggerAtMillis, showPendingIntent)
             alarmManager.setAlarmClock(clockInfo, pendingIntent)
         } catch (_: Throwable) {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (alarmManager.canScheduleExactAlarms()) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                    } else {
-                        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                    }
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                }
-            } catch (_: SecurityException) {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                    } else {
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pendingIntent)
-                    }
-                } catch (_: Throwable) {}
-            } catch (_: Throwable) {}
+            setExactAlarmSafely(alarmManager, triggerAtMillis, pendingIntent)
         }
     }
 
@@ -268,27 +276,7 @@ object PrayerSilentModeManager {
             val clockInfo = AlarmManager.AlarmClockInfo(endAtMillis, showPendingIntent)
             alarmManager.setAlarmClock(clockInfo, pendingIntent)
         } catch (_: Throwable) {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (alarmManager.canScheduleExactAlarms()) {
-                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                    } else {
-                        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                    }
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                }
-            } catch (_: SecurityException) {
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                    } else {
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, endAtMillis, pendingIntent)
-                    }
-                } catch (_: Throwable) {}
-            } catch (_: Throwable) {}
+            setExactAlarmSafely(alarmManager, endAtMillis, pendingIntent)
         }
     }
 
@@ -315,16 +303,7 @@ object PrayerSilentModeManager {
             }
         }
 
-        // 2. Clear preferences immediately
-        prefs.edit()
-            .remove(KEY_ACTIVE_SILENT_ID)
-            .remove(KEY_PREVIOUS_RINGER_MODE)
-            .remove(KEY_PREVIOUS_RING_VOLUME)
-            .remove(KEY_PREVIOUS_NOTIF_VOLUME)
-            .remove(KEY_SILENT_END_TIME)
-            .apply()
-
-        // 3. Cancel any scheduled end alarm
+        // 2. Cancel any scheduled end alarm
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
             action = ACTION_PRAYER_SILENT_END
@@ -341,10 +320,8 @@ object PrayerSilentModeManager {
             pendingIntent.cancel()
         }
 
-        // 4. Restore ringer mode and volumes synchronously
+        // 3. Restore ringer mode and stream volumes synchronously
         if (audioManager != null) {
-            val flags = AudioManager.FLAG_ALLOW_RINGER_MODES
-
             // A. Set ringerMode to NORMAL
             try {
                 audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
@@ -353,29 +330,34 @@ object PrayerSilentModeManager {
                 android.util.Log.e("PrayerSilent", "endSilentMode: failed to set ringerMode to NORMAL", e)
             }
 
-            // B. Restore and unmute STREAM_RING
+            // B. Restore STREAM_RING volume
             try {
                 val maxRing = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
-                val targetRing = if (previousRingVol > 0) previousRingVol else (maxRing / 2).coerceAtLeast(1)
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, targetRing, flags)
-                audioManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, flags)
+                val targetRing = if (previousRingVol > 0) previousRingVol else (maxRing * 2 / 3).coerceAtLeast(1)
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, targetRing, 0)
                 android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_RING to $targetRing")
             } catch (e: Exception) {
                 android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_RING", e)
             }
 
-            // C. Restore and unmute STREAM_NOTIFICATION
+            // C. Restore STREAM_NOTIFICATION volume
             try {
                 val maxNotif = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION)
-                val targetNotif = if (previousNotifVol > 0) previousNotifVol else (maxNotif / 2).coerceAtLeast(1)
-                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, targetNotif, flags)
-                audioManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, flags)
+                val targetNotif = if (previousNotifVol > 0) previousNotifVol else (maxNotif * 2 / 3).coerceAtLeast(1)
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, targetNotif, 0)
                 android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_NOTIFICATION to $targetNotif")
             } catch (e: Exception) {
                 android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_NOTIFICATION", e)
             }
 
-            // D. Ensure ringerMode is indeed NORMAL
+            // D. Restore STREAM_SYSTEM volume
+            try {
+                val maxSys = audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM)
+                val targetSys = (maxSys * 2 / 3).coerceAtLeast(1)
+                audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, targetSys, 0)
+            } catch (_: Exception) {}
+
+            // E. Ensure ringerMode is indeed NORMAL
             try {
                 if (audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL) {
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
@@ -384,5 +366,14 @@ object PrayerSilentModeManager {
 
             android.util.Log.d("PrayerSilent", "endSilentMode completed: currentMode=${audioManager.ringerMode}, ringVol=${audioManager.getStreamVolume(AudioManager.STREAM_RING)}")
         }
+
+        // 4. Clear preferences
+        prefs.edit()
+            .remove(KEY_ACTIVE_SILENT_ID)
+            .remove(KEY_PREVIOUS_RINGER_MODE)
+            .remove(KEY_PREVIOUS_RING_VOLUME)
+            .remove(KEY_PREVIOUS_NOTIF_VOLUME)
+            .remove(KEY_SILENT_END_TIME)
+            .apply()
     }
 }

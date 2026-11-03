@@ -12,7 +12,7 @@ class PrayerSilentModeReceiver : BroadcastReceiver() {
         val pm = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
         val wakeLock = pm?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "PrayerAssistant:SilentModeLock")
         try {
-            wakeLock?.acquire(5000L)
+            wakeLock?.acquire(10000L)
         } catch (e: Exception) {
             android.util.Log.e("PrayerSilent", "Failed to acquire wakeLock", e)
         }

@@ -55,6 +55,7 @@ object PrayerWidgetUpdater {
      * this the launcher can show a stale or blank snapshot at screen-on.
      */
     fun screenOnRefresh(context: Context) {
+        PrayerSilentModeManager.checkAndDeactivateIfExpired(context)
         updateAll(context)
         scheduleNextUpdate(context)
         scheduleIconRefresh(context)

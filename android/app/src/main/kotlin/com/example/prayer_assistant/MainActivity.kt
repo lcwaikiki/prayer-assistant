@@ -287,6 +287,7 @@ class MainActivity : FlutterActivity() {
                 "updateWidgetData" -> {
                     val timeline = call.argument<List<Map<String, Any?>>>("timeline") ?: emptyList()
                     val todayPrayers = call.argument<List<Map<String, Any?>>>("todayPrayers") ?: emptyList()
+                    val prayerSchedule = call.argument<List<Map<String, Any?>>>("prayerSchedule") ?: emptyList()
                     val locationLabel = call.argument<String>("locationLabel") ?: ""
                     val appLocale = call.argument<String>("appLocale") ?: ""
                     val dateHeaderHijri = call.argument<String>("dateHeaderHijri") ?: ""
@@ -305,6 +306,7 @@ class MainActivity : FlutterActivity() {
 
                     PrayerWidgetStorage.saveTimeline(this, timeline)
                     PrayerWidgetStorage.saveTodayPrayers(this, todayPrayers)
+                    PrayerWidgetStorage.savePrayerSchedule(this, prayerSchedule)
                     PrayerWidgetStorage.saveLocationLabel(this, locationLabel)
                     PrayerWidgetStorage.saveDateHeaders(this, dateHeaderHijri, dateHeaderGregorian)
                     PrayerWidgetStorage.saveWidgetCalendarDisplay(this, calendarDisplay)

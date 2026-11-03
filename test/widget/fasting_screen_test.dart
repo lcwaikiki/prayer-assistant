@@ -153,16 +153,20 @@ void main() {
     final harness = TestHarness.create();
     when(() => harness.database.loadSelectedLocation())
         .thenAnswer((_) async => sampleSelectedLocation());
+    final testDay = samplePrayerDay(
+      date: now,
+      imsak: '05:00',
+      aksam: '06:00',
+    );
     when(() => harness.api.getYearlyPrayerTimes(
           districtId: any(named: 'districtId'),
           year: any(named: 'year'),
-        )).thenAnswer((_) async => [
-          samplePrayerDay(
-            date: now,
-            imsak: '05:00',
-            aksam: '06:00',
-          ),
-        ]);
+        )).thenAnswer((_) async => [testDay]);
+    when(() => harness.database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        )).thenAnswer((_) async => [testDay]);
 
     await harness.initialize();
 
@@ -237,6 +241,50 @@ void main() {
     await tester.tap(find.byType(InkWell).first);
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.textContaining('05:01'), findsWidgets);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('IftarSuhoorCountdownCard switches between iftar and suhoor modes',
+      (tester) async {
+    final now = DateTime.now();
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation())
+        .thenAnswer((_) async => sampleSelectedLocation());
+
+    // Scenario: currently fasting (imsak in past, aksam in future)
+    final fastingDay = samplePrayerDay(
+      date: now,
+      imsak: '00:01',
+      aksam: '23:59',
+    );
+    when(() => harness.api.getYearlyPrayerTimes(
+          districtId: any(named: 'districtId'),
+          year: any(named: 'year'),
+        )).thenAnswer((_) async => [fastingDay]);
+    when(() => harness.database.getRange(
+          districtId: any(named: 'districtId'),
+          start: any(named: 'start'),
+          end: any(named: 'end'),
+        )).thenAnswer((_) async => [fastingDay]);
+
+    await harness.initialize();
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: IftarSuhoorCountdownCard()),
+      settle: false,
+    );
+    await tester.pump(const Duration(milliseconds: 200));
+
+    // Shows Iftar Countdown title
+    expect(find.text('Time to Iftar'), findsOneWidget);
+
+    // Expand and verify Iftar badge
+    await tester.tap(find.byType(InkWell).first);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.textContaining('23:59'), findsWidgets);
 
     await tester.pumpWidget(const SizedBox());
   });

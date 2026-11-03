@@ -5,6 +5,8 @@ import 'package:prayer_assistant/src/models/fasting_models.dart';
 import '../../helpers/test_harness.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('FastingLog & SunnahDayInfo Unit Tests', () {
     test('FastingLog toMap and fromMap serialization', () {
       const log = FastingLog(

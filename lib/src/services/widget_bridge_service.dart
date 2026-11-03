@@ -92,6 +92,28 @@ class WidgetBridgeService {
       break;
     }
 
+    final prayerSchedule = <Map<String, Object>>[];
+    final scheduleEnd = start.add(const Duration(days: 7));
+    for (final day in days) {
+      final safeDay = DateTime(day.date.year, day.date.month, day.date.day);
+      if (safeDay.isBefore(start) || safeDay.isAfter(scheduleEnd)) {
+        continue;
+      }
+      final prayerTimes = prayerMapForDay(day);
+      for (final prayerName in prayerOrder) {
+        final prayerTime =
+            parsePrayerTime(day.date, prayerTimes[prayerName] ?? '');
+        if (prayerTime == null) {
+          continue;
+        }
+        prayerSchedule.add(<String, Object>{
+          'name': localizedPrayerName(locale, prayerName),
+          'rawName': prayerName.toLowerCase(),
+          'epochMs': prayerTime.millisecondsSinceEpoch,
+        });
+      }
+    }
+
     final moonInfo = getMoonPhase(now);
     final safeLocale = (locale != null && locale.languageCode.isNotEmpty)
         ? locale
@@ -109,6 +131,7 @@ class WidgetBridgeService {
     await _channel.invokeMethod<void>('updateWidgetData', <String, Object>{
       'timeline': timeline,
       'todayPrayers': todayPrayers,
+      'prayerSchedule': prayerSchedule,
       'locationLabel': locationLabel,
       'appLocale': locale?.languageCode ?? '',
       'dateHeaderHijri': dateHeaderHijri,

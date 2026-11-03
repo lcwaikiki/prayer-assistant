@@ -199,49 +199,13 @@ object PrayerWidgetUpdater {
             ComponentName(context, FastingCountdownWidgetProvider::class.java)
         )
         if (fastingIds.isNotEmpty()) {
+            val schedule = PrayerWidgetStorage.readPrayerSchedule(context)
             val todayDetailed = PrayerWidgetStorage.readTodayPrayersDetailed(context)
-            val imsakEpoch = todayDetailed.find {
-                val r = it.rawName.lowercase(Locale.ROOT)
-                r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр"
-            }?.epochMs ?: todayDetailed.getOrNull(0)?.epochMs
-
-            val aksamEpoch = todayDetailed.find {
-                val r = it.rawName.lowercase(Locale.ROOT)
-                r == "aksam" || r == "akşam" || r == "maghrib" || r == "магриб"
-            }?.epochMs ?: todayDetailed.getOrNull(4)?.epochMs
-
-            val widgetStrings = getWidgetStrings(appLocale)
-
-            val isFastingHours = imsakEpoch != null && aksamEpoch != null &&
-                    now in imsakEpoch until aksamEpoch
-
             val timelineDetailed = PrayerWidgetStorage.readTimelineDetailed(context)
-            val nextImsakEpoch = timelineDetailed.firstOrNull {
-                val r = it.rawName.lowercase(Locale.ROOT)
-                (r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр") && it.epochMs > now
-            }?.epochMs
+            val widgetStrings = getWidgetStrings(appLocale)
+            val fastingState = calculateFastingState(now, schedule, todayDetailed, timelineDetailed, widgetStrings)
 
-            val targetEpoch = if (isFastingHours) {
-                aksamEpoch
-            } else {
-                if (aksamEpoch != null && now >= aksamEpoch) {
-                    nextImsakEpoch ?: ((imsakEpoch ?: (now + 36000000L)) + 86400000L)
-                } else {
-                    imsakEpoch ?: (now + 36000000L)
-                }
-            }
-
-            val targetImsakEpoch = if (aksamEpoch != null && now >= aksamEpoch) {
-                nextImsakEpoch ?: ((imsakEpoch ?: (now + 36000000L)) + 86400000L)
-            } else {
-                imsakEpoch
-            }
-
-            val imsakTimeStr = targetImsakEpoch?.let { formatClock(it) } ?: "05:00"
-            val aksamTimeStr = aksamEpoch?.let { formatClock(it) } ?: "19:00"
-
-            val title = if (isFastingHours) widgetStrings.iftarCountdown else widgetStrings.suhoorCountdown
-            val remainingMs = (targetEpoch - now).coerceAtLeast(0L)
+            val remainingMs = (fastingState.targetEpoch - now).coerceAtLeast(0L)
             val remainingSec = remainingMs / 1000
             val hours = remainingSec / 3600
             val minutes = (remainingSec % 3600) / 60
@@ -259,20 +223,6 @@ object PrayerWidgetUpdater {
                 val h = totalMinutes / 60L
                 val m = totalMinutes % 60L
                 String.format(Locale.US, "%02d:%02d", h, m)
-            }
-
-            var progressPct = 0
-            if (isFastingHours && imsakEpoch != null && aksamEpoch != null && aksamEpoch > imsakEpoch) {
-                val totalFasting = (aksamEpoch - imsakEpoch).toDouble()
-                val elapsed = (now - imsakEpoch).toDouble()
-                progressPct = ((elapsed / totalFasting) * 100).toInt().coerceIn(0, 100)
-            } else if (!isFastingHours && aksamEpoch != null) {
-                val prevAksam = if (aksamEpoch > now) aksamEpoch - 86400000L else aksamEpoch
-                val totalNight = (targetEpoch - prevAksam).toDouble()
-                val elapsed = (now - prevAksam).toDouble()
-                if (totalNight > 0) {
-                    progressPct = ((elapsed / totalNight) * 100).toInt().coerceIn(0, 100)
-                }
             }
 
             for (widgetId in fastingIds) {
@@ -295,19 +245,18 @@ object PrayerWidgetUpdater {
                     30f * countdownScale,
                     34f * countdownScale,
                 )
-                views.setTextViewText(R.id.widgetFastingTitle, title)
-                val targetTimeLabel = if (isFastingHours) "${widgetStrings.iftarLabel}: $aksamTimeStr" else "${widgetStrings.suhoorLabel}: $imsakTimeStr"
-                views.setTextViewText(R.id.widgetFastingIftarTime, targetTimeLabel)
+                views.setTextViewText(R.id.widgetFastingTitle, fastingState.title)
+                views.setTextViewText(R.id.widgetFastingIftarTime, fastingState.targetTimeLabel)
                 views.setTextViewText(R.id.widgetFastingRemaining, timeDisplay)
-                val percentageText = if (isFastingHours) {
-                    String.format(Locale.US, widgetStrings.fastedFormat, progressPct)
+                val percentageText = if (fastingState.isFastingHours) {
+                    String.format(Locale.US, widgetStrings.fastedFormat, fastingState.progressPct)
                 } else {
-                    String.format(Locale.US, "%d%%", progressPct)
+                    String.format(Locale.US, "%d%%", fastingState.progressPct)
                 }
                 views.setTextViewText(R.id.widgetFastingPercentage, percentageText)
-                views.setProgressBar(R.id.widgetFastingProgressBar, 100, progressPct, false)
-                views.setTextViewText(R.id.widgetFastingSuhoorLabel, "${widgetStrings.suhoorLabel}: $imsakTimeStr")
-                views.setTextViewText(R.id.widgetFastingIftarLabel, "${widgetStrings.iftarLabel}: $aksamTimeStr")
+                views.setProgressBar(R.id.widgetFastingProgressBar, 100, fastingState.progressPct, false)
+                views.setTextViewText(R.id.widgetFastingSuhoorLabel, "${widgetStrings.suhoorLabel}: ${fastingState.imsakTimeStr}")
+                views.setTextViewText(R.id.widgetFastingIftarLabel, "${widgetStrings.iftarLabel}: ${fastingState.aksamTimeStr}")
                 views.setOnClickPendingIntent(R.id.widgetFastingRoot, openFasting)
                 widgetManager.updateAppWidget(widgetId, views)
             }
@@ -1224,7 +1173,10 @@ object PrayerWidgetUpdater {
         val detailedTransitions = PrayerWidgetStorage.readTodayPrayersDetailed(context)
             .map { it.epochMs }
             .filter { it > now }
-        val nextTransition = (timelineTransitions + detailedTransitions)
+        val scheduleTransitions = PrayerWidgetStorage.readPrayerSchedule(context)
+            .map { it.epochMs }
+            .filter { it > now }
+        val nextTransition = (timelineTransitions + detailedTransitions + scheduleTransitions)
             .distinct()
             .minOrNull()
 
@@ -1388,34 +1340,14 @@ object PrayerWidgetUpdater {
         ).isNotEmpty()
 
         if (hasFastingWidget) {
+            val schedule = PrayerWidgetStorage.readPrayerSchedule(context)
             val todayDetailed = PrayerWidgetStorage.readTodayPrayersDetailed(context)
-            val imsakEpoch = todayDetailed.find {
-                val r = it.rawName.lowercase(Locale.ROOT)
-                r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр"
-            }?.epochMs ?: todayDetailed.getOrNull(0)?.epochMs
-
-            val aksamEpoch = todayDetailed.find {
-                val r = it.rawName.lowercase(Locale.ROOT)
-                r == "aksam" || r == "akşam" || r == "maghrib" || r == "магриб"
-            }?.epochMs ?: todayDetailed.getOrNull(4)?.epochMs
-
-            if (imsakEpoch != null && aksamEpoch != null) {
-                val timelineDetailed = PrayerWidgetStorage.readTimelineDetailed(context)
-                val nextImsakEpoch = timelineDetailed.firstOrNull {
-                    val r = it.rawName.lowercase(Locale.ROOT)
-                    (r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр") && it.epochMs > now
-                }?.epochMs
-
-                val target = if (now in imsakEpoch until aksamEpoch) {
-                    aksamEpoch
-                } else if (now >= aksamEpoch) {
-                    nextImsakEpoch ?: (imsakEpoch + 86400000L)
-                } else {
-                    imsakEpoch
-                }
-                val remainingMinutes = (target - now) / 60_000L
-                if (remainingMinutes in 0 until mmssThreshold) return true
-            }
+            val timelineDetailed = PrayerWidgetStorage.readTimelineDetailed(context)
+            val appLocale = PrayerWidgetStorage.readAppLocale(context)
+            val widgetStrings = getWidgetStrings(appLocale)
+            val fastingState = calculateFastingState(now, schedule, todayDetailed, timelineDetailed, widgetStrings)
+            val remainingMinutes = (fastingState.targetEpoch - now) / 60_000L
+            if (remainingMinutes in 0 until mmssThreshold) return true
         }
 
         return false
@@ -1828,6 +1760,103 @@ object PrayerWidgetUpdater {
     fun getWidgetStrings(locale: String): WidgetStrings {
         val key = locale.lowercase(Locale.ROOT)
         return widgetLocalizations[key] ?: widgetLocalizations["en"]!!
+    }
+
+    data class FastingState(
+        val isFastingHours: Boolean,
+        val targetEpoch: Long,
+        val title: String,
+        val targetTimeLabel: String,
+        val progressPct: Int,
+        val imsakTimeStr: String,
+        val aksamTimeStr: String
+    )
+
+    fun isImsakPrayer(rawName: String): Boolean {
+        val r = rawName.lowercase(Locale.ROOT)
+        return r == "imsak" || r == "fajr" || r == "subuh" || r == "фаджр"
+    }
+
+    fun isAksamPrayer(rawName: String): Boolean {
+        val r = rawName.lowercase(Locale.ROOT)
+        return r == "aksam" || r == "akşam" || r == "maghrib" || r == "магриб"
+    }
+
+    fun calculateFastingState(
+        now: Long,
+        schedule: List<PrayerWidgetStorage.PrayerEntry>,
+        todayDetailed: List<PrayerWidgetStorage.PrayerEntry>,
+        timelineDetailed: List<PrayerWidgetStorage.PrayerEntry>,
+        widgetStrings: WidgetStrings
+    ): FastingState {
+        val allPrayers = (schedule + todayDetailed + timelineDetailed)
+            .distinctBy { Pair(it.rawName.lowercase(Locale.ROOT), it.epochMs) }
+
+        val allImsaks = allPrayers.filter { isImsakPrayer(it.rawName) }.map { it.epochMs }.distinct().sorted()
+        val allAksams = allPrayers.filter { isAksamPrayer(it.rawName) }.map { it.epochMs }.distinct().sorted()
+
+        val lastImsak = allImsaks.filter { it <= now }.maxOrNull()
+        val nextImsak = allImsaks.filter { it > now }.minOrNull()
+        val lastAksam = allAksams.filter { it <= now }.maxOrNull()
+        val nextAksam = allAksams.filter { it > now }.minOrNull()
+
+        val fallbackImsak = todayDetailed.find { isImsakPrayer(it.rawName) }?.epochMs
+            ?: todayDetailed.getOrNull(0)?.epochMs
+        val fallbackAksam = todayDetailed.find { isAksamPrayer(it.rawName) }?.epochMs
+            ?: todayDetailed.getOrNull(4)?.epochMs
+
+        val isFastingHours = if (lastImsak != null && (lastAksam == null || lastImsak > lastAksam)) {
+            true
+        } else if (lastAksam != null && (lastImsak == null || lastAksam >= lastImsak)) {
+            false
+        } else {
+            if (fallbackImsak != null && fallbackAksam != null) {
+                now in fallbackImsak until fallbackAksam
+            } else {
+                false
+            }
+        }
+
+        val targetEpoch: Long
+        val startEpoch: Long
+        val title: String
+        val targetTimeLabel: String
+        val imsakTimeStr: String
+        val aksamTimeStr: String
+
+        if (isFastingHours) {
+            title = widgetStrings.iftarCountdown
+            targetEpoch = nextAksam ?: (lastImsak?.plus(14 * 3600_000L) ?: (fallbackAksam ?: (now + 3600_000L)))
+            startEpoch = lastImsak ?: (fallbackImsak ?: (targetEpoch - 14 * 3600_000L))
+            imsakTimeStr = formatClock(startEpoch)
+            aksamTimeStr = formatClock(targetEpoch)
+            targetTimeLabel = "${widgetStrings.iftarLabel}: $aksamTimeStr"
+        } else {
+            title = widgetStrings.suhoorCountdown
+            targetEpoch = nextImsak ?: (lastAksam?.plus(10 * 3600_000L) ?: (fallbackImsak?.plus(86_400_000L) ?: (now + 8 * 3600_000L)))
+            startEpoch = lastAksam ?: (fallbackAksam ?: (targetEpoch - 10 * 3600_000L))
+            imsakTimeStr = formatClock(targetEpoch)
+            aksamTimeStr = (nextAksam ?: lastAksam ?: fallbackAksam)?.let { formatClock(it) } ?: "19:00"
+            targetTimeLabel = "${widgetStrings.suhoorLabel}: $imsakTimeStr"
+        }
+
+        val totalWindow = (targetEpoch - startEpoch).toDouble()
+        val elapsed = (now - startEpoch).toDouble()
+        val progressPct = if (totalWindow > 0) {
+            ((elapsed / totalWindow) * 100).toInt().coerceIn(0, 100)
+        } else {
+            0
+        }
+
+        return FastingState(
+            isFastingHours = isFastingHours,
+            targetEpoch = targetEpoch,
+            title = title,
+            targetTimeLabel = targetTimeLabel,
+            progressPct = progressPct,
+            imsakTimeStr = imsakTimeStr,
+            aksamTimeStr = aksamTimeStr
+        )
     }
 
     /**

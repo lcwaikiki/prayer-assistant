@@ -11,6 +11,7 @@ object PrayerWidgetStorage {
     private const val PREFS_NAME = "PrayerWidgetPrefs"
     private const val TIMELINE_KEY = "timeline_json"
     private const val TODAY_PRAYERS_KEY = "today_prayers_json"
+    private const val PRAYER_SCHEDULE_KEY = "prayer_schedule_json"
     private const val LOCATION_LABEL_KEY = "location_label"
     private const val WIDGET_TEXT_SIZE_KEY = "widget_text_size"
     private const val WIDGET_THEME_KEY = "widget_theme"
@@ -82,7 +83,19 @@ object PrayerWidgetStorage {
         saveEntryList(context, TODAY_PRAYERS_KEY, prayers)
     }
 
+    fun savePrayerSchedule(context: Context, schedule: List<Map<String, Any?>>) {
+        saveEntryList(context, PRAYER_SCHEDULE_KEY, schedule)
+    }
+
+    fun readPrayerSchedule(context: Context): List<PrayerEntry> {
+        return readDetailedEntryList(context, PRAYER_SCHEDULE_KEY).sortedBy { it.epochMs }
+    }
+
     fun readTodayPrayers(context: Context): List<Pair<String, Long>> {
+        val detailed = readTodayPrayersDetailed(context)
+        if (detailed.isNotEmpty()) {
+            return detailed.map { Pair(it.name, it.epochMs) }
+        }
         return readEntryList(context, TODAY_PRAYERS_KEY)
     }
 
@@ -257,6 +270,19 @@ object PrayerWidgetStorage {
     }
 
     fun readTodayPrayersDetailed(context: Context): List<PrayerEntry> {
+        val schedule = readPrayerSchedule(context)
+        if (schedule.isNotEmpty()) {
+            val nowCal = java.util.Calendar.getInstance()
+            val entryCal = java.util.Calendar.getInstance()
+            val todayEntries = schedule.filter {
+                entryCal.timeInMillis = it.epochMs
+                entryCal.get(java.util.Calendar.YEAR) == nowCal.get(java.util.Calendar.YEAR) &&
+                    entryCal.get(java.util.Calendar.DAY_OF_YEAR) == nowCal.get(java.util.Calendar.DAY_OF_YEAR)
+            }
+            if (todayEntries.isNotEmpty()) {
+                return todayEntries
+            }
+        }
         return readDetailedEntryList(context, TODAY_PRAYERS_KEY)
     }
 

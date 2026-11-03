@@ -234,7 +234,9 @@ class _IftarSuhoorCountdownCardState extends State<IftarSuhoorCountdownCard> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
-                                '${context.l10n.iftarTimeLabel}: $aksamStr',
+                                isFastingHours
+                                    ? context.l10n.iftarWithTime(aksamStr)
+                                    : context.l10n.suhoorWithTime(displayImsakStr),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: theme.textTheme.labelSmall?.copyWith(

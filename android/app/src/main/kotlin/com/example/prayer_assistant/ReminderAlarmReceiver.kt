@@ -7,6 +7,7 @@ import android.content.Intent
 class ReminderAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent == null) return
+        PrayerSilentModeManager.checkAndDeactivateIfExpired(context)
         val id = intent.getIntExtra("id", 0)
         val title = intent.getStringExtra("title") ?: "Reminder"
         val body = intent.getStringExtra("body") ?: ""

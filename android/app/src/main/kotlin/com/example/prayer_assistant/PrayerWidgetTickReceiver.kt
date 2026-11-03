@@ -6,6 +6,7 @@ import android.content.Intent
 
 class PrayerWidgetTickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
+        PrayerSilentModeManager.checkAndDeactivateIfExpired(context)
         if (intent?.action == PrayerWidgetUpdater.ACTION_REFRESH_ICON) {
             PrayerWidgetUpdater.updateAll(context)
             PrayerWidgetUpdater.scheduleIconRefresh(context)

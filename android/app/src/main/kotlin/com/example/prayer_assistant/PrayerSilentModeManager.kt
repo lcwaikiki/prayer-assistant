@@ -215,17 +215,11 @@ object PrayerSilentModeManager {
             val existingEndTime = prefs.getLong(KEY_SILENT_END_TIME, 0L)
             if (existingEndTime > now) existingEndTime else calculatedEndAtMillis
         } else {
-            val currentMode = audioManager.ringerMode
-            val modeToSave = if (currentMode == AudioManager.RINGER_MODE_NORMAL) {
-                AudioManager.RINGER_MODE_NORMAL
-            } else {
-                prefs.getInt(KEY_PREVIOUS_RINGER_MODE, AudioManager.RINGER_MODE_NORMAL)
-            }
             val currentRingVol = audioManager.getStreamVolume(AudioManager.STREAM_RING)
             val currentNotifVol = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
 
             prefs.edit()
-                .putInt(KEY_PREVIOUS_RINGER_MODE, modeToSave)
+                .putInt(KEY_PREVIOUS_RINGER_MODE, AudioManager.RINGER_MODE_NORMAL)
                 .putInt(KEY_PREVIOUS_RING_VOLUME, if (currentRingVol > 0) currentRingVol else prefs.getInt(KEY_PREVIOUS_RING_VOLUME, -1))
                 .putInt(KEY_PREVIOUS_NOTIF_VOLUME, if (currentNotifVol > 0) currentNotifVol else prefs.getInt(KEY_PREVIOUS_NOTIF_VOLUME, -1))
                 .apply()
@@ -300,7 +294,6 @@ object PrayerSilentModeManager {
 
     fun endSilentMode(context: Context, id: Int = 0) {
         val prefs = getPrefs(context)
-        val previousMode = prefs.getInt(KEY_PREVIOUS_RINGER_MODE, AudioManager.RINGER_MODE_NORMAL)
         val previousRingVol = prefs.getInt(KEY_PREVIOUS_RING_VOLUME, -1)
         val previousNotifVol = prefs.getInt(KEY_PREVIOUS_NOTIF_VOLUME, -1)
 
@@ -317,7 +310,9 @@ object PrayerSilentModeManager {
                 if (nm.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL) {
                     nm.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
                 }
-            } catch (_: Exception) {}
+            } catch (e: Exception) {
+                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set interruption filter", e)
+            }
         }
 
         // 2. Clear preferences immediately
@@ -346,42 +341,48 @@ object PrayerSilentModeManager {
             pendingIntent.cancel()
         }
 
-        // 4. Restore ringer mode synchronously
+        // 4. Restore ringer mode and volumes synchronously
         if (audioManager != null) {
-            android.util.Log.d("PrayerSilent", "endSilentMode: restoring previousMode=$previousMode, ringVol=$previousRingVol, notifVol=$previousNotifVol")
+            val flags = AudioManager.FLAG_ALLOW_RINGER_MODES
+
+            // A. Set ringerMode to NORMAL
             try {
-                audioManager.ringerMode = previousMode
-                android.util.Log.d("PrayerSilent", "endSilentMode: set ringerMode to $previousMode, currentMode=${audioManager.ringerMode}")
+                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                android.util.Log.d("PrayerSilent", "endSilentMode: ringerMode set to NORMAL, mode=${audioManager.ringerMode}")
             } catch (e: Exception) {
-                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set previousMode", e)
-                try {
-                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                } catch (_: Exception) {}
+                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set ringerMode to NORMAL", e)
             }
 
-            if (previousMode == AudioManager.RINGER_MODE_NORMAL) {
-                try {
-                    val maxRing = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
-                    val targetRing = if (previousRingVol > 0) previousRingVol else (maxRing / 2).coerceAtLeast(1)
-                    audioManager.setStreamVolume(AudioManager.STREAM_RING, targetRing, 0)
-                    android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_RING to $targetRing")
-                } catch (e: Exception) {
-                    android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_RING", e)
-                }
-
-                try {
-                    val maxNotif = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION)
-                    val targetNotif = if (previousNotifVol > 0) previousNotifVol else (maxNotif / 2).coerceAtLeast(1)
-                    audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, targetNotif, 0)
-                    android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_NOTIFICATION to $targetNotif")
-                } catch (e: Exception) {
-                    android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_NOTIFICATION", e)
-                }
-
-                try {
-                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                } catch (_: Exception) {}
+            // B. Restore and unmute STREAM_RING
+            try {
+                val maxRing = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
+                val targetRing = if (previousRingVol > 0) previousRingVol else (maxRing / 2).coerceAtLeast(1)
+                audioManager.setStreamVolume(AudioManager.STREAM_RING, targetRing, flags)
+                audioManager.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, flags)
+                android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_RING to $targetRing")
+            } catch (e: Exception) {
+                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_RING", e)
             }
+
+            // C. Restore and unmute STREAM_NOTIFICATION
+            try {
+                val maxNotif = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION)
+                val targetNotif = if (previousNotifVol > 0) previousNotifVol else (maxNotif / 2).coerceAtLeast(1)
+                audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, targetNotif, flags)
+                audioManager.adjustStreamVolume(AudioManager.STREAM_NOTIFICATION, AudioManager.ADJUST_UNMUTE, flags)
+                android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_NOTIFICATION to $targetNotif")
+            } catch (e: Exception) {
+                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_NOTIFICATION", e)
+            }
+
+            // D. Ensure ringerMode is indeed NORMAL
+            try {
+                if (audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL) {
+                    audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                }
+            } catch (_: Exception) {}
+
+            android.util.Log.d("PrayerSilent", "endSilentMode completed: currentMode=${audioManager.ringerMode}, ringVol=${audioManager.getStreamVolume(AudioManager.STREAM_RING)}")
         }
     }
 }

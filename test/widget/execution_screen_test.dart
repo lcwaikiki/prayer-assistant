@@ -672,7 +672,8 @@ void main() {
       id: 'task_bead_1',
       title: 'Daily Dhikr',
       count: 33,
-      progress: 33,
+      progress: 32,
+      check: 11,
       isTask: true,
       reminderEnabled: true,
     );
@@ -698,6 +699,11 @@ void main() {
       reminderService: mockReminderService,
     );
     await tester.pumpAndSettle();
+
+    // Tap to reach max progress (2 -> 3)
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
     expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
     expect(find.byKey(const Key('mark_as_done_appbar_button')), findsOneWidget);
 
@@ -707,7 +713,7 @@ void main() {
 
     // Verify notification/activation was removed
     verify(() => mockReminderService.cancelActiveNotification('task_bead_1'))
-        .called(1);
+        .called(2);
 
     // Verify task completion was recorded in database
     verify(() => mockDb.saveTaskCompletions(any())).called(1);
@@ -765,7 +771,8 @@ void main() {
       id: 'task_bead_3',
       title: 'Morning Dhikr',
       count: 33,
-      progress: 33,
+      progress: 32,
+      check: 11,
       isTask: true,
     );
 
@@ -786,7 +793,11 @@ void main() {
     await _pumpExecution(tester, item: item, database: mockDb);
     await tester.pumpAndSettle();
 
-    // Initial state is already done
+    // Tap to complete the bead
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
+    // Done state
     expect(find.byKey(const Key('mark_as_done_button')), findsOneWidget);
     expect(find.byIcon(Icons.check_circle), findsWidgets);
 
@@ -814,7 +825,7 @@ void main() {
       title: 'Bead 1',
       count: 2,
       check: 1,
-      progress: 2,
+      progress: 1,
       groupIds: ['task_group_1'],
     );
     final bead2 = _item(
@@ -841,7 +852,7 @@ void main() {
         .thenAnswer((_) async => <String, List<String>>{});
     when(() => mockDb.saveTaskCompletions(any())).thenAnswer((_) async {});
 
-    // Open first bead (which is completed, but has next bead)
+    // Open first bead
     await _pumpExecution(
       tester,
       items: [bead1, bead2],
@@ -851,6 +862,10 @@ void main() {
       reminderService: mockReminderService,
       database: mockDb,
     );
+    await tester.pumpAndSettle();
+
+    // Tap to complete first bead (1 -> 2)
+    await tester.tap(find.byKey(const Key('big_tap_button')));
     await tester.pumpAndSettle();
 
     // On intermediate bead: Next button exists, but mark as done MUST NOT appear
@@ -885,5 +900,27 @@ void main() {
         .called(1);
     verify(() => mockDb.saveTaskCompletions(any())).called(1);
     expect(find.byType(ExecutionScreen), findsNothing);
+  });
+
+  testWidgets(
+      'automatically resets progress to zero on opening when bead is at max number',
+      (tester) async {
+    final item = _item(
+      id: 'max_bead',
+      title: 'Completed Bead',
+      count: 33,
+      progress: 33,
+      isTask: true,
+    );
+
+    await _pumpExecution(tester, item: item);
+    await tester.pumpAndSettle();
+
+    // Progress counter displays 0 of 33 and big tap button is enabled
+    expect(find.text('0'), findsWidgets);
+    final tapButton = tester.widget<OutlinedButton>(
+      find.byKey(const Key('big_tap_button')),
+    );
+    expect(tapButton.onPressed, isNotNull);
   });
 }

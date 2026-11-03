@@ -215,13 +215,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
           .read(itemsNotifierProvider)
           .where((element) => element.id == widget.itemId)
           .firstOrNull;
-      final isTask = item != null &&
-          (item.isTask ||
-              (widget.groupId != null &&
-                  ref
-                      .read(groupsNotifierProvider)
-                      .any((g) => g.id == widget.groupId && g.isTask)));
-      if (item != null && item.currentProgress >= item.count && !isTask) {
+      if (item != null && item.currentProgress >= item.count) {
         ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
         ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
       }
@@ -514,13 +508,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
             .read(itemsNotifierProvider)
             .where((element) => element.id == widget.itemId)
             .firstOrNull;
-        final isTask = item != null &&
-            (item.isTask ||
-                (widget.groupId != null &&
-                    ref
-                        .read(groupsNotifierProvider)
-                        .any((g) => g.id == widget.groupId && g.isTask)));
-        if (item != null && item.currentProgress >= item.count && !isTask) {
+        if (item != null && item.currentProgress >= item.count) {
           ref.read(itemsNotifierProvider.notifier).resetProgress(widget.itemId);
           ref.read(beadPaceTrackerProvider.notifier).pauseSession(widget.itemId);
         }

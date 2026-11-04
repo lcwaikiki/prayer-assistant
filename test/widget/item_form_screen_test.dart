@@ -6,8 +6,14 @@ import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/tesbihat/data/item_repository.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:prayer_assistant/src/tesbihat/data/sound_library_repository.dart';
+import 'package:prayer_assistant/src/tesbihat/models/sound_item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/item_form_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/services/audio_player_service.dart';
 import 'package:prayer_assistant/src/tesbihat/services/haptic_service.dart';
+import 'package:prayer_assistant/src/tesbihat/state/sound_library_notifier.dart';
+import 'package:prayer_assistant/src/widgets/read_only_detail_section.dart';
 
 import '../helpers/mocks.dart';
 import '../helpers/test_harness.dart';
@@ -28,6 +34,7 @@ Future<void> _pumpForm(
   TestHarness harness, {
   Item? itemToEdit,
   bool readOnly = false,
+  AudioPlayerService? audioPlayerService,
   List<Override> extraOverrides = const [],
 }) async {
   await pumpWithHarness(
@@ -42,6 +49,7 @@ Future<void> _pumpForm(
                 builder: (_) => ItemFormScreen(
                   itemToEdit: itemToEdit,
                   readOnly: readOnly,
+                  audioPlayerService: audioPlayerService,
                 ),
               ),
             ),
@@ -701,5 +709,89 @@ void main() {
 
     // Now editable fields are visible
     expect(find.byKey(const Key('title_field')), findsOneWidget);
+  });
+
+  testWidgets('renders noSoundAttached in read-only mode when item has no sound attached',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final item = const Item(
+      id: 'item_no_sound',
+      title: 'Bead without sound',
+      count: 33,
+      check: 11,
+      setCount: 1,
+      vibrationIntensity: 4,
+    );
+
+    await _pumpForm(tester, harness, itemToEdit: item, readOnly: true);
+
+    await _scrollTo(tester, find.text('No sound attached'));
+    expect(find.text('No sound attached'), findsOneWidget);
+    expect(find.byType(ReadOnlySoundPlayerCard), findsNothing);
+  });
+
+  testWidgets(
+      'renders sound details and audio player in read-only mode when item has sound attached',
+      (tester) async {
+    final harness = TestHarness.create();
+    await harness.initialize();
+    final soundItem = SoundItem(
+      id: 'snd_item_1',
+      title: 'Salawat Dhikr',
+      path: '/sounds/salawat.m4a',
+      durationMs: 8000,
+      createdAt: DateTime.now(),
+    );
+    final soundRepo = SoundLibraryRepository.memory([soundItem]);
+    final player = FakeAudioPlayerService();
+
+    final item = Item(
+      id: 'item_with_sound',
+      title: 'Salawat Bead',
+      count: 33,
+      check: 11,
+      setCount: 3,
+      vibrationIntensity: 4,
+      soundId: 'snd_item_1',
+      soundTitle: 'Salawat Dhikr',
+      soundSpeed: 1.5,
+      autoCountWithSound: true,
+    );
+
+    await _pumpForm(
+      tester,
+      harness,
+      itemToEdit: item,
+      readOnly: true,
+      audioPlayerService: player,
+      extraOverrides: [
+        soundLibraryRepositoryProvider.overrideWithValue(soundRepo),
+        audioPlayerServiceProvider.overrideWithValue(player),
+      ],
+    );
+
+    // Scroll down to sound section
+    await _scrollTo(tester, find.byKey(const Key('sound_preview_button')));
+
+    // Verify sound details in read-only mode
+    expect(find.text('Salawat Dhikr'), findsWidgets);
+    expect(find.textContaining('1.5x speed'), findsWidgets);
+    expect(find.textContaining('0:08'), findsWidgets);
+    expect(find.byType(ReadOnlySoundPlayerCard), findsOneWidget);
+
+    // Audio preview button is playable
+    final playBtn = find.byKey(const Key('sound_preview_button'));
+    expect(playBtn, findsOneWidget);
+    await tester.tap(playBtn);
+    await tester.pump();
+
+    expect(player.state, PlayerState.playing);
+
+    // Tap to pause
+    await tester.tap(playBtn);
+    await tester.pump();
+
+    expect(player.state, PlayerState.paused);
   });
 }

@@ -207,8 +207,10 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   Future<void> _pickSound() async {
     if (_isPlayingPreview) {
       await _audioPlayer.stop();
+      if (!mounted) return;
       setState(() => _isPlayingPreview = false);
     }
+    if (!mounted) return;
     final sound = await SoundPickerSheet.show(context);
     if (sound != null && mounted) {
       setState(() {
@@ -386,6 +388,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
 
     if (mounted) {
       await _audioPlayer.stop();
+      if (!mounted) return;
       Navigator.pop(context);
     }
   }
@@ -750,36 +753,38 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
     final progressFraction =
         targetCount > 0 ? (progress / targetCount).clamp(0.0, 1.0) : 0.0;
 
-    final reminderCfg = _reminderConfig ??
-        (widget.itemToEdit != null
-            ? ReminderConfig.fromItem(widget.itemToEdit!)
-            : null);
-    final isReminderEnabled = reminderCfg?.enabled ?? false;
-    final isTask = reminderCfg?.isTask ?? widget.itemToEdit?.isTask ?? false;
+    final reminderCfg = _reminderConfig;
+    final isReminderEnabled = reminderCfg.enabled;
+    final isTask = reminderCfg.isTask;
 
-    final reminderSummary = reminderCfg != null
-        ? formatConciseReminder(
-            context: context,
-            enabled: isReminderEnabled,
-            isPrayerAnchor: reminderCfg.anchor == ItemReminderAnchor.prayerTime,
-            recurrence: reminderCfg.recurrence,
-            prayerName: reminderCfg.prayerName,
-            offsetMinutes: reminderCfg.offsetMinutes,
-            anchorDate: reminderCfg.anchorDate,
-            clockTime: reminderCfg.at != null
-                ? TimeOfDay(
-                    hour: reminderCfg.at!.hour,
-                    minute: reminderCfg.at!.minute,
-                  )
-                : null,
-            weekdays: reminderCfg.weekdays,
-            dayOfMonth: reminderCfg.dayOfMonth,
-            yearlyDate: reminderCfg.yearlyDate,
-            monthlyBasis: reminderCfg.monthlyBasis,
-            yearlyBasis: reminderCfg.yearlyBasis,
-            repeatCount: reminderCfg.repeatCount,
-          )
-        : l10n.reminderNotSet;
+    final reminderSummary = formatConciseReminder(
+      context: context,
+      enabled: isReminderEnabled,
+      isPrayerAnchor: reminderCfg.anchor == ItemReminderAnchor.prayerTime,
+      recurrence: reminderCfg.recurrence,
+      prayerName: reminderCfg.prayerName,
+      offsetMinutes: reminderCfg.offsetMinutes,
+      anchorDate: reminderCfg.anchorDate,
+      clockTime: reminderCfg.at != null
+          ? TimeOfDay(
+              hour: reminderCfg.at!.hour,
+              minute: reminderCfg.at!.minute,
+            )
+          : null,
+      weekdays: reminderCfg.weekdays,
+      dayOfMonth: reminderCfg.dayOfMonth,
+      yearlyDate: reminderCfg.yearlyDate,
+      monthlyBasis: reminderCfg.monthlyBasis,
+      yearlyBasis: reminderCfg.yearlyBasis,
+      repeatCount: reminderCfg.repeatCount,
+    );
+
+    final sound = _soundId != null
+        ? ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId)
+        : null;
+    final soundDurationText = sound?.durationMs != null
+        ? formatAudioDurationMs(sound!.durationMs!)
+        : null;
 
     final allGroups = ref.watch(groupsNotifierProvider);
     final groupNames = allGroups
@@ -900,18 +905,45 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
               ),
             ],
           ),
-        if (_soundId != null)
-          ReadOnlyCardContainer(
-            title: l10n.sound,
-            icon: Icons.music_note,
-            children: [
+        ReadOnlyCardContainer(
+          title: l10n.sound,
+          icon: Icons.music_note,
+          children: [
+            if (_soundId == null)
               ReadOnlyFieldTile(
                 label: l10n.sound,
-                value: '${_soundTitle ?? l10n.sound} • ${_playbackSpeed}x speed',
-                icon: Icons.audiotrack,
+                value: l10n.noSoundAttached,
+                icon: Icons.music_off,
+              )
+            else ...[
+              ReadOnlySoundPlayerCard(
+                title: _soundTitle ?? sound?.title ?? l10n.sound,
+                duration: soundDurationText,
+                speed: _playbackSpeed,
+                extraDetail: _autoCountWithSound ? l10n.autoCountWithSound : null,
+                isPlaying: _isPlayingPreview,
+                onPlayPause: _togglePreviewSound,
+                playButtonKey: const Key('sound_preview_button'),
+              ),
+              if (soundDurationText != null)
+                ReadOnlyFieldTile(
+                  label: 'Duration',
+                  value: soundDurationText,
+                  icon: Icons.timer_outlined,
+                ),
+              ReadOnlyFieldTile(
+                label: 'Playback speed',
+                value: '${_playbackSpeed}x',
+                icon: Icons.speed,
+              ),
+              ReadOnlyFieldTile(
+                label: l10n.autoCountWithSound,
+                value: _autoCountWithSound ? 'Yes' : 'No',
+                icon: Icons.repeat,
               ),
             ],
-          ),
+          ],
+        ),
         const SizedBox(height: 24),
         Row(
           children: [

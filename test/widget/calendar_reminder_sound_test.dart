@@ -22,6 +22,7 @@ import '../helpers/test_harness.dart';
 Future<void> _pumpForm(
   WidgetTester tester, {
   CalendarReminder? reminder,
+  bool readOnly = false,
   SoundLibraryRepository? soundRepo,
   FakeAudioPlayerService? audioPlayer,
 }) async {
@@ -48,6 +49,7 @@ Future<void> _pumpForm(
         child: testLocalizedApp(
           child: CalendarReminderFormScreen(
             reminder: reminder,
+            readOnly: readOnly,
             audioPlayerService: player,
             database: mockDb,
           ),
@@ -203,7 +205,7 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Adhan Makkah'), findsOneWidget);
+    expect(find.text('Adhan Makkah'), findsWidgets);
     // Swap and remove buttons should not appear in read-only
     expect(find.byKey(const Key('reminder_sound_swap_button')), findsNothing);
     expect(find.byKey(const Key('reminder_sound_remove_button')), findsNothing);
@@ -441,6 +443,21 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+      'renders noSoundAttached in read-only mode when reminder has no sound attached',
+      (tester) async {
+    final reminderWithoutSound = CalendarReminder(
+      id: 'r_nosound',
+      title: 'Reminder No Sound',
+      anchorAt: DateTime(2026, 8, 17, 9, 0),
+    );
+
+    await _pumpForm(tester, reminder: reminderWithoutSound, readOnly: true);
+
+    expect(find.text('No sound attached'), findsOneWidget);
+    expect(find.byKey(const Key('reminder_sound_preview_button')), findsNothing);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }
-
-

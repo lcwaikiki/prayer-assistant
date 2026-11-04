@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/audio_player_service.dart';
+import '../state/sound_library_notifier.dart';
 
 import '../../calendar/models/calendar_reminder.dart';
 import '../../services/local_database.dart';
@@ -20,10 +24,12 @@ class GroupFormScreen extends ConsumerStatefulWidget {
     super.key,
     this.groupToEdit,
     this.readOnly = false,
+    this.audioPlayerService,
   });
 
   final ItemGroup? groupToEdit;
   final bool readOnly;
+  final AudioPlayerService? audioPlayerService;
 
   @override
   ConsumerState<GroupFormScreen> createState() => _GroupFormScreenState();
@@ -36,6 +42,11 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   late final TextEditingController _notesController;
   late ReminderConfig _reminderConfig;
   bool _saving = false;
+  late final AudioPlayerService _audioPlayer;
+  StreamSubscription<void>? _playerCompleteSubscription;
+  String? _playingSoundItemId;
+  bool _isPlayingPreview = false;
+  int _playbackPositionMs = 0;
 
   bool get _isEditing => widget.groupToEdit != null;
 
@@ -63,13 +74,74 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
     _reminderConfig = widget.groupToEdit != null
         ? ReminderConfig.fromGroup(widget.groupToEdit!)
         : const ReminderConfig();
+    _audioPlayer =
+        widget.audioPlayerService ?? ref.read(audioPlayerServiceProvider);
+    _playerCompleteSubscription = _audioPlayer.onPlayerComplete.listen((_) {
+      if (mounted) {
+        setState(() {
+          _isPlayingPreview = false;
+          _playbackPositionMs = 0;
+          _playingSoundItemId = null;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    _playerCompleteSubscription?.cancel();
+    _audioPlayer.stop();
+    if (widget.audioPlayerService == null) {
+      _audioPlayer.dispose();
+    }
     _titleController.dispose();
     _notesController.dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleMemberSound(Item item) async {
+    if (item.soundId == null) return;
+    if (_isPlayingPreview && _playingSoundItemId == item.id) {
+      final pos = await _audioPlayer.getCurrentPosition();
+      await _audioPlayer.pause();
+      if (mounted) {
+        setState(() {
+          _isPlayingPreview = false;
+          if (pos != null) _playbackPositionMs = pos.inMilliseconds;
+        });
+      }
+      return;
+    }
+
+    if (_playingSoundItemId == item.id && _audioPlayer.state == PlayerState.paused) {
+      await _audioPlayer.resume();
+      if (mounted) {
+        setState(() => _isPlayingPreview = true);
+      }
+      return;
+    }
+
+    final sound = ref
+        .read(soundLibraryNotifierProvider.notifier)
+        .getSoundById(item.soundId);
+    if (sound != null) {
+      await _audioPlayer.stop();
+      final startPos = (_playingSoundItemId == item.id && _playbackPositionMs > 0)
+          ? Duration(milliseconds: _playbackPositionMs)
+          : null;
+      await _audioPlayer.playFile(
+        sound.path,
+        mimeType: sound.mimeType,
+        playbackRate: item.soundSpeed,
+        position: startPos,
+      );
+      if (mounted) {
+        setState(() {
+          _playingSoundItemId = item.id;
+          _isPlayingPreview = true;
+        });
+      }
+    }
   }
 
   Future<void> _save() async {
@@ -168,15 +240,16 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
+        final nav = Navigator.of(context);
         if (!_isDirty) {
-          if (context.mounted) {
-            Navigator.of(context).pop(result);
-          }
+          await _audioPlayer.stop();
+          nav.pop(result);
           return;
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
-        if (shouldDiscard == true && context.mounted) {
-          Navigator.of(context).pop(result);
+        if (shouldDiscard == true) {
+          await _audioPlayer.stop();
+          nav.pop(result);
         }
       },
       child: Scaffold(
@@ -372,6 +445,56 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                   icon: Icons.touch_app_outlined,
                 ),
               ),
+          ],
+        ),
+        ReadOnlyCardContainer(
+          title: l10n.sound,
+          icon: Icons.music_note,
+          children: [
+            if (groupMembers.where((m) => m.soundId != null && m.soundId!.isNotEmpty).isEmpty)
+              ReadOnlyFieldTile(
+                label: l10n.sound,
+                value: l10n.noSoundAttached,
+                icon: Icons.music_off,
+              )
+            else
+              ...groupMembers
+                  .where((m) => m.soundId != null && m.soundId!.isNotEmpty)
+                  .map((item) {
+                final sound = ref
+                    .read(soundLibraryNotifierProvider.notifier)
+                    .getSoundById(item.soundId);
+                final soundDurationText = sound?.durationMs != null
+                    ? formatAudioDurationMs(sound!.durationMs!)
+                    : null;
+                final isPlayingThis =
+                    _isPlayingPreview && _playingSoundItemId == item.id;
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ReadOnlyFieldTile(
+                        label: item.title,
+                        value:
+                            '${item.soundTitle ?? sound?.title ?? l10n.sound} • ${item.soundSpeed}x speed${soundDurationText != null ? ' • $soundDurationText' : ''}',
+                        icon: Icons.audiotrack,
+                      ),
+                      const SizedBox(height: 4),
+                      ReadOnlySoundPlayerCard(
+                        title: item.soundTitle ?? sound?.title ?? l10n.sound,
+                        subtitle: item.title,
+                        duration: soundDurationText,
+                        speed: item.soundSpeed,
+                        isPlaying: isPlayingThis,
+                        onPlayPause: () => _toggleMemberSound(item),
+                        playButtonKey:
+                            Key('group_sound_preview_button_${item.id}'),
+                      ),
+                    ],
+                  ),
+                );
+              }),
           ],
         ),
         const SizedBox(height: 24),

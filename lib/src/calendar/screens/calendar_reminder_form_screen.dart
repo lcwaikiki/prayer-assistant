@@ -330,8 +330,10 @@ class _CalendarReminderFormScreenState
   Future<void> _pickSound() async {
     if (_isPlayingPreview) {
       await _audioPlayer.stop();
+      if (!mounted) return;
       setState(() => _isPlayingPreview = false);
     }
+    if (!mounted) return;
     final sound = await SoundPickerSheet.show(context);
     if (sound != null && mounted) {
       setState(() {
@@ -852,6 +854,7 @@ class _CalendarReminderFormScreenState
     }
     if (mounted) {
       await _audioPlayer.stop();
+      if (!mounted) return;
       _allowPop = true;
       Navigator.pop(context);
     }
@@ -884,6 +887,13 @@ class _CalendarReminderFormScreenState
       yearlyBasis: _yearlyBasis,
       repeatCount: _repeatCount,
     );
+
+    final sound = _soundId != null
+        ? ref.read(soundLibraryNotifierProvider.notifier).getSoundById(_soundId)
+        : null;
+    final soundDurationText = sound?.durationMs != null
+        ? formatAudioDurationMs(sound!.durationMs!)
+        : null;
 
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -950,19 +960,39 @@ class _CalendarReminderFormScreenState
               ),
           ],
         ),
-        if (_soundId != null)
-          ReadOnlyCardContainer(
-            title: l10n.sound,
-            icon: Icons.music_note,
-            children: [
+        ReadOnlyCardContainer(
+          title: l10n.sound,
+          icon: Icons.music_note,
+          children: [
+            if (_soundId == null)
               ReadOnlyFieldTile(
                 label: l10n.sound,
-                value:
-                    '${_soundTitle ?? l10n.sound} • ${_playbackSpeed}x speed',
-                icon: Icons.audiotrack,
+                value: l10n.noSoundAttached,
+                icon: Icons.music_off,
+              )
+            else ...[
+              ReadOnlySoundPlayerCard(
+                title: _soundTitle ?? sound?.title ?? l10n.sound,
+                duration: soundDurationText,
+                speed: _playbackSpeed,
+                isPlaying: _isPlayingPreview,
+                onPlayPause: _togglePreviewSound,
+                playButtonKey: const Key('reminder_sound_preview_button'),
+              ),
+              if (soundDurationText != null)
+                ReadOnlyFieldTile(
+                  label: 'Duration',
+                  value: soundDurationText,
+                  icon: Icons.timer_outlined,
+                ),
+              ReadOnlyFieldTile(
+                label: 'Playback speed',
+                value: '${_playbackSpeed}x',
+                icon: Icons.speed,
               ),
             ],
-          ),
+          ],
+        ),
         const SizedBox(height: 24),
         Row(
           children: [

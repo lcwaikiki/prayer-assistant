@@ -152,9 +152,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
   void dispose() {
     _playerCompleteSubscription?.cancel();
     _audioPlayer.stop();
-    if (widget.audioPlayerService == null) {
-      _audioPlayer.dispose();
-    }
     _titleController.dispose();
     _notesController.dispose();
     _countController.dispose();

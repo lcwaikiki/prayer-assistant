@@ -91,9 +91,6 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   void dispose() {
     _playerCompleteSubscription?.cancel();
     _audioPlayer.stop();
-    if (widget.audioPlayerService == null) {
-      _audioPlayer.dispose();
-    }
     _titleController.dispose();
     _notesController.dispose();
     super.dispose();
@@ -240,16 +237,15 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final nav = Navigator.of(context);
         if (!_isDirty) {
-          await _audioPlayer.stop();
-          nav.pop(result);
+          if (context.mounted) {
+            Navigator.of(context).pop(result);
+          }
           return;
         }
         final shouldDiscard = await showDiscardConfirmationDialog(context);
-        if (shouldDiscard == true) {
-          await _audioPlayer.stop();
-          nav.pop(result);
+        if (shouldDiscard == true && context.mounted) {
+          Navigator.of(context).pop(result);
         }
       },
       child: Scaffold(

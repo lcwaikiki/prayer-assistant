@@ -86,23 +86,35 @@ class AudioPlayerService {
   }
 
   Future<void> pause() async {
-    await _player.pause();
+    try {
+      await _player.pause();
+    } catch (_) {}
   }
 
   Future<void> resume() async {
-    await _player.resume();
+    try {
+      await _player.resume();
+    } catch (_) {}
   }
 
   Future<void> stop() async {
-    await _player.stop();
+    try {
+      await _player.stop();
+    } catch (_) {}
   }
 
   Future<void> seek(Duration position) async {
-    await _player.seek(position);
+    try {
+      await _player.seek(position);
+    } catch (_) {}
   }
 
   Future<void> dispose() async {
-    await _player.stop();
-    await _player.dispose();
+    try {
+      await _player.stop();
+    } catch (_) {}
+    try {
+      await _player.dispose();
+    } catch (_) {}
   }
 }

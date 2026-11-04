@@ -157,6 +157,46 @@ void main() {
     expect(groups.first.isTask, isTrue);
   });
 
+  testWidgets('pops directly when clean when editing an existing group',
+      (tester) async {
+    final existingGroup = ItemGroup(
+      id: 'g_test',
+      title: 'test gr',
+      reminderEnabled: true,
+      reminderRecurrence: ReminderRecurrence.daily,
+      reminderAt: DateTime(2026, 11, 4, 13, 29),
+    );
+    repository.saveGroups([existingGroup]);
+
+    await pumpForm(tester, groupToEdit: existingGroup);
+
+    final backButton = find.byType(BackButton);
+    expect(backButton, findsOneWidget);
+    await tester.tap(backButton);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GroupFormScreen), findsNothing);
+  });
+
+  testWidgets(
+      'does not dispose shared audioPlayerService on screen disposal',
+      (tester) async {
+    final player = FakeAudioPlayerService();
+    final existingGroup = ItemGroup(
+      id: 'g_shared',
+      title: 'test gr',
+    );
+    repository.saveGroups([existingGroup]);
+
+    await pumpForm(tester, groupToEdit: existingGroup, audioPlayerService: player);
+
+    final backButton = find.byType(BackButton);
+    await tester.tap(backButton);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GroupFormScreen), findsNothing);
+  });
+
   testWidgets(
       'prompts discard dialog when back is pressed with dirty isTask change',
       (tester) async {
@@ -183,6 +223,12 @@ void main() {
 
     // Discard confirmation dialog should be shown
     expect(find.byType(AlertDialog), findsOneWidget);
+
+    // Tap Discard
+    await tester.tap(find.text('Discard'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GroupFormScreen), findsNothing);
   });
 
   testWidgets('renders concise read-only view and switches to edit on tap',

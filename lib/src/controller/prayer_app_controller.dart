@@ -884,6 +884,19 @@ class PrayerAppController extends ChangeNotifier {
 
   void consumePendingTrackTab() => _pendingTrackTab = null;
 
+  int? _pendingDatesTab;
+
+  /// Dates sub-tab (0 prayer times, 1 calendar, 2 moon phase) waiting to be shown.
+  int? get pendingDatesTab => _pendingDatesTab;
+
+  /// Opens the Dates tab on [subTab].
+  void openDatesTab(int subTab) {
+    _pendingDatesTab = subTab;
+    setTab(3);
+  }
+
+  void consumePendingDatesTab() => _pendingDatesTab = null;
+
   /// Opens the screen a home-screen widget points at.
   void openTarget(String target) {
     switch (target) {

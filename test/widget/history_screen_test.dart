@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:flutter/services.dart';
-import 'package:prayer_assistant/src/models/prayer_models.dart';
 import 'package:prayer_assistant/src/ui/history_screen.dart';
 
 import '../helpers/test_app.dart';
@@ -216,6 +215,47 @@ void main() {
     await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.textContaining('White Days'), findsWidgets);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('switches to prayer times sub-tab when pendingDatesTab is 0', (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.loadSelectedLocation()).thenAnswer(
+      (_) async => sampleSelectedLocation(),
+    );
+    when(
+      () => harness.database.getDay(
+        districtId: any(named: 'districtId'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => samplePrayerDay());
+    when(
+      () => harness.database.getRange(
+        districtId: any(named: 'districtId'),
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+      ),
+    ).thenAnswer((_) async => [samplePrayerDay()]);
+    await harness.initialize();
+
+    harness.controller.openDatesTab(0);
+
+    await pumpWithHarness(
+      tester,
+      harness,
+      const Scaffold(body: HistoryScreen()),
+      locale: const Locale('en'),
+      settle: false,
+    );
+    await tester.pump();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    // TabBar should have index 0 selected (Prayer Times)
+    final tabFinder = find.byType(TabBar);
+    final TabBar tabBar = tester.widget(tabFinder);
+    expect(tabBar.controller?.index, 0);
 
     await tester.pumpWidget(const SizedBox());
   });

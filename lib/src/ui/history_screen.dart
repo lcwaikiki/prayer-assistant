@@ -55,6 +55,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   final GlobalKey _todayRowKey = GlobalKey();
   bool _syncingHorizontal = false;
   int? _lastTabIndex;
+  bool _needsScrollToToday = false;
 
   @override
   void initState() {
@@ -119,8 +120,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     _syncingHorizontal = false;
   }
 
-  void _scheduleScrollToToday(List<PrayerDay> days, {String? locale}) {
-    if (days.isEmpty) {
+  void _scheduleScrollToToday(List<PrayerDay> days, {String? locale, int retries = 0}) {
+    if (days.isEmpty || retries > 5) {
       return;
     }
     final today = DateTime.now();
@@ -147,6 +148,14 @@ class _HistoryScreenState extends State<HistoryScreen>
         });
         return;
       }
+      if (!_verticalController.hasClients || estimatedTop == null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _scheduleScrollToToday(days, locale: locale, retries: retries + 1);
+          }
+        });
+        return;
+      }
       final targetContext = _todayRowKey.currentContext;
       if (targetContext != null) {
         Scrollable.ensureVisible(targetContext, alignment: 0.5);
@@ -163,7 +172,24 @@ class _HistoryScreenState extends State<HistoryScreen>
   Widget build(BuildContext context) {
     return Consumer<PrayerAppController>(
       builder: (context, controller, _) {
-        if (_lastTabIndex != controller.tabIndex) {
+        final pendingDatesTab = controller.pendingDatesTab;
+        if (pendingDatesTab != null) {
+          _lastTabIndex = controller.tabIndex;
+          controller.consumePendingDatesTab();
+          if (pendingDatesTab == 0) {
+            _needsScrollToToday = true;
+          }
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              if (_tabController.index != pendingDatesTab) {
+                _tabController.animateTo(pendingDatesTab);
+              }
+              if (pendingDatesTab == 0) {
+                _scrollToToday();
+              }
+            }
+          });
+        } else if (_lastTabIndex != controller.tabIndex) {
           _lastTabIndex = controller.tabIndex;
           if (controller.tabIndex == 3) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -245,6 +271,10 @@ class _HistoryScreenState extends State<HistoryScreen>
           _monthSpacing;
     }
     final monthEntries = groupedByMonth.entries.toList(growable: false);
+    if (_needsScrollToToday) {
+      _needsScrollToToday = false;
+      _scheduleScrollToToday(days, locale: locale);
+    }
 
     return Stack(
       children: [

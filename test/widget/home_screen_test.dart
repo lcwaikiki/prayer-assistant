@@ -375,4 +375,41 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+      'prayer times card has dates button which triggers openDatesTab(0)',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(
+      () => harness.database.loadSelectedLocation(),
+    ).thenAnswer((_) async => sampleSelectedLocation());
+    when(
+      () => harness.database.getDay(
+        districtId: any(named: 'districtId'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => samplePrayerDay());
+    when(
+      () => harness.database.getRange(
+        districtId: any(named: 'districtId'),
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+      ),
+    ).thenAnswer((_) async => [samplePrayerDay()]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const HomeScreen(), settle: false);
+    await tester.pump();
+
+    final buttonFinder = find.byKey(const Key('prayer_times_card_dates_button'));
+    expect(buttonFinder, findsOneWidget);
+
+    await tester.tap(buttonFinder);
+    await tester.pump();
+
+    expect(harness.controller.tabIndex, 3);
+    expect(harness.controller.pendingDatesTab, 0);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

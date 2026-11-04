@@ -226,6 +226,55 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(14, 4, 8, 4),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.schedule,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              context.l10n.datesPrayerTimesTab,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
+                            ),
+                          ),
+                          IconButton(
+                            key: const Key('prayer_times_card_dates_button'),
+                            visualDensity: VisualDensity.compact,
+                            constraints: const BoxConstraints(
+                              minWidth: 32,
+                              minHeight: 32,
+                            ),
+                            padding: EdgeInsets.zero,
+                            tooltip: context.l10n.datesPrayerTimesTab,
+                            icon: Icon(
+                              Icons.calendar_month,
+                              size: 18,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            onPressed: () => controller.openDatesTab(0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outlineVariant
+                          .withAlpha(40),
+                    ),
                     for (final entry in prayerOrder.indexed) ...[
                       if (entry.$1 > 0)
                         Divider(

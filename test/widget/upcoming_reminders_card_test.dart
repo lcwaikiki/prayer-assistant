@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
-import 'package:prayer_assistant/src/calendar/screens/hijri_calendar_screen.dart';
+import 'package:prayer_assistant/src/calendar/screens/calendar_reminder_form_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
-import 'package:prayer_assistant/src/tesbihat/screens/execution_screen.dart';
-import 'package:prayer_assistant/src/tesbihat/screens/group_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/group_form_screen.dart';
+import 'package:prayer_assistant/src/tesbihat/screens/item_form_screen.dart';
 import 'package:prayer_assistant/src/ui/widgets/upcoming_reminders_card.dart';
 
 import '../helpers/test_harness.dart';
@@ -31,7 +31,7 @@ void main() {
     );
   });
 
-  testWidgets('tapping calendar item opens HijriCalendarScreen', (tester) async {
+  testWidgets('tapping calendar item opens CalendarReminderFormScreen in read-only mode', (tester) async {
     final harness = TestHarness.create();
     await harness.initialize();
 
@@ -59,12 +59,14 @@ void main() {
 
     await tester.tap(find.text('Read Quran'));
     await tester.pumpAndSettle();
-    expect(find.byType(HijriCalendarScreen), findsOneWidget);
+    expect(find.byType(CalendarReminderFormScreen), findsOneWidget);
+    final form = tester.widget<CalendarReminderFormScreen>(find.byType(CalendarReminderFormScreen));
+    expect(form.readOnly, isTrue);
 
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('tapping bead item opens ExecutionScreen', (tester) async {
+  testWidgets('tapping bead item opens ItemFormScreen in read-only mode', (tester) async {
     final harness = TestHarness.create();
     const beadItem = Item(
       id: 'bead-1',
@@ -96,13 +98,15 @@ void main() {
 
     await tester.tap(find.text('SubhanAllah Bead'));
     await tester.pumpAndSettle();
-    expect(find.byType(ExecutionScreen), findsOneWidget);
+    expect(find.byType(ItemFormScreen), findsOneWidget);
+    final form = tester.widget<ItemFormScreen>(find.byType(ItemFormScreen));
+    expect(form.readOnly, isTrue);
     expect(harness.controller.tabIndex, equals(4));
 
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('tapping group item opens GroupScreen', (tester) async {
+  testWidgets('tapping group item opens GroupFormScreen in read-only mode', (tester) async {
     final harness = TestHarness.create();
     const testGroup = ItemGroup(
       id: 'group-1',
@@ -130,7 +134,9 @@ void main() {
 
     await tester.tap(find.text('Morning Dhikr Group'));
     await tester.pumpAndSettle();
-    expect(find.byType(GroupScreen), findsOneWidget);
+    expect(find.byType(GroupFormScreen), findsOneWidget);
+    final form = tester.widget<GroupFormScreen>(find.byType(GroupFormScreen));
+    expect(form.readOnly, isTrue);
     expect(harness.controller.tabIndex, equals(4));
 
     await tester.pumpWidget(const SizedBox());

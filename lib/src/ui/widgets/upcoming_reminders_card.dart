@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart' as provider;
 
 import '../../calendar/models/calendar_reminder.dart';
-import '../../calendar/screens/hijri_calendar_screen.dart';
+import '../../calendar/screens/calendar_reminder_form_screen.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
 import '../../tesbihat/models/item.dart';
 import '../../tesbihat/models/item_group.dart';
-import '../../tesbihat/screens/execution_screen.dart';
-import '../../tesbihat/screens/group_screen.dart';
+import '../../tesbihat/screens/group_form_screen.dart';
+import '../../tesbihat/screens/item_form_screen.dart';
+import '../../tesbihat/state/groups_notifier.dart';
+import '../../tesbihat/state/items_notifier.dart';
 import '../../utils/orientation_utils.dart';
 
 enum UpcomingReminderType {
@@ -40,47 +43,77 @@ class UpcomingReminder {
   CalendarReminder? get reminder => calendarReminder;
 }
 
-class UpcomingRemindersCard extends StatelessWidget {
+class UpcomingRemindersCard extends ConsumerWidget {
   const UpcomingRemindersCard({super.key, required this.entries});
 
   final List<UpcomingReminder> entries;
 
-  void _onTap(BuildContext context, UpcomingReminder entry) {
+  void _onTap(BuildContext context, WidgetRef ref, UpcomingReminder entry) {
     switch (entry.type) {
       case UpcomingReminderType.calendar:
+        final reminder = entry.calendarReminder ??
+            (() {
+              try {
+                return provider.Provider.of<PrayerAppController>(context, listen: false)
+                    .calendarReminders
+                    .where((r) => r.id == entry.id)
+                    .firstOrNull;
+              } catch (_) {
+                return null;
+              }
+            })();
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => HijriCalendarScreen(
-              initialDate: entry.next,
-              openDetailOnLaunch: true,
+            builder: (_) => CalendarReminderFormScreen(
+              reminder: reminder,
+              reminderId: entry.id,
+              readOnly: true,
             ),
           ),
         );
       case UpcomingReminderType.bead:
+        final item = entry.bead ??
+            ref
+                .read(itemsNotifierProvider)
+                .where((i) => i.id == entry.id)
+                .firstOrNull;
+        if (item == null) return;
         lockPortraitOnPhones();
         try {
-          context.read<PrayerAppController>().setTab(4);
+          provider.Provider.of<PrayerAppController>(context, listen: false).setTab(4);
         } catch (_) {}
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => ExecutionScreen(itemId: entry.id),
+            builder: (_) => ItemFormScreen(
+              itemToEdit: item,
+              readOnly: true,
+            ),
           ),
         );
       case UpcomingReminderType.group:
+        final group = entry.group ??
+            ref
+                .read(groupsNotifierProvider)
+                .where((g) => g.id == entry.id)
+                .firstOrNull;
+        if (group == null) return;
         lockPortraitOnPhones();
         try {
-          context.read<PrayerAppController>().setTab(4);
+          provider.Provider.of<PrayerAppController>(context, listen: false).setTab(4);
         } catch (_) {}
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => GroupScreen(groupId: entry.id),
+            builder: (_) => GroupFormScreen(
+              groupToEdit: group,
+              readOnly: true,
+            ),
           ),
         );
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final locale = Localizations.localeOf(context).toString();
     final dateFormat = DateFormat('EEE, d MMM · HH:mm', locale);
     return Card(
@@ -102,7 +135,7 @@ class UpcomingRemindersCard extends StatelessWidget {
           ),
           for (final entry in entries)
             InkWell(
-              onTap: () => _onTap(context, entry),
+              onTap: () => _onTap(context, ref, entry),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                 child: Row(

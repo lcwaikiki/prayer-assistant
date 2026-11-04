@@ -417,13 +417,15 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           actions: [
             if (_readOnly) ...[
               IconButton(
+                key: const Key('edit_item_button'),
                 tooltip: l10n.edit,
                 icon: const Icon(Icons.edit),
                 onPressed: () => setState(() => _readOnly = false),
               ),
               if (widget.itemToEdit != null)
                 IconButton(
-                  tooltip: 'Execute',
+                  key: const Key('execute_item_button'),
+                  tooltip: l10n.execute,
                   icon: const Icon(Icons.play_arrow),
                   onPressed: () {
                     Navigator.push(
@@ -940,39 +942,6 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 label: l10n.autoCountWithSound,
                 value: _autoCountWithSound ? 'Yes' : 'No',
                 icon: Icons.repeat,
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                key: const Key('edit_item_button_bottom'),
-                icon: const Icon(Icons.edit),
-                label: Text(l10n.edit),
-                onPressed: () => setState(() => _readOnly = false),
-              ),
-            ),
-            if (widget.itemToEdit != null) ...[
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton.icon(
-                  key: const Key('execute_item_button_bottom'),
-                  icon: const Icon(Icons.play_arrow),
-                  label: Text(l10n.execute),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => ExecutionScreen(
-                          itemId: widget.itemToEdit!.id,
-                        ),
-                      ),
-                    );
-                  },
-                ),
               ),
             ],
           ],

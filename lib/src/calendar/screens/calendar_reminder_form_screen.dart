@@ -895,8 +895,6 @@ class _CalendarReminderFormScreenState
         ? formatAudioDurationMs(sound!.durationMs!)
         : null;
 
-    final colorScheme = Theme.of(context).colorScheme;
-
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -991,33 +989,6 @@ class _CalendarReminderFormScreenState
                 icon: Icons.speed,
               ),
             ],
-          ],
-        ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            if (_reminder != null || widget.reminder != null) ...[
-              Expanded(
-                child: OutlinedButton.icon(
-                  key: const Key('delete_reminder_button_bottom'),
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: colorScheme.error,
-                  ),
-                  icon: const Icon(Icons.delete_outline),
-                  label: Text(l10n.calendarDeleteReminder),
-                  onPressed: _deleteWithUndo,
-                ),
-              ),
-              const SizedBox(width: 12),
-            ],
-            Expanded(
-              child: OutlinedButton.icon(
-                key: const Key('edit_reminder_button_bottom'),
-                icon: const Icon(Icons.edit),
-                label: Text(l10n.calendarEditReminder),
-                onPressed: () => setState(() => _readOnly = false),
-              ),
-            ),
           ],
         ),
         const SizedBox(height: 16),

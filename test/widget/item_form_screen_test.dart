@@ -703,8 +703,7 @@ void main() {
     expect(find.byKey(const Key('title_field')), findsNothing);
 
     // Tap edit button to switch to editable mode
-    await _scrollTo(tester, find.byKey(const Key('edit_item_button_bottom')));
-    await tester.tap(find.byKey(const Key('edit_item_button_bottom')));
+    await tester.tap(find.byKey(const Key('edit_item_button')));
     await tester.pumpAndSettle();
 
     // Now editable fields are visible

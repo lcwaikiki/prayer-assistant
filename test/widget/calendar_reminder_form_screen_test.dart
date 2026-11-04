@@ -575,7 +575,7 @@ void main() {
     expect(find.byType(TextField), findsNothing);
 
     // Tap edit button to switch to editable mode
-    await tester.tap(find.byKey(const Key('edit_reminder_button_bottom')));
+    await tester.tap(find.byKey(const Key('edit_reminder_button')));
     await tester.pumpAndSettle();
 
     // Now editable fields are visible

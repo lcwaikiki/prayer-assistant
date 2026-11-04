@@ -497,39 +497,6 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
               }),
           ],
         ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                key: const Key('edit_group_button_bottom'),
-                icon: const Icon(Icons.edit),
-                label: Text(l10n.edit),
-                onPressed: () => setState(() => _readOnly = false),
-              ),
-            ),
-            if (widget.groupToEdit != null) ...[
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton.icon(
-                  key: const Key('view_group_beads_button_bottom'),
-                  icon: const Icon(Icons.format_list_bulleted),
-                  label: Text(l10n.groupMembers),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (_) => GroupScreen(
-                          groupId: widget.groupToEdit!.id,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ],
-        ),
         const SizedBox(height: 16),
       ],
     );

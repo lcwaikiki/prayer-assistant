@@ -213,7 +213,7 @@ void main() {
     expect(find.byKey(const Key('group_title_field')), findsNothing);
 
     // Tap edit button to switch to editable mode
-    await tester.tap(find.byKey(const Key('edit_group_button_bottom')));
+    await tester.tap(find.byKey(const Key('edit_group_button')));
     await tester.pumpAndSettle();
 
     // Now editable fields are visible

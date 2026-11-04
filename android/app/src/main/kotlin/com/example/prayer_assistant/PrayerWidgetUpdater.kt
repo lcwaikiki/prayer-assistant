@@ -232,7 +232,7 @@ object PrayerWidgetUpdater {
                     String.format(Locale.US, "%02d:%02d", minutes, seconds)
                 }
             } else {
-                val totalMinutes = (remainingMs + 59_999L) / 60_000L
+                val totalMinutes = (remainingMs / 60_000L).coerceAtLeast(0L)
                 val h = totalMinutes / 60L
                 val m = totalMinutes % 60L
                 String.format(Locale.US, "%02d:%02d", h, m)
@@ -1167,7 +1167,7 @@ object PrayerWidgetUpdater {
     }
 
     private fun formatHoursMinutes(remainingMs: Long): String {
-        val totalMinutes = (remainingMs + 59_999L) / 60_000L
+        val totalMinutes = (remainingMs / 60_000L).coerceAtLeast(0L)
         val hours = totalMinutes / 60L
         val minutes = totalMinutes % 60L
         return if (hours > 0) "%d:%02d".format(hours, minutes) else "${minutes}"
@@ -1263,9 +1263,9 @@ object PrayerWidgetUpdater {
             ((now / 60_000L) + 1L) * 60_000L
         } else {
             val remainingMs = state.prayer.second - now
-            val remainingMinutes = if (remainingMs > 0) (remainingMs + 59_999L) / 60_000L else 0L
+            val remainingMinutes = if (remainingMs > 0) remainingMs / 60_000L else 0L
             if (remainingMinutes >= ICON_DIGIT_THRESHOLD_MINUTES) {
-                state.prayer.second - (ICON_DIGIT_THRESHOLD_MINUTES - 1L) * 60_000L
+                state.prayer.second - ICON_DIGIT_THRESHOLD_MINUTES * 60_000L
             } else {
                 ((now / 60_000L) + 1L) * 60_000L
             }
@@ -1562,7 +1562,7 @@ object PrayerWidgetUpdater {
             }
         } else {
             val remainingMs = state.prayer.second - System.currentTimeMillis()
-            val remainingMinutes = if (remainingMs > 0) (remainingMs + 59_999L) / 60_000L else 0L
+            val remainingMinutes = if (remainingMs > 0) remainingMs / 60_000L else 0L
             if (remainingMinutes !in 0L until ICON_DIGIT_THRESHOLD_MINUTES) {
                 return IconCompat.createWithResource(context, R.mipmap.ic_launcher)
             }

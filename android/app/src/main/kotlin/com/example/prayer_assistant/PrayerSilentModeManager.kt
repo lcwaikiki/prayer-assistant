@@ -1,8 +1,10 @@
 package com.pirci.prayer_assistant
 
+import android.app.Activity
 import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
@@ -45,6 +47,48 @@ object PrayerSilentModeManager {
         }
     }
 
+    fun requestStartSilentMode(context: Context, id: Int, durationMinutes: Int) {
+        if (context is Activity || context is Service) {
+            startSilentMode(context, id, durationMinutes)
+            return
+        }
+        val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+            action = ACTION_PRAYER_SILENT_START
+            putExtra("id", id)
+            putExtra("durationMinutes", durationMinutes)
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent)
+            } else {
+                context.startService(serviceIntent)
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("PrayerSilent", "Failed to start PrayerSilentModeService, falling back to startSilentMode", e)
+            startSilentMode(context, id, durationMinutes)
+        }
+    }
+
+    fun requestEndSilentMode(context: Context) {
+        if (context is Activity || context is Service) {
+            endSilentMode(context)
+            return
+        }
+        val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+            action = ACTION_PRAYER_SILENT_END
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(serviceIntent)
+            } else {
+                context.startService(serviceIntent)
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("PrayerSilent", "Failed to start PrayerSilentModeService, falling back to endSilentMode", e)
+            endSilentMode(context)
+        }
+    }
+
     fun scheduleSilentMode(
         context: Context,
         id: Int,
@@ -62,7 +106,7 @@ object PrayerSilentModeManager {
         }
         val now = System.currentTimeMillis()
         if (triggerAtMillis <= now) {
-            startSilentMode(context, id, durationMinutes)
+            requestStartSilentMode(context, id, durationMinutes)
         } else {
             setSilentAlarm(context, id, triggerAtMillis, durationMinutes)
         }
@@ -103,18 +147,34 @@ object PrayerSilentModeManager {
         durationMinutes: Int
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
-            action = ACTION_PRAYER_SILENT_START
-            setPackage(context.packageName)
-            putExtra("id", id)
-            putExtra("durationMinutes", durationMinutes)
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+                action = ACTION_PRAYER_SILENT_START
+                putExtra("id", id)
+                putExtra("durationMinutes", durationMinutes)
+            }
+            PendingIntent.getForegroundService(
+                context,
+                id * 100 + 41,
+                serviceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            val broadcastIntent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
+                action = ACTION_PRAYER_SILENT_START
+                setPackage(context.packageName)
+                putExtra("id", id)
+                putExtra("durationMinutes", durationMinutes)
+            }
+            PendingIntent.getBroadcast(
+                context,
+                id * 100 + 41,
+                broadcastIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            id * 100 + 41,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
         val showIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -140,6 +200,22 @@ object PrayerSilentModeManager {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+                action = ACTION_PRAYER_SILENT_START
+            }
+            val servicePending = PendingIntent.getForegroundService(
+                context,
+                id * 100 + 41,
+                serviceIntent,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            )
+            if (servicePending != null) {
+                alarmManager.cancel(servicePending)
+                servicePending.cancel()
+            }
+        }
+
         val startIntent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
             action = ACTION_PRAYER_SILENT_START
             setPackage(context.packageName)
@@ -163,7 +239,7 @@ object PrayerSilentModeManager {
         if (cancelActive) {
             val prefs = getPrefs(context)
             if (prefs.contains(KEY_ACTIVE_SILENT_ID)) {
-                endSilentMode(context)
+                requestEndSilentMode(context)
             }
         }
     }
@@ -173,7 +249,7 @@ object PrayerSilentModeManager {
         if (prefs.contains(KEY_ACTIVE_SILENT_ID)) {
             val endTime = prefs.getLong(KEY_SILENT_END_TIME, 0L)
             if (endTime <= System.currentTimeMillis()) {
-                endSilentMode(context)
+                requestEndSilentMode(context)
             }
         }
     }
@@ -185,7 +261,7 @@ object PrayerSilentModeManager {
         if (prefs.contains(KEY_ACTIVE_SILENT_ID)) {
             val endTime = prefs.getLong(KEY_SILENT_END_TIME, 0L)
             if (endTime <= now) {
-                endSilentMode(context)
+                requestEndSilentMode(context)
             } else {
                 scheduleEndAlarm(context, endTime)
             }
@@ -258,16 +334,30 @@ object PrayerSilentModeManager {
 
     private fun scheduleEndAlarm(context: Context, endAtMillis: Long) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
-            action = ACTION_PRAYER_SILENT_END
-            setPackage(context.packageName)
+
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+                action = ACTION_PRAYER_SILENT_END
+            }
+            PendingIntent.getForegroundService(
+                context,
+                END_ALARM_REQUEST_CODE,
+                serviceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            val broadcastIntent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
+                action = ACTION_PRAYER_SILENT_END
+                setPackage(context.packageName)
+            }
+            PendingIntent.getBroadcast(
+                context,
+                END_ALARM_REQUEST_CODE,
+                broadcastIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
         }
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            END_ALARM_REQUEST_CODE,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+
         val showIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         }
@@ -311,6 +401,21 @@ object PrayerSilentModeManager {
 
         // 2. Cancel any scheduled end alarm
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val serviceIntent = Intent(context, PrayerSilentModeService::class.java).apply {
+                action = ACTION_PRAYER_SILENT_END
+            }
+            val servicePending = PendingIntent.getForegroundService(
+                context,
+                END_ALARM_REQUEST_CODE,
+                serviceIntent,
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            )
+            if (servicePending != null) {
+                alarmManager.cancel(servicePending)
+                servicePending.cancel()
+            }
+        }
         val intent = Intent(context, PrayerSilentModeReceiver::class.java).apply {
             action = ACTION_PRAYER_SILENT_END
             setPackage(context.packageName)
@@ -331,8 +436,15 @@ object PrayerSilentModeManager {
         if (audioManager != null) {
             val flags = AudioManager.FLAG_ALLOW_RINGER_MODES
 
-            // A. First unmute and set ring volume with FLAG_ALLOW_RINGER_MODES
-            // (Setting volume before or alongside ringerMode prevents Samsung One UI from reverting back to vibrate due to 0 volume)
+            // A. Set ringer mode to NORMAL first
+            try {
+                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
+                android.util.Log.d("PrayerSilent", "endSilentMode: ringerMode set to NORMAL, mode=${audioManager.ringerMode}")
+            } catch (e: Exception) {
+                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set ringerMode to NORMAL", e)
+            }
+
+            // B. Unmute and restore STREAM_RING volume
             val maxRing = audioManager.getStreamMaxVolume(AudioManager.STREAM_RING)
             val targetRing = if (previousRingVol > 0) previousRingVol else (maxRing * 2 / 3).coerceAtLeast(1)
 
@@ -347,14 +459,6 @@ object PrayerSilentModeManager {
                 android.util.Log.d("PrayerSilent", "endSilentMode: restored STREAM_RING to $targetRing")
             } catch (e: Exception) {
                 android.util.Log.e("PrayerSilent", "endSilentMode: failed to set STREAM_RING", e)
-            }
-
-            // B. Set ringerMode to NORMAL
-            try {
-                audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-                android.util.Log.d("PrayerSilent", "endSilentMode: ringerMode set to NORMAL, mode=${audioManager.ringerMode}")
-            } catch (e: Exception) {
-                android.util.Log.e("PrayerSilent", "endSilentMode: failed to set ringerMode to NORMAL", e)
             }
 
             // C. Restore and unmute STREAM_NOTIFICATION
@@ -375,7 +479,7 @@ object PrayerSilentModeManager {
                 audioManager.setStreamVolume(AudioManager.STREAM_SYSTEM, targetSys, flags)
             } catch (_: Exception) {}
 
-            // E. Ensure ringerMode is indeed NORMAL (retry with setStreamVolume if needed)
+            // E. Ensure ringerMode is indeed NORMAL (retry if reverted by volume state)
             try {
                 if (audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL) {
                     audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL

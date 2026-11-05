@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "Abrir configuración",
   "beadOverlayClose": "Cerrar",
   "beadsDone": "Hecho",
-  "beadsMarkAsDone": "Marcar como hecho"
+  "beadsMarkAsDone": "Marcar como hecho",
+  "reminderAtLabel": "Recordatorio a las",
+  "reminderPrayerOffsetOnTime": "en la oración de {prayer}",
+  "reminderPrayerOffsetAfter": "{minutes} minutos después de la oración de {prayer}",
+  "reminderPrayerOffsetBefore": "{minutes} minutos antes de la oración de {prayer}",
+  "reminderClockTimeAt": "a las {time}",
+  "reminderRecurrenceDaily": "Diariamente {detail}",
+  "reminderRecurrenceOnce": "Una vez {detail}",
+  "reminderRecurrenceOnceOnDate": "Una vez el {date} {detail}",
+  "reminderRecurrenceWeekly": "Cada {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "Cada semana {detail}",
+  "reminderRecurrenceMonthly": "Cada mes el día {day}{basis} {detail}",
+  "reminderRecurrenceYearly": "Cada año el {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} veces)"
 }

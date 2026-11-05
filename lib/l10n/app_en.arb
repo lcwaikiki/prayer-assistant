@@ -277,7 +277,9 @@
   "calendarDeleteReminderConfirm": "Delete \"{title}\"?",
   "@calendarDeleteReminderConfirm": {
     "placeholders": {
-      "title": {"type": "String"}
+      "title": {
+        "type": "String"
+      }
     }
   },
   "calendarDeleteOccurrence": "Delete this occurrence",
@@ -389,7 +391,9 @@
   "kazaRakatShort": "{count} rak.",
   "@kazaRakatShort": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "kazaTapToLog": "Tap a prayer to log it",
@@ -399,7 +403,9 @@
   "kazaDailyLogCount": "{count} prayed",
   "@kazaDailyLogCount": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "kazaWitrLabel": "Witr",
@@ -843,5 +849,86 @@
   "beadsIntervalChime": "Interval chime",
   "beadOverlayClose": "Close",
   "beadsDone": "Done",
-  "beadsMarkAsDone": "Mark as done"
+  "beadsMarkAsDone": "Mark as done",
+  "reminderAtLabel": "Reminder at",
+  "reminderPrayerOffsetOnTime": "at {prayer} prayer",
+  "reminderPrayerOffsetAfter": "{minutes} minutes after {prayer} prayer",
+  "reminderPrayerOffsetBefore": "{minutes} minutes before {prayer} prayer",
+  "reminderClockTimeAt": "at {time}",
+  "reminderRecurrenceDaily": "Daily {detail}",
+  "reminderRecurrenceOnce": "Once {detail}",
+  "reminderRecurrenceOnceOnDate": "Once on {date} {detail}",
+  "reminderRecurrenceWeekly": "Every {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "Every week {detail}",
+  "reminderRecurrenceMonthly": "Every month on day {day}{basis} {detail}",
+  "reminderRecurrenceYearly": "Every year on {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} times)",
+  "@reminderPrayerOffsetOnTime": {
+    "placeholders": {
+      "prayer": {}
+    }
+  },
+  "@reminderPrayerOffsetAfter": {
+    "placeholders": {
+      "minutes": {},
+      "prayer": {}
+    }
+  },
+  "@reminderPrayerOffsetBefore": {
+    "placeholders": {
+      "minutes": {},
+      "prayer": {}
+    }
+  },
+  "@reminderClockTimeAt": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "@reminderRecurrenceDaily": {
+    "placeholders": {
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceOnce": {
+    "placeholders": {
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceOnceOnDate": {
+    "placeholders": {
+      "date": {},
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceWeekly": {
+    "placeholders": {
+      "days": {},
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceWeeklyGeneral": {
+    "placeholders": {
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceMonthly": {
+    "placeholders": {
+      "day": {},
+      "basis": {},
+      "detail": {}
+    }
+  },
+  "@reminderRecurrenceYearly": {
+    "placeholders": {
+      "date": {},
+      "basis": {},
+      "detail": {}
+    }
+  },
+  "@reminderRepeatCountSuffix": {
+    "placeholders": {
+      "count": {}
+    }
+  }
 }

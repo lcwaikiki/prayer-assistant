@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "Buka Pengaturan",
   "beadOverlayClose": "Tutup",
   "beadsDone": "Selesai",
-  "beadsMarkAsDone": "Tandai sudah selesai"
+  "beadsMarkAsDone": "Tandai sudah selesai",
+  "reminderAtLabel": "Pengingat pada",
+  "reminderPrayerOffsetOnTime": "pada waktu salat {prayer}",
+  "reminderPrayerOffsetAfter": "{minutes} menit setelah salat {prayer}",
+  "reminderPrayerOffsetBefore": "{minutes} menit sebelum salat {prayer}",
+  "reminderClockTimeAt": "pukul {time}",
+  "reminderRecurrenceDaily": "Setiap hari {detail}",
+  "reminderRecurrenceOnce": "Sekali {detail}",
+  "reminderRecurrenceOnceOnDate": "Sekali pada {date} {detail}",
+  "reminderRecurrenceWeekly": "Setiap {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "Setiap minggu {detail}",
+  "reminderRecurrenceMonthly": "Setiap bulan pada tanggal {day}{basis} {detail}",
+  "reminderRecurrenceYearly": "Setiap tahun pada {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} kali)"
 }

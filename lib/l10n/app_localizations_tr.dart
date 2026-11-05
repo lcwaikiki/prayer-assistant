@@ -1869,4 +1869,67 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'Yapıldı olarak işaretle';
+
+  @override
+  String get reminderAtLabel => 'Hatırlatma zamanı';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return '$prayer vaktinde';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$prayer vaktinden $minutes dk sonra';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$prayer vaktinden $minutes dk önce';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return 'saat $time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'Her gün $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'Bir kez $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return 'Bir kez $date tarihinde $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'Her $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'Her hafta $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'Her ayın $day. gününde$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'Her yıl $date tarihinde$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count kez)';
+  }
 }

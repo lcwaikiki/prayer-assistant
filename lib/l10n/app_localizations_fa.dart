@@ -1867,4 +1867,67 @@ class AppLocalizationsFa extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'علامت‌گذاری به عنوان انجام شده';
+
+  @override
+  String get reminderAtLabel => 'زمان یادآوری';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return 'هنگام نماز $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$minutes دقیقه بعد از نماز $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$minutes دقیقه قبل از نماز $prayer';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return 'در ساعت $time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'روزانه $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'یک‌بار $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return 'یک‌بار در $date $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'هر $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'هر هفته $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'هر ماه در روز $day$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'هر سال در $date$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count بار)';
+  }
 }

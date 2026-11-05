@@ -743,5 +743,18 @@
   "dndPermissionOpenSettings": "அமைப்புகளைத் திற",
   "beadOverlayClose": "மூடு",
   "beadsDone": "முடிந்தது",
-  "beadsMarkAsDone": "முடிந்தது எனக் குறிக்கவும்"
+  "beadsMarkAsDone": "முடிந்தது எனக் குறிக்கவும்",
+  "reminderAtLabel": "நினைவூட்டல் நேரம்",
+  "reminderPrayerOffsetOnTime": "{prayer} தொழுகை நேரத்தில்",
+  "reminderPrayerOffsetAfter": "{prayer} தொழுகைக்கு {minutes} நிமிடங்களுக்குப் பிறகு",
+  "reminderPrayerOffsetBefore": "{prayer} தொழுகைக்கு {minutes} நிமிடங்களுக்கு முன்",
+  "reminderClockTimeAt": "{time} மணிக்கு",
+  "reminderRecurrenceDaily": "தினமும் {detail}",
+  "reminderRecurrenceOnce": "ஒரு முறை {detail}",
+  "reminderRecurrenceOnceOnDate": "{date} அன்று ஒரு முறை {detail}",
+  "reminderRecurrenceWeekly": "ஒவ்வொரு {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "ஒவ்வொரு வாரமும் {detail}",
+  "reminderRecurrenceMonthly": "ஒவ்வொரு மாதமும் {day} ஆம் நாள்{basis} {detail}",
+  "reminderRecurrenceYearly": "ஒவ்வொரு ஆண்டும் {date} அன்று{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} முறை)"
 }

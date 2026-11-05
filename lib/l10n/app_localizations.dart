@@ -3535,6 +3535,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Mark as done'**
   String get beadsMarkAsDone;
+
+  /// No description provided for @reminderAtLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder at'**
+  String get reminderAtLabel;
+
+  /// No description provided for @reminderPrayerOffsetOnTime.
+  ///
+  /// In en, this message translates to:
+  /// **'at {prayer} prayer'**
+  String reminderPrayerOffsetOnTime(Object prayer);
+
+  /// No description provided for @reminderPrayerOffsetAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes after {prayer} prayer'**
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer);
+
+  /// No description provided for @reminderPrayerOffsetBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes before {prayer} prayer'**
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer);
+
+  /// No description provided for @reminderClockTimeAt.
+  ///
+  /// In en, this message translates to:
+  /// **'at {time}'**
+  String reminderClockTimeAt(Object time);
+
+  /// No description provided for @reminderRecurrenceDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily {detail}'**
+  String reminderRecurrenceDaily(Object detail);
+
+  /// No description provided for @reminderRecurrenceOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once {detail}'**
+  String reminderRecurrenceOnce(Object detail);
+
+  /// No description provided for @reminderRecurrenceOnceOnDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Once on {date} {detail}'**
+  String reminderRecurrenceOnceOnDate(Object date, Object detail);
+
+  /// No description provided for @reminderRecurrenceWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {days} {detail}'**
+  String reminderRecurrenceWeekly(Object days, Object detail);
+
+  /// No description provided for @reminderRecurrenceWeeklyGeneral.
+  ///
+  /// In en, this message translates to:
+  /// **'Every week {detail}'**
+  String reminderRecurrenceWeeklyGeneral(Object detail);
+
+  /// No description provided for @reminderRecurrenceMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Every month on day {day}{basis} {detail}'**
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail);
+
+  /// No description provided for @reminderRecurrenceYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Every year on {date}{basis} {detail}'**
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail);
+
+  /// No description provided for @reminderRepeatCountSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' ({count} times)'**
+  String reminderRepeatCountSuffix(Object count);
 }
 
 class _AppLocalizationsDelegate

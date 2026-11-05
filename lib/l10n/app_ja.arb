@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "設定を開く",
   "beadOverlayClose": "閉じる",
   "beadsDone": "完了",
-  "beadsMarkAsDone": "完了としてマーク"
+  "beadsMarkAsDone": "完了としてマーク",
+  "reminderAtLabel": "リマインダー時刻",
+  "reminderPrayerOffsetOnTime": "{prayer}の礼拝時",
+  "reminderPrayerOffsetAfter": "{prayer}の礼拝の{minutes}分後",
+  "reminderPrayerOffsetBefore": "{prayer}の礼拝の{minutes}分前",
+  "reminderClockTimeAt": "{time}",
+  "reminderRecurrenceDaily": "毎日 {detail}",
+  "reminderRecurrenceOnce": "1回 {detail}",
+  "reminderRecurrenceOnceOnDate": "{date}に1回 {detail}",
+  "reminderRecurrenceWeekly": "毎週{days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "毎週 {detail}",
+  "reminderRecurrenceMonthly": "毎月{day}日{basis} {detail}",
+  "reminderRecurrenceYearly": "毎年{date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count}回)"
 }

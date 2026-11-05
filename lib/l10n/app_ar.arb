@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "فتح الإعدادات",
   "beadOverlayClose": "إغلاق",
   "beadsDone": "تم",
-  "beadsMarkAsDone": "تحديد كمكتمل"
+  "beadsMarkAsDone": "تحديد كمكتمل",
+  "reminderAtLabel": "وقت التذكير",
+  "reminderPrayerOffsetOnTime": "عند صلاة {prayer}",
+  "reminderPrayerOffsetAfter": "بعد صلاة {prayer} بـ {minutes} دقيقة",
+  "reminderPrayerOffsetBefore": "قبل صلاة {prayer} بـ {minutes} دقيقة",
+  "reminderClockTimeAt": "في {time}",
+  "reminderRecurrenceDaily": "يومياً {detail}",
+  "reminderRecurrenceOnce": "مرة واحدة {detail}",
+  "reminderRecurrenceOnceOnDate": "مرة واحدة في {date} {detail}",
+  "reminderRecurrenceWeekly": "كل {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "كل أسبوع {detail}",
+  "reminderRecurrenceMonthly": "كل شهر في اليوم {day}{basis} {detail}",
+  "reminderRecurrenceYearly": "كل عام في {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} مرات)"
 }

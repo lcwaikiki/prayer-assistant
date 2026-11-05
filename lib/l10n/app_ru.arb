@@ -693,5 +693,18 @@
   "dndPermissionOpenSettings": "Открыть настройки",
   "beadOverlayClose": "Закрыть",
   "beadsDone": "Выполнено",
-  "beadsMarkAsDone": "Отметить как выполненное"
+  "beadsMarkAsDone": "Отметить как выполненное",
+  "reminderAtLabel": "Время напоминания",
+  "reminderPrayerOffsetOnTime": "во время намаза {prayer}",
+  "reminderPrayerOffsetAfter": "через {minutes} мин после намаза {prayer}",
+  "reminderPrayerOffsetBefore": "за {minutes} мин до намаза {prayer}",
+  "reminderClockTimeAt": "в {time}",
+  "reminderRecurrenceDaily": "Ежедневно {detail}",
+  "reminderRecurrenceOnce": "Один раз {detail}",
+  "reminderRecurrenceOnceOnDate": "Один раз {date} {detail}",
+  "reminderRecurrenceWeekly": "Каждый {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "Каждую неделю {detail}",
+  "reminderRecurrenceMonthly": "Каждый месяц {day}-го числа{basis} {detail}",
+  "reminderRecurrenceYearly": "Каждый год {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} раз)"
 }

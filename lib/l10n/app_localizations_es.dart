@@ -1888,4 +1888,67 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'Marcar como hecho';
+
+  @override
+  String get reminderAtLabel => 'Recordatorio a las';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return 'en la oración de $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$minutes minutos después de la oración de $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$minutes minutos antes de la oración de $prayer';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return 'a las $time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'Diariamente $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'Una vez $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return 'Una vez el $date $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'Cada $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'Cada semana $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'Cada mes el día $day$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'Cada año el $date$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count veces)';
+  }
 }

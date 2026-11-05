@@ -34,49 +34,72 @@ String formatConciseReminder({
 
   final locale = Localizations.localeOf(context).toString();
 
+  final String repeatSuffix = (repeatCount != null && repeatCount > 0)
+      ? (l10n != null
+          ? l10n.reminderRepeatCountSuffix(repeatCount.toString())
+          : ' ($repeatCount times)')
+      : '';
+
   if (isPrayerAnchor) {
     final rawName = prayerName ?? 'Isha';
     final pName = l10n?.prayerNameLabel(rawName) ?? rawName;
     final String offsetPhrase;
     if (offsetMinutes == 0) {
-      offsetPhrase = 'at $pName prayer';
+      offsetPhrase = l10n != null
+          ? l10n.reminderPrayerOffsetOnTime(pName)
+          : 'at $pName prayer';
     } else if (offsetMinutes > 0) {
-      offsetPhrase = '$offsetMinutes minutes after $pName prayer';
+      offsetPhrase = l10n != null
+          ? l10n.reminderPrayerOffsetAfter(offsetMinutes.toString(), pName)
+          : '$offsetMinutes minutes after $pName prayer';
     } else {
-      offsetPhrase = '${-offsetMinutes} minutes before $pName prayer';
+      offsetPhrase = l10n != null
+          ? l10n.reminderPrayerOffsetBefore((-offsetMinutes).toString(), pName)
+          : '${-offsetMinutes} minutes before $pName prayer';
     }
-
-    final String repeatSuffix =
-        (repeatCount != null && repeatCount > 0) ? ' ($repeatCount times)' : '';
 
     switch (recurrence) {
       case ReminderRecurrence.once:
         if (anchorDate != null) {
           final dateStr = DateFormat.yMMMd(locale).format(anchorDate);
-          return 'Once on $dateStr $offsetPhrase$repeatSuffix';
+          return l10n != null
+              ? '${l10n.reminderRecurrenceOnceOnDate(dateStr, offsetPhrase)}$repeatSuffix'
+              : 'Once on $dateStr $offsetPhrase$repeatSuffix';
         }
-        return 'Once $offsetPhrase$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceOnce(offsetPhrase)}$repeatSuffix'
+            : 'Once $offsetPhrase$repeatSuffix';
       case ReminderRecurrence.daily:
-        return 'Daily $offsetPhrase$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceDaily(offsetPhrase)}$repeatSuffix'
+            : 'Daily $offsetPhrase$repeatSuffix';
       case ReminderRecurrence.weekly:
         if (weekdays.isNotEmpty) {
           final sortedWeekdays = List<int>.from(weekdays)..sort();
           final days = sortedWeekdays
               .map((w) => DateFormat.EEEE(locale).format(DateTime(2024, 1, w)))
               .join(', ');
-          return 'every $days $offsetPhrase$repeatSuffix';
+          return l10n != null
+              ? '${l10n.reminderRecurrenceWeekly(days, offsetPhrase)}$repeatSuffix'
+              : 'every $days $offsetPhrase$repeatSuffix';
         }
-        return 'Every week $offsetPhrase$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceWeeklyGeneral(offsetPhrase)}$repeatSuffix'
+            : 'Every week $offsetPhrase$repeatSuffix';
       case ReminderRecurrence.monthly:
         final day = dayOfMonth ?? anchorDate?.day ?? 1;
         final basis = monthlyBasis == CalendarBasis.hijri ? ' (Hijri)' : '';
-        return 'Every month on day $day$basis $offsetPhrase$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceMonthly(day.toString(), basis, offsetPhrase)}$repeatSuffix'
+            : 'Every month on day $day$basis $offsetPhrase$repeatSuffix';
       case ReminderRecurrence.yearly:
         final date = yearlyDate ?? anchorDate;
         final dateStr =
             date != null ? DateFormat.MMMd(locale).format(date) : '';
         final basis = yearlyBasis == CalendarBasis.hijri ? ' (Hijri)' : '';
-        return 'Every year on $dateStr$basis $offsetPhrase$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceYearly(dateStr, basis, offsetPhrase)}$repeatSuffix'
+            : 'Every year on $dateStr$basis $offsetPhrase$repeatSuffix';
     }
   } else {
     // Clock time anchor
@@ -93,40 +116,53 @@ String formatConciseReminder({
       time,
       alwaysUse24HourFormat: MediaQuery.alwaysUse24HourFormatOf(context),
     );
-
-    final String repeatSuffix =
-        (repeatCount != null && repeatCount > 0) ? ' ($repeatCount times)' : '';
+    final timePhrase = l10n != null
+        ? l10n.reminderClockTimeAt(timeStr)
+        : 'at $timeStr';
 
     switch (recurrence) {
       case ReminderRecurrence.once:
         final date = anchorAt ?? anchorDate;
         if (date != null) {
           final dateStr = DateFormat.yMMMd(locale).format(date);
-          return 'Once on $dateStr at $timeStr$repeatSuffix';
+          return l10n != null
+              ? '${l10n.reminderRecurrenceOnceOnDate(dateStr, timePhrase)}$repeatSuffix'
+              : 'Once on $dateStr $timePhrase$repeatSuffix';
         }
-        return 'Once at $timeStr$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceOnce(timePhrase)}$repeatSuffix'
+            : 'Once $timePhrase$repeatSuffix';
       case ReminderRecurrence.daily:
-        return 'Daily at $timeStr$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceDaily(timePhrase)}$repeatSuffix'
+            : 'Daily $timePhrase$repeatSuffix';
       case ReminderRecurrence.weekly:
         if (weekdays.isNotEmpty) {
           final sortedWeekdays = List<int>.from(weekdays)..sort();
           final days = sortedWeekdays
               .map((w) => DateFormat.EEEE(locale).format(DateTime(2024, 1, w)))
               .join(', ');
-          return 'Every $days at $timeStr$repeatSuffix';
+          return l10n != null
+              ? '${l10n.reminderRecurrenceWeekly(days, timePhrase)}$repeatSuffix'
+              : 'Every $days $timePhrase$repeatSuffix';
         }
-        return 'Every week at $timeStr$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceWeeklyGeneral(timePhrase)}$repeatSuffix'
+            : 'Every week $timePhrase$repeatSuffix';
       case ReminderRecurrence.monthly:
         final day = dayOfMonth ?? anchorAt?.day ?? anchorDate?.day ?? 1;
         final basis = monthlyBasis == CalendarBasis.hijri ? ' (Hijri)' : '';
-        return 'Every month on day $day$basis at $timeStr$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceMonthly(day.toString(), basis, timePhrase)}$repeatSuffix'
+            : 'Every month on day $day$basis $timePhrase$repeatSuffix';
       case ReminderRecurrence.yearly:
         final date = yearlyDate ?? anchorAt ?? anchorDate;
         final dateStr =
             date != null ? DateFormat.MMMd(locale).format(date) : '';
         final basis = yearlyBasis == CalendarBasis.hijri ? ' (Hijri)' : '';
-        return 'Every year on $dateStr$basis at $timeStr$repeatSuffix';
+        return l10n != null
+            ? '${l10n.reminderRecurrenceYearly(dateStr, basis, timePhrase)}$repeatSuffix'
+            : 'Every year on $dateStr$basis $timePhrase$repeatSuffix';
     }
   }
 }
-

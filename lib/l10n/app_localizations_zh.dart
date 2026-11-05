@@ -1806,4 +1806,67 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => '标记为已完成';
+
+  @override
+  String get reminderAtLabel => '提醒时间';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return '$prayer拜时';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$prayer拜后$minutes分钟';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$prayer拜前$minutes分钟';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return '$time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return '每天 $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return '一次 $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return '$date 一次 $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return '每$days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return '每周 $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return '每月第 $day 天$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return '每年 $date$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count 次)';
+  }
 }

@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "打开设置",
   "beadOverlayClose": "关闭",
   "beadsDone": "完成",
-  "beadsMarkAsDone": "标记为已完成"
+  "beadsMarkAsDone": "标记为已完成",
+  "reminderAtLabel": "提醒时间",
+  "reminderPrayerOffsetOnTime": "{prayer}拜时",
+  "reminderPrayerOffsetAfter": "{prayer}拜后{minutes}分钟",
+  "reminderPrayerOffsetBefore": "{prayer}拜前{minutes}分钟",
+  "reminderClockTimeAt": "{time}",
+  "reminderRecurrenceDaily": "每天 {detail}",
+  "reminderRecurrenceOnce": "一次 {detail}",
+  "reminderRecurrenceOnceOnDate": "{date} 一次 {detail}",
+  "reminderRecurrenceWeekly": "每{days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "每周 {detail}",
+  "reminderRecurrenceMonthly": "每月第 {day} 天{basis} {detail}",
+  "reminderRecurrenceYearly": "每年 {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} 次)"
 }

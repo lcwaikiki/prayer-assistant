@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "ترتیبات کھولیں",
   "beadOverlayClose": "بند کریں",
   "beadsDone": "مکمل",
-  "beadsMarkAsDone": "مکمل کے طور پر نشان لگائیں"
+  "beadsMarkAsDone": "مکمل کے طور پر نشان لگائیں",
+  "reminderAtLabel": "یاد دہانی کا وقت",
+  "reminderPrayerOffsetOnTime": "نماز {prayer} کے وقت",
+  "reminderPrayerOffsetAfter": "نماز {prayer} کے {minutes} منٹ بعد",
+  "reminderPrayerOffsetBefore": "نماز {prayer} سے {minutes} منٹ پہلے",
+  "reminderClockTimeAt": "{time} پر",
+  "reminderRecurrenceDaily": "روزانہ {detail}",
+  "reminderRecurrenceOnce": "ایک بار {detail}",
+  "reminderRecurrenceOnceOnDate": "ایک بار {date} کو {detail}",
+  "reminderRecurrenceWeekly": "ہر {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "ہر ہفتے {detail}",
+  "reminderRecurrenceMonthly": "ہر مہینے کی {day} تاریخ{basis} کو {detail}",
+  "reminderRecurrenceYearly": "ہر سال {date}{basis} کو {detail}",
+  "reminderRepeatCountSuffix": " ({count} بار)"
 }

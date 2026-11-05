@@ -743,5 +743,18 @@
   "dndPermissionOpenSettings": "সেটিংস খুলুন",
   "beadOverlayClose": "বন্ধ করুন",
   "beadsDone": "সম্পন্ন",
-  "beadsMarkAsDone": "সম্পন্ন হিসেবে চিহ্নিত করুন"
+  "beadsMarkAsDone": "সম্পন্ন হিসেবে চিহ্নিত করুন",
+  "reminderAtLabel": "অনুস্মারক সময়",
+  "reminderPrayerOffsetOnTime": "{prayer} নামাজের সময়",
+  "reminderPrayerOffsetAfter": "{prayer} নামাজের {minutes} মিনিট পরে",
+  "reminderPrayerOffsetBefore": "{prayer} নামাজের {minutes} মিনিট আগে",
+  "reminderClockTimeAt": "{time} টায়",
+  "reminderRecurrenceDaily": "প্রতিদিন {detail}",
+  "reminderRecurrenceOnce": "একবার {detail}",
+  "reminderRecurrenceOnceOnDate": "{date} তারিখে একবার {detail}",
+  "reminderRecurrenceWeekly": "প্রতি {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "প্রতি সপ্তাহে {detail}",
+  "reminderRecurrenceMonthly": "প্রতি মাসের {day} তারিখে{basis} {detail}",
+  "reminderRecurrenceYearly": "প্রতি বছর {date} তারিখে{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} বার)"
 }

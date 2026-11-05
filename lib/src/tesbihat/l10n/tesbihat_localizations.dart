@@ -69,6 +69,7 @@ class TesbihatLocalizations {
   String get setCountReadonlyHelper => _appL10n.beadsSetCountReadonlyHelper;
   String get vibrationIntensity => _appL10n.beadsVibrationIntensity;
   String get reminderTitle => _appL10n.beadsReminderTitle;
+  String get reminderAtLabel => _appL10n.reminderAtLabel;
   String get reminderEnable => _appL10n.beadsReminderEnable;
   String get reminderRepeatOnce => _appL10n.beadsReminderRepeatOnce;
   String get reminderRepeatDaily => _appL10n.beadsReminderRepeatDaily;

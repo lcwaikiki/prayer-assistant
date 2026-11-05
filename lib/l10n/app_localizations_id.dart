@@ -1879,4 +1879,67 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'Tandai sudah selesai';
+
+  @override
+  String get reminderAtLabel => 'Pengingat pada';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return 'pada waktu salat $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$minutes menit setelah salat $prayer';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$minutes menit sebelum salat $prayer';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return 'pukul $time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'Setiap hari $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'Sekali $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return 'Sekali pada $date $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'Setiap $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'Setiap minggu $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'Setiap bulan pada tanggal $day$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'Setiap tahun pada $date$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count kali)';
+  }
 }

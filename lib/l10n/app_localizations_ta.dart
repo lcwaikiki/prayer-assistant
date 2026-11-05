@@ -1903,4 +1903,67 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'முடிந்தது எனக் குறிக்கவும்';
+
+  @override
+  String get reminderAtLabel => 'நினைவூட்டல் நேரம்';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return '$prayer தொழுகை நேரத்தில்';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$prayer தொழுகைக்கு $minutes நிமிடங்களுக்குப் பிறகு';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$prayer தொழுகைக்கு $minutes நிமிடங்களுக்கு முன்';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return '$time மணிக்கு';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'தினமும் $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'ஒரு முறை $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return '$date அன்று ஒரு முறை $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'ஒவ்வொரு $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'ஒவ்வொரு வாரமும் $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'ஒவ்வொரு மாதமும் $day ஆம் நாள்$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'ஒவ்வொரு ஆண்டும் $date அன்று$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count முறை)';
+  }
 }

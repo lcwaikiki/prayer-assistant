@@ -1815,4 +1815,67 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => '完了としてマーク';
+
+  @override
+  String get reminderAtLabel => 'リマインダー時刻';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return '$prayerの礼拝時';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return '$prayerの礼拝の$minutes分後';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return '$prayerの礼拝の$minutes分前';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return '$time';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return '毎日 $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return '1回 $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return '$dateに1回 $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return '毎週$days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return '毎週 $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return '毎月$day日$basis $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return '毎年$date$basis $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count回)';
+  }
 }

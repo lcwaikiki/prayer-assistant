@@ -640,5 +640,18 @@
   "beadsIntervalChime": "Aralık zili",
   "beadOverlayClose": "Kapat",
   "beadsDone": "Yapıldı",
-  "beadsMarkAsDone": "Yapıldı olarak işaretle"
+  "beadsMarkAsDone": "Yapıldı olarak işaretle",
+  "reminderAtLabel": "Hatırlatma zamanı",
+  "reminderPrayerOffsetOnTime": "{prayer} vaktinde",
+  "reminderPrayerOffsetAfter": "{prayer} vaktinden {minutes} dk sonra",
+  "reminderPrayerOffsetBefore": "{prayer} vaktinden {minutes} dk önce",
+  "reminderClockTimeAt": "saat {time}",
+  "reminderRecurrenceDaily": "Her gün {detail}",
+  "reminderRecurrenceOnce": "Bir kez {detail}",
+  "reminderRecurrenceOnceOnDate": "Bir kez {date} tarihinde {detail}",
+  "reminderRecurrenceWeekly": "Her {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "Her hafta {detail}",
+  "reminderRecurrenceMonthly": "Her ayın {day}. gününde{basis} {detail}",
+  "reminderRecurrenceYearly": "Her yıl {date} tarihinde{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} kez)"
 }

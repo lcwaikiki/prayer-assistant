@@ -638,5 +638,18 @@
   "dndPermissionOpenSettings": "باز کردن تنظیمات",
   "beadOverlayClose": "بستن",
   "beadsDone": "انجام شد",
-  "beadsMarkAsDone": "علامت‌گذاری به عنوان انجام شده"
+  "beadsMarkAsDone": "علامت‌گذاری به عنوان انجام شده",
+  "reminderAtLabel": "زمان یادآوری",
+  "reminderPrayerOffsetOnTime": "هنگام نماز {prayer}",
+  "reminderPrayerOffsetAfter": "{minutes} دقیقه بعد از نماز {prayer}",
+  "reminderPrayerOffsetBefore": "{minutes} دقیقه قبل از نماز {prayer}",
+  "reminderClockTimeAt": "در ساعت {time}",
+  "reminderRecurrenceDaily": "روزانه {detail}",
+  "reminderRecurrenceOnce": "یک‌بار {detail}",
+  "reminderRecurrenceOnceOnDate": "یک‌بار در {date} {detail}",
+  "reminderRecurrenceWeekly": "هر {days} {detail}",
+  "reminderRecurrenceWeeklyGeneral": "هر هفته {detail}",
+  "reminderRecurrenceMonthly": "هر ماه در روز {day}{basis} {detail}",
+  "reminderRecurrenceYearly": "هر سال در {date}{basis} {detail}",
+  "reminderRepeatCountSuffix": " ({count} بار)"
 }

@@ -1867,4 +1867,67 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get beadsMarkAsDone => 'مکمل کے طور پر نشان لگائیں';
+
+  @override
+  String get reminderAtLabel => 'یاد دہانی کا وقت';
+
+  @override
+  String reminderPrayerOffsetOnTime(Object prayer) {
+    return 'نماز $prayer کے وقت';
+  }
+
+  @override
+  String reminderPrayerOffsetAfter(Object minutes, Object prayer) {
+    return 'نماز $prayer کے $minutes منٹ بعد';
+  }
+
+  @override
+  String reminderPrayerOffsetBefore(Object minutes, Object prayer) {
+    return 'نماز $prayer سے $minutes منٹ پہلے';
+  }
+
+  @override
+  String reminderClockTimeAt(Object time) {
+    return '$time پر';
+  }
+
+  @override
+  String reminderRecurrenceDaily(Object detail) {
+    return 'روزانہ $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnce(Object detail) {
+    return 'ایک بار $detail';
+  }
+
+  @override
+  String reminderRecurrenceOnceOnDate(Object date, Object detail) {
+    return 'ایک بار $date کو $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeekly(Object days, Object detail) {
+    return 'ہر $days $detail';
+  }
+
+  @override
+  String reminderRecurrenceWeeklyGeneral(Object detail) {
+    return 'ہر ہفتے $detail';
+  }
+
+  @override
+  String reminderRecurrenceMonthly(Object day, Object basis, Object detail) {
+    return 'ہر مہینے کی $day تاریخ$basis کو $detail';
+  }
+
+  @override
+  String reminderRecurrenceYearly(Object date, Object basis, Object detail) {
+    return 'ہر سال $date$basis کو $detail';
+  }
+
+  @override
+  String reminderRepeatCountSuffix(Object count) {
+    return ' ($count بار)';
+  }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../tesbihat/widgets/audio_speed_bar.dart';
+
 /// Hero header for read-only view displaying title, avatar icon, and badges.
 class ReadOnlyHeroHeader extends StatelessWidget {
   const ReadOnlyHeroHeader({
@@ -212,8 +214,6 @@ class ReadOnlyFieldTile extends StatelessWidget {
   }
 }
 
-
-
 /// Formats milliseconds into m:ss format (e.g. 1:05, 0:12).
 String formatAudioDurationMs(int durationMs) {
   if (durationMs <= 0) return '0:00';
@@ -223,118 +223,212 @@ String formatAudioDurationMs(int durationMs) {
   return '$minutes:${seconds.toString().padLeft(2, '0')}';
 }
 
-/// An audio player card for read-only detail views.
-class ReadOnlySoundPlayerCard extends StatelessWidget {
+/// An audio player card for read-only detail views and audio playback across the app,
+/// styled consistently with the beads execution screen player.
+class ReadOnlySoundPlayerCard extends StatefulWidget {
   const ReadOnlySoundPlayerCard({
     super.key,
     required this.title,
     this.subtitle,
     this.duration,
-    this.speed,
+    this.speed = 1.0,
+    this.onSpeedChanged,
     this.extraDetail,
     required this.isPlaying,
     required this.onPlayPause,
     this.playButtonKey,
+    this.toggleControlsKey,
+    this.actions = const [],
+    this.extraContent,
   });
 
   final String title;
   final String? subtitle;
   final String? duration;
-  final double? speed;
+  final double speed;
+  final ValueChanged<double>? onSpeedChanged;
   final String? extraDetail;
   final bool isPlaying;
   final VoidCallback onPlayPause;
   final Key? playButtonKey;
+  final Key? toggleControlsKey;
+  final List<Widget> actions;
+  final Widget? extraContent;
+
+  @override
+  State<ReadOnlySoundPlayerCard> createState() => _ReadOnlySoundPlayerCardState();
+}
+
+class _ReadOnlySoundPlayerCardState extends State<ReadOnlySoundPlayerCard> {
+  bool _isSoundControlsExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    final details = <String>[];
-    if (subtitle != null && subtitle!.isNotEmpty) {
-      details.add(subtitle!);
-    }
-    if (duration != null && duration!.isNotEmpty) {
-      details.add(duration!);
-    }
-    if (speed != null) {
-      final String speedStr;
-      if (speed == speed!.roundToDouble()) {
-        speedStr = '${speed!.toInt()}x';
-      } else {
-        final fixed2 = speed!.toStringAsFixed(2);
-        speedStr =
-            fixed2.endsWith('0') ? '${speed!.toStringAsFixed(1)}x' : '${fixed2}x';
-      }
-      details.add('$speedStr speed');
-    }
-    if (extraDetail != null && extraDetail!.isNotEmpty) {
-      details.add(extraDetail!);
+    final String speedStr;
+    if (widget.speed == widget.speed.roundToDouble()) {
+      speedStr = '${widget.speed.toInt()}x';
+    } else {
+      final fixed2 = widget.speed.toStringAsFixed(2);
+      speedStr = fixed2.endsWith('0')
+          ? '${widget.speed.toStringAsFixed(1)}x'
+          : '${fixed2}x';
     }
 
-    return Container(
+    final subtitleParts = <String>[];
+    if (widget.subtitle != null && widget.subtitle!.isNotEmpty) {
+      subtitleParts.add(widget.subtitle!);
+    }
+    subtitleParts.add('$speedStr speed');
+    final subtitleDisplay = subtitleParts.join(' • ');
+
+    return Card(
+      elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isPlaying
-            ? colorScheme.primaryContainer.withValues(alpha: 0.35)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isPlaying
-              ? colorScheme.primary.withValues(alpha: 0.5)
-              : colorScheme.outlineVariant.withValues(alpha: 0.4),
-        ),
+      color: colorScheme.surfaceContainerLow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        children: [
-          FilledButton.tonal(
-            key: playButtonKey,
-            onPressed: onPlayPause,
-            style: FilledButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(12),
-              backgroundColor: isPlaying
-                  ? colorScheme.primary
-                  : colorScheme.primaryContainer,
-              foregroundColor: isPlaying
-                  ? colorScheme.onPrimary
-                  : colorScheme.onPrimaryContainer,
-            ),
-            child: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
               children: [
-                Text(
-                  title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                if (details.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    details.join(' • '),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
+                Expanded(
+                  child: FilledButton.tonal(
+                    key: widget.playButtonKey,
+                    onPressed: widget.onPlayPause,
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
+                      backgroundColor: widget.isPlaying
+                          ? colorScheme.primary
+                          : colorScheme.primaryContainer,
+                      foregroundColor: widget.isPlaying
+                          ? colorScheme.onPrimary
+                          : colorScheme.onPrimaryContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    child: Row(
+                      children: [
+                        Icon(
+                          widget.isPlaying
+                              ? Icons.pause_circle_filled
+                              : Icons.play_circle_filled,
+                          size: 26,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                widget.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              if (subtitleDisplay.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  subtitleDisplay,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontSize: 12,
+                                    color: widget.isPlaying
+                                        ? colorScheme.onPrimary.withValues(alpha: 0.8)
+                                        : colorScheme.onSurfaceVariant,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        if (widget.duration != null &&
+                            widget.duration!.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          Text(
+                            widget.duration!,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: widget.isPlaying
+                                  ? colorScheme.onPrimary.withValues(alpha: 0.9)
+                                  : colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
+                ),
+                if (widget.onSpeedChanged != null) ...[
+                  const SizedBox(width: 8),
+                  IconButton.filledTonal(
+                    key: widget.toggleControlsKey ??
+                        const Key('toggle_sound_controls_button'),
+                    onPressed: () {
+                      setState(() {
+                        _isSoundControlsExpanded = !_isSoundControlsExpanded;
+                      });
+                    },
+                    style: IconButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.all(12),
+                    ),
+                    icon: AnimatedRotation(
+                      turns: _isSoundControlsExpanded ? 0.5 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: const Icon(Icons.keyboard_arrow_down),
+                    ),
+                  ),
+                ],
+                for (final action in widget.actions) ...[
+                  const SizedBox(width: 8),
+                  action,
                 ],
               ],
             ),
-          ),
-        ],
+            if (_isSoundControlsExpanded && widget.onSpeedChanged != null) ...[
+              const SizedBox(height: 8),
+              AudioSpeedBar(
+                speed: widget.speed,
+                onSpeedChanged: widget.onSpeedChanged!,
+              ),
+            ],
+            if (widget.extraDetail != null && widget.extraDetail!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.extraDetail!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+            if (widget.extraContent != null) ...[
+              const SizedBox(height: 4),
+              widget.extraContent!,
+            ],
+          ],
+        ),
       ),
     );
   }

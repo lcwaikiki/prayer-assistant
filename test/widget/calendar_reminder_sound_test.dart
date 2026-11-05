@@ -460,4 +460,67 @@ void main() {
 
     await tester.pumpWidget(const SizedBox());
   });
+
+  testWidgets(
+      'read-only reminder screen displays localized Reminder at field and allows expanding speed controls',
+      (tester) async {
+    final soundItem = SoundItem(
+      id: 'sound_adhan_ro',
+      title: 'Adhan Makkah',
+      path: '/path/to/adhan.mp3',
+      mimeType: 'audio/mpeg',
+      durationMs: 12000,
+      createdAt: DateTime.now(),
+    );
+    final soundRepo = SoundLibraryRepository.memory([soundItem]);
+    final player = FakeAudioPlayerService();
+
+    final reminder = CalendarReminder(
+      id: 'rem_ro_test',
+      title: 'Fajr Dhikr',
+      anchorAt: DateTime(2026, 8, 17, 5, 20),
+      anchor: CalendarReminderAnchor.prayerTime,
+      anchorPrayerName: 'Imsak',
+      anchorOffsetMinutes: 10,
+      recurrence: ReminderRecurrence.daily,
+      soundId: soundItem.id,
+      soundTitle: soundItem.title,
+    );
+
+    await _pumpForm(
+      tester,
+      reminder: reminder,
+      readOnly: true,
+      soundRepo: soundRepo,
+      audioPlayer: player,
+    );
+
+    // Verify localized Reminder at field and content
+    expect(find.text('Reminder at'), findsOneWidget);
+    expect(find.text('Daily 10 minutes after Fajr prayer'), findsWidgets);
+
+    // Verify audio player card displays sound title and speed
+    expect(find.text('Adhan Makkah'), findsWidgets);
+    expect(find.byKey(const Key('reminder_sound_preview_button')), findsOneWidget);
+    expect(find.byKey(const Key('toggle_sound_controls_button')), findsOneWidget);
+
+    // Controls start collapsed
+    expect(find.byKey(const Key('speed_value_text')), findsNothing);
+
+    // Tap expand toggle
+    await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+    await tester.pumpAndSettle();
+
+    // Speed bar is now visible
+    expect(find.byKey(const Key('speed_value_text')), findsOneWidget);
+    expect(find.text('1.00x'), findsOneWidget);
+
+    // Tap 2x preset
+    await tester.tap(find.byKey(const Key('speed_preset_2x')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('2.00x'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
+  });
 }

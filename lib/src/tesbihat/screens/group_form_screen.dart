@@ -47,6 +47,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
   String? _playingSoundItemId;
   bool _isPlayingPreview = false;
   int _playbackPositionMs = 0;
+  final Map<String, double> _memberPlaybackSpeeds = {};
 
   bool get _isEditing => widget.groupToEdit != null;
 
@@ -126,10 +127,11 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       final startPos = (_playingSoundItemId == item.id && _playbackPositionMs > 0)
           ? Duration(milliseconds: _playbackPositionMs)
           : null;
+      final speed = _memberPlaybackSpeeds[item.id] ?? item.soundSpeed;
       await _audioPlayer.playFile(
         sound.path,
         mimeType: sound.mimeType,
-        playbackRate: item.soundSpeed,
+        playbackRate: speed,
         position: startPos,
       );
       if (mounted) {
@@ -410,7 +412,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                 icon: Icons.notes,
               ),
             ReadOnlyFieldTile(
-              label: 'Reminder at',
+              label: l10n.reminderAtLabel,
               value: reminderSummary,
               icon: Icons.alarm,
               isHighlighted: _reminderConfig.enabled,
@@ -481,11 +483,21 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                         title: item.soundTitle ?? sound?.title ?? l10n.sound,
                         subtitle: item.title,
                         duration: soundDurationText,
-                        speed: item.soundSpeed,
+                        speed: _memberPlaybackSpeeds[item.id] ?? item.soundSpeed,
+                        onSpeedChanged: (speed) {
+                          setState(() {
+                            _memberPlaybackSpeeds[item.id] = speed;
+                          });
+                          if (_playingSoundItemId == item.id) {
+                            _audioPlayer.setPlaybackRate(speed);
+                          }
+                        },
                         isPlaying: isPlayingThis,
                         onPlayPause: () => _toggleMemberSound(item),
                         playButtonKey:
                             Key('group_sound_preview_button_${item.id}'),
+                        toggleControlsKey:
+                            Key('group_sound_toggle_controls_${item.id}'),
                       ),
                     ],
                   ),

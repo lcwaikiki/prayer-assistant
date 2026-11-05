@@ -940,7 +940,7 @@ class _CalendarReminderFormScreenState
                 icon: Icons.notes,
               ),
             ReadOnlyFieldTile(
-              label: 'Reminder at',
+              label: l10n.reminderAtLabel,
               value: reminderSummary,
               icon: Icons.alarm,
               isHighlighted: isReminderEnabled,
@@ -973,20 +973,10 @@ class _CalendarReminderFormScreenState
                 title: _soundTitle ?? sound?.title ?? l10n.sound,
                 duration: soundDurationText,
                 speed: _playbackSpeed,
+                onSpeedChanged: _onSpeedChanged,
                 isPlaying: _isPlayingPreview,
                 onPlayPause: _togglePreviewSound,
                 playButtonKey: const Key('reminder_sound_preview_button'),
-              ),
-              if (soundDurationText != null)
-                ReadOnlyFieldTile(
-                  label: 'Duration',
-                  value: soundDurationText,
-                  icon: Icons.timer_outlined,
-                ),
-              ReadOnlyFieldTile(
-                label: 'Playback speed',
-                value: '${_playbackSpeed}x',
-                icon: Icons.speed,
               ),
             ],
           ],

@@ -838,7 +838,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 icon: Icons.notes,
               ),
             ReadOnlyFieldTile(
-              label: 'Reminder at',
+              label: l10n.reminderAtLabel,
               value: reminderSummary,
               icon: Icons.alarm,
               isHighlighted: isReminderEnabled,
@@ -919,21 +919,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
                 title: _soundTitle ?? sound?.title ?? l10n.sound,
                 duration: soundDurationText,
                 speed: _playbackSpeed,
+                onSpeedChanged: _onSpeedChanged,
                 extraDetail: _autoCountWithSound ? l10n.autoCountWithSound : null,
                 isPlaying: _isPlayingPreview,
                 onPlayPause: _togglePreviewSound,
                 playButtonKey: const Key('sound_preview_button'),
-              ),
-              if (soundDurationText != null)
-                ReadOnlyFieldTile(
-                  label: 'Duration',
-                  value: soundDurationText,
-                  icon: Icons.timer_outlined,
-                ),
-              ReadOnlyFieldTile(
-                label: 'Playback speed',
-                value: '${_playbackSpeed}x',
-                icon: Icons.speed,
               ),
               ReadOnlyFieldTile(
                 label: l10n.autoCountWithSound,

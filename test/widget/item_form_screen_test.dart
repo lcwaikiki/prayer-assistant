@@ -697,7 +697,7 @@ void main() {
     expect(find.text('Text'), findsOneWidget);
     expect(find.text('bismillahellezi'), findsWidgets);
     expect(find.text('Bismillahellezi la yedurru'), findsWidgets);
-    expect(find.textContaining('every Thursday 10 minutes after'), findsOneWidget);
+    expect(find.textContaining('Thursday 10 minutes after'), findsOneWidget);
 
     // Form text fields should NOT be shown in read-only mode
     expect(find.byKey(const Key('title_field')), findsNothing);

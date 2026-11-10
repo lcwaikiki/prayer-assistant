@@ -186,6 +186,39 @@ class TesbihatLocalizations {
   String get intervalChime => _appL10n.beadsIntervalChime;
   String get done => _appL10n.beadsDone;
   String get markAsDone => _appL10n.beadsMarkAsDone;
+  String get readOnlyStartCounting => _appL10n.readOnlyStartCounting;
+  String get readOnlyStartGroupSession => _appL10n.readOnlyStartGroupSession;
+  String get readOnlyProgressAndTarget => _appL10n.readOnlyProgressAndTarget;
+  String get readOnlyStatTarget => _appL10n.readOnlyStatTarget;
+  String get readOnlyStatCheck => _appL10n.readOnlyStatCheck;
+  String get readOnlyStatVibration => _appL10n.readOnlyStatVibration;
+  String get readOnlyStatSets => _appL10n.readOnlyStatSets;
+  String get readOnlyReminderSchedule => _appL10n.readOnlyReminderSchedule;
+  String get readOnlyActive => _appL10n.readOnlyActive;
+  String get readOnlyNotesAndInvocation => _appL10n.readOnlyNotesAndInvocation;
+  String readOnlyPinchZoom(String scale) => _appL10n.readOnlyPinchZoom(scale);
+  String get readOnlyCollapse => _appL10n.readOnlyCollapse;
+  String get readOnlyExpand => _appL10n.readOnlyExpand;
+  String get readOnlyNoBeadsInGroup => _appL10n.readOnlyNoBeadsInGroup;
+  String get readOnlyNotificationSnoozeOptions =>
+      _appL10n.readOnlyNotificationSnoozeOptions;
+  String readOnlySnoozeMinutes(String minutes) =>
+      _appL10n.readOnlySnoozeMinutes(minutes);
+  String get readOnlyMarkAsDone => _appL10n.readOnlyMarkAsDone;
+  String get readOnlyMarkAsPending => _appL10n.readOnlyMarkAsPending;
+  String get readOnlyDisableReminder => _appL10n.readOnlyDisableReminder;
+  String get readOnlyEnableReminder => _appL10n.readOnlyEnableReminder;
+  String get readOnlySupplicationNotes => _appL10n.readOnlySupplicationNotes;
+  String get readOnlyReminderDetailsTitle => _appL10n.readOnlyReminderDetailsTitle;
+  String get readOnlyBeadDetailsTitle => _appL10n.readOnlyBeadDetailsTitle;
+  String get readOnlyGroupDetailsTitle => _appL10n.readOnlyGroupDetailsTitle;
+  String get readOnlyFieldText => _appL10n.readOnlyFieldText;
+  String get commonYes => _appL10n.commonYes;
+  String get commonNo => _appL10n.commonNo;
+  String get readOnlyTargetAndCheck => _appL10n.readOnlyTargetAndCheck;
+  String readOnlySkippedCount(String count) => _appL10n.readOnlySkippedCount(count);
+  String readOnlyPlaybackSpeedLabel(String speed) =>
+      _appL10n.readOnlyPlaybackSpeedLabel(speed);
 }
 
 extension TesbihatLocalizationsX on BuildContext {

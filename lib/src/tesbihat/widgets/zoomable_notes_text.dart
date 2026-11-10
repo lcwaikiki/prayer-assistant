@@ -12,12 +12,16 @@ class ZoomableNotesText extends StatefulWidget {
     required this.style,
     this.zoomable = true,
     this.textKey,
+    this.onScaleChanged,
+    this.initialScale = 1.0,
   });
 
   final String text;
   final TextStyle? style;
   final bool zoomable;
   final Key? textKey;
+  final ValueChanged<double>? onScaleChanged;
+  final double initialScale;
 
   @override
   State<ZoomableNotesText> createState() => _ZoomableNotesTextState();
@@ -28,9 +32,17 @@ class _ZoomableNotesTextState extends State<ZoomableNotesText> {
   static const _maxScale = 3.0;
 
   final Map<int, Offset> _pointers = {};
-  double _scale = 1.0;
+  late double _scale = widget.initialScale;
   double _pinchStartScale = 1.0;
   double? _pinchStartDistance;
+
+  @override
+  void didUpdateWidget(covariant ZoomableNotesText oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialScale != widget.initialScale) {
+      _scale = widget.initialScale;
+    }
+  }
 
   double get _pointerDistance {
     final positions = _pointers.values.toList();
@@ -56,7 +68,10 @@ class _ZoomableNotesTextState extends State<ZoomableNotesText> {
       _minScale,
       _maxScale,
     );
-    if (scale != _scale) setState(() => _scale = scale);
+    if (scale != _scale) {
+      setState(() => _scale = scale);
+      widget.onScaleChanged?.call(scale);
+    }
   }
 
   void _onPointerEnd(PointerEvent event) {

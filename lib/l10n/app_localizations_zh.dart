@@ -1869,4 +1869,102 @@ class AppLocalizationsZh extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count 次)';
   }
+
+  @override
+  String get readOnlyStartCounting => '开始计数';
+
+  @override
+  String get readOnlyStartGroupSession => '开始群组念诵';
+
+  @override
+  String get readOnlyProgressAndTarget => '进度与目标';
+
+  @override
+  String get readOnlyStatTarget => '目标';
+
+  @override
+  String get readOnlyStatCheck => '检查点';
+
+  @override
+  String get readOnlyStatVibration => '震动';
+
+  @override
+  String get readOnlyStatSets => '组数';
+
+  @override
+  String get readOnlyReminderSchedule => '提醒计划';
+
+  @override
+  String get readOnlyActive => '启用';
+
+  @override
+  String get readOnlyNotesAndInvocation => '备注与祈祷';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return '缩放 ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => '折叠';
+
+  @override
+  String get readOnlyExpand => '展开';
+
+  @override
+  String get readOnlyNoBeadsInGroup => '此群组中暂无赞珠';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => '通知稍后提醒选项';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes 分钟';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => '标记为已完成';
+
+  @override
+  String get readOnlyMarkAsPending => '标记为待处理';
+
+  @override
+  String get readOnlyDisableReminder => '关闭提醒';
+
+  @override
+  String get readOnlyEnableReminder => '开启提醒';
+
+  @override
+  String get readOnlySupplicationNotes => '祈祷词备注';
+
+  @override
+  String get readOnlyReminderDetailsTitle => '提醒详情';
+
+  @override
+  String get readOnlyBeadDetailsTitle => '赞珠详情';
+
+  @override
+  String get readOnlyGroupDetailsTitle => '群组详情';
+
+  @override
+  String get readOnlyFieldText => '文本';
+
+  @override
+  String get commonYes => '是';
+
+  @override
+  String get commonNo => '否';
+
+  @override
+  String get readOnlyTargetAndCheck => '目标与检查';
+
+  @override
+  String readOnlySkippedCount(String count) {
+    return '$count已跳过';
+  }
+
+  @override
+  String readOnlyPlaybackSpeedLabel(String speed) {
+    return '$speed倍速';
+  }
 }

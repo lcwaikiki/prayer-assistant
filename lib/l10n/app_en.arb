@@ -930,5 +930,145 @@
     "placeholders": {
       "count": {}
     }
+  },
+  "readOnlyStartCounting": "Start Counting",
+  "@readOnlyStartCounting": {
+    "description": "Button label to start counting a bead in read-only view"
+  },
+  "readOnlyStartGroupSession": "Start Group Session",
+  "@readOnlyStartGroupSession": {
+    "description": "Button label to start group counting session in read-only view"
+  },
+  "readOnlyProgressAndTarget": "Progress & Target",
+  "@readOnlyProgressAndTarget": {
+    "description": "Title for progress and target card in read-only view"
+  },
+  "readOnlyStatTarget": "Target",
+  "@readOnlyStatTarget": {
+    "description": "Label for target stat column in read-only view"
+  },
+  "readOnlyStatCheck": "Check",
+  "@readOnlyStatCheck": {
+    "description": "Label for check interval stat column in read-only view"
+  },
+  "readOnlyStatVibration": "Vibration",
+  "@readOnlyStatVibration": {
+    "description": "Label for vibration intensity stat column in read-only view"
+  },
+  "readOnlyStatSets": "Sets",
+  "@readOnlyStatSets": {
+    "description": "Label for completed sets/cycles stat column in read-only view"
+  },
+  "readOnlyReminderSchedule": "Reminder Schedule",
+  "@readOnlyReminderSchedule": {
+    "description": "Title for reminder schedule card in read-only view"
+  },
+  "readOnlyActive": "Active",
+  "@readOnlyActive": {
+    "description": "Status badge indicating an active reminder schedule"
+  },
+  "readOnlyNotesAndInvocation": "Notes & Invocation",
+  "@readOnlyNotesAndInvocation": {
+    "description": "Title for notes and invocation card in read-only view"
+  },
+  "readOnlyPinchZoom": "Pinch {scale}x",
+  "@readOnlyPinchZoom": {
+    "description": "Pinch zoom indicator badge showing current zoom scale factor",
+    "placeholders": {
+      "scale": {
+        "type": "String"
+      }
+    }
+  },
+  "readOnlyCollapse": "Collapse",
+  "@readOnlyCollapse": {
+    "description": "Tooltip or button label to collapse expanded notes container"
+  },
+  "readOnlyExpand": "Expand",
+  "@readOnlyExpand": {
+    "description": "Tooltip or button label to expand notes container"
+  },
+  "readOnlyNoBeadsInGroup": "No beads in this group",
+  "@readOnlyNoBeadsInGroup": {
+    "description": "Empty state message when a group has no member beads"
+  },
+  "readOnlyNotificationSnoozeOptions": "Notification Snooze Options",
+  "@readOnlyNotificationSnoozeOptions": {
+    "description": "Title for notification snooze options preview card"
+  },
+  "readOnlySnoozeMinutes": "+{minutes} min",
+  "@readOnlySnoozeMinutes": {
+    "description": "Chip label showing snooze minutes",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "readOnlyMarkAsDone": "Mark as Done",
+  "@readOnlyMarkAsDone": {
+    "description": "Action button label to mark task as completed"
+  },
+  "readOnlyMarkAsPending": "Mark as Pending",
+  "@readOnlyMarkAsPending": {
+    "description": "Action button label to mark completed task back to pending"
+  },
+  "readOnlyDisableReminder": "Disable Reminder",
+  "@readOnlyDisableReminder": {
+    "description": "Action button label to disable an active reminder"
+  },
+  "readOnlyEnableReminder": "Enable Reminder",
+  "@readOnlyEnableReminder": {
+    "description": "Action button label to enable an inactive reminder"
+  },
+  "readOnlySupplicationNotes": "Supplication Notes",
+  "@readOnlySupplicationNotes": {
+    "description": "Title for supplication notes card in reminder detail view"
+  },
+  "readOnlyReminderDetailsTitle": "Reminder Details",
+  "@readOnlyReminderDetailsTitle": {
+    "description": "App bar title for reminder detail screen"
+  },
+  "readOnlyBeadDetailsTitle": "Milestone Details",
+  "@readOnlyBeadDetailsTitle": {
+    "description": "App bar title for bead/milestone detail screen"
+  },
+  "readOnlyGroupDetailsTitle": "Group Details",
+  "@readOnlyGroupDetailsTitle": {
+    "description": "App bar title for group detail screen"
+  },
+  "readOnlyFieldText": "Text",
+  "@readOnlyFieldText": {
+    "description": "Field label for the text or title of an item in read-only view"
+  },
+  "commonYes": "Yes",
+  "@commonYes": {
+    "description": "Affirmative answer (Yes)"
+  },
+  "commonNo": "No",
+  "@commonNo": {
+    "description": "Negative answer (No)"
+  },
+  "readOnlyTargetAndCheck": "Target & Check",
+  "@readOnlyTargetAndCheck": {
+    "description": "Field label for target and check count in read-only bead view"
+  },
+  "readOnlySkippedCount": "{count} skipped",
+  "@readOnlySkippedCount": {
+    "description": "Label indicating the number of skipped reminder occurrences",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readOnlyPlaybackSpeedLabel": "{speed} speed",
+  "@readOnlyPlaybackSpeedLabel": {
+    "description": "Speed label in read-only sound card",
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
   }
 }

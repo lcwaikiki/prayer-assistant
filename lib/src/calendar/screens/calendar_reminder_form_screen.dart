@@ -899,7 +899,7 @@ class _CalendarReminderFormScreenState
       padding: const EdgeInsets.all(16),
       children: [
         ReadOnlyHeroHeader(
-          title: title.isEmpty ? l10n.calendarReminderFormTitleEdit : title,
+          title: title.isEmpty ? l10n.readOnlyReminderDetailsTitle : title,
           icon: Icons.event_note,
           subtitle: reminderSummary,
           badges: [
@@ -925,11 +925,11 @@ class _CalendarReminderFormScreenState
         ),
         const SizedBox(height: 8),
         ReadOnlyCardContainer(
-          title: l10n.calendarReminderFormTitleEdit,
+          title: l10n.readOnlyReminderDetailsTitle,
           icon: Icons.info_outline,
           children: [
             ReadOnlyFieldTile(
-              label: 'Text',
+              label: l10n.readOnlyFieldText,
               value: title.isEmpty ? '-' : title,
               icon: Icons.title,
             ),
@@ -947,7 +947,7 @@ class _CalendarReminderFormScreenState
             ),
             ReadOnlyFieldTile(
               label: l10n.calendarMarkAsTask,
-              value: _isTask ? 'Yes' : 'No',
+              value: _isTask ? l10n.commonYes : l10n.commonNo,
               icon: Icons.task_alt,
             ),
             if (_excludedDates.isNotEmpty)
@@ -1022,9 +1022,11 @@ class _CalendarReminderFormScreenState
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            _isEditing
-                ? l10n.calendarReminderFormTitleEdit
-                : l10n.calendarReminderFormTitleNew,
+            _readOnly
+                ? l10n.readOnlyReminderDetailsTitle
+                : (_isEditing
+                    ? l10n.calendarReminderFormTitleEdit
+                    : l10n.calendarReminderFormTitleNew),
           ),
           actions: [
             if (_readOnly && (_reminder != null || widget.reminder != null))

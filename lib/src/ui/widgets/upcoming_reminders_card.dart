@@ -4,13 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as provider;
 
 import '../../calendar/models/calendar_reminder.dart';
+import '../../calendar/screens/calendar_reminder_detail_screen.dart';
 import '../../calendar/screens/calendar_reminder_form_screen.dart';
 import '../../controller/prayer_app_controller.dart';
 import '../../l10n/l10n.dart';
 import '../../tesbihat/models/item.dart';
 import '../../tesbihat/models/item_group.dart';
-import '../../tesbihat/screens/group_form_screen.dart';
-import '../../tesbihat/screens/item_form_screen.dart';
+import '../../tesbihat/screens/bead_detail_screen.dart';
+import '../../tesbihat/screens/group_detail_screen.dart';
 import '../../tesbihat/state/groups_notifier.dart';
 import '../../tesbihat/state/items_notifier.dart';
 import '../../utils/orientation_utils.dart';
@@ -64,11 +65,13 @@ class UpcomingRemindersCard extends ConsumerWidget {
             })();
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => CalendarReminderFormScreen(
-              reminder: reminder,
-              reminderId: entry.id,
-              readOnly: true,
-            ),
+            builder: (_) => reminder != null
+                ? CalendarReminderDetailScreen(reminder: reminder)
+                : CalendarReminderFormScreen(
+                    reminder: reminder,
+                    reminderId: entry.id,
+                    readOnly: true,
+                  ),
           ),
         );
       case UpcomingReminderType.bead:
@@ -84,10 +87,7 @@ class UpcomingRemindersCard extends ConsumerWidget {
         } catch (_) {}
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => ItemFormScreen(
-              itemToEdit: item,
-              readOnly: true,
-            ),
+            builder: (_) => BeadDetailScreen(item: item),
           ),
         );
       case UpcomingReminderType.group:
@@ -103,10 +103,7 @@ class UpcomingRemindersCard extends ConsumerWidget {
         } catch (_) {}
         Navigator.of(context).push(
           MaterialPageRoute<void>(
-            builder: (_) => GroupFormScreen(
-              groupToEdit: group,
-              readOnly: true,
-            ),
+            builder: (_) => GroupDetailScreen(group: group),
           ),
         );
     }

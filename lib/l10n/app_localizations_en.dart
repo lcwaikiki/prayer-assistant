@@ -1932,4 +1932,102 @@ class AppLocalizationsEn extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count times)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Start Counting';
+
+  @override
+  String get readOnlyStartGroupSession => 'Start Group Session';
+
+  @override
+  String get readOnlyProgressAndTarget => 'Progress & Target';
+
+  @override
+  String get readOnlyStatTarget => 'Target';
+
+  @override
+  String get readOnlyStatCheck => 'Check';
+
+  @override
+  String get readOnlyStatVibration => 'Vibration';
+
+  @override
+  String get readOnlyStatSets => 'Sets';
+
+  @override
+  String get readOnlyReminderSchedule => 'Reminder Schedule';
+
+  @override
+  String get readOnlyActive => 'Active';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Notes & Invocation';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Pinch ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Collapse';
+
+  @override
+  String get readOnlyExpand => 'Expand';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'No beads in this group';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'Notification Snooze Options';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes min';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Mark as Done';
+
+  @override
+  String get readOnlyMarkAsPending => 'Mark as Pending';
+
+  @override
+  String get readOnlyDisableReminder => 'Disable Reminder';
+
+  @override
+  String get readOnlyEnableReminder => 'Enable Reminder';
+
+  @override
+  String get readOnlySupplicationNotes => 'Supplication Notes';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Reminder Details';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Milestone Details';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Group Details';
+
+  @override
+  String get readOnlyFieldText => 'Text';
+
+  @override
+  String get commonYes => 'Yes';
+
+  @override
+  String get commonNo => 'No';
+
+  @override
+  String get readOnlyTargetAndCheck => 'Target & Check';
+
+  @override
+  String readOnlySkippedCount(String count) {
+    return '$count skipped';
+  }
+
+  @override
+  String readOnlyPlaybackSpeedLabel(String speed) {
+    return '$speed speed';
+  }
 }

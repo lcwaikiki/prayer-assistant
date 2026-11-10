@@ -410,7 +410,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
+          title: Text(
+            _readOnly
+                ? l10n.readOnlyBeadDetailsTitle
+                : (_isEditing ? l10n.editMilestone : l10n.createMilestone),
+          ),
           actions: [
             if (_readOnly) ...[
               IconButton(
@@ -827,7 +831,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           icon: Icons.info_outline,
           children: [
             ReadOnlyFieldTile(
-              label: 'Text',
+              label: l10n.readOnlyFieldText,
               value: title.isEmpty ? '-' : title,
               icon: Icons.title,
             ),
@@ -845,7 +849,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
             ),
             ReadOnlyFieldTile(
               label: l10n.markAsTask,
-              value: isTask ? 'Yes' : 'No',
+              value: isTask ? l10n.commonYes : l10n.commonNo,
               icon: Icons.task_alt,
             ),
           ],
@@ -855,7 +859,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
           icon: Icons.adjust,
           children: [
             ReadOnlyFieldTile(
-              label: 'Target & Check',
+              label: l10n.readOnlyTargetAndCheck,
               value:
                   '${l10n.count}: ${_countController.text} • ${l10n.check}: ${_checkController.text} • ${l10n.set}: ${_setCountController.text}',
               icon: Icons.format_list_numbered,
@@ -927,7 +931,7 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
               ),
               ReadOnlyFieldTile(
                 label: l10n.autoCountWithSound,
-                value: _autoCountWithSound ? 'Yes' : 'No',
+                value: _autoCountWithSound ? l10n.commonYes : l10n.commonNo,
                 icon: Icons.repeat,
               ),
             ],

@@ -1938,4 +1938,102 @@ class AppLocalizationsBn extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count বার)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'গণনা শুরু করুন';
+
+  @override
+  String get readOnlyStartGroupSession => 'গ্রুপ সেশন শুরু করুন';
+
+  @override
+  String get readOnlyProgressAndTarget => 'অগ্রগতি ও লক্ষ্য';
+
+  @override
+  String get readOnlyStatTarget => 'লক্ষ্য';
+
+  @override
+  String get readOnlyStatCheck => 'চেক';
+
+  @override
+  String get readOnlyStatVibration => 'কম্পন';
+
+  @override
+  String get readOnlyStatSets => 'সেট';
+
+  @override
+  String get readOnlyReminderSchedule => 'স্মারক সময়সূচী';
+
+  @override
+  String get readOnlyActive => 'সক্রিয়';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'নোট ও দুআ';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'জুম ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'সংকোচন';
+
+  @override
+  String get readOnlyExpand => 'প্রসারিত করুন';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'এই গ্রুপে কোনো তসবিহ নেই';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'বিজ্ঞপ্তি স্নুজ বিকল্প';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes মি.';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'সম্পন্ন হিসেবে চিহ্নিত করুন';
+
+  @override
+  String get readOnlyMarkAsPending => 'অপেক্ষমান হিসেবে চিহ্নিত করুন';
+
+  @override
+  String get readOnlyDisableReminder => 'স্মারক নিষ্ক্রিয় করুন';
+
+  @override
+  String get readOnlyEnableReminder => 'স্মারক সক্রিয় করুন';
+
+  @override
+  String get readOnlySupplicationNotes => 'দোয়ার নোট';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'স্মারকের বিবরণ';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'তসবিহ বিবরণ';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'গ্রুপের বিবরণ';
+
+  @override
+  String get readOnlyFieldText => 'পাঠ্য';
+
+  @override
+  String get commonYes => 'হ্যাঁ';
+
+  @override
+  String get commonNo => 'না';
+
+  @override
+  String get readOnlyTargetAndCheck => 'লক্ষ্য এবং চেক';
+
+  @override
+  String readOnlySkippedCount(String count) {
+    return '$count বাদ দেওয়া হয়েছে';
+  }
+
+  @override
+  String readOnlyPlaybackSpeedLabel(String speed) {
+    return '$speed গতি';
+  }
 }

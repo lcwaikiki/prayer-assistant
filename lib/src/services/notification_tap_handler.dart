@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 import '../calendar/models/calendar_reminder.dart';
+import '../calendar/screens/calendar_reminder_detail_screen.dart';
 import '../calendar/screens/calendar_reminder_form_screen.dart';
 import '../controller/prayer_app_controller.dart';
 import '../navigation.dart';
@@ -552,12 +553,14 @@ void _navigateToCalendarReminder({String? reminderId, DateTime? initialDate}) {
     }
     rootNavigatorKey.currentState?.push(
       MaterialPageRoute<void>(
-        builder: (_) => CalendarReminderFormScreen(
-          reminder: reminder,
-          reminderId: reminderId,
-          initialDate: initialDate ?? (reminder?.anchorAt ?? DateTime.now()),
-          readOnly: true,
-        ),
+        builder: (_) => reminder != null
+            ? CalendarReminderDetailScreen(reminder: reminder)
+            : CalendarReminderFormScreen(
+                reminder: reminder,
+                reminderId: reminderId,
+                initialDate: initialDate ?? (reminder?.anchorAt ?? DateTime.now()),
+                readOnly: true,
+              ),
       ),
     );
   });

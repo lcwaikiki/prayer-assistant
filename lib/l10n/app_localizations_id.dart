@@ -1942,4 +1942,102 @@ class AppLocalizationsId extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count kali)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Mulai Menghitung';
+
+  @override
+  String get readOnlyStartGroupSession => 'Mulai Sesi Grup';
+
+  @override
+  String get readOnlyProgressAndTarget => 'Kemajuan & Target';
+
+  @override
+  String get readOnlyStatTarget => 'Target';
+
+  @override
+  String get readOnlyStatCheck => 'Pemeriksaan';
+
+  @override
+  String get readOnlyStatVibration => 'Getaran';
+
+  @override
+  String get readOnlyStatSets => 'Putaran';
+
+  @override
+  String get readOnlyReminderSchedule => 'Jadwal Pengingat';
+
+  @override
+  String get readOnlyActive => 'Aktif';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Catatan & Doa';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Cubit ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Ciutkan';
+
+  @override
+  String get readOnlyExpand => 'Perluas';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'Tidak ada butir tasbih di grup ini';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'Opsi Tunda Pemberitahuan';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes mnt';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Tandai Selesai';
+
+  @override
+  String get readOnlyMarkAsPending => 'Tandai Tertunda';
+
+  @override
+  String get readOnlyDisableReminder => 'Nonaktifkan Pengingat';
+
+  @override
+  String get readOnlyEnableReminder => 'Aktifkan Pengingat';
+
+  @override
+  String get readOnlySupplicationNotes => 'Catatan Doa';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Detail Pengingat';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Detail Butir Tasbih';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Detail Grup';
+
+  @override
+  String get readOnlyFieldText => 'Teks';
+
+  @override
+  String get commonYes => 'Ya';
+
+  @override
+  String get commonNo => 'Tidak';
+
+  @override
+  String get readOnlyTargetAndCheck => 'Target & Pemeriksaan';
+
+  @override
+  String readOnlySkippedCount(String count) {
+    return '$count dilewati';
+  }
+
+  @override
+  String readOnlyPlaybackSpeedLabel(String speed) {
+    return 'Kecepatan $speed';
+  }
 }

@@ -1878,4 +1878,102 @@ class AppLocalizationsJa extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count回)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'カウントを開始';
+
+  @override
+  String get readOnlyStartGroupSession => 'グループセッションを開始';
+
+  @override
+  String get readOnlyProgressAndTarget => '進捗と目標';
+
+  @override
+  String get readOnlyStatTarget => '目標';
+
+  @override
+  String get readOnlyStatCheck => 'チェック';
+
+  @override
+  String get readOnlyStatVibration => '振動';
+
+  @override
+  String get readOnlyStatSets => 'セット';
+
+  @override
+  String get readOnlyReminderSchedule => 'リマインダースケジュール';
+
+  @override
+  String get readOnlyActive => '有効';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'メモと祈り';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'ピンチ ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => '折りたたむ';
+
+  @override
+  String get readOnlyExpand => '展開';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'このグループには数珠がありません';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => '通知のスヌーズオプション';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes分';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => '完了としてマーク';
+
+  @override
+  String get readOnlyMarkAsPending => '保留中としてマーク';
+
+  @override
+  String get readOnlyDisableReminder => 'リマインダーを無効化';
+
+  @override
+  String get readOnlyEnableReminder => 'リマインダーを有効化';
+
+  @override
+  String get readOnlySupplicationNotes => '祈りのメモ';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'リマインダーの詳細';
+
+  @override
+  String get readOnlyBeadDetailsTitle => '数珠の詳細';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'グループの詳細';
+
+  @override
+  String get readOnlyFieldText => 'テキスト';
+
+  @override
+  String get commonYes => 'はい';
+
+  @override
+  String get commonNo => 'いいえ';
+
+  @override
+  String get readOnlyTargetAndCheck => '目標と確認';
+
+  @override
+  String readOnlySkippedCount(String count) {
+    return '$count件スキップ';
+  }
+
+  @override
+  String readOnlyPlaybackSpeedLabel(String speed) {
+    return '$speedの速度';
+  }
 }

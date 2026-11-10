@@ -252,7 +252,11 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
+          title: Text(
+            _readOnly
+                ? l10n.readOnlyGroupDetailsTitle
+                : (_isEditing ? l10n.editGroup : l10n.newGroup),
+          ),
           actions: [
             if (_readOnly) ...[
               IconButton(
@@ -401,7 +405,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
           icon: Icons.info_outline,
           children: [
             ReadOnlyFieldTile(
-              label: 'Text',
+              label: l10n.readOnlyFieldText,
               value: title.isEmpty ? '-' : title,
               icon: Icons.title,
             ),
@@ -419,7 +423,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
             ),
             ReadOnlyFieldTile(
               label: l10n.markAsTask,
-              value: _reminderConfig.isTask ? 'Yes' : 'No',
+              value: _reminderConfig.isTask ? l10n.commonYes : l10n.commonNo,
               icon: Icons.task_alt,
             ),
           ],
@@ -475,7 +479,7 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
                       ReadOnlyFieldTile(
                         label: item.title,
                         value:
-                            '${item.soundTitle ?? sound?.title ?? l10n.sound} • ${item.soundSpeed}x speed${soundDurationText != null ? ' • $soundDurationText' : ''}',
+                            '${item.soundTitle ?? sound?.title ?? l10n.sound} • ${l10n.readOnlyPlaybackSpeedLabel('${item.soundSpeed}x')}${soundDurationText != null ? ' • $soundDurationText' : ''}',
                         icon: Icons.audiotrack,
                       ),
                       const SizedBox(height: 4),

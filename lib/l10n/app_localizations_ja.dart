@@ -1976,4 +1976,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speedの速度';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return '「$title」グループには$count個のビーズが含まれています。これらのビーズをどうしますか？';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'ビーズを保持';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'ビーズも削除';
 }

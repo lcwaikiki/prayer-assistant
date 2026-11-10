@@ -2041,4 +2041,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return 'Скорость $speed';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return 'Группа «$title» содержит $count бусин(ы). Что вы хотите сделать с ними?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'Сохранить бусины';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'Удалить и бусины';
 }

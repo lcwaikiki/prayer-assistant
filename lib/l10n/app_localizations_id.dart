@@ -2040,4 +2040,15 @@ class AppLocalizationsId extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return 'Kecepatan $speed';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return 'Grup \"$title\" berisi $count butir tasbih. Apa yang ingin Anda lakukan dengan butir tasbih ini?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'Simpan Butir';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'Hapus Butir Juga';
 }

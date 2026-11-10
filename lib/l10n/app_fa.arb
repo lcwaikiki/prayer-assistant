@@ -681,5 +681,8 @@
   "commonNo": "خیر",
   "readOnlyTargetAndCheck": "هدف و بررسی",
   "readOnlySkippedCount": "{count} نادیده گرفته شد",
-  "readOnlyPlaybackSpeedLabel": "سرعت {speed}"
+  "readOnlyPlaybackSpeedLabel": "سرعت {speed}",
+  "deleteGroupWithBeadsMessage": "گروه \"{title}\" شامل {count} تسبیح است. می‌خواهید با این تسبیح‌ها چه کنید؟",
+  "deleteGroupKeepBeadsAction": "نگه‌داشتن تسبیح‌ها",
+  "deleteGroupDeleteBeadsAction": "حذف تسبیح‌ها"
 }

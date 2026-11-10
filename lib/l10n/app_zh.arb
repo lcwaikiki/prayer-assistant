@@ -681,5 +681,8 @@
   "commonNo": "否",
   "readOnlyTargetAndCheck": "目标与检查",
   "readOnlySkippedCount": "{count}已跳过",
-  "readOnlyPlaybackSpeedLabel": "{speed}倍速"
+  "readOnlyPlaybackSpeedLabel": "{speed}倍速",
+  "deleteGroupWithBeadsMessage": "“{title}”群组包含{count}个念珠。您想如何处理这些念珠？",
+  "deleteGroupKeepBeadsAction": "保留念珠",
+  "deleteGroupDeleteBeadsAction": "同时删除念珠"
 }

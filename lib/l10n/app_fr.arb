@@ -681,5 +681,8 @@
   "commonNo": "Non",
   "readOnlyTargetAndCheck": "Objectif et Vérification",
   "readOnlySkippedCount": "{count} ignoré(s)",
-  "readOnlyPlaybackSpeedLabel": "Vitesse {speed}"
+  "readOnlyPlaybackSpeedLabel": "Vitesse {speed}",
+  "deleteGroupWithBeadsMessage": "Le groupe « {title} » contient {count} grains. Que souhaitez-vous faire de ces grains ?",
+  "deleteGroupKeepBeadsAction": "Garder les grains",
+  "deleteGroupDeleteBeadsAction": "Supprimer aussi les grains"
 }

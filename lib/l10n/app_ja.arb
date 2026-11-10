@@ -681,5 +681,8 @@
   "commonNo": "いいえ",
   "readOnlyTargetAndCheck": "目標と確認",
   "readOnlySkippedCount": "{count}件スキップ",
-  "readOnlyPlaybackSpeedLabel": "{speed}の速度"
+  "readOnlyPlaybackSpeedLabel": "{speed}の速度",
+  "deleteGroupWithBeadsMessage": "「{title}」グループには{count}個のビーズが含まれています。これらのビーズをどうしますか？",
+  "deleteGroupKeepBeadsAction": "ビーズを保持",
+  "deleteGroupDeleteBeadsAction": "ビーズも削除"
 }

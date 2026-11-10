@@ -786,5 +786,8 @@
   "commonNo": "না",
   "readOnlyTargetAndCheck": "লক্ষ্য এবং চেক",
   "readOnlySkippedCount": "{count} বাদ দেওয়া হয়েছে",
-  "readOnlyPlaybackSpeedLabel": "{speed} গতি"
+  "readOnlyPlaybackSpeedLabel": "{speed} গতি",
+  "deleteGroupWithBeadsMessage": "\"{title}\" গ্রুপে {count} টি তসবিহ রয়েছে। আপনি এই তসবিহগুলি দিয়ে কী করতে চান?",
+  "deleteGroupKeepBeadsAction": "তসবিহ রাখুন",
+  "deleteGroupDeleteBeadsAction": "তসবিহও মুছুন"
 }

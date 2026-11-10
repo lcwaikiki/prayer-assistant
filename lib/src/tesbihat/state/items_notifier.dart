@@ -226,6 +226,28 @@ class ItemsNotifier extends Notifier<List<Item>> {
 
   /// Drops [groupId] from every item's membership after the group itself is
   /// deleted, so no item keeps pointing at a nonexistent group.
+  /// Prunes group IDs from items that no longer exist in [validGroupIds],
+  /// turning orphaned group beads into visible ungrouped beads and persisting.
+  void pruneOrphanedGroupIds(Set<String> validGroupIds) {
+    var changed = false;
+    final nextState = state.map((item) {
+      if (item.groupIds.isEmpty) return item;
+      final valid = item.groupIds
+          .where((id) => validGroupIds.contains(id))
+          .toList(growable: false);
+      if (valid.length != item.groupIds.length) {
+        changed = true;
+        return item.copyWith(groupIds: valid);
+      }
+      return item;
+    }).toList(growable: false);
+
+    if (changed) {
+      state = nextState;
+      _repository.saveItems(state);
+    }
+  }
+
   void removeGroupFromItems(String groupId) {
     final nextState = <Item>[];
     var changed = false;
@@ -248,6 +270,74 @@ class ItemsNotifier extends Notifier<List<Item>> {
     }
     state = nextState;
     _repository.saveItems(state);
+  }
+
+  /// Deletes beads that belong to [groupId].
+  /// If a bead belongs only to [groupId], it is permanently deleted and its reminder cancelled.
+  /// If a bead belongs to multiple groups, [groupId] is removed from its groupIds.
+  void deleteGroupBeads(String groupId) {
+    final toDeleteIds = <String>[];
+    final nextState = <Item>[];
+    for (final item in state) {
+      if (item.groupIds.contains(groupId)) {
+        if (item.groupIds.length <= 1) {
+          toDeleteIds.add(item.id);
+        } else {
+          nextState.add(
+            item.copyWith(
+              groupIds: item.groupIds
+                  .where((id) => id != groupId)
+                  .toList(growable: false),
+            ),
+          );
+        }
+      } else {
+        nextState.add(item);
+      }
+    }
+    state = nextState;
+    _repository.saveItems(state);
+    for (final id in toDeleteIds) {
+      _reminderService.cancelReminder(id);
+    }
+  }
+
+  /// Restores [originalMembers] back into the state for [groupId], re-attaching
+  /// [groupId] and rescheduling reminders for any restored items.
+  void restoreGroupBeads(List<Item> originalMembers, String groupId) {
+    if (originalMembers.isEmpty) {
+      return;
+    }
+    final existingIds = state.map((i) => i.id).toSet();
+    final toAdd = <Item>[];
+    for (final member in originalMembers) {
+      if (!existingIds.contains(member.id)) {
+        final withGroup = member.groupIds.contains(groupId)
+            ? member
+            : member.copyWith(
+                groupIds: [...member.groupIds, groupId],
+              );
+        toAdd.add(withGroup);
+      }
+    }
+
+    final nextState = state.map((item) {
+      if (originalMembers.any((m) => m.id == item.id)) {
+        if (!item.groupIds.contains(groupId)) {
+          return item.copyWith(
+            groupIds: [...item.groupIds, groupId],
+          );
+        }
+      }
+      return item;
+    }).toList(growable: true);
+
+    nextState.addAll(toAdd);
+    state = nextState;
+    _repository.saveItems(state);
+    for (final item in toAdd) {
+      _reminderService.scheduleReminder(item);
+    }
   }
 
   /// Adds [groupId] to each of the given items' membership.

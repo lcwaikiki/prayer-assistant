@@ -368,7 +368,7 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
-  testWidgets('deleting the group confirms and strips memberships', (
+  testWidgets('deleting the group with keep beads strips memberships', (
     tester,
   ) async {
     final harness = TestHarness.create();
@@ -385,14 +385,89 @@ void main() {
     await tester.tap(find.byKey(const Key('delete_group_button')));
     await tester.pumpAndSettle();
     expect(
-      find.text('Delete this group? Its beads are kept.'),
+      find.text('"Morning Adhkar" contains 1 beads. What would you like to do with these beads?'),
       findsOneWidget,
     );
-    await tester.tap(find.text('Delete'));
+    await tester.tap(find.byKey(const Key('keep_beads_button')));
     await tester.pumpAndSettle();
 
     expect(harness.itemRepository.loadGroups(), isEmpty);
     expect(harness.itemRepository.loadItems().single.groupIds, isEmpty);
+    expect(find.text('Undo'), findsOneWidget);
+
+    // Tapping undo restores the group and its member associations
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    expect(harness.itemRepository.loadGroups(), hasLength(1));
+    expect(harness.itemRepository.loadItems().single.groupIds, contains('g1'));
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('deleting the group with delete beads permanently deletes member beads', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([
+      _item('a', groupIds: ['g1']),
+    ]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Morning Adhkar'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const GroupScreen(groupId: 'g1'));
+
+    await tester.tap(find.byKey(const Key('delete_group_button')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('delete_beads_button')));
+    await tester.pumpAndSettle();
+
+    expect(harness.itemRepository.loadGroups(), isEmpty);
+    expect(harness.itemRepository.loadItems(), isEmpty);
+    expect(find.text('Undo'), findsOneWidget);
+
+    // Tapping undo restores the group and the deleted member beads
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    expect(harness.itemRepository.loadGroups(), hasLength(1));
+    expect(harness.itemRepository.loadItems(), hasLength(1));
+    expect(harness.itemRepository.loadItems().single.groupIds, contains('g1'));
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
+  testWidgets('deleting an empty group shows simple delete confirmation', (
+    tester,
+  ) async {
+    final harness = TestHarness.create();
+    harness.itemRepository = ItemRepository.memory([]);
+    harness.itemRepository.saveGroups([
+      const ItemGroup(id: 'g1', title: 'Empty Group'),
+    ]);
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const GroupScreen(groupId: 'g1'));
+
+    await tester.tap(find.byKey(const Key('delete_group_button')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Delete this group? Its beads are kept.'),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const Key('confirm_delete_group_button')));
+    await tester.pumpAndSettle();
+
+    expect(harness.itemRepository.loadGroups(), isEmpty);
+    expect(find.text('Undo'), findsOneWidget);
+
+    // Tapping undo restores the empty group
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+
+    expect(harness.itemRepository.loadGroups(), hasLength(1));
 
     await tester.pumpWidget(const SizedBox());
   });

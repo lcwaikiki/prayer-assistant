@@ -77,6 +77,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
     state = state.where((group) => group.id != id).toList(growable: false);
     _repository.saveGroups(state);
     _reminderService.cancelReminder(id);
+    ref.read(itemsNotifierProvider.notifier).removeGroupFromItems(id);
   }
 
   /// Removes every group whose id is in [ids] in one batch, cancelling each
@@ -99,6 +100,7 @@ class GroupsNotifier extends Notifier<List<ItemGroup>> {
     for (final group in removed) {
       _reminderService.cancelReminder(group.id);
     }
+    ref.read(itemsNotifierProvider.notifier).removeGroupsFromItems(ids);
   }
 
   void restoreGroup(ItemGroup group, {required int index}) {

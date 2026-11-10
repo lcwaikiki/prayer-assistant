@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../widgets/delete_group_dialog.dart';
 
 import '../l10n/tesbihat_localizations.dart';
 import '../models/item.dart';
@@ -151,33 +152,66 @@ class _GroupScreenState extends ConsumerState<GroupScreen> {
   }
 
   Future<void> _deleteGroup(BuildContext context, WidgetRef ref) async {
-    final l10n = context.tesbihatL10n;
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.deleteGroup),
-        content: Text(l10n.deleteGroupConfirm),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: Text(l10n.delete),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !context.mounted) {
+    final groups = ref.read(groupsNotifierProvider);
+    final group = groups.where((g) => g.id == widget.groupId).firstOrNull;
+    if (group == null) {
       return;
     }
-    ref.read(groupsNotifierProvider.notifier).deleteGroup(widget.groupId);
-    ref
-        .read(itemsNotifierProvider.notifier)
-        .removeGroupFromItems(widget.groupId);
+
+    final allItems = ref.read(itemsNotifierProvider);
+    final memberItems = allItems
+        .where((i) => i.groupIds.contains(widget.groupId))
+        .toList(growable: false);
+
+    final action = await showDeleteGroupConfirmationDialog(
+      context,
+      group: group,
+      memberCount: memberItems.length,
+    );
+    if (action == null || !context.mounted) {
+      return;
+    }
+
+    final groupIndex = groups.indexOf(group);
+    final groupsNotifier = ref.read(groupsNotifierProvider.notifier);
+    final itemsNotifier = ref.read(itemsNotifierProvider.notifier);
+    final l10n = context.tesbihatL10n;
+
+    if (action == DeleteGroupBeadsAction.deleteBeads) {
+      itemsNotifier.deleteGroupBeads(widget.groupId);
+    } else {
+      itemsNotifier.removeGroupFromItems(widget.groupId);
+    }
+    groupsNotifier.deleteGroup(widget.groupId);
+
     if (context.mounted) {
-      Navigator.pop(context);
+      final messenger = ScaffoldMessenger.of(context);
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+
+      messenger.hideCurrentSnackBar();
+      messenger.showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 6),
+          behavior: SnackBarBehavior.floating,
+          content: Row(
+            children: [
+              Expanded(child: Text(l10n.deletedItem(group.title))),
+              TextButton(
+                onPressed: () {
+                  groupsNotifier.restoreGroup(group, index: groupIndex);
+                  if (memberItems.isNotEmpty) {
+                    itemsNotifier.restoreGroupBeads(memberItems, group.id);
+                  }
+                  messenger.hideCurrentSnackBar();
+                },
+                child: Text(l10n.undo),
+              ),
+            ],
+          ),
+        ),
+      );
     }
   }
 

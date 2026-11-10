@@ -681,5 +681,8 @@
   "commonNo": "Tidak",
   "readOnlyTargetAndCheck": "Target & Pemeriksaan",
   "readOnlySkippedCount": "{count} dilewati",
-  "readOnlyPlaybackSpeedLabel": "Kecepatan {speed}"
+  "readOnlyPlaybackSpeedLabel": "Kecepatan {speed}",
+  "deleteGroupWithBeadsMessage": "Grup \"{title}\" berisi {count} butir tasbih. Apa yang ingin Anda lakukan dengan butir tasbih ini?",
+  "deleteGroupKeepBeadsAction": "Simpan Butir",
+  "deleteGroupDeleteBeadsAction": "Hapus Butir Juga"
 }

@@ -2065,4 +2065,15 @@ class AppLocalizationsTa extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speed வேகம்';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return '\"$title\" குழுவில் $count மணிகள் உள்ளன. இந்த மணிகளை என்ன செய்ய விரும்புகிறீர்கள்?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'மணிகளை வைத்திரு';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'மணிகளையும் நீக்கு';
 }

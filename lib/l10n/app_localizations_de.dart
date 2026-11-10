@@ -2045,4 +2045,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speed Geschwindigkeit';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return 'Die Gruppe \"$title\" enthält $count Perlen. Was möchten Sie mit diesen Perlen tun?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'Perlen behalten';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'Perlen auch löschen';
 }

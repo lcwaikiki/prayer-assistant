@@ -681,5 +681,8 @@
   "commonNo": "لا",
   "readOnlyTargetAndCheck": "الهدف والتحقق",
   "readOnlySkippedCount": "تم تخطي {count}",
-  "readOnlyPlaybackSpeedLabel": "سرعة {speed}"
+  "readOnlyPlaybackSpeedLabel": "سرعة {speed}",
+  "deleteGroupWithBeadsMessage": "تحتوي مجموعة \"{title}\" على {count} من التسابيح. ماذا تريد أن تفعل بها؟",
+  "deleteGroupKeepBeadsAction": "الاحتفاظ بالتسابيح",
+  "deleteGroupDeleteBeadsAction": "حذف التسابيح أيضاً"
 }

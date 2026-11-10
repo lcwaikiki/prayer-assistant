@@ -78,6 +78,26 @@ void main() {
 
       expect(container.read(itemsNotifierProvider), isEmpty);
     });
+
+    test('prunes orphaned groupIds whose group does not exist and persists', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['deleted_group', 'valid_group']),
+        item('test_bead').copyWith(groupIds: const ['deleted_group']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container
+          .read(itemsNotifierProvider.notifier)
+          .pruneOrphanedGroupIds(const {'valid_group'});
+
+      final items = container.read(itemsNotifierProvider);
+      expect(items.firstWhere((i) => i.id == 'a').groupIds, ['valid_group']);
+      expect(items.firstWhere((i) => i.id == 'test_bead').groupIds, isEmpty);
+
+      final persisted = repository.loadItems();
+      expect(persisted.firstWhere((i) => i.id == 'a').groupIds, ['valid_group']);
+      expect(persisted.firstWhere((i) => i.id == 'test_bead').groupIds, isEmpty);
+    });
   });
 
   group('ItemsNotifier.addItem', () {
@@ -647,6 +667,61 @@ void main() {
 
       expect(repository.loadItems()[0].groupIds, ['g2']);
       expect(repository.loadItems()[1].groupIds, isEmpty);
+    });
+
+    test('deleteGroupBeads permanently deletes beads belonging only to the group and cancels reminders', () {
+      final repository = ItemRepository.memory([
+        item('a').copyWith(groupIds: const ['g1']),
+        item('b').copyWith(groupIds: const ['g1', 'g2']),
+        item('c').copyWith(groupIds: const ['g2']),
+      ]);
+      final container = containerWith(repository, reminderService);
+
+      container.read(itemsNotifierProvider.notifier).deleteGroupBeads('g1');
+
+      final remaining = container.read(itemsNotifierProvider);
+      expect(remaining.map((i) => i.id), ['b', 'c']);
+      expect(remaining.firstWhere((i) => i.id == 'b').groupIds, ['g2']);
+
+      verify(() => reminderService.cancelReminder('a')).called(1);
+      verifyNever(() => reminderService.cancelReminder('b'));
+    });
+
+    test('restoreGroupBeads restores deleted beads with reminders and re-groups kept beads', () {
+      final originalA = item('a').copyWith(groupIds: const ['g1']);
+      final originalB = item('b').copyWith(groupIds: const ['g1', 'g2']);
+      final originalC = item('c').copyWith(groupIds: const ['g2']);
+
+      final repository = ItemRepository.memory([originalA, originalB, originalC]);
+      final container = containerWith(repository, reminderService);
+
+      // Simulate deletion with Delete Beads
+      container.read(itemsNotifierProvider.notifier).deleteGroupBeads('g1');
+      expect(container.read(itemsNotifierProvider).map((i) => i.id), ['b', 'c']);
+
+      // Undo restore
+      container.read(itemsNotifierProvider.notifier).restoreGroupBeads([originalA, originalB], 'g1');
+
+      final restored = container.read(itemsNotifierProvider);
+      expect(restored.map((i) => i.id), containsAll(['a', 'b', 'c']));
+      expect(restored.firstWhere((i) => i.id == 'a').groupIds, contains('g1'));
+      expect(restored.firstWhere((i) => i.id == 'b').groupIds, containsAll(['g1', 'g2']));
+
+      verify(() => reminderService.scheduleReminder(any())).called(greaterThanOrEqualTo(1));
+    });
+
+    test('restoreGroupBeads re-associates kept beads when undone after Keep Beads', () {
+      final originalA = item('a').copyWith(groupIds: const ['g1']);
+      final repository = ItemRepository.memory([originalA]);
+      final container = containerWith(repository, reminderService);
+
+      // Simulate deletion with Keep Beads
+      container.read(itemsNotifierProvider.notifier).removeGroupFromItems('g1');
+      expect(container.read(itemsNotifierProvider).single.groupIds, isEmpty);
+
+      // Undo restore
+      container.read(itemsNotifierProvider.notifier).restoreGroupBeads([originalA], 'g1');
+      expect(container.read(itemsNotifierProvider).single.groupIds, ['g1']);
     });
 
     test('removeGroupsFromItems strips several groups from every item', () {

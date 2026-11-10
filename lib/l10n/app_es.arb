@@ -681,5 +681,8 @@
   "commonNo": "No",
   "readOnlyTargetAndCheck": "Objetivo y Verificación",
   "readOnlySkippedCount": "{count} omitido(s)",
-  "readOnlyPlaybackSpeedLabel": "Velocidad {speed}"
+  "readOnlyPlaybackSpeedLabel": "Velocidad {speed}",
+  "deleteGroupWithBeadsMessage": "El grupo \"{title}\" contiene {count} cuentas. ¿Qué deseas hacer con ellas?",
+  "deleteGroupKeepBeadsAction": "Conservar cuentas",
+  "deleteGroupDeleteBeadsAction": "Eliminar también las cuentas"
 }

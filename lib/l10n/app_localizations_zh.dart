@@ -1967,4 +1967,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speed倍速';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return '“$title”群组包含$count个念珠。您想如何处理这些念珠？';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => '保留念珠';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => '同时删除念珠';
 }

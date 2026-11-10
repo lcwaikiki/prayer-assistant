@@ -1070,5 +1070,25 @@
         "type": "String"
       }
     }
+  },
+  "deleteGroupWithBeadsMessage": "\"{title}\" contains {count} beads. What would you like to do with these beads?",
+  "@deleteGroupWithBeadsMessage": {
+    "description": "Confirmation message when deleting a group that contains beads, asking what to do with member beads",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteGroupKeepBeadsAction": "Keep Beads",
+  "@deleteGroupKeepBeadsAction": {
+    "description": "Button label to delete the group but keep its beads as individual beads"
+  },
+  "deleteGroupDeleteBeadsAction": "Delete Beads",
+  "@deleteGroupDeleteBeadsAction": {
+    "description": "Button label to delete both the group and its member beads"
   }
 }

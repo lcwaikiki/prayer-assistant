@@ -736,5 +736,8 @@
   "commonNo": "Нет",
   "readOnlyTargetAndCheck": "Цель и проверка",
   "readOnlySkippedCount": "{count} пропущено",
-  "readOnlyPlaybackSpeedLabel": "Скорость {speed}"
+  "readOnlyPlaybackSpeedLabel": "Скорость {speed}",
+  "deleteGroupWithBeadsMessage": "Группа «{title}» содержит {count} бусин(ы). Что вы хотите сделать с ними?",
+  "deleteGroupKeepBeadsAction": "Сохранить бусины",
+  "deleteGroupDeleteBeadsAction": "Удалить и бусины"
 }

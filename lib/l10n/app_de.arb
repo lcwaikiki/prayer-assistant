@@ -681,5 +681,8 @@
   "commonNo": "Nein",
   "readOnlyTargetAndCheck": "Ziel & Prüfung",
   "readOnlySkippedCount": "{count} übersprungen",
-  "readOnlyPlaybackSpeedLabel": "{speed} Geschwindigkeit"
+  "readOnlyPlaybackSpeedLabel": "{speed} Geschwindigkeit",
+  "deleteGroupWithBeadsMessage": "Die Gruppe \"{title}\" enthält {count} Perlen. Was möchten Sie mit diesen Perlen tun?",
+  "deleteGroupKeepBeadsAction": "Perlen behalten",
+  "deleteGroupDeleteBeadsAction": "Perlen auch löschen"
 }

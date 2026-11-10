@@ -3793,6 +3793,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{speed} speed'**
   String readOnlyPlaybackSpeedLabel(String speed);
+
+  /// Confirmation message when deleting a group that contains beads, asking what to do with member beads
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" contains {count} beads. What would you like to do with these beads?'**
+  String deleteGroupWithBeadsMessage(String title, String count);
+
+  /// Button label to delete the group but keep its beads as individual beads
+  ///
+  /// In en, this message translates to:
+  /// **'Keep Beads'**
+  String get deleteGroupKeepBeadsAction;
+
+  /// Button label to delete both the group and its member beads
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Beads'**
+  String get deleteGroupDeleteBeadsAction;
 }
 
 class _AppLocalizationsDelegate

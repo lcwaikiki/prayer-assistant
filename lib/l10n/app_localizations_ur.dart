@@ -2028,4 +2028,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speed رفتار';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return 'گروپ \"$title\" میں $count تسبیحات ہیں۔ آپ ان تسبیحات کے ساتھ کیا کرنا چاہتے ہیں؟';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'تسبیحات رکھیں';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'تسبیحات بھی حذف کریں';
 }

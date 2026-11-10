@@ -2036,4 +2036,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return '$speed গতি';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return '\"$title\" গ্রুপে $count টি তসবিহ রয়েছে। আপনি এই তসবিহগুলি দিয়ে কী করতে চান?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'তসবিহ রাখুন';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'তসবিহও মুছুন';
 }

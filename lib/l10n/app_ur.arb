@@ -681,5 +681,8 @@
   "commonNo": "نہیں",
   "readOnlyTargetAndCheck": "ہدف اور تصدیق",
   "readOnlySkippedCount": "{count} چھوڑ دیا گیا",
-  "readOnlyPlaybackSpeedLabel": "{speed} رفتار"
+  "readOnlyPlaybackSpeedLabel": "{speed} رفتار",
+  "deleteGroupWithBeadsMessage": "گروپ \"{title}\" میں {count} تسبیحات ہیں۔ آپ ان تسبیحات کے ساتھ کیا کرنا چاہتے ہیں؟",
+  "deleteGroupKeepBeadsAction": "تسبیحات رکھیں",
+  "deleteGroupDeleteBeadsAction": "تسبیحات بھی حذف کریں"
 }

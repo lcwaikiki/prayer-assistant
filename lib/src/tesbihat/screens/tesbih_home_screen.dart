@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/tesbihat_localizations.dart';
 import '../models/daily_item_stat.dart';
 import '../models/item.dart';
+import '../widgets/delete_group_dialog.dart';
 import '../models/item_group.dart';
 import '../state/groups_notifier.dart';
 import '../state/home_order_notifier.dart';
@@ -77,6 +78,19 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
   bool _isSearchOpen = false;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final groups = ref.read(groupsNotifierProvider);
+      final validGroupIds = groups.map((g) => g.id).toSet();
+      ref
+          .read(itemsNotifierProvider.notifier)
+          .pruneOrphanedGroupIds(validGroupIds);
+    });
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -119,10 +133,19 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
     WidgetRef ref,
     ItemGroup group, {
     required int index,
+    List<Item> originalMembers = const [],
+    DeleteGroupBeadsAction action = DeleteGroupBeadsAction.keepBeads,
   }) {
     final l10n = context.tesbihatL10n;
-    final notifier = ref.read(groupsNotifierProvider.notifier);
-    notifier.deleteGroup(group.id);
+    final groupsNotifier = ref.read(groupsNotifierProvider.notifier);
+    final itemsNotifier = ref.read(itemsNotifierProvider.notifier);
+
+    if (action == DeleteGroupBeadsAction.deleteBeads) {
+      itemsNotifier.deleteGroupBeads(group.id);
+    } else {
+      itemsNotifier.removeGroupFromItems(group.id);
+    }
+    groupsNotifier.deleteGroup(group.id);
 
     final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
@@ -135,7 +158,10 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
             Expanded(child: Text(l10n.deletedItem(group.title))),
             TextButton(
               onPressed: () {
-                notifier.restoreGroup(group, index: index);
+                groupsNotifier.restoreGroup(group, index: index);
+                if (originalMembers.isNotEmpty) {
+                  itemsNotifier.restoreGroupBeads(originalMembers, group.id);
+                }
                 messenger.hideCurrentSnackBar();
               },
               child: Text(l10n.undo),
@@ -186,7 +212,30 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
         );
         break;
       case _GroupAction.delete:
-        _deleteGroupWithUndo(context, ref, group, index: index);
+        final allItems = ref.read(itemsNotifierProvider);
+        final memberItems = allItems
+            .where((i) => i.groupIds.contains(group.id))
+            .toList(growable: false);
+        if (memberItems.isEmpty) {
+          _deleteGroupWithUndo(context, ref, group, index: index);
+        } else {
+          final choice = await showDeleteGroupConfirmationDialog(
+            context,
+            group: group,
+            memberCount: memberItems.length,
+          );
+          if (choice == null || !context.mounted) {
+            return;
+          }
+          _deleteGroupWithUndo(
+            context,
+            ref,
+            group,
+            index: index,
+            originalMembers: memberItems,
+            action: choice,
+          );
+        }
         break;
     }
   }
@@ -199,8 +248,11 @@ class _TesbihHomeScreenState extends ConsumerState<TesbihHomeScreen> {
     final homeOrder = ref.watch(homeOrderNotifierProvider);
     final selection = ref.watch(tesbihSelectionProvider);
     final selectionActive = selection.active;
+    final existingGroupIds = groups.map((g) => g.id).toSet();
     final ungrouped = items
-        .where((item) => item.groupIds.isEmpty)
+        .where((item) =>
+            item.groupIds.isEmpty ||
+            !item.groupIds.any(existingGroupIds.contains))
         .toList(growable: false);
     final isEmpty = groups.isEmpty && ungrouped.isEmpty;
 

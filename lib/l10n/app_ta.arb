@@ -786,5 +786,8 @@
   "commonNo": "இல்லை",
   "readOnlyTargetAndCheck": "இலக்கு & சரிபார்ப்பு",
   "readOnlySkippedCount": "{count} தவிர்க்கப்பட்டது",
-  "readOnlyPlaybackSpeedLabel": "{speed} வேகம்"
+  "readOnlyPlaybackSpeedLabel": "{speed} வேகம்",
+  "deleteGroupWithBeadsMessage": "\"{title}\" குழுவில் {count} மணிகள் உள்ளன. இந்த மணிகளை என்ன செய்ய விரும்புகிறீர்கள்?",
+  "deleteGroupKeepBeadsAction": "மணிகளை வைத்திரு",
+  "deleteGroupDeleteBeadsAction": "மணிகளையும் நீக்கு"
 }

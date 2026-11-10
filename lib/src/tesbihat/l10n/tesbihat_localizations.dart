@@ -219,6 +219,10 @@ class TesbihatLocalizations {
   String readOnlySkippedCount(String count) => _appL10n.readOnlySkippedCount(count);
   String readOnlyPlaybackSpeedLabel(String speed) =>
       _appL10n.readOnlyPlaybackSpeedLabel(speed);
+  String deleteGroupWithBeadsMessage(String title, String count) =>
+      _appL10n.deleteGroupWithBeadsMessage(title, count);
+  String get deleteGroupKeepBeadsAction => _appL10n.deleteGroupKeepBeadsAction;
+  String get deleteGroupDeleteBeadsAction => _appL10n.deleteGroupDeleteBeadsAction;
 }
 
 extension TesbihatLocalizationsX on BuildContext {

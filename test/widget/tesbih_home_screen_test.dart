@@ -151,11 +151,7 @@ void main() {
     await tester.tap(find.text('Tasbih'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Edit Beads'), findsOneWidget);
-    expect(find.text('Execute'), findsOneWidget);
 
-    await tester.tap(find.text('Execute'));
-    await tester.pumpAndSettle();
 
     expect(find.text('TAP'), findsOneWidget);
     expect(find.byKey(const Key('big_tap_button')), findsOneWidget);
@@ -256,7 +252,7 @@ void main() {
     await tester.enterText(find.byKey(const Key('tesbih_search_field')), 'nonexistent');
     await tester.pumpAndSettle();
 
-    expect(find.text('No matching items found.'), findsOneWidget);
+    expect(find.text('No results'), findsOneWidget);
 
     // Close search box to restore compact history row
     await tester.tap(find.byKey(const Key('tesbih_search_close_button')));
@@ -311,15 +307,24 @@ void main() {
     await tester.tap(find.text('Delete'));
     await tester.pumpAndSettle();
 
+    // Confirmation dialog asks what to do with member beads
+    expect(find.byKey(const Key('keep_beads_button')), findsOneWidget);
+    await tester.tap(find.byKey(const Key('keep_beads_button')));
+    await tester.pumpAndSettle();
+
     expect(find.text('Daily Adhkar Group'), findsNothing);
+    // Member bead becomes ungrouped and visible on home screen
+    expect(find.text('Morning Adhkar 1'), findsOneWidget);
     expect(find.text('"Daily Adhkar Group" deleted'), findsOneWidget);
     expect(find.text('Undo'), findsOneWidget);
 
-    // Undo restore
+    // Tapping undo restores the group and re-groups its member beads
     await tester.tap(find.text('Undo'));
     await tester.pumpAndSettle();
 
     expect(find.text('Daily Adhkar Group'), findsOneWidget);
+    // Morning Adhkar 1 is re-grouped inside Daily Adhkar Group, not loose
+    expect(find.text('Morning Adhkar 1'), findsNothing);
 
     await tester.pumpWidget(const SizedBox());
   });

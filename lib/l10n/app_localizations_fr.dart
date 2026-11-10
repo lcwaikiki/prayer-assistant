@@ -2058,4 +2058,15 @@ class AppLocalizationsFr extends AppLocalizations {
   String readOnlyPlaybackSpeedLabel(String speed) {
     return 'Vitesse $speed';
   }
+
+  @override
+  String deleteGroupWithBeadsMessage(String title, String count) {
+    return 'Le groupe « $title » contient $count grains. Que souhaitez-vous faire de ces grains ?';
+  }
+
+  @override
+  String get deleteGroupKeepBeadsAction => 'Garder les grains';
+
+  @override
+  String get deleteGroupDeleteBeadsAction => 'Supprimer aussi les grains';
 }

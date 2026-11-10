@@ -1946,4 +1946,81 @@ class AppLocalizationsDe extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count Mal)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Zählen starten';
+
+  @override
+  String get readOnlyStartGroupSession => 'Gruppensitzung starten';
+
+  @override
+  String get readOnlyProgressAndTarget => 'Fortschritt & Ziel';
+
+  @override
+  String get readOnlyStatTarget => 'Ziel';
+
+  @override
+  String get readOnlyStatCheck => 'Prüfen';
+
+  @override
+  String get readOnlyStatVibration => 'Vibration';
+
+  @override
+  String get readOnlyStatSets => 'Sätze';
+
+  @override
+  String get readOnlyReminderSchedule => 'Erinnerungsplan';
+
+  @override
+  String get readOnlyActive => 'Aktiv';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Notizen & Bittgebet';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Pinchen ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Einklappen';
+
+  @override
+  String get readOnlyExpand => 'Ausklappen';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'Keine Gebetsperlen in dieser Gruppe';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions =>
+      'Schlummeroptionen für Benachrichtigungen';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes Min.';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Als erledigt markieren';
+
+  @override
+  String get readOnlyMarkAsPending => 'Als ausstehend markieren';
+
+  @override
+  String get readOnlyDisableReminder => 'Erinnerung deaktivieren';
+
+  @override
+  String get readOnlyEnableReminder => 'Erinnerung aktivieren';
+
+  @override
+  String get readOnlySupplicationNotes => 'Bittgebet-Notizen';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Erinnerungsdetails';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Gebetsperlen-Details';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Gruppendetails';
 }

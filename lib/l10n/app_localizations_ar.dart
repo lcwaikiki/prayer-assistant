@@ -1923,4 +1923,80 @@ class AppLocalizationsAr extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count مرات)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'بدء التسبيح';
+
+  @override
+  String get readOnlyStartGroupSession => 'بدء جلسة المجموعة';
+
+  @override
+  String get readOnlyProgressAndTarget => 'التقدم والهدف';
+
+  @override
+  String get readOnlyStatTarget => 'الهدف';
+
+  @override
+  String get readOnlyStatCheck => 'الفاصل';
+
+  @override
+  String get readOnlyStatVibration => 'الاهتزاز';
+
+  @override
+  String get readOnlyStatSets => 'الدورات';
+
+  @override
+  String get readOnlyReminderSchedule => 'جدول التذكير';
+
+  @override
+  String get readOnlyActive => 'نشط';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'الملاحظات والدعاء';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'تكبير ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'طي';
+
+  @override
+  String get readOnlyExpand => 'توسيع';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'لا توجد تسبيحات في هذه المجموعة';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'خيارات تأجيل الإشعار';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes دقيقة';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'تحديد كمكتمل';
+
+  @override
+  String get readOnlyMarkAsPending => 'تحديد كمعلق';
+
+  @override
+  String get readOnlyDisableReminder => 'تعطيل التذكير';
+
+  @override
+  String get readOnlyEnableReminder => 'تفعيل التذكير';
+
+  @override
+  String get readOnlySupplicationNotes => 'ملاحظات الدعاء';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'تفاصيل التذكير';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'تفاصيل التسبيح';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'تفاصيل المجموعة';
 }

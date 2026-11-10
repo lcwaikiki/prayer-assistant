@@ -1022,9 +1022,11 @@ class _CalendarReminderFormScreenState
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            _isEditing
-                ? l10n.calendarReminderFormTitleEdit
-                : l10n.calendarReminderFormTitleNew,
+            _readOnly
+                ? l10n.readOnlyReminderDetailsTitle
+                : (_isEditing
+                    ? l10n.calendarReminderFormTitleEdit
+                    : l10n.calendarReminderFormTitleNew),
           ),
           actions: [
             if (_readOnly && (_reminder != null || widget.reminder != null))

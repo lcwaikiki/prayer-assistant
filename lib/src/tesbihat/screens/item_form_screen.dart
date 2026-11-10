@@ -410,7 +410,11 @@ class _ItemFormScreenState extends ConsumerState<ItemFormScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? l10n.editMilestone : l10n.createMilestone),
+          title: Text(
+            _readOnly
+                ? l10n.readOnlyBeadDetailsTitle
+                : (_isEditing ? l10n.editMilestone : l10n.createMilestone),
+          ),
           actions: [
             if (_readOnly) ...[
               IconButton(

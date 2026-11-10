@@ -1966,4 +1966,81 @@ class AppLocalizationsTa extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count முறை)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'எண்ணத் தொடங்கு';
+
+  @override
+  String get readOnlyStartGroupSession => 'குழு அமர்வைத் தொடங்கு';
+
+  @override
+  String get readOnlyProgressAndTarget => 'முன்னேற்றம் & இலக்கு';
+
+  @override
+  String get readOnlyStatTarget => 'இலக்கு';
+
+  @override
+  String get readOnlyStatCheck => 'சரிபார்';
+
+  @override
+  String get readOnlyStatVibration => 'அதிர்வு';
+
+  @override
+  String get readOnlyStatSets => 'சுற்றுகள்';
+
+  @override
+  String get readOnlyReminderSchedule => 'நினைவூட்டல் அட்டவணை';
+
+  @override
+  String get readOnlyActive => 'செயலில்';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'குறிப்புகள் & துஆ';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'அளவிடு ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'சுருக்கு';
+
+  @override
+  String get readOnlyExpand => 'விரிவாக்கு';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'இந்தக் குழுவில் மணிகள் இல்லை';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions =>
+      'அறிவிப்பு உறக்கநிலை விருப்பங்கள்';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes நிமி';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'முடிந்தது எனக் குறிக்கவும்';
+
+  @override
+  String get readOnlyMarkAsPending => 'நிலுவையில் எனக் குறிக்கவும்';
+
+  @override
+  String get readOnlyDisableReminder => 'நினைவூட்டலை முடக்கு';
+
+  @override
+  String get readOnlyEnableReminder => 'நினைவூட்டலை இயக்கு';
+
+  @override
+  String get readOnlySupplicationNotes => 'துஆ குறிப்புகள்';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'நினைவூட்டல் விவரங்கள்';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'மணி விவரங்கள்';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'குழு விவரங்கள்';
 }

@@ -14,12 +14,13 @@ import '../../tesbihat/models/reminder_schedulable.dart';
 import '../../tesbihat/state/groups_notifier.dart';
 import '../../tesbihat/state/items_notifier.dart';
 
-import '../../tesbihat/screens/group_form_screen.dart';
-import '../../tesbihat/screens/item_form_screen.dart';
+import '../../tesbihat/screens/bead_detail_screen.dart';
+import '../../tesbihat/screens/group_detail_screen.dart';
 import '../../utils/time_utils.dart';
 import '../hijri_utils.dart';
 import '../models/calendar_reminder.dart';
 import '../../ui/widgets/moon_phase_widget.dart';
+import 'calendar_reminder_detail_screen.dart';
 import 'calendar_reminder_form_screen.dart';
 import 'hijri_date_picker_dialog.dart';
 import '../../utils/orientation_utils.dart';
@@ -870,10 +871,7 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (_) => ItemFormScreen(
-                itemToEdit: item,
-                readOnly: true,
-              ),
+              builder: (_) => BeadDetailScreen(item: item),
             ),
           );
         }
@@ -888,10 +886,7 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (_) => GroupFormScreen(
-                groupToEdit: group,
-                readOnly: true,
-              ),
+              builder: (_) => GroupDetailScreen(group: group),
             ),
           );
         }
@@ -907,9 +902,8 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
           Navigator.push(
             context,
             MaterialPageRoute<void>(
-              builder: (_) => CalendarReminderFormScreen(
+              builder: (_) => CalendarReminderDetailScreen(
                 reminder: reminder,
-                readOnly: true,
               ),
             ),
           );
@@ -1474,9 +1468,8 @@ class _DayDetailSheetState extends ConsumerState<DayDetailSheet> {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (_) => CalendarReminderFormScreen(
+                          builder: (_) => CalendarReminderDetailScreen(
                             reminder: reminder,
-                            readOnly: true,
                           ),
                         ),
                       );

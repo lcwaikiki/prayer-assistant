@@ -3613,6 +3613,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **' ({count} times)'**
   String reminderRepeatCountSuffix(Object count);
+
+  /// Button label to start counting a bead in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Start Counting'**
+  String get readOnlyStartCounting;
+
+  /// Button label to start group counting session in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Start Group Session'**
+  String get readOnlyStartGroupSession;
+
+  /// Title for progress and target card in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Progress & Target'**
+  String get readOnlyProgressAndTarget;
+
+  /// Label for target stat column in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Target'**
+  String get readOnlyStatTarget;
+
+  /// Label for check interval stat column in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Check'**
+  String get readOnlyStatCheck;
+
+  /// Label for vibration intensity stat column in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration'**
+  String get readOnlyStatVibration;
+
+  /// Label for completed sets/cycles stat column in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Sets'**
+  String get readOnlyStatSets;
+
+  /// Title for reminder schedule card in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Schedule'**
+  String get readOnlyReminderSchedule;
+
+  /// Status badge indicating an active reminder schedule
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get readOnlyActive;
+
+  /// Title for notes and invocation card in read-only view
+  ///
+  /// In en, this message translates to:
+  /// **'Notes & Invocation'**
+  String get readOnlyNotesAndInvocation;
+
+  /// Pinch zoom indicator badge showing current zoom scale factor
+  ///
+  /// In en, this message translates to:
+  /// **'Pinch {scale}x'**
+  String readOnlyPinchZoom(String scale);
+
+  /// Tooltip or button label to collapse expanded notes container
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get readOnlyCollapse;
+
+  /// Tooltip or button label to expand notes container
+  ///
+  /// In en, this message translates to:
+  /// **'Expand'**
+  String get readOnlyExpand;
+
+  /// Empty state message when a group has no member beads
+  ///
+  /// In en, this message translates to:
+  /// **'No beads in this group'**
+  String get readOnlyNoBeadsInGroup;
+
+  /// Title for notification snooze options preview card
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Snooze Options'**
+  String get readOnlyNotificationSnoozeOptions;
+
+  /// Chip label showing snooze minutes
+  ///
+  /// In en, this message translates to:
+  /// **'+{minutes} min'**
+  String readOnlySnoozeMinutes(String minutes);
+
+  /// Action button label to mark task as completed
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Done'**
+  String get readOnlyMarkAsDone;
+
+  /// Action button label to mark completed task back to pending
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Pending'**
+  String get readOnlyMarkAsPending;
+
+  /// Action button label to disable an active reminder
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Reminder'**
+  String get readOnlyDisableReminder;
+
+  /// Action button label to enable an inactive reminder
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Reminder'**
+  String get readOnlyEnableReminder;
+
+  /// Title for supplication notes card in reminder detail view
+  ///
+  /// In en, this message translates to:
+  /// **'Supplication Notes'**
+  String get readOnlySupplicationNotes;
+
+  /// App bar title for reminder detail screen
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder Details'**
+  String get readOnlyReminderDetailsTitle;
+
+  /// App bar title for bead/milestone detail screen
+  ///
+  /// In en, this message translates to:
+  /// **'Milestone Details'**
+  String get readOnlyBeadDetailsTitle;
+
+  /// App bar title for group detail screen
+  ///
+  /// In en, this message translates to:
+  /// **'Group Details'**
+  String get readOnlyGroupDetailsTitle;
 }
 
 class _AppLocalizationsDelegate

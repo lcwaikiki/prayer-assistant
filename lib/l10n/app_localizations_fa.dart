@@ -1930,4 +1930,80 @@ class AppLocalizationsFa extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count بار)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'شروع شمارش';
+
+  @override
+  String get readOnlyStartGroupSession => 'شروع جلسه گروهی';
+
+  @override
+  String get readOnlyProgressAndTarget => 'پیشرفت و هدف';
+
+  @override
+  String get readOnlyStatTarget => 'هدف';
+
+  @override
+  String get readOnlyStatCheck => 'بررسی';
+
+  @override
+  String get readOnlyStatVibration => 'لرزش';
+
+  @override
+  String get readOnlyStatSets => 'دورها';
+
+  @override
+  String get readOnlyReminderSchedule => 'برنامه یادآوری';
+
+  @override
+  String get readOnlyActive => 'فعال';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'یادداشت‌ها و دعا';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'بزرگ‌نمایی ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'جمع کردن';
+
+  @override
+  String get readOnlyExpand => 'گسترش';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'هیچ تسبیحی در این گروه نیست';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'گزینه‌های تعویق اعلان';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes دقیقه';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'علامت‌گذاری به عنوان انجام شده';
+
+  @override
+  String get readOnlyMarkAsPending => 'علامت‌گذاری به عنوان در انتظار';
+
+  @override
+  String get readOnlyDisableReminder => 'غیرفعال کردن یادآوری';
+
+  @override
+  String get readOnlyEnableReminder => 'فعال کردن یادآوری';
+
+  @override
+  String get readOnlySupplicationNotes => 'یادداشت‌های دعا';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'جزئیات یادآوری';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'جزئیات تسبیح';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'جزئیات گروه';
 }

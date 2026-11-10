@@ -1951,4 +1951,81 @@ class AppLocalizationsEs extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count veces)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Iniciar conteo';
+
+  @override
+  String get readOnlyStartGroupSession => 'Iniciar sesión de grupo';
+
+  @override
+  String get readOnlyProgressAndTarget => 'Progreso y objetivo';
+
+  @override
+  String get readOnlyStatTarget => 'Objetivo';
+
+  @override
+  String get readOnlyStatCheck => 'Control';
+
+  @override
+  String get readOnlyStatVibration => 'Vibración';
+
+  @override
+  String get readOnlyStatSets => 'Series';
+
+  @override
+  String get readOnlyReminderSchedule => 'Horario de recordatorio';
+
+  @override
+  String get readOnlyActive => 'Activo';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Notas e invocación';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Pellizcar ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Contraer';
+
+  @override
+  String get readOnlyExpand => 'Expandir';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'No hay cuentas en este grupo';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions =>
+      'Opciones de posponer notificación';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes min';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Marcar como hecho';
+
+  @override
+  String get readOnlyMarkAsPending => 'Marcar como pendiente';
+
+  @override
+  String get readOnlyDisableReminder => 'Desactivar recordatorio';
+
+  @override
+  String get readOnlyEnableReminder => 'Activar recordatorio';
+
+  @override
+  String get readOnlySupplicationNotes => 'Notas de súplica';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Detalles del recordatorio';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Detalles de la cuenta';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Detalles del grupo';
 }

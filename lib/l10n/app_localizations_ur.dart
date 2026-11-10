@@ -1930,4 +1930,80 @@ class AppLocalizationsUr extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count بار)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'تسبیح شروع کریں';
+
+  @override
+  String get readOnlyStartGroupSession => 'گروپ سیشن شروع کریں';
+
+  @override
+  String get readOnlyProgressAndTarget => 'پیش رفت اور ہدف';
+
+  @override
+  String get readOnlyStatTarget => 'ہدف';
+
+  @override
+  String get readOnlyStatCheck => 'چیک';
+
+  @override
+  String get readOnlyStatVibration => 'تھرتھراہٹ';
+
+  @override
+  String get readOnlyStatSets => 'سیٹ';
+
+  @override
+  String get readOnlyReminderSchedule => 'یاد دہانی کا شیڈول';
+
+  @override
+  String get readOnlyActive => 'فعال';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'نوٹس اور دعا';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'زوم ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'سمیٹیں';
+
+  @override
+  String get readOnlyExpand => 'پھیلائیں';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'اس گروپ میں کوئی تسبیح نہیں ہے';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions => 'اطلاع اسنوز کے اختیارات';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes منٹ';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'مکمل نشان زد کریں';
+
+  @override
+  String get readOnlyMarkAsPending => 'زیر التواء نشان زد کریں';
+
+  @override
+  String get readOnlyDisableReminder => 'یاد دہانی بند کریں';
+
+  @override
+  String get readOnlyEnableReminder => 'یاد دہانی فعال کریں';
+
+  @override
+  String get readOnlySupplicationNotes => 'دعائیہ نوٹس';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'یاد دہانی کی تفصیلات';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'تسبیح کی تفصیلات';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'گروپ کی تفصیلات';
 }

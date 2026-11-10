@@ -1942,4 +1942,81 @@ class AppLocalizationsRu extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count раз)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Начать счет';
+
+  @override
+  String get readOnlyStartGroupSession => 'Начать групповую сессию';
+
+  @override
+  String get readOnlyProgressAndTarget => 'Прогресс и цель';
+
+  @override
+  String get readOnlyStatTarget => 'Цель';
+
+  @override
+  String get readOnlyStatCheck => 'Контроль';
+
+  @override
+  String get readOnlyStatVibration => 'Вибрация';
+
+  @override
+  String get readOnlyStatSets => 'Круги';
+
+  @override
+  String get readOnlyReminderSchedule => 'Расписание напоминаний';
+
+  @override
+  String get readOnlyActive => 'Активно';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Заметки и дуа';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Масштаб ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Свернуть';
+
+  @override
+  String get readOnlyExpand => 'Развернуть';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'В этой группе пока нет четок';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions =>
+      'Варианты отсрочки уведомления';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes мин';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Отметить как выполненное';
+
+  @override
+  String get readOnlyMarkAsPending => 'Отметить как ожидающее';
+
+  @override
+  String get readOnlyDisableReminder => 'Отключить напоминание';
+
+  @override
+  String get readOnlyEnableReminder => 'Включить напоминание';
+
+  @override
+  String get readOnlySupplicationNotes => 'Заметки к дуа';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Детали напоминания';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Детали четки';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Детали группы';
 }

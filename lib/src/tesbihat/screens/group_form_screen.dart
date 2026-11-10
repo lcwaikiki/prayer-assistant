@@ -252,7 +252,11 @@ class _GroupFormScreenState extends ConsumerState<GroupFormScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_isEditing ? l10n.editGroup : l10n.newGroup),
+          title: Text(
+            _readOnly
+                ? l10n.readOnlyGroupDetailsTitle
+                : (_isEditing ? l10n.editGroup : l10n.newGroup),
+          ),
           actions: [
             if (_readOnly) ...[
               IconButton(

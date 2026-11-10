@@ -1932,4 +1932,81 @@ class AppLocalizationsTr extends AppLocalizations {
   String reminderRepeatCountSuffix(Object count) {
     return ' ($count kez)';
   }
+
+  @override
+  String get readOnlyStartCounting => 'Saymaya Başla';
+
+  @override
+  String get readOnlyStartGroupSession => 'Grup Zikrini Başlat';
+
+  @override
+  String get readOnlyProgressAndTarget => 'İlerleme ve Hedef';
+
+  @override
+  String get readOnlyStatTarget => 'Hedef';
+
+  @override
+  String get readOnlyStatCheck => 'Kontrol';
+
+  @override
+  String get readOnlyStatVibration => 'Titreşim';
+
+  @override
+  String get readOnlyStatSets => 'Set';
+
+  @override
+  String get readOnlyReminderSchedule => 'Hatırlatıcı Takvimi';
+
+  @override
+  String get readOnlyActive => 'Aktif';
+
+  @override
+  String get readOnlyNotesAndInvocation => 'Notlar ve Dua';
+
+  @override
+  String readOnlyPinchZoom(String scale) {
+    return 'Kıstır ${scale}x';
+  }
+
+  @override
+  String get readOnlyCollapse => 'Daralt';
+
+  @override
+  String get readOnlyExpand => 'Genişlet';
+
+  @override
+  String get readOnlyNoBeadsInGroup => 'Bu grupta tesbih yok';
+
+  @override
+  String get readOnlyNotificationSnoozeOptions =>
+      'Bildirim Erteleme Seçenekleri';
+
+  @override
+  String readOnlySnoozeMinutes(String minutes) {
+    return '+$minutes dk';
+  }
+
+  @override
+  String get readOnlyMarkAsDone => 'Yapıldı Olarak İşaretle';
+
+  @override
+  String get readOnlyMarkAsPending => 'Beklemede Olarak İşaretle';
+
+  @override
+  String get readOnlyDisableReminder => 'Hatırlatıcıyı Kapat';
+
+  @override
+  String get readOnlyEnableReminder => 'Hatırlatıcıyı Aç';
+
+  @override
+  String get readOnlySupplicationNotes => 'Dua Notları';
+
+  @override
+  String get readOnlyReminderDetailsTitle => 'Hatırlatıcı Detayları';
+
+  @override
+  String get readOnlyBeadDetailsTitle => 'Tesbih Detayları';
+
+  @override
+  String get readOnlyGroupDetailsTitle => 'Grup Detayları';
 }

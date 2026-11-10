@@ -1124,6 +1124,31 @@ object PrayerWidgetUpdater {
      * Chronometer can't render unpadded minutes (and custom views in widget layouts
      * break on several launchers), so the app drives these updates itself.
      */
+    internal fun formatCountdownText(
+        state: StatusBarState?,
+        now: Long,
+        mmssThresholdMinutes: Int
+    ): String {
+        if (state == null) {
+            return "--:--"
+        }
+
+        if (state.isPostPrayer) {
+            return if (state.postMinutes in 1..3) {
+                "+${state.postMinutes}"
+            } else {
+                "0"
+            }
+        }
+
+        val remainingMs = state.prayer.second - now
+        val remainingMinutes = remainingMs / 60_000L
+        if (remainingMinutes >= mmssThresholdMinutes) {
+            return formatHoursMinutes(remainingMs)
+        }
+        return formatMinutesSeconds(remainingMs)
+    }
+
     private fun applyCountdown(
         views: RemoteViews,
         viewId: Int,
@@ -1131,39 +1156,7 @@ object PrayerWidgetUpdater {
         now: Long,
         mmssThresholdMinutes: Int
     ) {
-        if (state == null) {
-            views.setTextViewText(viewId, "--:--")
-            return
-        }
-
-        if (state.isPostPrayer) {
-            val elapsedMs = now - state.prayer.second
-            if (mmssThresholdMinutes > 0) {
-                views.setTextViewText(viewId, formatElapsedMinutesSeconds(elapsedMs))
-            } else {
-                if (state.postMinutes in 1..3) {
-                    views.setTextViewText(viewId, "+${state.postMinutes}")
-                } else {
-                    views.setTextViewText(viewId, "0")
-                }
-            }
-            return
-        }
-
-        val remainingMs = state.prayer.second - now
-        val remainingMinutes = remainingMs / 60_000L
-        if (remainingMinutes >= mmssThresholdMinutes) {
-            views.setTextViewText(viewId, formatHoursMinutes(remainingMs))
-            return
-        }
-        views.setTextViewText(viewId, formatMinutesSeconds(remainingMs))
-    }
-
-    private fun formatElapsedMinutesSeconds(elapsedMs: Long): String {
-        val totalSeconds = (elapsedMs / 1000L).coerceAtLeast(0)
-        val minutes = totalSeconds / 60L
-        val seconds = totalSeconds % 60L
-        return "+$minutes:${seconds.toString().padStart(2, '0')}"
+        views.setTextViewText(viewId, formatCountdownText(state, now, mmssThresholdMinutes))
     }
 
     private fun formatHoursMinutes(remainingMs: Long): String {
@@ -1388,7 +1381,7 @@ object PrayerWidgetUpdater {
             if (state != null) {
                 if (state.isPostPrayer) {
                     val elapsedMinutes = (now - state.prayer.second) / 60_000L
-                    if (elapsedMinutes in 0..3) return true
+                    if (elapsedMinutes in 0..2) return true
                 } else {
                     val remainingMinutes = (state.prayer.second - now) / 60_000L
                     if (remainingMinutes in 0 until mmssThreshold) return true
@@ -1437,19 +1430,21 @@ object PrayerWidgetUpdater {
         val postMinutes: Int
     )
 
-    fun getStatusBarState(context: Context, now: Long = System.currentTimeMillis()): StatusBarState? {
-        val timeline = PrayerWidgetStorage.readTimeline(context)
+    fun calculateStatusBarState(
+        timeline: List<Pair<String, Long>>,
+        now: Long = System.currentTimeMillis()
+    ): StatusBarState? {
         if (timeline.isEmpty()) return null
 
         val previous = timeline.filter { it.second <= now }.maxByOrNull { it.second }
         if (previous != null) {
             val elapsedMs = now - previous.second
             val elapsedMinutes = (elapsedMs / 60_000L).toInt()
-            if (elapsedMinutes in 0..3) {
+            if (elapsedMinutes in 0..2) {
                 return StatusBarState(
                     prayer = previous,
-                    isPostPrayer = elapsedMinutes > 0,
-                    postMinutes = elapsedMinutes
+                    isPostPrayer = true,
+                    postMinutes = elapsedMinutes + 1
                 )
             }
         }
@@ -1460,6 +1455,11 @@ object PrayerWidgetUpdater {
             isPostPrayer = false,
             postMinutes = 0
         )
+    }
+
+    fun getStatusBarState(context: Context, now: Long = System.currentTimeMillis()): StatusBarState? {
+        val timeline = PrayerWidgetStorage.readTimeline(context)
+        return calculateStatusBarState(timeline, now)
     }
 
     internal fun updateStatusBar(

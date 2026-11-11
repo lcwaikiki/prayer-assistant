@@ -6,6 +6,7 @@ import 'package:prayer_assistant/src/calendar/screens/calendar_reminder_detail_s
 import 'package:prayer_assistant/src/calendar/screens/calendar_reminder_form_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item.dart';
 import 'package:prayer_assistant/src/tesbihat/models/item_group.dart';
+import 'package:prayer_assistant/src/tesbihat/models/sound_item.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/bead_detail_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/group_detail_screen.dart';
 import 'package:prayer_assistant/src/tesbihat/screens/group_form_screen.dart';
@@ -256,6 +257,70 @@ void main() {
       expect(find.text('Bildirim Erteleme Seçenekleri'), findsOneWidget);
       expect(find.text('+5 dk'), findsOneWidget);
       expect(find.text('Yapıldı Olarak İşaretle'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('mark as done marks task completed and closes screen', (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      final reminder = CalendarReminder(
+        id: 'cal-task-toggle',
+        title: 'Daily Task',
+        anchorAt: DateTime.now(),
+        isTask: true,
+        enabled: true,
+      );
+      await harness.controller.addCalendarReminder(reminder);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        CalendarReminderDetailScreen(reminder: reminder),
+      );
+
+      final today = DateTime.now();
+      expect(harness.controller.isTaskCompleted('cal_${reminder.id}', today), isFalse);
+      expect(find.text('Mark as Done'), findsOneWidget);
+
+      // Tap Mark as Done
+      await tester.tap(find.byKey(const Key('toggle_done_reminder_button')));
+      await tester.pumpAndSettle();
+
+      expect(harness.controller.isTaskCompleted('cal_${reminder.id}', today), isTrue);
+      // Screen is popped/closed
+      expect(find.byType(CalendarReminderDetailScreen), findsNothing);
+    });
+
+    testWidgets('non-task reminder shows disable/enable and toggles enabled flag', (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      final reminder = CalendarReminder(
+        id: 'cal-non-task',
+        title: 'General Reminder',
+        anchorAt: DateTime.now(),
+        isTask: false,
+        enabled: true,
+      );
+      await harness.controller.addCalendarReminder(reminder);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        CalendarReminderDetailScreen(reminder: reminder),
+      );
+
+      expect(find.text('Disable Reminder'), findsOneWidget);
+
+      // Tap Disable Reminder
+      await tester.tap(find.byKey(const Key('toggle_done_reminder_button')));
+      await tester.pumpAndSettle();
+
+      final disabled = harness.controller.calendarReminders.firstWhere((r) => r.id == reminder.id);
+      expect(disabled.enabled, isFalse);
+      expect(find.text('Enable Reminder'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
     });

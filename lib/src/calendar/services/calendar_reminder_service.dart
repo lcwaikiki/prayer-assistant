@@ -108,6 +108,24 @@ class CalendarReminderService {
     _maxOccurrences,
   );
 
+  /// Cancels any currently displayed notification and active alarm/snooze
+  /// for [reminderId] without removing future recurring occurrences.
+  Future<void> cancelActiveNotification(String reminderId) async {
+    final base = _notificationId(reminderId);
+    try {
+      final active = await _plugin.getActiveNotifications();
+      for (final n in active) {
+        final id = n.id;
+        if (id != null && id >= base && id < base + _maxOccurrences) {
+          await _plugin.cancel(id: id);
+          if (NativeReminderService.isAndroid) {
+            await NativeReminderService.cancel(id);
+          }
+        }
+      }
+    } catch (_) {}
+  }
+
   /// Schedules with an exact alarm when the OS allows it, falling back to
   /// an inexact alarm when the exact-alarm permission is denied (Android
   /// 12+ rejects exact scheduling with a platform exception), so the

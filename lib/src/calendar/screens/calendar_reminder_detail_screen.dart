@@ -82,12 +82,29 @@ class _CalendarReminderDetailScreenState
     );
   }
 
-  void _toggleCompleted(CalendarReminder currentReminder) {
+  Future<void> _toggleCompleted(
+    CalendarReminder currentReminder,
+    bool isTask,
+  ) async {
     final controller = provider.Provider.of<PrayerAppController>(
       context,
       listen: false,
     );
-    controller.toggleCalendarReminderEnabled(currentReminder.id);
+    if (isTask) {
+      final today = DateTime.now();
+      controller.setTaskCompletion('cal_${currentReminder.id}', today, true);
+      if (currentReminder.recurrence == ReminderRecurrence.once ||
+          currentReminder.repeatCount == 1) {
+        await controller.calendarReminderService.cancelReminder(currentReminder.id);
+      } else {
+        await controller.calendarReminderService.cancelActiveNotification(currentReminder.id);
+      }
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } else {
+      controller.toggleCalendarReminderEnabled(currentReminder.id);
+    }
   }
 
   @override
@@ -222,17 +239,17 @@ class _CalendarReminderDetailScreenState
       ),
       bottomNavigationBar: ReadOnlyBottomActionBar(
         primaryLabel: isTask
-            ? (isReminderEnabled
-                ? (l10n?.readOnlyMarkAsDone ?? 'Mark as Done')
-                : (l10n?.readOnlyMarkAsPending ?? 'Mark as Pending'))
+            ? (l10n?.readOnlyMarkAsDone ?? 'Mark as Done')
             : (isReminderEnabled
                 ? (l10n?.readOnlyDisableReminder ?? 'Disable Reminder')
                 : (l10n?.readOnlyEnableReminder ?? 'Enable Reminder')),
-        primaryIcon: isReminderEnabled
+        primaryIcon: isTask
             ? Icons.check_circle_outline_rounded
-            : Icons.replay_rounded,
+            : (isReminderEnabled
+                ? Icons.notifications_off_outlined
+                : Icons.notifications_active_outlined),
         primaryKey: const Key('toggle_done_reminder_button'),
-        onPrimaryPressed: () => _toggleCompleted(currentReminder),
+        onPrimaryPressed: () => _toggleCompleted(currentReminder, isTask),
         secondaryLabel: l10n?.calendarReminderFormTitleEdit ?? 'Edit Reminder',
         secondaryIcon: Icons.edit_outlined,
         secondaryKey: const Key('edit_reminder_bottom_button'),

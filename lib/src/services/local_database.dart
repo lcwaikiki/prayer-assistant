@@ -22,6 +22,7 @@ class LocalDatabase {
   static const _reminderVibrationEnabledKey = 'reminder_vibration_enabled';
   static const _reminderSoundEnabledKey = 'reminder_sound_enabled';
   static const _themePreferenceKey = 'theme_preference';
+  static const _colorThemeKey = 'app_color_theme';
   static const _localePreferenceKey = 'locale_preference';
   static const _calendarPrimaryDisplayKey = 'calendar_primary_display';
   static const _showSecondaryCalendarDateKey = 'show_secondary_calendar_date';
@@ -683,6 +684,28 @@ class LocalDatabase {
       'app_settings',
       where: 'setting_key = ?',
       whereArgs: [_themePreferenceKey],
+      limit: 1,
+    );
+    if (rows.isEmpty) {
+      return null;
+    }
+    return rows.first['setting_value'] as String?;
+  }
+
+  Future<void> saveColorTheme(String value) async {
+    final db = await instance;
+    await db.insert('app_settings', {
+      'setting_key': _colorThemeKey,
+      'setting_value': value,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String?> loadColorTheme() async {
+    final db = await instance;
+    final rows = await db.query(
+      'app_settings',
+      where: 'setting_key = ?',
+      whereArgs: [_colorThemeKey],
       limit: 1,
     );
     if (rows.isEmpty) {

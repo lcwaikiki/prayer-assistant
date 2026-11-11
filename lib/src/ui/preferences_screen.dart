@@ -199,6 +199,57 @@ class PreferencesScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const Divider(height: 1),
+                  _PreferenceSubSection(
+                    title: context.l10n.themeColorTitle,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: AppColorTheme.values.map((theme) {
+                            final isSelected = controller.colorTheme == theme;
+                            final themeName = _colorThemeName(context, theme);
+                            return Semantics(
+                              label: themeName,
+                              selected: isSelected,
+                              button: true,
+                              child: Tooltip(
+                                message: themeName,
+                                child: InkWell(
+                                  key: Key('color_theme_${theme.id}'),
+                                  onTap: () => controller.updateColorTheme(theme),
+                                  borderRadius: BorderRadius.circular(24),
+                                  child: Container(
+                                    width: 44,
+                                    height: 44,
+                                    decoration: BoxDecoration(
+                                      color: theme.seedColor,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: isSelected
+                                            ? Theme.of(context).colorScheme.onSurface
+                                            : Colors.transparent,
+                                        width: isSelected ? 3 : 1,
+                                      ),
+                                    ),
+                                    child: isSelected
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                            size: 24,
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -1311,5 +1362,18 @@ String _widgetTextSizeSubtitle(BuildContext context, WidgetTextSize size) {
     WidgetTextSize.small => l10n.widgetTextSizeSmall,
     WidgetTextSize.medium => l10n.widgetTextSizeMedium,
     WidgetTextSize.large => l10n.widgetTextSizeLarge,
+  };
+}
+
+String _colorThemeName(BuildContext context, AppColorTheme theme) {
+  final l10n = context.l10n;
+  return switch (theme) {
+    AppColorTheme.emerald => l10n.themeEmerald,
+    AppColorTheme.sapphire => l10n.themeSapphire,
+    AppColorTheme.amber => l10n.themeAmber,
+    AppColorTheme.amethyst => l10n.themeAmethyst,
+    AppColorTheme.ruby => l10n.themeRuby,
+    AppColorTheme.rose => l10n.themeRose,
+    AppColorTheme.slate => l10n.themeSlate,
   };
 }

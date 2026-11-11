@@ -710,6 +710,54 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @themeColorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Color theme'**
+  String get themeColorTitle;
+
+  /// No description provided for @themeEmerald.
+  ///
+  /// In en, this message translates to:
+  /// **'Emerald Green'**
+  String get themeEmerald;
+
+  /// No description provided for @themeSapphire.
+  ///
+  /// In en, this message translates to:
+  /// **'Sapphire Blue'**
+  String get themeSapphire;
+
+  /// No description provided for @themeAmber.
+  ///
+  /// In en, this message translates to:
+  /// **'Amber Gold'**
+  String get themeAmber;
+
+  /// No description provided for @themeAmethyst.
+  ///
+  /// In en, this message translates to:
+  /// **'Amethyst Purple'**
+  String get themeAmethyst;
+
+  /// No description provided for @themeRuby.
+  ///
+  /// In en, this message translates to:
+  /// **'Crimson Red'**
+  String get themeRuby;
+
+  /// No description provided for @themeRose.
+  ///
+  /// In en, this message translates to:
+  /// **'Rose Pink'**
+  String get themeRose;
+
+  /// No description provided for @themeSlate.
+  ///
+  /// In en, this message translates to:
+  /// **'Slate Charcoal'**
+  String get themeSlate;
+
   /// No description provided for @homeScreenSettingsSectionTitle.
   ///
   /// In en, this message translates to:

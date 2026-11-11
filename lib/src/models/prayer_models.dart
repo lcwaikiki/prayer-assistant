@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/painting.dart';
 
 import 'package:intl/intl.dart';
 
@@ -412,6 +413,66 @@ enum AppThemePreference {
   system,
   light,
   dark,
+}
+
+enum AppColorTheme {
+  emerald(
+    id: 'emerald',
+    seedColor: Color(0xFF1F8A70),
+    defaultName: 'Emerald Green',
+  ),
+  sapphire(
+    id: 'sapphire',
+    seedColor: Color(0xFF1565C0),
+    defaultName: 'Sapphire Blue',
+  ),
+  amber(
+    id: 'amber',
+    seedColor: Color(0xFFD97706),
+    defaultName: 'Amber Gold',
+  ),
+  amethyst(
+    id: 'amethyst',
+    seedColor: Color(0xFF7E22CE),
+    defaultName: 'Amethyst Purple',
+  ),
+  ruby(
+    id: 'ruby',
+    seedColor: Color(0xFFDC2626),
+    defaultName: 'Crimson Red',
+  ),
+  rose(
+    id: 'rose',
+    seedColor: Color(0xFFDB2777),
+    defaultName: 'Rose Pink',
+  ),
+  slate(
+    id: 'slate',
+    seedColor: Color(0xFF37474F),
+    defaultName: 'Slate Charcoal',
+  );
+
+  const AppColorTheme({
+    required this.id,
+    required this.seedColor,
+    required this.defaultName,
+  });
+
+  final String id;
+  final Color seedColor;
+  final String defaultName;
+
+  static AppColorTheme fromId(String? id) {
+    if (id == null) return AppColorTheme.emerald;
+    if (id == 'indigo') return AppColorTheme.amethyst;
+    if (id == 'terracotta') return AppColorTheme.rose;
+    for (final theme in AppColorTheme.values) {
+      if (theme.id == id || theme.name == id) {
+        return theme;
+      }
+    }
+    return AppColorTheme.emerald;
+  }
 }
 
 enum CalendarPrimaryDisplay {

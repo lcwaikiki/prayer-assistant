@@ -31,6 +31,31 @@ void main() {
     await tester.pumpWidget(const SizedBox());
   });
 
+  testWidgets(
+      'expanding the color theme section and picking sapphire updates theme',
+      (tester) async {
+    final harness = TestHarness.create();
+    when(() => harness.database.saveColorTheme(any()))
+        .thenAnswer((_) async {});
+    await harness.initialize();
+
+    await pumpWithHarness(tester, harness, const PreferencesScreen());
+
+    await tester.tap(find.text('Appearance'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Color theme'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('color_theme_sapphire')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('color_theme_sapphire')));
+    await tester.pumpAndSettle();
+
+    expect(harness.controller.colorTheme, AppColorTheme.sapphire);
+    verify(() => harness.database.saveColorTheme('sapphire')).called(1);
+
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('language section lists the system default option',
       (tester) async {
     final harness = TestHarness.create();

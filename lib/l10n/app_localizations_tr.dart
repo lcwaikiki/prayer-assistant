@@ -346,6 +346,30 @@ class AppLocalizationsTr extends AppLocalizations {
   String get themeDark => 'Koyu';
 
   @override
+  String get themeColorTitle => 'Renk teması';
+
+  @override
+  String get themeEmerald => 'Zümrüt Yeşili';
+
+  @override
+  String get themeSapphire => 'Safir Mavisi';
+
+  @override
+  String get themeAmber => 'Kehribar Sarısı';
+
+  @override
+  String get themeAmethyst => 'Ametist Moru';
+
+  @override
+  String get themeRuby => 'Kırmızı';
+
+  @override
+  String get themeRose => 'Gül Pembesi';
+
+  @override
+  String get themeSlate => 'Antrasit';
+
+  @override
   String get homeScreenSettingsSectionTitle => 'Görünüm';
 
   @override

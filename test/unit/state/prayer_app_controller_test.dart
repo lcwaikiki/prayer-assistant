@@ -187,6 +187,12 @@ void main() {
       () => database.loadThemePreference(),
     ).thenAnswer((_) async => null);
     when(
+      () => database.loadColorTheme(),
+    ).thenAnswer((_) async => null);
+    when(
+      () => database.saveColorTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => database.loadLocalePreference(),
     ).thenAnswer((_) async => null);
     when(
@@ -1089,6 +1095,16 @@ void main() {
 
       expect(controller.themeMode, ThemeMode.dark);
       verify(() => database.saveThemePreference('dark')).called(1);
+    });
+
+    test('updateColorTheme persists and updates colorTheme', () async {
+      when(() => database.saveColorTheme(any())).thenAnswer((_) async {});
+      final controller = buildController();
+
+      await controller.updateColorTheme(AppColorTheme.sapphire);
+
+      expect(controller.colorTheme, AppColorTheme.sapphire);
+      verify(() => database.saveColorTheme('sapphire')).called(1);
     });
 
     test('updateLocalePreference re-pushes calendar reminders in the new locale',

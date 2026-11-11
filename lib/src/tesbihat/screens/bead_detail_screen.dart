@@ -67,6 +67,17 @@ class _BeadDetailScreenState extends ConsumerState<BeadDetailScreen> {
   Future<void> _onSpeedChanged(double newSpeed, String filePath) async {
     setState(() => _playbackSpeed = newSpeed);
     await _audioPlayer.setPlaybackRate(newSpeed);
+
+    final currentItem = ref
+            .read(itemsNotifierProvider)
+            .where((it) => it.id == widget.item.id)
+            .firstOrNull ??
+        widget.item;
+    if (currentItem.soundSpeed != newSpeed) {
+      ref
+          .read(itemsNotifierProvider.notifier)
+          .updateItem(currentItem.copyWith(soundSpeed: newSpeed));
+    }
   }
 
   void _navigateToEdit(Item currentItem) {

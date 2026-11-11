@@ -65,9 +65,23 @@ class _CalendarReminderDetailScreenState
     }
   }
 
-  Future<void> _onSpeedChanged(double newSpeed, String filePath) async {
+  Future<void> _onSpeedChanged(
+    double newSpeed,
+    String filePath,
+    CalendarReminder currentReminder,
+  ) async {
     setState(() => _playbackSpeed = newSpeed);
     await _audioPlayer.setPlaybackRate(newSpeed);
+
+    if (currentReminder.soundSpeed != newSpeed) {
+      final controller = provider.Provider.of<PrayerAppController>(
+        context,
+        listen: false,
+      );
+      await controller.updateCalendarReminder(
+        currentReminder.copyWith(soundSpeed: newSpeed),
+      );
+    }
   }
 
   void _navigateToEdit(CalendarReminder currentReminder) {
@@ -223,7 +237,7 @@ class _CalendarReminderDetailScreenState
               title: currentReminder.soundTitle ?? sound.title,
               duration: soundDurationText,
               speed: _playbackSpeed,
-              onSpeedChanged: (s) => _onSpeedChanged(s, sound.path),
+              onSpeedChanged: (s) => _onSpeedChanged(s, sound.path, currentReminder),
               isPlaying: _isPlayingPreview,
               onPlayPause: () => _togglePreviewSound(sound.path),
               playButtonKey: const Key('sound_preview_button'),

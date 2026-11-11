@@ -92,6 +92,55 @@ void main() {
 
       await tester.pumpWidget(const SizedBox());
     });
+
+    testWidgets('changing audio speed persists soundSpeed on bead item', (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      final sound = SoundItem(
+        id: 'sound-custom',
+        title: 'Custom Azan',
+        path: 'azans/custom.mp3',
+        durationMs: 45000,
+        createdAt: DateTime(2026, 1, 1),
+      );
+      harness.soundLibraryRepository.saveSounds([sound]);
+      final item = Item(
+        id: 'bead-with-audio',
+        title: 'Tahmid',
+        count: 33,
+        check: 11,
+        setCount: 0,
+        vibrationIntensity: 100,
+        soundId: sound.id,
+        soundTitle: sound.title,
+        soundSpeed: 1.0,
+      );
+      harness.itemRepository.saveItems([item]);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        BeadDetailScreen(item: item),
+      );
+
+      await tester.scrollUntilVisible(find.byType(ReadOnlySoundPlayerCard), 200);
+      expect(find.byType(ReadOnlySoundPlayerCard), findsOneWidget);
+
+      // Expand speed controls
+      await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+      await tester.pumpAndSettle();
+      expect(find.text('1x'), findsOneWidget);
+
+      // Tap speed 1.5x button
+      await tester.tap(find.text('1.5x'));
+      await tester.pumpAndSettle();
+
+      final updated = harness.itemRepository.loadItems().firstWhere((it) => it.id == item.id);
+      expect(updated.soundSpeed, 1.5);
+
+      await tester.pumpWidget(const SizedBox());
+    });
   });
 
   group('GroupDetailScreen', () {
@@ -321,6 +370,52 @@ void main() {
       final disabled = harness.controller.calendarReminders.firstWhere((r) => r.id == reminder.id);
       expect(disabled.enabled, isFalse);
       expect(find.text('Enable Reminder'), findsOneWidget);
+
+      await tester.pumpWidget(const SizedBox());
+    });
+
+    testWidgets('changing audio speed persists soundSpeed on calendar reminder', (tester) async {
+      final harness = TestHarness.create();
+      await harness.initialize();
+
+      final sound = SoundItem(
+        id: 'sound-dua',
+        title: 'Dua Audio',
+        path: 'duas/custom.mp3',
+        durationMs: 30000,
+        createdAt: DateTime(2026, 1, 1),
+      );
+      harness.soundLibraryRepository.saveSounds([sound]);
+      final reminder = CalendarReminder(
+        id: 'cal-audio-test',
+        title: 'Adhkar with Audio',
+        anchorAt: DateTime.now(),
+        soundId: sound.id,
+        soundTitle: sound.title,
+        soundSpeed: 1.0,
+      );
+      await harness.controller.addCalendarReminder(reminder);
+
+      await pumpWithHarness(
+        tester,
+        harness,
+        CalendarReminderDetailScreen(reminder: reminder),
+      );
+
+      await tester.scrollUntilVisible(find.byType(ReadOnlySoundPlayerCard), 200);
+      expect(find.byType(ReadOnlySoundPlayerCard), findsOneWidget);
+
+      // Expand speed controls
+      await tester.tap(find.byKey(const Key('toggle_sound_controls_button')));
+      await tester.pumpAndSettle();
+      expect(find.text('1x'), findsOneWidget);
+
+      // Tap speed 1.5x button
+      await tester.tap(find.text('1.5x'));
+      await tester.pumpAndSettle();
+
+      final updated = harness.controller.calendarReminders.firstWhere((r) => r.id == reminder.id);
+      expect(updated.soundSpeed, 1.5);
 
       await tester.pumpWidget(const SizedBox());
     });

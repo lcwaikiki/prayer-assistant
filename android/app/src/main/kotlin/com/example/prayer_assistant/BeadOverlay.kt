@@ -181,6 +181,24 @@ object BeadOverlay {
             } catch (_: Exception) {}
         }
 
+        fun vibrateTapFeedback() {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    val vm = app.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as? VibratorManager
+                    vm?.defaultVibrator?.vibrate(VibrationEffect.createOneShot(12, VibrationEffect.DEFAULT_AMPLITUDE))
+                } else {
+                    @Suppress("DEPRECATION")
+                    val v = app.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        v?.vibrate(VibrationEffect.createOneShot(12, VibrationEffect.DEFAULT_AMPLITUDE))
+                    } else {
+                        @Suppress("DEPRECATION")
+                        v?.vibrate(12)
+                    }
+                }
+            } catch (_: Exception) {}
+        }
+
         fun showDismissTarget() {
             if (dismissView == null) {
                 val isDark = isSystemDark(app)
@@ -237,6 +255,7 @@ object BeadOverlay {
         }
 
         val touchSlop = ViewConfiguration.get(app).scaledTouchSlop
+        val dragSlop = (touchSlop * 2.5f).coerceAtLeast(24 * density)
         val longPressTimeout = 1000L
         val handler = Handler(Looper.getMainLooper())
 
@@ -244,6 +263,7 @@ object BeadOverlay {
         var initialY = 0
         var initialTouchX = 0f
         var initialTouchY = 0f
+        var touchDownTime = 0L
         var isDragging = false
         var isLongPressed = false
         var isOverDismiss = false
@@ -262,6 +282,7 @@ object BeadOverlay {
                     initialY = params.y
                     initialTouchX = event.rawX
                     initialTouchY = event.rawY
+                    touchDownTime = System.currentTimeMillis()
                     isDragging = false
                     isLongPressed = false
                     isOverDismiss = false
@@ -272,7 +293,7 @@ object BeadOverlay {
                 MotionEvent.ACTION_MOVE -> {
                     val dx = event.rawX - initialTouchX
                     val dy = event.rawY - initialTouchY
-                    if (!isDragging && hypot(dx, dy) > touchSlop) {
+                    if (!isDragging && hypot(dx.toDouble(), dy.toDouble()) > dragSlop) {
                         isDragging = true
                         handler.removeCallbacks(longPressRunnable)
                         showDismissTarget()
@@ -347,11 +368,31 @@ object BeadOverlay {
                         hide(app)
                         onDismiss?.invoke()
                     } else {
-                        if (isDragging) {
-                            savePosition(app, params.x, params.y)
-                        }
-                        if (!isDragging && !isLongPressed) {
+                        val totalDist = hypot((event.rawX - initialTouchX).toDouble(), (event.rawY - initialTouchY).toDouble())
+                        val touchDuration = System.currentTimeMillis() - touchDownTime
+                        val isActuallyTap = !isLongPressed && (!isDragging || (totalDist < dragSlop && touchDuration < 400))
+
+                        if (isActuallyTap) {
+                            if (isDragging) {
+                                params.x = initialX
+                                params.y = initialY
+                                try {
+                                    wm.updateViewLayout(bubble, params)
+                                } catch (_: Exception) {}
+                            }
+                            vibrateTapFeedback()
+                            bubble.animate().scaleX(0.92f).scaleY(0.92f).setDuration(40).withEndAction {
+                                bubble.animate().scaleX(1.0f).scaleY(1.0f).setDuration(40).start()
+                            }.start()
+                            val count = bubble.text.toString().toIntOrNull()
+                            if (count != null) {
+                                val nextCount = (count + 1).toString()
+                                bubble.text = nextCount
+                                bubble.textSize = textSizeFor(nextCount)
+                            }
                             onTap(System.currentTimeMillis())
+                        } else if (isDragging) {
+                            savePosition(app, params.x, params.y)
                         }
                     }
                     true

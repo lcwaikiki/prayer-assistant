@@ -196,7 +196,7 @@ class PrayerAssistantApp extends StatelessWidget {
           supportedLocales: supportedAppLocales,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF1F8A70),
+              seedColor: controller.colorTheme.seedColor,
               brightness: Brightness.light,
             ),
             useMaterial3: true,
@@ -204,7 +204,7 @@ class PrayerAssistantApp extends StatelessWidget {
           ),
           darkTheme: ThemeData(
             colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF1F8A70),
+              seedColor: controller.colorTheme.seedColor,
               brightness: Brightness.dark,
             ),
             useMaterial3: true,

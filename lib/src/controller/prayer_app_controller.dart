@@ -97,6 +97,7 @@ class PrayerAppController extends ChangeNotifier {
   bool _reminderVibrationEnabled = true;
   bool _reminderSoundEnabled = true;
   AppThemePreference _themePreference = AppThemePreference.system;
+  AppColorTheme _colorTheme = AppColorTheme.emerald;
   AppLocalePreference _localePreference = AppLocalePreference.system;
   List<CalendarReminder> _calendarReminders = const <CalendarReminder>[];
   CalendarPrimaryDisplay _calendarPrimaryDisplay = CalendarPrimaryDisplay.hijri;
@@ -203,6 +204,7 @@ class PrayerAppController extends ChangeNotifier {
   bool get reminderVibrationEnabled => _reminderVibrationEnabled;
   bool get reminderSoundEnabled => _reminderSoundEnabled;
   AppThemePreference get themePreference => _themePreference;
+  AppColorTheme get colorTheme => _colorTheme;
   ThemeMode get themeMode => switch (_themePreference) {
     AppThemePreference.system => ThemeMode.system,
     AppThemePreference.light => ThemeMode.light,
@@ -611,6 +613,7 @@ class PrayerAppController extends ChangeNotifier {
         database.loadShowCardUpcomingReminders(), // 35
         database.loadTodayCardsOrder(), // 36
         database.loadCalendarReminders(), // 37
+        database.loadColorTheme(), // 38
       ]);
 
       _selectedLocation = results[0] as SelectedLocation?;
@@ -659,6 +662,9 @@ class PrayerAppController extends ChangeNotifier {
         }
       }
       _themePreference = themePreference;
+
+      final rawColorTheme = results.length > 38 ? results[38] as String? : null;
+      _colorTheme = AppColorTheme.fromId(rawColorTheme);
 
       final rawLocalePreference = results[17] as String?;
       var localePreference = AppLocalePreference.system;
@@ -1599,6 +1605,15 @@ class PrayerAppController extends ChangeNotifier {
     }
     _themePreference = preference;
     await database.saveThemePreference(preference.name);
+    notifyListeners();
+  }
+
+  Future<void> updateColorTheme(AppColorTheme theme) async {
+    if (_colorTheme == theme) {
+      return;
+    }
+    _colorTheme = theme;
+    await database.saveColorTheme(theme.id);
     notifyListeners();
   }
 

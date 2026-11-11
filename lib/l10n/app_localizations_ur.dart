@@ -347,6 +347,30 @@ class AppLocalizationsUr extends AppLocalizations {
   String get themeDark => 'ڈارک';
 
   @override
+  String get themeColorTitle => 'Color theme';
+
+  @override
+  String get themeEmerald => 'Emerald Green';
+
+  @override
+  String get themeSapphire => 'Sapphire Blue';
+
+  @override
+  String get themeAmber => 'Amber Gold';
+
+  @override
+  String get themeAmethyst => 'Amethyst Purple';
+
+  @override
+  String get themeRuby => 'Crimson Red';
+
+  @override
+  String get themeRose => 'Rose Pink';
+
+  @override
+  String get themeSlate => 'Slate Charcoal';
+
+  @override
   String get homeScreenSettingsSectionTitle => 'ظاہری شکل';
 
   @override

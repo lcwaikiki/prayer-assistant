@@ -250,6 +250,7 @@ class TestHarness {
     when(() => database.loadSnoozeDurationMinutes()).thenAnswer((_) async => 10);
     when(() => database.saveSnoozeDurationMinutes(any())).thenAnswer((_) async {});
     when(() => database.loadThemePreference()).thenAnswer((_) async => null);
+    when(() => database.loadColorTheme()).thenAnswer((_) async => null);
     when(() => database.loadLocalePreference()).thenAnswer((_) async => null);
     when(
       () => database.loadAppBarRemainingPlacement(),
@@ -452,6 +453,7 @@ class TestHarness {
       () => database.saveReminderSoundEnabled(any()),
     ).thenAnswer((_) async {});
     when(() => database.saveThemePreference(any())).thenAnswer((_) async {});
+    when(() => database.saveColorTheme(any())).thenAnswer((_) async {});
     when(() => database.saveLocalePreference(any())).thenAnswer((_) async {});
     when(
       () => database.upsertPrayerDays(any(), any()),

@@ -342,7 +342,7 @@ void main() {
       expect(find.byType(CalendarReminderDetailScreen), findsNothing);
     });
 
-    testWidgets('non-task reminder shows disable/enable and toggles enabled flag', (tester) async {
+    testWidgets('non-task reminder hides disable/enable button and shows edit button', (tester) async {
       final harness = TestHarness.create();
       await harness.initialize();
 
@@ -361,15 +361,10 @@ void main() {
         CalendarReminderDetailScreen(reminder: reminder),
       );
 
-      expect(find.text('Disable Reminder'), findsOneWidget);
-
-      // Tap Disable Reminder
-      await tester.tap(find.byKey(const Key('toggle_done_reminder_button')));
-      await tester.pumpAndSettle();
-
-      final disabled = harness.controller.calendarReminders.firstWhere((r) => r.id == reminder.id);
-      expect(disabled.enabled, isFalse);
-      expect(find.text('Enable Reminder'), findsOneWidget);
+      expect(find.byKey(const Key('toggle_done_reminder_button')), findsNothing);
+      expect(find.text('Disable Reminder'), findsNothing);
+      expect(find.text('Enable Reminder'), findsNothing);
+      expect(find.byKey(const Key('edit_reminder_bottom_button')), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox());
     });

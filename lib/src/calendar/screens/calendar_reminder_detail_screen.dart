@@ -32,11 +32,13 @@ class _CalendarReminderDetailScreenState
   late AudioPlayerService _audioPlayer;
   bool _isPlayingPreview = false;
   double _playbackSpeed = 1.0;
+  double _lastSyncedSpeed = 1.0;
 
   @override
   void initState() {
     super.initState();
     _playbackSpeed = widget.reminder.soundSpeed;
+    _lastSyncedSpeed = widget.reminder.soundSpeed;
     _audioPlayer =
         widget.audioPlayerService ?? ref.read(audioPlayerServiceProvider);
     _audioPlayer.onPlayerComplete.listen((_) {
@@ -70,7 +72,10 @@ class _CalendarReminderDetailScreenState
     String filePath,
     CalendarReminder currentReminder,
   ) async {
-    setState(() => _playbackSpeed = newSpeed);
+    setState(() {
+      _playbackSpeed = newSpeed;
+      _lastSyncedSpeed = newSpeed;
+    });
     await _audioPlayer.setPlaybackRate(newSpeed);
 
     if (currentReminder.soundSpeed != newSpeed) {
@@ -96,28 +101,21 @@ class _CalendarReminderDetailScreenState
     );
   }
 
-  Future<void> _toggleCompleted(
-    CalendarReminder currentReminder,
-    bool isTask,
-  ) async {
+  Future<void> _markTaskDone(CalendarReminder currentReminder) async {
     final controller = provider.Provider.of<PrayerAppController>(
       context,
       listen: false,
     );
-    if (isTask) {
-      final today = DateTime.now();
-      controller.setTaskCompletion('cal_${currentReminder.id}', today, true);
-      if (currentReminder.recurrence == ReminderRecurrence.once ||
-          currentReminder.repeatCount == 1) {
-        await controller.calendarReminderService.cancelReminder(currentReminder.id);
-      } else {
-        await controller.calendarReminderService.cancelActiveNotification(currentReminder.id);
-      }
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+    final today = DateTime.now();
+    controller.setTaskCompletion('cal_${currentReminder.id}', today, true);
+    if (currentReminder.recurrence == ReminderRecurrence.once ||
+        currentReminder.repeatCount == 1) {
+      await controller.calendarReminderService.cancelReminder(currentReminder.id);
     } else {
-      controller.toggleCalendarReminderEnabled(currentReminder.id);
+      await controller.calendarReminderService.cancelActiveNotification(currentReminder.id);
+    }
+    if (mounted) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -129,6 +127,10 @@ class _CalendarReminderDetailScreenState
             .where((r) => r.id == widget.reminder.id)
             .firstOrNull ??
         widget.reminder;
+    if (currentReminder.soundSpeed != _lastSyncedSpeed) {
+      _lastSyncedSpeed = currentReminder.soundSpeed;
+      _playbackSpeed = currentReminder.soundSpeed;
+    }
 
     final isReminderEnabled = currentReminder.enabled;
     final isTask = currentReminder.isTask;
@@ -254,16 +256,10 @@ class _CalendarReminderDetailScreenState
       bottomNavigationBar: ReadOnlyBottomActionBar(
         primaryLabel: isTask
             ? (l10n?.readOnlyMarkAsDone ?? 'Mark as Done')
-            : (isReminderEnabled
-                ? (l10n?.readOnlyDisableReminder ?? 'Disable Reminder')
-                : (l10n?.readOnlyEnableReminder ?? 'Enable Reminder')),
-        primaryIcon: isTask
-            ? Icons.check_circle_outline_rounded
-            : (isReminderEnabled
-                ? Icons.notifications_off_outlined
-                : Icons.notifications_active_outlined),
+            : null,
+        primaryIcon: isTask ? Icons.check_circle_outline_rounded : null,
         primaryKey: const Key('toggle_done_reminder_button'),
-        onPrimaryPressed: () => _toggleCompleted(currentReminder, isTask),
+        onPrimaryPressed: isTask ? () => _markTaskDone(currentReminder) : null,
         secondaryLabel: l10n?.calendarReminderFormTitleEdit ?? 'Edit Reminder',
         secondaryIcon: Icons.edit_outlined,
         secondaryKey: const Key('edit_reminder_bottom_button'),

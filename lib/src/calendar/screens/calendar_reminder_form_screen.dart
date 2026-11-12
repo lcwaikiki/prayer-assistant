@@ -288,9 +288,27 @@ class _CalendarReminderFormScreenState
     super.dispose();
   }
 
-  void _onSpeedChanged(double newSpeed) {
+  Future<void> _onSpeedChanged(double newSpeed) async {
     setState(() => _playbackSpeed = newSpeed);
-    _audioPlayer.setPlaybackRate(newSpeed);
+    await _audioPlayer.setPlaybackRate(newSpeed);
+    if (widget.readOnly) {
+      final target = _reminder ?? widget.reminder;
+      if (target != null && target.soundSpeed != newSpeed) {
+        final updated = target.copyWith(soundSpeed: newSpeed);
+        _reminder = updated;
+        try {
+          if (!mounted) return;
+          await context
+              .read<PrayerAppController>()
+              .updateCalendarReminder(updated);
+        } catch (_) {
+          try {
+            if (!mounted) return;
+            await _getDatabase(context).saveCalendarReminder(updated);
+          } catch (_) {}
+        }
+      }
+    }
   }
 
   Future<void> _togglePreviewSound() async {

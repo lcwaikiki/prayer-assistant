@@ -1209,9 +1209,9 @@ class ReadOnlySnoozePreviewCard extends StatelessWidget {
 class ReadOnlyBottomActionBar extends StatelessWidget {
   const ReadOnlyBottomActionBar({
     super.key,
-    required this.primaryLabel,
-    required this.primaryIcon,
-    required this.onPrimaryPressed,
+    this.primaryLabel,
+    this.primaryIcon,
+    this.onPrimaryPressed,
     required this.secondaryLabel,
     required this.secondaryIcon,
     required this.onSecondaryPressed,
@@ -1219,9 +1219,9 @@ class ReadOnlyBottomActionBar extends StatelessWidget {
     this.secondaryKey,
   });
 
-  final String primaryLabel;
-  final IconData primaryIcon;
-  final VoidCallback onPrimaryPressed;
+  final String? primaryLabel;
+  final IconData? primaryIcon;
+  final VoidCallback? onPrimaryPressed;
   final String secondaryLabel;
   final IconData secondaryIcon;
   final VoidCallback onSecondaryPressed;
@@ -1247,25 +1247,29 @@ class ReadOnlyBottomActionBar extends StatelessWidget {
         top: false,
         child: Row(
           children: [
-            Expanded(
-              flex: 3,
-              child: FilledButton.icon(
-                key: primaryKey,
-                onPressed: onPrimaryPressed,
-                icon: Icon(primaryIcon, size: 20),
-                label: Text(
-                  primaryLabel,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+            if (primaryLabel != null &&
+                primaryIcon != null &&
+                onPrimaryPressed != null) ...[
+              Expanded(
+                flex: 3,
+                child: FilledButton.icon(
+                  key: primaryKey,
+                  onPressed: onPrimaryPressed,
+                  icon: Icon(primaryIcon, size: 20),
+                  label: Text(
+                    primaryLabel!,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 12),
+              const SizedBox(width: 12),
+            ],
             Expanded(
               flex: 2,
               child: OutlinedButton.icon(

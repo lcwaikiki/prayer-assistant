@@ -450,6 +450,21 @@ enum AppColorTheme {
     id: 'slate',
     seedColor: Color(0xFF37474F),
     defaultName: 'Slate Charcoal',
+  ),
+  olive(
+    id: 'olive',
+    seedColor: Color(0xFF558B2F),
+    defaultName: 'Olive Green',
+  ),
+  citrine(
+    id: 'citrine',
+    seedColor: Color(0xFFEAB308),
+    defaultName: 'Citrine Gold',
+  ),
+  bronze(
+    id: 'bronze',
+    seedColor: Color(0xFF6D4C41),
+    defaultName: 'Warm Bronze',
   );
 
   const AppColorTheme({

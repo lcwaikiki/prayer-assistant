@@ -235,9 +235,14 @@ class PreferencesScreen extends StatelessWidget {
                                       ),
                                     ),
                                     child: isSelected
-                                        ? const Icon(
+                                        ? Icon(
                                             Icons.check,
-                                            color: Colors.white,
+                                            color: ThemeData.estimateBrightnessForColor(
+                                                      theme.seedColor,
+                                                    ) ==
+                                                    Brightness.light
+                                                ? Colors.black87
+                                                : Colors.white,
                                             size: 24,
                                           )
                                         : null,
@@ -247,6 +252,14 @@ class PreferencesScreen extends StatelessWidget {
                             );
                           }).toList(),
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      _ColorThemePreviewCard(
+                        previewLabel: context.l10n.themePreviewTitle,
+                        themeName: _colorThemeName(context, controller.colorTheme),
+                        nextPrayerTitle: context.l10n.nextPrayerTitle,
+                        prayerLabel: context.l10n.prayerNameLabel('asr'),
+                        secondaryPrayerLabel: context.l10n.prayerNameLabel('maghrib'),
                       ),
                     ],
                   ),
@@ -1375,5 +1388,151 @@ String _colorThemeName(BuildContext context, AppColorTheme theme) {
     AppColorTheme.ruby => l10n.themeRuby,
     AppColorTheme.rose => l10n.themeRose,
     AppColorTheme.slate => l10n.themeSlate,
+    AppColorTheme.olive => l10n.themeOlive,
+    AppColorTheme.citrine => l10n.themeCitrine,
+    AppColorTheme.bronze => l10n.themeBronze,
   };
+}
+
+class _ColorThemePreviewCard extends StatelessWidget {
+  const _ColorThemePreviewCard({
+    required this.previewLabel,
+    required this.themeName,
+    required this.nextPrayerTitle,
+    required this.prayerLabel,
+    required this.secondaryPrayerLabel,
+  });
+
+  final String previewLabel;
+  final String themeName;
+  final String nextPrayerTitle;
+  final String prayerLabel;
+  final String secondaryPrayerLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Container(
+      key: const Key('color_theme_preview'),
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: colorScheme.outlineVariant.withAlpha(120)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.palette_outlined, size: 15, color: colorScheme.primary),
+              const SizedBox(width: 6),
+              Text(
+                '$previewLabel: $themeName',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer.withAlpha(160),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: colorScheme.primary.withAlpha(50)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.play_arrow_rounded, size: 18, color: colorScheme.primary),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    '$nextPrayerTitle: $prayerLabel',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: colorScheme.onSurface,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Text(
+                    '01:24',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer.withAlpha(140),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.wb_sunny_outlined, size: 15, color: colorScheme.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    prayerLabel,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ),
+                Text(
+                  '15:42',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            child: Row(
+              children: [
+                Icon(Icons.nights_stay_outlined, size: 15, color: colorScheme.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    secondaryPrayerLabel,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+                Text(
+                  '18:02',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

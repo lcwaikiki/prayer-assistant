@@ -370,6 +370,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get themeSlate => 'Antrasit';
 
   @override
+  String get themeOlive => 'Zeytin Yeşili';
+
+  @override
+  String get themeCitrine => 'Sitrin Sarısı';
+
+  @override
+  String get themeBronze => 'Bronz Kahve';
+
+  @override
+  String get themePreviewTitle => 'Önizleme';
+
+  @override
   String get homeScreenSettingsSectionTitle => 'Görünüm';
 
   @override

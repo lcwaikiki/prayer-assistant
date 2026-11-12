@@ -52,6 +52,18 @@ void main() {
 
     expect(harness.controller.colorTheme, AppColorTheme.sapphire);
     verify(() => harness.database.saveColorTheme('sapphire')).called(1);
+    expect(find.byKey(const Key('color_theme_preview')), findsOneWidget);
+    expect(find.text('Preview: Sapphire Blue'), findsOneWidget);
+
+    await tester.ensureVisible(find.byKey(const Key('color_theme_olive')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('color_theme_citrine')), findsOneWidget);
+    expect(find.byKey(const Key('color_theme_bronze')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('color_theme_olive')));
+    await tester.pumpAndSettle();
+    expect(harness.controller.colorTheme, AppColorTheme.olive);
+    expect(find.text('Preview: Olive Green'), findsOneWidget);
 
     await tester.pumpWidget(const SizedBox());
   });

@@ -758,6 +758,30 @@ abstract class AppLocalizations {
   /// **'Slate Charcoal'**
   String get themeSlate;
 
+  /// No description provided for @themeOlive.
+  ///
+  /// In en, this message translates to:
+  /// **'Olive Green'**
+  String get themeOlive;
+
+  /// No description provided for @themeCitrine.
+  ///
+  /// In en, this message translates to:
+  /// **'Citrine Gold'**
+  String get themeCitrine;
+
+  /// No description provided for @themeBronze.
+  ///
+  /// In en, this message translates to:
+  /// **'Warm Bronze'**
+  String get themeBronze;
+
+  /// No description provided for @themePreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview'**
+  String get themePreviewTitle;
+
   /// No description provided for @homeScreenSettingsSectionTitle.
   ///
   /// In en, this message translates to:

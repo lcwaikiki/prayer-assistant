@@ -371,6 +371,18 @@ class AppLocalizationsBn extends AppLocalizations {
   String get themeSlate => 'Slate Charcoal';
 
   @override
+  String get themeOlive => 'Olive Green';
+
+  @override
+  String get themeCitrine => 'Citrine Gold';
+
+  @override
+  String get themeBronze => 'Warm Bronze';
+
+  @override
+  String get themePreviewTitle => 'Preview';
+
+  @override
   String get homeScreenSettingsSectionTitle => 'চেহারা';
 
   @override

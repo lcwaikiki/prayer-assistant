@@ -349,6 +349,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "DC2626"
             "rose", "terracotta" -> "DB2777"
             "slate" -> "37474F"
+            "olive" -> "558B2F"
+            "citrine" -> "EAB308"
+            "bronze" -> "6D4C41"
             else -> "1F8A70"
         }
     }
@@ -361,6 +364,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "FFE5E2"
             "rose", "terracotta" -> "FFE5EA"
             "slate" -> "D2EFFE"
+            "olive" -> "DAF2C2"
+            "citrine" -> "FFE8BB"
+            "bronze" -> "FFE6DE"
             else -> "C2F5E3"
         }
     }
@@ -373,6 +379,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "522623"
             "rose", "terracotta" -> "502634"
             "slate" -> "063847"
+            "olive" -> "243916"
+            "citrine" -> "413104"
+            "bronze" -> "51281A"
             else -> "063B2F"
         }
     }
@@ -385,6 +394,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "904A43"
             "rose", "terracotta" -> "8C4A5F"
             "slate" -> "126682"
+            "olive" -> "476730"
+            "citrine" -> "765A0B"
+            "bronze" -> "8F4C34"
             else -> "126B56"
         }
     }
@@ -397,6 +409,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "FFB4AB"
             "rose", "terracotta" -> "FFB1C7"
             "slate" -> "8BD0EF"
+            "olive" -> "ACD28F"
+            "citrine" -> "E8C26C"
+            "bronze" -> "FFB59C"
             else -> "87D6BC"
         }
     }
@@ -411,6 +426,9 @@ object PrayerWidgetUpdater {
                 "ruby" -> R.drawable.widget_bg_transparent_ruby
                 "rose", "terracotta" -> R.drawable.widget_bg_transparent_rose
                 "slate" -> R.drawable.widget_bg_transparent_slate
+                "olive" -> R.drawable.widget_bg_transparent_olive
+                "citrine" -> R.drawable.widget_bg_transparent_citrine
+                "bronze" -> R.drawable.widget_bg_transparent_bronze
                 else -> R.drawable.widget_bg_transparent
             }
             else -> if (isLight(context)) {
@@ -421,6 +439,9 @@ object PrayerWidgetUpdater {
                     "ruby" -> R.drawable.widget_bg_light_ruby
                     "rose", "terracotta" -> R.drawable.widget_bg_light_rose
                     "slate" -> R.drawable.widget_bg_light_slate
+                    "olive" -> R.drawable.widget_bg_light_olive
+                    "citrine" -> R.drawable.widget_bg_light_citrine
+                    "bronze" -> R.drawable.widget_bg_light_bronze
                     else -> R.drawable.widget_bg_light_emerald
                 }
             } else {
@@ -431,6 +452,9 @@ object PrayerWidgetUpdater {
                     "ruby" -> R.drawable.widget_bg_ruby
                     "rose", "terracotta" -> R.drawable.widget_bg_rose
                     "slate" -> R.drawable.widget_bg_slate
+                    "olive" -> R.drawable.widget_bg_olive
+                    "citrine" -> R.drawable.widget_bg_citrine
+                    "bronze" -> R.drawable.widget_bg_bronze
                     else -> R.drawable.widget_bg
                 }
             }
@@ -449,6 +473,9 @@ object PrayerWidgetUpdater {
                     "ruby" -> R.drawable.widget_fasting_bg_light_ruby
                     "rose", "terracotta" -> R.drawable.widget_fasting_bg_light_rose
                     "slate" -> R.drawable.widget_fasting_bg_light_slate
+                    "olive" -> R.drawable.widget_fasting_bg_light_olive
+                    "citrine" -> R.drawable.widget_fasting_bg_light_citrine
+                    "bronze" -> R.drawable.widget_fasting_bg_light_bronze
                     else -> R.drawable.widget_fasting_bg_light
                 }
             } else {
@@ -459,6 +486,9 @@ object PrayerWidgetUpdater {
                     "ruby" -> R.drawable.widget_fasting_bg_ruby
                     "rose", "terracotta" -> R.drawable.widget_fasting_bg_rose
                     "slate" -> R.drawable.widget_fasting_bg_slate
+                    "olive" -> R.drawable.widget_fasting_bg_olive
+                    "citrine" -> R.drawable.widget_fasting_bg_citrine
+                    "bronze" -> R.drawable.widget_fasting_bg_bronze
                     else -> R.drawable.widget_fasting_bg
                 }
             }
@@ -473,6 +503,9 @@ object PrayerWidgetUpdater {
             "ruby" -> R.drawable.widget_row_highlight_light_ruby
             "rose", "terracotta" -> R.drawable.widget_row_highlight_light_rose
             "slate" -> R.drawable.widget_row_highlight_light_slate
+            "olive" -> R.drawable.widget_row_highlight_light_olive
+            "citrine" -> R.drawable.widget_row_highlight_light_citrine
+            "bronze" -> R.drawable.widget_row_highlight_light_bronze
             else -> R.drawable.widget_row_highlight_light
         }
     }
@@ -485,6 +518,9 @@ object PrayerWidgetUpdater {
             "ruby" -> R.drawable.widget_row_highlight_ruby
             "rose", "terracotta" -> R.drawable.widget_row_highlight_rose
             "slate" -> R.drawable.widget_row_highlight_slate
+            "olive" -> R.drawable.widget_row_highlight_olive
+            "citrine" -> R.drawable.widget_row_highlight_citrine
+            "bronze" -> R.drawable.widget_row_highlight_bronze
             else -> R.drawable.widget_row_highlight
         }
     }
@@ -498,6 +534,9 @@ object PrayerWidgetUpdater {
             "ruby" -> "#FF73332E"
             "rose", "terracotta" -> "#FF703347"
             "slate" -> "#FF004D64"
+            "olive" -> "#FF304F1A"
+            "citrine" -> "#FF5A4300"
+            "bronze" -> "#FF723520"
             else -> "#FF005140"
         }
         return Color.parseColor(hex)
@@ -511,6 +550,9 @@ object PrayerWidgetUpdater {
             "ruby" -> R.drawable.notification_pill_bg_ruby
             "rose", "terracotta" -> R.drawable.notification_pill_bg_rose
             "slate" -> R.drawable.notification_pill_bg_slate
+            "olive" -> R.drawable.notification_pill_bg_olive
+            "citrine" -> R.drawable.notification_pill_bg_citrine
+            "bronze" -> R.drawable.notification_pill_bg_bronze
             else -> R.drawable.notification_pill_bg
         }
     }
@@ -523,6 +565,9 @@ object PrayerWidgetUpdater {
             "ruby" -> R.drawable.qadaa_button_bg_ruby
             "rose", "terracotta" -> R.drawable.qadaa_button_bg_rose
             "slate" -> R.drawable.qadaa_button_bg_slate
+            "olive" -> R.drawable.qadaa_button_bg_olive
+            "citrine" -> R.drawable.qadaa_button_bg_citrine
+            "bronze" -> R.drawable.qadaa_button_bg_bronze
             else -> R.drawable.qadaa_button_bg
         }
     }

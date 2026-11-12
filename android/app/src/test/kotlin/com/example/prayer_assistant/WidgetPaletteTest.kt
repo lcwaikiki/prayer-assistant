@@ -28,4 +28,10 @@ class WidgetPaletteTest {
         assertTrue(PrayerWidgetUpdater.themeIsLight("system", systemNightMode = false))
         assertFalse(PrayerWidgetUpdater.themeIsLight("system", systemNightMode = true))
     }
+
+    @Test
+    fun system_followsExplicitAppThemeOverOs() {
+        assertTrue(PrayerWidgetUpdater.themeIsLight("system", systemNightMode = true, appTheme = "light"))
+        assertFalse(PrayerWidgetUpdater.themeIsLight("system", systemNightMode = false, appTheme = "dark"))
+    }
 }

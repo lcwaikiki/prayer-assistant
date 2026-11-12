@@ -812,6 +812,8 @@ class PrayerAppController extends ChangeNotifier {
         _syncStatusBarConfig(),
         widgetBridgeService.updateWidgetTextSize(_widgetTextSize.name),
         widgetBridgeService.updateWidgetTheme(_widgetTheme.name),
+        widgetBridgeService.updateAppTheme(_themePreference.name),
+        widgetBridgeService.updateWidgetColorTheme(_colorTheme.id),
         widgetBridgeService.updateWidgetCalendarDisplay(
           _widgetCalendarDisplay.name,
           _showSecondaryCalendarDate,
@@ -1605,6 +1607,7 @@ class PrayerAppController extends ChangeNotifier {
     }
     _themePreference = preference;
     await database.saveThemePreference(preference.name);
+    await widgetBridgeService.updateAppTheme(preference.name);
     notifyListeners();
   }
 
@@ -1614,6 +1617,7 @@ class PrayerAppController extends ChangeNotifier {
     }
     _colorTheme = theme;
     await database.saveColorTheme(theme.id);
+    await widgetBridgeService.updateWidgetColorTheme(theme.id);
     notifyListeners();
   }
 
@@ -1840,6 +1844,7 @@ class PrayerAppController extends ChangeNotifier {
     final prefs = <String, dynamic>{
       'remindersSilenced': _remindersSilenced,
       'themePreference': _themePreference.name,
+      'colorTheme': _colorTheme.id,
       'localePreference': _localePreference.name,
       'appBarRemainingPlacement': _appBarRemainingPlacement.name,
       'widgetTextSize': _widgetTextSize.name,
@@ -2189,6 +2194,11 @@ class PrayerAppController extends ChangeNotifier {
       prefs['themePreference'],
       _themePreference,
     );
+    if (prefs['colorTheme'] is String) {
+      _colorTheme = AppColorTheme.fromId(prefs['colorTheme'] as String);
+      await database.saveColorTheme(_colorTheme.id);
+      await widgetBridgeService.updateWidgetColorTheme(_colorTheme.id);
+    }
     _localePreference = _enumByName(
       AppLocalePreference.values,
       prefs['localePreference'],
@@ -2317,6 +2327,7 @@ class PrayerAppController extends ChangeNotifier {
         _widgetTextSizeValue.toString(),
       );
       await widgetBridgeService.updateWidgetTheme(_widgetTheme.name);
+      await widgetBridgeService.updateAppTheme(_themePreference.name);
       await widgetBridgeService.updateWidgetCalendarDisplay(
         _widgetCalendarDisplay.name,
         _showSecondaryCalendarDate,

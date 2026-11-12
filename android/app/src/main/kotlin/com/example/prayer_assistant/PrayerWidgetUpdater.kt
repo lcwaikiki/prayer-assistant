@@ -309,19 +309,29 @@ object PrayerWidgetUpdater {
         return themeIsLight(
             PrayerWidgetStorage.readWidgetTheme(context),
             isSystemNightMode(context),
+            PrayerWidgetStorage.readAppTheme(context),
         )
     }
 
     /**
      * Pure palette resolution: explicit "light" is light, explicit
-     * "dark"/"transparent" are dark, and anything else ("system") follows the
-     * phone's night mode. Unit testable without a Context.
+     * "dark"/"transparent" are dark, and "system" follows the app's explicit
+     * theme mode when set or the phone's night mode otherwise. Unit testable
+     * without a Context.
      */
-    internal fun themeIsLight(theme: String, systemNightMode: Boolean): Boolean {
+    internal fun themeIsLight(
+        theme: String,
+        systemNightMode: Boolean,
+        appTheme: String = "system",
+    ): Boolean {
         return when (theme) {
             "light" -> true
             "dark", "transparent" -> false
-            else -> !systemNightMode
+            else -> when (appTheme) {
+                "light" -> true
+                "dark" -> false
+                else -> !systemNightMode
+            }
         }
     }
 
@@ -331,22 +341,197 @@ object PrayerWidgetUpdater {
         return nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
+    internal fun getThemeSeedColorHex(context: Context): String {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "1565C0"
+            "amber" -> "D97706"
+            "amethyst", "indigo" -> "7E22CE"
+            "ruby" -> "DC2626"
+            "rose", "terracotta" -> "DB2777"
+            "slate" -> "37474F"
+            else -> "1F8A70"
+        }
+    }
+
+    internal fun getLightSurfaceColorHex(context: Context): String {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "E3EBFF"
+            "amber" -> "FFE6D6"
+            "amethyst", "indigo" -> "F6E5FF"
+            "ruby" -> "FFE5E2"
+            "rose", "terracotta" -> "FFE5EA"
+            "slate" -> "D2EFFE"
+            else -> "C2F5E3"
+        }
+    }
+
+    internal fun getDarkSurfaceColorHex(context: Context): String {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "1F3454"
+            "amber" -> "4D2B09"
+            "amethyst", "indigo" -> "3E2C50"
+            "ruby" -> "522623"
+            "rose", "terracotta" -> "502634"
+            "slate" -> "063847"
+            else -> "063B2F"
+        }
+    }
+
+    internal fun getLightPrimaryColorHex(context: Context): String {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "405F90"
+            "amber" -> "88511E"
+            "amethyst", "indigo" -> "6F528A"
+            "ruby" -> "904A43"
+            "rose", "terracotta" -> "8C4A5F"
+            "slate" -> "126682"
+            else -> "126B56"
+        }
+    }
+
+    internal fun getDarkPrimaryColorHex(context: Context): String {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "A9C7FF"
+            "amber" -> "FFB77D"
+            "amethyst", "indigo" -> "DBB9F9"
+            "ruby" -> "FFB4AB"
+            "rose", "terracotta" -> "FFB1C7"
+            "slate" -> "8BD0EF"
+            else -> "87D6BC"
+        }
+    }
+
     internal fun getWidgetBgRes(context: Context): Int {
+        val colorTheme = PrayerWidgetStorage.readWidgetColorTheme(context)
         return when (PrayerWidgetStorage.readWidgetTheme(context)) {
-            "transparent" -> R.drawable.widget_bg_transparent
-            else -> if (isLight(context)) R.drawable.widget_bg_light else R.drawable.widget_bg
+            "transparent" -> when (colorTheme) {
+                "sapphire" -> R.drawable.widget_bg_transparent_sapphire
+                "amber" -> R.drawable.widget_bg_transparent_amber
+                "amethyst", "indigo" -> R.drawable.widget_bg_transparent_amethyst
+                "ruby" -> R.drawable.widget_bg_transparent_ruby
+                "rose", "terracotta" -> R.drawable.widget_bg_transparent_rose
+                "slate" -> R.drawable.widget_bg_transparent_slate
+                else -> R.drawable.widget_bg_transparent
+            }
+            else -> if (isLight(context)) {
+                when (colorTheme) {
+                    "sapphire" -> R.drawable.widget_bg_light_sapphire
+                    "amber" -> R.drawable.widget_bg_light_amber
+                    "amethyst", "indigo" -> R.drawable.widget_bg_light_amethyst
+                    "ruby" -> R.drawable.widget_bg_light_ruby
+                    "rose", "terracotta" -> R.drawable.widget_bg_light_rose
+                    "slate" -> R.drawable.widget_bg_light_slate
+                    else -> R.drawable.widget_bg_light_emerald
+                }
+            } else {
+                when (colorTheme) {
+                    "sapphire" -> R.drawable.widget_bg_sapphire
+                    "amber" -> R.drawable.widget_bg_amber
+                    "amethyst", "indigo" -> R.drawable.widget_bg_amethyst
+                    "ruby" -> R.drawable.widget_bg_ruby
+                    "rose", "terracotta" -> R.drawable.widget_bg_rose
+                    "slate" -> R.drawable.widget_bg_slate
+                    else -> R.drawable.widget_bg
+                }
+            }
         }
     }
 
     private fun getWidgetFastingBgRes(context: Context): Int {
+        val colorTheme = PrayerWidgetStorage.readWidgetColorTheme(context)
         return when (PrayerWidgetStorage.readWidgetTheme(context)) {
-            "transparent" -> R.drawable.widget_bg_transparent
+            "transparent" -> getWidgetBgRes(context)
             else -> if (isLight(context)) {
-                R.drawable.widget_fasting_bg_light
+                when (colorTheme) {
+                    "sapphire" -> R.drawable.widget_fasting_bg_light_sapphire
+                    "amber" -> R.drawable.widget_fasting_bg_light_amber
+                    "amethyst", "indigo" -> R.drawable.widget_fasting_bg_light_amethyst
+                    "ruby" -> R.drawable.widget_fasting_bg_light_ruby
+                    "rose", "terracotta" -> R.drawable.widget_fasting_bg_light_rose
+                    "slate" -> R.drawable.widget_fasting_bg_light_slate
+                    else -> R.drawable.widget_fasting_bg_light
+                }
             } else {
-                R.drawable.widget_fasting_bg
+                when (colorTheme) {
+                    "sapphire" -> R.drawable.widget_fasting_bg_sapphire
+                    "amber" -> R.drawable.widget_fasting_bg_amber
+                    "amethyst", "indigo" -> R.drawable.widget_fasting_bg_amethyst
+                    "ruby" -> R.drawable.widget_fasting_bg_ruby
+                    "rose", "terracotta" -> R.drawable.widget_fasting_bg_rose
+                    "slate" -> R.drawable.widget_fasting_bg_slate
+                    else -> R.drawable.widget_fasting_bg
+                }
             }
         }
+    }
+
+    internal fun getRowHighlightLightRes(context: Context): Int {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> R.drawable.widget_row_highlight_light_sapphire
+            "amber" -> R.drawable.widget_row_highlight_light_amber
+            "amethyst", "indigo" -> R.drawable.widget_row_highlight_light_amethyst
+            "ruby" -> R.drawable.widget_row_highlight_light_ruby
+            "rose", "terracotta" -> R.drawable.widget_row_highlight_light_rose
+            "slate" -> R.drawable.widget_row_highlight_light_slate
+            else -> R.drawable.widget_row_highlight_light
+        }
+    }
+
+    internal fun getRowHighlightDarkRes(context: Context): Int {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> R.drawable.widget_row_highlight_sapphire
+            "amber" -> R.drawable.widget_row_highlight_amber
+            "amethyst", "indigo" -> R.drawable.widget_row_highlight_amethyst
+            "ruby" -> R.drawable.widget_row_highlight_ruby
+            "rose", "terracotta" -> R.drawable.widget_row_highlight_rose
+            "slate" -> R.drawable.widget_row_highlight_slate
+            else -> R.drawable.widget_row_highlight
+        }
+    }
+
+    internal fun getHighlightTextColor(context: Context): Int {
+        if (!isLight(context)) return Color.WHITE
+        val hex = when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> "#FF274777"
+            "amber" -> "#FF6C3A07"
+            "amethyst", "indigo" -> "#FF563B71"
+            "ruby" -> "#FF73332E"
+            "rose", "terracotta" -> "#FF703347"
+            "slate" -> "#FF004D64"
+            else -> "#FF005140"
+        }
+        return Color.parseColor(hex)
+    }
+
+    internal fun getNotificationPillBgRes(context: Context): Int {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> R.drawable.notification_pill_bg_sapphire
+            "amber" -> R.drawable.notification_pill_bg_amber
+            "amethyst", "indigo" -> R.drawable.notification_pill_bg_amethyst
+            "ruby" -> R.drawable.notification_pill_bg_ruby
+            "rose", "terracotta" -> R.drawable.notification_pill_bg_rose
+            "slate" -> R.drawable.notification_pill_bg_slate
+            else -> R.drawable.notification_pill_bg
+        }
+    }
+
+    internal fun getQadaaButtonBgRes(context: Context): Int {
+        return when (PrayerWidgetStorage.readWidgetColorTheme(context)) {
+            "sapphire" -> R.drawable.qadaa_button_bg_sapphire
+            "amber" -> R.drawable.qadaa_button_bg_amber
+            "amethyst", "indigo" -> R.drawable.qadaa_button_bg_amethyst
+            "ruby" -> R.drawable.qadaa_button_bg_ruby
+            "rose", "terracotta" -> R.drawable.qadaa_button_bg_rose
+            "slate" -> R.drawable.qadaa_button_bg_slate
+            else -> R.drawable.qadaa_button_bg
+        }
+    }
+
+    internal fun getWidgetAccentColor(context: Context): Int {
+        if (isLight(context)) {
+            return Color.parseColor("#FF${getLightPrimaryColorHex(context)}")
+        }
+        return Color.parseColor("#FF${getDarkPrimaryColorHex(context)}")
     }
 
     internal fun getPrimaryTextColor(context: Context): Int {
@@ -355,7 +540,7 @@ object PrayerWidgetUpdater {
 
     internal fun getSecondaryTextColor(context: Context): Int {
         return if (isLight(context)) {
-            Color.parseColor("#FF57605B")
+            Color.parseColor("#FF494D52")
         } else {
             Color.parseColor("#B3FFFFFF")
         }
@@ -600,7 +785,7 @@ object PrayerWidgetUpdater {
             gregorian = fullGregorianFormat.format(now.time)
         }
 
-        val accentColor = Color.parseColor("#FFD700") // Highlight gold for today
+        val accentColor = getWidgetAccentColor(context)
         val headerLabels = weekdayHeaderLabels(context)
         for (i in headerLabels.indices) {
             val headerId = context.resources.getIdentifier("grid_hdr_$i", "id", context.packageName)
@@ -954,11 +1139,11 @@ object PrayerWidgetUpdater {
         )
 
         val rowHighlightRes = if (isLight(context)) {
-            R.drawable.widget_row_highlight_light
+            getRowHighlightLightRes(context)
         } else {
-            R.drawable.widget_row_highlight
+            getRowHighlightDarkRes(context)
         }
-        val highlightTextColor = if (isLight(context)) Color.parseColor("#FF0F5144") else Color.WHITE
+        val highlightTextColor = getHighlightTextColor(context)
 
         for (i in rowIds.indices) {
             val prayer = todayPrayers.getOrNull(i)
@@ -1052,9 +1237,6 @@ object PrayerWidgetUpdater {
      * drawables always fill whatever bounds the host gives them.
      */
     private fun applyCircleBackground(views: RemoteViews, context: Context, widgetId: Int) {
-        val theme = PrayerWidgetStorage.readWidgetTheme(context)
-        val isSystemDark = (context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
-
         val density = context.resources.displayMetrics.density
         val diameter = (circleDiameterDp(context, widgetId) * density).toInt().coerceAtLeast(1)
 
@@ -1062,16 +1244,20 @@ object PrayerWidgetUpdater {
         val canvas = Canvas(bitmap)
         val radius = diameter / 2f
 
-        val (circleBgColor, ringColor) = when (theme) {
-            "light" -> Color.parseColor("#FFFFFFFF") to Color.parseColor("#331F8A70")
-            "dark" -> Color.parseColor("#FF1F8A70") to Color.parseColor("#4DFFFFFF")
-            "transparent" -> Color.parseColor("#70121C19") to Color.parseColor("#40FFFFFF")
+        val theme = PrayerWidgetStorage.readWidgetTheme(context)
+        val lightHex = getLightSurfaceColorHex(context)
+        val darkHex = getDarkSurfaceColorHex(context)
+        val lightPrimaryHex = getLightPrimaryColorHex(context)
+        val darkPrimaryHex = getDarkPrimaryColorHex(context)
+        val (circleBgColor, ringColor) = when {
+            theme == "transparent" -> {
+                Color.parseColor("#80$darkHex") to Color.parseColor("#80$darkPrimaryHex")
+            }
+            isLight(context) -> {
+                Color.parseColor("#FF$lightHex") to Color.parseColor("#80$lightPrimaryHex")
+            }
             else -> {
-                if (isSystemDark) {
-                    Color.parseColor("#FF1F8A70") to Color.parseColor("#4DFFFFFF")
-                } else {
-                    Color.parseColor("#FFFFFFFF") to Color.parseColor("#331F8A70")
-                }
+                Color.parseColor("#FF$darkHex") to Color.parseColor("#80$darkPrimaryHex")
             }
         }
 
@@ -1703,7 +1889,7 @@ object PrayerWidgetUpdater {
             views.setTextViewText(timeIds[i], prayer?.let { formatClock(it.second) } ?: "--:--")
             val isNext = prayer != null && state != null && prayer.second == state.prayer.second
             if (isNext) {
-                views.setInt(columnIds[i], "setBackgroundResource", R.drawable.notification_pill_bg)
+                views.setInt(columnIds[i], "setBackgroundResource", getNotificationPillBgRes(context))
                 views.setTextColor(nameIds[i], Color.parseColor("#E6FFFFFF"))
                 views.setTextColor(timeIds[i], Color.WHITE)
             } else {

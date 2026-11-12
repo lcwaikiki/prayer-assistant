@@ -140,7 +140,8 @@ object BeadOverlay {
             typeface = Typeface.DEFAULT_BOLD
             background = GradientDrawable().apply {
                 shape = GradientDrawable.OVAL
-                setColor(Color.parseColor("#E61F8A70"))
+                val seedHex = PrayerWidgetUpdater.getThemeSeedColorHex(app)
+                setColor(Color.parseColor("#E6$seedHex"))
                 setStroke((2 * density).toInt(), Color.WHITE)
             }
             elevation = 8f

@@ -235,6 +235,18 @@ class WidgetBridgeService {
     });
   }
 
+  Future<void> updateAppTheme(String theme) async {
+    await _channel.invokeMethod<void>('updateAppTheme', <String, Object>{
+      'theme': theme,
+    });
+  }
+
+  Future<void> updateWidgetColorTheme(String theme) async {
+    await _channel.invokeMethod<void>('updateWidgetColorTheme', <String, Object>{
+      'theme': theme,
+    });
+  }
+
   Future<void> updateWidgetCalendarDisplay(
     String display,
     bool showSecondaryDate,

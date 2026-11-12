@@ -362,6 +362,18 @@ class MainActivity : FlutterActivity() {
                     PrayerWidgetUpdater.updateAll(this)
                     result.success(null)
                 }
+                "updateAppTheme" -> {
+                    val theme = call.argument<String>("theme") ?: "system"
+                    PrayerWidgetStorage.saveAppTheme(this, theme)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
+                "updateWidgetColorTheme" -> {
+                    val theme = call.argument<String>("theme") ?: "emerald"
+                    PrayerWidgetStorage.saveWidgetColorTheme(this, theme)
+                    PrayerWidgetUpdater.updateAll(this)
+                    result.success(null)
+                }
                 "updateWidgetCalendarDisplay" -> {
                     val display = call.argument<String>("display") ?: "hijri"
                     val showSecondaryDate = call.argument<Boolean>("showSecondaryDate") ?: true

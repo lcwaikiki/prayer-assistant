@@ -135,6 +135,33 @@ object PrayerWidgetStorage {
             .getString(WIDGET_THEME_KEY, "system") ?: "system"
     }
 
+    private const val APP_THEME_KEY = "app_theme"
+    private const val WIDGET_COLOR_THEME_KEY = "widget_color_theme"
+
+    fun saveAppTheme(context: Context, theme: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(APP_THEME_KEY, theme)
+            .apply()
+    }
+
+    fun readAppTheme(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(APP_THEME_KEY, "system") ?: "system"
+    }
+
+    fun saveWidgetColorTheme(context: Context, theme: String) {
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putString(WIDGET_COLOR_THEME_KEY, theme)
+            .apply()
+    }
+
+    fun readWidgetColorTheme(context: Context): String {
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getString(WIDGET_COLOR_THEME_KEY, "emerald") ?: "emerald"
+    }
+
     private const val WIDGET_CALENDAR_DISPLAY_KEY = "widget_calendar_display"
     private const val WIDGET_SHOW_SECONDARY_CALENDAR_KEY = "widget_show_secondary_calendar"
     private const val DATE_HEADER_HIJRI_KEY = "date_header_hijri"

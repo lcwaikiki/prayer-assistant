@@ -87,5 +87,6 @@ All 7 themes are distributed across mutually distinct color families to ensure i
 
 ## 3. Architecture & Implementation
 - **Dynamic Material 3 Palettes:** Driven by `ColorScheme.fromSeed(seedColor: controller.colorTheme.seedColor, brightness: ...)`, automatically generating matching primary, secondary, tertiary, surface, and outline colors for both Light and Dark modes.
-- **Persistence:** Stored in `app_settings` SQLite table via `LocalDatabase.saveColorTheme` / `loadColorTheme`.
+- **Android Home Screen Widgets & Floating Overlay:** Synchronized automatically via `WidgetBridgeService.updateWidgetColorTheme` to `PrayerWidgetStorage` and `PrayerWidgetUpdater`. Every color theme dynamically updates dark widget backgrounds, fasting gradient backgrounds, active prayer row highlights, circle widget rings/fills, Qadaa counters/buttons, status bar active prayer pills, and the floating bead counter bubble (`BeadOverlay`).
+- **Persistence & Backup:** Stored in `app_settings` SQLite table via `LocalDatabase.saveColorTheme` / `loadColorTheme`, and included in preferences export/restore.
 - **User Settings:** Configured via circular swatch buttons in **Preferences → Appearance → Color Theme**.

@@ -211,6 +211,12 @@ void main() {
       () => widgetBridge.updateWidgetTheme(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateAppTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateWidgetColorTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateWidgetCalendarDisplay(any(), any()),
     ).thenAnswer((_) async {});
     when(
@@ -1095,6 +1101,7 @@ void main() {
 
       expect(controller.themeMode, ThemeMode.dark);
       verify(() => database.saveThemePreference('dark')).called(1);
+      verify(() => widgetBridge.updateAppTheme('dark')).called(1);
     });
 
     test('updateColorTheme persists and updates colorTheme', () async {
@@ -1105,6 +1112,7 @@ void main() {
 
       expect(controller.colorTheme, AppColorTheme.sapphire);
       verify(() => database.saveColorTheme('sapphire')).called(1);
+      verify(() => widgetBridge.updateWidgetColorTheme('sapphire')).called(1);
     });
 
     test('updateLocalePreference re-pushes calendar reminders in the new locale',

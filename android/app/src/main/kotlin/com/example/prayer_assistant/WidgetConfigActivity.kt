@@ -458,15 +458,12 @@ class WidgetConfigActivity : Activity() {
     }
 
     private fun applyDialogTheme(selectedTheme: String) {
-        val isDark = when (selectedTheme) {
-            "light" -> false
-            "dark" -> true
-            "transparent" -> true
-            else -> {
-                val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-                nightMode == Configuration.UI_MODE_NIGHT_YES
-            }
-        }
+        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        val isDark = !PrayerWidgetUpdater.themeIsLight(
+            selectedTheme,
+            nightMode == Configuration.UI_MODE_NIGHT_YES,
+            PrayerWidgetStorage.readAppTheme(this),
+        )
 
         if (isDark) {
             dialogCard.setBackgroundResource(R.drawable.widget_config_dialog_bg_dark)

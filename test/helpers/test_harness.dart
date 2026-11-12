@@ -143,6 +143,12 @@ class TestHarness {
       () => widgetBridge.updateWidgetTheme(any()),
     ).thenAnswer((_) async {});
     when(
+      () => widgetBridge.updateAppTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
+      () => widgetBridge.updateWidgetColorTheme(any()),
+    ).thenAnswer((_) async {});
+    when(
       () => widgetBridge.updateWidgetCalendarDisplay(any(), any()),
     ).thenAnswer((_) async {});
     when(

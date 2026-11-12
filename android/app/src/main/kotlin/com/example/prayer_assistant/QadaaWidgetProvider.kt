@@ -60,8 +60,10 @@ class QadaaWidgetProvider : ResizableWidgetProvider() {
             val secondary = PrayerWidgetUpdater.getSecondaryTextColor(context)
 
             views.setInt(R.id.widgetQadaaRoot, "setBackgroundResource", PrayerWidgetUpdater.getWidgetBgRes(context))
+            views.setInt(R.id.widgetQadaaAddDay, "setBackgroundResource", PrayerWidgetUpdater.getQadaaButtonBgRes(context))
             views.setTextColor(R.id.widgetQadaaTitle, primary)
             views.setTextColor(R.id.widgetQadaaGoal, secondary)
+            views.setTextColor(R.id.widgetQadaaToday, PrayerWidgetUpdater.getWidgetAccentColor(context))
             views.setTextColor(R.id.widgetQadaaRemaining, secondary)
             views.setTextColor(R.id.widgetQadaaAddDay, primary)
             PrayerWidgetUpdater.setTextSizeSp(views, R.id.widgetQadaaTitle, textSize, 11f, 13f, 15f, 18f)

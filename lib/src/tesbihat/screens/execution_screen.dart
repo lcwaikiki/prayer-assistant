@@ -543,11 +543,11 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
   void dispose() {
     _appController?.removeListener(_onControllerChanged);
     WidgetsBinding.instance.removeObserver(this);
-    _overlay.setOnTap(null);
-    _overlay.disarm();
     _activeExecutionScreens--;
     if (_activeExecutionScreens <= 0) {
       _activeExecutionScreens = 0;
+      _overlay.setOnTap(null);
+      _overlay.disarm();
       _setWakelock(false);
     }
     _playerCompleteSub?.cancel();
@@ -568,7 +568,9 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     }
     _audioPlayer.stop();
     _chimePlayer.stop();
-    _restoreOrientation();
+    if (_activeExecutionScreens <= 0) {
+      _restoreOrientation();
+    }
     super.dispose();
   }
 

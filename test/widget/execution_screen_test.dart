@@ -923,4 +923,47 @@ void main() {
     );
     expect(tapButton.onPressed, isNotNull);
   });
+
+  testWidgets(
+      'stealth mode toggles pure black background and gray foreground and persists across beads',
+      (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final bead1 = _item(id: 'stealth_1', title: 'Bead One');
+    final bead2 = _item(id: 'stealth_2', title: 'Bead Two');
+
+    await _pumpExecution(tester, item: bead1);
+    await tester.pumpAndSettle();
+
+    // Initially off
+    var scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.backgroundColor, isNull);
+
+    // Enable stealth mode
+    await tester.tap(find.byKey(const Key('toggle_stealth_mode_button')));
+    await tester.pumpAndSettle();
+
+    scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.backgroundColor, Colors.black);
+    final appBar = tester.widget<AppBar>(find.byType(AppBar));
+    expect(appBar.backgroundColor, Colors.black);
+    expect(appBar.foregroundColor, const Color(0xFF8E8E93));
+
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getBool('beads_stealth_mode'), isTrue);
+
+    // Opening a different bead keeps stealth mode enabled app-wide
+    await _pumpExecution(tester, item: bead2);
+    await tester.pumpAndSettle();
+
+    scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.backgroundColor, Colors.black);
+
+    // Toggle off
+    await tester.tap(find.byKey(const Key('toggle_stealth_mode_button')));
+    await tester.pumpAndSettle();
+
+    scaffold = tester.widget<Scaffold>(find.byType(Scaffold));
+    expect(scaffold.backgroundColor, isNull);
+    expect(prefs.getBool('beads_stealth_mode'), isFalse);
+  });
 }

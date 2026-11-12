@@ -19,6 +19,7 @@ import '../state/interval_sound_notifier.dart';
 import '../state/items_notifier.dart';
 import '../state/minimize_on_exit_notifier.dart';
 import '../state/sound_library_notifier.dart';
+import '../state/stealth_mode_notifier.dart';
 import '../widgets/audio_speed_bar.dart';
 import '../widgets/truncated_title_tooltip.dart';
 import '../widgets/zoomable_notes_text.dart';
@@ -805,6 +806,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
     final setCountValue = item.setCount;
     final minimizeOnExit = ref.watch(minimizeOnExitNotifierProvider);
     final intervalChimeEnabled = ref.watch(intervalSoundNotifierProvider);
+    final stealthMode = ref.watch(stealthModeNotifierProvider);
 
     final allItems = ref.watch(itemsNotifierProvider);
     ItemGroup? currentGroup;
@@ -860,11 +862,54 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: TruncatedTitleTooltip(title: item.title),
-        actions: [
-          IconButton.filledTonal(
+    return Theme(
+      data: stealthMode
+          ? _buildStealthTheme(Theme.of(context))
+          : Theme.of(context),
+      child: Builder(
+        builder: (context) => Scaffold(
+          backgroundColor: stealthMode ? Colors.black : null,
+          appBar: AppBar(
+            backgroundColor: stealthMode ? Colors.black : null,
+            foregroundColor: stealthMode ? _stealthGray : null,
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(30),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 6),
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: TruncatedTitleTooltip(
+                    title: item.title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: stealthMode ? _stealthGray : null,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            actions: [
+              IconButton.filledTonal(
+                key: const Key('toggle_stealth_mode_button'),
+                tooltip: l10n.stealthMode,
+                style: IconButton.styleFrom(
+                  backgroundColor: stealthMode
+                      ? Theme.of(context).colorScheme.primaryContainer
+                      : Theme.of(context).colorScheme.surfaceContainerHighest,
+                  foregroundColor: stealthMode
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.outline,
+                ),
+                icon: Icon(
+                  stealthMode
+                      ? Icons.visibility_off
+                      : Icons.visibility_off_outlined,
+                ),
+                onPressed: () => ref
+                    .read(stealthModeNotifierProvider.notifier)
+                    .setEnabled(!stealthMode),
+              ),
+              IconButton.filledTonal(
             key: const Key('toggle_interval_chime_button'),
             tooltip: l10n.intervalChime,
             style: IconButton.styleFrom(
@@ -939,7 +984,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
           child: Column(
             children: [
               Row(
@@ -972,14 +1017,14 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               LinearProgressIndicator(
                 key: const Key('progress_bar'),
                 value: item.count == 0 ? 0.0 : item.currentProgress / item.count,
                 minHeight: 10,
                 borderRadius: BorderRadius.circular(999),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               GestureDetector(
                 key: const Key('progress_text_long_press_target'),
                 onLongPress: editProgressAndSetCount,
@@ -990,7 +1035,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                 ),
               ),
               if (item.soundId != null) ...[
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Card(
                   margin: EdgeInsets.zero,
                   child: Padding(
@@ -1114,7 +1159,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                   ),
                 ),
               ],
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Expanded(
                 child: SizedBox.expand(
                   child: OutlinedButton(
@@ -1123,20 +1168,29 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                         ? null
                         : handleTap,
                     style: OutlinedButton.styleFrom(
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       foregroundColor: Theme.of(context).colorScheme.primary,
                       side: BorderSide(
                         color: Theme.of(context).colorScheme.onSurface,
                         width: 2,
                       ),
                     ),
-                    child: Text(
-                      l10n.tap,
-                      style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        l10n.tap,
+                        style: const TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Wrap(
                 alignment: WrapAlignment.center,
                 crossAxisAlignment: WrapCrossAlignment.center,
@@ -1165,7 +1219,7 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
                     ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1213,6 +1267,54 @@ class _ExecutionScreenState extends ConsumerState<ExecutionScreen>
             ],
           ),
         ),
+      ),
+    ),
+    ),
+    );
+  }
+
+  static const _stealthGray = Color(0xFF8E8E93);
+  static const _stealthDimGray = Color(0xFF6E6E73);
+
+  static ThemeData _buildStealthTheme(ThemeData base) {
+    const scheme = ColorScheme.dark(
+      surface: Colors.black,
+      surfaceContainerLow: Color(0xFF0A0A0A),
+      surfaceContainer: Color(0xFF101010),
+      surfaceContainerHighest: Color(0xFF141414),
+      primary: _stealthGray,
+      onPrimary: Colors.black,
+      primaryContainer: Color(0xFF1C1C1E),
+      onPrimaryContainer: _stealthGray,
+      secondary: _stealthGray,
+      onSecondary: Colors.black,
+      onSurface: _stealthGray,
+      onSurfaceVariant: _stealthDimGray,
+      outline: Color(0xFF3A3A3C),
+      outlineVariant: Color(0xFF2C2C2E),
+    );
+    return base.copyWith(
+      brightness: Brightness.dark,
+      colorScheme: scheme,
+      scaffoldBackgroundColor: Colors.black,
+      cardTheme: const CardThemeData(
+        color: Color(0xFF0A0A0A),
+        elevation: 0,
+        margin: EdgeInsets.zero,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        foregroundColor: _stealthGray,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+      ),
+      textTheme: base.textTheme.apply(
+        bodyColor: _stealthGray,
+        displayColor: _stealthGray,
+      ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: _stealthGray,
+        linearTrackColor: Color(0xFF1C1C1E),
       ),
     );
   }

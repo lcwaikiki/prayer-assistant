@@ -3590,6 +3590,12 @@ abstract class AppLocalizations {
   /// **'Interval chime'**
   String get beadsIntervalChime;
 
+  /// No description provided for @beadsStealthMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Stealth mode'**
+  String get beadsStealthMode;
+
   /// No description provided for @beadOverlayClose.
   ///
   /// In en, this message translates to:

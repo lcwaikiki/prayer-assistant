@@ -1932,6 +1932,9 @@ class AppLocalizationsTa extends AppLocalizations {
   String get beadsIntervalChime => 'Interval chime';
 
   @override
+  String get beadsStealthMode => 'Stealth mode';
+
+  @override
   String get beadOverlayClose => 'மூடு';
 
   @override

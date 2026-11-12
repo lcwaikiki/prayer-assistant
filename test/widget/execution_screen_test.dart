@@ -966,4 +966,88 @@ void main() {
     expect(scaffold.backgroundColor, isNull);
     expect(prefs.getBool('beads_stealth_mode'), isFalse);
   });
+
+  testWidgets(
+      'keeps portrait orientation locked when advancing to next group bead',
+      (tester) async {
+    tester.view.physicalSize = const Size(400, 800);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(() {
+      tester.view.resetPhysicalSize();
+      tester.view.resetDevicePixelRatio();
+    });
+
+    final orientationCalls = <List<dynamic>>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'SystemChrome.setPreferredOrientations') {
+          orientationCalls.add(List<dynamic>.from(call.arguments as List));
+        }
+        return null;
+      },
+    );
+    addTearDown(() {
+      tester.binding.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null);
+    });
+
+    const group = ItemGroup(
+      id: 'orient_group',
+      title: 'Orientation Group',
+    );
+    final bead1 = _item(
+      id: 'orient_1',
+      title: 'Bead 1',
+      count: 3,
+      progress: 2,
+      check: 1,
+      setCount: 1,
+      groupIds: [group.id],
+    );
+    final bead2 = _item(
+      id: 'orient_2',
+      title: 'Bead 2',
+      count: 3,
+      progress: 0,
+      check: 1,
+      setCount: 1,
+      groupIds: [group.id],
+    );
+
+    await _pumpExecution(
+      tester,
+      item: bead1,
+      items: [bead1, bead2],
+      groups: [group],
+      groupId: group.id,
+    );
+    await tester.pumpAndSettle();
+
+    orientationCalls.clear();
+
+    // Complete bead1 to show the next bead button.
+    await tester.tap(find.byKey(const Key('big_tap_button')));
+    await tester.pumpAndSettle();
+
+    // Advance to bead2 via pushReplacement.
+    await tester.tap(find.byKey(const Key('next_group_bead_action_button')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Bead 2'), findsOneWidget);
+    // Old screen dispose must NOT unlock orientation ([]) while new screen is active.
+    expect(
+      orientationCalls.where((args) => args.isEmpty),
+      isEmpty,
+    );
+
+    // Popping the final ExecutionScreen restores free orientation.
+    Navigator.of(tester.element(find.byType(ExecutionScreen))).pop();
+    await tester.pumpAndSettle();
+
+    expect(
+      orientationCalls.where((args) => args.isEmpty),
+      isNotEmpty,
+    );
+  });
 }

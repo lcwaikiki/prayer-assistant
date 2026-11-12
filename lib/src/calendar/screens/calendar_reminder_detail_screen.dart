@@ -32,11 +32,13 @@ class _CalendarReminderDetailScreenState
   late AudioPlayerService _audioPlayer;
   bool _isPlayingPreview = false;
   double _playbackSpeed = 1.0;
+  double _lastSyncedSpeed = 1.0;
 
   @override
   void initState() {
     super.initState();
     _playbackSpeed = widget.reminder.soundSpeed;
+    _lastSyncedSpeed = widget.reminder.soundSpeed;
     _audioPlayer =
         widget.audioPlayerService ?? ref.read(audioPlayerServiceProvider);
     _audioPlayer.onPlayerComplete.listen((_) {
@@ -70,7 +72,10 @@ class _CalendarReminderDetailScreenState
     String filePath,
     CalendarReminder currentReminder,
   ) async {
-    setState(() => _playbackSpeed = newSpeed);
+    setState(() {
+      _playbackSpeed = newSpeed;
+      _lastSyncedSpeed = newSpeed;
+    });
     await _audioPlayer.setPlaybackRate(newSpeed);
 
     if (currentReminder.soundSpeed != newSpeed) {
@@ -129,6 +134,10 @@ class _CalendarReminderDetailScreenState
             .where((r) => r.id == widget.reminder.id)
             .firstOrNull ??
         widget.reminder;
+    if (currentReminder.soundSpeed != _lastSyncedSpeed) {
+      _lastSyncedSpeed = currentReminder.soundSpeed;
+      _playbackSpeed = currentReminder.soundSpeed;
+    }
 
     final isReminderEnabled = currentReminder.enabled;
     final isTask = currentReminder.isTask;

@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:prayer_assistant/src/calendar/models/calendar_reminder.dart';
 import 'package:prayer_assistant/src/calendar/screens/calendar_reminder_form_screen.dart';
 import 'package:prayer_assistant/src/controller/prayer_app_controller.dart';
@@ -29,13 +30,24 @@ Future<void> _pumpForm(
   final player = audioPlayer ?? FakeAudioPlayerService();
   final repo = soundRepo ?? SoundLibraryRepository.memory();
   final mockDb = MockLocalDatabase();
+  when(() => mockDb.saveCalendarReminder(any())).thenAnswer((_) async {});
+  final mockWidgetBridge = MockWidgetBridgeService();
+  when(
+    () => mockWidgetBridge.updateCalendarReminders(
+      headerText: any(named: 'headerText'),
+      reminders: any(named: 'reminders'),
+    ),
+  ).thenAnswer((_) async {});
+  final mockCalendarService = MockCalendarReminderService();
+  when(() => mockCalendarService.scheduleReminder(any()))
+      .thenAnswer((_) async {});
   final controller = PrayerAppController(
     api: MockImsakiyemApi(),
     database: mockDb,
     locationResolver: MockLocationResolver(),
     notificationService: MockNotificationService(),
-    widgetBridgeService: MockWidgetBridgeService(),
-    calendarReminderService: MockCalendarReminderService(),
+    widgetBridgeService: mockWidgetBridge,
+    calendarReminderService: mockCalendarService,
   );
 
   await tester.pumpWidget(
@@ -63,6 +75,9 @@ Future<void> _pumpForm(
 void main() {
   setUpAll(() {
     TestWidgetsFlutterBinding.ensureInitialized();
+    registerFallbackValue(
+      CalendarReminder(id: 'fallback', title: 'Fallback', anchorAt: DateTime(2026)),
+    );
   });
 
   testWidgets('renders sound attach button when no sound is attached',

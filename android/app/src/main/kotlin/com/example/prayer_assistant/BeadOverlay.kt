@@ -35,6 +35,8 @@ object BeadOverlay {
     private var dismissView: TextView? = null
     private var lastX: Int? = null
     private var lastY: Int? = null
+    private var activeHandler: Handler? = null
+    private var activeLongPressRunnable: Runnable? = null
 
     private fun getSavedPosition(context: Context): Pair<Int, Int> {
         val x = lastX
@@ -275,6 +277,8 @@ object BeadOverlay {
                 openApp(app)
             }
         }
+        activeHandler = handler
+        activeLongPressRunnable = longPressRunnable
 
         bubble.setOnTouchListener { _, event ->
             when (event.action) {
@@ -473,6 +477,11 @@ object BeadOverlay {
             dismissView = null
         }
         val bubble = view ?: return
+        activeLongPressRunnable?.let { runnable ->
+            activeHandler?.removeCallbacks(runnable)
+        }
+        activeHandler = null
+        activeLongPressRunnable = null
         try {
             wm.removeView(bubble)
         } catch (_: Exception) {}
